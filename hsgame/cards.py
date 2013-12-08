@@ -1,5 +1,5 @@
-from game.game_objects import Card, MinionCard, Minion
-from game.constants import CARD_STATUS, CHARACTER_CLASS
+from hsgame.game_objects import Card, MinionCard, Minion
+from hsgame.constants import CARD_STATUS, CHARACTER_CLASS
 cardList = {}
 def createCards():
     def addCard(card):

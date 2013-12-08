@@ -1,5 +1,5 @@
-from game.game_objects import MinionCard, Minion
-from game.constants import CARD_STATUS, CHARACTER_CLASS, MINION_TYPES
+from hsgame.game_objects import MinionCard, Minion
+from hsgame.constants import CARD_STATUS, CHARACTER_CLASS, MINION_TYPES
 __author__ = 'Daniel'
 
 

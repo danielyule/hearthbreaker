@@ -1,4 +1,4 @@
-from game.constants import CHARACTER_CLASS
+from hsgame.constants import CHARACTER_CLASS
 from random import shuffle, randint
 
 __author__ = 'Daniel'
@@ -108,13 +108,14 @@ class Minion(Bindable):
             if self.game.is_active_taunt() and not what.taunt:
                 raise GameException("Must attack a minion with taunt")
             self.board.trigger("minion_on_minion_attack", self, what)
+            self.trigger("attack_minion", what)
         else:
             if not self.can_attack():
                 raise GameException("That minion cannot attack")
             if self.game.is_active_taunt():
                 raise GameException("Must attack a minion with taunt")
+            self.trigger("attack_player")
 
-        self.trigger("attack_minion", what)
         if self.wind_fury and not self.used_wind_fury:
             self.used_wind_fury = True
         else:
@@ -189,6 +190,7 @@ class Player(Bindable):
         return "Player: " + self.name
 
     def draw(self):
+        self.trigger("card_drawn")
         return self.deck.draw()
 
     def can_draw(self):
@@ -252,7 +254,7 @@ class Game(Bindable):
 
         self.current_player.max_mana += 1
         self.current_player.mana = self.current_player.max_mana
-        self.current_player.trigger("turn_start")
+        self.current_player.trigger("turn_started")
         if self.current_player.can_draw():
             self.hands[self.current_player].append(self.current_player.draw())
         else:

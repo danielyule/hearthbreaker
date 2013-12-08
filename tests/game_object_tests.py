@@ -1,4 +1,4 @@
-from game.constants import CHARACTER_CLASS
+from hsgame.constants import CHARACTER_CLASS
 
 
 __author__ = 'Daniel'
@@ -6,8 +6,8 @@ import random
 import unittest
 from unittest.mock import Mock
 
-from game.minions import StonetuskBoar, NoviceEngineer
-from game.game_objects import Player, Board, Game, Deck, Bindable
+from hsgame.minions import StonetuskBoar, NoviceEngineer
+from hsgame.game_objects import Player, Board, Game, Deck, Bindable
 
 
 class TestMinions(unittest.TestCase):
@@ -71,8 +71,8 @@ class TestGame(unittest.TestCase):
         self.assertTrue(game.players[0].deck == deck1, "Deck not assigned to player")
         self.assertTrue(game.players[1].deck == deck2, "Deck not assigned to player")
 
-        self.assertTrue(game.agents[game.players[0]] == agent1, "Agent not stored in the game")
-        self.assertTrue(game.agents[game.players[1]] == agent2, "Agent not stored in the game")
+        self.assertTrue(game.agents[game.players[0]] == agent1, "Agent not stored in the hsgame")
+        self.assertTrue(game.agents[game.players[1]] == agent2, "Agent not stored in the hsgame")
 
         self.assertListEqual(checked_cards[0][1:], game.hands[game.players[0]][:-1], "Cards not retained after request")
         self.assertListEqual(checked_cards[1][1:2], game.hands[game.players[1]][:-3], "Cards not retained after request")
