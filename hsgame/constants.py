@@ -1,10 +1,11 @@
 __author__ = 'Daniel'
 
 class CARD_STATUS:
-    COMMON = 1
-    RARE = 2
-    EPIC = 3
-    LEGENDARY = 4
+    BASIC = 1
+    EXPERT = 2
+    RARE = 3
+    EPIC = 4
+    LEGENDARY = 5
 
 
 class CHARACTER_CLASS:
@@ -18,6 +19,37 @@ class CHARACTER_CLASS:
     PALADIN = 7
     ROGUE = 8
     WARLOCK = 9
+
+    @staticmethod
+    def from_str(class_name):
+        classes = {
+            "MAGE": CHARACTER_CLASS.MAGE,
+            "HUNTER": CHARACTER_CLASS.HUNTER,
+            "SHAMAN": CHARACTER_CLASS.SHAMAN,
+            "WARRIOR": CHARACTER_CLASS.WARRIOR,
+            "DRUID": CHARACTER_CLASS.DRUID,
+            "PRIEST": CHARACTER_CLASS.PRIEST,
+            "PALADIN": CHARACTER_CLASS.PALADIN,
+            "ROGUE": CHARACTER_CLASS.ROGUE,
+            "WARLOCK": CHARACTER_CLASS.WARLOCK,
+        }
+
+        return classes[class_name.upper()]
+    
+    @staticmethod
+    def to_str(class_number):
+        classes = {
+            CHARACTER_CLASS.MAGE: "Mage",
+            CHARACTER_CLASS.HUNTER: "Hunter",
+            CHARACTER_CLASS.SHAMAN: "Shaman",
+            CHARACTER_CLASS.WARRIOR: "Warrior",
+            CHARACTER_CLASS.DRUID: "Druid",
+            CHARACTER_CLASS.PRIEST: "Priest",
+            CHARACTER_CLASS.PALADIN: "Paladin",
+            CHARACTER_CLASS.ROGUE: "Rogue",
+            CHARACTER_CLASS.WARLOCK: "Warlock",
+        }
+        return classes[class_number]
 
 class MINION_TYPES:
     NONE = 0

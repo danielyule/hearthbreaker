@@ -3,14 +3,17 @@ Events Triggered in hssim
 
 ##Player
  * damaged (amount)
- * death
- * card_drawn
+ * died
+ * card_drawn (card)
+ * turn_started
+ * turn_ended
 
 ##Game
- * turn_started
- * turn_end
+
+
  * card_played
  * minion_on_minion_attack
+ * minion_added(new_minion)
  * minion_died(dead_minion)
 
 ##Minion

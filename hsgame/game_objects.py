@@ -1,7 +1,26 @@
+import copy
+import hsgame.replay
 from hsgame.constants import CHARACTER_CLASS
-from random import shuffle, randint
+from hsgame.powers import powers
+from random import randint
+import hsgame.targetting
 
 __author__ = 'Daniel'
+
+card_table = {}
+
+def card_lookup(card_name):
+    def card_lookup_rec(card_type):
+        if card_type is not MinionCard:
+            card = card_type()
+        for sub_type in card_type.__subclasses__():
+            card_lookup_rec(sub_type)
+
+    if len(card_table) == 0:
+        for card_type in Card.__subclasses__():
+            card_lookup_rec(card_type)
+
+    return card_table[card_name]()
 
 
 class GameException(Exception):
@@ -13,22 +32,49 @@ class Bindable:
     def __init__(self):
         self.events = {}
 
-    def bind(self, event, function):
+    def bind(self, event, function, *args, **kwargs):
+        class Handler:
+            def __init__(self, function, args, kwargs):
+                self.args = args
+                self.kwargs = kwargs
+                self.function = function
+                self.remove = False
+
+
         if not event in self.events:
             self.events[event] = []
-        self.events[event].append(function)
+
+        self.events[event].append(Handler(function, args, kwargs))
+
+    def bind_once(self, event, function, *args, **kwargs):
+        class Handler:
+            def __init__(self, function, args, kwargs):
+                self.args = args
+                self.kwargs = kwargs
+                self.function = function
+                self.remove = True
+
+        if not event in self.events:
+            self.events[event] = []
+
+        self.events[event].append(Handler(function, args, kwargs))
 
     def trigger(self, event, *args, **kwargs):
         if event in self.events:
             for handler in self.events[event]:
-                handler(*args, **kwargs)
+                pass_args = args + handler.args
+                pass_kwargs = kwargs.copy()
+                pass_kwargs.update(handler.kwargs)
+                handler.function(*pass_args, **pass_kwargs)
+            self.events[event] = [handler for handler in self.events[event] if not handler.remove]
 
     def unbind(self, event, function):
-        self.events[event].remove(function)
+        if event in self.events:
+            self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
 
 
 class Card(Bindable):
-    def __init__(self, name, mana, gold, character_class, status):
+    def __init__(self, name, mana, character_class, status, targettable, target_func=None):
         """
             @name: string
             @mana: int
@@ -39,45 +85,51 @@ class Card(Bindable):
         super().__init__()
         self.name = name
         self.mana = mana
-        self.gold = gold
         self.character_class = character_class
         self.status = status
+        self.targettable = targettable
+        if targettable:
+            self.targets = []
+            self.target = None
+            self.get_targets = target_func
+        card_table[name] = type(self)
 
-    def can_use(self, player, board):
+    def can_use(self, player, game):
+        if self.targettable:
+            self.targets = self.get_targets(game)
+            if len(self.targets) is 0:
+                return False
+
         return player.mana >= self.mana
 
-    def use(self, player, board):
-        if self.can_use(player, board):
+    def use(self, player, game):
+        if self.can_use(player, game):
             player.mana -= self.mana
         else:
             raise GameException("Tried to play card that could not be played")
 
-    def bind(self, event, function):
-        if not event in self.events:
-            self.events[event] = []
-        self.events[event].append(function)
+        if self.targettable:
+            self.target = player.agent.choose_target(self.targets)
 
-    def trigger(self, event, **args):
-        for handler in self.events[event]:
-            handler(args)
+    def __str__(self):
+        return self.name + " (" + str(self.mana) + " mana)"
 
 
 class MinionCard(Card):
-    def __init__(self, name, mana, gold, character_class, status, minion):
-        super().__init__(name, mana, gold, character_class, status)
-        self.minion = minion
+    def __init__(self, name, mana, character_class, status):
+        super().__init__(name, mana, character_class, status, False)
 
-    def can_use(self, player, board):
-        return super().can_use(player, board) and self.minion.can_use(player, board)
+    def can_use(self, player, game):
+        return super().can_use(player, game)
 
-    def use(self, player, board):
-        super().use(player, board)
-        self.minion.add_to_board(self, board, player)
+    def use(self, player, game):
+        super().use(player, game)
+        self.create_minion().add_to_board(self, game, player, player.agent.choose_index(self))
 
 
 class Minion(Bindable):
     def __init__(self, attack, defense, type):
-        self.attack = self.max_attack = attack
+        self.attack_power = self.max_attack = attack
         self.defense = self.max_defense = defense
         self.type = type
         self.active = False
@@ -87,34 +139,66 @@ class Minion(Bindable):
         self.used_wind_fury = False
         self.frozen = False
         self.stealth = False
+        self.game = None
+        self.player = None
+        self.card = None
+        self.temp_attack = 0
+        self.index = -1
+        self.charge = False
         super().__init__()
 
-    def can_use(self, player, board):
-        return True
-
-    def add_to_board(self, card, board, player):
-        board.minions[player].append(self)
-        self.board = board
-        self.player = player
+    def add_to_board(self, card, game, player, index):
         self.card = card
+        player.minions.insert(index, self)
+        self.game = game
+        self.player = player
         self.trigger("added_to_board")
+        self.game.trigger("minion_added", self)
+        for minion in player.minions:
+            if minion.index >= index:
+                minion.index += 1
+        self.index = index
+        if self.charge:
+            self.active = True
+        player.bind("turn_ended", self.turn_complete)
 
-    def attack(self, what):
-        if isinstance(what, Minion):
-            if not what.can_be_attacked():
-                raise GameException("Cannot attack that minion")
-            if not self.can_attack():
-                raise GameException("That minion cannot attack")
-            if self.game.is_active_taunt() and not what.taunt:
-                raise GameException("Must attack a minion with taunt")
-            self.board.trigger("minion_on_minion_attack", self, what)
-            self.trigger("attack_minion", what)
+
+    def turn_complete(self):
+        if self.temp_attack > 0:
+            self.trigger("attack_decreased", self.temp_attack)
+            self.temp_attack = 0
+
+
+    def attack(self):
+        if not self.can_attack():
+            raise GameException("That minion cannot attack")
+
+        found_taunt = False
+        targets = []
+        for enemy in self.game.other_player.minions:
+            if enemy.taunt:
+                found_taunt = True
+            if not enemy.stealth:
+                targets.append(enemy)
+
+        if found_taunt:
+            targets = [target for target in targets if target.taunt]
         else:
-            if not self.can_attack():
-                raise GameException("That minion cannot attack")
-            if self.game.is_active_taunt():
-                raise GameException("Must attack a minion with taunt")
-            self.trigger("attack_player")
+            targets.append(self.game.other_player)
+
+
+        target = self.player.agent.choose_target(targets)
+
+        if isinstance(target, Minion):
+
+            self.game.trigger("minion_on_minion_attack", self, target)
+            self.trigger("attack_minion", target)
+            my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
+            self.minion_damage(target.attack_power, target)
+            target.minion_damage(my_attack, self)
+        else:
+            self.trigger("attack_player", target)
+            target.minion_damage(self.attack_power, self)
 
         if self.wind_fury and not self.used_wind_fury:
             self.used_wind_fury = True
@@ -122,26 +206,75 @@ class Minion(Bindable):
             self.active = False
         self.stealth = False
 
-        self.damage(what.attack, what)
-        what.damage(self.attack, self)
-
     def damage(self, amount, attacker):
         self.trigger("damaged", amount, attacker)
         self.defense -= amount
         if self.defense <= 0:
             self.die(attacker)
 
+    def increase_attack(self, amount):
+        def silence():
+            self.attack_power -= amount
+        self.trigger("attack_increased", amount)
+        self.attack_power += amount
+        self.bind_once('silenced', silence)
+
+    def increase_temp_attack(self, amount):
+
+        self.trigger("attack_increased", amount)
+        self.temp_attack += amount
+
+    def increase_health(self, amount):
+        def silence():
+            self.max_defense -= amount
+            if self.max_defense < self.defense:
+                self.defense = self.max_defense
+        self.trigger("health_increased", amount)
+        self.max_defense += amount
+        self.defense += amount
+        self.bind_once('silenced', silence)
+
+    def silence(self):
+        self.trigger("silenced")
+        self.taunt = False
+        self.wind_fury = False
+        self.frozen = False
+        self.stealth = False
+
+
+    def spell_damage(self, amount, spellCard):
+        self.trigger("spell_damaged", amount, spellCard)
+        self.damage(amount, spellCard)
+
+    def minion_damage(self, amount, minion):
+        self.trigger("minion_damaged", amount, minion)
+        self.damage(amount, minion)
+
+    def player_damage(self, amount, player):
+        self.trigger("player_damaged", amount, player)
+        self.damage(amount, player)
+
     def die(self, by):
         self.trigger("death", by)
         self.game.trigger("minion_died", self, by)
         self.dead = True
-        self.game.remove_minion(self)
+        for minion in self.player.minions:
+            if minion.index > self.index:
+                minion.index -= 1
+        self.game.remove_minion(self, self.player)
+        self.player.unbind("turn_ended", self.turn_complete)
 
     def can_attack(self):
         return self.active and not self.frozen
 
     def can_be_attacked(self):
         return not self.stealth
+
+    def spell_targettable(self):
+        return not self.stealth
+
+    def __str__(self):
+        return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.defense, self.card.name, self.index)
 
 
 class Deck:
@@ -154,53 +287,80 @@ class Deck:
     def can_draw(self):
         return self.left > 0
 
-    def draw(self):
+    def draw(self, random):
         if not self.can_draw():
             raise GameException("Cannot draw more than 30 cards")
 
-        index = randint(0, 29)
-        while self.used[index]:
-            index = randint(0, 29)
+        index = random(0, self.left - 1)
+        count = 0
+        i = 0
+        while count < index:
+            if not self.used[i]:
+                count += 1
+            i += 1
 
         self.used[index] = True
+        self.left -= 1
         return self.cards[index]
 
     def put_back(self, card):
-        for index in range(0, 29):
+        for index in range(0, 30):
             if self.cards[index] == card:
                 if self.used[index] is False:
                     raise GameException("Tried to put back a card that hadn't been used yet")
                 self.used[index] = False
+                self.left += 1
                 return
         raise GameException("Tried to put back a card that didn't come from this deck")
 
 
 class Player(Bindable):
-    def __init__(self, name, deck):
+    def __init__(self, name, deck, agent, game, random=randint):
+        super().__init__()
         self.name = name
-        self.mana = 1
+        self.mana = 0
         self.health = 30
         self.deck = deck
-        self.max_mana = 1
+        self.max_mana = 0
         self.armour = 0
+        self.attack_power = 0
+        self.minions = []
+        self.weapon = None
         self.character_class = deck.character_class
-        super().__init__()
+        self.bind("turn_ended", self.turn_complete)
+        self.random = random
+        self.hand = []
+        self.fatigue = 0
+        self.agent = agent
+        self.game = game
+        self.frozen = False
+        self.active = False
+        self.power = powers(self.character_class)(self)
 
     def __str__(self):
         return "Player: " + self.name
 
     def draw(self):
-        self.trigger("card_drawn")
-        return self.deck.draw()
+        if self.can_draw():
+            card = self.deck.draw(self.random)
+            self.trigger("card_drawn", card)
+            self.hand.append(card)
+        else:
+            self.fatigue += 1
+            self.trigger("fatigue_damage", self.fatigue)
+            self.damage(self.fatigue, self)
+
 
     def can_draw(self):
         return self.deck.can_draw()
 
     def put_back(self, card):
-        return self.deck.put_back(card)
+        self.hand.remove(card)
+        self.deck.put_back(card)
+        self.trigger("card_put_back", card)
 
-    def damage(self, amount):
-        self.trigger("damaged", amount)
+    def damage(self, amount, what):
+        self.trigger("damaged", amount, what)
         self.armour -= amount
         if self.armour < 0:
             self.health += self.armour
@@ -208,72 +368,288 @@ class Player(Bindable):
         if self.health <= 0:
             self.die()
 
+    def increase_attack(self, amount):
+        self.trigger("attack_increased", amount)
+        self.attack_power += amount
+
+    def increase_armour(self, amount):
+        self.trigger("armour_increased", amount)
+        self.armour += amount
+
+    def spell_damage(self, amount, spellCard):
+        self.trigger("spell_damaged", amount, spellCard)
+        self.damage(amount, spellCard)
+
+    def minion_damage(self, amount, minion):
+        self.trigger("minion_damaged", amount, minion)
+        self.damage(amount, minion)
+
+    def player_damage(self, amount, player):
+        self.trigger("player_damaged", amount, player)
+        self.damage(amount, player)
+
+    def heal(self, amount):
+        self.trigger("heal")
+        self.health += amount
+        if self.health > 30:
+            self.health = 30
+
+    def can_attack(self):
+        return self.attack_power > 0 and not self.frozen
+
+    def attack(self):
+        if not self.can_attack():
+            raise GameException("The player cannot attack")
+
+        found_taunt = False
+        targets = []
+        for enemy in self.game.other_player.minions:
+            if enemy.taunt:
+                found_taunt = True
+            if not enemy.stealth:
+                targets.append(enemy)
+
+        if found_taunt:
+            targets = [target for target in targets if target.taunt]
+        else:
+            targets.append(self.game.other_player)
+
+
+        target = self.agent.choose_target(targets)
+
+        if isinstance(target, Minion):
+
+            self.game.trigger("player_on_minion_attack", self, target)
+            self.trigger("attack_minion", target)
+            self.minion_damage(target.attack_power, target)
+            target.player_damage(self.attack_power, self)
+        else:
+            self.game.trigger("player_on_player_attack", self, target)
+            self.trigger("attack_player", target)
+            target.player_damage(self.attack_power, self)
+
+        self.active = False
+
     def die(self):
-        self.trigger("death")
-        print(str(self) + " died")
+        self.trigger("died")
+        self.dead = True
 
+    def spell_targettable(self):
+        return True
 
-class Board:
-    def __init__(self, players):
-        self.players = players
-        self.minions = {players[0]: [], players[1]: []}
-        self.weapons = {}
+    def find_power_target(self):
+        targets = hsgame.targetting.find_spell_target(self.game)
+        target = self.agent.choose_target(targets)
+        self.trigger("found_power_target", target)
+        return target
 
+    def turn_complete(self):
+        self.attack_power = 0
 
 class Game(Bindable):
-    def __init__(self, decks, agents):
-        play_order = [0, 1]
-        shuffle(play_order)
-        self.players = [Player("one", decks[play_order[0]]), Player("two", decks[play_order[1]])]
-        self.agents = {self.players[0]: agents[play_order[0]], self.players[1]: agents[play_order[1]]}
+    def __init__(self, decks, agents, random=randint):
+        super().__init__()
+        self.random = random
+        first_player = random(0, 1)
+        if first_player is not 0:
+            play_order = [0, 1]
+        else:
+            play_order = [1, 0]
+        self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self, random),
+                        Player("two", decks[play_order[1]], agents[play_order[1]], self, random)]
+        agents[0].set_game(self)
+        agents[1].set_game(self)
         self.current_player = self.players[0]
-        self.board = Board(self.players)
-        self.hands = {self.players[0]: [self.players[0].draw(), self.players[0].draw(), self.players[0].draw()],
-                      self.players[1]: [self.players[1].draw(), self.players[1].draw(), self.players[1].draw(),
-                                        self.players[1].draw()]}
+        self.game_ended = False
+        for i in range(0,3):
+            self.players[0].draw()
 
-        card_keep_index = self.agents[self.players[0]].do_card_check(self.hands[self.players[0]])
+        for i in range(0,4):
+            self.players[1].draw()
+
+
+        self.players[0].bind("died", self.game_over)
+        self.players[1].bind("died", self.game_over)
+
+    def pre_game(self):
+        card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
+        self.trigger("kept_cards", self.players[0].hand, card_keep_index)
+        put_back_cards = []
         for card_index in range(0, 3):
             if not card_keep_index[card_index]:
-                self.hands[self.players[0]].append(self.players[0].draw())
-                self.players[0].put_back(self.hands[self.players[0]][card_index])
-                del self.hands[self.players[0]][card_index]
+                self.players[0].draw()
+                put_back_cards.append(self.players[0].hand[card_index])
 
-        card_keep_index = self.agents[self.players[1]].do_card_check(self.hands[self.players[1]])
+        for card in put_back_cards:
+            self.players[0].put_back(card)
+
+        card_keep_index = self.players[1].agent.do_card_check(self.players[1].hand)
+        self.trigger("kept_cards", self.players[1].hand, card_keep_index)
+        put_back_cards = []
         for card_index in range(0, 4):
             if not card_keep_index[card_index]:
-                self.hands[self.players[1]].append(self.players[1].draw())
-                self.players[1].put_back(self.hands[self.players[1]][card_index])
-                del (self.hands[self.players[1]][card_index])
+                self.players[1].draw()
+                put_back_cards.append(self.players[1].hand[card_index])
+
+        for card in put_back_cards:
+            self.players[1].put_back(card)
+
+
+
+    def start(self):
+        self.pre_game()
+        self.current_player = self.players[1]
+        while not self.game_ended:
+            self.play_single_turn()
+
+    def play_single_turn(self):
+        self._start_turn()
+        self.current_player.agent.do_turn(self.current_player)
+        self._end_turn()
 
     def _start_turn(self):
         if self.current_player == self.players[0]:
             self.current_player = self.players[1]
+            self.other_player = self.players[0]
         else:
             self.current_player = self.players[0]
-
-        self.current_player.max_mana += 1
+            self.other_player = self.players[1]
+        if self.current_player.max_mana < 10:
+            self.current_player.max_mana += 1
         self.current_player.mana = self.current_player.max_mana
         self.current_player.trigger("turn_started")
-        if self.current_player.can_draw():
-            self.hands[self.current_player].append(self.current_player.draw())
-        else:
-            self.current_player.damage(1)
-        self.agents[self.current_player].do_turn()
+        self.current_player.draw()
 
-    def end_turn(self):
-        self.trigger("turn_ended")
-        for minion in self.board.minions[self.current_player]:
+    def game_over(self):
+        self.game_ended = True
+
+    def _end_turn(self):
+        self.current_player.trigger("turn_ended")
+        for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False
             minion.frozen = False
 
     def play_card(self, card):
-        if not card.can_use():
+        if self.game_ended:
+            raise GameException("The game has ended")
+        if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.trigger("card_played", card)
         card.use(self.current_player, self)
-        self.hands[self.current_player].remove(card)
+        self.current_player.hand.remove(card)
+
+    def remove_minion(self, minion, player):
+        player.minions.remove(minion)
+        self.trigger("minion_removed", minion, player)
+
+
+class RecordingGame(Game):
+
+    def __init__(self, decks, agents):
+        game = self
+
+        class RecordingAgent:
+
+            __slots__ = ['agent']
+
+            def __init__(self, proxied_agent):
+                object.__setattr__(self, "agent", proxied_agent)
+
+            def choose_index(self, card):
+                index = self.agent.choose_index(card)
+                game.replay.last_index = index
+                return index
+
+            def choose_target(self, targets):
+                target = self.agent.choose_target(targets)
+                game.replay.last_target = target
+                return target
+
+            def __getattr__(self, item):
+                return self.agent.__getattribute__(item)
+
+            def __setattr__(self, key, value):
+                setattr(self.__getattribute__("agent"), key, value)
+
+        def bind_attacks(character):
+            character.bind('attack_minion', self.replay.record_attack, character, self)
+            character.bind('attack_player', self.replay.record_attack, character, self)
+
+        self.replay = hsgame.replay.Replay()
+        agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
+
+        super().__init__(decks, agents, self._find_random)
+
+        self.replay.save_decks(*decks)
+
+        self.bind("card_played", self.replay.record_card_played, self)
+        self.bind("minion_added", bind_attacks)
+
+        self.bind("kept_cards", self.replay.record_kept_index, self)
+
+        for player in self.players:
+            player.bind("turn_ended", self.replay.record_turn_end, self)
+            player.bind("used_power", self.replay.record_power, self)
+            player.bind("found_power_target", self.replay.record_power_target, self)
+            bind_attacks(player)
+
+    def _find_random(self, lower_bound, upper_bound):
+        result = randint(lower_bound, upper_bound)
+        self.replay.record_random(result)
+        return result
+
+
+class SavedGame(Game):
+
+    def __init__(self, replay):
+        action_index = 0
+        random_index = 0
+        game_ref = self
+        k_index = 0
+
+        def replay_random(start, end):
+            nonlocal random_index
+            random_index += 1
+            return replay.random_numbers[random_index - 1]
+
+        class ReplayAgent:
+
+            def __init__(self):
+                self.next_target = None
+                self.next_index = -1
+
+            def do_card_check(self, cards):
+                nonlocal k_index
+                keep_arr = [False] * len(cards)
+                for index in replay.keeps[k_index]:
+                    keep_arr[int(index)] = True
+                k_index += 1
+                return keep_arr
+
+            def do_turn(self, player):
+                nonlocal action_index
+                while type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
+                    replay.actions[action_index].play(game_ref)
+                    action_index += 1
+
+                action_index += 1
+
+            def set_game(self, game):
+                pass
+
+            def choose_target(self, targets):
+                return self.next_target
+
+            def choose_index(self, card):
+                return self.next_index
+
+        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()], replay_random)
+
+
+
+
+
 
 
 
