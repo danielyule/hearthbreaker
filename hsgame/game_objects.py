@@ -197,6 +197,7 @@ class Minion(Bindable):
             self.minion_damage(target.attack_power, target)
             target.minion_damage(my_attack, self)
         else:
+            self.game.trigger("minion_on_player_attack", self, target)
             self.trigger("attack_player", target)
             target.minion_damage(self.attack_power, self)
 
@@ -389,7 +390,7 @@ class Player(Bindable):
         self.damage(amount, player)
 
     def heal(self, amount):
-        self.trigger("heal")
+        self.trigger("heal", amount)
         self.health += amount
         if self.health > 30:
             self.health = 30

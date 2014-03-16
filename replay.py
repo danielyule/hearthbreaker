@@ -73,10 +73,6 @@ class ProxyCard:
     def to_output(self):
         return str(self)
 
-
-
-
-
 class ReplayAction:
         def play(self):
             pass
