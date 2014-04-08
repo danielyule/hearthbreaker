@@ -7,7 +7,7 @@ The format is case sensitive.
 
 Header
 ------
-The header consists of three directives: the `deck` directive, the `random` directive and the `keep` directive
+The header consists of three directives: the [`deck`](#deck) directive, the [`random`](#random) directive and the [`keep`](#keep-optional) directive
 
 ###Deck
 `deck(class, card1, card2,....,card30)`
@@ -73,7 +73,7 @@ If no arguments are provided, then each time a random number is needed, 0 will b
 Actions
 -------
 
-Action directives specify user actions.  There are six types of user actions: `play`, `summon`, `attack`, `power`, `end` and `concede`.
+Action directives specify user actions.  There are six types of user actions: [`play`](#play), [`summon`](#summon), [`attack`](#attack), [`power`](#power), [`end`](#end) and [`concede`](#concede).
 
 ###Play
 `play(card_index[:option][, target])`
