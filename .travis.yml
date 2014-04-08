@@ -4,4 +4,4 @@ python:
   - "3.3"
 
 script:
-  - python -m unittest tests
+  - python -m unittest discover -s tests -p *_tests.py

@@ -356,7 +356,7 @@ class Replay:
 
             elif action == 'concede':
                 self.actions.append(ConcedeAction())
-
+        replayfile.close()
 
 class RecordingGame(Game):
 

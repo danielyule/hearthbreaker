@@ -25,20 +25,21 @@ class TestReplay(unittest.TestCase):
             return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
         self.maxDiff = None
-        for rfile in listdir("replays"):
+        for rfile in listdir("tests/replays"):
             replay = Replay()
-            replay.parse_replay("replays/" + rfile)
+            replay.parse_replay("tests/replays/" + rfile)
             output = StringIO()
             replay.write_replay(output)
-            f = open("replays/" + rfile, 'r')
+            f = open("tests/replays/" + rfile, 'r')
             file_string = f.read()
+            f.close()
             file_string = "\n".join(map(process_line, file_string.split("\n")))
 
             self.assertEqual(output.getvalue(), file_string)
 
     def test_loading_game(self):
         replay = Replay()
-        replay.parse_replay("replays/example.rep")
+        replay.parse_replay("tests/replays/example.rep")
         game = SavedGame(replay)
 
         game.start()
@@ -61,12 +62,13 @@ class TestReplay(unittest.TestCase):
         game.start()
         output = StringIO()
         game.replay.write_replay(output)
-        f = open("replays/stonetusk_innervate.rep", 'r')
+        f = open("tests/replays/stonetusk_innervate.rep", 'r')
         self.assertEqual(output.getvalue(), f.read())
+        f.close()
 
     def test_option_replay(self):
         replay = Replay()
-        replay.parse_replay("replays/stonetusk_power.rep")
+        replay.parse_replay("tests/replays/stonetusk_power.rep")
         game = SavedGame(replay)
         game.start()
         panther = game.other_player.minions[0]

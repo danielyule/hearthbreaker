@@ -58,7 +58,6 @@ class TestSpells(unittest.TestCase):
         return game
 
     def test_Savagery(self):
-
         class SavageryAgent(EnemyMinionSpellTestingAgent):
             def do_turn(self, player):
                 if player.mana > 2:
