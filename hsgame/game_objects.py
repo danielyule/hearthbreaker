@@ -162,12 +162,10 @@ class Minion(Bindable):
             self.active = True
         player.bind("turn_ended", self.turn_complete)
 
-
     def turn_complete(self):
         if self.temp_attack > 0:
             self.trigger("attack_decreased", self.temp_attack)
             self.temp_attack = 0
-
 
     def attack(self):
         if not self.can_attack():
@@ -318,6 +316,7 @@ class Deck:
 class Player(Bindable):
     def __init__(self, name, deck, agent, game, random=randint):
         super().__init__()
+        self.dead = False
         self.name = name
         self.mana = 0
         self.health = 30
@@ -452,7 +451,7 @@ class Game(Bindable):
         super().__init__()
         self.random = random
         first_player = random(0, 1)
-        if first_player is not 0:
+        if first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
@@ -567,6 +566,13 @@ class RecordingGame(Game):
                 game.replay.last_target = target
                 return target
 
+            def choose_option(self, *options):
+                option = self.agent.choose_option(options)
+
+                game.replay.record_option_chosen(options.index(option))
+                return option
+
+
             def __getattr__(self, item):
                 return self.agent.__getattribute__(item)
 
@@ -614,11 +620,15 @@ class SavedGame(Game):
             random_index += 1
             return replay.random_numbers[random_index - 1]
 
+        def null_random(start, end):
+            return 0
+
         class ReplayAgent:
 
             def __init__(self):
                 self.next_target = None
                 self.next_index = -1
+                self.next_option = None
 
             def do_card_check(self, cards):
                 nonlocal k_index
@@ -630,7 +640,7 @@ class SavedGame(Game):
 
             def do_turn(self, player):
                 nonlocal action_index
-                while type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
+                while action_index < len(replay.actions) and not player.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
                     replay.actions[action_index].play(game_ref)
                     action_index += 1
 
@@ -645,7 +655,15 @@ class SavedGame(Game):
             def choose_index(self, card):
                 return self.next_index
 
-        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()], replay_random)
+            def choose_option(self, *options):
+                return options[self.next_option]
+
+        if len(replay.random_numbers) is 0:
+            random_func = null_random
+        else:
+            random_func = replay_random
+
+        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()], random_func)
 
 
 

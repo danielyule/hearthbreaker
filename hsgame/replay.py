@@ -49,8 +49,8 @@ class ProxyCard:
 
     def __init__(self, card_reference, game=None):
         self.card_ref = -1
-        if type(card_reference) is int:
-            self.card_ref = int(card_reference)
+        if type(card_reference) is str:
+            self.card_ref = card_reference
         else:
             index = 0
             for card in game.current_player.hand:
@@ -59,13 +59,19 @@ class ProxyCard:
                     break
                 index += 1
 
-        if self.card_ref < 0:
+        if self.card_ref is -1:
             raise ReplayException("Could not find card in hand")
 
         self.targettable = False
 
+    def set_option(self, option):
+        self.card_ref = ":" + str(option)
+
     def resolve(self, game):
-        return game.current_player.hand[self.card_ref]
+        ref = self.card_ref.split(':')
+        if len(ref) > 1:
+            game.current_player.agent.next_option = int(ref[1])
+        return game.current_player.hand[int(ref[0])]
 
     def __str__(self):
         return str(self.card_ref)
@@ -88,8 +94,8 @@ class SpellAction(ReplayAction):
 
     def play(self, game):
         if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve()
-        self.card.resolve().play()
+            game.current_player.agent.next_target = self.target.resolve(game)
+        self.card.resolve(game).use(game.current_player, game)
         game.current_player.agent.next_target = None
 
     def to_output_string(self):
@@ -131,7 +137,7 @@ class AttackAction(ReplayAction):
             return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
 
     def play(self, game):
-        game.current_player.agent.next_target = self.target.resolve()
+        game.current_player.agent.next_target = self.target.resolve(game)
         self.character.resolve(game).attack()
         game.current_player.agent.next_target = None
 
@@ -167,6 +173,17 @@ class TurnEndAction(ReplayAction):
 
     def play(self, game):
         pass
+
+
+class ConcedeAction(ReplayAction):
+    def __init__(self):
+        pass
+
+    def to_output_string(self):
+        return "concede()"
+
+    def play(self, game):
+        game.current_player.die()
 
 
 
@@ -219,6 +236,9 @@ class Replay:
         self.last_card.targettable = card.targettable
         self.card_class = type(card)
 
+    def record_option_chosen(self, option, game):
+        self.last_card.set_option(option)
+
     def record_attack(self, target, attacker, game):
         self._save_played_card(game)
         self.actions.append(AttackAction(attacker, target, game))
@@ -264,9 +284,12 @@ class Replay:
             writer.write(",".join([card.name for card in shorten_deck(deck.cards)]))
             writer.write(")\n")
 
-        writer.write("random(")
-        writer.write(",".join([str(num) for num in self.random_numbers]))
-        writer.write(")\n")
+        if self.random_numbers.count(0) == len(self.random_numbers):
+            writer.write("random()\n")
+        else:
+            writer.write("random(")
+            writer.write(",".join([str(num) for num in self.random_numbers]))
+            writer.write(")\n")
 
         for keep in self.keeps:
             writer.write("keep(")
@@ -280,13 +303,13 @@ class Replay:
 
         if 'read' not in dir(replayfile):
             replayfile = open(replayfile, 'r')
-        line_pattern = re.compile("([^\(]*)\(([^)]*)\)")
+        line_pattern = re.compile("([^\(]*)\(([^)]*)\)\s*(;.*)?$")
         args_split = re.compile("\s*,\s*")
         for line in replayfile:
             (action, args) = line_pattern.match(line).group(1, 2)
             args = args_split.split(args)
             if action == 'play':
-                card = int(args[0])
+                card = args[0]
                 if len(args) > 1:
                     target = args[1]
                 else:
@@ -294,7 +317,7 @@ class Replay:
                 self.actions.append(SpellAction(ProxyCard(card), target))
 
             elif action == 'summon':
-                card = int(args[0])
+                card = args[0]
 
                 index = int(args[1])
 
@@ -316,6 +339,8 @@ class Replay:
                     raise ReplayException("Only one random number list per file")
                 if len(args[0]) > 0:
                     self.random_numbers = [int(num) for num in args]
+                else:
+                    self.random_numbers = []
             elif action == 'deck':
                 if len(self.decks) > 1:
                     raise ReplayException("Maximum of two decks per file")
@@ -327,4 +352,7 @@ class Replay:
                 if len(self.keeps) > 1:
                     raise ReplayException("Maximum of two keep directives per file")
                 self.keeps.append(args)
+
+            elif action == 'concede':
+                self.actions.append(ConcedeAction())
 

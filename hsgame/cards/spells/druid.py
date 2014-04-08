@@ -73,12 +73,23 @@ class PowerOfTheWild(Card):
                     minion.increase_attack(1)
                     minion.increase_health(1)
 
-        class SummonPanther(MinionCard):
+        class SummonPanther(Card):
             def __init__(self):
-                super().__init__("Summon Panther", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, False)
 
-            def create_minion(self):
-                return Minion(3, 2, MINION_TYPES.BEAST)
+            def use(self, player, game):
+                class Panther(MinionCard):
+                    def __init__(self):
+                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+                    def create_minion(self):
+                        return Minion(3, 2, MINION_TYPES.BEAST)
+
+                super().use(player, game)
+                panther = Minion(3, 2, MINION_TYPES.BEAST)
+                panther.add_to_board(Panther(), game, player, len(player.minions))
+
+
 
         option = player.agent.choose_option(LeaderOfThePack(), SummonPanther())
         option.use(player, game)
