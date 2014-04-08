@@ -237,6 +237,7 @@ class TestSpells(unittest.TestCase):
 
         return game
 
+    @check_mana_cost(3)
     def test_SavageRoar(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), SavageRoar()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -270,5 +271,27 @@ class TestSpells(unittest.TestCase):
         self.assertEqual(0, game.current_player.minions[0].temp_attack)
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
         self.assertEqual(0, game.current_player.attack_power)
+
+        return game
+
+    @check_mana_cost(4)
+    def test_Claw(self):
+        testing_env = self
+
+        class BiteAgent(EnemySpellTestingAgent):
+            def do_turn(self, player):
+                super().do_turn(player)
+                if player.mana == 0:
+                    testing_env.assertEqual(4, self.game.current_player.attack_power)
+                    testing_env.assertEqual(4, self.game.current_player.armour)
+
+        game = generate_game_for(Bite, StonetuskBoar, BiteAgent, DoNothingBot)
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
 
         return game

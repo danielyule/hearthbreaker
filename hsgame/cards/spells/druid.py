@@ -77,7 +77,6 @@ class PowerOfTheWild(Card):
                 super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, False)
 
             def use(self, player, game):
-                super().use(player, game)
                 for minion in player.minions:
                     minion.increase_attack(1)
                     minion.increase_health(1)
@@ -94,7 +93,6 @@ class PowerOfTheWild(Card):
                     def create_minion(self):
                         return Minion(3, 2, MINION_TYPES.BEAST)
 
-                super().use(player, game)
                 panther = Minion(3, 2, MINION_TYPES.BEAST)
                 panther.add_to_board(Panther(), game, player, len(player.minions))
 
@@ -161,19 +159,18 @@ class MarkOfNature(Card):
                 super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                super().use(player, game)
-                self.target.increase_attack(4)
+                target.increase_attack(4)
 
         class MarkOfNatureHealth(Card):
             def __init__(self):
                 super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                super().use(player, game)
-                self.target.increase_health(4)
-                self.target.taunt = True
+                target.increase_health(4)
+                target.taunt = True
 
         super().use(player, game)
+        target = self.target
         option = game.current_player.agent.choose_option(MarkOfNatureAttack(), MarkOfNatureHealth())
         option.use(player, game)
 
@@ -191,6 +188,15 @@ class SavageRoar(Card):
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) > 0
 
+
+class Bite(Card):
+    def __init__(self):
+        super().__init__("Bite", 4, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.increase_attack(4)
+        player.increase_armour(4)
 
 
 #Keeper of the Grove: Moonfire or Dispel
