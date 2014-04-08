@@ -1,6 +1,7 @@
 from unittest.mock import Mock, call
 from hsgame.agents.basic_agents import DoNothingBot
 from hsgame.game_objects import Game
+from hsgame.replay import SavedGame
 from tests.testing_agents import *
 
 __author__ = 'Daniel'
@@ -294,3 +295,11 @@ class TestSpells(unittest.TestCase):
         game.play_single_turn()
 
         return game
+
+    def test_SoulOfTheForest(self):
+        game = SavedGame("tests/replays/card_tests/SoulOfTheForest.rep")
+        game.start()
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[2].attack_power)
+        self.assertEqual(2, game.other_player.minions[2].defense)
+        self.assertEqual("Treant", game.other_player.minions[2].card.name)

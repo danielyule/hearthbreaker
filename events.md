@@ -43,7 +43,7 @@ Events Triggered in hssim
  * spell_damaged(amount, card)
  * minion_damaged(amount, minion)
  * player_damaged(amount, player)
- * death (attacker)
+ * died (attacker)
  * attack increased(amount)
  * attack_decreased(amount)
  * health_increased(amount)

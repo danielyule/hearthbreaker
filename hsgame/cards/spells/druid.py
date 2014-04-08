@@ -198,6 +198,28 @@ class Bite(Card):
         player.increase_attack(4)
         player.increase_armour(4)
 
+class SoulOfTheForest(Card):
+    def __init__(self):
+        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, False)
+
+    def use(self, player, game):
+
+        def summon_treant(*args):
+            class Treant(MinionCard):
+                def __init__(self):
+                    super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+                def create_minion(self):
+                    return Minion(2, 2, MINION_TYPES.NONE)
+
+            treant = Minion(2, 2, MINION_TYPES.NONE)
+            treant.add_to_board(Treant(), game, player, len(player.minions))
+
+        super().use(player, game)
+        for minion in player.minions:
+            minion.bind("died", summon_treant, minion)
+
+
 
 #Keeper of the Grove: Moonfire or Dispel
 

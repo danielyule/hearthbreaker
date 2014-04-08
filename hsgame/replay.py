@@ -98,7 +98,7 @@ class SpellAction(ReplayAction):
     def play(self, game):
         if self.target is not None:
             game.current_player.agent.next_target = self.target.resolve(game)
-        self.card.resolve(game).use(game.current_player, game)
+        game.play_card(self.card.resolve(game))
         game.current_player.agent.next_target = None
 
     def to_output_string(self):
@@ -126,9 +126,9 @@ class MinionAction(ReplayAction):
         if self.target is not None:
             game.current_player.agent.next_target = self.target.resolve(game)
 
-        game.current_player.agent.next_target = self.index
-        self.card.resolve(game).use(game.current_player, game)
-        game.current_player.agent.next_target = None
+        game.current_player.agent.next_index = self.index
+        game.play_card(self.card.resolve(game))
+        game.current_player.agent.nextIndex = -1
 
 
 class AttackAction(ReplayAction):
@@ -357,6 +357,8 @@ class Replay:
             elif action == 'concede':
                 self.actions.append(ConcedeAction())
         replayfile.close()
+        if len(self.keeps) is 0:
+            self.keeps = [[0,1,2],[0,1,2,3]]
 
 class RecordingGame(Game):
 
@@ -423,7 +425,11 @@ class RecordingGame(Game):
 
 class SavedGame(Game):
 
-    def __init__(self, replay):
+    def __init__(self, replay_file):
+
+        replay = Replay()
+        replay.parse_replay(replay_file)
+
         action_index = 0
         random_index = 0
         game_ref = self

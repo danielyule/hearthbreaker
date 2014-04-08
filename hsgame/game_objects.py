@@ -252,7 +252,7 @@ class Minion(Bindable):
         self.damage(amount, player)
 
     def die(self, by):
-        self.trigger("death", by)
+        self.trigger("died", by)
         self.game.trigger("minion_died", self, by)
         self.dead = True
         for minion in self.player.minions:
@@ -291,14 +291,14 @@ class Deck:
         index = random(0, self.left - 1)
         count = 0
         i = 0
-        while count < index:
+        while count <= index:
             if not self.used[i]:
                 count += 1
             i += 1
 
-        self.used[index] = True
+        self.used[i - 1] = True
         self.left -= 1
-        return self.cards[index]
+        return self.cards[i - 1]
 
     def put_back(self, card):
         for index in range(0, 30):

@@ -25,7 +25,7 @@ class TestReplay(unittest.TestCase):
             return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
         self.maxDiff = None
-        for rfile in listdir("tests/replays"):
+        for rfile in filter(lambda file: re.compile(r'.*\.rep$').match(file), listdir("tests/replays")):
             replay = Replay()
             replay.parse_replay("tests/replays/" + rfile)
             output = StringIO()
@@ -38,9 +38,7 @@ class TestReplay(unittest.TestCase):
             self.assertEqual(output.getvalue(), file_string)
 
     def test_loading_game(self):
-        replay = Replay()
-        replay.parse_replay("tests/replays/example.rep")
-        game = SavedGame(replay)
+        game = SavedGame("tests/replays/example.rep")
 
         game.start()
 
@@ -67,9 +65,7 @@ class TestReplay(unittest.TestCase):
         f.close()
 
     def test_option_replay(self):
-        replay = Replay()
-        replay.parse_replay("tests/replays/stonetusk_power.rep")
-        game = SavedGame(replay)
+        game = SavedGame("tests/replays/stonetusk_power.rep")
         game.start()
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")
