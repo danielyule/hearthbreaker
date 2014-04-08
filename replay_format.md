@@ -2,7 +2,7 @@ Replay File Format
 ==================
 
 The replay file format is a text file made up of a series of directives,
-one per line.  In general, the file has two components: the header, and the actions.
+one per line.  In general, the file has two components: the [header](#Header), and the [actions](#Actions).
 The format is case sensitive.
 
 Header
@@ -73,7 +73,7 @@ If no arguments are provided, then each time a random number is needed, 0 will b
 Actions
 -------
 
-Action directives specify user actions.  There are five types of user actions: `play`, `summon`, `attack`, `power` and `end`.
+Action directives specify user actions.  There are six types of user actions: `play`, `summon`, `attack`, `power`, `end` and `concede`.
 
 ###Play
 `play(card_index[:option][, target])`
