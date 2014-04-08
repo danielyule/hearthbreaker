@@ -45,6 +45,15 @@ class Naturalize(Card):
         game.other_player.draw()
 
 
+class Savagery(Card):
+    def __init__(self):
+        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(player.attack_power, self)
+
+
 class MarkOfTheWild(Card):
     def __init__(self):
         super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.BASIC, True, hsgame.targetting.find_minion_spell_target)

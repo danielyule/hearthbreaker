@@ -17,18 +17,20 @@ class TestSpells(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
-    @check_mana_cost(-2)  # This spell costs 0, but adds two mana, making it effectively a cost of -2
-    def test_Ennervate(self):
+    @check_mana_cost(-8)  # This spell costs 0, but adds two mana, making it effectively a cost of -2 each time it
+                          # is called.
+    def test_Innervate(self):
         game = generate_game_for(Innervate, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
+        #triggers all four innervate cards the player is holding.
         game.play_single_turn()
-        self.assertEqual(3, game.current_player.mana)
+        self.assertEqual(9, game.current_player.mana)
         return game
 
     @check_mana_cost(0)
     def test_Moonfire(self):
         game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
-        self.assertEqual(29, game.other_player.health)
+        self.assertEqual(26, game.other_player.health)
         return game
 
     @check_mana_cost(1)
@@ -44,6 +46,57 @@ class TestSpells(unittest.TestCase):
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, MinionPlayingAgent)
         game.play_single_turn()
         return game
+
+    @check_mana_cost(1)
+    def test_Naturalize(self):
+        game = generate_game_for(StonetuskBoar, Naturalize, MinionPlayingAgent, EnemyMinionSpellTestingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, len(game.other_player.hand))
+        return game
+
+    def test_Savagery(self):
+
+        class SavageryAgent(EnemyMinionSpellTestingAgent):
+            def do_turn(self, player):
+                if player.mana > 2:
+                    player.power.use()
+                    super().do_turn(player)
+
+        game = generate_game_for(Savagery, BloodfenRaptor, SavageryAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+
+    def test_ClawAndSavagery(self):
+        deck1 = StackedDeck([BloodfenRaptor()], CHARACTER_CLASS.PRIEST)
+        deck2 = StackedDeck([Claw(), Claw(), Savagery()], CHARACTER_CLASS.DRUID)
+        game = Game([deck1, deck2], [MinionPlayingAgent(), EnemyMinionSpellTestingAgent()])
+        game.current_player = game.players[1]
+        game.pre_game()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+
+
+
+
+
 
     @check_mana_cost(2)
     def test_MarkOfTheWild(self):

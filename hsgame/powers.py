@@ -7,6 +7,8 @@ def powers(character_class):
         return DruidPower
     elif character_class == CHARACTER_CLASS.MAGE:
         return MagePower
+    elif character_class == CHARACTER_CLASS.PRIEST:
+        return PriestPower
 
 
 class Power:
@@ -43,3 +45,13 @@ class MagePower(Power):
         super().use()
         target = self.player.find_power_target()
         target.damage(1, None)
+
+class PriestPower(Power):
+
+    def __init__(self, player):
+        super().__init__(player)
+
+    def use(self):
+        super().use()
+        target = self.player.find_power_target()
+        target.heal(2)
