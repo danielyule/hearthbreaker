@@ -1,13 +1,14 @@
 from hsgame.agents.user_agents import Observer
 from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Deck, Game
+from hsgame.game_objects import Deck, Game, card_lookup
 from hsgame.agents.basic_agents import DoNothingBot
+import hsgame.cards
 
 __author__ = 'Daniel'
 
 import unittest
 import sys
-from hsgame.cards.minions import StonetuskBoar, NoviceEngineer
+import io
 
 class TestObserver(unittest.TestCase):
 
@@ -16,8 +17,8 @@ class TestObserver(unittest.TestCase):
         card_set2 = []
 
         for cardIndex in range(0, 30):
-            card_set1.append(StonetuskBoar())
-            card_set2.append(NoviceEngineer())
+            card_set1.append(card_lookup("Stonetusk Boar"))
+            card_set2.append(card_lookup("Novice Engineer"))
 
         self.deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         self.deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
@@ -26,6 +27,6 @@ class TestObserver(unittest.TestCase):
         agent1 = DoNothingBot()
         agent2 = DoNothingBot()
         game = Game([self.deck1, self.deck2], [agent1, agent2])
-        obs = Observer(sys.stdout)
+        obs = Observer(io.StringIO())
         obs.observe(game)
         game.start()

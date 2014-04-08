@@ -1,13 +1,14 @@
 import unittest
 from io import StringIO
 from os import listdir
+import re
 
-from hsgame.replay import Replay
+from hsgame.replay import Replay, RecordingGame, SavedGame
 from hsgame.agents.basic_agents import PredictableBot
 from hsgame.constants import CHARACTER_CLASS
-import hsgame.game_objects
 from hsgame.cards import *
-from tests.testing_agents import MinionPlayingAgent, EnemyMinionSpellTestingAgent
+
+import hsgame.game_objects
 import sys
 
 import random
@@ -16,6 +17,13 @@ __author__ = 'Daniel'
 class TestReplay(unittest.TestCase):
 
     def test_reading_and_writing(self):
+
+        def process_line(line):
+            line = re.sub(r'\s*,\s*', ',', line)
+            line = re.sub(r'\s*\(\s*', '(', line)
+            line = re.sub(r'\s+\)', ')', line)
+            return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
+
         self.maxDiff = None
         for rfile in listdir("replays"):
             replay = Replay()
@@ -23,12 +31,15 @@ class TestReplay(unittest.TestCase):
             output = StringIO()
             replay.write_replay(output)
             f = open("replays/" + rfile, 'r')
-            self.assertEqual(output.getvalue(), f.read())
+            file_string = f.read()
+            file_string = "\n".join(map(process_line, file_string.split("\n")))
+
+            self.assertEqual(output.getvalue(), file_string)
 
     def test_loading_game(self):
         replay = Replay()
         replay.parse_replay("replays/example.rep")
-        game = hsgame.game_objects.SavedGame(replay)
+        game = SavedGame(replay)
 
         game.start()
 
@@ -46,7 +57,7 @@ class TestReplay(unittest.TestCase):
         deck2 = hsgame.game_objects.Deck([Naturalize()]* 30, CHARACTER_CLASS.DRUID)
         agent1 = PredictableBot()
         agent2 = PredictableBot()
-        game = hsgame.game_objects.RecordingGame([deck1, deck2], [agent1, agent2])
+        game = RecordingGame([deck1, deck2], [agent1, agent2])
         game.start()
         output = StringIO()
         game.replay.write_replay(output)
@@ -56,7 +67,7 @@ class TestReplay(unittest.TestCase):
     def test_option_replay(self):
         replay = Replay()
         replay.parse_replay("replays/stonetusk_power.rep")
-        game = hsgame.game_objects.SavedGame(replay)
+        game = SavedGame(replay)
         game.start()
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")

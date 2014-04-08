@@ -1,9 +1,7 @@
-import copy
-import hsgame.replay
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.powers import powers
 from random import randint
+from hsgame.powers import powers
 import hsgame.targetting
+
 
 __author__ = 'Daniel'
 
@@ -542,128 +540,6 @@ class Game(Bindable):
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
         self.trigger("minion_removed", minion, player)
-
-
-class RecordingGame(Game):
-
-    def __init__(self, decks, agents):
-        game = self
-
-        class RecordingAgent:
-
-            __slots__ = ['agent']
-
-            def __init__(self, proxied_agent):
-                object.__setattr__(self, "agent", proxied_agent)
-
-            def choose_index(self, card):
-                index = self.agent.choose_index(card)
-                game.replay.last_index = index
-                return index
-
-            def choose_target(self, targets):
-                target = self.agent.choose_target(targets)
-                game.replay.last_target = target
-                return target
-
-            def choose_option(self, *options):
-                option = self.agent.choose_option(options)
-
-                game.replay.record_option_chosen(options.index(option))
-                return option
-
-
-            def __getattr__(self, item):
-                return self.agent.__getattribute__(item)
-
-            def __setattr__(self, key, value):
-                setattr(self.__getattribute__("agent"), key, value)
-
-        def bind_attacks(character):
-            character.bind('attack_minion', self.replay.record_attack, character, self)
-            character.bind('attack_player', self.replay.record_attack, character, self)
-
-        self.replay = hsgame.replay.Replay()
-        agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
-
-        super().__init__(decks, agents, self._find_random)
-
-        self.replay.save_decks(*decks)
-
-        self.bind("card_played", self.replay.record_card_played, self)
-        self.bind("minion_added", bind_attacks)
-
-        self.bind("kept_cards", self.replay.record_kept_index, self)
-
-        for player in self.players:
-            player.bind("turn_ended", self.replay.record_turn_end, self)
-            player.bind("used_power", self.replay.record_power, self)
-            player.bind("found_power_target", self.replay.record_power_target, self)
-            bind_attacks(player)
-
-    def _find_random(self, lower_bound, upper_bound):
-        result = randint(lower_bound, upper_bound)
-        self.replay.record_random(result)
-        return result
-
-
-class SavedGame(Game):
-
-    def __init__(self, replay):
-        action_index = 0
-        random_index = 0
-        game_ref = self
-        k_index = 0
-
-        def replay_random(start, end):
-            nonlocal random_index
-            random_index += 1
-            return replay.random_numbers[random_index - 1]
-
-        def null_random(start, end):
-            return 0
-
-        class ReplayAgent:
-
-            def __init__(self):
-                self.next_target = None
-                self.next_index = -1
-                self.next_option = None
-
-            def do_card_check(self, cards):
-                nonlocal k_index
-                keep_arr = [False] * len(cards)
-                for index in replay.keeps[k_index]:
-                    keep_arr[int(index)] = True
-                k_index += 1
-                return keep_arr
-
-            def do_turn(self, player):
-                nonlocal action_index
-                while action_index < len(replay.actions) and not player.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
-                    replay.actions[action_index].play(game_ref)
-                    action_index += 1
-
-                action_index += 1
-
-            def set_game(self, game):
-                pass
-
-            def choose_target(self, targets):
-                return self.next_target
-
-            def choose_index(self, card):
-                return self.next_index
-
-            def choose_option(self, *options):
-                return options[self.next_option]
-
-        if len(replay.random_numbers) is 0:
-            random_func = null_random
-        else:
-            random_func = replay_random
-
-        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()], random_func)
 
 
 

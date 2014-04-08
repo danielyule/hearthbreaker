@@ -8,8 +8,10 @@ import random
 import unittest
 from unittest.mock import Mock, call
 
-from hsgame.cards.minions import StonetuskBoar, NoviceEngineer
-from hsgame.game_objects import Player, Game, Deck, Bindable
+from hsgame.game_objects import Player, Game, Deck, Bindable, card_lookup
+
+import hsgame.cards
+
 
 class TestGame(unittest.TestCase):
 
@@ -22,8 +24,8 @@ class TestGame(unittest.TestCase):
         test_env = self
 
         for cardIndex in range(0, 30):
-            card_set1.append(StonetuskBoar())
-            card_set2.append(NoviceEngineer())
+            card_set1.append(card_lookup("Stonetusk Boar"))
+            card_set2.append(card_lookup("Novice Engineer"))
 
         deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
@@ -74,8 +76,8 @@ class TestGame(unittest.TestCase):
         test_env = self
 
         for cardIndex in range(0, 30):
-            card_set1.append(StonetuskBoar())
-            card_set2.append(NoviceEngineer())
+            card_set1.append(card_lookup("Stonetusk Boar"))
+            card_set2.append(card_lookup("Novice Engineer"))
 
         deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
