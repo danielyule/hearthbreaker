@@ -132,3 +132,8 @@ directive.
 `end()`
 
 The `end` directive indicates that a player has ended their turn.
+
+###Concede
+`concede()`
+
+The `concede` directive indicates that the current player has conceded the game.  This event immediately ends the game.
