@@ -92,12 +92,6 @@ class TestSpells(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
 
-
-
-
-
-
-
     @check_mana_cost(2)
     def test_MarkOfTheWild(self):
         game = generate_game_for(MarkOfTheWild, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
@@ -174,6 +168,22 @@ class TestSpells(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.current_player.max_mana)
         return game
+
+    @check_mana_cost(2)
+    def test_Wrath(self):
+        game = generate_game_for(Wrath, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, len(game.current_player.hand))
+
+        return game
+
 
     @check_mana_cost(3)
     def test_HealingTouch(self):

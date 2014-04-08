@@ -112,6 +112,35 @@ class WildGrowth(Card):
         super().use(player, game)
         player.max_mana += 1
 
+class Wrath(Card):
+    def __init__(self):
+        super().__init__("Wrath", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+
+        class WrathOne(Card):
+            def __init__(self):
+                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+
+            def use(self, player, game):
+                target.spell_damage(1, wrath)
+                player.draw()
+
+        class WrathThree(Card):
+            def __init__(self):
+                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+
+            def use(self, player, game):
+                target.spell_damage(3, wrath)
+
+        super().use(player, game)
+        option = game.current_player.agent.choose_option(WrathOne(), WrathThree())
+        target = self.target
+        wrath = self
+        option.use(player, game)
+
+
+
 
 class HealingTouch(Card):
     def __init__(self):
