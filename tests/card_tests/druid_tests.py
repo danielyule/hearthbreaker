@@ -8,7 +8,7 @@ __author__ = 'Daniel'
 
 import random
 from tests.testing_utils import check_mana_cost, generate_game_for, StackedDeck
-from hsgame.cards.spells.druid import *
+from hsgame.cards.spells import *
 from hsgame.cards.minions import *
 import unittest
 
@@ -296,10 +296,12 @@ class TestSpells(unittest.TestCase):
 
         return game
 
+    #Can't check for mana cost, because we test on the next player's turn
     def test_SoulOfTheForest(self):
         game = SavedGame("tests/replays/card_tests/SoulOfTheForest.rep")
         game.start()
-        self.assertEqual(3, len(game.other_player.minions))
-        self.assertEqual(2, game.other_player.minions[2].attack_power)
-        self.assertEqual(2, game.other_player.minions[2].defense)
-        self.assertEqual("Treant", game.other_player.minions[2].card.name)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[1].attack_power)
+        self.assertEqual(2, game.other_player.minions[1].defense)
+        self.assertEqual("Treant", game.other_player.minions[1].card.name)
+        return game

@@ -42,7 +42,7 @@ n,Battle Rage,Draw a card for each damaged friendly character.,,Warrior,2,,,Expe
 n,Bestial Wrath,Give a Beast +2 Attack and Immune this turn.,,Hunter,1,,,Expert,Spell
 n,Betrayal,Force an enemy minion to deal its damage to the minions next to it.,,Rogue,2,,,Expert,Spell
 n,Big Game Hunter,Battlecry: Destroy a minion with an Attack of 7 or more.,,,3,4,2,Expert,Minion
-n,Bite,Give your hero +4 Attack this turn and 4 Armor.,,Druid,4,,,Expert,Spell
+y,Bite,Give your hero +4 Attack this turn and 4 Armor.,,Druid,4,,,Expert,Spell
 n,Blade Flurry,Destroy your weapon and deal its damage to all enemies.,,Rogue,2,,,Expert,Spell
 n,Blessed Champion,Double a minion's Attack.,,Paladin,5,,,Expert,Spell
 n,Blessing of Kings,Give a minion +4/+4. (+4 Attack/+4 Health),,Paladin,4,,,Basic,Spell
@@ -283,7 +283,7 @@ n,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Ba
 n,Sacrificial Pact,Destroy a Demon. Restore 5 Health to your hero.,,Warlock,0,,,Basic,Spell
 n,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Basic,Spell
 y,Savage Roar,Give your characters +2 Attack this turn.,,Druid,3,,,Basic,Spell
-n,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Expert,Spell
+y,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Expert,Spell
 n,Savannah Highmane,Deathrattle: Summon two 2/2 Hyenas.,Beast,Hunter,6,6,5,Expert,Minion
 n,Scarlet Crusader,Divine Shield,,,3,3,1,Expert,Minion
 n,Scavenging Hyena,"Whenever a friendly Beast dies, gain +2/+1.",Beast,Hunter,2,2,2,Expert,Minion
@@ -307,14 +307,14 @@ n,SI:7 Agent,Combo: Deal 2 damage.,,Rogue,3,3,3,Expert,Minion
 n,Silence,Silence a minion.,,Priest,0,,,Expert,Spell
 n,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Expert,Minion
 n,Silverback Patriarch,Taunt,Beast,,3,1,4,Basic,Minion
-n,Silvermoon Guardian,Divine Shield,,,4,3,3,Expert,Minion
+n,Silvermoon Guardian,Divine Shield,,,4,3,3,Expert,Minionf
 n,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Basic,Spell
 n,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Expert,Spell
 n,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Expert,Spell
 n,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Expert,Spell
 n,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Expert,Spell
 n,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Expert,Minion
-n,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Expert,Spell
+y,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Expert,Spell
 n,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Basic,Spell
 n,Southsea Captain,Your other Pirates have +1/+1.,Pirate,,3,3,3,Expert,Minion
 n,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,Expert,Minion

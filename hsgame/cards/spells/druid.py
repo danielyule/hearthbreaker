@@ -218,6 +218,7 @@ class SoulOfTheForest(Card):
         super().use(player, game)
         for minion in player.minions:
             minion.bind("died", summon_treant, minion)
+            minion.bind_once("silenced", lambda minion: minion.unbind("died", summon_treant), minion)
 
 
 

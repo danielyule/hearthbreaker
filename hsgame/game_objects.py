@@ -9,9 +9,11 @@ card_table = {}
 
 def card_lookup(card_name):
     def card_lookup_rec(card_type):
-        if card_type is not MinionCard:
-            card = card_type()
-        for sub_type in card_type.__subclasses__():
+        subclasses = card_type.__subclasses__()
+        if len(subclasses) is 0:
+                card = card_type()
+                card_table[card.name] = card_type
+        for sub_type in subclasses:
             card_lookup_rec(sub_type)
 
     if len(card_table) == 0:
@@ -90,7 +92,6 @@ class Card(Bindable):
             self.targets = []
             self.target = None
             self.get_targets = target_func
-        card_table[name] = type(self)
 
     def can_use(self, player, game):
         if self.targettable:
@@ -150,7 +151,7 @@ class Minion(Bindable):
         player.minions.insert(index, self)
         self.game = game
         self.player = player
-        self.trigger("added_to_board")
+        self.trigger("added_to_board", self)
         self.game.trigger("minion_added", self)
         for minion in player.minions:
             if minion.index >= index:

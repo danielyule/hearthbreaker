@@ -36,7 +36,7 @@ Events Triggered in hssim
  * minion_removed
 
 ##Minion
- * added_to_board
+ * added_to_board(minion)
  * attack_minion
  * attack_player
  * damaged(amount, attacker)

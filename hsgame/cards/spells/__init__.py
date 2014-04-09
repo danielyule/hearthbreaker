@@ -4,10 +4,14 @@ from hsgame.cards.spells.druid import \
     Innervate, \
     Moonfire, \
     Claw, \
+    Savagery, \
     Naturalize, \
     MarkOfTheWild, \
     PowerOfTheWild, \
     WildGrowth, \
+    Wrath, \
     HealingTouch, \
     MarkOfNature, \
-    SavageRoar
+    Bite, \
+    SavageRoar, \
+    SoulOfTheForest
