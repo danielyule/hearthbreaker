@@ -1,15 +1,16 @@
 from unittest.mock import Mock, call
-from hsgame.agents.basic_agents import DoNothingBot
+from hsgame.constants import CHARACTER_CLASS
+
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import *
+
 
 __author__ = 'Daniel'
 
 import random
 from tests.testing_utils import check_mana_cost, generate_game_for, StackedDeck
-from hsgame.cards.spells import *
-from hsgame.cards.minions import *
+from hsgame.cards import *
 import unittest
 
 
@@ -326,4 +327,52 @@ class TestSpells(unittest.TestCase):
         swipe_card = game.other_player.hand[0]
         game.play_single_turn()
 
-        self.assertListEqual([call(4, swipe_card), call(1, swipe_card)], spell_damage_mock.call_args_list) #, call(1, swipe_card)], spell_damage_mock.call_args_list)
+        self.assertListEqual([call(4, swipe_card), call(1, swipe_card), call(1, swipe_card)],
+                             spell_damage_mock.call_args_list)
+
+        #The bloodfen raptor should be left, with one hp
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+
+
+    def test_KeeperOfTheGrove(self):
+        #Test Moonfire option
+
+        game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+
+        #Test Dispel option
+
+        random.seed(1857)
+
+        game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        game.players[0].agent.choose_option = Mock(side_effect=lambda moonfire, dispel: dispel)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.current_player.minions[0].charge)
+
+        game.play_single_turn()
+
+        self.assertFalse(game.other_player.minions[0].charge)
+
+
+

@@ -230,7 +230,9 @@ class Swipe(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.spell_damage(4, self)
-        for minion in game.other_player.minions:
+
+        #must be copied or as units die, they'll be removed from the list
+        for minion in game.other_player.minions.copy():
             if minion is not self.target:
                 minion.spell_damage(1, self)
 

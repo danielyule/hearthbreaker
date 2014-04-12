@@ -131,7 +131,7 @@ class MinionCard(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.create_minion().add_to_board(self, game, player, player.agent.choose_index(self))
+        self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
 
 
 class Minion(Bindable):
@@ -248,6 +248,7 @@ class Minion(Bindable):
         self.wind_fury = False
         self.frozen = False
         self.stealth = False
+        self.charge = False
 
 
     def spell_damage(self, amount, spellCard):

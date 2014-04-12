@@ -185,11 +185,11 @@ n,Inner Fire,Change a minion's Attack to be equal to its Health.,,Priest,1,,,Exp
 n,Inner Rage,Deal 1 damage to a minion and give it +2 Attack.,,Warrior,0,,,Expert,Spell
 y,Innervate,Gain 2 Mana Crystals this turn only.,,Druid,0,,,Basic,Spell
 n,Ironbark Protector,Taunt,,Druid,8,8,8,Basic,Minion
-n,Ironbeak Owl,Battlecry: Silence a minion.,Beast,,2,2,1,Expert,Minion
+y,Ironbeak Owl,Battlecry: Silence a minion.,Beast,,2,2,1,Expert,Minion
 n,Ironforge Rifleman,Battlecry: Deal 1 damage.,,,3,2,2,Basic,Minion
 n,Ironfur Grizzly,Taunt,Beast,,3,3,3,Basic,Minion
 n,Jungle Panther,Stealth,Beast,,3,4,2,Expert,Minion
-n,Keeper of the Grove,Choose One - Deal 2 damage; or Silence a minion.,,Druid,4,2,4,Expert,Minion
+y,Keeper of the Grove,Choose One - Deal 2 damage; or Silence a minion.,,Druid,4,2,4,Expert,Minion
 n,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Expert,Minion
 n,Kill Command,"Deal 3 damage. If you have a Beast, deal 5 damage instead.",,Hunter,3,,,Basic,Spell
 n,King Krush,Charge,Beast,Hunter,9,8,8,Expert,Minion
@@ -336,7 +336,7 @@ n,Succubus,Battlecry: Discard a random card.,Demon,Warlock,2,4,3,Basic,Minion
 n,Summoning Portal,"Your minions cost (2) less, but not less than (1).",,Warlock,4,0,4,Expert,Minion
 n,Sunfury Protector,Battlecry: Give adjacent minions Taunt.,,,2,2,3,Expert,Minion
 n,Sunwalker,Taunt. Divine Shield,,,6,4,5,Expert,Minion
-n,Swipe,Deal 4 damage to an enemy and 1 damage to all other enemies.,,Druid,4,,,Basic,Spell
+y,Swipe,Deal 4 damage to an enemy and 1 damage to all other enemies.,,Druid,4,,,Basic,Spell
 n,Sword of Justice,"Whenever you summon a minion, give it +1/+1 and this loses 1 Durability.",,Paladin,3,1,5,Expert,Weapon
 n,Sylvanas Windrunner,Deathrattle: Take control of a random enemy minion.,,,6,5,5,Expert,Minion
 n,Tauren Warrior,Taunt. Enrage: +3 Attack,,,3,2,3,Expert,Minion
@@ -376,7 +376,7 @@ n,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Basic,Mi
 n,Wisp,,,,0,1,1,Expert,Minion
 n,Wolfrider,Charge,,,3,3,1,Basic,Minion
 n,Worgen Infiltrator,Stealth,,,1,2,1,Expert,Minion
-n,Wrath,Choose One - Deal 3 damage to a minion; or 1 damage and draw a card.,,Druid,2,,,Expert,Spell
+y,Wrath,Choose One - Deal 3 damage to a minion; or 1 damage and draw a card.,,Druid,2,,,Expert,Spell
 n,Young Dragonhawk,Windfury,Beast,,1,1,1,Expert,Minion
 n,Young Priestess,"At the end of your turn, give another random friendly minion +1 Health.",,,1,2,1,Expert,Minion
 n,Youthful Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,2,3,2,Expert,Minion
