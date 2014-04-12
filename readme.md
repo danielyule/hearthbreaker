@@ -7,6 +7,14 @@ is to create a system implementing every card in Hearthstone, then simulate game
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
 The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
 
+Usage
+-----
+The only way to use the system currently is through unit tests.  The tests are located in the [`tests`](tests) package.
+
+All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
+
+The Hearthstone Simulator is compatible with Python 3.3+
+
 Progress
 --------
 
@@ -26,5 +34,14 @@ The cards themselves are each a class, and can be found in the [hsgame/cards](hs
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).
+
+Contributing
+------------
+
+To contribute, simply fork the repository, make changes and submit a pull request.
+
+All pull requests which implement new cards must also include a unit test for those cards.
+
+All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator)
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
