@@ -7,7 +7,7 @@ __author__ = 'Daniel'
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
-        super(MinionCard, self).__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE)
 
     def create_minion(self, player):
 
@@ -25,14 +25,12 @@ class KeeperOfTheGrove(MinionCard):
             def use(self, player, game):
                 target.silence()
 
-        option = player.agent.choose_option(Moonfire(), Dispel())
+        targets = hsgame.targetting.find_minion_spell_target(player.game)
 
-
-        targets = self.get_targets(player.game)
-        target = player.agent.choose_target(targets)
-
-
-        option.use(player, player.game)
+        if len(targets) > 0:
+            target = player.agent.choose_target(targets)
+            option = player.agent.choose_option(Moonfire(), Dispel())
+            option.use(player, player.game)
 
         return Minion(2, 4, MINION_TYPES.NONE)
 

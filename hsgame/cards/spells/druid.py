@@ -83,12 +83,12 @@ class PowerOfTheWild(Card):
 
         class SummonPanther(Card):
             def __init__(self):
-                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, False)
+                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
 
             def use(self, player, game):
                 class Panther(MinionCard):
                     def __init__(self):
-                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL)
 
                     def create_minion(self):
                         return Minion(3, 2, MINION_TYPES.BEAST)
@@ -108,7 +108,10 @@ class WildGrowth(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.max_mana += 1
+        if player.max_mana < 10:
+            player.max_mana += 1
+        else:
+            player.hand.append(ExcessMana())
 
 class Wrath(Card):
     def __init__(self):
@@ -118,7 +121,7 @@ class Wrath(Card):
 
         class WrathOne(Card):
             def __init__(self):
-                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.spell_damage(1, wrath)
@@ -126,7 +129,7 @@ class Wrath(Card):
 
         class WrathThree(Card):
             def __init__(self):
-                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.spell_damage(3, wrath)
@@ -156,14 +159,14 @@ class MarkOfNature(Card):
     def use(self, player, game):
         class MarkOfNatureAttack(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.increase_attack(4)
 
         class MarkOfNatureHealth(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
+                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.increase_health(4)
@@ -236,8 +239,49 @@ class Swipe(Card):
             if minion is not self.target:
                 minion.spell_damage(1, self)
 
-#Keeper of the Grove: Moonfire or Dispel
 
-    #Power of the Wild: leader of the pack or summon a panther
+class Nourish(Card):
 
-    #mark of Nature: has no names
+    def __init__(self):
+        super().__init__("Nourish", 5, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Gain2(Card):
+
+            def __init__(self):
+                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                if player.max_mana < 8:
+                    player.max_mana += 2
+                    player.mana += 2
+                else:
+                    player.max_mana = 10
+                    player.mana += 2
+
+        class Draw3(Card):
+
+            def __init__(self):
+                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                player.draw()
+                player.draw()
+                player.draw()
+
+
+        option = player.agent.choose_option(Gain2(), Draw3())
+        option.use(player, game)
+
+
+
+#Special card that only appears in tandem with Wild Growth
+class ExcessMana(Card):
+    def __init__(self):
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.draw()

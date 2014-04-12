@@ -15,4 +15,5 @@ from hsgame.cards.spells.druid import \
     SavageRoar, \
     Bite, \
     SoulOfTheForest, \
-    Swipe
+    Swipe, \
+    Nourish

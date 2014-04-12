@@ -6,6 +6,7 @@ class CARD_STATUS:
     RARE = 3
     EPIC = 4
     LEGENDARY = 5
+    SPECIAL = -1
 
 
 class CHARACTER_CLASS:

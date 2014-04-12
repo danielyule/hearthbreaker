@@ -335,6 +335,7 @@ class TestSpells(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].defense)
 
 
+    @check_mana_cost(4)
     def test_KeeperOfTheGrove(self):
         #Test Moonfire option
 
@@ -373,6 +374,64 @@ class TestSpells(unittest.TestCase):
         game.play_single_turn()
 
         self.assertFalse(game.other_player.minions[0].charge)
+
+        #Test when there are no targets for the spell
+        random.seed(1857)
+        game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Keeper of the Grove", game.current_player.minions[0].card.name)
+        return game
+
+
+    @check_mana_cost(5)
+    def test_Nourish(self):
+
+        #Test gaining two mana
+        game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(7, game.current_player.max_mana)
+        self.assertEqual(7, len(game.current_player.hand))
+
+        #Test drawing three cards
+        random.seed(1857)
+        game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.players[0].agent.choose_option = Mock(side_effect=lambda gain2, draw3: draw3)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(10, len(game.current_player.hand))
+        self.assertEqual(5, game.current_player.max_mana)
+
+
+        return game
 
 
 

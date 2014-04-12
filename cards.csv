@@ -249,7 +249,7 @@ y,Naturalize,Destroy a minion. Your opponent draws 2 cards.,,Druid,1,,,Expert,Sp
 n,Nightblade,Battlecry: Deal 3 damage to the enemy hero.,,,5,4,4,Basic,Minion
 n,Noble Sacrifice,"Secret: When an enemy attacks, summon a 2/1 Defender as the new target.",,Paladin,1,,,Expert,Spell
 n,Northshire Cleric,"Whenever a minion is healed, draw a card.",,Priest,1,1,3,Basic,Minion
-n,Nourish,Choose One - Gain 2 Mana Crystals; or Draw 3 cards.,,Druid,5,,,Expert,Spell
+y,Nourish,Choose One - Gain 2 Mana Crystals; or Draw 3 cards.,,Druid,5,,,Expert,Spell
 y,Novice Engineer,Battlecry: Draw a card.,,,2,1,1,Basic,Minion
 n,Nozdormu,Players only have 15 seconds to take their turns.,Dragon,,9,8,8,Expert,Minion
 n,Oasis Snapjaw,,Beast,,4,2,7,Basic,Minion
