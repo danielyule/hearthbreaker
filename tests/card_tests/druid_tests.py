@@ -305,3 +305,25 @@ class TestSpells(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[1].defense)
         self.assertEqual("Treant", game.other_player.minions[1].card.name)
         return game
+
+    def test_Swipe(self):
+        deck1 = StackedDeck([BloodfenRaptor(), StonetuskBoar(), StonetuskBoar()],CHARACTER_CLASS.DRUID)
+        deck2 = StackedDeck([Swipe()], CHARACTER_CLASS.DRUID,)
+        game = Game([deck1, deck2], [MinionPlayingAgent(), EnemyMinionSpellTestingAgent()])
+        game.pre_game()
+        game.current_player = game.players[1]
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        spell_damage_mock = Mock()
+        game.current_player.minions[0].bind('spell_damaged', spell_damage_mock)
+        game.current_player.minions[1].bind('spell_damaged', spell_damage_mock)
+        game.current_player.minions[2].bind('spell_damaged', spell_damage_mock)
+        swipe_card = game.other_player.hand[0]
+        game.play_single_turn()
+
+        self.assertListEqual([call(4, swipe_card), call(1, swipe_card)], spell_damage_mock.call_args_list) #, call(1, swipe_card)], spell_damage_mock.call_args_list)

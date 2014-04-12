@@ -31,6 +31,7 @@ class GameException(Exception):
 class Bindable:
     def __init__(self):
         self.events = {}
+        self.delayed = []
 
     def bind(self, event, function, *args, **kwargs):
         class Handler:
@@ -67,6 +68,13 @@ class Bindable:
                 pass_kwargs.update(handler.kwargs)
                 handler.function(*pass_args, **pass_kwargs)
             self.events[event] = [handler for handler in self.events[event] if not handler.remove]
+
+    def delayed_trigger(self, event, *args, **kwargs):
+        self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
+
+    def activate_delayed(self):
+        for delayed in self.delayed:
+            self.trigger(delayed['event'], *delayed['args'], **delayed['kwargs'])
 
     def unbind(self, event, function):
         if event in self.events:
@@ -203,9 +211,11 @@ class Minion(Bindable):
         else:
             self.active = False
         self.stealth = False
+        self.activate_delayed()
+        target.activate_delayed()
 
     def damage(self, amount, attacker):
-        self.trigger("damaged", amount, attacker)
+        self.delayed_trigger("damaged", amount, attacker)
         self.defense -= amount
         if self.defense <= 0:
             self.die(attacker)
@@ -253,7 +263,7 @@ class Minion(Bindable):
         self.damage(amount, player)
 
     def die(self, by):
-        self.trigger("died", by)
+        self.delayed_trigger("died", by)
         self.game.trigger("minion_died", self, by)
         self.dead = True
         for minion in self.player.minions:
@@ -537,6 +547,12 @@ class Game(Bindable):
         self.trigger("card_played", card)
         card.use(self.current_player, self)
         self.current_player.hand.remove(card)
+
+        for minion in self.current_player.minions:
+            minion.activate_delayed()
+        for minion in self.other_player.minions:
+            minion.activate_delayed()
+
 
     def remove_minion(self, minion, player):
         player.minions.remove(minion)

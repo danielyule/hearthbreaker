@@ -221,6 +221,18 @@ class SoulOfTheForest(Card):
             minion.bind_once("silenced", lambda minion: minion.unbind("died", summon_treant), minion)
 
 
+class Swipe(Card):
+
+    def __init__(self):
+        super().__init__("Swipe", 4, CHARACTER_CLASS.DRUID, CARD_STATUS.BASIC, True, hsgame.targetting.find_enemy_minion_spell_target)
+
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(4, self)
+        for minion in game.other_player.minions:
+            if minion is not self.target:
+                minion.spell_damage(1, self)
 
 #Keeper of the Grove: Moonfire or Dispel
 
