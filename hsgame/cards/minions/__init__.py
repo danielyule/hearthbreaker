@@ -7,4 +7,5 @@ from hsgame.cards.minions.common import \
     StonetuskBoar
 
 from hsgame.cards.minions.druid import \
-    KeeperOfTheGrove
+    KeeperOfTheGrove, \
+    DruidOfTheClaw

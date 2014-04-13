@@ -243,7 +243,6 @@ class Swipe(Card):
             game.other_player.spell_damage(1, self)
 
 
-
 class Nourish(Card):
 
     def __init__(self):

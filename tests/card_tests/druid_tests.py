@@ -393,6 +393,16 @@ class TestSpells(unittest.TestCase):
         return game
 
 
+    def test_DruidOfTheClaw(self):
+        game = SavedGame("tests/replays/card_tests/DruidOfTheClaw.rep")
+        game.start()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].attack_power)
+        self.assertEqual(6, game.other_player.minions[0].max_defense)
+        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertTrue(game.other_player.minions[0].taunt)
+
     @check_mana_cost(5)
     def test_Nourish(self):
 

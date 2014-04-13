@@ -34,3 +34,38 @@ class KeeperOfTheGrove(MinionCard):
 
         return Minion(2, 4, MINION_TYPES.NONE)
 
+
+class DruidOfTheClaw(MinionCard):
+
+    def __init__(self):
+        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+    def create_minion(self, player):
+
+        #These are basically placeholders to give the agent something to choose
+        class CatForm(Card):
+            def __init__(self):
+                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                pass
+
+        class BearForm(Card):
+            def __init__(self):
+                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                pass
+
+        cat = CatForm()
+        bear = BearForm()
+        option = player.agent.choose_option(cat, bear)
+        if option is cat:
+            minion = Minion(4, 4, MINION_TYPES.NONE)
+            minion.charge = True
+        else:
+            minion = Minion(4, 6, MINION_TYPES.NONE)
+            minion.taunt = True
+
+        return minion
+
