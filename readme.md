@@ -30,7 +30,7 @@ event that takes the appropriate action.  Parameters can be passed to an event a
 is triggered, or both.  For an overview of the events and the parameters they receive, see [events.md](events.md).
 
 The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
-(spell/minion/secret/weapon) and by class.
+(spell/minion/secret/weapon) and by class.  To see which cards have been implemented, simply search for "yes".
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).
@@ -40,7 +40,8 @@ Contributing
 
 To contribute, simply fork the repository, make changes and submit a pull request.
 
-All pull requests which implement new cards must also include a unit test for those cards.
+All pull requests which implement new cards must also include a unit test for those cards.  In the case where the card
+ has no side effects aside from playing the minion, tests should include another card's effects on it.
 
 All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator)
 
