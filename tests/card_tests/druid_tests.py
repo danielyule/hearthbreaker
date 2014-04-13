@@ -333,6 +333,7 @@ class TestSpells(unittest.TestCase):
         #The bloodfen raptor should be left, with one hp
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(29, game.other_player.health)
 
 
     @check_mana_cost(4)
