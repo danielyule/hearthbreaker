@@ -440,9 +440,27 @@ class TestSpells(unittest.TestCase):
 
         self.assertEqual(10, len(game.current_player.hand))
         self.assertEqual(5, game.current_player.max_mana)
-
-
         return game
 
+    def test_ForceOfNature(self):
+        game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
 
+        self.assertEqual(3, len(game.current_player.minions))
 
+        for minion in game.current_player.minions:
+            self.assertEqual(2, minion.attack_power)
+            self.assertEqual(2, minion.defense)
+            self.assertEqual(2, minion.max_defense)
+            self.assertTrue(minion.charge)
+            self.assertEqual("Treant", minion.card.name)

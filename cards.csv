@@ -135,7 +135,7 @@ no,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Basic,Spell
 no,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Basic,Minion
 no,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Expert,Spell
 no,Flesheating Ghoul,"Whenever a minion dies, gain +1 Attack.",,,3,2,3,Expert,Minion
-no,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Expert,Spell
+yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Expert,Spell
 no,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Expert,Spell
 no,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's hand and it costs (2) more.",,Hunter,2,,,Expert,Spell
 no,Frost Elemental,Battlecry: Freeze a character.,,,6,5,5,Expert,Minion

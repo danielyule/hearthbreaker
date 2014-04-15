@@ -16,4 +16,5 @@ from hsgame.cards.spells.druid import \
     Bite, \
     SoulOfTheForest, \
     Swipe, \
-    Nourish
+    Nourish, \
+    ForceOfNature

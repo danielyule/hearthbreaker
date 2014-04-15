@@ -279,6 +279,29 @@ class Nourish(Card):
         option.use(player, game)
 
 
+class ForceOfNature(Card):
+
+    def __init__(self):
+        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Treant(MinionCard):
+            def __init__(self):
+                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+            @staticmethod
+            def create_minion():
+                minion = Minion(2, 2, MINION_TYPES.NONE)
+                minion.charge = True
+                return minion
+
+        for i in [0, 1, 2]:
+            treant = Treant.create_minion()
+            treant.add_to_board(Treant(), game, player, 0)
+
+
 
 #Special card that only appears in tandem with Wild Growth
 class ExcessMana(Card):
