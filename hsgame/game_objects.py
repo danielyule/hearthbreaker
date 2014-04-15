@@ -1,5 +1,5 @@
-from random import randint
-from hsgame.powers import powers
+import random
+import hsgame.powers
 import hsgame.targetting
 
 
@@ -324,7 +324,7 @@ class Deck:
 
 
 class Player(Bindable):
-    def __init__(self, name, deck, agent, game, random=randint):
+    def __init__(self, name, deck, agent, game, random=random.randint):
         super().__init__()
         self.dead = False
         self.name = name
@@ -345,7 +345,7 @@ class Player(Bindable):
         self.game = game
         self.frozen = False
         self.active = False
-        self.power = powers(self.character_class)(self)
+        self.power = hsgame.powers.powers(self.character_class)(self)
 
     def __str__(self):
         return "Player: " + self.name
@@ -457,7 +457,7 @@ class Player(Bindable):
         self.attack_power = 0
 
 class Game(Bindable):
-    def __init__(self, decks, agents, random=randint):
+    def __init__(self, decks, agents, random=random.randint):
         super().__init__()
         self.random = random
         first_player = random(0, 1)

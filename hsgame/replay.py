@@ -1,10 +1,10 @@
 from random import randint
 import re
 import hsgame
-from hsgame.constants import CHARACTER_CLASS
+import hsgame.constants
 import hsgame.game_objects
 import hsgame.cards
-from hsgame.game_objects import Game
+import hsgame.game_objects
 
 __author__ = 'Daniel'
 
@@ -281,7 +281,7 @@ class Replay:
 
         for deck in self.decks:
             writer.write("deck(")
-            writer.write(CHARACTER_CLASS.to_str(deck.character_class))
+            writer.write(hsgame.constants.CHARACTER_CLASS.to_str(deck.character_class))
             writer.write(",")
             writer.write(",".join([card.name for card in shorten_deck(deck.cards)]))
             writer.write(")\n")
@@ -347,7 +347,7 @@ class Replay:
                     raise ReplayException("Maximum of two decks per file")
                 deck_size = len(args) - 1
                 cards = [hsgame.game_objects.card_lookup(args[1 + index % (deck_size)]) for index in range(0, 30)]
-                self.decks.append(hsgame.game_objects.Deck(cards, CHARACTER_CLASS.from_str(args[0])))
+                self.decks.append(hsgame.game_objects.Deck(cards, hsgame.constants.CHARACTER_CLASS.from_str(args[0])))
 
             elif action == 'keep':
                 if len(self.keeps) > 1:
@@ -360,7 +360,7 @@ class Replay:
         if len(self.keeps) is 0:
             self.keeps = [[0,1,2],[0,1,2,3]]
 
-class RecordingGame(Game):
+class RecordingGame(hsgame.game_objects.Game):
 
     def __init__(self, decks, agents):
         game = self
@@ -423,7 +423,7 @@ class RecordingGame(Game):
         return result
 
 
-class SavedGame(Game):
+class SavedGame(hsgame.game_objects.Game):
 
     def __init__(self, replay_file):
 

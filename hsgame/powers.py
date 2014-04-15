@@ -1,13 +1,13 @@
-from hsgame.constants import CHARACTER_CLASS
+import hsgame.constants
 
 __author__ = 'Daniel'
 
 def powers(character_class):
-    if character_class == CHARACTER_CLASS.DRUID:
+    if character_class == hsgame.constants.CHARACTER_CLASS.DRUID:
         return DruidPower
-    elif character_class == CHARACTER_CLASS.MAGE:
+    elif character_class == hsgame.constants.CHARACTER_CLASS.MAGE:
         return MagePower
-    elif character_class == CHARACTER_CLASS.PRIEST:
+    elif character_class == hsgame.constants.CHARACTER_CLASS.PRIEST:
         return PriestPower
 
 
