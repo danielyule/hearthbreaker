@@ -297,9 +297,11 @@ class ForceOfNature(Card):
                 minion.charge = True
                 return minion
 
+        treants = []
         for i in [0, 1, 2]:
-            treant = Treant.create_minion()
-            treant.add_to_board(Treant(), game, player, 0)
+            treants.append(Treant.create_minion())
+            treants[i].add_to_board(Treant(), game, player, 0)
+            player.bind_once("turn_ended", lambda x: game.remove_minion(x, player), treants[i])
 
 
 
