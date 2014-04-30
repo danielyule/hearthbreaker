@@ -233,7 +233,7 @@ no,Mindgames,Put a copy of a random minion from your opponent's deck into the ba
 no,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of it.",,Mage,3,,,Expert,Spell
 no,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
 no,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Expert,Spell
-no,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
+yes,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
 no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Basic,Spell
 no,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Basic,Spell
@@ -364,7 +364,7 @@ no,Violet Teacher,"Whenever you cast a spell, summon a 1/1 Violet Apprentice.",,
 no,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Expert,Minion
 no,Voidwalker,Taunt,Demon,Warlock,1,1,3,Basic,Minion
 no,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Basic,Minion
-no,War Golem,,,,7,7,7,Basic,Minion
+yes,War Golem,,,,7,7,7,Basic,Minion
 no,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Basic,Minion
 no,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Basic,Minion
 no,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Basic,Spell

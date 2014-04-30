@@ -4,7 +4,9 @@ from hsgame.cards.minions.common import \
     BloodfenRaptor, \
     IronbeakOwl, \
     NoviceEngineer, \
-    StonetuskBoar
+    StonetuskBoar, \
+    WarGolem, \
+    MogushanWarden
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \

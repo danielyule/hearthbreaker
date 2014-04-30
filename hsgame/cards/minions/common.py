@@ -38,3 +38,21 @@ class IronbeakOwl(MinionCard):
         minion = Minion(2, 1, MINION_TYPES.BEAST)
         minion.bind('added_to_board', silence)
         return minion
+
+
+class WarGolem(MinionCard):
+    def __init__(self):
+        super().__init__("War Golem", 7, CHARACTER_CLASS.ALL, CARD_STATUS.BASIC)
+
+    def create_minion(self, player):
+        return Minion(7,7, MINION_TYPES.NONE)
+
+
+class MogushanWarden(MinionCard):
+    def __init__(self):
+        super().__init__("Mogu'shan Warden", 4, CHARACTER_CLASS.ALL, CARD_STATUS.EXPERT)
+
+    def create_minion(self, player):
+        minion = Minion(1, 7, MINION_TYPES.BEAST)
+        minion.taunt = True
+        return minion
