@@ -32,7 +32,7 @@ class KeeperOfTheGrove(MinionCard):
             option = player.agent.choose_option(Moonfire(), Dispel())
             option.use(player, player.game)
 
-        return Minion(2, 4, MINION_TYPES.NONE)
+        return Minion(2, 4)
 
 
 class DruidOfTheClaw(MinionCard):
@@ -61,11 +61,87 @@ class DruidOfTheClaw(MinionCard):
         bear = BearForm()
         option = player.agent.choose_option(cat, bear)
         if option is cat:
-            minion = Minion(4, 4, MINION_TYPES.NONE)
+            minion = Minion(4, 4)
             minion.charge = True
         else:
-            minion = Minion(4, 6, MINION_TYPES.NONE)
+            minion = Minion(4, 6)
             minion.taunt = True
 
         return minion
 
+
+class AncientOfLore(MinionCard):
+
+    def __init__(self):
+        super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC)
+
+    def create_minion(self, player):
+
+        #These are basically placeholders to give the agent something to choose
+        class AncientSecrets(Card):
+            def __init__(self):
+                super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                player.heal(5)
+
+        class AncientTeachings(Card):
+            def __init__(self):
+                super().__init__("Ancient  Teachings", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                player.draw()
+                player.draw()
+
+
+        option = player.agent.choose_option(AncientSecrets(), AncientTeachings())
+        option.use(player, player.game)
+
+        return Minion(5, 5)
+
+
+class AncientOfWar(MinionCard):
+
+    def __init__(self):
+        super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC)
+
+
+    def create_minion(self, player):
+
+        #These are basically placeholders to give the agent something to choose
+        class Health(Card):
+            def __init__(self):
+                super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                pass
+
+        class Attack(Card):
+            def __init__(self):
+                super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                pass
+
+        health = Health()
+        attack = Attack()
+        option = player.agent.choose_option(health, attack)
+        minion = Minion(5, 5)
+        if option is health:
+            minion.increase_health(5)
+            minion.taunt = True
+        else:
+            minion.increase_attack(5)
+
+        return minion
+
+
+class IronbarkProtector (MinionCard):
+
+    def __init__(self):
+        super().__init__("Ironbark Protector", 8, CHARACTER_CLASS.DRUID, CARD_STATUS.BASIC)
+
+    def create_minion(self, player):
+        minion = Minion(8, 8)
+        minion.taunt = True
+        return minion

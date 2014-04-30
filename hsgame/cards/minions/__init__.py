@@ -10,4 +10,7 @@ from hsgame.cards.minions.common import \
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \
-    DruidOfTheClaw
+    DruidOfTheClaw, \
+    AncientOfLore, \
+    AncientOfWar, \
+    IronbarkProtector

@@ -351,7 +351,7 @@ class ForceOfNature(Card):
 class Starfire(Card):
 
     def __init__(self):
-        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC, True, hsgame.targetting.find_spell_target)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.BASIC, True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
