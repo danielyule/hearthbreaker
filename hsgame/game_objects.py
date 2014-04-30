@@ -136,7 +136,7 @@ class MinionCard(Card):
 
 
 class Minion(Bindable):
-    def __init__(self, attack, defense, type=hsgame.constants.MINION_TYPES.NONE):
+    def __init__(self, attack, defense, type=hsgame.constants.MINION_TYPE.NONE):
         self.attack_power = self.max_attack = attack
         self.defense = self.max_defense = defense
         self.type = type

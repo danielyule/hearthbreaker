@@ -1,5 +1,5 @@
 import hsgame.targetting
-from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPES
+from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
 
 __author__ = 'Daniel'
@@ -93,7 +93,6 @@ class AncientOfLore(MinionCard):
                 player.draw()
                 player.draw()
 
-
         option = player.agent.choose_option(AncientSecrets(), AncientTeachings())
         option.use(player, player.game)
 
@@ -145,3 +144,46 @@ class IronbarkProtector (MinionCard):
         minion = Minion(8, 8)
         minion.taunt = True
         return minion
+
+
+class Cenarius(MinionCard):
+
+    def __init__(self):
+        super().__init__("Cenarius", 9, CHARACTER_CLASS.DRUID, CARD_STATUS.LEGENDARY)
+
+    def create_minion(self, player):
+
+        #These are basically placeholders to give the agent something to choose
+        class IncreaseStats(Card):
+            def __init__(self):
+                super().__init__("Give your other minions +2/+2 and taunt", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                for minion in player.minions:
+                    minion.increase_attack(2)
+                    minion.increase_health(2)
+                    minion.taunt = True
+
+        class SummonTreants(Card):
+            def __init__(self):
+                super().__init__("Summon two 2/2 Treants with taunt", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                class Treant(MinionCard):
+                    def __init__(self):
+                        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+                    @staticmethod
+                    def create_minion():
+                        minion = Minion(2, 2, MINION_TYPE.NONE)
+                        minion.taunt = True
+                        return minion
+                #TODO Check if Cenarius summons the minions before or after himself
+                for i in [0, 1]:
+                    treant = Treant.create_minion()
+                    treant.add_to_board(Treant(), game, player, 0)
+
+        option = player.agent.choose_option(IncreaseStats(), SummonTreants())
+        option.use(player, player.game)
+
+        return Minion(5, 8)

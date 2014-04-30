@@ -6,11 +6,13 @@ from hsgame.cards.minions.common import \
     NoviceEngineer, \
     StonetuskBoar, \
     WarGolem, \
-    MogushanWarden
+    MogushanWarden, \
+    OasisSnapjaw
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \
     DruidOfTheClaw, \
     AncientOfLore, \
     AncientOfWar, \
-    IronbarkProtector
+    IronbarkProtector, \
+    Cenarius

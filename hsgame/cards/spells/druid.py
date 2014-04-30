@@ -1,5 +1,5 @@
 import hsgame.targetting
-from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPES
+from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPE
 
 __author__ = 'Daniel'
 from hsgame.game_objects import Card, MinionCard, Minion
@@ -91,9 +91,9 @@ class PowerOfTheWild(Card):
                         super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL)
 
                     def create_minion(self):
-                        return Minion(3, 2, MINION_TYPES.BEAST)
+                        return Minion(3, 2, MINION_TYPE.BEAST)
 
-                panther = Minion(3, 2, MINION_TYPES.BEAST)
+                panther = Minion(3, 2, MINION_TYPE.BEAST)
                 panther.add_to_board(Panther(), game, player, len(player.minions))
 
 
@@ -224,9 +224,9 @@ class SoulOfTheForest(Card):
                     super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
 
                 def create_minion(self):
-                    return Minion(2, 2, MINION_TYPES.NONE)
+                    return Minion(2, 2)
 
-            treant = Minion(2, 2, MINION_TYPES.NONE)
+            treant = Minion(2, 2)
             treant.add_to_board(Treant(), game, player, len(player.minions))
 
         super().use(player, game)
@@ -338,7 +338,7 @@ class ForceOfNature(Card):
 
             @staticmethod
             def create_minion():
-                minion = Minion(2, 2, MINION_TYPES.NONE)
+                minion = Minion(2, 2)
                 minion.charge = True
                 return minion
 

@@ -64,7 +64,7 @@ no,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or 
 no,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Expert,Minion
 no,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Expert,Minion
 no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Reward,Minion
-no,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
+yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
 no,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Basic,Spell
 no,Chillwind Yeti,,,,4,4,5,Basic,Minion
 no,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
