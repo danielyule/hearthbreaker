@@ -7,7 +7,8 @@ from hsgame.cards.minions.common import \
     StonetuskBoar, \
     WarGolem, \
     MogushanWarden, \
-    OasisSnapjaw
+    OasisSnapjaw, \
+    FaerieDragon
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \

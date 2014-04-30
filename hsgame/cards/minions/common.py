@@ -64,3 +64,15 @@ class OasisSnapjaw(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 7, MINION_TYPE.BEAST)
+
+class FaerieDragon(MinionCard):
+    def __init__(self):
+        super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_STATUS.EXPERT)
+
+    def create_minion(self, player):
+        def silence():
+            minion.spell_targettable = lambda : True
+        minion = Minion(3, 2, MINION_TYPE.DRAGON)
+        minion.spell_targettable = lambda: False
+        minion.bind("silenced", silence())
+        return minion

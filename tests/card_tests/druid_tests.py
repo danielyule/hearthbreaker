@@ -14,7 +14,7 @@ from hsgame.cards import *
 import unittest
 
 
-class TestSpells(unittest.TestCase):
+class TestDruid(unittest.TestCase):
 
     def setUp(self):
         random.seed(1857)

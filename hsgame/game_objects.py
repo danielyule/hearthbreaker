@@ -32,7 +32,6 @@ class GameException(Exception):
 class Bindable:
     def __init__(self):
         self.events = {}
-        self.delayed = []
 
     def bind(self, event, function, *args, **kwargs):
         class Handler:
@@ -70,12 +69,7 @@ class Bindable:
                 handler.function(*pass_args, **pass_kwargs)
             self.events[event] = [handler for handler in self.events[event] if not handler.remove]
 
-    def delayed_trigger(self, event, *args, **kwargs):
-        self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
 
-    def activate_delayed(self):
-        for delayed in self.delayed:
-            self.trigger(delayed['event'], *delayed['args'], **delayed['kwargs'])
 
     def unbind(self, event, function):
         if event in self.events:
@@ -153,7 +147,18 @@ class Minion(Bindable):
         self.temp_attack = 0
         self.index = -1
         self.charge = False
+        self.delayed = []
         super().__init__()
+
+    def delayed_trigger(self, event, *args, **kwargs):
+        self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
+        self.game.delayed_minions.append(self)
+
+    def activate_delayed(self):
+        for delayed in self.delayed:
+            self.trigger(delayed['event'], *delayed['args'], **delayed['kwargs'])
+
+        self.delayed = []
 
     def add_to_board(self, card, game, player, index):
         self.card = card
@@ -202,18 +207,19 @@ class Minion(Bindable):
             my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
             self.minion_damage(target.attack_power, target)
             target.minion_damage(my_attack, self)
+            target.activate_delayed()
         else:
             self.game.trigger("minion_on_player_attack", self, target)
             self.trigger("attack_player", target)
             target.minion_damage(self.attack_power, self)
 
+        self.activate_delayed()
         if self.wind_fury and not self.used_wind_fury:
             self.used_wind_fury = True
         else:
             self.active = False
         self.stealth = False
-        self.activate_delayed()
-        target.activate_delayed()
+
 
     def damage(self, amount, attacker):
         self.delayed_trigger("damaged", amount, attacker)
@@ -460,6 +466,7 @@ class Player(Bindable):
 class Game(Bindable):
     def __init__(self, decks, agents, random=random.randint):
         super().__init__()
+        self.delayed_minions = []
         self.random = random
         first_player = random(0, 1)
         if first_player is 0:
@@ -550,10 +557,10 @@ class Game(Bindable):
         card.use(self.current_player, self)
         self.current_player.hand.remove(card)
 
-        for minion in self.current_player.minions:
+        for minion in self.delayed_minions:
             minion.activate_delayed()
-        for minion in self.other_player.minions:
-            minion.activate_delayed()
+
+        self.delayed_minions = []
 
 
     def remove_minion(self, minion, player):

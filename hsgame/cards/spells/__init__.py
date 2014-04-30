@@ -20,3 +20,6 @@ from hsgame.cards.spells.druid import \
     Starfall, \
     ForceOfNature, \
     Starfire
+
+from hsgame.cards.spells.mage import \
+    ArcaneMissiles
