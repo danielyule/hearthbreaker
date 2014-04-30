@@ -470,3 +470,43 @@ class TestSpells(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(0, len(game.other_player.minions))
+
+    @check_mana_cost(5)
+    def test_Starfall(self):
+
+        #Test gaining two mana
+        game = generate_game_for(Starfall, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(30, game.other_player.health)
+
+        #Test drawing three cards
+        random.seed(1857)
+        game = generate_game_for(Starfall, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+        #TODO replace Stonetusk with a War Golem
+        game.players[0].agent.choose_option = Mock(side_effect=lambda damageAll, damageOne: damageOne)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(30, game.other_player.health)
+        return game

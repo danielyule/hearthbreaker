@@ -297,13 +297,44 @@ class ForceOfNature(Card):
                 minion.charge = True
                 return minion
 
-        treants = []
         for i in [0, 1, 2]:
-            treants.append(Treant.create_minion())
-            treants[i].add_to_board(Treant(), game, player, 0)
-            player.bind_once("turn_ended", lambda x: game.remove_minion(x, player), treants[i])
+            treant = Treant.create_minion()
+            treant.add_to_board(Treant(), game, player, 0)
+            player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
 
 
+class Starfall(Card):
+
+    def __init__(self):
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, False)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) > 0
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class DamageAll(Card):
+
+            def __init__(self):
+                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                for minion in game.other_player.minions.copy():
+                    minion.spell_damage(2, self)
+
+        class DamageOne(Card):
+
+            def __init__(self):
+                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                targets = hsgame.targetting.find_enemy_minion_spell_target(game)
+                target = player.agent.choose_target(targets)
+                target.spell_damage(5, self)
+
+        option = player.agent.choose_option(DamageAll(), DamageOne())
+        option.use(player, game)
 
 #Special card that only appears in tandem with Wild Growth
 class ExcessMana(Card):

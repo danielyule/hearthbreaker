@@ -323,7 +323,7 @@ no,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Expert,Minion
 no,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Expert,Minion
 no,Sprint,Draw 4 cards.,,Rogue,7,,,Basic,Spell
 no,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Expert,Minion
-no,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Expert,Spell
+yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Expert,Spell
 no,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Basic,Spell
 no,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Basic,Minion
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Basic,Minion
