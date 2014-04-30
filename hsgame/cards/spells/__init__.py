@@ -17,5 +17,6 @@ from hsgame.cards.spells.druid import \
     SoulOfTheForest, \
     Swipe, \
     Nourish, \
+    Starfall, \
     ForceOfNature, \
-    Starfall
+    Starfire

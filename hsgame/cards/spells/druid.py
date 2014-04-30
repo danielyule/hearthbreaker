@@ -113,6 +113,17 @@ class WildGrowth(Card):
         else:
             player.hand.append(ExcessMana())
 
+
+#Special card that only appears in tandem with Wild Growth
+class ExcessMana(Card):
+    def __init__(self):
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.draw()
+
+
 class Wrath(Card):
     def __init__(self):
         super().__init__("Wrath", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT, True, hsgame.targetting.find_minion_spell_target)
@@ -279,30 +290,6 @@ class Nourish(Card):
         option.use(player, game)
 
 
-class ForceOfNature(Card):
-
-    def __init__(self):
-        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC, False)
-
-    def use(self, player, game):
-        super().use(player, game)
-
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
-
-            @staticmethod
-            def create_minion():
-                minion = Minion(2, 2, MINION_TYPES.NONE)
-                minion.charge = True
-                return minion
-
-        for i in [0, 1, 2]:
-            treant = Treant.create_minion()
-            treant.add_to_board(Treant(), game, player, 0)
-            player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
-
-
 class Starfall(Card):
 
     def __init__(self):
@@ -329,18 +316,45 @@ class Starfall(Card):
                 super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
 
             def use(self, player, game):
-                targets = hsgame.targetting.find_enemy_minion_spell_target(game)
+                targets = hsgame.targetting.find_minion_spell_target(game)
                 target = player.agent.choose_target(targets)
                 target.spell_damage(5, self)
 
         option = player.agent.choose_option(DamageAll(), DamageOne())
         option.use(player, game)
 
-#Special card that only appears in tandem with Wild Growth
-class ExcessMana(Card):
+
+class ForceOfNature(Card):
+
     def __init__(self):
-        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC, False)
 
     def use(self, player, game):
         super().use(player, game)
+
+        class Treant(MinionCard):
+            def __init__(self):
+                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
+
+            @staticmethod
+            def create_minion():
+                minion = Minion(2, 2, MINION_TYPES.NONE)
+                minion.charge = True
+                return minion
+
+        for i in [0, 1, 2]:
+            treant = Treant.create_minion()
+            treant.add_to_board(Treant(), game, player, 0)
+            player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
+
+
+class Starfire(Card):
+
+    def __init__(self):
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.EPIC, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(5, self)
         player.draw()
+

@@ -510,3 +510,27 @@ class TestSpells(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].defense)
         self.assertEqual(30, game.other_player.health)
         return game
+
+
+    def test_Starfire(self):
+        game = generate_game_for(Starfire, MogushanWarden, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertEqual(7, game.other_player.minions[1].defense)
+        self.assertEqual(9, len(game.current_player.hand))
