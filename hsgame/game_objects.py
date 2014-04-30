@@ -181,7 +181,7 @@ class Minion(Bindable):
         found_taunt = False
         targets = []
         for enemy in self.game.other_player.minions:
-            if enemy.taunt:
+            if enemy.taunt and not enemy.stealth:
                 found_taunt = True
             if not enemy.stealth:
                 targets.append(enemy)
