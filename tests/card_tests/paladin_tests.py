@@ -57,3 +57,19 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual(1, game.other_player.minions[0].defense)
         self.assertEqual(1, game.other_player.minions[0].max_defense)
+        
+    def testBlessingOfKings(self):
+        game = generate_game_for(BlessingOfKings, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(5, game.other_player.minions[0].attack_power)
+        self.assertEqual(5, game.other_player.minions[0].defense)
+        self.assertEqual(5, game.other_player.minions[0].max_defense)
+
+        #Test that this spell is being silenced properly as well
+        game.other_player.minions[0].silence()
+        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].max_defense)

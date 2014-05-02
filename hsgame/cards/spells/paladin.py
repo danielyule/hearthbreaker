@@ -24,3 +24,12 @@ class BlessedChampion(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.increase_attack(self.target.attack_power)
+        
+class BlessingOfKings(Card):
+    def __init__(self):
+        super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.increase_attack(4)
+        self.target.increase_health(4)
