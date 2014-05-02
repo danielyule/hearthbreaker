@@ -26,4 +26,6 @@ from hsgame.cards.spells.mage import \
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \
-    BlessedChampion
+    BlessedChampion, \
+    BlessingOfKings, \
+    BlessingOfMight
