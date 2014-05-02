@@ -3,6 +3,7 @@ import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
+from hsgame.replay import SavedGame
 
 from hsgame.cards import *
 
@@ -89,3 +90,11 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual(1, game.other_player.minions[0].defense)
         self.assertEqual(1, game.other_player.minions[0].max_defense)
+
+    def testBlessingOfWisdom(self):
+        game = SavedGame("tests/replays/card_tests/BlessingOfWisdom.rep")
+        game.start()
+        self.assertEqual(3, len(game.current_player.minions))
+        # 7 cards have been drawn.
+        # 3 for starting first, 3 for new turn and 1 for minion attack with Blessing of Wisdom (the second minion who had it got silenced)
+        self.assertEqual(23, game.other_player.deck.left)

@@ -41,3 +41,19 @@ class BlessingOfMight(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.increase_attack(3)
+
+class BlessingOfWisdom(Card):
+    def __init__(self):
+        super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+
+        def draw(*args):
+            player.draw()
+
+        super().use(player, game)
+        self.target.bind("attack_minion", draw, self.target)
+        self.target.bind("attack_player", draw, self.target)
+        self.target.bind_once("silenced", lambda minion: minion.unbind("attack_minion", draw), self.target)
+        self.target.bind_once("silenced", lambda minion: minion.unbind("attack_player", draw), self.target)
+
