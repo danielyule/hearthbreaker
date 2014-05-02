@@ -1,7 +1,7 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
+from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 
 from hsgame.cards import *
@@ -29,18 +29,8 @@ class TestPaladin(unittest.TestCase):
     def testAvengingWrath(self):
         game = generate_game_for(MogushanWarden, AvengingWrath, MinionPlayingAgent, SpellTestingAgent)
 
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
+        for turn in range(0, 12):
+            game.play_single_turn()
 
         #The random numbers work so that Avenging Wrath hits the player once, first minion once, second minion four times and third minion two times (total of eight hits)
         self.assertEqual(29, game.other_player.health)
@@ -52,3 +42,18 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[1].defense)
         self.assertEqual(5, game.other_player.minions[2].defense)
 
+    def testBlessedChampion(self):
+        game = generate_game_for(BlessedChampion, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].max_defense)
+
+        #Test that this spell is being silenced properly as well
+        game.other_player.minions[0].silence()
+        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].max_defense)

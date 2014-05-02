@@ -44,7 +44,7 @@ no,Betrayal,Force an enemy minion to deal its damage to the minions next to it.,
 no,Big Game Hunter,Battlecry: Destroy a minion with an Attack of 7 or more.,,,3,4,2,Expert,Minion
 yes,Bite,Give your hero +4 Attack this turn and 4 Armor.,,Druid,4,,,Expert,Spell
 no,Blade Flurry,Destroy your weapon and deal its damage to all enemies.,,Rogue,2,,,Expert,Spell
-no,Blessed Champion,Double a minion's Attack.,,Paladin,5,,,Expert,Spell
+yes,Blessed Champion,Double a minion's Attack.,,Paladin,5,,,Expert,Spell
 no,Blessing of Kings,Give a minion +4/+4. (+4 Attack/+4 Health),,Paladin,4,,,Basic,Spell
 no,Blessing of Might,Give a minion +3 Attack.,,Paladin,1,,,Basic,Spell
 no,Blessing of Wisdom,"Choose a minion. Whenever it attacks, draw a card.",,Paladin,1,,,Expert,Spell
