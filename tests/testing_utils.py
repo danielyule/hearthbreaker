@@ -17,6 +17,7 @@ class StackedDeck(Deck):
         for card_index in range(0, 30):
             if not self.used[card_index]:
                 self.used[card_index] = True
+                self.left -= 1
                 return self.cards[card_index]
 
         return None
