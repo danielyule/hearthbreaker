@@ -33,3 +33,11 @@ class BlessingOfKings(Card):
         super().use(player, game)
         self.target.increase_attack(4)
         self.target.increase_health(4)
+
+class BlessingOfMight(Card):
+    def __init__(self):
+        super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.increase_attack(3)
