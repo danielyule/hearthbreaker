@@ -9,6 +9,8 @@ def powers(character_class):
         return MagePower
     elif character_class == hsgame.constants.CHARACTER_CLASS.PRIEST:
         return PriestPower
+    elif character_class == hsgame.constants.CHARACTER_CLASS.PALADIN:
+        return PaladinPower
 
 
 class Power:
@@ -55,3 +57,11 @@ class PriestPower(Power):
         super().use()
         target = self.player.find_power_target()
         target.heal(2)
+
+class PaladinPower(Power):
+    
+    def __init__(self, player):
+        super().__init__(player)
+        
+    def use(self):
+        super().use()
