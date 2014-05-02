@@ -1,5 +1,6 @@
 import random
 import unittest
+from hsgame.replay import SavedGame
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
 from tests.testing_utils import generate_game_for
 
@@ -34,3 +35,14 @@ class TestMage(unittest.TestCase):
         self.assertEqual(10, game.other_player.health)
         self.assertEqual(3, game.other_player.minions[0].defense)
 
+    def testArcaneMissilesWithSpellPower(self):
+        game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
+        game.start()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(2, game.other_player.minions[0].max_defense)
+        self.assertEqual(27, game.other_player.health)
+
+        return game

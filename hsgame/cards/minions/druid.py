@@ -1,6 +1,7 @@
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
+from hsgame.cards.battlecries import silence, deal_two_damage
 
 __author__ = 'Daniel'
 
@@ -16,23 +17,25 @@ class KeeperOfTheGrove(MinionCard):
                 super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.spell_damage(2, self)
+                pass
 
         class Dispel(Card):
             def __init__(self):
                 super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.silence()
+                pass
 
-        targets = hsgame.targetting.find_minion_spell_target(player.game)
+        moonfire = Moonfire()
+        dispell = Dispel()
+        option = player.agent.choose_option(moonfire, dispell)
+        minion = Minion(2, 4)
+        if option == moonfire:
+            minion.bind("added_to_board", deal_two_damage)
+        else:
+            minion.bind("added_to_board", silence)
 
-        if len(targets) > 0:
-            target = player.agent.choose_target(targets)
-            option = player.agent.choose_option(Moonfire(), Dispel())
-            option.use(player, player.game)
-
-        return Minion(2, 4)
+        return minion
 
 
 class DruidOfTheClaw(MinionCard):

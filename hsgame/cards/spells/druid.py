@@ -21,7 +21,7 @@ class Moonfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(1, self)
+        self.target.spell_damage(1 + player.spell_power, self)
 
 
 class Claw(Card):
@@ -51,7 +51,7 @@ class Savagery(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.attack_power, self)
+        self.target.spell_damage(player.attack_power + player.spell_power, self)
 
 
 class MarkOfTheWild(Card):
@@ -135,7 +135,7 @@ class Wrath(Card):
                 super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.spell_damage(1, wrath)
+                target.spell_damage(1 + player.spell_power, wrath)
                 player.draw()
 
         class WrathThree(Card):
@@ -143,7 +143,7 @@ class Wrath(Card):
                 super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, True, hsgame.targetting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.spell_damage(3, wrath)
+                target.spell_damage(3 + player.spell_power, wrath)
 
         super().use(player, game)
         option = game.current_player.agent.choose_option(WrathOne(), WrathThree())
@@ -248,10 +248,10 @@ class Swipe(Card):
         #must be copied or as units die, they'll be removed from the list
         for minion in game.other_player.minions.copy():
             if minion is not self.target:
-                minion.spell_damage(1, self)
+                minion.spell_damage(1 + player.spell_power, self)
 
         if self.target is not game.other_player:
-            game.other_player.spell_damage(1, self)
+            game.other_player.spell_damage(1 + player.spell_power, self)
 
 
 class Nourish(Card):
@@ -308,7 +308,7 @@ class Starfall(Card):
 
             def use(self, player, game):
                 for minion in game.other_player.minions.copy():
-                    minion.spell_damage(2, self)
+                    minion.spell_damage(2 + player.spell_power, self)
 
         class DamageOne(Card):
 
@@ -318,7 +318,7 @@ class Starfall(Card):
             def use(self, player, game):
                 targets = hsgame.targetting.find_minion_spell_target(game)
                 target = player.agent.choose_target(targets)
-                target.spell_damage(5, self)
+                target.spell_damage(5 + player.spell_power, self)
 
         option = player.agent.choose_option(DamageAll(), DamageOne())
         option.use(player, game)
@@ -355,6 +355,6 @@ class Starfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(5, self)
+        self.target.spell_damage(5 + player.spell_power, self)
         player.draw()
 

@@ -196,7 +196,7 @@ no,King Krush,Charge,Beast,Hunter,9,8,8,Expert,Minion
 no,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Expert,Minion
 no,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mage,3,4,3,Expert,Minion
 no,Knife Juggler,"After you summon a minion, deal 1 damage to a random enemy.",,,2,3,2,Expert,Minion
-no,Kobold Geomancer,Spell Damage +1,,,2,2,2,Basic,Minion
+yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Basic,Minion
 no,Kor'kron Elite,Charge,,Warrior,4,4,3,Basic,Minion
 no,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Expert,Spell
 no,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Expert,Spell

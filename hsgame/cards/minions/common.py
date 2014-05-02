@@ -76,3 +76,14 @@ class FaerieDragon(MinionCard):
         minion.spell_targettable = lambda: False
         minion.bind("silenced", silence())
         return minion
+
+class KoboldGeomancer(MinionCard):
+
+    def __init__(self):
+        super().__init__("Kobold Geomancer", 2, CHARACTER_CLASS.ALL, CARD_STATUS.BASIC)
+
+    def create_minion(self, player):
+        minion = Minion(2, 2)
+        minion.spell_power = 1
+        return minion
+
