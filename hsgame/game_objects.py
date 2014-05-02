@@ -147,6 +147,7 @@ class Minion(Bindable):
         self.temp_attack = 0
         self.index = -1
         self.charge = False
+        self.spell_power = 0
         self.delayed = []
         super().__init__()
 
@@ -165,6 +166,7 @@ class Minion(Bindable):
         player.minions.insert(index, self)
         self.game = game
         self.player = player
+        player.spell_power += self.spell_power
         self.trigger("added_to_board", self)
         self.game.trigger("minion_added", self)
         for minion in player.minions:
@@ -257,6 +259,9 @@ class Minion(Bindable):
         self.stealth = False
         self.charge = False
 
+        self.player.spell_power -= self.spell_power
+        self.spell_power = 0
+
 
     def spell_damage(self, amount, spellCard):
         self.trigger("spell_damaged", amount, spellCard)
@@ -273,6 +278,7 @@ class Minion(Bindable):
     def die(self, by):
         self.delayed_trigger("died", by)
         self.game.trigger("minion_died", self, by)
+        self.player.spell_power -= self.spell_power
         self.dead = True
         for minion in self.player.minions:
             if minion.index > self.index:
@@ -341,6 +347,7 @@ class Player(Bindable):
         self.max_mana = 0
         self.armour = 0
         self.attack_power = 0
+        self.spell_power = 0
         self.minions = []
         self.weapon = None
         self.character_class = deck.character_class

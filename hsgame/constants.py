@@ -1,8 +1,9 @@
 __author__ = 'Daniel'
 
-class CARD_STATUS:
-    BASIC = 1
-    EXPERT = 2
+
+class CARD_RARITY:
+    FREE = 1
+    COMMON = 2
     RARE = 3
     EPIC = 4
     LEGENDARY = 5

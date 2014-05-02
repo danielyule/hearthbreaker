@@ -116,12 +116,6 @@ class TestDruid(unittest.TestCase):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
 
-
-
-
-
-
-
         #This is a test of the +1/+1 option of the Power Of the Wild Card
         game = Game([deck1, deck2], [MinionPlayingAgent(), MinionPlayingAgent()])
         game.current_player = game.players[1]
