@@ -1,4 +1,4 @@
-from hsgame.constants import CHARACTER_CLASS, CARD_STATUS
+from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
 __author__ = 'Daniel'
@@ -6,7 +6,7 @@ __author__ = 'Daniel'
 
 class AvengingWrath(Card):
     def __init__(self):
-        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_STATUS.EXPERT, False)
+        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
         super().use(player, game)

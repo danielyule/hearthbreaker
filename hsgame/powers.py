@@ -69,7 +69,7 @@ class PaladinPower(Power):
     def use(self):
         class SilverHandRecruit(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Silver Hand Recruit", 1, hsgame.constants.CHARACTER_CLASS.PALADIN, hsgame.constants.CARD_STATUS.SPECIAL)
+                super().__init__("Silver Hand Recruit", 1, hsgame.constants.CHARACTER_CLASS.PALADIN, hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 return hsgame.game_objects.Minion(1, 1)

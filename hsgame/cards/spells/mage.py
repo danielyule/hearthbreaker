@@ -1,4 +1,4 @@
-from hsgame.constants import CHARACTER_CLASS, CARD_STATUS
+from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
 __author__ = 'Daniel'
@@ -6,7 +6,7 @@ __author__ = 'Daniel'
 
 class ArcaneMissiles(Card):
     def __init__(self):
-        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_STATUS.BASIC, False)
+        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
 
     def use(self, player, game):
         super().use(player, game)
