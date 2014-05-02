@@ -25,4 +25,5 @@ from hsgame.cards.spells.mage import \
     ArcaneMissiles
 
 from hsgame.cards.spells.paladin import \
-    AvengingWrath
+    AvengingWrath, \
+    BlessedChampion

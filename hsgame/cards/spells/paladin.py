@@ -1,3 +1,4 @@
+import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
@@ -15,3 +16,11 @@ class AvengingWrath(Card):
             targets.append(game.other_player)
             target = targets[game.random(0, len(targets) - 1)]
             target.spell_damage(1, self)
+
+class BlessedChampion(Card):
+    def __init__(self):
+        super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_spell_target)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.increase_attack(self.target.attack_power)
