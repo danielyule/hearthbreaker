@@ -1,4 +1,5 @@
 import hsgame.constants
+import hsgame.game_objects
 
 __author__ = 'Daniel'
 
@@ -48,6 +49,7 @@ class MagePower(Power):
         target = self.player.find_power_target()
         target.damage(1, None)
 
+
 class PriestPower(Power):
 
     def __init__(self, player):
@@ -58,10 +60,22 @@ class PriestPower(Power):
         target = self.player.find_power_target()
         target.heal(2)
 
+
 class PaladinPower(Power):
     
     def __init__(self, player):
         super().__init__(player)
         
     def use(self):
+        class SilverHandRecruit(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Silver Hand Recruit", 1, hsgame.constants.CHARACTER_CLASS.PALADIN, hsgame.constants.CARD_STATUS.SPECIAL)
+
+            def create_minion(self, player):
+                return hsgame.game_objects.Minion(1, 1)
+
         super().use()
+
+        recruit_card = SilverHandRecruit()
+        recruit_card.create_minion(self.player).add_to_board(recruit_card, self.player.game, self.player, 0)
+

@@ -1,5 +1,6 @@
 import random
 import unittest
+from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
 from tests.testing_utils import generate_game_for
 
@@ -11,6 +12,19 @@ class TestPaladin(unittest.TestCase):
 
     def setUp(self):
         random.seed(1857)
+
+
+    def testPaladinPower(self):
+        game = generate_game_for(AvengingWrath, MogushanWarden, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].defense)
+        self.assertEqual("Silver Hand Recruit", game.current_player.minions[0].card.name)
+
 
     def testAvengingWrath(self):
         game = generate_game_for(MogushanWarden, AvengingWrath, MinionPlayingAgent, SpellTestingAgent)
