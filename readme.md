@@ -7,6 +7,8 @@ is to create a system implementing every card in Hearthstone, then simulate game
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
 The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
 
+Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
+
 Usage
 -----
 The only way to use the system currently is through unit tests.  The tests are located in the [`tests`](tests) package.
