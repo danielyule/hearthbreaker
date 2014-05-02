@@ -10,7 +10,7 @@ class AvengingWrath(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for i in range(0, 8):
+        for i in range(0, 8 + player.spell_power):
             targets = game.other_player.minions.copy()
             targets.append(game.other_player)
             target = targets[game.random(0, len(targets) - 1)]
