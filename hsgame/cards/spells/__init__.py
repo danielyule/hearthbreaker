@@ -17,4 +17,9 @@ from hsgame.cards.spells.druid import \
     SoulOfTheForest, \
     Swipe, \
     Nourish, \
-    ForceOfNature
+    Starfall, \
+    ForceOfNature, \
+    Starfire
+
+from hsgame.cards.spells.mage import \
+    ArcaneMissiles

@@ -52,7 +52,9 @@ class CHARACTER_CLASS:
         }
         return classes[class_number]
 
-class MINION_TYPES:
+
+class MINION_TYPE:
     NONE = 0
     BEAST = 1
     MURLOC = 2
+    DRAGON = 3

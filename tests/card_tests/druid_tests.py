@@ -14,7 +14,7 @@ from hsgame.cards import *
 import unittest
 
 
-class TestSpells(unittest.TestCase):
+class TestDruid(unittest.TestCase):
 
     def setUp(self):
         random.seed(1857)
@@ -442,6 +442,47 @@ class TestSpells(unittest.TestCase):
         self.assertEqual(5, game.current_player.max_mana)
         return game
 
+    @check_mana_cost(5)
+    def test_Starfall(self):
+
+        #Test gaining two mana
+        game = generate_game_for(Starfall, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(30, game.other_player.health)
+
+        #Test drawing three cards
+        random.seed(1857)
+        game = generate_game_for(Starfall, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        game.players[0].agent.choose_option = Mock(side_effect=lambda damageAll, damageOne: damageOne)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertEqual(30, game.other_player.health)
+        return game
+
+    @check_mana_cost(6)
     def test_ForceOfNature(self):
         game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         game.play_single_turn()
@@ -454,13 +495,269 @@ class TestSpells(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
+
+        def check_minions():
+            self.assertEqual(3, len(game.current_player.minions))
+
+            for minion in game.current_player.minions:
+                self.assertEqual(2, minion.attack_power)
+                self.assertEqual(2, minion.defense)
+                self.assertEqual(2, minion.max_defense)
+                self.assertTrue(minion.charge)
+                self.assertEqual("Treant", minion.card.name)
+
+        game.other_player.bind_once("turn_ended", check_minions)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+        return game
+
+
+
+    @check_mana_cost(6)
+    def test_Starfire(self):
+        game = generate_game_for(Starfire, MogushanWarden, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertEqual(7, game.other_player.minions[1].defense)
+        self.assertEqual(9, len(game.current_player.hand))
+
+        return game
+
+    @check_mana_cost(7)
+    def test_AncientOfLore(self):
+        game = generate_game_for(AncientOfLore, Starfire, MinionPlayingAgent, EnemySpellTestingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(game.other_player.health, 25)
+
+        game.play_single_turn()
+
+        self.assertEqual(30, game.current_player.health)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].defense)
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual("Ancient of Lore", game.current_player.minions[0].card.name)
+
+        random.seed(1857)
+
+        game = generate_game_for(AncientOfLore, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        game.players[0].agent.choose_option = Mock(side_effect=lambda heal, draw: draw)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(11, len(game.current_player.hand))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].defense)
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual("Ancient of Lore", game.current_player.minions[0].card.name)
+
+        return game
+
+    def test_AncientOfWar(self):
+        game = generate_game_for(AncientOfWar, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(10, game.current_player.minions[0].defense)
+        self.assertEqual(10, game.current_player.minions[0].max_defense)
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Ancient of War", game.current_player.minions[0].card.name)
+        self.assertEqual(5, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].defense)
+        self.assertEqual(5, game.other_player.minions[0].max_defense)
+        self.assertFalse(game.other_player.minions[0].taunt)
+
+        random.seed(1857)
+        game = generate_game_for(AncientOfWar, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+        game.players[0].agent.choose_option = Mock(side_effect=lambda health, attack: attack)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(10, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].defense)
+        self.assertEqual(5, game.current_player.minions[0].max_defense)
+        self.assertFalse(game.current_player.minions[0].taunt)
+        self.assertEqual("Ancient of War", game.current_player.minions[0].card.name)
+        self.assertEqual(5, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].defense)
+        self.assertEqual(5, game.other_player.minions[0].max_defense)
+        self.assertEqual(5, game.other_player.minions[0].attack_power)
+        self.assertFalse(game.other_player.minions[0].taunt)
+
+
+    def test_IronbarkProtector(self):
+        game = generate_game_for(IronbarkProtector, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(8, game.current_player.minions[0].attack_power)
+        self.assertEqual(8, game.current_player.minions[0].defense)
+        self.assertEqual(8, game.current_player.minions[0].max_defense)
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Ironbark Protector", game.current_player.minions[0].card.name)
+        self.assertEqual(6, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertFalse(game.other_player.minions[0].taunt)
+
+
+    def test_Cenarius(self):
+        deck1 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.DRUID)
+        deck2 = StackedDeck([WarGolem(), WarGolem(), Cenarius(), Cenarius()], CHARACTER_CLASS.DRUID)
+        game = Game([deck1, deck2], [DoNothingBot(), MinionPlayingAgent()])
+        game.pre_game()
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.other_player.minions))
+        for minion in game.other_player.minions:
+            self.assertEqual(7, minion.attack_power)
+            self.assertEqual(7, minion.defense)
+            self.assertEqual(7, minion.max_defense)
         game.play_single_turn()
 
         self.assertEqual(3, len(game.current_player.minions))
 
-        for minion in game.current_player.minions:
-            self.assertEqual(2, minion.attack_power)
-            self.assertEqual(2, minion.defense)
-            self.assertEqual(2, minion.max_defense)
-            self.assertTrue(minion.charge)
-            self.assertEqual("Treant", minion.card.name)
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(8, game.current_player.minions[0].defense)
+        self.assertEqual(8, game.current_player.minions[0].max_defense)
+        self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
+
+        for minion_index in range(1, 3):
+            minion = game.current_player.minions[minion_index]
+            self.assertEqual(9, minion.attack_power)
+            self.assertEqual(9, minion.defense)
+            self.assertEqual(9, minion.max_defense)
+
+        game.players[1].agent.choose_option = Mock(side_effect=lambda stats, summon: summon)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.minions))
+
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(8, game.current_player.minions[0].defense)
+        self.assertEqual(8, game.current_player.minions[0].max_defense)
+        self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
+
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].defense)
+        self.assertEqual(2, game.current_player.minions[1].max_defense)
+        self.assertTrue(game.current_player.minions[1].taunt)
+        self.assertEqual("Treant", game.current_player.minions[1].card.name)
+
+        self.assertEqual(2, game.current_player.minions[2].attack_power)
+        self.assertEqual(2, game.current_player.minions[2].defense)
+        self.assertEqual(2, game.current_player.minions[2].max_defense)
+        self.assertTrue(game.current_player.minions[2].taunt)
+        self.assertEqual("Treant", game.current_player.minions[2].card.name)
+

@@ -1,5 +1,5 @@
 import hsgame.targetting
-from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPES
+from hsgame.constants import CHARACTER_CLASS, CARD_STATUS, MINION_TYPE
 
 __author__ = 'Daniel'
 from hsgame.game_objects import Card, MinionCard, Minion
@@ -91,9 +91,9 @@ class PowerOfTheWild(Card):
                         super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL)
 
                     def create_minion(self):
-                        return Minion(3, 2, MINION_TYPES.BEAST)
+                        return Minion(3, 2, MINION_TYPE.BEAST)
 
-                panther = Minion(3, 2, MINION_TYPES.BEAST)
+                panther = Minion(3, 2, MINION_TYPE.BEAST)
                 panther.add_to_board(Panther(), game, player, len(player.minions))
 
 
@@ -112,6 +112,17 @@ class WildGrowth(Card):
             player.max_mana += 1
         else:
             player.hand.append(ExcessMana())
+
+
+#Special card that only appears in tandem with Wild Growth
+class ExcessMana(Card):
+    def __init__(self):
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.draw()
+
 
 class Wrath(Card):
     def __init__(self):
@@ -213,9 +224,9 @@ class SoulOfTheForest(Card):
                     super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_STATUS.EXPERT)
 
                 def create_minion(self):
-                    return Minion(2, 2, MINION_TYPES.NONE)
+                    return Minion(2, 2)
 
-            treant = Minion(2, 2, MINION_TYPES.NONE)
+            treant = Minion(2, 2)
             treant.add_to_board(Treant(), game, player, len(player.minions))
 
         super().use(player, game)
@@ -279,6 +290,40 @@ class Nourish(Card):
         option.use(player, game)
 
 
+class Starfall(Card):
+
+    def __init__(self):
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_STATUS.RARE, False)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) > 0
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class DamageAll(Card):
+
+            def __init__(self):
+                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                for minion in game.other_player.minions.copy():
+                    minion.spell_damage(2, self)
+
+        class DamageOne(Card):
+
+            def __init__(self):
+                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+
+            def use(self, player, game):
+                targets = hsgame.targetting.find_minion_spell_target(game)
+                target = player.agent.choose_target(targets)
+                target.spell_damage(5, self)
+
+        option = player.agent.choose_option(DamageAll(), DamageOne())
+        option.use(player, game)
+
+
 class ForceOfNature(Card):
 
     def __init__(self):
@@ -293,21 +338,23 @@ class ForceOfNature(Card):
 
             @staticmethod
             def create_minion():
-                minion = Minion(2, 2, MINION_TYPES.NONE)
+                minion = Minion(2, 2)
                 minion.charge = True
                 return minion
 
         for i in [0, 1, 2]:
             treant = Treant.create_minion()
             treant.add_to_board(Treant(), game, player, 0)
+            player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
 
 
+class Starfire(Card):
 
-#Special card that only appears in tandem with Wild Growth
-class ExcessMana(Card):
     def __init__(self):
-        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_STATUS.SPECIAL, False)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_STATUS.BASIC, True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
+        self.target.spell_damage(5, self)
         player.draw()
+

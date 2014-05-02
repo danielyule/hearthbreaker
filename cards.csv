@@ -12,15 +12,15 @@ no,Ancestral Healing,Restore a minion to full Health and give it Taunt.,,Shaman,
 no,Ancestral Spirit,"Choose a minion. When that minion is destroyed, return it to the battlefield.",,Shaman,2,,,Expert,Spell
 no,Ancient Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,4,5,4,Expert,Minion
 no,Ancient Mage,Battlecry: Give adjacent minions Spell Damage +1.,,,4,2,5,Expert,Minion
-no,Ancient of Lore,Choose One - Draw 2 cards; or Restore 5 Health.,,Druid,7,5,5,Expert,Minion
-no,Ancient of War,Choose One - +5 Attack; or +5 Health and Taunt.,,Druid,7,5,5,Expert,Minion
+yes,Ancient of Lore,Choose One - Draw 2 cards; or Restore 5 Health.,,Druid,7,5,5,Expert,Minion
+yes,Ancient of War,Choose One - +5 Attack; or +5 Health and Taunt.,,Druid,7,5,5,Expert,Minion
 no,Ancient Watcher,Can't Attack.,,,2,4,5,Expert,Minion
 no,Angry Chicken,Enrage: +5 Attack.,Beast,,1,1,1,Expert,Minion
 no,Animal Companion,Summon a random Beast Companion.,,Hunter,3,,,Basic,Spell
 no,Arathi Weaponsmith,Battlecry: Equip a 2/2 weapon.,,Warrior,4,3,3,Expert,Minion
 no,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Basic,Spell
 no,Arcane Golem,Charge. Battlecry: Give your opponent a Mana Crystal.,,,3,4,2,Expert,Minion
-no,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
+yes,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
 no,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1,,,Basic,Spell
 no,Arcane Shot,Deal 2 damage.,,Hunter,1,,,Basic,Spell
 no,Arcanite Reaper,,,Warrior,5,5,2,Basic,Weapon
@@ -64,7 +64,7 @@ no,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or 
 no,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Expert,Minion
 no,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Expert,Minion
 no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Reward,Minion
-no,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
+yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
 no,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Basic,Spell
 no,Chillwind Yeti,,,,4,4,5,Basic,Minion
 no,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
@@ -184,7 +184,7 @@ no,Injured Blademaster,Battlecry: Deal 4 damage to HIMSELF.,,,3,4,7,Expert,Minio
 no,Inner Fire,Change a minion's Attack to be equal to its Health.,,Priest,1,,,Expert,Spell
 no,Inner Rage,Deal 1 damage to a minion and give it +2 Attack.,,Warrior,0,,,Expert,Spell
 yes,Innervate,Gain 2 Mana Crystals this turn only.,,Druid,0,,,Basic,Spell
-no,Ironbark Protector,Taunt,,Druid,8,8,8,Basic,Minion
+yes,Ironbark Protector,Taunt,,Druid,8,8,8,Basic,Minion
 yes,Ironbeak Owl,Battlecry: Silence a minion.,Beast,,2,2,1,Expert,Minion
 no,Ironforge Rifleman,Battlecry: Deal 1 damage.,,,3,2,2,Basic,Minion
 no,Ironfur Grizzly,Taunt,Beast,,3,3,3,Basic,Minion
@@ -233,7 +233,7 @@ no,Mindgames,Put a copy of a random minion from your opponent's deck into the ba
 no,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of it.",,Mage,3,,,Expert,Spell
 no,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
 no,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Expert,Spell
-no,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
+yes,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
 no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Basic,Spell
 no,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Basic,Spell
@@ -323,8 +323,8 @@ no,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Expert,Minion
 no,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Expert,Minion
 no,Sprint,Draw 4 cards.,,Rogue,7,,,Basic,Spell
 no,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Expert,Minion
-no,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Expert,Spell
-no,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Basic,Spell
+yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Expert,Spell
+yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Basic,Spell
 no,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Basic,Minion
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Basic,Minion
 no,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Expert,Weapon
@@ -364,7 +364,7 @@ no,Violet Teacher,"Whenever you cast a spell, summon a 1/1 Violet Apprentice.",,
 no,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Expert,Minion
 no,Voidwalker,Taunt,Demon,Warlock,1,1,3,Basic,Minion
 no,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Basic,Minion
-no,War Golem,,,,7,7,7,Basic,Minion
+yes,War Golem,,,,7,7,7,Basic,Minion
 no,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Basic,Minion
 no,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Basic,Minion
 no,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Basic,Spell
