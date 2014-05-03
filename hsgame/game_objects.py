@@ -228,10 +228,13 @@ class Minion(Bindable):
             self.active = False
         self.stealth = False
 
-
     def damage(self, amount, attacker):
         self.delayed_trigger("damaged", amount, attacker)
         self.defense -= amount
+        if type(attacker) is Minion:
+            attacker.delayed_trigger("did_damage", amount, self)
+        elif type(attacker) is Player:
+            attacker.trigger("did_damage", amount, self)
         if self.defense <= 0:
             self.die(attacker)
 
@@ -404,11 +407,15 @@ class Player(Bindable):
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
 
-    def damage(self, amount, what):
-        self.trigger("damaged", amount, what)
+    def damage(self, amount, attacker):
+        self.trigger("damaged", amount, attacker)
         self.armour -= amount
         if self.armour < 0:
             self.health += self.armour
+            if type(attacker) is Minion:
+                attacker.delayed_trigger("did_damage", -self.armour, self)
+            elif type(attacker) is Player:
+                attacker.trigger("did_damage", -self.armour, self)
             self.armour = 0
         if self.health <= 0:
             self.die()
@@ -575,6 +582,10 @@ class Game(Bindable):
             self.current_player.frozen_this_turn = False
         else:
             self.current_player.frozen = False
+
+        self.other_player.frozen_this_turn = False
+        for minion in self.other_player.minions:
+            minion.frozen_this_turn = False
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False

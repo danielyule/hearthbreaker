@@ -1,5 +1,6 @@
 import random
 import unittest
+from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.replay import SavedGame
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
 from tests.testing_utils import generate_game_for
@@ -46,3 +47,24 @@ class TestMage(unittest.TestCase):
         self.assertEqual(27, game.other_player.health)
 
         return game
+
+    def testWaterElemental(self):
+        game = generate_game_for(WaterElemental, StonetuskBoar, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(25, game.other_player.health)
+        self.assertFalse(game.other_player.frozen_this_turn)
+        self.assertFalse(game.other_player.frozen)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(6, game.current_player.minions[0].defense)
+        self.assertEqual("Water Elemental", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(22, game.other_player.health)
+        self.assertTrue(game.other_player.frozen_this_turn)
+        self.assertTrue(game.other_player.frozen)

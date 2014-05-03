@@ -18,3 +18,6 @@ from hsgame.cards.minions.druid import \
     AncientOfWar, \
     IronbarkProtector, \
     Cenarius
+
+from hsgame.cards.minions.mage import \
+    WaterElemental
