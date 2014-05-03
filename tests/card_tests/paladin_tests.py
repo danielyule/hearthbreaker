@@ -111,3 +111,25 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(28, game.players[0].health)
         self.assertEqual(0, len(game.players[0].minions))
         
+    def testDivineFavor(self):
+        game = generate_game_for(StonetuskBoar, DivineFavor, DoNothingBot, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+        
+        # Cheat
+        for cheat in range(0, 4):
+            game.players[0].draw()
+        
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(6, len(game.players[1].hand))
+        game.play_single_turn()
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(10, len(game.players[1].hand))
+        # The following test is if we have 10 cards in hand already. Casting Divine Favor should count as being down to 9 again, and then draw a 10th card
+        game.play_single_turn()
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(10, len(game.players[1].hand))
+        game.play_single_turn() # New turn, p2 draws a card that is discarded (10), cast Divine Favor (9), draws a new card (10)
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(10, len(game.players[1].hand))

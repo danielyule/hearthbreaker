@@ -66,3 +66,12 @@ class Consecration(Card):
         for minion in game.other_player.minions.copy():
             minion.spell_damage(2 + player.spell_power, self)
         game.other_player.spell_damage(2 + player.spell_power, self)
+
+class DivineFavor(Card):
+    def __init__(self):
+        super().__init__("Divine Favor", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, False)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        while len(game.other_player.hand) > len(player.hand):
+            player.draw()
