@@ -75,3 +75,19 @@ class DivineFavor(Card):
         super().use(player, game)
         while len(game.other_player.hand) > len(player.hand):
             player.draw()
+
+class Equality(Card):
+    def __init__(self):
+        super().__init__("Equality", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, False)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        
+        for minion in game.other_player.minions.copy():
+            minion.decrease_health(minion.max_defense - 1)
+            
+        for minion in player.minions.copy():
+            minion.decrease_health(minion.max_defense - 1)
+            
+    def can_use(self, player, game):
+        return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)

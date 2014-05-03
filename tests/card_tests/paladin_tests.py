@@ -133,3 +133,17 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn() # New turn, p2 draws a card that is discarded (10), cast Divine Favor (9), draws a new card (10)
         self.assertEqual(10, len(game.players[0].hand))
         self.assertEqual(10, len(game.players[1].hand))
+        
+    def testEquality(self):
+        game = generate_game_for(MogushanWarden, Equality, MinionPlayingAgent, SpellTestingAgent)
+        
+        for turn in range(0, 7):
+            game.play_single_turn()
+            
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, game.players[0].minions[0].defense)
+        self.assertEqual(7, game.players[0].minions[0].max_defense)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].defense)
+        self.assertEqual(1, game.players[0].minions[0].max_defense)
