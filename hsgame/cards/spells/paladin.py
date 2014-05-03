@@ -57,3 +57,12 @@ class BlessingOfWisdom(Card):
         self.target.bind_once("silenced", lambda minion: minion.unbind("attack_minion", draw), self.target)
         self.target.bind_once("silenced", lambda minion: minion.unbind("attack_player", draw), self.target)
 
+class Consecration(Card):
+    def __init__(self):
+        super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, False)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in game.other_player.minions.copy():
+            minion.spell_damage(2 + player.spell_power, self)
+        game.other_player.spell_damage(2 + player.spell_power, self)

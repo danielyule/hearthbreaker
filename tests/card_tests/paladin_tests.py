@@ -98,3 +98,16 @@ class TestPaladin(unittest.TestCase):
         # 7 cards have been drawn.
         # 3 for starting first, 3 for new turn and 1 for minion attack with Blessing of Wisdom (the second minion who had it got silenced)
         self.assertEqual(23, game.other_player.deck.left)
+
+    def testConsecration(self):
+        game = generate_game_for(StonetuskBoar, Consecration, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+            
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(4, len(game.players[0].minions))
+        game.play_single_turn()
+        self.assertEqual(28, game.players[0].health)
+        self.assertEqual(0, len(game.players[0].minions))
+        

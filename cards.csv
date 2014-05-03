@@ -76,7 +76,7 @@ no,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Exp
 no,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Expert,Spell
 no,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Expert,Spell
 no,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Expert,Spell
-no,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Basic,Spell
+yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Basic,Spell
 no,Core Hound,,Beast,,7,9,5,Basic,Minion
 no,Corruption,"Choose an enemy minion. At the start of your turn, destroy it.",,Warlock,1,,,Basic,Spell
 no,Counterspell,"Secret: When your opponent casts a spell, Counter it.",,Mage,3,,,Expert,Spell
