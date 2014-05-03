@@ -11,7 +11,7 @@ class SpellTestingAgent(DoNothingBot):
 
     def do_turn(self, player):
         self.turn += 1
-        while self.turn >= self.play_on and len(player.hand) > 0 and self.game.current_player.mana >= player.hand[0].mana:
+        while self.turn >= self.play_on and len(player.hand) > 0 and self.game.current_player.mana >= player.hand[0].mana and player.hand[0].can_use(player, self.game):
             self.game.play_card(player.hand[0])
 
 

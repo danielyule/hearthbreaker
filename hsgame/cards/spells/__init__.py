@@ -31,4 +31,5 @@ from hsgame.cards.spells.paladin import \
     BlessingOfMight, \
     BlessingOfWisdom, \
     Consecration, \
-    DivineFavor
+    DivineFavor, \
+    Equality

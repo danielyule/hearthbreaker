@@ -250,6 +250,16 @@ class Minion(Bindable):
         self.max_defense += amount
         self.defense += amount
         self.bind_once('silenced', silence)
+        
+    def decrease_health(self, amount):
+        def silence():
+            # I think silence only restores its max defense again. It does not heal as well.
+            self.max_defense += amount
+        self.trigger("health_decreased", amount)
+        self.max_defense -= amount
+        if (self.defense > self.max_defense):
+            self.defense = self.max_defense
+        self.bind_once('silenced', silence)
 
     def silence(self):
         self.trigger("silenced")
