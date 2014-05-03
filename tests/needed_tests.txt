@@ -1,0 +1,15 @@
+Novice Engineer must be tested
+Various error conditions for replays should be tested
+No replay being saved involves one of player one's minions attacking or being attacked
+All replays always draw the card on top of the deck
+No replay with a minion with a battlecry is being tested
+No replay involving a mage or priest's hero power is being tested
+NO non targetted spells are being used in any replay
+No options are being saved in any replay
+Need much better observer test (and a much better observer)
+Wild growth should be used at 10 mana to get the excess mana card
+Once Sap or Frozen trap is a card, any spell cards which summon minions should be tested
+Nourish should be tested at 10 mana with the choosing mana option
+StackedDeck is never run to Fatigue
+PredictableBot is never asked to choose an option
+Equality is never being tested with minions down

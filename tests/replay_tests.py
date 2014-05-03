@@ -73,10 +73,4 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(panther.attack_power, 4)
         self.assertEqual(panther.index, 0)
 
-if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        card1 = hsgame.game_objects.card_lookup(sys.argv[1])
-        card2 = hsgame.game_objects.card_lookup(sys.argv[2])
-        print(card1, card2)
-
 

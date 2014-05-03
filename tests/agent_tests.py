@@ -1,3 +1,4 @@
+import random
 from hsgame.agents.user_agents import Observer
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game, card_lookup
@@ -7,14 +8,15 @@ import hsgame.cards
 __author__ = 'Daniel'
 
 import unittest
-import sys
 import io
+
 
 class TestObserver(unittest.TestCase):
 
     def setUp(self):
         card_set1 = []
         card_set2 = []
+        random.seed(1567)
 
         for cardIndex in range(0, 30):
             card_set1.append(card_lookup("Stonetusk Boar"))
@@ -27,6 +29,8 @@ class TestObserver(unittest.TestCase):
         agent1 = DoNothingBot()
         agent2 = DoNothingBot()
         game = Game([self.deck1, self.deck2], [agent1, agent2])
-        obs = Observer(io.StringIO())
+        string = io.StringIO()
+        obs = Observer(string)
         obs.observe(game)
         game.start()
+        self.assertEqual(6905, len(string.getvalue()))
