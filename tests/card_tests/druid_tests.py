@@ -581,7 +581,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(11, len(game.current_player.hand))
+        self.assertEqual(10, len(game.current_player.hand))
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].defense)
         self.assertEqual(5, game.current_player.minions[0].attack_power)

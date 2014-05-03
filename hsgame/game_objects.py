@@ -368,7 +368,8 @@ class Player(Bindable):
         if self.can_draw():
             card = self.deck.draw(self.random)
             self.trigger("card_drawn", card)
-            self.hand.append(card)
+            if (len(self.hand) < 10):
+                self.hand.append(card)
         else:
             self.fatigue += 1
             self.trigger("fatigue_damage", self.fatigue)
@@ -561,8 +562,8 @@ class Game(Bindable):
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.trigger("card_played", card)
-        card.use(self.current_player, self)
         self.current_player.hand.remove(card)
+        card.use(self.current_player, self)
 
         for minion in self.delayed_minions:
             minion.activate_delayed()

@@ -29,4 +29,6 @@ from hsgame.cards.spells.paladin import \
     BlessedChampion, \
     BlessingOfKings, \
     BlessingOfMight, \
-    BlessingOfWisdom
+    BlessingOfWisdom, \
+    Consecration, \
+    DivineFavor
