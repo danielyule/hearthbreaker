@@ -152,15 +152,13 @@ class Wrath(Card):
         option.use(player, game)
 
 
-
-
 class HealingTouch(Card):
     def __init__(self):
-        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE, False)
+        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
-        player.heal(8)
+        self.target.heal(8)
 
 
 class MarkOfNature(Card):
