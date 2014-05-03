@@ -140,6 +140,7 @@ class Minion(Bindable):
         self.wind_fury = False
         self.used_wind_fury = False
         self.frozen = False
+        self.frozen_this_turn = False
         self.stealth = False
         self.game = None
         self.player = None
@@ -181,6 +182,8 @@ class Minion(Bindable):
         if self.temp_attack > 0:
             self.trigger("attack_decreased", self.temp_attack)
             self.temp_attack = 0
+
+
 
     def attack(self):
         if not self.can_attack():
@@ -266,6 +269,7 @@ class Minion(Bindable):
         self.taunt = False
         self.wind_fury = False
         self.frozen = False
+        self.frozen_this_turn = False
         self.stealth = False
         self.charge = False
 
@@ -367,6 +371,7 @@ class Player(Bindable):
         self.fatigue = 0
         self.agent = agent
         self.game = game
+        self.frozen_this_turn = False
         self.frozen = False
         self.active = False
         self.power = hsgame.powers.powers(self.character_class)(self)
@@ -563,10 +568,17 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
+        if self.current_player.frozen_this_turn:
+            self.current_player.frozen_this_turn = False
+        else:
+            self.current_player.frozen = False
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False
-            minion.frozen = False
+            if minion.frozen_this_turn:
+                minion.frozen_this_turn = False
+            else:
+                minion.frozen = False
 
     def play_card(self, card):
         if self.game_ended:
