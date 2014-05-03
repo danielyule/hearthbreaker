@@ -368,7 +368,8 @@ class Player(Bindable):
         if self.can_draw():
             card = self.deck.draw(self.random)
             self.trigger("card_drawn", card)
-            self.hand.append(card)
+            if (len(self.hand) < 10):
+                self.hand.append(card)
         else:
             self.fatigue += 1
             self.trigger("fatigue_damage", self.fatigue)
