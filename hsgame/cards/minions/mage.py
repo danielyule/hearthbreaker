@@ -10,8 +10,7 @@ class WaterElemental(MinionCard):
 
     def create_minion(self, player):
         def did_damage(amount, target):
-            target.frozen = True
-            target.frozen_this_turn = True
+            target.freeze()
 
         minion = Minion(3, 6)
         minion.bind("did_damage", did_damage)

@@ -8,6 +8,7 @@ __author__ = 'Daniel'
 
 card_table = {}
 
+
 def card_lookup(card_name):
     def card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
@@ -186,8 +187,6 @@ class Minion(Bindable):
             self.trigger("attack_decreased", self.temp_attack)
             self.temp_attack = 0
 
-
-
     def attack(self):
         if not self.can_attack():
             raise GameException("That minion cannot attack")
@@ -204,7 +203,6 @@ class Minion(Bindable):
             targets = [target for target in targets if target.taunt]
         else:
             targets.append(self.game.other_player)
-
 
         target = self.player.agent.choose_target(targets)
 
@@ -270,6 +268,10 @@ class Minion(Bindable):
             self.defense = self.max_defense
         self.bind_once('silenced', silence)
 
+    def freeze(self):
+        self.frozen_this_turn = True
+        self.frozen = True
+
     def silence(self):
         self.trigger("silenced")
         self.taunt = False
@@ -278,7 +280,6 @@ class Minion(Bindable):
         self.frozen_this_turn = False
         self.stealth = False
         self.charge = False
-
         self.player.spell_power -= self.spell_power
         self.spell_power = 0
 
@@ -427,6 +428,10 @@ class Player(Bindable):
     def increase_armour(self, amount):
         self.trigger("armour_increased", amount)
         self.armour += amount
+
+    def freeze(self):
+        self.frozen_this_turn = True
+        self.frozen = True
 
     def spell_damage(self, amount, spellCard):
         self.trigger("spell_damaged", amount, spellCard)

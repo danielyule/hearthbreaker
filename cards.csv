@@ -177,7 +177,7 @@ no,Hungry Crab,Battlecry: Destroy a Murloc and gain +2/+2.,Beast,,1,1,2,Expert,M
 no,Hunter's Mark,Change a minion's Health to 1.,,Hunter,0,,,Basic,Spell
 no,Ice Barrier,"Secret: As soon as your hero is attacked, gain 8 Armor.",,Mage,3,,,Expert,Spell
 no,Ice Block,"Secret: When your hero takes fatal damage, prevent it and become Immune this turn.",,Mage,3,,,Expert,Spell
-no,Ice Lance,"Freeze a character. If it was already Frozen, deal 4 damage instead.",,Mage,1,,,Expert,Spell
+yes,Ice Lance,"Freeze a character. If it was already Frozen, deal 4 damage instead.",,Mage,1,,,Expert,Spell
 no,Illidan Stormrage,"Whenever you play a card, summon a 2/1 Flame of Azzinoth.",Demon,,6,7,5,Expert,Minion
 no,Imp Master,"At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.",,,3,1,5,Expert,Minion
 no,Injured Blademaster,Battlecry: Deal 4 damage to HIMSELF.,,,3,4,7,Expert,Minion

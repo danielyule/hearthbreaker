@@ -1,6 +1,6 @@
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
-
+import hsgame.targetting
 __author__ = 'Daniel'
 
 
@@ -16,4 +16,15 @@ class ArcaneMissiles(Card):
             target = targets[game.random(0, len(targets) -1)]
             target.spell_damage(1, self)
 
+
+class IceLance(Card):
+    def __init__(self):
+        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if self.target.frozen:
+            self.target.spell_damage(4, self)
+        else:
+            self.target.freeze()
 

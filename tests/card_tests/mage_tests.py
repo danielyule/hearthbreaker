@@ -66,5 +66,29 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(22, game.other_player.health)
-        self.assertTrue(game.other_player.frozen_this_turn)
+
+        # Always false after the end of a turn
+        self.assertFalse(game.other_player.frozen_this_turn)
         self.assertTrue(game.other_player.frozen)
+
+    def testIceLance(self):
+        game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, MinionPlayingAgent)
+        game.play_single_turn()
+
+        self.assertTrue(game.other_player.frozen)
+        self.assertEqual(30, game.other_player.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.other_player.frozen)
+        self.assertEqual(26, game.other_player.health)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].frozen)
+        self.assertEqual(7, game.other_player.minions[0].defense)
+
+
