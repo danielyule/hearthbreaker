@@ -1,5 +1,5 @@
 *.pyc
 .project
 .pydevproject
-.gitignore
+.coverage
 htmlcov
