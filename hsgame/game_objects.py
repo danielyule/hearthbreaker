@@ -128,6 +128,9 @@ class MinionCard(Card):
         super().use(player, game)
         self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
 
+    def create_minion(self, player):
+        pass
+
 
 class Minion(Bindable):
     def __init__(self, attack, defense, type=hsgame.constants.MINION_TYPE.NONE):
