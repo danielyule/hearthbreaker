@@ -1,4 +1,3 @@
-Novice Engineer must be tested
 Various error conditions for replays should be tested
 No replay being saved involves one of player one's minions attacking or being attacked
 All replays always draw the card on top of the deck
