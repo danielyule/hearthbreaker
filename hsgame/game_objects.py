@@ -8,6 +8,7 @@ __author__ = 'Daniel'
 
 card_table = {}
 
+
 def card_lookup(card_name):
     def card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
@@ -128,6 +129,9 @@ class MinionCard(Card):
         super().use(player, game)
         self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
 
+    def create_minion(self, player):
+        pass
+
 
 class Minion(Bindable):
     def __init__(self, attack, defense, type=hsgame.constants.MINION_TYPE.NONE):
@@ -140,6 +144,7 @@ class Minion(Bindable):
         self.wind_fury = False
         self.used_wind_fury = False
         self.frozen = False
+        self.frozen_this_turn = False
         self.stealth = False
         self.game = None
         self.player = None
@@ -199,7 +204,6 @@ class Minion(Bindable):
         else:
             targets.append(self.game.other_player)
 
-
         target = self.player.agent.choose_target(targets)
 
         if isinstance(target, Minion):
@@ -222,10 +226,13 @@ class Minion(Bindable):
             self.active = False
         self.stealth = False
 
-
     def damage(self, amount, attacker):
         self.delayed_trigger("damaged", amount, attacker)
         self.defense -= amount
+        if type(attacker) is Minion:
+            attacker.delayed_trigger("did_damage", amount, self)
+        elif type(attacker) is Player:
+            attacker.trigger("did_damage", amount, self)
         if self.defense <= 0:
             self.die(attacker)
 
@@ -261,14 +268,18 @@ class Minion(Bindable):
             self.defense = self.max_defense
         self.bind_once('silenced', silence)
 
+    def freeze(self):
+        self.frozen_this_turn = True
+        self.frozen = True
+
     def silence(self):
         self.trigger("silenced")
         self.taunt = False
         self.wind_fury = False
         self.frozen = False
+        self.frozen_this_turn = False
         self.stealth = False
         self.charge = False
-
         self.player.spell_power -= self.spell_power
         self.spell_power = 0
 
@@ -367,6 +378,7 @@ class Player(Bindable):
         self.fatigue = 0
         self.agent = agent
         self.game = game
+        self.frozen_this_turn = False
         self.frozen = False
         self.active = False
         self.power = hsgame.powers.powers(self.character_class)(self)
@@ -378,8 +390,10 @@ class Player(Bindable):
         if self.can_draw():
             card = self.deck.draw(self.random)
             self.trigger("card_drawn", card)
-            if (len(self.hand) < 10):
+            if len(self.hand) < 10:
                 self.hand.append(card)
+            else:
+                self.trigger("card_destroyed", card)
         else:
             self.fatigue += 1
             self.trigger("fatigue_damage", self.fatigue)
@@ -394,11 +408,15 @@ class Player(Bindable):
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
 
-    def damage(self, amount, what):
-        self.trigger("damaged", amount, what)
+    def damage(self, amount, attacker):
+        self.trigger("damaged", amount, attacker)
         self.armour -= amount
         if self.armour < 0:
             self.health += self.armour
+            if type(attacker) is Minion:
+                attacker.delayed_trigger("did_damage", -self.armour, self)
+            elif type(attacker) is Player:
+                attacker.trigger("did_damage", -self.armour, self)
             self.armour = 0
         if self.health <= 0:
             self.die()
@@ -410,6 +428,10 @@ class Player(Bindable):
     def increase_armour(self, amount):
         self.trigger("armour_increased", amount)
         self.armour += amount
+
+    def freeze(self):
+        self.frozen_this_turn = True
+        self.frozen = True
 
     def spell_damage(self, amount, spellCard):
         self.trigger("spell_damaged", amount, spellCard)
@@ -561,10 +583,21 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
+        if self.current_player.frozen_this_turn:
+            self.current_player.frozen_this_turn = False
+        else:
+            self.current_player.frozen = False
+
+        self.other_player.frozen_this_turn = False
+        for minion in self.other_player.minions:
+            minion.frozen_this_turn = False
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False
-            minion.frozen = False
+            if minion.frozen_this_turn:
+                minion.frozen_this_turn = False
+            else:
+                minion.frozen = False
 
     def play_card(self, card):
         if self.game_ended:

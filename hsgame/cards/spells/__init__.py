@@ -22,7 +22,8 @@ from hsgame.cards.spells.druid import \
     Starfire
 
 from hsgame.cards.spells.mage import \
-    ArcaneMissiles
+    ArcaneMissiles, \
+    IceLance
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

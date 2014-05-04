@@ -6,6 +6,7 @@ Events Triggered in hssim
  * died
  * card_drawn (card)
  * card_put_back(card)
+ * card_destroyed (card)
  * turn_started
  * turn_ended
  * attack_minion
@@ -47,4 +48,5 @@ Events Triggered in hssim
  * attack increased(amount)
  * attack_decreased(amount)
  * health_increased(amount)
+ * health_decreased(amount)
  * silenced

@@ -18,7 +18,7 @@ class NoviceEngineer(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(1, 1)
-        minion.bind('added_to_board', draw_card())
+        minion.bind('added_to_board', draw_card)
         return minion
 
 class StonetuskBoar(MinionCard):

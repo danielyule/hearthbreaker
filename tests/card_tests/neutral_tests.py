@@ -13,6 +13,19 @@ class TestCommon(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
+    def test_NoviceEngineer(self):
+        game = generate_game_for(NoviceEngineer, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].defense)
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual("Novice Engineer", game.current_player.minions[0].card.name)
+
+        #Three cards to start, two for the two turns and one from the battlecry
+        self.assertEqual(24, game.current_player.deck.left)
+
     def test_KoboldGeomancer(self):
         game = generate_game_for(KoboldGeomancer, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
 

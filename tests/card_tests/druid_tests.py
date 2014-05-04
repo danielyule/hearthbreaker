@@ -164,7 +164,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(3, game.current_player.max_mana)
         return game
 
-    @check_mana_cost(2)
     def test_Wrath(self):
         game = generate_game_for(Wrath, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
@@ -177,8 +176,22 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(5, len(game.current_player.hand))
 
-        return game
+        random.seed(1857)
+        game = generate_game_for(Wrath, MogushanWarden, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
+        game.players[0].agent.choose_option = Mock(side_effect=lambda one, three: three)
+        for turn in range(0, 8):
+            game.play_single_turn()
 
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        #Two wraths will have been played
+        self.assertEqual(1, game.other_player.minions[0].defense)
+
+
+        return game
 
     @check_mana_cost(3)
     def test_HealingTouch(self):

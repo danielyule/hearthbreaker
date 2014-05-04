@@ -126,11 +126,4 @@ class TestBinding(unittest.TestCase):
         event2.assert_called_with()
 
 
-#Create a test for Mulligan cards
-
-if __name__ == '__main__':
-    unittest.main()
-
-
-
 

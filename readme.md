@@ -7,7 +7,8 @@ is to create a system implementing every card in Hearthstone, then simulate game
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
 The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
 
-Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
+ * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
+ * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthstone-simulator/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthstone-simulator?branch=master)
 
 Usage
 -----
@@ -45,6 +46,6 @@ To contribute, simply fork the repository, make changes and submit a pull reques
 All pull requests which implement new cards must also include a unit test for those cards.  In the case where the card
  has no side effects aside from playing the minion, tests should include another card's effects on it.
 
-All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator)
+All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.

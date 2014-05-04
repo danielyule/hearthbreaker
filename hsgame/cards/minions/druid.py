@@ -1,4 +1,3 @@
-import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
 from hsgame.cards.battlecries import silence, deal_two_damage
@@ -14,17 +13,11 @@ class KeeperOfTheGrove(MinionCard):
 
         class Moonfire(Card):
             def __init__(self):
-                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_spell_target)
-
-            def use(self, player, game):
-                pass
+                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, False)
 
         class Dispel(Card):
             def __init__(self):
-                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_spell_target)
-
-            def use(self, player, game):
-                pass
+                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, False)
 
         moonfire = Moonfire()
         dispell = Dispel()
@@ -50,15 +43,9 @@ class DruidOfTheClaw(MinionCard):
             def __init__(self):
                 super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
 
-            def use(self, player, game):
-                pass
-
         class BearForm(Card):
             def __init__(self):
                 super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
-
-            def use(self, player, game):
-                pass
 
         cat = CatForm()
         bear = BearForm()
@@ -107,7 +94,6 @@ class AncientOfWar(MinionCard):
     def __init__(self):
         super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
-
     def create_minion(self, player):
 
         #These are basically placeholders to give the agent something to choose
@@ -115,15 +101,9 @@ class AncientOfWar(MinionCard):
             def __init__(self):
                 super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
 
-            def use(self, player, game):
-                pass
-
         class Attack(Card):
             def __init__(self):
                 super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
-
-            def use(self, player, game):
-                pass
 
         health = Health()
         attack = Attack()

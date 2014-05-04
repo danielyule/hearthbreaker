@@ -1,6 +1,6 @@
 __author__ = 'Daniel'
 
-from hsgame.cards.minions.common import \
+from hsgame.cards.minions.neutral import \
     BloodfenRaptor, \
     IronbeakOwl, \
     NoviceEngineer, \
@@ -18,3 +18,6 @@ from hsgame.cards.minions.druid import \
     AncientOfWar, \
     IronbarkProtector, \
     Cenarius
+
+from hsgame.cards.minions.mage import \
+    WaterElemental
