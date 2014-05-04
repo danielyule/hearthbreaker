@@ -65,7 +65,7 @@ class ProxyCard:
         if self.card_ref is -1:
             raise ReplayException("Could not find card in hand")
 
-        self.targettable = False
+        self.targetable = False
 
     def set_option(self, option):
         self.card_ref = ":" + str(option)
@@ -214,7 +214,7 @@ class Replay:
     def _save_played_card(self, game):
         if self.last_card is not None:
             if issubclass(self.card_class, hsgame.game_objects.MinionCard):
-                if self.last_card.targettable:
+                if self.last_card.targetable:
                     self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target, game))
                     self.last_card = None
                     self.last_index = None
@@ -224,7 +224,7 @@ class Replay:
                     self.last_card = None
                     self.last_index = None
             else:
-                if self.last_card.targettable:
+                if self.last_card.targetable:
                     self.actions.append(SpellAction(self.last_card, self.last_target, game))
                     self.last_card = None
                     self.last_target = None
@@ -235,7 +235,7 @@ class Replay:
     def record_card_played(self, card, game):
         self._save_played_card(game)
         self.last_card = ProxyCard(card, game)
-        self.last_card.targettable = card.targettable
+        self.last_card.targetable = card.targetable
         self.card_class = type(card)
 
     def record_option_chosen(self, option, game):
@@ -406,7 +406,6 @@ class RecordingGame(hsgame.game_objects.Game):
 
         self.replay.save_decks(*decks)
 
-        self.bind("card_played", self.replay.record_card_played, self)
         self.bind("minion_added", bind_attacks)
 
         self.bind("kept_cards", self.replay.record_kept_index, self)
@@ -415,6 +414,7 @@ class RecordingGame(hsgame.game_objects.Game):
             player.bind("turn_ended", self.replay.record_turn_end, self)
             player.bind("used_power", self.replay.record_power, self)
             player.bind("found_power_target", self.replay.record_power_target, self)
+            player.bind("card_played", self.replay.record_card_played, self)
             bind_attacks(player)
 
     def _find_random(self, lower_bound, upper_bound):

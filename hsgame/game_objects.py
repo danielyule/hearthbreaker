@@ -78,7 +78,7 @@ class Bindable:
 
 
 class Card(Bindable):
-    def __init__(self, name, mana, character_class, status, targettable, target_func=None):
+    def __init__(self, name, mana, character_class, status, targetable, target_func=None):
         """
             @name: string
             @mana: int
@@ -91,14 +91,14 @@ class Card(Bindable):
         self.mana = mana
         self.character_class = character_class
         self.status = status
-        self.targettable = targettable
-        if targettable:
+        self.targetable = targetable
+        if targetable:
             self.targets = []
             self.target = None
             self.get_targets = target_func
 
     def can_use(self, player, game):
-        if self.targettable:
+        if self.targetable:
             self.targets = self.get_targets(game)
             if self.targets is not None and len(self.targets) is 0:
                 return False
@@ -111,7 +111,7 @@ class Card(Bindable):
         else:
             raise GameException("Tried to play card that could not be played")
 
-        if self.targettable:
+        if self.targetable:
             if self.targets is None:
                 self.target = None
             else:
