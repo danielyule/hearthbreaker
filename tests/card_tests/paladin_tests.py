@@ -233,3 +233,22 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].attack_power)
         self.assertEqual(1, game.players[0].minions[0].max_attack)
         self.assertEqual(2, game.players[0].minions[0].defense)
+
+    def testLayOnHands(self):
+        game = generate_game_for(StonetuskBoar, LayOnHands, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 15):
+            game.play_single_turn()
+        
+        game.players[0].health = 20
+        # Put back some cards from hand, for testing purpose
+        for putback in range(0, 5):
+            game.players[1].put_back(game.players[1].hand[0])
+        self.assertEqual(5, len(game.players[1].hand))
+        game.play_single_turn() # Lay on Hands should be played
+        self.assertEqual(28, game.players[0].health)
+        self.assertEqual(8, len(game.players[1].hand))
+        game.play_single_turn()
+        game.play_single_turn() # Lay on Hands should be played, and a card be discarded since we have 8 already
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(10, len(game.players[1].hand))

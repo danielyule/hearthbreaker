@@ -139,3 +139,15 @@ class Humility(Card):
         super().use(player, game)
         
         self.target.attack_power = self.target.max_attack = 1
+        
+class LayOnHands(Card):
+    def __init__(self):
+        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.heal(8)
+        player.draw()
+        player.draw()
+        player.draw()
