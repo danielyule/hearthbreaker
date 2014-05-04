@@ -136,14 +136,119 @@ class TestPaladin(unittest.TestCase):
         
     def testEquality(self):
         game = generate_game_for(MogushanWarden, Equality, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
         
-        for turn in range(0, 7):
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(5, len(game.players[1].hand))
+        game.play_single_turn() # SpellTestingAgent should draw a card, have 2 mana and try to cast Equality, which it shouldn't be able to do (no minions), so hand should be 6
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(6, len(game.players[1].hand))
+        
+        for turn in range(0, 3):
             game.play_single_turn()
             
+        # Make sure there's a minion on the playfield
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, game.players[0].minions[0].defense)
         self.assertEqual(7, game.players[0].minions[0].max_defense)
-        game.play_single_turn()
+        game.play_single_turn() # Equality should be played this turn
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].defense)
         self.assertEqual(1, game.players[0].minions[0].max_defense)
+        # Test it again to make sure the minion stays at 1 health
+        game.play_single_turn() # A new minion should be played
+        game.play_single_turn() # And Equality should be played here
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].defense)
+        self.assertEqual(1, game.players[0].minions[0].max_defense)
+        self.assertEqual(1, game.players[0].minions[1].defense)
+        self.assertEqual(1, game.players[0].minions[1].max_defense)
+
+    def testHammerOfWrath(self):
+        game = generate_game_for(MogushanWarden, HammerOfWrath, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(7, len(game.players[1].hand))
+        game.play_single_turn() # Hammer of Wrath should be played
+        self.assertEqual(27, game.players[0].health)
+        self.assertEqual(8, len(game.players[1].hand))
+
+    def testHandOfProtection(self):
+        game = generate_game_for(StonetuskBoar, HandOfProtection, MinionPlayingAgent, SpellTestingAgent)
+        
+        game.play_single_turn() # Stonetusk Boar should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertFalse(game.players[0].minions[0].divine_shield)
+        game.play_single_turn() # Hand of Protection should be played here, and the only available target should be the enemy minion
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].divine_shield)
+
+    def testHolyLight(self):
+        game = generate_game_for(StonetuskBoar, HolyLight, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 3):
+            game.play_single_turn()
+        
+        game.players[0].health = 20
+        game.play_single_turn() # Holy Light should be played
+        self.assertEqual(26, game.players[0].health)
+        game.play_single_turn()
+        game.play_single_turn() # Holy Light should be played
+        self.assertEqual(30, game.players[0].health)
+
+    def testHolyWrath(self):
+        game = generate_game_for(StonetuskBoar, HolyWrath, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 9):
+            game.play_single_turn()
+        
+        self.assertEqual(30, game.players[0].health)
+        game.play_single_turn() # Holy Wrath should be played that will draw Holy Wrath that costs 5 mana, thus dealing 5 damage
+        self.assertEqual(25, game.players[0].health)
+
+    def testHumility(self):
+        game = generate_game_for(BloodfenRaptor, Humility, MinionPlayingAgent, SpellTestingAgent)
+        
+        game.play_single_turn()
+        game.play_single_turn() # No targets for Humility
+        game.play_single_turn() # Bloodfen Raptor should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
+        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].max_attack)
+        self.assertEqual(2, game.players[0].minions[0].defense)
+        game.play_single_turn() # Humility should be played, and target the enemy Bloodfen Raptor
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].max_attack)
+        self.assertEqual(2, game.players[0].minions[0].defense)
+
+    def testLayOnHands(self):
+        game = generate_game_for(StonetuskBoar, LayOnHands, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 15):
+            game.play_single_turn()
+        
+        game.players[0].health = 20
+        # Put back some cards from hand, for testing purpose
+        for putback in range(0, 5):
+            game.players[1].put_back(game.players[1].hand[0])
+        self.assertEqual(5, len(game.players[1].hand))
+        game.play_single_turn() # Lay on Hands should be played
+        self.assertEqual(28, game.players[0].health)
+        self.assertEqual(8, len(game.players[1].hand))
+        game.play_single_turn()
+        game.play_single_turn() # Lay on Hands should be played, and a card be discarded since we have 8 already
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(10, len(game.players[1].hand))

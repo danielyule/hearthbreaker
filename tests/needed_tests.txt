@@ -11,4 +11,3 @@ Once Sap or Frozen trap is a card, any spell cards which summon minions should b
 Nourish should be tested at 10 mana with the choosing mana option
 StackedDeck is never run to Fatigue
 PredictableBot is never asked to choose an option
-Equality is never being tested with minions down

@@ -83,11 +83,71 @@ class Equality(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        for minion in game.other_player.minions.copy():
-            minion.decrease_health(minion.max_defense - 1)
-            
-        for minion in player.minions.copy():
-            minion.decrease_health(minion.max_defense - 1)
+        targets = game.other_player.minions.copy()
+        targets.extend(player.minions)
+        
+        for minion in targets:
+            minion.decrease_health(minion.max_defense - 1)            
             
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
+
+class HammerOfWrath(Card):
+    def __init__(self):
+        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.spell_damage(3 + player.spell_power, self)
+        player.draw()
+
+class HandOfProtection(Card):
+    def __init__(self):
+        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.divine_shield = True
+        
+class HolyLight(Card):
+    def __init__(self):
+        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.heal(6)
+        
+class HolyWrath(Card):
+    def __init__(self):
+        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        player.draw()
+        cost = player.hand[-1].mana
+        self.target.spell_damage(cost + player.spell_power, self)
+
+class Humility(Card):
+    def __init__(self):
+        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.attack_power = self.target.max_attack = 1
+        
+class LayOnHands(Card):
+    def __init__(self):
+        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.heal(8)
+        player.draw()
+        player.draw()
+        player.draw()
