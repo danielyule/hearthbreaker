@@ -130,3 +130,12 @@ class HolyWrath(Card):
         player.draw()
         cost = player.hand[-1].mana
         self.target.spell_damage(cost + player.spell_power, self)
+
+class Humility(Card):
+    def __init__(self):
+        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.attack_power = self.target.max_attack = 1

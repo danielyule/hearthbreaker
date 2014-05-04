@@ -215,3 +215,21 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(30, game.players[0].health)
         game.play_single_turn() # Holy Wrath should be played that will draw Holy Wrath that costs 5 mana, thus dealing 5 damage
         self.assertEqual(25, game.players[0].health)
+
+    def testHumility(self):
+        game = generate_game_for(BloodfenRaptor, Humility, MinionPlayingAgent, SpellTestingAgent)
+        
+        game.play_single_turn()
+        game.play_single_turn() # No targets for Humility
+        game.play_single_turn() # Bloodfen Raptor should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
+        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].max_attack)
+        self.assertEqual(2, game.players[0].minions[0].defense)
+        game.play_single_turn() # Humility should be played, and target the enemy Bloodfen Raptor
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].max_attack)
+        self.assertEqual(2, game.players[0].minions[0].defense)

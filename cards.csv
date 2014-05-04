@@ -172,7 +172,7 @@ no,Holy Nova,Deal 2 damage to all enemies. Restore 2 Health to all friendly char
 no,Holy Smite,Deal 2 damage.,,Priest,1,,,Basic,Spell
 yes,Holy Wrath,Draw a card and deal damage equal to its cost.,,Paladin,5,,,Expert,Spell
 no,Houndmaster,Battlecry: Give a friendly Beast +2/+2 and Taunt.,,Hunter,4,4,3,Basic,Minion
-no,Humility,Change a minion's Attack to 1.,,Paladin,1,,,Basic,Spell
+yes,Humility,Change a minion's Attack to 1.,,Paladin,1,,,Basic,Spell
 no,Hungry Crab,Battlecry: Destroy a Murloc and gain +2/+2.,Beast,,1,1,2,Expert,Minion
 no,Hunter's Mark,Change a minion's Health to 1.,,Hunter,0,,,Basic,Spell
 no,Ice Barrier,"Secret: As soon as your hero is attacked, gain 8 Armor.",,Mage,3,,,Expert,Spell

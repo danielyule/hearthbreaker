@@ -37,4 +37,5 @@ from hsgame.cards.spells.paladin import \
     HammerOfWrath, \
     HandOfProtection, \
     HolyLight, \
-    HolyWrath
+    HolyWrath, \
+    Humility
