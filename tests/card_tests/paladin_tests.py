@@ -136,14 +136,34 @@ class TestPaladin(unittest.TestCase):
         
     def testEquality(self):
         game = generate_game_for(MogushanWarden, Equality, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
         
-        for turn in range(0, 7):
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(5, len(game.players[1].hand))
+        game.play_single_turn() # SpellTestingAgent will draw a card, have 2 mana and try to cast Equality, which it shouldn't be able to do (no minions), so hand should be 6
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(6, len(game.players[1].hand))
+        
+        for turn in range(0, 3):
             game.play_single_turn()
             
+        # Make sure there's a minion on the playfield
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, game.players[0].minions[0].defense)
         self.assertEqual(7, game.players[0].minions[0].max_defense)
-        game.play_single_turn()
+        game.play_single_turn() # Equality will be played this turn
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].defense)
         self.assertEqual(1, game.players[0].minions[0].max_defense)
+        # Test it again to make sure the minion stays at 1 health
+        game.play_single_turn() # A new minion will be played
+        game.play_single_turn() # And Equality is being played here
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].defense)
+        self.assertEqual(1, game.players[0].minions[0].max_defense)
+        self.assertEqual(1, game.players[0].minions[1].defense)
+        self.assertEqual(1, game.players[0].minions[1].max_defense)

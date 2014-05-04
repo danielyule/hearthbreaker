@@ -83,11 +83,11 @@ class Equality(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        for minion in game.other_player.minions.copy():
-            minion.decrease_health(minion.max_defense - 1)
-            
-        for minion in player.minions.copy():
-            minion.decrease_health(minion.max_defense - 1)
+        targets = game.other_player.minions.copy()
+        targets.extend(player.minions)
+        
+        for minion in targets:
+            minion.decrease_health(minion.max_defense - 1)            
             
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
