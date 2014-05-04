@@ -36,4 +36,5 @@ from hsgame.cards.spells.paladin import \
     Equality, \
     HammerOfWrath, \
     HandOfProtection, \
-    HolyLight
+    HolyLight, \
+    HolyWrath

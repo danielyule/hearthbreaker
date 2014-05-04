@@ -205,3 +205,13 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn() # Holy Light should be played
         self.assertEqual(30, game.players[0].health)
+
+    def testHolyWrath(self):
+        game = generate_game_for(StonetuskBoar, HolyWrath, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 9):
+            game.play_single_turn()
+        
+        self.assertEqual(30, game.players[0].health)
+        game.play_single_turn() # Holy Wrath should be played that will draw Holy Wrath that costs 5 mana, thus dealing 5 damage
+        self.assertEqual(25, game.players[0].health)

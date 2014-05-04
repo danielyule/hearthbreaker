@@ -119,3 +119,14 @@ class HolyLight(Card):
         super().use(player, game)
         
         self.target.heal(6)
+        
+class HolyWrath(Card):
+    def __init__(self):
+        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        player.draw()
+        cost = player.hand[-1].mana
+        self.target.spell_damage(cost + player.spell_power, self)
