@@ -44,14 +44,3 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     game.pre_game()
     return game
 
-
-def check_mana_cost(cost):
-    def create_func(func):
-        def run(self):
-            game = func(self)
-            self.assertEqual(game.current_player.mana, game.current_player.max_mana - cost,
-                             "Mana cost was not correct in " + str(func))
-
-        return run
-
-    return create_func

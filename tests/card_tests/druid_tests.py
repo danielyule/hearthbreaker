@@ -9,7 +9,7 @@ from tests.testing_agents import *
 __author__ = 'Daniel'
 
 import random
-from tests.testing_utils import check_mana_cost, generate_game_for, StackedDeck
+from tests.testing_utils import generate_game_for, StackedDeck
 from hsgame.cards import *
 import unittest
 
@@ -19,23 +19,17 @@ class TestDruid(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
-    @check_mana_cost(-8)  # This spell costs 0, but adds two mana, making it effectively a cost of -2 each time it
-                          # is called.
     def test_Innervate(self):
         game = generate_game_for(Innervate, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
         #triggers all four innervate cards the player is holding.
         game.play_single_turn()
         self.assertEqual(9, game.current_player.mana)
-        return game
 
-    @check_mana_cost(0)
     def test_Moonfire(self):
         game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
         self.assertEqual(26, game.other_player.health)
-        return game
 
-    @check_mana_cost(1)
     def test_Claw(self):
         testing_env = self
 
@@ -47,9 +41,7 @@ class TestDruid(unittest.TestCase):
 
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, MinionPlayingAgent)
         game.play_single_turn()
-        return game
 
-    @check_mana_cost(1)
     def test_Naturalize(self):
         game = generate_game_for(StonetuskBoar, Naturalize, MinionPlayingAgent, EnemyMinionSpellTestingAgent)
         game.play_single_turn()
@@ -57,7 +49,6 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(5, len(game.other_player.hand))
-        return game
 
     def test_Savagery(self):
         class SavageryAgent(EnemyMinionSpellTestingAgent):
@@ -93,7 +84,6 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
 
-    @check_mana_cost(2)
     def test_MarkOfTheWild(self):
         game = generate_game_for(MarkOfTheWild, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
@@ -109,9 +99,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].defense)
         self.assertEqual(1, game.other_player.minions[0].max_defense)
 
-
-        return game
-    @check_mana_cost(2)
     def test_PowerOfTheWild(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -152,17 +139,12 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[2].attack_power)
         self.assertEqual(2, game.current_player.minions[2].max_defense)
 
-        return game
-
-
-    @check_mana_cost(3)  # Although this spell costs 2, it affects the max_mana, which throws off the check
     def test_WildGrowth(self):
         game = generate_game_for(WildGrowth, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(3, game.current_player.max_mana)
-        return game
 
     def test_Wrath(self):
         game = generate_game_for(Wrath, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
@@ -190,10 +172,6 @@ class TestDruid(unittest.TestCase):
         #Two wraths will have been played
         self.assertEqual(1, game.other_player.minions[0].defense)
 
-
-        return game
-
-    @check_mana_cost(3)
     def test_HealingTouch(self):
         game = generate_game_for(HealingTouch, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
         game.play_single_turn()
@@ -206,9 +184,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(30, game.current_player.health)
-        return game
 
-    @check_mana_cost(3)
     def test_MarkOfNature(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), MarkOfNature()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -243,9 +219,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(5, game.other_player.minions[0].defense)
         self.assertTrue(game.other_player.minions[0].taunt)
 
-        return game
-
-    @check_mana_cost(3)
     def test_SavageRoar(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), SavageRoar()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -280,9 +253,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
         self.assertEqual(0, game.current_player.attack_power)
 
-        return game
-
-    @check_mana_cost(4)
     def test_Claw(self):
         testing_env = self
 
@@ -302,9 +272,6 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        return game
-
-    #Can't check for mana cost, because we test on the next player's turn
     def test_SoulOfTheForest(self):
         game = SavedGame("tests/replays/card_tests/SoulOfTheForest.rep")
         game.start()
@@ -312,7 +279,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[1].attack_power)
         self.assertEqual(2, game.other_player.minions[1].defense)
         self.assertEqual("Treant", game.other_player.minions[1].card.name)
-        return game
 
     def test_Swipe(self):
         deck1 = StackedDeck([BloodfenRaptor(), StonetuskBoar(), StonetuskBoar()],CHARACTER_CLASS.DRUID)
@@ -343,7 +309,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(29, game.other_player.health)
 
 
-    @check_mana_cost(4)
     def test_KeeperOfTheGrove(self):
         #Test Moonfire option
 
@@ -397,7 +362,6 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Keeper of the Grove", game.current_player.minions[0].card.name)
-        return game
 
 
     def test_DruidOfTheClaw(self):
@@ -410,7 +374,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].defense)
         self.assertTrue(game.other_player.minions[0].taunt)
 
-    @check_mana_cost(5)
     def test_Nourish(self):
 
         #Test gaining two mana
@@ -447,9 +410,7 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(10, len(game.current_player.hand))
         self.assertEqual(5, game.current_player.max_mana)
-        return game
 
-    @check_mana_cost(5)
     def test_Starfall(self):
 
         #Test gaining two mana
@@ -487,9 +448,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].defense)
         self.assertEqual(30, game.other_player.health)
-        return game
 
-    @check_mana_cost(6)
     def test_ForceOfNature(self):
         game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         game.play_single_turn()
@@ -519,11 +478,6 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
 
-        return game
-
-
-
-    @check_mana_cost(6)
     def test_Starfire(self):
         game = generate_game_for(Starfire, MogushanWarden, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
 
@@ -547,9 +501,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(7, game.other_player.minions[1].defense)
         self.assertEqual(9, len(game.current_player.hand))
 
-        return game
-
-    @check_mana_cost(7)
     def test_AncientOfLore(self):
         game = generate_game_for(AncientOfLore, Starfire, MinionPlayingAgent, EnemySpellTestingAgent)
 
@@ -599,8 +550,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[0].defense)
         self.assertEqual(5, game.current_player.minions[0].attack_power)
         self.assertEqual("Ancient of Lore", game.current_player.minions[0].card.name)
-
-        return game
 
     def test_AncientOfWar(self):
         game = generate_game_for(AncientOfWar, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
@@ -667,7 +616,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(5, game.other_player.minions[0].max_defense)
         self.assertEqual(5, game.other_player.minions[0].attack_power)
         self.assertFalse(game.other_player.minions[0].taunt)
-
 
     def test_IronbarkProtector(self):
         game = generate_game_for(IronbarkProtector, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
