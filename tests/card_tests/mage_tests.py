@@ -1,9 +1,11 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
+from hsgame.constants import CHARACTER_CLASS
+from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
-from tests.testing_utils import generate_game_for
+from tests.testing_utils import generate_game_for, StackedDeck
 
 from hsgame.cards import *
 
@@ -91,4 +93,36 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.other_player.minions[0].frozen)
         self.assertEqual(7, game.other_player.minions[0].defense)
 
+    def test_ManaWyrm(self):
+        deck1 = StackedDeck([ManaWyrm(), IceLance(), ManaWyrm(), IceLance(), IceLance(), IceLance()], CHARACTER_CLASS.MAGE)
+        deck2 = StackedDeck([IronbeakOwl()], CHARACTER_CLASS.PALADIN)
+        game = Game([deck1, deck2], [SpellTestingAgent(), MinionPlayingAgent()])
+        game.pre_game()
+        game.current_player = 1
 
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].defense)
+        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual("Mana Wyrm",game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].defense)
+        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[1].defense)
+        self.assertEqual(3, game.current_player.minions[1].max_defense)
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].defense)
+        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual(5, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[1].defense)
+        self.assertEqual(3, game.current_player.minions[1].max_defense)

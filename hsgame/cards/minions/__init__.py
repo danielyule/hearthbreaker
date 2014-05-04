@@ -21,4 +21,5 @@ from hsgame.cards.minions.druid import \
     Cenarius
 
 from hsgame.cards.minions.mage import \
+    ManaWyrm, \
     WaterElemental

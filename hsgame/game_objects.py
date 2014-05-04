@@ -511,6 +511,7 @@ class Player(Bindable):
     def turn_complete(self):
         self.attack_power = 0
 
+
 class Game(Bindable):
     def __init__(self, decks, agents, random=random.randint):
         super().__init__()
@@ -612,10 +613,11 @@ class Game(Bindable):
             raise GameException("The game has ended")
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
-        self.trigger("card_played", card)
+        self.current_player.trigger("card_played", card)
+        if type(card) in Card.__subclasses__():
+            self.current_player.trigger("spell_cast", card)
         self.current_player.hand.remove(card)
         card.use(self.current_player, self)
-
         for minion in self.delayed_minions:
             minion.activate_delayed()
 

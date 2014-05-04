@@ -7,6 +7,8 @@ Events Triggered in hssim
  * card_drawn (card)
  * card_put_back(card)
  * card_destroyed (card)
+ * card_played (card)
+ * spell_cast (card)
  * turn_started
  * turn_ended
  * attack_minion
@@ -24,9 +26,6 @@ Events Triggered in hssim
  * found_power_target(target)
 
 ##Game
-
-
- * card_played
  * minion_on_minion_attack(minion, target)
  * minion_on_player_attack(minion, target)
  * player_on_minion_attack(player, target)
