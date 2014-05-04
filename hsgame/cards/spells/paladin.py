@@ -110,3 +110,12 @@ class HandOfProtection(Card):
         super().use(player, game)
         
         self.target.divine_shield = True
+        
+class HolyLight(Card):
+    def __init__(self):
+        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.heal(6)
