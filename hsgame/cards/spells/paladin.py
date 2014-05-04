@@ -91,3 +91,13 @@ class Equality(Card):
             
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
+
+class HammerOfWrath(Card):
+    def __init__(self):
+        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+        
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.spell_damage(3 + player.spell_power, self)
+        player.draw()

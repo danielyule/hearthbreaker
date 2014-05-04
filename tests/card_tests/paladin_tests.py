@@ -167,3 +167,15 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].max_defense)
         self.assertEqual(1, game.players[0].minions[1].defense)
         self.assertEqual(1, game.players[0].minions[1].max_defense)
+
+    def testHammerOfWrath(self):
+        game = generate_game_for(MogushanWarden, HammerOfWrath, DoNothingBot, SpellTestingAgent)
+        
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(7, len(game.players[1].hand))
+        game.play_single_turn() # Hammer of Wrath will be played
+        self.assertEqual(27, game.players[0].health)
+        self.assertEqual(8, len(game.players[1].hand))

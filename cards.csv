@@ -156,7 +156,7 @@ no,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Expert,Minion
 no,Gruul,"At the end of each turn, gain +1/+1 .",,,8,7,7,Expert,Minion
 no,Guardian of Kings,Battlecry: Restore 6 Health to your hero.,,Paladin,7,5,6,Basic,Minion
 no,Gurubashi Berserker,"Whenever this minion takes damage, gain +3 Attack.",,,5,2,7,Basic,Minion
-no,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Basic,Spell
+yes,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Basic,Spell
 no,Hand of Protection,Give a minion Divine Shield.,,Paladin,1,,,Basic,Spell
 no,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.,,,5,5,4,Expert,Minion
 no,Harvest Golem,Deathrattle: Summon a 2/1 Damaged Golem.,,,3,2,3,Expert,Minion
