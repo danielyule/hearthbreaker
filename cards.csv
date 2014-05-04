@@ -1,4 +1,4 @@
-Implemented?, Name,Text,Race,Class,Cost,Attack,Health,Type,Minion/Spell
+Implemented?,Name,Text,Race,Class,Cost,Attack,Health,Type,Minion/Spell
 no,Abomination,Taunt. Deathrattle: Deal 2 damage to ALL characters.,,,5,4,4,Expert,Minion
 no,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Expert,Minion
 no,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Basic,Minion
