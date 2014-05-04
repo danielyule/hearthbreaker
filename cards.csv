@@ -20,8 +20,8 @@ no,Animal Companion,Summon a random Beast Companion.,,Hunter,3,,,Basic,Spell
 no,Arathi Weaponsmith,Battlecry: Equip a 2/2 weapon.,,Warrior,4,3,3,Expert,Minion
 no,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Basic,Spell
 no,Arcane Golem,Charge. Battlecry: Give your opponent a Mana Crystal.,,,3,4,2,Expert,Minion
-yes,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
-no,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1,,,Basic,Spell
+no,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
+yes,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1,,,Basic,Spell
 no,Arcane Shot,Deal 2 damage.,,Hunter,1,,,Basic,Spell
 no,Arcanite Reaper,,,Warrior,5,5,2,Basic,Weapon
 no,Archmage,Spell Damage +1,,,6,4,7,Basic,Minion

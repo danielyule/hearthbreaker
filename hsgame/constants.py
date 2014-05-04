@@ -34,6 +34,7 @@ class CHARACTER_CLASS:
             "PALADIN": CHARACTER_CLASS.PALADIN,
             "ROGUE": CHARACTER_CLASS.ROGUE,
             "WARLOCK": CHARACTER_CLASS.WARLOCK,
+            "": CHARACTER_CLASS.ALL,
         }
 
         return classes[class_name.upper()]
@@ -59,3 +60,21 @@ class MINION_TYPE:
     BEAST = 1
     MURLOC = 2
     DRAGON = 3
+    GIANT = 4
+    DEMON = 5
+    PIRATE = 6
+    TOTEM = 7
+
+    @staticmethod
+    def from_str(type_name):
+        TYPES = {
+            "": MINION_TYPE.NONE,
+            "BEAST": MINION_TYPE.BEAST,
+            "MURLOC": MINION_TYPE.MURLOC,
+            "DRAGON": MINION_TYPE.DRAGON,
+            "GIANT": MINION_TYPE.GIANT,
+            "DEMON": MINION_TYPE.DEMON,
+            "PIRATE": MINION_TYPE.PIRATE,
+            "TOTEM": MINION_TYPE.TOTEM,
+        }
+        return TYPES[type_name.upper()]

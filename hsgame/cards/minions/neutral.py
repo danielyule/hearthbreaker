@@ -63,7 +63,7 @@ class MogushanWarden(MinionCard):
         super().__init__("Mogu'shan Warden", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(1, 7, MINION_TYPE.BEAST)
+        minion = Minion(1, 7)
         minion.taunt = True
         return minion
 
