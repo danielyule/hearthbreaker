@@ -153,6 +153,7 @@ class Minion(Bindable):
         self.index = -1
         self.charge = False
         self.spell_power = 0
+        self.divine_shield = False
         self.delayed = []
         super().__init__()
 
@@ -227,14 +228,17 @@ class Minion(Bindable):
         self.stealth = False
 
     def damage(self, amount, attacker):
-        self.delayed_trigger("damaged", amount, attacker)
-        self.defense -= amount
-        if type(attacker) is Minion:
-            attacker.delayed_trigger("did_damage", amount, self)
-        elif type(attacker) is Player:
-            attacker.trigger("did_damage", amount, self)
-        if self.defense <= 0:
-            self.die(attacker)
+        if self.divine_shield:
+            self.divine_shield = False
+        else:
+            self.delayed_trigger("damaged", amount, attacker)
+            self.defense -= amount
+            if type(attacker) is Minion:
+                attacker.delayed_trigger("did_damage", amount, self)
+            elif type(attacker) is Player:
+                attacker.trigger("did_damage", amount, self)
+            if self.defense <= 0:
+                self.die(attacker)
 
     def increase_attack(self, amount):
         def silence():
@@ -282,6 +286,7 @@ class Minion(Bindable):
         self.charge = False
         self.player.spell_power -= self.spell_power
         self.spell_power = 0
+        self.divine_shield = False
 
 
     def spell_damage(self, amount, spellCard):
