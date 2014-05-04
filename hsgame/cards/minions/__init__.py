@@ -9,7 +9,8 @@ from hsgame.cards.minions.neutral import \
     MogushanWarden, \
     OasisSnapjaw, \
     FaerieDragon, \
-    KoboldGeomancer
+    KoboldGeomancer, \
+    ElvenArcher
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \

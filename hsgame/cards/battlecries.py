@@ -8,24 +8,15 @@ def draw_card(minion):
 
 
 def silence(minion):
-    targets = hsgame.targetting.find_minion_spell_target(minion.game)
-    target = minion.player.agent.choose_target(targets)
-    target.silence()
+    if minion.card.target is not None:
+        minion.card.target.silence()
 
 
 def deal_one_damage(minion):
-    targets = minion.game.other_player.minions.copy()
-    targets.append(minion.game.other_player)
-    targets.extend(minion.player.minions)
-    targets.append(minion.player)
-    target = minion.player.agent.choose_target(targets)
-    target.damage(1, None)
+    if minion.card.target is not None:
+        minion.card.target.damage(1, None)
 
 
 def deal_two_damage(minion):
-    targets = minion.game.other_player.minions.copy()
-    targets.append(minion.game.other_player)
-    targets.extend(minion.player.minions)
-    targets.append(minion.player)
-    target = minion.player.agent.choose_target(targets)
-    target.damage(2, None)
+    if minion.card.target is not None:
+        minion.card.target.damage(2, None)

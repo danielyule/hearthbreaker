@@ -100,7 +100,7 @@ class Card(Bindable):
     def can_use(self, player, game):
         if self.targettable:
             self.targets = self.get_targets(game)
-            if len(self.targets) is 0:
+            if self.targets is not None and len(self.targets) is 0:
                 return False
 
         return player.mana >= self.mana
@@ -112,15 +112,18 @@ class Card(Bindable):
             raise GameException("Tried to play card that could not be played")
 
         if self.targettable:
-            self.target = player.agent.choose_target(self.targets)
+            if self.targets is None:
+                self.target = None
+            else:
+                self.target = player.agent.choose_target(self.targets)
 
     def __str__(self):
         return self.name + " (" + str(self.mana) + " mana)"
 
 
 class MinionCard(Card):
-    def __init__(self, name, mana, character_class, status):
-        super().__init__(name, mana, character_class, status, False)
+    def __init__(self, name, mana, character_class, status, targetable=False, targeting_func=None):
+        super().__init__(name, mana, character_class, status, targetable, targeting_func)
 
     def can_use(self, player, game):
         return super().can_use(player, game)

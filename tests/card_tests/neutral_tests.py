@@ -48,3 +48,20 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, game.other_player.minions[0].spell_power)
         self.assertEqual(0, game.other_player.spell_power)
 
+    def test_ElvenArcher(self):
+        game = generate_game_for(StonetuskBoar, ElvenArcher, MinionPlayingAgent, MinionPlayingAgent)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].defense)
+        self.assertEqual(1, game.current_player.minions[0].max_defense)
+        self.assertEqual("Elven Archer", game.current_player.minions[0].card.name)
+
+
+
