@@ -143,7 +143,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(5, len(game.players[1].hand))
-        game.play_single_turn() # SpellTestingAgent will draw a card, have 2 mana and try to cast Equality, which it shouldn't be able to do (no minions), so hand should be 6
+        game.play_single_turn() # SpellTestingAgent should draw a card, have 2 mana and try to cast Equality, which it shouldn't be able to do (no minions), so hand should be 6
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(6, len(game.players[1].hand))
@@ -155,13 +155,13 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, game.players[0].minions[0].defense)
         self.assertEqual(7, game.players[0].minions[0].max_defense)
-        game.play_single_turn() # Equality will be played this turn
+        game.play_single_turn() # Equality should be played this turn
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].defense)
         self.assertEqual(1, game.players[0].minions[0].max_defense)
         # Test it again to make sure the minion stays at 1 health
-        game.play_single_turn() # A new minion will be played
-        game.play_single_turn() # And Equality is being played here
+        game.play_single_turn() # A new minion should be played
+        game.play_single_turn() # And Equality should be played here
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].defense)
         self.assertEqual(1, game.players[0].minions[0].max_defense)
@@ -176,6 +176,19 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(30, game.players[0].health)
         self.assertEqual(7, len(game.players[1].hand))
-        game.play_single_turn() # Hammer of Wrath will be played
+        game.play_single_turn() # Hammer of Wrath should be played
         self.assertEqual(27, game.players[0].health)
         self.assertEqual(8, len(game.players[1].hand))
+
+    def testHandOfProtection(self):
+        game = generate_game_for(StonetuskBoar, HandOfProtection, MinionPlayingAgent, SpellTestingAgent)
+        
+        game.play_single_turn() # Stonetusk Boar should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertFalse(game.players[0].minions[0].divine_shield)
+        game.play_single_turn() # Hand of Protection should be played here, and the only available target should be the enemy minion
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].divine_shield)

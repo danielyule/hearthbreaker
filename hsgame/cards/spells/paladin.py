@@ -101,3 +101,12 @@ class HammerOfWrath(Card):
         
         self.target.spell_damage(3 + player.spell_power, self)
         player.draw()
+
+class HandOfProtection(Card):
+    def __init__(self):
+        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.divine_shield = True

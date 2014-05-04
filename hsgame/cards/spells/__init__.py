@@ -34,4 +34,5 @@ from hsgame.cards.spells.paladin import \
     Consecration, \
     DivineFavor, \
     Equality, \
-    HammerOfWrath
+    HammerOfWrath, \
+    HandOfProtection
