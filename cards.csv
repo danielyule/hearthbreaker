@@ -5,7 +5,7 @@ no,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Basic,Mi
 no,Acolyte of Pain,"Whenever this minion takes damage, draw a card.",,,3,1,3,Expert,Minion
 no,Al'Akir the Windlord,"Windfury, Charge, Divine Shield, Taunt",,Shaman,8,3,5,Expert,Minion
 no,Alarm-o-Bot,"At the start of your turn, swap this minion with a random one in your hand.",,,3,0,3,Expert,Minion
-no,Aldor Peacekeeper,Battlecry: Change an enemy minion's Attack to 1.,,Paladin,3,3,3,Expert,Minion
+yes,Aldor Peacekeeper,Battlecry: Change an enemy minion's Attack to 1.,,Paladin,3,3,3,Expert,Minion
 no,Alexstrasza,Battlecry: Set a hero's remaining Health to 15.,Dragon,,9,8,8,Expert,Minion
 no,Amani Berserker,Enrage: +3 Attack,,,2,2,3,Expert,Minion
 no,Ancestral Healing,Restore a minion to full Health and give it Taunt.,,Shaman,0,,,Basic,Spell
