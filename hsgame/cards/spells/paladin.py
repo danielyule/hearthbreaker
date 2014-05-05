@@ -138,7 +138,8 @@ class Humility(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.attack_power = self.target.max_attack = 1
+        # This will increase/decrease a minions attack to 1
+        self.target.increase_attack(1 - self.target.attack_power)
         
 class LayOnHands(Card):
     def __init__(self):

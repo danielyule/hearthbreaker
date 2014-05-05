@@ -225,13 +225,11 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
         self.assertEqual(3, game.players[0].minions[0].attack_power)
-        self.assertEqual(3, game.players[0].minions[0].max_attack)
         self.assertEqual(2, game.players[0].minions[0].defense)
         game.play_single_turn() # Humility should be played, and target the enemy Bloodfen Raptor
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
         self.assertEqual(1, game.players[0].minions[0].attack_power)
-        self.assertEqual(1, game.players[0].minions[0].max_attack)
         self.assertEqual(2, game.players[0].minions[0].defense)
 
     def testLayOnHands(self):
@@ -252,3 +250,22 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn() # Lay on Hands should be played, and a card be discarded since we have 8 already
         self.assertEqual(30, game.players[0].health)
         self.assertEqual(10, len(game.players[1].hand))
+
+    def testAldorPeacekeeper(self):
+        game = generate_game_for(AldorPeacekeeper, BloodfenRaptor, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].defense)
+        self.assertEqual(3, game.players[1].minions[0].attack_power)
+        self.assertEqual("Bloodfen Raptor", game.players[1].minions[0].card.name)
+        game.play_single_turn() # Aldor Peacekeeper will be played
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].defense)
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual("Bloodfen Raptor", game.players[1].minions[0].card.name)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].defense)
+        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual("Aldor Peacekeeper", game.players[0].minions[0].card.name)
