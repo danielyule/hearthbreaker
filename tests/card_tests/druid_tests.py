@@ -40,6 +40,7 @@ class TestDruid(unittest.TestCase):
                 testing_env.assertEqual(2, self.game.current_player.armour)
 
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, MinionPlayingAgent)
+        game.pre_game()
         game.play_single_turn()
 
     def test_Naturalize(self):
@@ -253,7 +254,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
         self.assertEqual(0, game.current_player.attack_power)
 
-    def test_Claw(self):
+    def test_Bite(self):
         testing_env = self
 
         class BiteAgent(EnemySpellTestingAgent):
