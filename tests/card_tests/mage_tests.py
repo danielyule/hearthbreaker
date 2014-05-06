@@ -145,3 +145,20 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].defense)
         self.assertEqual(30, game.other_player.health)
+
+    def test_Frostbolt(self):
+        game = generate_game_for(OasisSnapjaw, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertTrue(game.other_player.frozen)
+        self.assertEqual(27, game.other_player.health)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.other_player.health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertTrue(game.other_player.minions[0].frozen)

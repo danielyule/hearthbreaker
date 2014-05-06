@@ -38,3 +38,12 @@ class ArcaneExplosion(Card):
         for minion in game.other_player.minions.copy():
             minion.spell_damage(1 + player.spell_power, self)
 
+
+class Frostbolt(Card):
+    def __init__(self):
+        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(3 + player.spell_power, self)
+        self.target.freeze()

@@ -141,7 +141,7 @@ no,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's
 no,Frost Elemental,Battlecry: Freeze a character.,,,6,5,5,Expert,Minion
 no,Frost Nova,Freeze all enemy minions.,,Mage,3,,,Basic,Spell
 no,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,Basic,Spell
-no,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Basic,Spell
+yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Basic,Spell
 no,Frostwolf Grunt,Taunt,,,2,2,2,Basic,Minion
 no,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Basic,Minion
 no,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Expert,Minion
