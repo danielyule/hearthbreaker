@@ -27,7 +27,7 @@ no,Arcanite Reaper,,,Warrior,5,5,2,Basic,Weapon
 no,Archmage,Spell Damage +1,,,6,4,7,Basic,Minion
 no,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into your hand.",,Mage,7,5,7,Expert,Minion
 no,Argent Commander,"Charge, Divine Shield",,,6,4,2,Expert,Minion
-yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Expert,Minion
+no,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Expert,Minion
 no,Argent Squire,Divine Shield,,,1,1,1,Expert,Minion
 no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Expert,Minion
 no,Assassin's Blade,,,Rogue,5,3,4,Basic,Weapon
@@ -67,7 +67,7 @@ no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand
 yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
 no,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Basic,Spell
 no,Chillwind Yeti,,,,4,4,5,Basic,Minion
-yes,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
+no,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
 yes,Claw,Give your hero +2 Attack this turn and 2 Armor.,,Druid,1,,,Basic,Spell
 no,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Basic,Spell
 no,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Expert,Spell
@@ -154,7 +154,7 @@ no,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,
 no,Grimscale Oracle,ALL other Murlocs have +1 Attack.,Murloc,,1,1,1,Basic,Minion
 no,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Expert,Minion
 no,Gruul,"At the end of each turn, gain +1/+1 .",,,8,7,7,Expert,Minion
-yes,Guardian of Kings,Battlecry: Restore 6 Health to your hero.,,Paladin,7,5,6,Basic,Minion
+no,Guardian of Kings,Battlecry: Restore 6 Health to your hero.,,Paladin,7,5,6,Basic,Minion
 no,Gurubashi Berserker,"Whenever this minion takes damage, gain +3 Attack.",,,5,2,7,Basic,Minion
 yes,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Basic,Spell
 yes,Hand of Protection,Give a minion Divine Shield.,,Paladin,1,,,Basic,Spell
