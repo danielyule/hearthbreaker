@@ -42,3 +42,6 @@ from hsgame.cards.spells.paladin import \
     HolyWrath, \
     Humility, \
     LayOnHands
+
+from hsgame.cards.spells.priest import \
+    CircleOfHealing

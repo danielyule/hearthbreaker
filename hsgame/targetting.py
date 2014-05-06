@@ -66,3 +66,9 @@ def find_enemy_minion_battlecry_target(game):
     if len(targets) is 0:
         return None
     return targets
+
+def find_friendly_minion_battlecry_target(game):
+    targets = game.current_player.minions.copy()
+    if len(targets) is 0:
+        return None
+    return targets

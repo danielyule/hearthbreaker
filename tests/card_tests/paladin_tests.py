@@ -260,7 +260,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].defense)
         self.assertEqual(3, game.players[1].minions[0].attack_power)
         self.assertEqual("Bloodfen Raptor", game.players[1].minions[0].card.name)
-        game.play_single_turn() # Aldor Peacekeeper will be played
+        game.play_single_turn() # Aldor Peacekeeper should be played
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].defense)
         self.assertEqual(1, game.players[1].minions[0].attack_power)
@@ -272,3 +272,33 @@ class TestPaladin(unittest.TestCase):
         game.players[1].minions[0].silence()
         self.assertEqual(2, game.players[1].minions[0].defense)
         self.assertEqual(3, game.players[1].minions[0].attack_power)
+        
+    def testArgentProtector(self):
+        game = generate_game_for(ArgentProtector, BloodfenRaptor, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        game.play_single_turn() # Argent Protector should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Argent Protector", game.players[0].minions[0].card.name)
+        self.assertFalse(game.players[0].minions[0].divine_shield)
+        game.play_single_turn()
+        game.play_single_turn() # Argent Protector should be played, and the previous AP should get Divine Shield
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[1].divine_shield)
+        game.players[0].minions[1].silence()
+        self.assertFalse(game.players[0].minions[1].divine_shield)
+        
+    def testGuardianOfKings(self):
+        game = generate_game_for(GuardianOfKings, BloodfenRaptor, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        game.players[0].health = 20
+
+        self.assertEqual(0, len(game.players[0].minions))
+        game.play_single_turn() # Guardian of Kings should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Guardian of Kings", game.players[0].minions[0].card.name)
+        self.assertEqual(26, game.players[0].health)
