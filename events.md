@@ -40,6 +40,7 @@ Events Triggered in hssim
  * attack_minion
  * attack_player
  * damaged(amount, attacker)
+ * healed(amount)
  * spell_damaged(amount, card)
  * minion_damaged(amount, minion)
  * player_damaged(amount, player)

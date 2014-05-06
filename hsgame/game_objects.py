@@ -304,6 +304,12 @@ class Minion(Bindable):
         self.trigger("player_damaged", amount, player)
         self.damage(amount, player)
 
+    def heal(self, amount):
+        self.trigger("healed", amount)
+        self.defense += amount
+        if self.defense > self.max_defense:
+            self.defense = self.max_defense
+
     def die(self, by):
         self.delayed_trigger("died", by)
         self.game.trigger("minion_died", self, by)
