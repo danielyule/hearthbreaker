@@ -18,7 +18,7 @@ no,Ancient Watcher,Can't Attack.,,,2,4,5,Expert,Minion
 no,Angry Chicken,Enrage: +5 Attack.,Beast,,1,1,1,Expert,Minion
 no,Animal Companion,Summon a random Beast Companion.,,Hunter,3,,,Basic,Spell
 no,Arathi Weaponsmith,Battlecry: Equip a 2/2 weapon.,,Warrior,4,3,3,Expert,Minion
-no,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Basic,Spell
+yes,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Basic,Spell
 no,Arcane Golem,Charge. Battlecry: Give your opponent a Mana Crystal.,,,3,4,2,Expert,Minion
 no,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
 yes,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1,,,Basic,Spell

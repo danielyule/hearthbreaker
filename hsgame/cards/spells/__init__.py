@@ -23,7 +23,8 @@ from hsgame.cards.spells.druid import \
 
 from hsgame.cards.spells.mage import \
     ArcaneMissiles, \
-    IceLance
+    IceLance, \
+    ArcaneExplosion
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

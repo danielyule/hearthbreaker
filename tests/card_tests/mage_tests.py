@@ -126,3 +126,22 @@ class TestMage(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[1].attack_power)
         self.assertEqual(3, game.current_player.minions[1].defense)
         self.assertEqual(3, game.current_player.minions[1].max_defense)
+
+    def test_ArcaneExplosion(self):
+        game = generate_game_for(BloodfenRaptor, ArcaneExplosion, MinionPlayingAgent, SpellTestingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(30, game.other_player.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(30, game.other_player.health)

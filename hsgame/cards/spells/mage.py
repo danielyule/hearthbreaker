@@ -28,3 +28,13 @@ class IceLance(Card):
         else:
             self.target.freeze()
 
+
+class ArcaneExplosion(Card):
+    def __init__(self):
+        super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in game.other_player.minions.copy():
+            minion.spell_damage(1 + player.spell_power, self)
+
