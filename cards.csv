@@ -67,7 +67,7 @@ no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand
 yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Expert,Minion
 no,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Basic,Spell
 no,Chillwind Yeti,,,,4,4,5,Basic,Minion
-no,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
+yes,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Expert,Spell
 yes,Claw,Give your hero +2 Attack this turn and 2 Armor.,,Druid,1,,,Basic,Spell
 no,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Basic,Spell
 no,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Expert,Spell
