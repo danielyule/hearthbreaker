@@ -269,3 +269,6 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].defense)
         self.assertEqual(3, game.players[0].minions[0].attack_power)
         self.assertEqual("Aldor Peacekeeper", game.players[0].minions[0].card.name)
+        game.players[1].minions[0].silence()
+        self.assertEqual(2, game.players[1].minions[0].defense)
+        self.assertEqual(3, game.players[1].minions[0].attack_power)
