@@ -25,4 +25,5 @@ from hsgame.cards.minions.mage import \
     WaterElemental
     
 from hsgame.cards.minions.paladin import \
-    AldorPeacekeeper
+    AldorPeacekeeper, \
+    ArgentProtector
