@@ -17,6 +17,29 @@ class ManaWyrm(MinionCard):
         return minion
 
 
+class SorcerersApprentice(MinionCard):
+    def __init__(self):
+        super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def reduce_mana(card):
+            def increase_mana(c):
+                c.mana += 1
+            if type(card) in Card.__subclasses__():
+                if card.mana > 0:
+                    card.mana -= 1
+                    minion.bind("silence", increase_mana, card)
+                    minion.bind("died", lambda x, c: increase_mana(c), card)
+
+        minion = Minion(3, 2)
+        for hand_card in player.hand:
+            reduce_mana(hand_card)
+        player.bind("card_drawn", reduce_mana)
+        minion.bind_once("silence", lambda: player.unbind("card_drawn", reduce_mana))
+        minion.bind_once("died", lambda x: player.unbind("card_drawn", reduce_mana))
+        return minion
+
+
 class WaterElemental(MinionCard):
     def __init__(self):
         super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)

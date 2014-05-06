@@ -313,7 +313,7 @@ no,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Exp
 no,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Expert,Spell
 no,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Expert,Spell
 no,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Expert,Spell
-no,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Expert,Minion
+yes,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Expert,Minion
 yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Expert,Spell
 no,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Basic,Spell
 no,Southsea Captain,Your other Pirates have +1/+1.,Pirate,,3,3,3,Expert,Minion

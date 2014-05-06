@@ -162,3 +162,36 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].defense)
         self.assertTrue(game.other_player.minions[0].frozen)
+
+    def test_SorcerersApprentice(self):
+        deck1 = StackedDeck([SorcerersApprentice(), ArcaneMissiles(), SorcerersApprentice(), Frostbolt(), Frostbolt(),
+                             Frostbolt()], CHARACTER_CLASS.MAGE)
+        deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.PRIEST)
+        game = Game([deck1, deck2], [SpellTestingAgent(), DoNothingBot()])
+        game.pre_game()
+        game.current_player = game.players[1]
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(2, game.current_player.minions[0].defense)
+        self.assertEqual("Sorcerer's Apprentice", game.current_player.minions[0].card.name)
+
+        #Arcane missiles should also have been played, since it is now free
+        self.assertEqual(27, game.other_player.health)
+
+        #Make sure the other frostbolts have been properly reduced
+        self.assertEqual(1, game.current_player.hand[1].mana)
+        self.assertEqual(1, game.current_player.hand[2].mana)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        #Both Sorcer's Apprentices are killed by friendly Frostbolts.
+        self.assertEqual(0, len(game.current_player.minions))
+
+        #Make sure that the cards in hand are no longer reduced
+        self.assertEqual(2, game.current_player.hand[0].mana)
