@@ -289,3 +289,16 @@ class TestPaladin(unittest.TestCase):
         self.assertTrue(game.players[0].minions[1].divine_shield)
         game.players[0].minions[1].silence()
         self.assertFalse(game.players[0].minions[1].divine_shield)
+        
+    def testGuardianOfKings(self):
+        game = generate_game_for(GuardianOfKings, BloodfenRaptor, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        game.players[0].health = 20
+
+        self.assertEqual(0, len(game.players[0].minions))
+        game.play_single_turn() # Guardian of Kings should be played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Guardian of Kings", game.players[0].minions[0].card.name)
+        self.assertEqual(26, game.players[0].health)

@@ -23,3 +23,12 @@ class ArgentProtector(MinionCard):
         minion = Minion(2, 2)
         minion.bind("added_to_board", give_divine_shield)
         return minion
+    
+class GuardianOfKings(MinionCard):
+    def __init__(self):
+        super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(5, 6)
+        player.heal(6)
+        return minion
