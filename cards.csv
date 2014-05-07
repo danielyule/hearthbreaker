@@ -231,7 +231,7 @@ no,Mind Control Tech,"Battlecry: If your opponent has 4 or more minions, take co
 no,Mind Vision,Put a copy of a random card in your opponent's hand into your hand.,,Priest,1,,,Basic,Spell
 no,Mindgames,Put a copy of a random minion from your opponent's deck into the battlefield.,,Priest,4,,,Expert,Spell
 no,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of it.",,Mage,3,,,Expert,Spell
-no,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
+yes,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
 no,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Expert,Spell
 yes,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
 no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion

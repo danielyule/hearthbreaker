@@ -24,6 +24,7 @@ from hsgame.cards.spells.druid import \
 from hsgame.cards.spells.mage import \
     ArcaneMissiles, \
     IceLance, \
+    MirrorImage, \
     ArcaneExplosion, \
     Frostbolt
 

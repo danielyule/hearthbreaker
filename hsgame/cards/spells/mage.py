@@ -1,5 +1,5 @@
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, Minion, MinionCard
 import hsgame.targetting
 __author__ = 'Daniel'
 
@@ -27,6 +27,30 @@ class IceLance(Card):
             self.target.spell_damage(4, self)
         else:
             self.target.freeze()
+
+
+class MirrorImage(Card):
+    def __init__(self):
+        super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        class MirrorImageMinion(MinionCard):
+            def __init__(self):
+                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, False)
+
+            def create_minion(self, player):
+                minion = Minion(0, 2)
+                minion.taunt = True
+                return minion
+
+        minion1 = Minion(0, 2)
+        minion2 = Minion(0, 2)
+        minion1.taunt = True
+        minion2.taunt = True
+        minion1.add_to_board(MirrorImageMinion(), game, player, 0)
+        minion2.add_to_board(MirrorImageMinion(), game, player, 0)
+
 
 
 class ArcaneExplosion(Card):

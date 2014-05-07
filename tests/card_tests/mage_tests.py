@@ -127,6 +127,23 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[1].defense)
         self.assertEqual(3, game.current_player.minions[1].max_defense)
 
+    def test_MirrorImage(self):
+        game = generate_game_for(MirrorImage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.minions[0].attack_power)
+        self.assertEqual(2, game.current_player.minions[0].defense)
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Mirror Image", game.current_player.minions[0].card.name)
+        self.assertEqual(0, game.current_player.minions[0].card.mana)
+
+        self.assertEqual(0, game.current_player.minions[1].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].defense)
+        self.assertTrue(game.current_player.minions[1].taunt)
+        self.assertEqual("Mirror Image", game.current_player.minions[1].card.name)
+        self.assertEqual(0, game.current_player.minions[1].card.mana)
+
+
     def test_ArcaneExplosion(self):
         game = generate_game_for(BloodfenRaptor, ArcaneExplosion, MinionPlayingAgent, SpellTestingAgent)
 
