@@ -47,4 +47,5 @@ from hsgame.cards.spells.paladin import \
     LayOnHands
 
 from hsgame.cards.spells.priest import \
-    CircleOfHealing
+    CircleOfHealing, \
+    DivineSpirit

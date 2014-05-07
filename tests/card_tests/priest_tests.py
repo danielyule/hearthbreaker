@@ -43,3 +43,35 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Circle of Healing should be played
         self.assertEqual(game.players[0].minions[0].max_defense, game.players[0].minions[0].defense)
         self.assertEqual(game.players[1].minions[0].max_defense, game.players[1].minions[0].defense)
+        
+    def testDivineSpirit(self):
+        game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        game.play_single_turn() # Two Divine Spirits should be played
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(28, game.players[1].minions[0].defense)
+        self.assertEqual(28, game.players[1].minions[0].max_defense)
+        # Test that this spell is being silenced properly as well
+        game.players[1].minions[0].silence()
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        game.play_single_turn()
+        # Let's say the minion got damaged
+        game.players[1].minions[0].defense = 4
+        game.play_single_turn() # Three Divine Spirits should be played
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(32, game.players[1].minions[0].defense)
+        self.assertEqual(35, game.players[1].minions[0].max_defense)
+        # Test that this spell is being silenced properly as well
+        game.players[1].minions[0].silence()
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].max_defense)
