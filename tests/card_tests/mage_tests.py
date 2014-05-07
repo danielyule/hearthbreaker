@@ -212,3 +212,11 @@ class TestMage(unittest.TestCase):
 
         #Make sure that the cards in hand are no longer reduced
         self.assertEqual(2, game.current_player.hand[0].mana)
+
+
+    def test_ArcaneIntellect(self):
+        game = generate_game_for(ArcaneIntellect, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.hand))

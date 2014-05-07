@@ -26,7 +26,8 @@ from hsgame.cards.spells.mage import \
     IceLance, \
     MirrorImage, \
     ArcaneExplosion, \
-    Frostbolt
+    Frostbolt, \
+    ArcaneIntellect
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

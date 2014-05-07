@@ -71,3 +71,13 @@ class Frostbolt(Card):
         super().use(player, game)
         self.target.spell_damage(3 + player.spell_power, self)
         self.target.freeze()
+
+
+class ArcaneIntellect(Card):
+    def __init__(self):
+        super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for c in range(0, 2):
+            player.draw()
