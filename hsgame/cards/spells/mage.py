@@ -81,3 +81,13 @@ class ArcaneIntellect(Card):
         super().use(player, game)
         for c in range(0, 2):
             player.draw()
+
+
+class FrostNova(Card):
+    def __init__(self):
+        super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in game.other_player.minions:
+            minion.freeze()

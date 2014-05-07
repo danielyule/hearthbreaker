@@ -27,7 +27,8 @@ from hsgame.cards.spells.mage import \
     MirrorImage, \
     ArcaneExplosion, \
     Frostbolt, \
-    ArcaneIntellect
+    ArcaneIntellect, \
+    FrostNova
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

@@ -139,7 +139,7 @@ yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of 
 no,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Expert,Spell
 no,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's hand and it costs (2) more.",,Hunter,2,,,Expert,Spell
 no,Frost Elemental,Battlecry: Freeze a character.,,,6,5,5,Expert,Minion
-no,Frost Nova,Freeze all enemy minions.,,Mage,3,,,Basic,Spell
+yes,Frost Nova,Freeze all enemy minions.,,Mage,3,,,Basic,Spell
 no,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,Basic,Spell
 yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Basic,Spell
 no,Frostwolf Grunt,Taunt,,,2,2,2,Basic,Minion
