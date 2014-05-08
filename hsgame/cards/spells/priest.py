@@ -27,3 +27,13 @@ class DivineSpirit(Card):
         
         # Increases by defense, not max_defense - source: http://www.hearthhead.com/card=1361/divine-spirit#comments:id=1908273
         self.target.increase_health(self.target.defense)
+        
+class HolyFire(Card):
+    def __init__(self):
+        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.spell_damage(5 + player.spell_power, self)
+        player.heal(5) # The heal aspect of the card is not affected by +spell damage cards

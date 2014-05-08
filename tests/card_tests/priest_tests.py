@@ -75,3 +75,20 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].defense)
         self.assertEqual(7, game.players[1].minions[0].max_defense)
+        
+    def testHolyFire(self):
+        game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        game.players[0].health = 20
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        game.play_single_turn() # Holy Fire should be played
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(2, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(25, game.players[0].health)
