@@ -111,3 +111,11 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Holy Nova should be played
         self.assertEqual(6, game.players[0].minions[0].defense)
         self.assertEqual(5, game.players[1].minions[0].defense)
+        
+    def testHolySmite(self):
+        game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingBot)
+        
+        self.assertEqual(30, game.players[1].health)
+        game.play_single_turn() # Holy Smite should be played
+        self.assertEqual(28, game.players[1].health)
+        

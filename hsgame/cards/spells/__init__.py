@@ -50,4 +50,5 @@ from hsgame.cards.spells.priest import \
     CircleOfHealing, \
     DivineSpirit, \
     HolyFire, \
-    HolyNova
+    HolyNova, \
+    HolySmite

@@ -50,3 +50,12 @@ class HolyNova(Card):
         
         for minion in player.minions:
             minion.heal(2)
+
+class HolySmite(Card):
+    def __init__(self):
+        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.spell_damage(2 + player.spell_power, self)
