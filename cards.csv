@@ -355,7 +355,7 @@ no,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Basic,Minion
 no,Twilight Drake,Battlecry: Gain +1 Health for each card in your hand.,Dragon,,4,4,1,Expert,Minion
 no,Twisting Nether,Destroy all minions.,,Warlock,8,,,Expert,Spell
 no,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Expert,Minion
-no,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,2,,,Expert,Spell
+no,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,3,,,Expert,Spell
 no,Upgrade!,"If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.",,Warrior,1,,,Expert,Spell
 no,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Basic,Spell
 no,Vaporize,"Secret: When a minion attacks your hero, destroy it.",,Mage,3,,,Expert,Spell
