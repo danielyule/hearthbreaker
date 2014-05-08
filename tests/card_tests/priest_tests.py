@@ -92,3 +92,22 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].defense)
         self.assertEqual(7, game.players[1].minions[0].max_defense)
         self.assertEqual(25, game.players[0].health)
+        
+    def testHolyNova(self):
+        deck1 = StackedDeck([MogushanWarden(), HolyNova()], CHARACTER_CLASS.PRIEST)
+        deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
+        game = Game([deck1, deck2], [SpellTestingAgent(), MinionPlayingAgent()])
+        game.pre_game()
+        game.current_player = 1
+        
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        game.players[0].minions[0].defense = 4 # Fake damage
+        self.assertEqual(4, game.players[0].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        game.play_single_turn() # Holy Nova should be played
+        self.assertEqual(6, game.players[0].minions[0].defense)
+        self.assertEqual(5, game.players[1].minions[0].defense)

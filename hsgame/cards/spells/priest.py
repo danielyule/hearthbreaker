@@ -37,3 +37,16 @@ class HolyFire(Card):
         
         self.target.spell_damage(5 + player.spell_power, self)
         player.heal(5) # The heal aspect of the card is not affected by +spell damage cards
+        
+class HolyNova(Card):
+    def __init__(self):
+        super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+                
+        for minion in game.other_player.minions.copy():
+            minion.spell_damage(2 + player.spell_power, self)  
+        
+        for minion in player.minions:
+            minion.heal(2)

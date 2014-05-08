@@ -49,4 +49,5 @@ from hsgame.cards.spells.paladin import \
 from hsgame.cards.spells.priest import \
     CircleOfHealing, \
     DivineSpirit, \
-    HolyFire
+    HolyFire, \
+    HolyNova

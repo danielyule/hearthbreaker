@@ -168,7 +168,7 @@ no,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Basic,Spell
 no,Hogger,"At the end of your turn, summon a 2/2 Gnoll with Taunt.",,,6,4,4,Expert,Minion
 yes,Holy Fire,Deal 5 damage. Restore 5 Health to your hero.,,Priest,6,,,Expert,Spell
 yes,Holy Light,Restore 6 Health.,,Paladin,2,,,Basic,Spell
-no,Holy Nova,Deal 2 damage to all enemies. Restore 2 Health to all friendly characters.,,Priest,5,,,Basic,Spell
+yes,Holy Nova,Deal 2 damage to all enemies. Restore 2 Health to all friendly characters.,,Priest,5,,,Basic,Spell
 no,Holy Smite,Deal 2 damage.,,Priest,1,,,Basic,Spell
 yes,Holy Wrath,Draw a card and deal damage equal to its cost.,,Paladin,5,,,Expert,Spell
 no,Houndmaster,Battlecry: Give a friendly Beast +2/+2 and Taunt.,,Hunter,4,4,3,Basic,Minion
