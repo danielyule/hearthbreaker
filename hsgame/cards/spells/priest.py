@@ -92,3 +92,13 @@ class MindBlast(Card):
         
         game.other_player.spell_damage(5 + player.spell_power, self)
         
+class MindControl(Card):
+    def __init__(self):
+        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, True, hsgame.targetting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.remove_from_board()
+        self.target.add_to_board(self.target.card, self.target.game, player, 0)
+        

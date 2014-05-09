@@ -185,6 +185,14 @@ class Minion(Bindable):
         if self.charge:
             self.active = True
         player.bind("turn_ended", self.turn_complete)
+        
+    def remove_from_board(self):
+        self.player.spell_power -= self.spell_power
+        for minion in self.player.minions:
+            if minion.index > self.index:
+                minion.index -= 1
+        self.game.remove_minion(self, self.player)
+        self.player.unbind("turn_ended", self.turn_complete)
 
     def turn_complete(self):
         if self.temp_attack > 0:
@@ -313,13 +321,8 @@ class Minion(Bindable):
     def die(self, by):
         self.delayed_trigger("died", by)
         self.game.trigger("minion_died", self, by)
-        self.player.spell_power -= self.spell_power
         self.dead = True
-        for minion in self.player.minions:
-            if minion.index > self.index:
-                minion.index -= 1
-        self.game.remove_minion(self, self.player)
-        self.player.unbind("turn_ended", self.turn_complete)
+        self.remove_from_board()
 
     def can_attack(self):
         return self.active and not self.frozen
