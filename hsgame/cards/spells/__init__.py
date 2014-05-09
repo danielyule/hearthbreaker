@@ -53,4 +53,5 @@ from hsgame.cards.spells.priest import \
     HolyNova, \
     HolySmite, \
     InnerFire, \
-    MassDispel
+    MassDispel, \
+    MindBlast

@@ -83,3 +83,12 @@ class MassDispel(Card): # TODO: Can this spell be cast if the enemy have no mini
             
         player.draw()
         
+class MindBlast(Card):
+    def __init__(self):
+        super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        game.other_player.spell_damage(5 + player.spell_power, self)
+        

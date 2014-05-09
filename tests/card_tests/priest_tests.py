@@ -150,3 +150,13 @@ class TestPriest(unittest.TestCase):
         self.assertFalse(game.players[1].minions[0].taunt)
         self.assertEqual(8, len(game.players[0].hand))
         
+    def testMindBlast(self):
+        game = generate_game_for(MindBlast, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 2):
+            game.play_single_turn()
+        
+        self.assertEqual(30, game.players[1].health)
+        game.play_single_turn() # Mind Blast should be played
+        self.assertEqual(25, game.players[1].health)
+        

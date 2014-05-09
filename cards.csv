@@ -225,7 +225,7 @@ yes,Mass Dispel,Silence all enemy minions. Draw a card.,,Priest,4,,,Expert,Spell
 no,Master of Disguise,Battlecry: Give a friendly minion Stealth.,,Rogue,4,4,4,Expert,Minion
 no,Master Swordsmith,"At the end of your turn, give another random friendly minion +1 Attack.",,,2,1,3,Expert,Minion
 no,Millhouse Manastorm,Battlecry: Enemy spells cost (0) next turn.,,,2,4,4,Expert,Minion
-no,Mind Blast,Deal 5 damage to the enemy hero.,,Priest,2,,,Basic,Spell
+yes,Mind Blast,Deal 5 damage to the enemy hero.,,Priest,2,,,Basic,Spell
 no,Mind Control,Take control of an enemy minion.,,Priest,10,,,Basic,Spell
 no,Mind Control Tech,"Battlecry: If your opponent has 4 or more minions, take control of one at random.",,,3,3,3,Expert,Minion
 no,Mind Vision,Put a copy of a random card in your opponent's hand into your hand.,,Priest,1,,,Basic,Spell
