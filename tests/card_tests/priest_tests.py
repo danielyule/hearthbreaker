@@ -136,3 +136,17 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].defense)
         
+    def testMassDispel(self):
+        game = generate_game_for(MassDispel, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 8):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertTrue(game.players[1].minions[0].taunt)
+        self.assertEqual(7, len(game.players[0].hand))
+        game.play_single_turn() # Mass Dispel should be played
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertFalse(game.players[1].minions[0].taunt)
+        self.assertEqual(8, len(game.players[0].hand))
+        

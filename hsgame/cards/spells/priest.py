@@ -71,3 +71,15 @@ class InnerFire(Card):
         # It will set the attack to its current health, not max health (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)
         self.target.increase_attack(self.target.defense - self.target.attack_power)
         
+class MassDispel(Card): # TODO: Can this spell be cast if the enemy have no minions?
+    def __init__(self):
+        super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        for minion in game.other_player.minions.copy():
+            minion.silence()
+            
+        player.draw()
+        

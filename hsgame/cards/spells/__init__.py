@@ -52,4 +52,5 @@ from hsgame.cards.spells.priest import \
     HolyFire, \
     HolyNova, \
     HolySmite, \
-    InnerFire
+    InnerFire, \
+    MassDispel
