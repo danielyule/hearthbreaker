@@ -181,7 +181,7 @@ yes,Ice Lance,"Freeze a character. If it was already Frozen, deal 4 damage inste
 no,Illidan Stormrage,"Whenever you play a card, summon a 2/1 Flame of Azzinoth.",Demon,,6,7,5,Expert,Minion
 no,Imp Master,"At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.",,,3,1,5,Expert,Minion
 no,Injured Blademaster,Battlecry: Deal 4 damage to HIMSELF.,,,3,4,7,Expert,Minion
-no,Inner Fire,Change a minion's Attack to be equal to its Health.,,Priest,1,,,Expert,Spell
+yes,Inner Fire,Change a minion's Attack to be equal to its Health.,,Priest,1,,,Expert,Spell
 no,Inner Rage,Deal 1 damage to a minion and give it +2 Attack.,,Warrior,0,,,Expert,Spell
 yes,Innervate,Gain 2 Mana Crystals this turn only.,,Druid,0,,,Basic,Spell
 yes,Ironbark Protector,Taunt,,Druid,8,8,8,Basic,Minion

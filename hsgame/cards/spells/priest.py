@@ -38,13 +38,13 @@ class HolyFire(Card):
         self.target.spell_damage(5 + player.spell_power, self)
         player.heal(5) # The heal aspect of the card is not affected by +spell damage cards
         
-class HolyNova(Card):
+class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
         super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
         super().use(player, game)
-                
+        
         for minion in game.other_player.minions.copy():
             minion.spell_damage(2 + player.spell_power, self)  
         
@@ -59,3 +59,15 @@ class HolySmite(Card):
         super().use(player, game)
         
         self.target.spell_damage(2 + player.spell_power, self)
+        
+class InnerFire(Card):
+    def __init__(self):
+        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        # This will increase/decrease a minions attack to its current health
+        # It will set the attack to its current health, not max health (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)
+        self.target.increase_attack(self.target.defense - self.target.attack_power)
+        

@@ -119,3 +119,20 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Holy Smite should be played
         self.assertEqual(28, game.players[1].health)
         
+    def testInnerFire(self):
+        game = generate_game_for(InnerFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        
+        for turn in range(0, 8):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        game.play_single_turn() # Inner Fire should be played
+        self.assertEqual(7, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        # Test that this spell is being silenced properly as well
+        game.players[1].minions[0].silence()
+        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].defense)
+        
