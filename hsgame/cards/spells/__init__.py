@@ -55,4 +55,5 @@ from hsgame.cards.spells.priest import \
     InnerFire, \
     MassDispel, \
     MindBlast, \
-    MindControl
+    MindControl, \
+    MindVision

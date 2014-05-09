@@ -172,3 +172,13 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(5, len(game.players[1].minions))
         
+    def testMindVision(self):
+        game = generate_game_for(MindVision, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+                
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
+        game.play_single_turn() # Mind Vision should be played
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual("Mogu'shan Warden", game.players[0].hand[-1].name)
+        self.assertEqual(4, len(game.players[1].hand))
+        

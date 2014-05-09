@@ -1,3 +1,4 @@
+import copy
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
@@ -101,4 +102,14 @@ class MindControl(Card):
         
         self.target.remove_from_board()
         self.target.add_to_board(self.target.card, self.target.game, player, 0)
+        
+class MindVision(Card): # TODO: Can this card be played if opponent has no cards in hand?
+    def __init__(self):
+        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        card = copy.deepcopy(game.other_player.hand[game.random(0, len(game.other_player.hand) - 1)])
+        player.hand.append(card)
         

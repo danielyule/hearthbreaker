@@ -228,7 +228,7 @@ no,Millhouse Manastorm,Battlecry: Enemy spells cost (0) next turn.,,,2,4,4,Exper
 yes,Mind Blast,Deal 5 damage to the enemy hero.,,Priest,2,,,Basic,Spell
 yes,Mind Control,Take control of an enemy minion.,,Priest,10,,,Basic,Spell
 no,Mind Control Tech,"Battlecry: If your opponent has 4 or more minions, take control of one at random.",,,3,3,3,Expert,Minion
-no,Mind Vision,Put a copy of a random card in your opponent's hand into your hand.,,Priest,1,,,Basic,Spell
+yes,Mind Vision,Put a copy of a random card in your opponent's hand into your hand.,,Priest,1,,,Basic,Spell
 no,Mindgames,Put a copy of a random minion from your opponent's deck into the battlefield.,,Priest,4,,,Expert,Spell
 no,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of it.",,Mage,3,,,Expert,Spell
 yes,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
