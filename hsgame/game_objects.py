@@ -117,6 +117,9 @@ class Card(Bindable):
             else:
                 self.target = player.agent.choose_target(self.targets)
 
+    def is_spell(self):
+        return True
+
     def __str__(self):
         return self.name + " (" + str(self.mana) + " mana)"
 
@@ -133,6 +136,29 @@ class MinionCard(Card):
         self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
 
     def create_minion(self, player):
+        pass
+
+    def is_spell(self):
+        return False
+
+
+class SecretCard(Card):
+    def __init__(self, name, mana, character_class, status):
+        super().__init__(name, mana, character_class, status, False, None)
+        self.player = None
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.secrets.append(self)
+        self.player = player
+
+    def reveal(self):
+        self.player.trigger("secret_revealed", self)
+
+    def activate(self, player):
+        pass
+
+    def deactivate(self, player):
         pass
 
 
@@ -222,6 +248,7 @@ class Minion(Bindable):
 
             self.game.trigger("minion_on_minion_attack", self, target)
             self.trigger("attack_minion", target)
+            target.trigger("attacked", self)
             my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
             self.minion_damage(target.attack_power, target)
             target.minion_damage(my_attack, self)
@@ -229,7 +256,9 @@ class Minion(Bindable):
         else:
             self.game.trigger("minion_on_player_attack", self, target)
             self.trigger("attack_player", target)
+            target.trigger("attacked", self)
             target.minion_damage(self.attack_power, self)
+            #TODO check if the player's weapon is out in the case of Misdirection
 
         self.activate_delayed()
         if self.wind_fury and not self.used_wind_fury:
@@ -398,6 +427,7 @@ class Player(Bindable):
         self.frozen_this_turn = False
         self.frozen = False
         self.active = False
+        self.secrets = []
         self.power = hsgame.powers.powers(self.character_class)(self)
 
     def __str__(self):
@@ -495,11 +525,13 @@ class Player(Bindable):
 
             self.game.trigger("player_on_minion_attack", self, target)
             self.trigger("attack_minion", target)
+            target.trigger("attacked", self)
             self.minion_damage(target.attack_power, target)
             target.player_damage(self.attack_power, self)
         else:
             self.game.trigger("player_on_player_attack", self, target)
             self.trigger("attack_player", target)
+            target.trigger("attacked", self)
             target.player_damage(self.attack_power, self)
 
         self.active = False
@@ -592,6 +624,9 @@ class Game(Bindable):
             self.other_player = self.players[1]
         if self.current_player.max_mana < 10:
             self.current_player.max_mana += 1
+
+        for secret in self.other_player.secrets:
+            secret.activate(self.other_player)
         self.current_player.mana = self.current_player.max_mana
         self.current_player.trigger("turn_started")
         self.current_player.draw()
@@ -617,13 +652,16 @@ class Game(Bindable):
             else:
                 minion.frozen = False
 
+        for secret in self.other_player.secrets:
+            secret.deactivate(self.other_player)
+
     def play_card(self, card):
         if self.game_ended:
             raise GameException("The game has ended")
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.current_player.trigger("card_played", card)
-        if type(card) in Card.__subclasses__():
+        if card.is_spell():
             self.current_player.trigger("spell_cast", card)
         self.current_player.hand.remove(card)
         card.use(self.current_player, self)

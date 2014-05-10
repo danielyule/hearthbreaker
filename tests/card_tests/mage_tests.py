@@ -229,3 +229,21 @@ class TestMage(unittest.TestCase):
             self.assertTrue(minion.frozen)
 
         self.assertFalse(game.other_player.frozen)
+
+
+    def test_IceBarrier(self):
+        game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, PredictableBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
+
+        game.play_single_turn()
+        #only one minion because PredictableBot will shoot its own minions if there isn't anything else to shoot.
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, game.other_player.armour)
+
+        #Attacked once on the first turn, the fireballed before getting the armour up
+        self.assertEqual(28, game.other_player.health)
+

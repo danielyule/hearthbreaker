@@ -1,7 +1,9 @@
+import hsgame.cards
+
 __author__ = 'Daniel'
 
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import MinionCard, Minion, Card
+from hsgame.game_objects import MinionCard, Minion
 
 
 class ManaWyrm(MinionCard):
@@ -25,7 +27,7 @@ class SorcerersApprentice(MinionCard):
         def reduce_mana(card):
             def increase_mana(c):
                 c.mana += 1
-            if type(card) in Card.__subclasses__():
+            if card.is_spell():
                 if card.mana > 0:
                     card.mana -= 1
                     minion.bind("silence", increase_mana, card)

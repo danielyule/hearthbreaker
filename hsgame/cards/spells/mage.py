@@ -1,5 +1,5 @@
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card, Minion, MinionCard
+from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targetting
 __author__ = 'Daniel'
 
@@ -52,7 +52,6 @@ class MirrorImage(Card):
         minion2.add_to_board(MirrorImageMinion(), game, player, 0)
 
 
-
 class ArcaneExplosion(Card):
     def __init__(self):
         super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
@@ -91,3 +90,17 @@ class FrostNova(Card):
         super().use(player, game)
         for minion in game.other_player.minions:
             minion.freeze()
+
+
+class IceBarrier(SecretCard):
+    def __init__(self):
+        super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def reveal(self, attacker, player):
+        player.armour += 8
+
+    def activate(self, player):
+        player.bind_once("attacked", self.reveal, player)
+
+    def deactivate(self, player):
+        player.unbind("attacked", self.reveal)

@@ -13,6 +13,7 @@ Events Triggered in hssim
  * turn_ended
  * attack_minion
  * attack_player
+ * attacked (attacker)
  * fatigue_damage(amount)
  * damaged(amount, what)
  * spell_damaged(amount, card)
@@ -22,6 +23,7 @@ Events Triggered in hssim
  * attack_decreased(amount)
  * armour_increased(amount)
  * heal(amount)
+ * secret_revealed (secret)
  * used_power
  * found_power_target(target)
 
@@ -39,6 +41,7 @@ Events Triggered in hssim
  * added_to_board(minion)
  * attack_minion
  * attack_player
+ * attacked(attacker)
  * damaged(amount, attacker)
  * healed(amount)
  * spell_damaged(amount, card)
