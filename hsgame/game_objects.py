@@ -147,6 +147,9 @@ class SecretCard(Card):
         super().__init__(name, mana, character_class, status, False, None)
         self.player = None
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and self.name not in [secret.name for secret in player.secrets]
+
     def use(self, player, game):
         super().use(player, game)
         player.secrets.append(self)

@@ -247,3 +247,16 @@ class TestMage(unittest.TestCase):
         #Attacked once on the first turn, the fireballed before getting the armour up
         self.assertEqual(28, game.other_player.health)
 
+        #Make sure we can't have two identical secrets at the same time
+        random.seed(1857)
+        game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertEqual("Ice Barrier", game.other_player.secrets[0].name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
+
