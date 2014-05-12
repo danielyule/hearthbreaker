@@ -153,6 +153,7 @@ class SecretCard(Card):
 
     def reveal(self):
         self.player.trigger("secret_revealed", self)
+        self.player.secrets.remove(self)
 
     def activate(self, player):
         pass

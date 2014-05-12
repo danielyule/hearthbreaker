@@ -242,6 +242,8 @@ class TestMage(unittest.TestCase):
 
         self.assertFalse(game.other_player.frozen)
         self.assertEqual(27, game.other_player.health)
+        #Ensure that secrets are being removed after being revealed
+        self.assertEqual(0, len(game.other_player.secrets))
 
 
     def test_IceBarrier(self):

@@ -101,6 +101,7 @@ class Counterspell(SecretCard):
 
     def reveal(self, card):
         card.cancel = True
+        super().reveal()
 
     def activate(self, player):
         player.game.current_player.bind_once("spell_cast", self.reveal)
@@ -115,6 +116,7 @@ class IceBarrier(SecretCard):
 
     def reveal(self, attacker, player):
         player.armour += 8
+        super().reveal()
 
     def activate(self, player):
         player.bind_once("attacked", self.reveal, player)
