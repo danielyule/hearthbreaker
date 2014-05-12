@@ -54,3 +54,11 @@ class MinionPlayingAgent(DoNothingBot):
     def do_turn(self, player):
         if len(player.hand) > 0 and player.mana >= player.hand[0].mana:
             self.game.play_card(player.hand[0])
+
+
+class MinionAttackingAgent(MinionPlayingAgent):
+    def do_turn(self, player):
+        super().do_turn(player)
+        for minion in player.minions.copy():
+            if minion.can_attack():
+                minion.attack()

@@ -4,7 +4,7 @@ from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 
 from hsgame.cards import *
@@ -299,3 +299,24 @@ class TestMage(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].defense)
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual("Spellbender", game.other_player.minions[0].card.name)
+
+        #Now make sure it doesn't activate when a non-targeted spell is used
+        random.seed(1857)
+        game = generate_game_for(Spellbender, ArcaneIntellect, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        #The arcane intellect should not have caused the Spellbender to activate
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))
+
+
+    def test_Vaporize(self):
+        game = generate_game_for(Vaporize, FaerieDragon, SpellTestingAgent, MinionAttackingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.secrets))
+

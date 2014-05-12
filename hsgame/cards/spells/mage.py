@@ -179,3 +179,21 @@ class Spellbender(SecretCard):
 
     def deactivate(self, player):
         player.game.current_player.unbind("spell_cast", self.reveal)
+
+
+class Vaporize(SecretCard):
+    def __init__(self):
+        super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def reveal(self, attacker):
+        if type(attacker) is Minion:
+            attacker.die(self)
+            super().reveal()
+        else:
+            self.activate()
+
+    def activate(self, player):
+        player.bind_once("attacked", self.reveal)
+
+    def deactivate(self, player):
+        player.unbind("attacked", self.reveal)

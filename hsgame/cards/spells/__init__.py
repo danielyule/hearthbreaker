@@ -32,7 +32,8 @@ from hsgame.cards.spells.mage import \
     Counterspell, \
     IceBarrier, \
     MirrorEntity, \
-    Spellbender
+    Spellbender, \
+    Vaporize
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

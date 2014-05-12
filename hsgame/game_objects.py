@@ -260,6 +260,8 @@ class Minion(Bindable):
             self.game.trigger("minion_on_minion_attack", self, target)
             self.trigger("attack_minion", target)
             target.trigger("attacked", self)
+            if self.dead:
+                return
             my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
             self.minion_damage(target.attack_power, target)
             target.minion_damage(my_attack, self)
@@ -267,6 +269,8 @@ class Minion(Bindable):
         else:
             self.game.trigger("minion_on_player_attack", self, target)
             self.trigger("attack_player", target)
+            if self.dead:
+                return
             target.trigger("attacked", self)
             target.minion_damage(self.attack_power, self)
             #TODO check if the player's weapon is out in the case of Misdirection
