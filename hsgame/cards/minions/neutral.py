@@ -75,6 +75,7 @@ class OasisSnapjaw(MinionCard):
     def create_minion(self, player):
         return Minion(2, 7, MINION_TYPE.BEAST)
 
+
 class FaerieDragon(MinionCard):
     def __init__(self):
         super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
@@ -87,6 +88,7 @@ class FaerieDragon(MinionCard):
         minion.bind("silenced", silence())
         return minion
 
+
 class KoboldGeomancer(MinionCard):
 
     def __init__(self):
@@ -97,3 +99,13 @@ class KoboldGeomancer(MinionCard):
         minion.spell_power = 1
         return minion
 
+
+class IronfurGrizzly(MinionCard):
+
+    def __init__(self):
+        super().__init__("Ironfur Grizzly", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(3, 3)
+        minion.taunt = True
+        return minion

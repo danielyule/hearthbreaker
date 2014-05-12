@@ -41,6 +41,7 @@ class Bindable:
                 self.kwargs = kwargs
                 self.function = function
                 self.remove = False
+                self.active = False
 
 
         if not event in self.events:
@@ -55,6 +56,7 @@ class Bindable:
                 self.kwargs = kwargs
                 self.function = function
                 self.remove = True
+                self.active = False
 
         if not event in self.events:
             self.events[event] = []
@@ -64,10 +66,13 @@ class Bindable:
     def trigger(self, event, *args, **kwargs):
         if event in self.events:
             for handler in self.events[event]:
-                pass_args = args + handler.args
-                pass_kwargs = kwargs.copy()
-                pass_kwargs.update(handler.kwargs)
-                handler.function(*pass_args, **pass_kwargs)
+                if not handler.active:
+                    pass_args = args + handler.args
+                    pass_kwargs = kwargs.copy()
+                    pass_kwargs.update(handler.kwargs)
+                    handler.active = True
+                    handler.function(*pass_args, **pass_kwargs)
+                    handler.active = False
             self.events[event] = [handler for handler in self.events[event] if not handler.remove]
 
 

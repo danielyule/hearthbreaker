@@ -1,3 +1,4 @@
+import copy
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targetting
@@ -123,3 +124,25 @@ class IceBarrier(SecretCard):
 
     def deactivate(self, player):
         player.unbind("attacked", self.reveal)
+
+
+class MirrorEntity(SecretCard):
+    def __init__(self):
+        super().__init__("Mirror Entity", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def reveal(self, minion, player):
+        if minion.player is not player:
+            mirror = copy.copy(minion)
+            mirror.player = player
+            mirror.card = copy.copy(minion.card)
+            player.minions.append(mirror)
+            player.game.trigger("minion_added", mirror)
+            super().reveal()
+        else:
+            player.game.bind_once("minion_added", self.reveal, player)
+
+    def activate(self, player):
+        player.game.bind_once("minion_added", self.reveal, player)
+
+    def deactivate(self, player):
+        player.game.unbind("minion_added", self.reveal)

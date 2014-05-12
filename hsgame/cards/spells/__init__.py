@@ -30,7 +30,8 @@ from hsgame.cards.spells.mage import \
     ArcaneIntellect, \
     FrostNova, \
     Counterspell, \
-    IceBarrier
+    IceBarrier, \
+    MirrorEntity
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

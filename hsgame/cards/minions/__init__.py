@@ -10,7 +10,8 @@ from hsgame.cards.minions.neutral import \
     OasisSnapjaw, \
     FaerieDragon, \
     KoboldGeomancer, \
-    ElvenArcher
+    ElvenArcher, \
+    IronfurGrizzly
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \
