@@ -146,3 +146,36 @@ class MirrorEntity(SecretCard):
 
     def deactivate(self, player):
         player.game.unbind("minion_added", self.reveal)
+
+
+class Spellbender(SecretCard):
+    def __init__(self):
+        super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
+
+    def reveal(self, card, player):
+        if card.targetable:
+            class SpellbenderMinion(MinionCard):
+                    def __init__(self):
+                        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
+
+                    @staticmethod
+                    def create_minion(player):
+                        return Minion(1, 3)
+
+            def choose_bender(targets):
+                minion = SpellbenderMinion.create_minion(player)
+                minion.add_to_board(self, player.game, player, 0)
+                player.game.current_player.agent.choose_target = old_target
+                return minion
+
+            old_target = player.game.current_player.agent.choose_target
+            player.game.current_player.agent.choose_target = choose_bender
+            super().reveal()
+        else:
+            self.activate(player)
+
+    def activate(self, player):
+        player.game.current_player.bind_once("spell_cast", self.reveal, player)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("spell_cast", self.reveal)

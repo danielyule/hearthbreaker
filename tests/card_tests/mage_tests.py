@@ -287,3 +287,15 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Ironfur Grizzly", game.other_player.minions[0].card.name)
         self.assertEqual(game.other_player, game.other_player.minions[0].player)
+
+    def test_Spellbender(self):
+        game = generate_game_for(Spellbender, Moonfire, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        #The moonfire should have been re-directed to the Spellbender, which should have taken one damage
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual("Spellbender", game.other_player.minions[0].card.name)

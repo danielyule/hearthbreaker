@@ -20,7 +20,7 @@ class TestGame(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
-    def test_createGame(self):
+    def test_create_game(self):
         card_set1 = []
         card_set2 = []
         test_env = self
@@ -72,7 +72,7 @@ class TestGame(unittest.TestCase):
         self.assertListEqual(checked_cards[0][1:], game.players[0].hand[:-1], "Cards not retained after request")
         self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[:-3], "Cards not retained after request")
 
-    def test_FirstTurn(self):
+    def test_first_turn(self):
         card_set1 = []
         card_set2 = []
         test_env = self
@@ -83,7 +83,6 @@ class TestGame(unittest.TestCase):
 
         deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
-
 
         agent1 = unittest.mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
         agent2 = unittest.mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
@@ -99,21 +98,20 @@ class TestGame(unittest.TestCase):
             for turn in range(0, secret.mana * 2 - 2):
                 game.play_single_turn()
 
-
-            def assertDifferent():
+            def assert_different():
                 new_events = copy.copy(game.events)
                 new_events.update(game.other_player.events)
                 new_events.update(game.current_player.events)
                 self.assertNotEqual(events, new_events, secret.name)
 
-            def assertSame():
+            def assert_same():
                 new_events = copy.copy(game.events)
                 new_events.update(game.current_player.events)
                 new_events.update(game.other_player.events)
                 self.assertEqual(events, new_events)
 
-            game.current_player.bind("turn_ended", assertDifferent)
-            game.other_player.bind("turn_ended", assertSame)
+            game.current_player.bind("turn_ended", assert_different)
+            game.other_player.bind("turn_ended", assert_same)
 
             #save the events as they are prior to the secret being played
             events = copy.copy(game.events)
