@@ -230,6 +230,19 @@ class TestMage(unittest.TestCase):
 
         self.assertFalse(game.other_player.frozen)
 
+    def test_Counterspell(self):
+        game = generate_game_for(Counterspell, Frostbolt, SpellTestingAgent, SpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual("Counterspell", game.current_player.secrets[0].name)
+
+        game.play_single_turn()
+
+        self.assertFalse(game.other_player.frozen)
+        self.assertEqual(27, game.other_player.health)
+
 
     def test_IceBarrier(self):
         game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, PredictableBot)

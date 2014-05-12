@@ -79,7 +79,7 @@ no,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage t
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Basic,Spell
 no,Core Hound,,Beast,,7,9,5,Basic,Minion
 no,Corruption,"Choose an enemy minion. At the start of your turn, destroy it.",,Warlock,1,,,Basic,Spell
-no,Counterspell,"Secret: When your opponent casts a spell, Counter it.",,Mage,3,,,Expert,Spell
+yes,Counterspell,"Secret: When your opponent casts a spell, Counter it.",,Mage,3,,,Expert,Spell
 no,Crazed Alchemist,Battlecry: Swap the Attack and Health of a minion.,,,2,2,2,Expert,Minion
 no,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.,,Warrior,2,2,2,Expert,Minion
 no,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Expert,Minion

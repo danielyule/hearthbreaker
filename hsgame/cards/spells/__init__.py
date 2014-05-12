@@ -29,6 +29,7 @@ from hsgame.cards.spells.mage import \
     Frostbolt, \
     ArcaneIntellect, \
     FrostNova, \
+    Counterspell, \
     IceBarrier
 
 from hsgame.cards.spells.paladin import \

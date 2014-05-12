@@ -92,6 +92,23 @@ class FrostNova(Card):
             minion.freeze()
 
 
+class Counterspell(SecretCard):
+    def __init__(self):
+        super().__init__("Counterspell", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+    def reveal(self, card):
+        card.cancel = True
+
+    def activate(self, player):
+        player.game.current_player.bind_once("spell_cast", self.reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("spell_cast", self.reveal)
+
+
 class IceBarrier(SecretCard):
     def __init__(self):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)

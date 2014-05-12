@@ -91,6 +91,7 @@ class Card(Bindable):
         self.mana = mana
         self.character_class = character_class
         self.status = status
+        self.cancel = False
         self.targetable = targetable
         if targetable:
             self.targets = []
@@ -106,11 +107,6 @@ class Card(Bindable):
         return player.mana >= self.mana
 
     def use(self, player, game):
-        if self.can_use(player, game):
-            player.mana -= self.mana
-        else:
-            raise GameException("Tried to play card that could not be played")
-
         if self.targetable:
             if self.targets is None:
                 self.target = None
@@ -664,14 +660,21 @@ class Game(Bindable):
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.current_player.trigger("card_played", card)
+        self.current_player.hand.remove(card)
+        if card.can_use(self.current_player, self):
+            self.current_player.mana -= card.mana
+        else:
+            raise GameException("Tried to play card that could not be played")
+
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)
-        self.current_player.hand.remove(card)
-        card.use(self.current_player, self)
-        for minion in self.delayed_minions:
-            minion.activate_delayed()
 
-        self.delayed_minions = []
+        if not card.cancel:
+            card.use(self.current_player, self)
+            for minion in self.delayed_minions:
+                minion.activate_delayed()
+
+            self.delayed_minions = []
 
 
     def remove_minion(self, minion, player):
