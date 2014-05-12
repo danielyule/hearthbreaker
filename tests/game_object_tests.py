@@ -1,14 +1,16 @@
 import copy
 from hsgame.agents.basic_agents import DoNothingBot
 from hsgame.constants import CHARACTER_CLASS
-
+from tests.testing_agents import SpellTestingAgent
+from tests.testing_utils import generate_game_for
+from hsgame.cards import StonetuskBoar
 
 __author__ = 'Daniel'
 import random
 import unittest
 from unittest.mock import Mock, call
 
-from hsgame.game_objects import Player, Game, Deck, Bindable, card_lookup
+from hsgame.game_objects import Player, Game, Deck, Bindable, card_lookup, SecretCard
 
 import hsgame.cards
 
@@ -88,6 +90,48 @@ class TestGame(unittest.TestCase):
         game = Game([deck1, deck2], [agent1, agent2])
 
         game.start()
+
+    def test_secrets(self):
+        for secret_type in SecretCard.__subclasses__():
+            random.seed(1857)
+            secret = secret_type()
+            game = generate_game_for(secret_type, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+            for turn in range(0, secret.mana * 2 - 2):
+                game.play_single_turn()
+
+
+            def assertDifferent():
+                new_events = copy.copy(game.events)
+                new_events.update(game.other_player.events)
+                new_events.update(game.current_player.events)
+                self.assertNotEqual(events, new_events, secret.name)
+
+            def assertSame():
+                new_events = copy.copy(game.events)
+                new_events.update(game.current_player.events)
+                new_events.update(game.other_player.events)
+                self.assertEqual(events, new_events)
+
+            game.current_player.bind("turn_ended", assertDifferent)
+            game.other_player.bind("turn_ended", assertSame)
+
+            #save the events as they are prior to the secret being played
+            events = copy.copy(game.events)
+            events.update(game.other_player.events)
+            events.update(game.current_player.events)
+
+            #The secret is played, but the events aren't updated until the secret is activated
+            game.play_single_turn()
+
+            self.assertEqual(1, len(game.current_player.secrets))
+
+            #Now the events should be changed
+            game.play_single_turn()
+
+            #Now the events should be reset
+            game.play_single_turn()
+
+
 
 
 class TestBinding(unittest.TestCase):

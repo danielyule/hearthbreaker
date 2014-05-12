@@ -65,7 +65,7 @@ class Bindable:
 
     def trigger(self, event, *args, **kwargs):
         if event in self.events:
-            for handler in self.events[event]:
+            for handler in self.events[event].copy():
                 if not handler.active:
                     pass_args = args + handler.args
                     pass_kwargs = kwargs.copy()
@@ -73,13 +73,19 @@ class Bindable:
                     handler.active = True
                     handler.function(*pass_args, **pass_kwargs)
                     handler.active = False
-            self.events[event] = [handler for handler in self.events[event] if not handler.remove]
+                    if handler.remove:
+                        self.events[event].remove(handler)
+                        if len(self.events[event]) is 0:
+                            del (self.events[event])
+
 
 
 
     def unbind(self, event, function):
         if event in self.events:
             self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
+            if len(self.events[event]) is 0:
+                del (self.events[event])
 
 
 class Card(Bindable):
