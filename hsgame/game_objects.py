@@ -694,6 +694,7 @@ class Game(Bindable):
 
         if not card.cancel:
             card.use(self.current_player, self)
+            self.current_player.trigger("card_used", card)
             for minion in self.delayed_minions:
                 minion.activate_delayed()
 

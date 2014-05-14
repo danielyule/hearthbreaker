@@ -48,19 +48,20 @@ class KirinTorMage(MinionCard):
                 self.amount = 3
                 self.filter = lambda c: type(c) in SecretCard.__subclasses__()
                 self.min = 0
-        def card_played(card):
-            if type(card) is SecretCard:
-                player.unbind("card_played", card_played)
+
+        def card_used(card):
+            if type(card) in SecretCard.__subclasses__():
+                player.unbind("card_used", card_used)
                 player.unbind("turn_ended", turn_ended)
                 player.mana_filters.remove(filter)
 
         def turn_ended():
-            player.unbind("card_played", card_played)
+            player.unbind("card_used", card_used)
             player.mana_filters.remove(filter)
 
         filter = Filter()
         minion = Minion(4, 3)
-        player.bind("card_played", card_played)
+        player.bind("card_used", card_used)
         player.bind_once("turn_ended", turn_ended)
         player.mana_filters.append(filter)
 

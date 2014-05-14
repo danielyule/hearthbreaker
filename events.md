@@ -6,8 +6,9 @@ Events Triggered in hssim
  * died
  * card_drawn (card)
  * card_put_back(card)
- * card_destroyed (card)
- * card_played (card)
+ * card_destroyed(card)
+ * card_played(card)
+ * card_used(card)
  * spell_cast (card)
  * turn_started
  * turn_ended

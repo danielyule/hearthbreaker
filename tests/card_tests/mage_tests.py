@@ -324,7 +324,7 @@ class TestMage(unittest.TestCase):
 
     def testKirinTorMage(self):
 
-        game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for([KirinTorMage, Vaporize, Spellbender], StonetuskBoar, SpellTestingAgent, DoNothingBot)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -332,8 +332,8 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Vaporize", game.current_player.secrets[0].name)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Kirin Tor Mage", game.current_player.minions[0].card.name)
-        self.assertEqual(3, game.current_player.hand[1].mana_cost(game.current_player))
-        self.assertEqual("Vaporize", game.current_player.hand[1].name)
+        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual("Spellbender", game.current_player.hand[0].name)
 
         random.seed(1857)
         game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
