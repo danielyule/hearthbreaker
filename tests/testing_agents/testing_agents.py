@@ -11,7 +11,13 @@ class SpellTestingAgent(DoNothingBot):
 
     def do_turn(self, player):
         self.turn += 1
-        while self.turn >= self.play_on and len(player.hand) > 0 and self.game.current_player.mana >= player.hand[0].mana and player.hand[0].can_use(player, self.game):
+        while self.turn >= self.play_on and len(player.hand) > 0 and player.hand[0].can_use(player, self.game):
+            self.game.play_card(player.hand[0])
+
+
+class OneSpellTestingAgent(DoNothingBot):
+    def do_turn(self, player):
+        if len(player.hand) > 0 and player.hand[0].can_use(player, self.game):
             self.game.play_card(player.hand[0])
 
 
@@ -52,7 +58,7 @@ class MinionPlayingAgent(DoNothingBot):
         super().__init__()
 
     def do_turn(self, player):
-        if len(player.hand) > 0 and player.mana >= player.hand[0].mana:
+        if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
             self.game.play_card(player.hand[0])
 
 

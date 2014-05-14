@@ -24,6 +24,7 @@ from hsgame.cards.minions.druid import \
 from hsgame.cards.minions.mage import \
     ManaWyrm, \
     SorcerersApprentice, \
+    KirinTorMage, \
     WaterElemental
     
 from hsgame.cards.minions.paladin import \

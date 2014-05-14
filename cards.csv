@@ -194,7 +194,7 @@ no,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Expert,Min
 no,Kill Command,"Deal 3 damage. If you have a Beast, deal 5 damage instead.",,Hunter,3,,,Basic,Spell
 no,King Krush,Charge,Beast,Hunter,9,8,8,Expert,Minion
 no,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Expert,Minion
-no,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mage,3,4,3,Expert,Minion
+yes,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mage,3,4,3,Expert,Minion
 no,Knife Juggler,"After you summon a minion, deal 1 damage to a random enemy.",,,2,3,2,Expert,Minion
 yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Basic,Minion
 no,Kor'kron Elite,Charge,,Warrior,4,4,3,Basic,Minion

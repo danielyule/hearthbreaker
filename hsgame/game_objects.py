@@ -78,9 +78,6 @@ class Bindable:
                         if len(self.events[event]) is 0:
                             del (self.events[event])
 
-
-
-
     def unbind(self, event, function):
         if event in self.events:
             self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
@@ -115,7 +112,16 @@ class Card(Bindable):
             if self.targets is not None and len(self.targets) is 0:
                 return False
 
-        return player.mana >= self.mana
+        return player.mana >= self.mana_cost(player)
+
+    def mana_cost(self, player):
+        calc_mana = self.mana
+        for filter in player.mana_filters:
+            if filter.filter(self):
+                calc_mana -= filter.amount
+                if calc_mana < filter.min:
+                    return filter.min
+        return calc_mana
 
     def use(self, player, game):
         if self.targetable:
@@ -269,9 +275,9 @@ class Minion(Bindable):
         else:
             self.game.trigger("minion_on_player_attack", self, target)
             self.trigger("attack_player", target)
+            target.trigger("attacked", self)
             if self.dead:
                 return
-            target.trigger("attacked", self)
             target.minion_damage(self.attack_power, self)
             #TODO check if the player's weapon is out in the case of Misdirection
 
@@ -443,6 +449,7 @@ class Player(Bindable):
         self.frozen = False
         self.active = False
         self.secrets = []
+        self.mana_filters = []
         self.power = hsgame.powers.powers(self.character_class)(self)
 
     def __str__(self):
@@ -678,7 +685,7 @@ class Game(Bindable):
         self.current_player.trigger("card_played", card)
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
-            self.current_player.mana -= card.mana
+            self.current_player.mana -= card.mana_cost(self.current_player)
         else:
             raise GameException("Tried to play card that could not be played")
 

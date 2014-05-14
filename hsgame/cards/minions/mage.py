@@ -3,7 +3,7 @@ import hsgame.cards
 __author__ = 'Daniel'
 
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import MinionCard, Minion
+from hsgame.game_objects import MinionCard, Minion, SecretCard
 
 
 class ManaWyrm(MinionCard):
@@ -24,21 +24,46 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def reduce_mana(card):
-            def increase_mana(c):
-                c.mana += 1
-            if card.is_spell():
-                if card.mana > 0:
-                    card.mana -= 1
-                    minion.bind("silence", increase_mana, card)
-                    minion.bind("died", lambda x, c: increase_mana(c), card)
+        class Filter:
+            def __init__(self):
+                self.amount = 1
+                self.filter = lambda c: c.is_spell()
+                self.min = 0
 
+        filter = Filter()
         minion = Minion(3, 2)
-        for hand_card in player.hand:
-            reduce_mana(hand_card)
-        player.bind("card_drawn", reduce_mana)
-        minion.bind_once("silence", lambda: player.unbind("card_drawn", reduce_mana))
-        minion.bind_once("died", lambda x: player.unbind("card_drawn", reduce_mana))
+        minion.bind_once("silence", lambda: player.mana_filters.remove(filter))
+        minion.bind_once("died", lambda x: player.mana_filters.remove(filter))
+        player.mana_filters.append(filter)
+        return minion
+
+
+class KirinTorMage(MinionCard):
+    def __init__(self):
+        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        class Filter:
+            def __init__(self):
+                self.amount = 3
+                self.filter = lambda c: type(c) in SecretCard.__subclasses__()
+                self.min = 0
+        def card_played(card):
+            if type(card) is SecretCard:
+                player.unbind("card_played", card_played)
+                player.unbind("turn_ended", turn_ended)
+                player.mana_filters.remove(filter)
+
+        def turn_ended():
+            player.unbind("card_played", card_played)
+            player.mana_filters.remove(filter)
+
+        filter = Filter()
+        minion = Minion(4, 3)
+        player.bind("card_played", card_played)
+        player.bind_once("turn_ended", turn_ended)
+        player.mana_filters.append(filter)
+
         return minion
 
 

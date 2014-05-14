@@ -1,4 +1,5 @@
 import copy
+import collections
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
 
@@ -24,21 +25,29 @@ class StackedDeck(Deck):
 
 
 def generate_game_for(card1, card2, first_agent_type, second_agent_type):
-
-    card1 = card1()
-    card2 = card2()
-    if card1.character_class == CHARACTER_CLASS.ALL:
-        class1 = CHARACTER_CLASS.MAGE
+    if not isinstance(card1, collections.Sequence):
+        card_set1 = [card1()]
     else:
-        class1 = card1.character_class
+        card_set1 = [card() for card in card1]
+    class1 = CHARACTER_CLASS.MAGE
+    for card in card_set1:
+        if card.character_class != CHARACTER_CLASS.ALL:
+            class1 = card.character_class
+            break
 
-    if card2.character_class == CHARACTER_CLASS.ALL:
-        class2 = CHARACTER_CLASS.MAGE
+    if not isinstance(card2, collections.Sequence):
+        card_set2 = [card2()]
     else:
-        class2 = card2.character_class
+        card_set2 = [card() for card in card1]
 
-    deck1 = StackedDeck([card1], class1)
-    deck2 = StackedDeck([card2], class2)
+    class2 = CHARACTER_CLASS.MAGE
+    for card in card_set2:
+        if card.character_class != CHARACTER_CLASS.ALL:
+            class2 = card.character_class
+            break
+
+    deck1 = StackedDeck(card_set1, class1)
+    deck2 = StackedDeck(card_set2, class2)
     game = Game([deck1, deck2], [first_agent_type(), second_agent_type()])
     game.current_player = game.players[1]
     game.pre_game()

@@ -4,7 +4,7 @@ from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 
 from hsgame.cards import *
@@ -201,8 +201,8 @@ class TestMage(unittest.TestCase):
         self.assertEqual(27, game.other_player.health)
 
         #Make sure the other frostbolts have been properly reduced
-        self.assertEqual(1, game.current_player.hand[1].mana)
-        self.assertEqual(1, game.current_player.hand[2].mana)
+        self.assertEqual(1, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(1, game.current_player.hand[2].mana_cost(game.current_player))
 
         game.play_single_turn()
         game.play_single_turn()
@@ -319,4 +319,30 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(30, game.other_player.health)
+
+
+    def testKirinTorMage(self):
+
+        game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual("Vaporize", game.current_player.secrets[0].name)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Kirin Tor Mage", game.current_player.minions[0].card.name)
+        self.assertEqual(3, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual("Vaporize", game.current_player.hand[1].name)
+
+        random.seed(1857)
+        game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.secrets))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Kirin Tor Mage", game.current_player.minions[0].card.name)
+        self.assertEqual(3, game.current_player.hand[2].mana_cost(game.current_player))
+        self.assertEqual("Vaporize", game.current_player.hand[2].name)
 
