@@ -95,7 +95,7 @@ class TestGame(unittest.TestCase):
             random.seed(1857)
             secret = secret_type()
             game = generate_game_for(secret_type, StonetuskBoar, SpellTestingAgent, DoNothingBot)
-            for turn in range(0, secret.mana * 2 - 2):
+            for turn in range(0, secret.mana * 2):
                 game.play_single_turn()
 
             def assert_different():
