@@ -49,7 +49,8 @@ from hsgame.cards.spells.paladin import \
     HolyLight, \
     HolyWrath, \
     Humility, \
-    LayOnHands
+    LayOnHands, \
+    EyeForAnEye
 
 from hsgame.cards.spells.priest import \
     CircleOfHealing, \

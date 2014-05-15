@@ -302,3 +302,17 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Guardian of Kings", game.players[0].minions[0].card.name)
         self.assertEqual(26, game.players[0].health)
+
+    def testEyeForAnEye(self):
+        game = generate_game_for(EyeForAnEye, StonetuskBoar, SpellTestingAgent, PredictableBot)
+        
+        game.play_single_turn() # Eye for an Eye should be played
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual("Eye for an Eye", game.players[0].secrets[0].name)
+        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[1].health)
+
+        game.play_single_turn() # Attack with Stonetusk should happen, and the secret should trigger. Making both players take 1 damage.
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(29, game.players[0].health)
+        self.assertEqual(29, game.players[1].health)

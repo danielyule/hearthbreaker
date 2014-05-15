@@ -1,6 +1,6 @@
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, SecretCard
 
 __author__ = 'Daniel'
 
@@ -152,3 +152,17 @@ class LayOnHands(Card):
         player.draw()
         player.draw()
         player.draw()
+
+class EyeForAnEye(SecretCard):
+    def __init__(self):
+        super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def reveal(self, amount, what):
+        what.player.damage(amount, self)
+        super().reveal()
+
+    def activate(self, player):
+        player.bind_once("damaged", self.reveal)
+
+    def deactivate(self, player):
+        player.unbind("damaged", self.reveal)
