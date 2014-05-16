@@ -322,7 +322,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(30, game.other_player.health)
 
 
-    def testKirinTorMage(self):
+    def test_KirinTorMage(self):
 
         game = generate_game_for([KirinTorMage, Vaporize, Spellbender], StonetuskBoar, SpellTestingAgent, DoNothingBot)
         for turn in range(0, 5):

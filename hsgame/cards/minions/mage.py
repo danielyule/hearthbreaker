@@ -45,7 +45,8 @@ class KirinTorMage(MinionCard):
     def create_minion(self, player):
         class Filter:
             def __init__(self):
-                self.amount = 3
+                #To make sure that no matter what the cost of a secret, it will be 0
+                self.amount = 100
                 self.filter = lambda c: type(c) in SecretCard.__subclasses__()
                 self.min = 0
 
