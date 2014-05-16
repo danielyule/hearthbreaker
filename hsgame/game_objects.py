@@ -590,6 +590,7 @@ class Game(Bindable):
         agents[0].set_game(self)
         agents[1].set_game(self)
         self.current_player = self.players[0]
+        self.other_player = self.players[1]
         self.game_ended = False
         for i in range(0,3):
             self.players[0].draw()

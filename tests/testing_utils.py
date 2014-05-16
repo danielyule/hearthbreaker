@@ -50,6 +50,7 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     deck2 = StackedDeck(card_set2, class2)
     game = Game([deck1, deck2], [first_agent_type(), second_agent_type()])
     game.current_player = game.players[1]
+    game.other_player = game.players[0]
     game.pre_game()
     return game
 
