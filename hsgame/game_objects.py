@@ -259,10 +259,10 @@ class Minion(Bindable):
         else:
             targets.append(self.game.other_player)
 
+        self.player.trigger("attacking", self)
         target = self.player.agent.choose_target(targets)
 
         if isinstance(target, Minion):
-
             self.game.trigger("minion_on_minion_attack", self, target)
             self.trigger("attack_minion", target)
             target.trigger("attacked", self)
@@ -540,11 +540,10 @@ class Player(Bindable):
         else:
             targets.append(self.game.other_player)
 
-
+        self.trigger("attacking", self)
         target = self.agent.choose_target(targets)
 
         if isinstance(target, Minion):
-
             self.game.trigger("player_on_minion_attack", self, target)
             self.trigger("attack_minion", target)
             target.trigger("attacked", self)

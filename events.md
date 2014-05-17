@@ -12,6 +12,7 @@ Events Triggered in hssim
  * spell_cast (card)
  * turn_started
  * turn_ended
+ * attacking (attacker)
  * attack_minion
  * attack_player
  * attacked (attacker)
@@ -40,6 +41,7 @@ Events Triggered in hssim
 
 ##Minion
  * added_to_board(minion)
+ * attacking (attacker)
  * attack_minion
  * attack_player
  * attacked(attacker)

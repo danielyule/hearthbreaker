@@ -316,3 +316,24 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(29, game.players[0].health)
         self.assertEqual(29, game.players[1].health)
+
+    def testNobleSacrifice(self):
+        game = generate_game_for(NobleSacrifice, StonetuskBoar, SpellTestingAgent, PredictableBot)
+        
+        game.play_single_turn() # NobleSacrifice should be played
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual("Noble Sacrifice", game.players[0].secrets[0].name)
+
+        game.play_single_turn() # Attack with Stonetusk should happen, and the secret should trigger. Both minions should die.
+        self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(30, game.players[0].health)
+        
+        # Test with 7 minions
+        game = SavedGame("tests/replays/card_tests/NobleSacrifice.rep")
+        game.start()
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(29, game.players[0].health)
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual("Noble Sacrifice", game.players[0].secrets[0].name)

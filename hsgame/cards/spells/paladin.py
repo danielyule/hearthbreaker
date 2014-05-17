@@ -1,6 +1,6 @@
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card, SecretCard
+from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 
 __author__ = 'Daniel'
 
@@ -166,3 +166,37 @@ class EyeForAnEye(SecretCard):
 
     def deactivate(self, player):
         player.unbind("damaged", self.reveal)
+
+class NobleSacrifice(SecretCard):
+    def __init__(self):
+        super().__init__("Noble Sacrifice", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def reveal(self, attacker):
+        player = attacker.game.other_player
+        
+        if len(player.minions) < 7:
+            class DefenderMinion(MinionCard):
+                    def __init__(self):
+                        super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+    
+                    @staticmethod
+                    def create_minion(player):
+                        return Minion(2, 1)
+    
+            def choose_bender(targets):
+                minion = DefenderMinion.create_minion(player)
+                minion.add_to_board(self, player.game, player, 0)
+                player.game.current_player.agent.choose_target = old_target
+                return minion
+    
+            old_target = player.game.current_player.agent.choose_target
+            player.game.current_player.agent.choose_target = choose_bender
+            super().reveal()
+        else:
+            self.activate(player)
+
+    def activate(self, player):
+        player.game.current_player.bind_once("attacking", self.reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("attacking", self.reveal)
