@@ -17,7 +17,7 @@ class TestPriest(unittest.TestCase):
         random.seed(1857)
 
 
-    def testPriestPower(self):
+    def test_PriestPower(self):
         game = generate_game_for(CircleOfHealing, MogushanWarden, PredictableBot, DoNothingBot)
 
         game.players[1].health = 20
@@ -28,7 +28,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(22, game.players[1].health)
 
 
-    def testCircleOfHealing(self):
+    def test_CircleOfHealing(self):
         deck1 = StackedDeck([CircleOfHealing(), MogushanWarden(), CircleOfHealing(), CircleOfHealing(), CircleOfHealing(), CircleOfHealing(), CircleOfHealing()], CHARACTER_CLASS.PRIEST)
         deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
         game = Game([deck1, deck2], [SpellTestingAgent(), MinionPlayingAgent()])
@@ -44,7 +44,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(game.players[0].minions[0].max_defense, game.players[0].minions[0].defense)
         self.assertEqual(game.players[1].minions[0].max_defense, game.players[1].minions[0].defense)
         
-    def testDivineSpirit(self):
+    def test_DivineSpirit(self):
         game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 8):
@@ -76,7 +76,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(7, game.players[1].minions[0].defense)
         self.assertEqual(7, game.players[1].minions[0].max_defense)
         
-    def testHolyFire(self):
+    def test_HolyFire(self):
         game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 10):
@@ -93,7 +93,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(7, game.players[1].minions[0].max_defense)
         self.assertEqual(25, game.players[0].health)
         
-    def testHolyNova(self):
+    def test_HolyNova(self):
         deck1 = StackedDeck([MogushanWarden(), HolyNova()], CHARACTER_CLASS.PRIEST)
         deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
         game = Game([deck1, deck2], [SpellTestingAgent(), MinionPlayingAgent()])
@@ -112,14 +112,14 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(6, game.players[0].minions[0].defense)
         self.assertEqual(5, game.players[1].minions[0].defense)
         
-    def testHolySmite(self):
+    def test_HolySmite(self):
         game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingBot)
         
         self.assertEqual(30, game.players[1].health)
         game.play_single_turn() # Holy Smite should be played
         self.assertEqual(28, game.players[1].health)
         
-    def testInnerFire(self):
+    def test_InnerFire(self):
         game = generate_game_for(InnerFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 8):
@@ -136,7 +136,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].defense)
         
-    def testMassDispel(self):
+    def test_MassDispel(self):
         game = generate_game_for(MassDispel, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 8):
@@ -150,7 +150,7 @@ class TestPriest(unittest.TestCase):
         self.assertFalse(game.players[1].minions[0].taunt)
         self.assertEqual(8, len(game.players[0].hand))
         
-    def testMindBlast(self):
+    def test_MindBlast(self):
         game = generate_game_for(MindBlast, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 2):
@@ -160,7 +160,7 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Mind Blast should be played
         self.assertEqual(25, game.players[1].health)
         
-    def testMindControl(self):
+    def test_MindControl(self):
         game = generate_game_for(MindControl, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
         for turn in range(0, 18):
@@ -172,7 +172,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(5, len(game.players[1].minions))
         
-    def testMindVision(self):
+    def test_MindVision(self):
         game = generate_game_for(MindVision, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
                 
         self.assertEqual(3, len(game.players[0].hand))

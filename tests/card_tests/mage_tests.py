@@ -16,7 +16,7 @@ class TestMage(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
-    def testArcaneMissiles(self):
+    def test_ArcaneMissiles(self):
         game = generate_game_for(MogushanWarden, ArcaneMissiles, MinionPlayingAgent,SpellTestingAgent)
 
         game.play_single_turn()
@@ -38,7 +38,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(10, game.other_player.health)
         self.assertEqual(3, game.other_player.minions[0].defense)
 
-    def testArcaneMissilesWithSpellPower(self):
+    def test_ArcaneMissilesWithSpellPower(self):
         game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
         game.start()
 
@@ -50,7 +50,7 @@ class TestMage(unittest.TestCase):
 
         return game
 
-    def testWaterElemental(self):
+    def test_WaterElemental(self):
         game = generate_game_for(WaterElemental, StonetuskBoar, PredictableBot, DoNothingBot)
 
         for turn in range(0, 11):
@@ -73,7 +73,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.frozen_this_turn)
         self.assertTrue(game.other_player.frozen)
 
-    def testIceLance(self):
+    def test_IceLance(self):
         game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
 
