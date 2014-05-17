@@ -40,15 +40,14 @@ class MirrorImage(Card):
             def __init__(self):
                 super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, False)
 
-            def create_minion(self, player):
+            @staticmethod
+            def create_minion(player):
                 minion = Minion(0, 2)
                 minion.taunt = True
                 return minion
 
-        minion1 = Minion(0, 2)
-        minion2 = Minion(0, 2)
-        minion1.taunt = True
-        minion2.taunt = True
+        minion1 = MirrorImageMinion.create_minion(player)
+        minion2 = MirrorImageMinion.create_minion(player)
         minion1.add_to_board(MirrorImageMinion(), game, player, 0)
         minion2.add_to_board(MirrorImageMinion(), game, player, 0)
 
@@ -155,16 +154,16 @@ class Spellbender(SecretCard):
     def reveal(self, card, player):
         if card.targetable:
             class SpellbenderMinion(MinionCard):
-                    def __init__(self):
-                        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
+                def __init__(self):
+                    super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
 
-                    @staticmethod
-                    def create_minion(player):
-                        return Minion(1, 3)
+                @staticmethod
+                def create_minion(player):
+                    return Minion(1, 3)
 
             def choose_bender(targets):
                 minion = SpellbenderMinion.create_minion(player)
-                minion.add_to_board(self, player.game, player, 0)
+                minion.add_to_board(SpellbenderMinion(), player.game, player, 0)
                 player.game.current_player.agent.choose_target = old_target
                 return minion
 

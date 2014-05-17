@@ -176,16 +176,16 @@ class NobleSacrifice(SecretCard):
         
         if len(player.minions) < 7:
             class DefenderMinion(MinionCard):
-                    def __init__(self):
-                        super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
-    
-                    @staticmethod
-                    def create_minion(player):
-                        return Minion(2, 1)
+                def __init__(self):
+                    super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+
+                @staticmethod
+                def create_minion(player):
+                    return Minion(2, 1)
     
             def choose_bender(targets):
                 minion = DefenderMinion.create_minion(player)
-                minion.add_to_board(self, player.game, player, 0)
+                minion.add_to_board(DefenderMinion(), player.game, player, 0)
                 player.game.current_player.agent.choose_target = old_target
                 return minion
     
