@@ -196,3 +196,20 @@ class Vaporize(SecretCard):
 
     def deactivate(self, player):
         player.unbind("attacked", self.reveal)
+
+
+class IceBlock(SecretCard):
+    def __init__(self):
+        super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
+
+    def _reveal_if_fatal(self, amount, attacker, player):
+        if player.health - amount < 0:
+            player.health += amount
+            player.immune = True
+            super().reveal()
+
+    def activate(self, player):
+        player.bind("damaged", self._reveal_if_fatal, player)
+
+    def deactivate(self, player):
+        player.unbind("damaged", self._reveal_if_fatal)
