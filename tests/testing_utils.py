@@ -38,7 +38,7 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     if not isinstance(card2, collections.Sequence):
         card_set2 = [card2()]
     else:
-        card_set2 = [card() for card in card1]
+        card_set2 = [card() for card in card2]
 
     class2 = CHARACTER_CLASS.MAGE
     for card in card_set2:

@@ -3,7 +3,7 @@ Events Triggered in hssim
 
 ##Player
  * damaged (amount)
- * died
+ * died (attacker)
  * card_drawn (card)
  * card_put_back(card)
  * card_destroyed(card)
@@ -19,6 +19,7 @@ Events Triggered in hssim
  * fatigue_damage(amount)
  * damaged(amount, what)
  * spell_damaged(amount, card)
+ * physically_damaged(amount, attacker)
  * minion_damaged(amount, minion)
  * player_damaged(amount, player)
  * attack increased(amount)
@@ -48,6 +49,7 @@ Events Triggered in hssim
  * damaged(amount, attacker)
  * healed(amount)
  * spell_damaged(amount, card)
+ * physically_damaged(amount, attacker)
  * minion_damaged(amount, minion)
  * player_damaged(amount, player)
  * died (attacker)

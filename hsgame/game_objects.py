@@ -179,29 +179,76 @@ class SecretCard(Card):
         pass
 
 
-class Minion(Bindable):
-    def __init__(self, attack, defense, type=hsgame.constants.MINION_TYPE.NONE):
-        self.attack_power = self.max_attack = attack
-        self.defense = self.max_defense = defense
-        self.type = type
+class Character(Bindable):
+    def __init__(self, attack_power, health, game):
+        super().__init__()
+        self.health = health
+        self.max_health = health
+        self.attack_power = attack_power
         self.active = False
         self.dead = False
-        self.taunt = False
         self.wind_fury = False
         self.used_wind_fury = False
         self.frozen = False
         self.frozen_this_turn = False
-        self.stealth = False
-        self.game = None
-        self.player = None
-        self.card = None
         self.temp_attack = 0
-        self.index = -1
-        self.charge = False
-        self.spell_power = 0
-        self.divine_shield = False
+        self.game = game
         self.delayed = []
-        super().__init__()
+
+    def _find_target(self, targets):
+        pass
+
+    def turn_complete(self):
+        if self.temp_attack > 0:
+            self.trigger("attack_decreased", self.temp_attack)
+            self.temp_attack = 0
+
+    def attack(self):
+        if not self.can_attack():
+            raise GameException("That minion cannot attack")
+
+        found_taunt = False
+        targets = []
+        for enemy in self.game.other_player.minions:
+            if enemy.taunt and not enemy.stealth:
+                found_taunt = True
+            if not enemy.stealth:
+                targets.append(enemy)
+
+        if found_taunt:
+            targets = [target for target in targets if target.taunt]
+        else:
+            targets.append(self.game.other_player)
+
+        target = self.choose_target(targets)
+
+        if isinstance(target, Minion):
+            self.trigger("attack_minion", target)
+            target.trigger("attacked", self)
+            if self.dead:
+                return
+            my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
+            self.physical_damage(target.attack_power, target)
+            target.physical_damage(my_attack, self)
+            target.activate_delayed()
+        else:
+            self.trigger("attack_player", target)
+            target.trigger("attacked", self)
+            if self.dead:
+                return
+            target.physical_damage(self.attack_power, self)
+            target.activate_delayed()
+            #TODO check if the player's weapon is out in the case of Misdirection
+
+        self.activate_delayed()
+        if self.wind_fury and not self.used_wind_fury:
+            self.used_wind_fury = True
+        else:
+            self.active = False
+        self.stealth = False
+
+    def choose_target(self, targets):
+        pass
 
     def delayed_trigger(self, event, *args, **kwargs):
         self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
@@ -212,6 +259,104 @@ class Minion(Bindable):
             self.trigger(delayed['event'], *delayed['args'], **delayed['kwargs'])
 
         self.delayed = []
+
+    def damage(self, amount, attacker):
+        self.delayed_trigger("damaged", amount, attacker)
+        self.health -= amount
+        if type(attacker) is Minion:
+            attacker.delayed_trigger("did_damage", amount, self)
+        elif type(attacker) is Player:
+            attacker.trigger("did_damage", amount, self)
+        if self.health <= 0:
+            self.die(attacker)
+
+    def increase_attack(self, amount):
+        def silence():
+            self.attack_power -= amount
+        self.trigger("attack_increased", amount)
+        self.attack_power += amount
+        self.bind_once('silenced', silence)
+
+    def increase_temp_attack(self, amount):
+
+        self.trigger("attack_increased", amount)
+        self.temp_attack += amount
+
+    def increase_health(self, amount):
+        def silence():
+            self.max_health -= amount
+            if self.max_health < self.health:
+                self.health = self.max_health
+        self.trigger("health_increased", amount)
+        self.max_health += amount
+        self.health += amount
+        self.bind_once('silenced', silence)
+
+    def decrease_health(self, amount):
+        def silence():
+            # I think silence only restores its max health again. It does not heal as well.
+            self.max_health += amount
+        self.trigger("health_decreased", amount)
+        self.max_health -= amount
+        if self.health > self.max_health:
+            self.health = self.max_health
+        self.bind_once('silenced', silence)
+
+    def freeze(self):
+        self.frozen_this_turn = True
+        self.frozen = True
+
+    def silence(self):
+        self.trigger("silenced")
+        self.wind_fury = False
+        self.frozen = False
+        self.frozen_this_turn = False
+
+    def spell_damage(self, amount, spellCard):
+        self.trigger("spell_damaged", amount, spellCard)
+        self.damage(amount, spellCard)
+
+    def physical_damage(self, amount, attacker):
+        self.trigger("physically_damaged", amount, attacker)
+        if type(attacker) is Player:
+            self.player_damage(amount, attacker)
+        else:
+            self.minion_damage(amount, attacker)
+
+    def minion_damage(self, amount, minion):
+        self.trigger("minion_damaged", amount, minion)
+        self.damage(amount, minion)
+
+    def player_damage(self, amount, player):
+        self.trigger("player_damaged", amount, player)
+        self.damage(amount, player)
+
+    def heal(self, amount):
+        self.trigger("healed", amount)
+        self.health += amount
+        if self.health > self.max_health:
+            self.health = self.max_health
+
+    def die(self, by):
+        self.delayed_trigger("died", by)
+        self.dead = True
+
+    def can_attack(self):
+        return self.attack_power + self.temp_attack > 0 and self.active and not self.frozen
+
+
+class Minion(Character):
+    def __init__(self, attack, health, type=hsgame.constants.MINION_TYPE.NONE):
+        super().__init__(attack, health, None)
+        self.type = type
+        self.taunt = False
+        self.stealth = False
+        self.player = None
+        self.card = None
+        self.index = -1
+        self.charge = False
+        self.spell_power = 0
+        self.divine_shield = False
 
     def add_to_board(self, card, game, player, index):
         self.card = card
@@ -237,145 +382,30 @@ class Minion(Bindable):
         self.game.remove_minion(self, self.player)
         self.player.unbind("turn_ended", self.turn_complete)
 
-    def turn_complete(self):
-        if self.temp_attack > 0:
-            self.trigger("attack_decreased", self.temp_attack)
-            self.temp_attack = 0
-
     def attack(self):
-        if not self.can_attack():
-            raise GameException("That minion cannot attack")
-
-        found_taunt = False
-        targets = []
-        for enemy in self.game.other_player.minions:
-            if enemy.taunt and not enemy.stealth:
-                found_taunt = True
-            if not enemy.stealth:
-                targets.append(enemy)
-
-        if found_taunt:
-            targets = [target for target in targets if target.taunt]
-        else:
-            targets.append(self.game.other_player)
-
         self.player.trigger("attacking", self)
-        target = self.player.agent.choose_target(targets)
-
-        if isinstance(target, Minion):
-            self.game.trigger("minion_on_minion_attack", self, target)
-            self.trigger("attack_minion", target)
-            target.trigger("attacked", self)
-            if self.dead:
-                return
-            my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
-            self.minion_damage(target.attack_power, target)
-            target.minion_damage(my_attack, self)
-            target.activate_delayed()
-        else:
-            self.game.trigger("minion_on_player_attack", self, target)
-            self.trigger("attack_player", target)
-            target.trigger("attacked", self)
-            if self.dead:
-                return
-            target.minion_damage(self.attack_power, self)
-            #TODO check if the player's weapon is out in the case of Misdirection
-
-        self.activate_delayed()
-        if self.wind_fury and not self.used_wind_fury:
-            self.used_wind_fury = True
-        else:
-            self.active = False
+        super().attack()
         self.stealth = False
 
-    def damage(self, amount, attacker):
-        if self.divine_shield:
-            self.divine_shield = False
-        else:
-            self.delayed_trigger("damaged", amount, attacker)
-            self.defense -= amount
-            if type(attacker) is Minion:
-                attacker.delayed_trigger("did_damage", amount, self)
-            elif type(attacker) is Player:
-                attacker.trigger("did_damage", amount, self)
-            if self.defense <= 0:
-                self.die(attacker)
-
-    def increase_attack(self, amount):
-        def silence():
-            self.attack_power -= amount
-        self.trigger("attack_increased", amount)
-        self.attack_power += amount
-        self.bind_once('silenced', silence)
-
-    def increase_temp_attack(self, amount):
-
-        self.trigger("attack_increased", amount)
-        self.temp_attack += amount
-
-    def increase_health(self, amount):
-        def silence():
-            self.max_defense -= amount
-            if self.max_defense < self.defense:
-                self.defense = self.max_defense
-        self.trigger("health_increased", amount)
-        self.max_defense += amount
-        self.defense += amount
-        self.bind_once('silenced', silence)
-        
-    def decrease_health(self, amount):
-        def silence():
-            # I think silence only restores its max defense again. It does not heal as well.
-            self.max_defense += amount
-        self.trigger("health_decreased", amount)
-        self.max_defense -= amount
-        if (self.defense > self.max_defense):
-            self.defense = self.max_defense
-        self.bind_once('silenced', silence)
-
-    def freeze(self):
-        self.frozen_this_turn = True
-        self.frozen = True
-
     def silence(self):
-        self.trigger("silenced")
+        super().silence()
         self.taunt = False
-        self.wind_fury = False
-        self.frozen = False
-        self.frozen_this_turn = False
         self.stealth = False
         self.charge = False
         self.player.spell_power -= self.spell_power
         self.spell_power = 0
         self.divine_shield = False
 
-
-    def spell_damage(self, amount, spellCard):
-        self.trigger("spell_damaged", amount, spellCard)
-        self.damage(amount, spellCard)
-
-    def minion_damage(self, amount, minion):
-        self.trigger("minion_damaged", amount, minion)
-        self.damage(amount, minion)
-
-    def player_damage(self, amount, player):
-        self.trigger("player_damaged", amount, player)
-        self.damage(amount, player)
-
-    def heal(self, amount):
-        self.trigger("healed", amount)
-        self.defense += amount
-        if self.defense > self.max_defense:
-            self.defense = self.max_defense
+    def damage(self, amount, attacker):
+        if self.divine_shield:
+            self.divine_shield = False
+        else:
+            super().damage(amount, attacker)
 
     def die(self, by):
-        self.delayed_trigger("died", by)
+        super().die(by)
         self.game.trigger("minion_died", self, by)
-        self.dead = True
         self.remove_from_board()
-
-    def can_attack(self):
-        return self.active and not self.frozen
 
     def can_be_attacked(self):
         return not self.stealth
@@ -383,8 +413,11 @@ class Minion(Bindable):
     def spell_targettable(self):
         return not self.stealth
 
+    def choose_target(self, targets):
+        return self.player.choose_target(targets)
+
     def __str__(self):
-        return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.defense, self.card.name, self.index)
+        return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
 
 
 class Deck:
@@ -424,36 +457,34 @@ class Deck:
         raise GameException("Tried to put back a card that didn't come from this deck")
 
 
-class Player(Bindable):
+class Player(Character):
     def __init__(self, name, deck, agent, game, random=random.randint):
-        super().__init__()
-        self.dead = False
+        super().__init__(0, 30, game)
         self.name = name
         self.mana = 0
-        self.health = 30
-        self.deck = deck
         self.max_mana = 0
         self.armour = 0
-        self.attack_power = 0
+        self.deck = deck
         self.spell_power = 0
         self.minions = []
         self.weapon = None
         self.character_class = deck.character_class
-        self.bind("turn_ended", self.turn_complete)
         self.random = random
         self.hand = []
         self.fatigue = 0
         self.agent = agent
         self.game = game
-        self.frozen_this_turn = False
-        self.frozen = False
-        self.active = False
         self.secrets = []
         self.mana_filters = []
         self.power = hsgame.powers.powers(self.character_class)(self)
+        self.bind("turn_ended", self.turn_complete)
 
     def __str__(self):
         return "Player: " + self.name
+
+    def attack(self):
+        self.trigger("attacking", self)
+        super().attack()
 
     def draw(self):
         if self.can_draw():
@@ -467,7 +498,7 @@ class Player(Bindable):
             self.fatigue += 1
             self.trigger("fatigue_damage", self.fatigue)
             self.damage(self.fatigue, self)
-
+            self.activate_delayed()
 
     def can_draw(self):
         return self.deck.can_draw()
@@ -478,88 +509,18 @@ class Player(Bindable):
         self.trigger("card_put_back", card)
 
     def damage(self, amount, attacker):
-        self.trigger("damaged", amount, attacker)
         self.armour -= amount
         if self.armour < 0:
-            self.health += self.armour
-            if type(attacker) is Minion:
-                attacker.delayed_trigger("did_damage", -self.armour, self)
-            elif type(attacker) is Player:
-                attacker.trigger("did_damage", -self.armour, self)
+            new_amount = -self.armour
             self.armour = 0
-        if self.health <= 0:
-            self.die()
-
-    def increase_attack(self, amount):
-        self.trigger("attack_increased", amount)
-        self.attack_power += amount
+            super().damage(new_amount, attacker)
 
     def increase_armour(self, amount):
         self.trigger("armour_increased", amount)
         self.armour += amount
 
-    def freeze(self):
-        self.frozen_this_turn = True
-        self.frozen = True
-
-    def spell_damage(self, amount, spellCard):
-        self.trigger("spell_damaged", amount, spellCard)
-        self.damage(amount, spellCard)
-
-    def minion_damage(self, amount, minion):
-        self.trigger("minion_damaged", amount, minion)
-        self.damage(amount, minion)
-
-    def player_damage(self, amount, player):
-        self.trigger("player_damaged", amount, player)
-        self.damage(amount, player)
-
-    def heal(self, amount):
-        self.trigger("heal", amount)
-        self.health += amount
-        if self.health > 30:
-            self.health = 30
-
-    def can_attack(self):
-        return self.attack_power > 0 and not self.frozen
-
-    def attack(self):
-        if not self.can_attack():
-            raise GameException("The player cannot attack")
-
-        found_taunt = False
-        targets = []
-        for enemy in self.game.other_player.minions:
-            if enemy.taunt and not enemy.stealth:
-                found_taunt = True
-            if not enemy.stealth:
-                targets.append(enemy)
-
-        if found_taunt:
-            targets = [target for target in targets if target.taunt]
-        else:
-            targets.append(self.game.other_player)
-
-        self.trigger("attacking", self)
-        target = self.agent.choose_target(targets)
-
-        if isinstance(target, Minion):
-            self.game.trigger("player_on_minion_attack", self, target)
-            self.trigger("attack_minion", target)
-            target.trigger("attacked", self)
-            self.minion_damage(target.attack_power, target)
-            target.player_damage(self.attack_power, self)
-        else:
-            self.game.trigger("player_on_player_attack", self, target)
-            self.trigger("attack_player", target)
-            target.trigger("attacked", self)
-            target.player_damage(self.attack_power, self)
-
-        self.active = False
-
-    def die(self):
-        self.trigger("died")
-        self.dead = True
+    def die(self, by):
+        super().die(by)
 
     def spell_targettable(self):
         return True
@@ -570,8 +531,8 @@ class Player(Bindable):
         self.trigger("found_power_target", target)
         return target
 
-    def turn_complete(self):
-        self.attack_power = 0
+    def choose_target(self, targets):
+        return self.agent.choose_target(targets)
 
 
 class Game(Bindable):
@@ -653,7 +614,7 @@ class Game(Bindable):
         self.current_player.trigger("turn_started")
         self.current_player.draw()
 
-    def game_over(self):
+    def game_over(self, attacker):
         self.game_ended = True
 
     def _end_turn(self):
@@ -666,6 +627,8 @@ class Game(Bindable):
         self.other_player.frozen_this_turn = False
         for minion in self.other_player.minions:
             minion.frozen_this_turn = False
+
+        self.current_player.active = True
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False

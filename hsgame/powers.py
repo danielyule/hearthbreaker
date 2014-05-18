@@ -35,7 +35,7 @@ class DruidPower(Power):
 
     def use(self):
         super().use()
-        self.player.increase_attack(1)
+        self.player.increase_temp_attack(1)
         self.player.increase_armour(1)
 
 

@@ -87,7 +87,7 @@ class Equality(Card):
         targets.extend(player.minions)
         
         for minion in targets:
-            minion.decrease_health(minion.max_defense - 1)            
+            minion.decrease_health(minion.max_health - 1)
             
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)

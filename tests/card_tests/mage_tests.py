@@ -36,7 +36,7 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         #The random numbers work so that both arcane missiles hit the Warden twice and the other player once
         self.assertEqual(10, game.other_player.health)
-        self.assertEqual(3, game.other_player.minions[0].defense)
+        self.assertEqual(3, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
         game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
@@ -44,8 +44,8 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(1, game.other_player.minions[0].defense)
-        self.assertEqual(2, game.other_player.minions[0].max_defense)
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(2, game.other_player.minions[0].max_health)
         self.assertEqual(27, game.other_player.health)
 
         return game
@@ -61,7 +61,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.frozen)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(3, game.current_player.minions[0].attack_power)
-        self.assertEqual(6, game.current_player.minions[0].defense)
+        self.assertEqual(6, game.current_player.minions[0].health)
         self.assertEqual("Water Elemental", game.current_player.minions[0].card.name)
 
         game.play_single_turn()
@@ -91,7 +91,7 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertTrue(game.other_player.minions[0].frozen)
-        self.assertEqual(7, game.other_player.minions[0].defense)
+        self.assertEqual(7, game.other_player.minions[0].health)
 
     def test_ManaWyrm(self):
         deck1 = StackedDeck([ManaWyrm(), IceLance(), ManaWyrm(), IceLance(), IceLance(), IceLance()], CHARACTER_CLASS.MAGE)
@@ -103,8 +103,8 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].attack_power)
-        self.assertEqual(3, game.current_player.minions[0].defense)
-        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)
         self.assertEqual("Mana Wyrm",game.current_player.minions[0].card.name)
 
         game.play_single_turn()
@@ -112,33 +112,33 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].attack_power)
-        self.assertEqual(3, game.current_player.minions[0].defense)
-        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)
         self.assertEqual(2, game.current_player.minions[1].attack_power)
-        self.assertEqual(3, game.current_player.minions[1].defense)
-        self.assertEqual(3, game.current_player.minions[1].max_defense)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[1].max_health)
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].attack_power)
-        self.assertEqual(3, game.current_player.minions[0].defense)
-        self.assertEqual(3, game.current_player.minions[0].max_defense)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)
         self.assertEqual(5, game.current_player.minions[1].attack_power)
-        self.assertEqual(3, game.current_player.minions[1].defense)
-        self.assertEqual(3, game.current_player.minions[1].max_defense)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[1].max_health)
 
     def test_MirrorImage(self):
         game = generate_game_for(MirrorImage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(0, game.current_player.minions[0].attack_power)
-        self.assertEqual(2, game.current_player.minions[0].defense)
+        self.assertEqual(2, game.current_player.minions[0].health)
         self.assertTrue(game.current_player.minions[0].taunt)
         self.assertEqual("Mirror Image", game.current_player.minions[0].card.name)
         self.assertEqual(0, game.current_player.minions[0].card.mana)
 
         self.assertEqual(0, game.current_player.minions[1].attack_power)
-        self.assertEqual(2, game.current_player.minions[1].defense)
+        self.assertEqual(2, game.current_player.minions[1].health)
         self.assertTrue(game.current_player.minions[1].taunt)
         self.assertEqual("Mirror Image", game.current_player.minions[1].card.name)
         self.assertEqual(0, game.current_player.minions[1].card.mana)
@@ -154,13 +154,13 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(30, game.other_player.health)
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(30, game.other_player.health)
 
     def test_Frostbolt(self):
@@ -177,7 +177,7 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(24, game.other_player.health)
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(1, game.other_player.minions[0].defense)
+        self.assertEqual(1, game.other_player.minions[0].health)
         self.assertTrue(game.other_player.minions[0].frozen)
 
     def test_SorcerersApprentice(self):
@@ -194,7 +194,7 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(3, game.current_player.minions[0].attack_power)
-        self.assertEqual(2, game.current_player.minions[0].defense)
+        self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual("Sorcerer's Apprentice", game.current_player.minions[0].card.name)
 
         #Arcane missiles should also have been played, since it is now free
@@ -296,7 +296,7 @@ class TestMage(unittest.TestCase):
 
         #The moonfire should have been re-directed to the Spellbender, which should have taken one damage
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(2, game.other_player.minions[0].defense)
+        self.assertEqual(2, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual("Spellbender", game.other_player.minions[0].card.name)
 

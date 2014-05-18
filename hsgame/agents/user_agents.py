@@ -29,7 +29,7 @@ class Observer:
     def turn_ended(self, player):
         self.writer.write("Turn ended for " + str(player) + "\n")
 
-    def died(self, player):
+    def died(self, attacker, player):
         self.writer.write(str(player) + " died!\n")
 
     def card_drawn(self, card, player):

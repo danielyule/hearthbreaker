@@ -186,7 +186,8 @@ class ConcedeAction(ReplayAction):
         return "concede()"
 
     def play(self, game):
-        game.current_player.die()
+        game.current_player.die(None)
+        game.current_player.activate_delayed()
 
 
 class Replay:

@@ -30,7 +30,7 @@ class Claw(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.increase_attack(2)
+        player.increase_temp_attack(2)
         player.increase_armour(2)
 
 
@@ -51,7 +51,7 @@ class Savagery(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.attack_power + player.spell_power, self)
+        self.target.spell_damage(player.temp_attack + player.spell_power, self)
 
 
 class MarkOfTheWild(Card):
@@ -195,7 +195,7 @@ class SavageRoar(Card):
         super().use(player, game)
         for minion in player.minions:
             minion.increase_temp_attack(2)
-        player.increase_attack(2)
+        player.increase_temp_attack(2)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) > 0
@@ -207,7 +207,7 @@ class Bite(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.increase_attack(4)
+        player.increase_temp_attack(4)
         player.increase_armour(4)
 
 class SoulOfTheForest(Card):

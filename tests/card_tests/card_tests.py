@@ -26,7 +26,7 @@ class CardTest(unittest.TestCase):
                     minion.player = fake_game.current_player
                     minion.silence()
                     self.assertEqual(int(row["Attack"]), minion.attack_power, row["Name"])
-                    self.assertEqual(int(row["Health"]), minion.defense, row["Name"])
+                    self.assertEqual(int(row["Health"]), minion.health, row["Name"])
                     self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.type, row["Name"])
 
         file.close()

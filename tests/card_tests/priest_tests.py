@@ -38,11 +38,11 @@ class TestPriest(unittest.TestCase):
         for turn in range(0, 8):
             game.play_single_turn()
 
-        game.players[0].minions[0].defense = 4
-        game.players[1].minions[0].defense = 4
+        game.players[0].minions[0].health = 4
+        game.players[1].minions[0].health = 4
         game.play_single_turn() # Circle of Healing should be played
-        self.assertEqual(game.players[0].minions[0].max_defense, game.players[0].minions[0].defense)
-        self.assertEqual(game.players[1].minions[0].max_defense, game.players[1].minions[0].defense)
+        self.assertEqual(game.players[0].minions[0].max_health, game.players[0].minions[0].health)
+        self.assertEqual(game.players[1].minions[0].max_health, game.players[1].minions[0].health)
         
     def test_DivineSpirit(self):
         game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
@@ -52,29 +52,29 @@ class TestPriest(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].max_health)
         game.play_single_turn() # Two Divine Spirits should be played
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(28, game.players[1].minions[0].defense)
-        self.assertEqual(28, game.players[1].minions[0].max_defense)
+        self.assertEqual(28, game.players[1].minions[0].health)
+        self.assertEqual(28, game.players[1].minions[0].max_health)
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].max_health)
         game.play_single_turn()
         # Let's say the minion got damaged
-        game.players[1].minions[0].defense = 4
+        game.players[1].minions[0].health = 4
         game.play_single_turn() # Three Divine Spirits should be played
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(32, game.players[1].minions[0].defense)
-        self.assertEqual(35, game.players[1].minions[0].max_defense)
+        self.assertEqual(32, game.players[1].minions[0].health)
+        self.assertEqual(35, game.players[1].minions[0].max_health)
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].max_health)
         
     def test_HolyFire(self):
         game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
@@ -85,12 +85,12 @@ class TestPriest(unittest.TestCase):
         game.players[0].health = 20
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].max_health)
         game.play_single_turn() # Holy Fire should be played
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(2, game.players[1].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].max_defense)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].max_health)
         self.assertEqual(25, game.players[0].health)
         
     def test_HolyNova(self):
@@ -105,12 +105,12 @@ class TestPriest(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
-        game.players[0].minions[0].defense = 4 # Fake damage
-        self.assertEqual(4, game.players[0].minions[0].defense)
-        self.assertEqual(7, game.players[1].minions[0].defense)
+        game.players[0].minions[0].health = 4 # Fake damage
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(7, game.players[1].minions[0].health)
         game.play_single_turn() # Holy Nova should be played
-        self.assertEqual(6, game.players[0].minions[0].defense)
-        self.assertEqual(5, game.players[1].minions[0].defense)
+        self.assertEqual(6, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[1].minions[0].health)
         
     def test_HolySmite(self):
         game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingBot)
@@ -127,14 +127,14 @@ class TestPriest(unittest.TestCase):
         
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
         game.play_single_turn() # Inner Fire should be played
         self.assertEqual(7, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
         self.assertEqual(1, game.players[1].minions[0].attack_power)
-        self.assertEqual(7, game.players[1].minions[0].defense)
+        self.assertEqual(7, game.players[1].minions[0].health)
         
     def test_MassDispel(self):
         game = generate_game_for(MassDispel, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)

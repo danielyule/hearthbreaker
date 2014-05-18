@@ -26,8 +26,8 @@ class DivineSpirit(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        # Increases by defense, not max_defense - source: http://www.hearthhead.com/card=1361/divine-spirit#comments:id=1908273
-        self.target.increase_health(self.target.defense)
+        # Increases by health, not max_health - source: http://www.hearthhead.com/card=1361/divine-spirit#comments:id=1908273
+        self.target.increase_health(self.target.health)
         
 class HolyFire(Card):
     def __init__(self):
@@ -70,7 +70,7 @@ class InnerFire(Card):
         
         # This will increase/decrease a minions attack to its current health
         # It will set the attack to its current health, not max health (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)
-        self.target.increase_attack(self.target.defense - self.target.attack_power)
+        self.target.increase_attack(self.target.health - self.target.attack_power)
         
 class MassDispel(Card): # TODO: Can this spell be cast if the enemy have no minions?
     def __init__(self):
