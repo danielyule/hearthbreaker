@@ -2,6 +2,7 @@ import random
 import hsgame.powers
 import hsgame.targetting
 import hsgame.constants
+import abc
 
 
 __author__ = 'Daniel'
@@ -137,7 +138,7 @@ class Card(Bindable):
         return self.name + " (" + str(self.mana) + " mana)"
 
 
-class MinionCard(Card):
+class MinionCard(Card,metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, status, targetable=False, targeting_func=None):
         super().__init__(name, mana, character_class, status, targetable, targeting_func)
 
@@ -148,6 +149,7 @@ class MinionCard(Card):
         super().use(player, game)
         self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
 
+    @abc.abstractmethod
     def create_minion(self, player):
         pass
 
@@ -155,7 +157,7 @@ class MinionCard(Card):
         return False
 
 
-class SecretCard(Card):
+class SecretCard(Card,metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, status):
         super().__init__(name, mana, character_class, status, False, None)
         self.player = None
@@ -172,14 +174,16 @@ class SecretCard(Card):
         self.player.trigger("secret_revealed", self)
         self.player.secrets.remove(self)
 
+    @abc.abstractmethod
     def activate(self, player):
         pass
 
+    @abc.abstractmethod
     def deactivate(self, player):
         pass
 
 
-class Character(Bindable):
+class Character(Bindable,metaclass=abc.ABCMeta):
     def __init__(self, attack_power, health, game):
         super().__init__()
         self.health = health
@@ -195,9 +199,6 @@ class Character(Bindable):
         self.game = game
         self.immune = False
         self.delayed = []
-
-    def _find_target(self, targets):
-        pass
 
     def turn_complete(self):
         if self.temp_attack > 0:
@@ -248,6 +249,7 @@ class Character(Bindable):
             self.active = False
         self.stealth = False
 
+    @abc.abstractmethod
     def choose_target(self, targets):
         pass
 
