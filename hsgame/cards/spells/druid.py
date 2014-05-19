@@ -90,11 +90,11 @@ class PowerOfTheWild(Card):
                     def __init__(self):
                         super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
-                    def create_minion(self):
+                    def create_minion(self, _):
                         return Minion(3, 2, MINION_TYPE.BEAST)
 
-                panther = Minion(3, 2, MINION_TYPE.BEAST)
-                panther.add_to_board(Panther(), game, player, len(player.minions))
+                panther = Panther()
+                panther.create_minion(player).add_to_board(panther, game, player, len(player.minions))
 
 
 
@@ -210,6 +210,7 @@ class Bite(Card):
         player.increase_temp_attack(4)
         player.increase_armour(4)
 
+
 class SoulOfTheForest(Card):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
@@ -221,16 +222,16 @@ class SoulOfTheForest(Card):
                 def __init__(self):
                     super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
-                def create_minion(self):
+                def create_minion(self, _):
                     return Minion(2, 2)
 
-            treant = Minion(2, 2)
-            treant.add_to_board(Treant(), game, player, len(player.minions))
+            treant = Treant()
+            treant.create_minion(player).add_to_board(treant, game, player, len(player.minions))
 
         super().use(player, game)
         for minion in player.minions:
-            minion.bind("died", summon_treant, minion)
-            minion.bind_once("silenced", lambda minion: minion.unbind("died", summon_treant), minion)
+            minion.bind("died", summon_treant)
+            minion.bind_once("silenced", lambda m: m.unbind("died", summon_treant), minion)
 
 
 class Swipe(Card):
