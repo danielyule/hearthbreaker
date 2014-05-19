@@ -73,6 +73,24 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.frozen_this_turn)
         self.assertTrue(game.other_player.frozen)
 
+        #Now make sure that attacking the Water Elemental directly will freeze a character
+        random.seed(1857)
+        game = generate_game_for(WaterElemental, IronbarkProtector, MinionPlayingAgent, PredictableBot)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        #The player won't have taken damage because of armour, and so shouldn't be frozen
+        self.assertEqual(30, game.current_player.health)
+        self.assertFalse(game.current_player.frozen)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(28, game.current_player.health)
+        self.assertTrue(game.current_player.frozen)
+
     def test_IceLance(self):
         game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()

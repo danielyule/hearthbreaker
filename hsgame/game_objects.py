@@ -212,9 +212,9 @@ class Character(Bindable,metaclass=abc.ABCMeta):
         found_taunt = False
         targets = []
         for enemy in self.game.other_player.minions:
-            if enemy.taunt and not enemy.stealth:
+            if enemy.taunt and enemy.can_be_attacked():
                 found_taunt = True
-            if not enemy.stealth:
+            if enemy.can_be_attacked():
                 targets.append(enemy)
 
         if found_taunt:
@@ -508,6 +508,9 @@ class Player(Character):
 
     def can_draw(self):
         return self.deck.can_draw()
+
+    def can_be_attacked(self):
+        return True
 
     def put_back(self, card):
         self.hand.remove(card)
