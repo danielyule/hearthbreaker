@@ -11,7 +11,8 @@ from hsgame.cards.minions.neutral import \
     FaerieDragon, \
     KoboldGeomancer, \
     ElvenArcher, \
-    IronfurGrizzly
+    IronfurGrizzly, \
+    ArgentSquire
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \

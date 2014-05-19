@@ -109,3 +109,12 @@ class IronfurGrizzly(MinionCard):
         minion = Minion(3, 3)
         minion.taunt = True
         return minion
+
+class ArgentSquire(MinionCard):
+    def __init__(self):
+        super().__init__("Argent Squire", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(1, 1)
+        minion.divine_shield = True
+        return minion

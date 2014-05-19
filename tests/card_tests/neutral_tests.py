@@ -63,5 +63,15 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[0].max_health)
         self.assertEqual("Elven Archer", game.current_player.minions[0].card.name)
 
+    def test_ArgentSquire(self):
+        game = generate_game_for(ArgentSquire, ElvenArcher, MinionPlayingAgent, MinionPlayingAgent)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].divine_shield)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].divine_shield)
+
 
 

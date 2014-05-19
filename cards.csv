@@ -28,7 +28,7 @@ no,Archmage,Spell Damage +1,,,6,4,7,Basic,Minion
 no,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into your hand.",,Mage,7,5,7,Expert,Minion
 no,Argent Commander,"Charge, Divine Shield",,,6,4,2,Expert,Minion
 yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Expert,Minion
-no,Argent Squire,Divine Shield,,,1,1,1,Expert,Minion
+yes,Argent Squire,Divine Shield,,,1,1,1,Expert,Minion
 no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Expert,Minion
 no,Assassin's Blade,,,Rogue,5,3,4,Basic,Weapon
 no,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Basic,Spell
