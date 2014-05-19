@@ -144,6 +144,21 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.current_player.max_mana)
 
+        #Make sure that the case where the player is at 10 mana works as well.
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(10, game.other_player.max_mana)
+        card_draw_mock = Mock(side_effect=game.other_player.draw)
+        game.other_player.draw = card_draw_mock
+        game.play_single_turn()
+        #Each time the player draws, they will draw another wild growth, which will turn into excess mana, which will
+        #draw another card.  However, because of the ordering of the cards, the last excess mana will be after
+        #a wild growth, which prevents SpellTestingAgent from playing the card, so only 5 draws are made instead of the
+        # possible 6
+        self.assertEqual(5, card_draw_mock.call_count)
+
+
     def test_Wrath(self):
         game = generate_game_for(Wrath, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
@@ -390,6 +405,17 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(7, game.current_player.max_mana)
         self.assertEqual(7, len(game.current_player.hand))
+
+        #Ensure that the case where we would be over 10 mana is handled correctly
+
+        game.play_single_turn()
+        game.play_single_turn()
+        #Nourish is played twice.  The first brings the player to 10, the second only increases the active mana, not
+        #max_mana
+
+        self.assertEqual(10, game.current_player.max_mana)
+        self.assertEqual(2, game.current_player.mana)
+
 
         #Test drawing three cards
         random.seed(1857)
