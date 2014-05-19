@@ -289,7 +289,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.secrets))
 
     def test_MirrorEntity(self):
-        game = generate_game_for(MirrorEntity, IronfurGrizzly, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for([StonetuskBoar, MirrorEntity], IronfurGrizzly, SpellTestingAgent, MinionPlayingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -297,9 +297,10 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Mirror Entity", game.current_player.secrets[0].name)
 
         game.play_single_turn()
-        self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual("Ironfur Grizzly", game.other_player.minions[0].card.name)
-        self.assertEqual(game.other_player, game.other_player.minions[0].player)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual("Ironfur Grizzly", game.other_player.minions[1].card.name)
+        self.assertEqual(game.other_player, game.other_player.minions[1].player)
+        self.assertEqual(1, game.other_player.minions[1].index)
 
     def test_Spellbender(self):
         game = generate_game_for(Spellbender, Moonfire, SpellTestingAgent, SpellTestingAgent)

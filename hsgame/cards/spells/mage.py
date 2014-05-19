@@ -134,6 +134,7 @@ class MirrorEntity(SecretCard):
             mirror = copy.copy(minion)
             mirror.player = player
             mirror.card = copy.copy(minion.card)
+            mirror.index = len(player.minions)
             player.minions.append(mirror)
             player.game.trigger("minion_added", mirror)
             super().reveal()
