@@ -245,7 +245,6 @@ class TestMage(unittest.TestCase):
         #Ensure that secrets are being removed after being revealed
         self.assertEqual(0, len(game.other_player.secrets))
 
-
     def test_IceBarrier(self):
         game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, PredictableBot)
         for turn in range(0, 5):
@@ -274,6 +273,20 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.secrets))
         self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
+
+    def test_IceBlock(self):
+        game = generate_game_for(IceBlock, Frostbolt, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(game.other_player.health, 3)
+        self.assertEqual(1, len(game.other_player.secrets))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(3, game.other_player.health)
+        self.assertEqual(0, len(game.other_player.secrets))
 
     def test_MirrorEntity(self):
         game = generate_game_for(MirrorEntity, IronfurGrizzly, SpellTestingAgent, MinionPlayingAgent)

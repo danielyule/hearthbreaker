@@ -193,6 +193,7 @@ class Character(Bindable):
         self.frozen_this_turn = False
         self.temp_attack = 0
         self.game = game
+        self.immune = False
         self.delayed = []
 
     def _find_target(self, targets):
@@ -261,14 +262,17 @@ class Character(Bindable):
         self.delayed = []
 
     def damage(self, amount, attacker):
-        self.delayed_trigger("damaged", amount, attacker)
-        self.health -= amount
-        if type(attacker) is Minion:
-            attacker.delayed_trigger("did_damage", amount, self)
-        elif type(attacker) is Player:
-            attacker.trigger("did_damage", amount, self)
-        if self.health <= 0:
-            self.die(attacker)
+        if not self.immune:
+            self.delayed_trigger("damaged", amount, attacker)
+            #The response of a secret to damage must happen immediately
+            self.trigger("secret_damaged", amount, attacker)
+            self.health -= amount
+            if type(attacker) is Minion:
+                attacker.delayed_trigger("did_damage", amount, self)
+            elif type(attacker) is Player:
+                attacker.trigger("did_damage", amount, self)
+            if self.health <= 0:
+                self.die(attacker)
 
     def increase_attack(self, amount):
         def silence():

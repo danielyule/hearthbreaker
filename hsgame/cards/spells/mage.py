@@ -203,13 +203,14 @@ class IceBlock(SecretCard):
         super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
 
     def _reveal_if_fatal(self, amount, attacker, player):
-        if player.health - amount < 0:
-            player.health += amount
+        if player.health - amount <= 0:
             player.immune = True
+            player.health += amount
+            #TODO Check if this spell will also prevent damage to armour.
             super().reveal()
 
     def activate(self, player):
-        player.bind("damaged", self._reveal_if_fatal, player)
+        player.bind("secret_damaged", self._reveal_if_fatal, player)
 
     def deactivate(self, player):
-        player.unbind("damaged", self._reveal_if_fatal)
+        player.unbind("secret_damaged", self._reveal_if_fatal)

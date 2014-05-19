@@ -31,6 +31,7 @@ from hsgame.cards.spells.mage import \
     FrostNova, \
     Counterspell, \
     IceBarrier, \
+    IceBlock, \
     MirrorEntity, \
     Spellbender, \
     Vaporize
