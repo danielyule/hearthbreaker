@@ -509,9 +509,6 @@ class Player(Character):
     def can_draw(self):
         return self.deck.can_draw()
 
-    def can_be_attacked(self):
-        return True
-
     def put_back(self, card):
         self.hand.remove(card)
         self.deck.put_back(card)
