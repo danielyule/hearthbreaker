@@ -237,7 +237,7 @@ class Character(Bindable):
             target.trigger("attacked", self)
             if self.dead:
                 return
-            target.physical_damage(self.attack_power, self)
+            target.physical_damage(self.attack_power + self.temp_attack, self)
             target.activate_delayed()
             #TODO check if the player's weapon is out in the case of Misdirection
 

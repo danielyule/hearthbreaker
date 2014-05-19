@@ -190,7 +190,7 @@ class Vaporize(SecretCard):
             attacker.die(self)
             super().reveal()
         else:
-            self.activate()
+            self.activate(attacker.game.other_player)
 
     def activate(self, player):
         player.bind_once("attacked", self.reveal)

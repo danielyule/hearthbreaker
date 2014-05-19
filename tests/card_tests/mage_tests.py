@@ -335,6 +335,15 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.secrets))
         self.assertEqual(30, game.other_player.health)
 
+        random.seed(1857)
+        game = generate_game_for(Vaporize, Swipe, SpellTestingAgent, PredictableBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(28, game.other_player.health)
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertFalse(game.current_player.dead)
+
 
     def test_KirinTorMage(self):
 
