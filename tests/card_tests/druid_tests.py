@@ -496,7 +496,7 @@ class TestDruid(unittest.TestCase):
                 self.assertTrue(minion.charge)
                 self.assertEqual("Treant", minion.card.name)
 
-        game.other_player.hero.bind_once("turn_ended", check_minions)
+        game.other_player.bind_once("turn_ended", check_minions)
 
         game.play_single_turn()
 

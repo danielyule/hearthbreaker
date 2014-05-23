@@ -1,9 +1,9 @@
 import copy
-from hsgame.agents.basic_agents import DoNothingBot
+from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from tests.testing_agents import SpellTestingAgent
 from tests.testing_utils import generate_game_for
-from hsgame.cards import StonetuskBoar
+from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 
 __author__ = 'Daniel'
 import random
@@ -134,6 +134,15 @@ class TestGame(unittest.TestCase):
 
             #Now the events should be reset
             game.play_single_turn()
+
+    def test_PhysicalHeroAttacks(self):
+        game = generate_game_for(Naturalize, ArcaneIntellect, PredictableBot, PredictableBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.other_player.hero.health)
+        self.assertEqual(0, game.other_player.hero.armour)
+        self.assertEqual(29, game.current_player.hero.health)
 
 
 
