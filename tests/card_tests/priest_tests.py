@@ -20,12 +20,12 @@ class TestPriest(unittest.TestCase):
     def test_PriestPower(self):
         game = generate_game_for(CircleOfHealing, MogushanWarden, PredictableBot, DoNothingBot)
 
-        game.players[1].health = 20
+        game.players[1].hero.health = 20
 
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(22, game.players[1].health)
+        self.assertEqual(22, game.players[1].hero.health)
 
 
     def test_CircleOfHealing(self):
@@ -82,7 +82,7 @@ class TestPriest(unittest.TestCase):
         for turn in range(0, 10):
             game.play_single_turn()
 
-        game.players[0].health = 20
+        game.players[0].hero.health = 20
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].health)
@@ -91,7 +91,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(7, game.players[1].minions[0].max_health)
-        self.assertEqual(25, game.players[0].health)
+        self.assertEqual(25, game.players[0].hero.health)
         
     def test_HolyNova(self):
         deck1 = StackedDeck([MogushanWarden(), HolyNova()], CHARACTER_CLASS.PRIEST)
@@ -115,9 +115,9 @@ class TestPriest(unittest.TestCase):
     def test_HolySmite(self):
         game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingBot)
         
-        self.assertEqual(30, game.players[1].health)
+        self.assertEqual(30, game.players[1].hero.health)
         game.play_single_turn() # Holy Smite should be played
-        self.assertEqual(28, game.players[1].health)
+        self.assertEqual(28, game.players[1].hero.health)
         
     def test_InnerFire(self):
         game = generate_game_for(InnerFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
@@ -156,9 +156,9 @@ class TestPriest(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
         
-        self.assertEqual(30, game.players[1].health)
+        self.assertEqual(30, game.players[1].hero.health)
         game.play_single_turn() # Mind Blast should be played
-        self.assertEqual(25, game.players[1].health)
+        self.assertEqual(25, game.players[1].hero.health)
         
     def test_MindControl(self):
         game = generate_game_for(MindControl, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)

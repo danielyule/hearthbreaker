@@ -30,5 +30,5 @@ class GuardianOfKings(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(5, 6)
-        player.heal(6)
+        player.hero.heal(6)
         return minion

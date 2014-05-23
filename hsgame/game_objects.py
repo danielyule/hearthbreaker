@@ -184,7 +184,7 @@ class SecretCard(Card,metaclass=abc.ABCMeta):
 
 
 class Character(Bindable,metaclass=abc.ABCMeta):
-    def __init__(self, attack_power, health, game):
+    def __init__(self, attack_power, health, player):
         super().__init__()
         self.health = health
         self.max_health = health
@@ -196,7 +196,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
         self.frozen = False
         self.frozen_this_turn = False
         self.temp_attack = 0
-        self.game = game
+        self.player = player
         self.immune = False
         self.delayed = []
 
@@ -211,7 +211,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
 
         found_taunt = False
         targets = []
-        for enemy in self.game.other_player.minions:
+        for enemy in self.player.game.other_player.minions:
             if enemy.taunt and enemy.can_be_attacked():
                 found_taunt = True
             if enemy.can_be_attacked():
@@ -220,8 +220,9 @@ class Character(Bindable,metaclass=abc.ABCMeta):
         if found_taunt:
             targets = [target for target in targets if target.taunt]
         else:
-            targets.append(self.game.other_player)
+            targets.append(self.player.game.other_player.hero)
 
+        self.player.trigger("attacking", self)
         target = self.choose_target(targets)
 
         if isinstance(target, Minion):
@@ -255,7 +256,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
 
     def delayed_trigger(self, event, *args, **kwargs):
         self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
-        self.game.delayed_minions.append(self)
+        self.player.game.delayed_minions.append(self)
 
     def activate_delayed(self):
         for delayed in self.delayed:
@@ -357,7 +358,7 @@ class Minion(Character):
         self.type = type
         self.taunt = False
         self.stealth = False
-        self.player = None
+        self.game = None
         self.card = None
         self.index = -1
         self.charge = False
@@ -389,7 +390,6 @@ class Minion(Character):
         self.player.unbind("turn_ended", self.turn_complete)
 
     def attack(self):
-        self.player.trigger("attacking", self)
         super().attack()
         self.stealth = False
 
@@ -463,56 +463,20 @@ class Deck:
         raise GameException("Tried to put back a card that didn't come from this deck")
 
 
-class Player(Character):
-    def __init__(self, name, deck, agent, game, random=random.randint):
-        super().__init__(0, 30, game)
-        self.name = name
-        self.mana = 0
-        self.max_mana = 0
-        self.armour = 0
-        self.deck = deck
-        self.spell_power = 0
-        self.minions = []
-        self.weapon = None
-        self.character_class = deck.character_class
-        self.random = random
-        self.hand = []
-        self.fatigue = 0
-        self.agent = agent
-        self.game = game
-        self.secrets = []
-        self.mana_filters = []
-        self.power = hsgame.powers.powers(self.character_class)(self)
-        self.bind("turn_ended", self.turn_complete)
+class Hero(Character):
+    def __init__(self, character_class, player):
+        super().__init__(0, 30, player)
 
-    def __str__(self): #pragma: no cover
-        return "Player: " + self.name
+        self.armour = 0
+        self.weapon = None
+        self.character_class = character_class
+        self.player = player
+        self.power = hsgame.powers.powers(self.character_class)(self)
+        self.player.bind("turn_ended", self.turn_complete)
 
     def attack(self):
         self.trigger("attacking", self)
         super().attack()
-
-    def draw(self):
-        if self.can_draw():
-            card = self.deck.draw(self.random)
-            self.trigger("card_drawn", card)
-            if len(self.hand) < 10:
-                self.hand.append(card)
-            else:
-                self.trigger("card_destroyed", card)
-        else:
-            self.fatigue += 1
-            self.trigger("fatigue_damage", self.fatigue)
-            self.damage(self.fatigue, self)
-            self.activate_delayed()
-
-    def can_draw(self):
-        return self.deck.can_draw()
-
-    def put_back(self, card):
-        self.hand.remove(card)
-        self.deck.put_back(card)
-        self.trigger("card_put_back", card)
 
     def damage(self, amount, attacker):
         self.armour -= amount
@@ -532,13 +496,64 @@ class Player(Character):
         return True
 
     def find_power_target(self):
-        targets = hsgame.targetting.find_spell_target(self.game)
-        target = self.agent.choose_target(targets)
+        targets = hsgame.targetting.find_spell_target(self.player.game)
+        target = self.choose_target(targets)
         self.trigger("found_power_target", target)
         return target
 
     def choose_target(self, targets):
+        return self.player.choose_target(targets)
+
+
+class Player(Bindable):
+    def __init__(self, name, deck, agent, game, random=random.randint):
+        super().__init__()
+        self.hero = Hero(deck.character_class, self)
+        self.name = name
+        self.mana = 0
+        self.max_mana = 0
+        self.deck = deck
+        self.spell_power = 0
+        self.minions = []
+        self.random = random
+        self.hand = []
+        self.fatigue = 0
+        self.agent = agent
+        self.game = game
+        self.secrets = []
+        self.mana_filters = []
+
+
+    def __str__(self): #pragma: no cover
+        return "Player: " + self.name
+
+
+
+    def draw(self):
+        if self.can_draw():
+            card = self.deck.draw(self.random)
+            self.trigger("card_drawn", card)
+            if len(self.hand) < 10:
+                self.hand.append(card)
+            else:
+                self.trigger("card_destroyed", card)
+        else:
+            self.fatigue += 1
+            self.trigger("fatigue_damage", self.fatigue)
+            self.hero.damage(self.fatigue, self)
+            self.hero.activate_delayed()
+
+    def can_draw(self):
+        return self.deck.can_draw()
+
+    def put_back(self, card):
+        self.hand.remove(card)
+        self.deck.put_back(card)
+        self.trigger("card_put_back", card)
+
+    def choose_target(self, targets):
         return self.agent.choose_target(targets)
+
 
 
 class Game(Bindable):
@@ -565,8 +580,8 @@ class Game(Bindable):
             self.players[1].draw()
 
 
-        self.players[0].bind("died", self.game_over)
-        self.players[1].bind("died", self.game_over)
+        self.players[0].hero.bind("died", self.game_over)
+        self.players[1].hero.bind("died", self.game_over)
 
     def pre_game(self):
         card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
@@ -625,16 +640,16 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
-        if self.current_player.frozen_this_turn:
-            self.current_player.frozen_this_turn = False
+        if self.current_player.hero.frozen_this_turn:
+            self.current_player.hero.frozen_this_turn = False
         else:
-            self.current_player.frozen = False
+            self.current_player.hero.frozen = False
 
-        self.other_player.frozen_this_turn = False
+        self.other_player.hero.frozen_this_turn = False
         for minion in self.other_player.minions:
             minion.frozen_this_turn = False
 
-        self.current_player.active = True
+        self.current_player.hero.active = True
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False

@@ -100,13 +100,17 @@ class TestGame(unittest.TestCase):
 
             def assert_different():
                 new_events = copy.copy(game.events)
+                new_events.update(game.other_player.hero.events)
                 new_events.update(game.other_player.events)
+                new_events.update(game.current_player.hero.events)
                 new_events.update(game.current_player.events)
                 self.assertNotEqual(events, new_events, secret.name)
 
             def assert_same():
                 new_events = copy.copy(game.events)
+                new_events.update(game.current_player.hero.events)
                 new_events.update(game.current_player.events)
+                new_events.update(game.other_player.hero.events)
                 new_events.update(game.other_player.events)
                 self.assertEqual(events, new_events)
 
@@ -115,7 +119,9 @@ class TestGame(unittest.TestCase):
 
             #save the events as they are prior to the secret being played
             events = copy.copy(game.events)
+            events.update(game.other_player.hero.events)
             events.update(game.other_player.events)
+            events.update(game.current_player.hero.events)
             events.update(game.current_player.events)
 
             #The secret is played, but the events aren't updated until the secret is activated

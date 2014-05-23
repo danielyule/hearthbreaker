@@ -26,7 +26,7 @@ class SelfSpellTestingAgent(SpellTestingAgent):
         super().__init__()
 
     def choose_target(self, targets):
-        return self.game.current_player
+        return self.game.current_player.hero
 
 
 class EnemySpellTestingAgent(SpellTestingAgent):
@@ -34,7 +34,7 @@ class EnemySpellTestingAgent(SpellTestingAgent):
         super().__init__()
 
     def choose_target(self, targets):
-        return self.game.other_player
+        return self.game.other_player.hero
 
 
 class MyMinionSpellTestingAgent(SpellTestingAgent):

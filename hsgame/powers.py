@@ -16,55 +16,55 @@ def powers(character_class):
 
 class Power:
 
-    def __init__(self, player):
-        self.player = player
+    def __init__(self, hero):
+        self.hero = hero
 
     def can_use(self):
-        return self.player.mana >= 2
+        return self.hero.player.mana >= 2
 
     def use(self):
         if self.can_use():
-            self.player.trigger("used_power")
-            self.player.mana -= 2
+            self.hero.player.trigger("used_power")
+            self.hero.player.mana -= 2
 
 
 class DruidPower(Power):
 
-    def __init__(self, player):
-        super().__init__(player)
+    def __init__(self, hero):
+        super().__init__(hero)
 
     def use(self):
         super().use()
-        self.player.increase_temp_attack(1)
-        self.player.increase_armour(1)
+        self.hero.increase_temp_attack(1)
+        self.hero.increase_armour(1)
 
 
 class MagePower(Power):
 
-    def __init__(self, player):
-        super().__init__(player)
+    def __init__(self, hero):
+        super().__init__(hero)
 
     def use(self):
         super().use()
-        target = self.player.find_power_target()
+        target = self.hero.find_power_target()
         target.damage(1, None)
 
 
 class PriestPower(Power):
 
-    def __init__(self, player):
-        super().__init__(player)
+    def __init__(self, hero):
+        super().__init__(hero)
 
     def use(self):
         super().use()
-        target = self.player.find_power_target()
+        target = self.hero.find_power_target()
         target.heal(2)
 
 
 class PaladinPower(Power):
     
-    def __init__(self, player):
-        super().__init__(player)
+    def __init__(self, hero):
+        super().__init__(hero)
         
     def use(self):
         class SilverHandRecruit(hsgame.game_objects.MinionCard):
@@ -77,5 +77,5 @@ class PaladinPower(Power):
         super().use()
 
         recruit_card = SilverHandRecruit()
-        recruit_card.create_minion(self.player).add_to_board(recruit_card, self.player.game, self.player, 0)
+        recruit_card.create_minion(None).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
 

@@ -28,7 +28,7 @@ class TestDruid(unittest.TestCase):
     def test_Moonfire(self):
         game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
-        self.assertEqual(26, game.other_player.health)
+        self.assertEqual(26, game.other_player.hero.health)
 
     def test_Claw(self):
         testing_env = self
@@ -36,8 +36,8 @@ class TestDruid(unittest.TestCase):
         class ClawAgent(EnemySpellTestingAgent):
             def do_turn(self, player):
                 super().do_turn(player)
-                testing_env.assertEqual(2, self.game.current_player.temp_attack)
-                testing_env.assertEqual(2, self.game.current_player.armour)
+                testing_env.assertEqual(2, self.game.current_player.hero.temp_attack)
+                testing_env.assertEqual(2, self.game.current_player.hero.armour)
 
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, MinionPlayingAgent)
         game.pre_game()
@@ -55,7 +55,7 @@ class TestDruid(unittest.TestCase):
         class SavageryAgent(EnemyMinionSpellTestingAgent):
             def do_turn(self, player):
                 if player.mana > 2:
-                    player.power.use()
+                    player.hero.power.use()
                     super().do_turn(player)
 
         game = generate_game_for(Savagery, BloodfenRaptor, SavageryAgent, MinionPlayingAgent)
@@ -191,12 +191,12 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        game.other_player.health = 20
+        game.other_player.hero.health = 20
         game.play_single_turn()
-        self.assertEqual(28, game.current_player.health)
+        self.assertEqual(28, game.current_player.hero.health)
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(30, game.current_player.health)
+        self.assertEqual(30, game.current_player.hero.health)
 
     def test_MarkOfNature(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), MarkOfNature()], CHARACTER_CLASS.DRUID)
@@ -250,7 +250,7 @@ class TestDruid(unittest.TestCase):
 
         player_increase_mock = Mock()
 
-        game.other_player.bind("attack_increased", player_increase_mock)
+        game.other_player.hero.bind("attack_increased", player_increase_mock)
 
 
         game.play_single_turn()
@@ -264,7 +264,7 @@ class TestDruid(unittest.TestCase):
         #And make sure that it went down again
         self.assertEqual(0, game.current_player.minions[0].temp_attack)
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
-        self.assertEqual(0, game.current_player.attack_power)
+        self.assertEqual(0, game.current_player.hero.attack_power)
 
     def test_Bite(self):
         testing_env = self
@@ -273,8 +273,8 @@ class TestDruid(unittest.TestCase):
             def do_turn(self, player):
                 super().do_turn(player)
                 if player.mana == 0:
-                    testing_env.assertEqual(4, self.game.current_player.temp_attack)
-                    testing_env.assertEqual(4, self.game.current_player.armour)
+                    testing_env.assertEqual(4, self.game.current_player.hero.temp_attack)
+                    testing_env.assertEqual(4, self.game.current_player.hero.armour)
 
         game = generate_game_for(Bite, StonetuskBoar, BiteAgent, DoNothingBot)
         game.play_single_turn()
@@ -319,7 +319,7 @@ class TestDruid(unittest.TestCase):
         #The bloodfen raptor should be left, with one hp
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(29, game.other_player.health)
+        self.assertEqual(29, game.other_player.hero.health)
 
 
     def test_KeeperOfTheGrove(self):
@@ -452,7 +452,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(30, game.other_player.health)
+        self.assertEqual(30, game.other_player.hero.health)
 
         #Test drawing three cards
         random.seed(1857)
@@ -471,7 +471,7 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].health)
-        self.assertEqual(30, game.other_player.health)
+        self.assertEqual(30, game.other_player.hero.health)
 
     def test_ForceOfNature(self):
         game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -496,7 +496,7 @@ class TestDruid(unittest.TestCase):
                 self.assertTrue(minion.charge)
                 self.assertEqual("Treant", minion.card.name)
 
-        game.other_player.bind_once("turn_ended", check_minions)
+        game.other_player.hero.bind_once("turn_ended", check_minions)
 
         game.play_single_turn()
 
@@ -540,11 +540,11 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(game.other_player.health, 25)
+        self.assertEqual(game.other_player.hero.health, 25)
 
         game.play_single_turn()
 
-        self.assertEqual(30, game.current_player.health)
+        self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(5, game.current_player.minions[0].attack_power)

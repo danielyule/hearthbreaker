@@ -13,7 +13,7 @@ class AvengingWrath(Card):
         super().use(player, game)
         for i in range(0, 8 + player.spell_power):
             targets = game.other_player.minions.copy()
-            targets.append(game.other_player)
+            targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) - 1)]
             target.spell_damage(1, self)
 
@@ -65,7 +65,7 @@ class Consecration(Card):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
             minion.spell_damage(2 + player.spell_power, self)
-        game.other_player.spell_damage(2 + player.spell_power, self)
+        game.other_player.hero.spell_damage(2 + player.spell_power, self)
 
 class DivineFavor(Card):
     def __init__(self):
@@ -153,19 +153,21 @@ class LayOnHands(Card):
         player.draw()
         player.draw()
 
+
 class EyeForAnEye(SecretCard):
     def __init__(self):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def reveal(self, amount, what):
-        what.player.damage(amount, self)
+        what.player.hero.damage(amount, self)
         super().reveal()
 
     def activate(self, player):
-        player.bind_once("secret_damaged", self.reveal)
+        player.hero.bind_once("secret_damaged", self.reveal)
 
     def deactivate(self, player):
-        player.unbind("secret_damaged", self.reveal)
+        player.hero.unbind("secret_damaged", self.reveal)
+
 
 class NobleSacrifice(SecretCard):
     def __init__(self):

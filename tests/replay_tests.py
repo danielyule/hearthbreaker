@@ -45,8 +45,8 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(game.current_player.deck.character_class, CHARACTER_CLASS.DRUID)
         self.assertEqual(game.other_player.deck.character_class, CHARACTER_CLASS.MAGE)
 
-        self.assertEqual(game.current_player.health, 29)
-        self.assertTrue(game.current_player.dead)
+        self.assertEqual(game.current_player.hero.health, 29)
+        self.assertTrue(game.current_player.hero.dead)
 
 
     def test_recording_game(self):

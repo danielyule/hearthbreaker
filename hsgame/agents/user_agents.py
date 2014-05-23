@@ -11,17 +11,17 @@ class Observer:
         self.game = game
         game.players[0].bind("turn_started", self.turn_started, game.players[0])
         game.players[0].bind("turn_ended", self.turn_ended, game.players[0])
-        game.players[0].bind("died", self.died, game.players[0])
+        game.players[0].hero.bind("died", self.died, game.players[0])
         game.players[0].bind("card_drawn", self.card_drawn, game.players[0])
         game.players[0].bind("card_put back", self.card_put_back, game.players[0])
-        game.players[0].bind("damaged", self.damaged, game.players[0])
+        game.players[0].hero.bind("damaged", self.damaged, game.players[0])
 
         game.players[1].bind("turn_started", self.turn_started, game.players[1])
         game.players[1].bind("turn_ended", self.turn_ended, game.players[1])
-        game.players[1].bind("died", self.died, game.players[1])
+        game.players[1].hero.bind("died", self.died, game.players[1])
         game.players[1].bind("card_drawn", self.card_drawn, game.players[1])
         game.players[1].bind("card_put back", self.card_put_back, game.players[1])
-        game.players[1].bind("damaged", self.damaged, game.players[1])
+        game.players[1].hero.bind("damaged", self.damaged, game.players[1])
 
     def turn_started(self, player):
         self.writer.write("Turn started for " + str(player) + "\n")

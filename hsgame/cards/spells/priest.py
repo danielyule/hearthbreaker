@@ -37,7 +37,7 @@ class HolyFire(Card):
         super().use(player, game)
         
         self.target.spell_damage(5 + player.spell_power, self)
-        player.heal(5) # The heal aspect of the card is not affected by +spell damage cards
+        player.hero.heal(5) # The heal aspect of the card is not affected by +spell damage cards
         
 class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
@@ -91,7 +91,7 @@ class MindBlast(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        game.other_player.spell_damage(5 + player.spell_power, self)
+        game.other_player.hero.spell_damage(5 + player.spell_power, self)
         
 class MindControl(Card):
     def __init__(self):

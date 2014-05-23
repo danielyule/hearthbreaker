@@ -32,11 +32,11 @@ class PredictableBot:
     def do_turn(self, player):
         done_something = True
 
-        if player.power.can_use():
-            player.power.use()
+        if player.hero.power.can_use():
+            player.hero.power.use()
 
-        if player.can_attack():
-            player.attack()
+        if player.hero.can_attack():
+            player.hero.attack()
 
         while done_something:
             done_something = False

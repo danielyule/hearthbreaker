@@ -34,7 +34,7 @@ class TestPaladin(unittest.TestCase):
             game.play_single_turn()
 
         #The random numbers work so that Avenging Wrath hits the player once, first minion once, second minion four times and third minion two times (total of eight hits)
-        self.assertEqual(29, game.other_player.health)
+        self.assertEqual(29, game.other_player.hero.health)
         self.assertEqual(3, len(game.other_player.minions))
         self.assertEqual("Mogu'shan Warden", game.other_player.minions[0].card.name)
         self.assertEqual("Mogu'shan Warden", game.other_player.minions[1].card.name)
@@ -105,10 +105,10 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 7):
             game.play_single_turn()
             
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(4, len(game.players[0].minions))
         game.play_single_turn()
-        self.assertEqual(28, game.players[0].health)
+        self.assertEqual(28, game.players[0].hero.health)
         self.assertEqual(0, len(game.players[0].minions))
         
     def test_DivineFavor(self):
@@ -178,10 +178,10 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 7):
             game.play_single_turn()
 
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(7, len(game.players[1].hand))
         game.play_single_turn() # Hammer of Wrath should be played
-        self.assertEqual(27, game.players[0].health)
+        self.assertEqual(27, game.players[0].hero.health)
         self.assertEqual(8, len(game.players[1].hand))
 
     def test_HandOfProtection(self):
@@ -203,12 +203,12 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
         
-        game.players[0].health = 20
+        game.players[0].hero.health = 20
         game.play_single_turn() # Holy Light should be played
-        self.assertEqual(26, game.players[0].health)
+        self.assertEqual(26, game.players[0].hero.health)
         game.play_single_turn()
         game.play_single_turn() # Holy Light should be played
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
 
     def test_HolyWrath(self):
         game = generate_game_for(StonetuskBoar, HolyWrath, DoNothingBot, SpellTestingAgent)
@@ -216,9 +216,9 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 9):
             game.play_single_turn()
         
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
         game.play_single_turn() # Holy Wrath should be played that will draw Holy Wrath that costs 5 mana, thus dealing 5 damage
-        self.assertEqual(25, game.players[0].health)
+        self.assertEqual(25, game.players[0].hero.health)
 
     def test_Humility(self):
         game = generate_game_for(BloodfenRaptor, Humility, MinionPlayingAgent, SpellTestingAgent)
@@ -242,17 +242,17 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 15):
             game.play_single_turn()
         
-        game.players[0].health = 20
+        game.players[0].hero.health = 20
         # Put back some cards from hand, for testing purpose
         for putback in range(0, 5):
             game.players[1].put_back(game.players[1].hand[0])
         self.assertEqual(5, len(game.players[1].hand))
         game.play_single_turn() # Lay on Hands should be played
-        self.assertEqual(28, game.players[0].health)
+        self.assertEqual(28, game.players[0].hero.health)
         self.assertEqual(8, len(game.players[1].hand))
         game.play_single_turn()
         game.play_single_turn() # Lay on Hands should be played, and a card be discarded since we have 8 already
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(10, len(game.players[1].hand))
 
     def test_AldorPeacekeeper(self):
@@ -299,13 +299,13 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 12):
             game.play_single_turn()
 
-        game.players[0].health = 20
+        game.players[0].hero.health = 20
 
         self.assertEqual(0, len(game.players[0].minions))
         game.play_single_turn() # Guardian of Kings should be played
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Guardian of Kings", game.players[0].minions[0].card.name)
-        self.assertEqual(26, game.players[0].health)
+        self.assertEqual(26, game.players[0].hero.health)
 
     def test_EyeForAnEye(self):
         game = generate_game_for(EyeForAnEye, StonetuskBoar, SpellTestingAgent, PredictableBot)
@@ -313,13 +313,13 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn() # Eye for an Eye should be played
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual("Eye for an Eye", game.players[0].secrets[0].name)
-        self.assertEqual(30, game.players[0].health)
-        self.assertEqual(30, game.players[1].health)
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
 
         game.play_single_turn() # Attack with Stonetusk should happen, and the secret should trigger. Making both players take 1 damage.
         self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(29, game.players[0].health)
-        self.assertEqual(29, game.players[1].health)
+        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(29, game.players[1].hero.health)
 
     def test_NobleSacrifice(self):
         game = generate_game_for(NobleSacrifice, StonetuskBoar, SpellTestingAgent, PredictableBot)
@@ -332,12 +332,12 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(30, game.players[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
         
         # Test with 7 minions
         game = SavedGame("tests/replays/card_tests/NobleSacrifice.rep")
         game.start()
         self.assertEqual(7, len(game.players[0].minions))
-        self.assertEqual(29, game.players[0].health)
+        self.assertEqual(29, game.players[0].hero.health)
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual("Noble Sacrifice", game.players[0].secrets[0].name)

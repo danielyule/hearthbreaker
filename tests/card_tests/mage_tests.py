@@ -22,7 +22,7 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(27, game.other_player.health)
+        self.assertEqual(27, game.other_player.hero.health)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -35,7 +35,7 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
         #The random numbers work so that both arcane missiles hit the Warden twice and the other player once
-        self.assertEqual(10, game.other_player.health)
+        self.assertEqual(10, game.other_player.hero.health)
         self.assertEqual(3, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
@@ -46,7 +46,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(2, game.other_player.minions[0].max_health)
-        self.assertEqual(27, game.other_player.health)
+        self.assertEqual(27, game.other_player.hero.health)
 
         return game
 
@@ -56,9 +56,9 @@ class TestMage(unittest.TestCase):
         for turn in range(0, 11):
             game.play_single_turn()
 
-        self.assertEqual(25, game.other_player.health)
-        self.assertFalse(game.other_player.frozen_this_turn)
-        self.assertFalse(game.other_player.frozen)
+        self.assertEqual(25, game.other_player.hero.health)
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertFalse(game.other_player.hero.frozen)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(3, game.current_player.minions[0].attack_power)
         self.assertEqual(6, game.current_player.minions[0].health)
@@ -67,11 +67,11 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(22, game.other_player.health)
+        self.assertEqual(22, game.other_player.hero.health)
 
         # Always false after the end of a turn
-        self.assertFalse(game.other_player.frozen_this_turn)
-        self.assertTrue(game.other_player.frozen)
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertTrue(game.other_player.hero.frozen)
 
         #Now make sure that attacking the Water Elemental directly will freeze a character
         random.seed(1857)
@@ -82,27 +82,27 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
         #The player won't have taken damage because of armour, and so shouldn't be frozen
-        self.assertEqual(30, game.current_player.health)
-        self.assertFalse(game.current_player.frozen)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertFalse(game.current_player.hero.frozen)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(28, game.current_player.health)
-        self.assertTrue(game.current_player.frozen)
+        self.assertEqual(28, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.frozen)
 
     def test_IceLance(self):
         game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
 
-        self.assertTrue(game.other_player.frozen)
-        self.assertEqual(30, game.other_player.health)
+        self.assertTrue(game.other_player.hero.frozen)
+        self.assertEqual(30, game.other_player.hero.health)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.other_player.frozen)
-        self.assertEqual(26, game.other_player.health)
+        self.assertTrue(game.other_player.hero.frozen)
+        self.assertEqual(26, game.other_player.hero.health)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -173,13 +173,13 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(30, game.other_player.health)
+        self.assertEqual(30, game.other_player.hero.health)
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(30, game.other_player.health)
+        self.assertEqual(30, game.other_player.hero.health)
 
     def test_Frostbolt(self):
         game = generate_game_for(OasisSnapjaw, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
@@ -187,13 +187,13 @@ class TestMage(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertTrue(game.other_player.frozen)
-        self.assertEqual(27, game.other_player.health)
+        self.assertTrue(game.other_player.hero.frozen)
+        self.assertEqual(27, game.other_player.hero.health)
 
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(24, game.other_player.health)
+        self.assertEqual(24, game.other_player.hero.health)
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertTrue(game.other_player.minions[0].frozen)
@@ -216,7 +216,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Sorcerer's Apprentice", game.current_player.minions[0].card.name)
 
         #Arcane missiles should also have been played, since it is now free
-        self.assertEqual(27, game.other_player.health)
+        self.assertEqual(27, game.other_player.hero.health)
 
         #Make sure the other frostbolts have been properly reduced
         self.assertEqual(1, game.current_player.hand[1].mana_cost(game.current_player))
@@ -246,7 +246,7 @@ class TestMage(unittest.TestCase):
         for minion in game.other_player.minions:
             self.assertTrue(minion.frozen)
 
-        self.assertFalse(game.other_player.frozen)
+        self.assertFalse(game.other_player.hero.frozen)
 
     def test_Counterspell(self):
         game = generate_game_for(Counterspell, Frostbolt, SpellTestingAgent, SpellTestingAgent)
@@ -258,8 +258,8 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertFalse(game.other_player.frozen)
-        self.assertEqual(27, game.other_player.health)
+        self.assertFalse(game.other_player.hero.frozen)
+        self.assertEqual(27, game.other_player.hero.health)
         #Ensure that secrets are being removed after being revealed
         self.assertEqual(0, len(game.other_player.secrets))
 
@@ -274,10 +274,10 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         #only one minion because PredictableBot will shoot its own minions if there isn't anything else to shoot.
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(7, game.other_player.armour)
+        self.assertEqual(7, game.other_player.hero.armour)
 
         #Attacked once on the first turn, the fireballed before getting the armour up
-        self.assertEqual(28, game.other_player.health)
+        self.assertEqual(28, game.other_player.hero.health)
 
         #Make sure we can't have two identical secrets at the same time
         random.seed(1857)
@@ -298,12 +298,12 @@ class TestMage(unittest.TestCase):
         for turn in range(0, 12):
             game.play_single_turn()
 
-        self.assertEqual(game.other_player.health, 3)
+        self.assertEqual(game.other_player.hero.health, 3)
         self.assertEqual(1, len(game.other_player.secrets))
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(3, game.other_player.health)
+        self.assertEqual(3, game.other_player.hero.health)
         self.assertEqual(0, len(game.other_player.secrets))
 
     def test_MirrorEntity(self):
@@ -351,16 +351,16 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
-        self.assertEqual(30, game.other_player.health)
+        self.assertEqual(30, game.other_player.hero.health)
 
         random.seed(1857)
         game = generate_game_for(Vaporize, Swipe, SpellTestingAgent, PredictableBot)
         for turn in range(0, 6):
             game.play_single_turn()
 
-        self.assertEqual(28, game.other_player.health)
+        self.assertEqual(28, game.other_player.hero.health)
         self.assertEqual(1, len(game.other_player.secrets))
-        self.assertFalse(game.current_player.dead)
+        self.assertFalse(game.current_player.hero.dead)
 
 
     def test_KirinTorMage(self):

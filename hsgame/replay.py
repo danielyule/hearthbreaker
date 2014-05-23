@@ -19,13 +19,13 @@ class ProxyCharacter:
     def __init__(self, character_ref, game=None):
         if type(character_ref) is str:
             self.character_ref = character_ref
-        elif type(character_ref) is hsgame.game_objects.Player:
-            if character_ref == game.players[0]:
+        elif type(character_ref) is hsgame.game_objects.Hero:
+            if character_ref == game.players[0].hero:
                 self.character_ref = "p1"
             else:
                 self.character_ref = "p2"
         elif type(character_ref) is hsgame.game_objects.Minion:
-            if character_ref.player == game.players[0]:
+            if character_ref.player == game.players[0].hero:
                 self.character_ref = "p1:" + str(character_ref.index)
             else:
                 self.character_ref = "p2:" + str(character_ref.index)
@@ -33,11 +33,14 @@ class ProxyCharacter:
     def resolve(self, game):
         ref = self.character_ref.split(':')
         if ref[0] == "p1":
-            char = game.players[0]
+            char = game.players[0].hero
         else:
-            char = game.players[1]
+            char = game.players[1].hero
         if len(ref) > 1:
-            return char.minions[int(ref[1])]
+            if ref[0] == "p1":
+                char = game.players[0].minions[int(ref[1])]
+            else:
+               char = game.players[1].minions[int(ref[1])]
 
         return char
 
@@ -185,8 +188,8 @@ class ConcedeAction(ReplayAction):
         return "concede()"
 
     def play(self, game):
-        game.current_player.die(None)
-        game.current_player.activate_delayed()
+        game.current_player.hero.die(None)
+        game.current_player.hero.activate_delayed()
 
 
 class Replay:
@@ -413,9 +416,9 @@ class RecordingGame(hsgame.game_objects.Game):
         for player in self.players:
             player.bind("turn_ended", self.replay.record_turn_end, self)
             player.bind("used_power", self.replay.record_power, self)
-            player.bind("found_power_target", self.replay.record_power_target, self)
+            player.hero.bind("found_power_target", self.replay.record_power_target, self)
             player.bind("card_played", self.replay.record_card_played, self)
-            bind_attacks(player)
+            bind_attacks(player.hero)
 
     def _find_random(self, lower_bound, upper_bound):
         result = randint(lower_bound, upper_bound)
@@ -460,7 +463,7 @@ class SavedGame(hsgame.game_objects.Game):
 
             def do_turn(self, player):
                 nonlocal action_index
-                while action_index < len(replay.actions) and not player.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
+                while action_index < len(replay.actions) and not player.hero.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
                     replay.actions[action_index].play(game_ref)
                     action_index += 1
 

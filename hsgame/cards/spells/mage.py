@@ -13,7 +13,7 @@ class ArcaneMissiles(Card):
         super().use(player, game)
         for i in range(0, 3 + player.spell_power):
             targets = game.other_player.minions.copy()
-            targets.append(game.other_player)
+            targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) -1)]
             target.spell_damage(1, self)
 
@@ -115,14 +115,14 @@ class IceBarrier(SecretCard):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def reveal(self, attacker, player):
-        player.armour += 8
+        player.hero.armour += 8
         super().reveal()
 
     def activate(self, player):
-        player.bind_once("attacked", self.reveal, player)
+        player.hero.bind_once("attacked", self.reveal, player)
 
     def deactivate(self, player):
-        player.unbind("attacked", self.reveal)
+        player.hero.unbind("attacked", self.reveal)
 
 
 class MirrorEntity(SecretCard):
@@ -190,13 +190,13 @@ class Vaporize(SecretCard):
             attacker.die(self)
             super().reveal()
         else:
-            self.activate(attacker.game.other_player)
+            self.activate(attacker.player.game.other_player)
 
     def activate(self, player):
-        player.bind_once("attacked", self.reveal)
+        player.hero.bind_once("attacked", self.reveal)
 
     def deactivate(self, player):
-        player.unbind("attacked", self.reveal)
+        player.hero.unbind("attacked", self.reveal)
 
 
 class IceBlock(SecretCard):
@@ -204,14 +204,15 @@ class IceBlock(SecretCard):
         super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
 
     def _reveal_if_fatal(self, amount, attacker, player):
-        if player.health - amount <= 0:
-            player.immune = True
-            player.health += amount
+        if player.hero.health - amount <= 0:
+            player.hero.immune = True
+            player.hero.health += amount
             #TODO Check if this spell will also prevent damage to armour.
             super().reveal()
+            player.hero.unbind("secret_damaged", self._reveal_if_fatal)
 
     def activate(self, player):
-        player.bind("secret_damaged", self._reveal_if_fatal, player)
+        player.hero.bind("secret_damaged", self._reveal_if_fatal, player)
 
     def deactivate(self, player):
-        player.unbind("secret_damaged", self._reveal_if_fatal)
+        player.hero.unbind("secret_damaged", self._reveal_if_fatal)
