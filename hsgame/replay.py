@@ -121,7 +121,6 @@ class MinionAction(ReplayAction):
             return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
         return 'summon({0},{1})'.format(self.card.to_output(), self.index)
 
-
     def play(self, game):
         if self.target is not None:
             game.current_player.agent.next_target = self.target.resolve(game)

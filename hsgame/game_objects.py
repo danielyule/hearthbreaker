@@ -134,7 +134,7 @@ class Card(Bindable):
     def is_spell(self):
         return True
 
-    def __str__(self):
+    def __str__(self): #pragma: no cover
         return self.name + " (" + str(self.mana) + " mana)"
 
 
@@ -422,7 +422,7 @@ class Minion(Character):
     def choose_target(self, targets):
         return self.player.choose_target(targets)
 
-    def __str__(self):
+    def __str__(self): #pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
 
 
@@ -485,7 +485,7 @@ class Player(Character):
         self.power = hsgame.powers.powers(self.character_class)(self)
         self.bind("turn_ended", self.turn_complete)
 
-    def __str__(self):
+    def __str__(self): #pragma: no cover
         return "Player: " + self.name
 
     def attack(self):

@@ -2,4 +2,3 @@
 exclude_lines=
     pragma: no cover
     pass$
-    def __str__
