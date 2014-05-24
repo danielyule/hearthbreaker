@@ -32,8 +32,7 @@ class SorcerersApprentice(MinionCard):
 
         filter = Filter()
         minion = Minion(3, 2)
-        minion.bind_once("silence", lambda: player.mana_filters.remove(filter))
-        minion.bind_once("died", lambda x: player.mana_filters.remove(filter))
+        minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
         player.mana_filters.append(filter)
         return minion
 
@@ -66,6 +65,25 @@ class KirinTorMage(MinionCard):
             player.mana_filters.append(mana_filter)
         minion = Minion(4, 3)
         minion.bind("added_to_board", first_secret_cost_zero)
+        return minion
+
+
+class EtherealArcanist(MinionCard):
+    def __init__(self):
+        super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def increase_stats():
+            if len(player.secrets) > 0:
+                minion.increase_attack(2)
+                minion.increase_health(2)
+
+        def silence():
+            player.unbind("turn_ended", increase_stats)
+
+        minion = Minion(3, 3)
+        player.bind("turn_ended", increase_stats)
+        minion.bind_once("silenced", silence)
         return minion
 
 

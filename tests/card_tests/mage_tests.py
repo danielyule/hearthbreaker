@@ -387,3 +387,47 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.hand[2].mana_cost(game.current_player))
         self.assertEqual("Vaporize", game.current_player.hand[2].name)
 
+    def test_EtherealArcanist(self):
+        game = generate_game_for([Spellbender, EtherealArcanist], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(5, game.current_player.minions[0].max_health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(7, game.current_player.minions[0].attack_power)
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual(7, game.current_player.minions[0].max_health)
+
+        game.current_player.minions[0].silence()
+
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)
+
+        #Test when the player has no secrets at all
+        random.seed(1857)
+        game = generate_game_for(EtherealArcanist, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].max_health)

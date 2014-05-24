@@ -409,6 +409,7 @@ class Minion(Character):
             super().damage(amount, attacker)
 
     def die(self, by):
+        self.bind_once("died", lambda c: self.silence())
         super().die(by)
         self.game.trigger("minion_died", self, by)
         self.remove_from_board()

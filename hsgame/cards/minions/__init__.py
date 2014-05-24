@@ -26,6 +26,7 @@ from hsgame.cards.minions.mage import \
     ManaWyrm, \
     SorcerersApprentice, \
     KirinTorMage, \
+    EtherealArcanist, \
     WaterElemental
     
 from hsgame.cards.minions.paladin import \

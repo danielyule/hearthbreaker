@@ -135,7 +135,7 @@ class TestGame(unittest.TestCase):
             #Now the events should be reset
             game.play_single_turn()
 
-    def test_PhysicalHeroAttacks(self):
+    def test_physical_hero_attacks(self):
         game = generate_game_for(Naturalize, ArcaneIntellect, PredictableBot, PredictableBot)
         for turn in range(0, 4):
             game.play_single_turn()
@@ -143,8 +143,6 @@ class TestGame(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(0, game.other_player.hero.armour)
         self.assertEqual(29, game.current_player.hero.health)
-
-
 
 
 class TestBinding(unittest.TestCase):
