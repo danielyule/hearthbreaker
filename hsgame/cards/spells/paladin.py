@@ -210,8 +210,7 @@ class Redemption(SecretCard):
 
     def _reveal(self, minion, by, player):
         if minion.player is player:
-            resurrection = copy.copy(minion)
-            resurrection.card = copy.copy(minion.card)
+            resurrection = minion.card.create_minion(player)
             resurrection.index = len(player.minions)
             resurrection.health = 1
             player.minions.append(resurrection)

@@ -371,6 +371,5 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].max_health)
         self.assertEqual(1, game.players[0].minions[0].health)
-        # The next test will fail, and I don't have a solution for it
-        #self.assertTrue(game.players[0].minions[0].divine_shield)
+        self.assertTrue(game.players[0].minions[0].divine_shield)
         
