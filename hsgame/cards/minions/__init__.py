@@ -27,7 +27,8 @@ from hsgame.cards.minions.mage import \
     SorcerersApprentice, \
     KirinTorMage, \
     EtherealArcanist, \
-    WaterElemental
+    WaterElemental, \
+    ArchmageAntonidas
     
 from hsgame.cards.minions.paladin import \
     AldorPeacekeeper, \

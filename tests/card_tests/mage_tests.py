@@ -518,4 +518,26 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[1].health)
         self.assertEqual(3, game.other_player.minions[2].health)
 
+    def test_Pyroblast(self):
+        game = generate_game_for(Pyroblast, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 18):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.current_player.hero.health)
+        game.play_single_turn()
+        self.assertEqual(20, game.other_player.hero.health)
+
+    def test_ArchmageAntonidas(self):
+        game = generate_game_for([ArchmageAntonidas, Vaporize], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Archmage Antonidas", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual("Fireball", game.current_player.hand[9].name)
+
 

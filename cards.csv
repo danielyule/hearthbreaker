@@ -267,7 +267,7 @@ no,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Basic,Sp
 no,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Expert,Spell
 no,Priestess of Elune,Battlecry: Restore 4 Health to your hero.,,,6,5,4,Expert,Minion
 no,Prophet Velen,Double the damage and healing of your spells and Hero Power.,,Priest,7,7,7,Expert,Minion
-no,Pyroblast,Deal 10 damage.,,Mage,10,,,Expert,Spell
+yes,Pyroblast,Deal 10 damage.,,Mage,10,,,Expert,Spell
 no,Questing Adventurer,"Whenever you play a card, gain +1/+1.",,,3,2,2,Expert,Minion
 no,Raging Worgen,Enrage: Windfury and +1 Attack,,,3,3,3,Expert,Minion
 no,Ragnaros the Firelord,"Can't Attack. At the end of your turn, deal 8 damage to a random enemy.",,,8,8,8,Expert,Minion

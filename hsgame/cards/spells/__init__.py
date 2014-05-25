@@ -39,7 +39,8 @@ from hsgame.cards.spells.mage import \
     Fireball, \
     Polymorph, \
     Blizzard, \
-    Flamestrike
+    Flamestrike, \
+    Pyroblast
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

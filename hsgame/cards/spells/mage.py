@@ -289,3 +289,12 @@ class Flamestrike(Card):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
             minion.spell_damage(4 + player.spell_power, self)
+
+
+class Pyroblast(Card):
+    def __init__(self):
+        super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(10 + player.spell_power, self)
