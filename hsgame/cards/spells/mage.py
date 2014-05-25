@@ -230,12 +230,14 @@ class ConeOfCold(Card):
         self.target.freeze()
         index = self.target.index
         if self.target.index > 0:
-            self.target.player.minions[index - 1].spell_damage(1 + player.spell_power, self)
-            self.target.player.minions[index - 1].freeze()
+            minion = self.target.player.minions[index - 1]
+            minion.spell_damage(1 + player.spell_power, self)
+            minion.freeze()
 
         if self.target.index < len(self.target.player.minions) - 1:
-            self.target.player.minions[index + 1].spell_damage(1 + player.spell_power, self)
-            self.target.player.minions[index + 1].freeze()
+            minion = self.target.player.minions[index + 1]
+            minion.spell_damage(1 + player.spell_power, self)
+            minion.freeze()
 
 
 class Fireball(Card):

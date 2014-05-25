@@ -452,6 +452,16 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[2].health)
         self.assertEqual(30, game.other_player.hero.health)
 
+        #Now check to ensure that it will work when targeting the other end of the minion list
+        game.current_player.agent.choose_target = lambda targets: targets[len(targets) - 1]
+        game.play_single_turn()
+        game.play_single_turn()
+
+        #Neither of the minions which survive Cone of Cold will be frozen, since they weren't touched this round
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].frozen)
+        self.assertFalse(game.other_player.minions[1].frozen)
+
     def test_Fireball(self):
         game = generate_game_for([Fireball, KoboldGeomancer], StonetuskBoar, EnemySpellTestingAgent, DoNothingBot)
         for turn in range(0, 7):

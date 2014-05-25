@@ -541,7 +541,7 @@ class Player(Bindable):
         else:
             self.fatigue += 1
             self.trigger("fatigue_damage", self.fatigue)
-            self.hero.damage(self.fatigue, self)
+            self.hero.damage(self.fatigue, None)
             self.hero.activate_delayed()
 
     def can_draw(self):

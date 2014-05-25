@@ -33,4 +33,4 @@ class TestObserver(unittest.TestCase):
         obs = Observer(string)
         obs.observe(game)
         game.start()
-        self.assertEqual(6905, len(string.getvalue()))
+        self.assertEqual(6845, len(string.getvalue()))

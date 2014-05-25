@@ -4,6 +4,8 @@ from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
 
 __author__ = 'Daniel'
+
+
 class StackedDeck(Deck):
 
     def __init__(self, card_pattern, character_class):
@@ -20,8 +22,6 @@ class StackedDeck(Deck):
                 self.used[card_index] = True
                 self.left -= 1
                 return self.cards[card_index]
-
-        return None
 
 
 def generate_game_for(card1, card2, first_agent_type, second_agent_type):
