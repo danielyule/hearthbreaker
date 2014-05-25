@@ -484,4 +484,38 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Sheep", game.other_player.minions[0].card.name)
         self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].type)
 
+    def test_Blizzard(self):
+        game = generate_game_for(Blizzard, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual(7, game.current_player.minions[1].health)
+        self.assertFalse(game.current_player.minions[0].frozen)
+        self.assertFalse(game.current_player.minions[1].frozen)
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        self.assertEqual(5, game.other_player.minions[1].health)
+        self.assertTrue(game.other_player.minions[0].frozen)
+        self.assertTrue(game.other_player.minions[1].frozen)
+
+    def test_Flamestrike(self):
+        game = generate_game_for(Flamestrike, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual(7, game.current_player.minions[1].health)
+        self.assertEqual(7, game.current_player.minions[2].health)
+
+        game.play_single_turn()
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(3, game.other_player.minions[1].health)
+        self.assertEqual(3, game.other_player.minions[2].health)
+
 

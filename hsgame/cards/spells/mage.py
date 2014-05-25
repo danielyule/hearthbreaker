@@ -270,3 +270,22 @@ class Polymorph(Card):
         self.target.player.minions[minion.index] = minion
 
 
+class Blizzard(Card):
+    def __init__(self):
+        super().__init__("Blizzard", 6, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in game.other_player.minions.copy():
+            minion.spell_damage(2 + player.spell_power, self)
+            minion.freeze()
+
+
+class Flamestrike(Card):
+    def __init__(self):
+        super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in game.other_player.minions.copy():
+            minion.spell_damage(4 + player.spell_power, self)

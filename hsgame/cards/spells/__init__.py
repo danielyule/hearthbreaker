@@ -37,7 +37,9 @@ from hsgame.cards.spells.mage import \
     Vaporize, \
     ConeOfCold, \
     Fireball, \
-    Polymorph
+    Polymorph, \
+    Blizzard, \
+    Flamestrike
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \
