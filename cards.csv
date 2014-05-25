@@ -276,7 +276,7 @@ no,Rampage,Give a damaged minion +3/+3.,,Warrior,2,,,Expert,Spell
 no,Ravenholdt Assassin,Stealth,,,7,7,5,Expert,Minion
 no,Razorfen Hunter,Battlecry: Summon a 1/1 Boar.,,,3,2,3,Basic,Minion
 no,Reckless Rocketeer,Charge,,,6,5,2,Basic,Minion
-no,Redemption,"Secret: When one of your minions dies, return it to life with 1 Health.",,Paladin,1,,,Expert,Spell
+yes,Redemption,"Secret: When one of your minions dies, return it to life with 1 Health.",,Paladin,1,,,Expert,Spell
 no,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 1.",,Paladin,1,,,Expert,Spell
 no,River Crocolisk,,Beast,,2,2,3,Basic,Minion
 no,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Basic,Spell

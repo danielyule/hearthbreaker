@@ -58,7 +58,8 @@ from hsgame.cards.spells.paladin import \
     Humility, \
     LayOnHands, \
     EyeForAnEye, \
-    NobleSacrifice
+    NobleSacrifice, \
+    Redemption
 
 from hsgame.cards.spells.priest import \
     CircleOfHealing, \

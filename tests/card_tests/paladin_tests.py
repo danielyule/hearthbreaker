@@ -341,3 +341,26 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(29, game.players[0].hero.health)
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual("Noble Sacrifice", game.players[0].secrets[0].name)
+
+    def test_Redemption(self):
+        game = generate_game_for([Redemption, BloodfenRaptor], MogushanWarden, SpellTestingAgent, PredictableBot)
+        
+        game.play_single_turn() # Redemption should be played
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual("Redemption", game.players[0].secrets[0].name)
+
+        game.play_single_turn()
+        game.play_single_turn() # Bloodfen Raptor should be played        
+        game.play_single_turn() # Mage hero power on Bloodfen Raptor
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].health)
+        
+        game.play_single_turn() # Bloodfen Raptor should be killed by the mage hero power, that will trigger the secret
+        self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].health)
+        

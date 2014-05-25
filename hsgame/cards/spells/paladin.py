@@ -1,3 +1,4 @@
+import copy
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
@@ -202,3 +203,25 @@ class NobleSacrifice(SecretCard):
 
     def deactivate(self, player):
         player.game.current_player.unbind("attacking", self._reveal)
+
+class Redemption(SecretCard):
+    def __init__(self):
+        super().__init__("Redemption", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def _reveal(self, minion, by, player):
+        if minion.player is player:
+            resurrection = copy.copy(minion)
+            resurrection.card = copy.copy(minion.card)
+            resurrection.index = len(player.minions)
+            resurrection.health = 1
+            player.minions.append(resurrection)
+            player.game.trigger("minion_added", resurrection)            
+            super().reveal()
+        else:
+            self.activate(player)
+
+    def activate(self, player):
+        player.game.bind_once("minion_died", self._reveal, player)
+
+    def deactivate(self, player):
+        player.game.unbind("minion_died", self._reveal)
