@@ -335,15 +335,15 @@ class ForceOfNature(Card):
             def __init__(self):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
-            @staticmethod
-            def create_minion():
+            def create_minion(self, player):
                 minion = Minion(2, 2)
                 minion.charge = True
                 return minion
 
         for i in [0, 1, 2]:
-            treant = Treant.create_minion()
-            treant.add_to_board(Treant(), game, player, 0)
+            treant_card = Treant()
+            treant = treant_card.create_minion(player)
+            treant.add_to_board(treant_card, game, player, 0)
             player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
 
 

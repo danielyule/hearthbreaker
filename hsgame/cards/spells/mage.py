@@ -14,13 +14,14 @@ class ArcaneMissiles(Card):
         for i in range(0, 3 + player.spell_power):
             targets = game.other_player.minions.copy()
             targets.append(game.other_player.hero)
-            target = targets[game.random(0, len(targets) -1)]
+            target = targets[game.random(0, len(targets) - 1)]
             target.spell_damage(1, self)
 
 
 class IceLance(Card):
     def __init__(self):
-        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, True, hsgame.targetting.find_spell_target)
+        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
+                         True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -36,20 +37,18 @@ class MirrorImage(Card):
 
     def use(self, player, game):
         super().use(player, game)
+
         class MirrorImageMinion(MinionCard):
             def __init__(self):
                 super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, False)
 
-            @staticmethod
-            def create_minion(player):
+            def create_minion(self, p):
                 minion = Minion(0, 2)
                 minion.taunt = True
                 return minion
-
-        minion1 = MirrorImageMinion.create_minion(player)
-        minion2 = MirrorImageMinion.create_minion(player)
-        minion1.add_to_board(MirrorImageMinion(), game, player, 0)
-        minion2.add_to_board(MirrorImageMinion(), game, player, 0)
+        for i in range(0, 2):
+            mirror_image = MirrorImageMinion()
+            mirror_image.create_minion(player).add_to_board(mirror_image, game, player, 0)
 
 
 class ArcaneExplosion(Card):
@@ -64,7 +63,8 @@ class ArcaneExplosion(Card):
 
 class Frostbolt(Card):
     def __init__(self):
-        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
+                         True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -99,37 +99,37 @@ class Counterspell(SecretCard):
     def use(self, player, game):
         super().use(player, game)
 
-    def reveal(self, card):
+    def _reveal(self, card):
         card.cancel = True
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self.reveal)
+        player.game.current_player.bind_once("spell_cast", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("spell_cast", self.reveal)
+        player.game.current_player.unbind("spell_cast", self._reveal)
 
 
 class IceBarrier(SecretCard):
     def __init__(self):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
-    def reveal(self, attacker, player):
+    def _reveal(self, attacker, player):
         player.hero.armour += 8
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self.reveal, player)
+        player.hero.bind_once("attacked", self._reveal, player)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self.reveal)
+        player.hero.unbind("attacked", self._reveal)
 
 
 class MirrorEntity(SecretCard):
     def __init__(self):
         super().__init__("Mirror Entity", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
-    def reveal(self, minion, player):
+    def _reveal(self, minion, player):
         if minion.player is not player:
             mirror = copy.copy(minion)
             mirror.player = player
@@ -139,32 +139,32 @@ class MirrorEntity(SecretCard):
             player.game.trigger("minion_added", mirror)
             super().reveal()
         else:
-            player.game.bind_once("minion_added", self.reveal, player)
+            self.activate(player)
 
     def activate(self, player):
-        player.game.bind_once("minion_added", self.reveal, player)
+        player.game.bind_once("minion_added", self._reveal, player)
 
     def deactivate(self, player):
-        player.game.unbind("minion_added", self.reveal)
+        player.game.unbind("minion_added", self._reveal)
 
 
 class Spellbender(SecretCard):
     def __init__(self):
         super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
 
-    def reveal(self, card, player):
+    def _reveal(self, card, player):
         if card.targetable:
             class SpellbenderMinion(MinionCard):
                 def __init__(self):
                     super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
 
-                @staticmethod
-                def create_minion(player):
+                def create_minion(self, p):
                     return Minion(1, 3)
 
             def choose_bender(targets):
-                minion = SpellbenderMinion.create_minion(player)
-                minion.add_to_board(SpellbenderMinion(), player.game, player, 0)
+                minion_card = SpellbenderMinion()
+                minion = minion_card.create_minion(player)
+                minion.add_to_board(minion_card, player.game, player, 0)
                 player.game.current_player.agent.choose_target = old_target
                 return minion
 
@@ -175,17 +175,17 @@ class Spellbender(SecretCard):
             self.activate(player)
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self.reveal, player)
+        player.game.current_player.bind_once("spell_cast", self._reveal, player)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("spell_cast", self.reveal)
+        player.game.current_player.unbind("spell_cast", self._reveal)
 
 
 class Vaporize(SecretCard):
     def __init__(self):
         super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
-    def reveal(self, attacker):
+    def _reveal(self, attacker):
         if type(attacker) is Minion:
             attacker.die(self)
             super().reveal()
@@ -193,10 +193,10 @@ class Vaporize(SecretCard):
             self.activate(attacker.player.game.other_player)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self.reveal)
+        player.hero.bind_once("attacked", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self.reveal)
+        player.hero.unbind("attacked", self._reveal)
 
 
 class IceBlock(SecretCard):
@@ -220,7 +220,8 @@ class IceBlock(SecretCard):
 
 class ConeOfCold(Card):
     def __init__(self):
-        super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
+                         True, hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -239,7 +240,8 @@ class ConeOfCold(Card):
 
 class Fireball(Card):
     def __init__(self):
-        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
+                         True, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -248,7 +250,8 @@ class Fireball(Card):
 
 class Polymorph(Card):
     def __init__(self):
-        super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
+                         True, hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -257,7 +260,7 @@ class Polymorph(Card):
             def __init__(self):
                 super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
-            def create_minion(self, player):
+            def create_minion(self, p):
                 return Minion(1, 1, MINION_TYPE.BEAST)
 
         sheep = Sheep()
