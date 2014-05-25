@@ -34,7 +34,8 @@ from hsgame.cards.spells.mage import \
     IceBlock, \
     MirrorEntity, \
     Spellbender, \
-    Vaporize
+    Vaporize, \
+    Fireball
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

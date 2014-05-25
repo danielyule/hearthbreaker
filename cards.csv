@@ -129,7 +129,7 @@ no,Fen Creeper,Taunt,,,5,3,6,Expert,Minion
 no,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Expert,Spell
 no,Fiery War Axe,,,Warrior,2,3,2,Basic,Weapon
 no,Fire Elemental,Battlecry: Deal 3 damage.,,Shaman,6,6,5,Basic,Minion
-no,Fireball,Deal 6 damage.,,Mage,4,,,Basic,Spell
+yes,Fireball,Deal 6 damage.,,Mage,4,,,Basic,Spell
 no,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Expert,Minion
 no,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Basic,Spell
 no,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Basic,Minion

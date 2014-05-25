@@ -216,3 +216,12 @@ class IceBlock(SecretCard):
 
     def deactivate(self, player):
         player.hero.unbind("secret_damaged", self._reveal_if_fatal)
+
+
+class Fireball(Card):
+    def __init__(self):
+        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.spell_damage(6 + player.spell_power, self)

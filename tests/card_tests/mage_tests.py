@@ -4,7 +4,8 @@ from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent, \
+    EnemySpellTestingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 
 from hsgame.cards import *
@@ -431,3 +432,17 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].attack_power)
         self.assertEqual(3, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[0].max_health)
+
+    def test_Fireball(self):
+        game = generate_game_for([Fireball, KoboldGeomancer], StonetuskBoar, EnemySpellTestingAgent, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.other_player.hero.health)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(17, game.other_player.hero.health)
+
+
