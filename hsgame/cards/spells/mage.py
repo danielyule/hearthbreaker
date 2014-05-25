@@ -7,7 +7,7 @@ __author__ = 'Daniel'
 
 class ArcaneMissiles(Card):
     def __init__(self):
-        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -21,7 +21,7 @@ class ArcaneMissiles(Card):
 class IceLance(Card):
     def __init__(self):
         super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         True, hsgame.targetting.find_spell_target)
+                         hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -33,14 +33,14 @@ class IceLance(Card):
 
 class MirrorImage(Card):
     def __init__(self):
-        super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, False)
+        super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
         class MirrorImageMinion(MinionCard):
             def __init__(self):
-                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, False)
+                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
 
             def create_minion(self, p):
                 minion = Minion(0, 2)
@@ -53,7 +53,7 @@ class MirrorImage(Card):
 
 class ArcaneExplosion(Card):
     def __init__(self):
-        super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+        super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -64,7 +64,7 @@ class ArcaneExplosion(Card):
 class Frostbolt(Card):
     def __init__(self):
         super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         True, hsgame.targetting.find_spell_target)
+                         hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -74,7 +74,7 @@ class Frostbolt(Card):
 
 class ArcaneIntellect(Card):
     def __init__(self):
-        super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+        super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -84,7 +84,7 @@ class ArcaneIntellect(Card):
 
 class FrostNova(Card):
     def __init__(self):
-        super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, False)
+        super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -221,7 +221,7 @@ class IceBlock(SecretCard):
 class ConeOfCold(Card):
     def __init__(self):
         super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         True, hsgame.targetting.find_minion_spell_target)
+                         hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -241,7 +241,7 @@ class ConeOfCold(Card):
 class Fireball(Card):
     def __init__(self):
         super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         True, hsgame.targetting.find_spell_target)
+                         hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -251,7 +251,7 @@ class Fireball(Card):
 class Polymorph(Card):
     def __init__(self):
         super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         True, hsgame.targetting.find_minion_spell_target)
+                         hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -268,3 +268,5 @@ class Polymorph(Card):
         minion.index = self.target.index
         minion.card = sheep
         self.target.player.minions[minion.index] = minion
+
+

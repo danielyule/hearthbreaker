@@ -87,7 +87,7 @@ class Bindable:
 
 
 class Card(Bindable):
-    def __init__(self, name, mana, character_class, status, targetable, target_func=None):
+    def __init__(self, name, mana, character_class, status, target_func=None):
         """
             @name: string
             @mana: int
@@ -101,8 +101,8 @@ class Card(Bindable):
         self.character_class = character_class
         self.status = status
         self.cancel = False
-        self.targetable = targetable
-        if targetable:
+        self.targetable = target_func is not None
+        if self.targetable:
             self.targets = []
             self.target = None
             self.get_targets = target_func
@@ -139,8 +139,8 @@ class Card(Bindable):
 
 
 class MinionCard(Card,metaclass=abc.ABCMeta):
-    def __init__(self, name, mana, character_class, status, targetable=False, targeting_func=None):
-        super().__init__(name, mana, character_class, status, targetable, targeting_func)
+    def __init__(self, name, mana, character_class, status, targeting_func=None):
+        super().__init__(name, mana, character_class, status, targeting_func)
 
     def can_use(self, player, game):
         return super().can_use(player, game)
@@ -159,7 +159,7 @@ class MinionCard(Card,metaclass=abc.ABCMeta):
 
 class SecretCard(Card,metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, status):
-        super().__init__(name, mana, character_class, status, False, None)
+        super().__init__(name, mana, character_class, status, None)
         self.player = None
 
     def can_use(self, player, game):

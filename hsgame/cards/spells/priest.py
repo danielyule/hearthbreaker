@@ -8,7 +8,7 @@ __author__ = 'Daniel'
 
 class CircleOfHealing(Card):
     def __init__(self):
-        super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
+        super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -21,7 +21,7 @@ class CircleOfHealing(Card):
 
 class DivineSpirit(Card):
     def __init__(self):
-        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -31,7 +31,7 @@ class DivineSpirit(Card):
         
 class HolyFire(Card):
     def __init__(self):
-        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -41,7 +41,7 @@ class HolyFire(Card):
         
 class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
-        super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
+        super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -54,7 +54,7 @@ class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
 
 class HolySmite(Card):
     def __init__(self):
-        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
+        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targetting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -63,7 +63,7 @@ class HolySmite(Card):
         
 class InnerFire(Card):
     def __init__(self):
-        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -74,7 +74,7 @@ class InnerFire(Card):
         
 class MassDispel(Card): # TODO: Can this spell be cast if the enemy have no minions?
     def __init__(self):
-        super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, False)
+        super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -86,7 +86,7 @@ class MassDispel(Card): # TODO: Can this spell be cast if the enemy have no mini
         
 class MindBlast(Card):
     def __init__(self):
-        super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, False)
+        super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -95,7 +95,7 @@ class MindBlast(Card):
         
 class MindControl(Card):
     def __init__(self):
-        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, True, hsgame.targetting.find_enemy_minion_spell_target)
+        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -105,7 +105,7 @@ class MindControl(Card):
         
 class MindVision(Card): # TODO: Can this card be played if opponent has no cards in hand?
     def __init__(self):
-        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, False)
+        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)

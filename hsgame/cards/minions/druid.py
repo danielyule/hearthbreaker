@@ -8,17 +8,18 @@ __author__ = 'Daniel'
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
-        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, True, hsgame.targetting.find_minion_battlecry_target)
+        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         hsgame.targetting.find_minion_battlecry_target)
 
     def create_minion(self, player):
 
         class Moonfire(Card):
             def __init__(self):
-                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, False)
+                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
         class Dispel(Card):
             def __init__(self):
-                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, False)
+                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
         moonfire = Moonfire()
         dispell = Dispel()
@@ -42,11 +43,11 @@ class DruidOfTheClaw(MinionCard):
         #These are basically placeholders to give the agent something to choose
         class CatForm(Card):
             def __init__(self):
-                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class BearForm(Card):
             def __init__(self):
-                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         cat = CatForm()
         bear = BearForm()
@@ -71,14 +72,14 @@ class AncientOfLore(MinionCard):
         #These are basically placeholders to give the agent something to choose
         class AncientSecrets(Card):
             def __init__(self):
-                super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 player.hero.heal(5)
 
         class AncientTeachings(Card):
             def __init__(self):
-                super().__init__("Ancient  Teachings", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Ancient  Teachings", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 player.draw()
@@ -100,11 +101,11 @@ class AncientOfWar(MinionCard):
         #These are basically placeholders to give the agent something to choose
         class Health(Card):
             def __init__(self):
-                super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class Attack(Card):
             def __init__(self):
-                super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         health = Health()
         attack = Attack()
@@ -140,7 +141,7 @@ class Cenarius(MinionCard):
         #These are basically placeholders to give the agent something to choose
         class IncreaseStats(Card):
             def __init__(self):
-                super().__init__("Give your other minions +2/+2 and taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Give your other minions +2/+2 and taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 for minion in player.minions:
@@ -150,7 +151,7 @@ class Cenarius(MinionCard):
 
         class SummonTreants(Card):
             def __init__(self):
-                super().__init__("Summon two 2/2 Treants with taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, False)
+                super().__init__("Summon two 2/2 Treants with taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 class Treant(MinionCard):

@@ -8,7 +8,7 @@ __author__ = 'Daniel'
 
 class AldorPeacekeeper(MinionCard):
     def __init__(self):
-        super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, True, hsgame.targetting.find_enemy_minion_battlecry_target)
+        super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targetting.find_enemy_minion_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(3, 3)
@@ -17,7 +17,7 @@ class AldorPeacekeeper(MinionCard):
     
 class ArgentProtector(MinionCard):
     def __init__(self):
-        super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, True, hsgame.targetting.find_friendly_minion_battlecry_target)
+        super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targetting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(2, 2)
