@@ -75,7 +75,7 @@ no,Coldlight Oracle,Battlecry: Each player draws 2 cards.,Murloc,,3,2,2,Expert,M
 no,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Expert,Minion
 no,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Expert,Spell
 no,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Expert,Spell
-no,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Expert,Spell
+yes,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Expert,Spell
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Basic,Spell
 no,Core Hound,,Beast,,7,9,5,Basic,Minion
 no,Corruption,"Choose an enemy minion. At the start of your turn, destroy it.",,Warlock,1,,,Basic,Spell
@@ -260,7 +260,7 @@ no,Patient Assassin,Stealth. Destroy any minion damaged by this minion.,,Rogue,2
 no,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,2,2,Expert,Weapon
 no,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Expert,Minion
 no,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Expert,Minion
-no,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Basic,Spell
+yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Basic,Spell
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Expert,Spell
 no,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Expert,Spell
 no,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Basic,Spell

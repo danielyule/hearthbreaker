@@ -35,7 +35,9 @@ from hsgame.cards.spells.mage import \
     MirrorEntity, \
     Spellbender, \
     Vaporize, \
-    Fireball
+    ConeOfCold, \
+    Fireball, \
+    Polymorph
 
 from hsgame.cards.spells.paladin import \
     AvengingWrath, \

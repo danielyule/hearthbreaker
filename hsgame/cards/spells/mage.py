@@ -1,5 +1,5 @@
 import copy
-from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
+from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targetting
 __author__ = 'Daniel'
@@ -218,6 +218,25 @@ class IceBlock(SecretCard):
         player.hero.unbind("secret_damaged", self._reveal_if_fatal)
 
 
+class ConeOfCold(Card):
+    def __init__(self):
+        super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.spell_damage(1 + player.spell_power, self)
+        self.target.freeze()
+        index = self.target.index
+        if self.target.index > 0:
+            self.target.player.minions[index - 1].spell_damage(1 + player.spell_power, self)
+            self.target.player.minions[index - 1].freeze()
+
+        if self.target.index < len(self.target.player.minions) - 1:
+            self.target.player.minions[index + 1].spell_damage(1 + player.spell_power, self)
+            self.target.player.minions[index + 1].freeze()
+
+
 class Fireball(Card):
     def __init__(self):
         super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_spell_target)
@@ -225,3 +244,24 @@ class Fireball(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.spell_damage(6 + player.spell_power, self)
+
+
+class Polymorph(Card):
+    def __init__(self):
+        super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, True, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Sheep(MinionCard):
+            def __init__(self):
+                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                return Minion(1, 1, MINION_TYPE.BEAST)
+
+        sheep = Sheep()
+        minion = sheep.create_minion(None)
+        minion.index = self.target.index
+        minion.card = sheep
+        self.target.player.minions[minion.index] = minion

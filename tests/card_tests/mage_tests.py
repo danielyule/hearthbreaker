@@ -1,7 +1,7 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from hsgame.constants import CHARACTER_CLASS
+from hsgame.constants import CHARACTER_CLASS, MINION_TYPE
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent, \
@@ -433,6 +433,25 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[0].max_health)
 
+    def test_ConeOfCold(self):
+        game = generate_game_for(ConeOfCold, [StonetuskBoar, BloodfenRaptor, BloodfenRaptor], SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].frozen)
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertTrue(game.other_player.minions[1].frozen)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertFalse(game.other_player.minions[2].frozen)
+        self.assertEqual(1, game.other_player.minions[2].health)
+        self.assertEqual(30, game.other_player.hero.health)
+
     def test_Fireball(self):
         game = generate_game_for([Fireball, KoboldGeomancer], StonetuskBoar, EnemySpellTestingAgent, DoNothingBot)
         for turn in range(0, 7):
@@ -444,5 +463,25 @@ class TestMage(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(17, game.other_player.hero.health)
+
+    def test_Polymorph(self):
+        game = generate_game_for(MogushanWarden, Polymorph, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual("Mogu'shan Warden", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].taunt)
+        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual("Sheep", game.other_player.minions[0].card.name)
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].type)
 
 
