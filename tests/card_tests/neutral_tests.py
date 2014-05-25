@@ -73,5 +73,15 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertFalse(game.other_player.minions[0].divine_shield)
 
+    def test_SilvermoonGuardian(self):
+        game = generate_game_for(SilvermoonGuardian, ElvenArcher, MinionPlayingAgent, MinionPlayingAgent)
+        
+        for i in range(0, 7):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].divine_shield)
 
-
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].divine_shield)

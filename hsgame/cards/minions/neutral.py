@@ -118,3 +118,12 @@ class ArgentSquire(MinionCard):
         minion = Minion(1, 1)
         minion.divine_shield = True
         return minion
+    
+class SilvermoonGuardian(MinionCard):
+    def __init__(self):
+        super().__init__("Silvermoon Guardian", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(3, 3)
+        minion.divine_shield = True
+        return minion
