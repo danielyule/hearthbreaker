@@ -224,3 +224,20 @@ class Redemption(SecretCard):
 
     def deactivate(self, player):
         player.game.unbind("minion_died", self._reveal)
+
+class Repentance(SecretCard):
+    def __init__(self):
+        super().__init__("Repentance", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def _reveal(self, minion, player):
+        if minion.player is not player:
+            minion.decrease_health(minion.max_health - 1)
+            super().reveal()
+        else:
+            self.activate(player)
+
+    def activate(self, player):
+        player.game.bind_once("minion_added", self._reveal, player)
+
+    def deactivate(self, player):
+        player.game.unbind("minion_added", self._reveal)
