@@ -31,3 +31,7 @@ def change_attack_to_one(minion):
 def give_divine_shield(minion):
     if minion.card.target is not None:
         minion.card.target.divine_shield = True
+        
+        
+def gain_one_health_for_each_card_in_hand(minion):
+    minion.increase_health(len(minion.player.hand))

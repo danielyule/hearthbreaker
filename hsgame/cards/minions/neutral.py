@@ -1,4 +1,5 @@
-from hsgame.cards.battlecries import draw_card, silence, deal_one_damage
+from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
+    gain_one_health_for_each_card_in_hand
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targetting
@@ -126,4 +127,13 @@ class SilvermoonGuardian(MinionCard):
     def create_minion(self, player):
         minion = Minion(3, 3)
         minion.divine_shield = True
+        return minion
+    
+class TwilightDrake(MinionCard):
+    def __init__(self):
+        super().__init__("Twilight Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 1, MINION_TYPE.DRAGON)
+        minion.bind('added_to_board', gain_one_health_for_each_card_in_hand)
         return minion

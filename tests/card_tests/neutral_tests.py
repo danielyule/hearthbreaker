@@ -85,3 +85,15 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertFalse(game.other_player.minions[0].divine_shield)
+
+    def test_TwilightDrake(self):
+        game = generate_game_for(TwilightDrake, ElvenArcher, MinionPlayingAgent, DoNothingBot)
+        
+        for i in range(0, 7):
+            game.play_single_turn()
+        
+        # 7 cards in hand, Twilight Drake should be played, making it 6 cards left in hand, giving the drake +6 health (a total of 7)
+        self.assertEqual(6, len(game.current_player.hand))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].max_health)
+        self.assertEqual(7, game.current_player.minions[0].health)

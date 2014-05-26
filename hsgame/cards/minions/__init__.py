@@ -13,7 +13,8 @@ from hsgame.cards.minions.neutral import \
     ElvenArcher, \
     IronfurGrizzly, \
     ArgentSquire, \
-    SilvermoonGuardian
+    SilvermoonGuardian, \
+    TwilightDrake
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \
