@@ -374,18 +374,18 @@ class TestPaladin(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].divine_shield)
         
     def test_Repentance(self):
-        game = generate_game_for(Repentance, ManaWyrm, SpellTestingAgent, PredictableBot)
+        game = generate_game_for(Repentance, TwilightDrake, SpellTestingAgent, MinionPlayingAgent)
         
         # Repentance should be played
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual("Repentance", game.players[0].secrets[0].name)
         
-        # Mana Wyrm (1 attack / 3 health) should be played, secret should activate and reduced the minions health to 1
-        # We should extend this test with Twilight Drake in the future, to have a test where a secret should trigger after a battlecry
-        # Source: http://www.hearthhead.com/card=232/repentance#comments:id=1919879:reply=726717
-        # Video source: http://youtu.be/pTYkMhYQAHU?t=14m
-        game.play_single_turn()
+        # Twilight Drake (4 attack / 1 health) should be played, gaining lots of health due to its battlecry,
+        # and the secret should activate afterwards and reduced the minions health to 1
+        for turn in range(0, 7):
+            game.play_single_turn()
+        
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].max_health)
