@@ -1,7 +1,7 @@
 import copy
 import hsgame.targetting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, Minion, MinionCard
 
 __author__ = 'Daniel'
 
@@ -113,3 +113,29 @@ class MindVision(Card): # TODO: Can this card be played if opponent has no cards
         card = copy.deepcopy(game.other_player.hand[game.random(0, len(game.other_player.hand) - 1)])
         player.hand.append(card)
         
+class Mindgames(Card):
+    def __init__(self):
+        super().__init__("Mindgames", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        class ShadowOfNothing(MinionCard):
+            def __init__(self):
+                super().__init__("Shadow of Nothing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, p):
+                minion = Minion(0, 1)
+                return minion
+        
+        minions = []
+        
+        for index in range(0, 30):
+            if not game.other_player.deck.used[index] and not game.other_player.deck.cards[index].is_spell():
+                minions.append(game.other_player.deck.cards[index])
+                
+        if len(minions) == 0:
+            minions.append(ShadowOfNothing())
+
+        minion = copy.copy(minions[game.random(0, len(minions) - 1)])
+        minion.create_minion(player).add_to_board(minion, game, player, 0)

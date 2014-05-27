@@ -72,4 +72,5 @@ from hsgame.cards.spells.priest import \
     MassDispel, \
     MindBlast, \
     MindControl, \
-    MindVision
+    MindVision, \
+    Mindgames

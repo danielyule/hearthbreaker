@@ -182,3 +182,22 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Mogu'shan Warden", game.players[0].hand[-1].name)
         self.assertEqual(4, len(game.players[1].hand))
         
+    def test_Mindgames(self):
+        game = generate_game_for(Mindgames, MogushanWarden, SpellTestingAgent, DoNothingBot)
+        
+        # Mindgames should be played, Mogu'shan Warden will be found and put into the battlefield
+        for turn in range(0, 7):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Mogu'shan Warden", game.players[0].minions[0].card.name)
+        
+        # Cheat
+        for index in range(0, 30):
+            game.players[1].deck.used[index] = True
+
+        game.play_single_turn()
+        game.play_single_turn() # Mindgames should be played, opponent have no cards left in deck so Shadow of Nothing should be summoned
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Shadow of Nothing", game.players[0].minions[0].card.name)
+        
