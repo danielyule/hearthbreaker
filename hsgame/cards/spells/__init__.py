@@ -73,4 +73,5 @@ from hsgame.cards.spells.priest import \
     MindBlast, \
     MindControl, \
     MindVision, \
-    Mindgames
+    Mindgames, \
+    PowerWordShield

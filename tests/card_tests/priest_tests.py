@@ -201,3 +201,14 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Shadow of Nothing", game.players[0].minions[0].card.name)
         
+    def test_PowerWordShield(self):
+        game = generate_game_for(StonetuskBoar, PowerWordShield, MinionPlayingAgent, SpellTestingAgent)
+        
+        # Power Word: Shield should be played, and target the enemy Stonetusk Boar. And a card should be drawn.
+        for turn in range(0, 2):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[0].max_health)
+        self.assertEqual(5, len(game.players[1].hand))

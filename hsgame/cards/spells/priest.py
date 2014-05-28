@@ -139,3 +139,13 @@ class Mindgames(Card):
 
         minion = copy.copy(minions[game.random(0, len(minions) - 1)])
         minion.create_minion(player).add_to_board(minion, game, player, 0)
+
+class PowerWordShield(Card):
+    def __init__(self):
+        super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targetting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.increase_health(2)
+        player.draw()

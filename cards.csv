@@ -263,7 +263,7 @@ no,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Expert,Mi
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Basic,Spell
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Expert,Spell
 no,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Expert,Spell
-no,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Basic,Spell
+yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Basic,Spell
 no,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Expert,Spell
 no,Priestess of Elune,Battlecry: Restore 4 Health to your hero.,,,6,5,4,Expert,Minion
 no,Prophet Velen,Double the damage and healing of your spells and Hero Power.,,Priest,7,7,7,Expert,Minion
