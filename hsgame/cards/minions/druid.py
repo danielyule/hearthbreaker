@@ -158,15 +158,14 @@ class Cenarius(MinionCard):
                     def __init__(self):
                         super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
-                    @staticmethod
-                    def create_minion():
+                    def create_minion(self, p):
                         minion = Minion(2, 2, MINION_TYPE.NONE)
                         minion.taunt = True
                         return minion
                 #TODO Check if Cenarius summons the minions before or after himself
                 for i in [0, 1]:
-                    treant = Treant.create_minion()
-                    treant.add_to_board(Treant(), game, player, 0)
+                    treant = Treant()
+                    treant.create_minion(player).add_to_board(treant, game, player, 0)
 
         option = player.agent.choose_option(IncreaseStats(), SummonTreants())
         option.use(player, player.game)
