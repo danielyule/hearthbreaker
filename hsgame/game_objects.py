@@ -35,11 +35,10 @@ class Bindable:
     def __init__(self):
         self.events = {}
 
-    def bind(self, event, function, *args, **kwargs):
+    def bind(self, event, function, *args):
         class Handler:
-            def __init__(self, function, args, kwargs):
+            def __init__(self):
                 self.args = args
-                self.kwargs = kwargs
                 self.function = function
                 self.remove = False
                 self.active = False
@@ -48,13 +47,12 @@ class Bindable:
         if not event in self.events:
             self.events[event] = []
 
-        self.events[event].append(Handler(function, args, kwargs))
+        self.events[event].append(Handler())
 
-    def bind_once(self, event, function, *args, **kwargs):
+    def bind_once(self, event, function, *args):
         class Handler:
-            def __init__(self, function, args, kwargs):
+            def __init__(self):
                 self.args = args
-                self.kwargs = kwargs
                 self.function = function
                 self.remove = True
                 self.active = False
@@ -62,17 +60,15 @@ class Bindable:
         if not event in self.events:
             self.events[event] = []
 
-        self.events[event].append(Handler(function, args, kwargs))
+        self.events[event].append(Handler())
 
-    def trigger(self, event, *args, **kwargs):
+    def trigger(self, event, *args):
         if event in self.events:
             for handler in self.events[event].copy():
                 if not handler.active:
                     pass_args = args + handler.args
-                    pass_kwargs = kwargs.copy()
-                    pass_kwargs.update(handler.kwargs)
                     handler.active = True
-                    handler.function(*pass_args, **pass_kwargs)
+                    handler.function(*pass_args)
                     handler.active = False
                     if handler.remove:
                         self.events[event].remove(handler)
@@ -136,7 +132,7 @@ class Card(Bindable):
     def is_spell(self):
         return True
 
-    def __str__(self): #pragma: no cover
+    def __str__(self):  # pragma: no cover
         return self.name + " (" + str(self.mana) + " mana)"
 
 

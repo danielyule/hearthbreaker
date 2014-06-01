@@ -151,11 +151,11 @@ class TestBinding(unittest.TestCase):
         event = Mock()
         binder = Bindable()
         binder.bind("test", event)
-        binder.trigger("test", 1, 5, 6, arg1="something", args2="whatever")
-        event.assert_called_once_with(1, 5, 6, arg1="something", args2="whatever")
+        binder.trigger("test", 1, 5, 6)
+        event.assert_called_once_with(1, 5, 6)
         binder.unbind("test", event)
         binder.trigger("test")
-        event.assert_called_once_with(1, 5, 6, arg1="something", args2="whatever")
+        event.assert_called_once_with(1, 5, 6)
 
     def test_bind_once(self):
         event = Mock()
@@ -163,11 +163,11 @@ class TestBinding(unittest.TestCase):
         binder = Bindable()
         binder.bind_once("test", event)
         binder.bind("test", event2)
-        binder.trigger("test", 1, 5, 6, arg1="something", args2="whatever")
-        event.assert_called_once_with(1, 5, 6, arg1="something", args2="whatever")
-        event2.assert_called_once_with(1, 5, 6, arg1="something", args2="whatever")
+        binder.trigger("test", 1, 5, 6)
+        event.assert_called_once_with(1, 5, 6)
+        event2.assert_called_once_with(1, 5, 6)
         binder.trigger("test")
-        event.assert_called_once_with(1, 5, 6, arg1="something", args2="whatever")
+        event.assert_called_once_with(1, 5, 6)
         self.assertEqual(event2.call_count, 2)
 
     def test_bind_with_different_args(self):
