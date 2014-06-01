@@ -2,7 +2,7 @@ from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
     gain_one_health_for_each_card_in_hand
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
-import hsgame.targetting
+import hsgame.targeting
 __author__ = 'Daniel'
 
 
@@ -16,7 +16,7 @@ class BloodfenRaptor(MinionCard):
 
 class ElvenArcher(MinionCard):
     def __init__(self):
-        super().__init__("Elven Archer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targetting.find_battlecry_target)
+        super().__init__("Elven Archer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(1, 1)
@@ -43,7 +43,7 @@ class StonetuskBoar(MinionCard):
 
 class IronbeakOwl(MinionCard):
     def __init__(self):
-        super().__init__("Ironbeak Owl", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targetting.find_minion_battlecry_target)
+        super().__init__("Ironbeak Owl", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(2, 1, MINION_TYPE.BEAST)

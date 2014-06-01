@@ -1,5 +1,5 @@
 import copy
-import hsgame.targetting
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard
 
@@ -21,7 +21,7 @@ class CircleOfHealing(Card):
 
 class DivineSpirit(Card):
     def __init__(self):
-        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -31,7 +31,7 @@ class DivineSpirit(Card):
         
 class HolyFire(Card):
     def __init__(self):
-        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -54,7 +54,7 @@ class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
 
 class HolySmite(Card):
     def __init__(self):
-        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targetting.find_spell_target)
+        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -63,7 +63,7 @@ class HolySmite(Card):
         
 class InnerFire(Card):
     def __init__(self):
-        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -95,7 +95,7 @@ class MindBlast(Card):
         
 class MindControl(Card):
     def __init__(self):
-        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targetting.find_enemy_minion_spell_target)
+        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -142,7 +142,7 @@ class Mindgames(Card):
 
 class PowerWordShield(Card):
     def __init__(self):
-        super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

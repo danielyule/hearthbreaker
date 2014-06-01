@@ -1,4 +1,4 @@
-import hsgame.targetting
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
 from hsgame.cards.battlecries import change_attack_to_one, give_divine_shield
@@ -8,7 +8,7 @@ __author__ = 'Daniel'
 
 class AldorPeacekeeper(MinionCard):
     def __init__(self):
-        super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targetting.find_enemy_minion_battlecry_target)
+        super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targeting.find_enemy_minion_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(3, 3)
@@ -17,7 +17,7 @@ class AldorPeacekeeper(MinionCard):
     
 class ArgentProtector(MinionCard):
     def __init__(self):
-        super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targetting.find_friendly_minion_battlecry_target)
+        super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         minion = Minion(2, 2)

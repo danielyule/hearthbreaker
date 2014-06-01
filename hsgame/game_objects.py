@@ -1,6 +1,6 @@
 import random
 import hsgame.powers
-import hsgame.targetting
+import hsgame.targeting
 import hsgame.constants
 import abc
 
@@ -87,7 +87,8 @@ class Bindable:
 
 
 class Card(Bindable):
-    def __init__(self, name, mana, character_class, status, target_func=None):
+    def __init__(self, name, mana, character_class, status, target_func=None,
+                 filter_func=lambda target: target.spell_targetable()):
         """
             @name: string
             @mana: int
@@ -106,10 +107,11 @@ class Card(Bindable):
             self.targets = []
             self.target = None
             self.get_targets = target_func
+            self.filter_func = filter_func
 
     def can_use(self, player, game):
         if self.targetable:
-            self.targets = self.get_targets(game)
+            self.targets = self.get_targets(game, self.filter_func)
             if self.targets is not None and len(self.targets) is 0:
                 return False
 
@@ -139,8 +141,9 @@ class Card(Bindable):
 
 
 class MinionCard(Card,metaclass=abc.ABCMeta):
-    def __init__(self, name, mana, character_class, status, targeting_func=None):
-        super().__init__(name, mana, character_class, status, targeting_func)
+    def __init__(self, name, mana, character_class, status, targeting_func=None,
+                 filter_func=lambda target: not target.stealth):
+        super().__init__(name, mana, character_class, status, targeting_func, filter_func)
 
     def can_use(self, player, game):
         return super().can_use(player, game)
@@ -199,6 +202,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
         self.player = player
         self.immune = False
         self.delayed = []
+        self.stealth = False
 
     def turn_complete(self):
         if self.temp_attack > 0:
@@ -357,7 +361,6 @@ class Minion(Character):
         super().__init__(attack, health, None)
         self.type = type
         self.taunt = False
-        self.stealth = False
         self.game = None
         self.card = None
         self.index = -1
@@ -391,7 +394,6 @@ class Minion(Character):
 
     def attack(self):
         super().attack()
-        self.stealth = False
 
     def silence(self):
         super().silence()
@@ -417,7 +419,7 @@ class Minion(Character):
     def can_be_attacked(self):
         return not self.stealth
 
-    def spell_targettable(self):
+    def spell_targetable(self):
         return not self.stealth
 
     def choose_target(self, targets):
@@ -493,11 +495,11 @@ class Hero(Character):
     def die(self, by):
         super().die(by)
 
-    def spell_targettable(self):
+    def spell_targetable(self):
         return True
 
     def find_power_target(self):
-        targets = hsgame.targetting.find_spell_target(self.player.game)
+        targets = hsgame.targeting.find_spell_target(self.player.game, lambda t: t.spell_targetable())
         target = self.choose_target(targets)
         self.trigger("found_power_target", target)
         return target

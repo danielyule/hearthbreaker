@@ -1,5 +1,5 @@
 import copy
-import hsgame.targetting
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 
@@ -20,7 +20,7 @@ class AvengingWrath(Card):
 
 class BlessedChampion(Card):
     def __init__(self):
-        super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targeting.find_minion_spell_target)
         
     def use(self, player, game):
         super().use(player, game)
@@ -28,7 +28,7 @@ class BlessedChampion(Card):
         
 class BlessingOfKings(Card):
     def __init__(self):
-        super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -37,7 +37,7 @@ class BlessingOfKings(Card):
 
 class BlessingOfMight(Card):
     def __init__(self):
-        super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -45,7 +45,7 @@ class BlessingOfMight(Card):
 
 class BlessingOfWisdom(Card):
     def __init__(self):
-        super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
 
@@ -95,7 +95,7 @@ class Equality(Card):
 
 class HammerOfWrath(Card):
     def __init__(self):
-        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targetting.find_spell_target)
+        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
         
     def use(self, player, game):
         super().use(player, game)
@@ -105,7 +105,7 @@ class HammerOfWrath(Card):
 
 class HandOfProtection(Card):
     def __init__(self):
-        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -114,7 +114,7 @@ class HandOfProtection(Card):
         
 class HolyLight(Card):
     def __init__(self):
-        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targetting.find_spell_target)
+        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -123,7 +123,7 @@ class HolyLight(Card):
         
 class HolyWrath(Card):
     def __init__(self):
-        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targetting.find_spell_target)
+        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -134,7 +134,7 @@ class HolyWrath(Card):
 
 class Humility(Card):
     def __init__(self):
-        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targetting.find_minion_spell_target)
+        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -144,7 +144,7 @@ class Humility(Card):
         
 class LayOnHands(Card):
     def __init__(self):
-        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC, hsgame.targetting.find_spell_target)
+        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
