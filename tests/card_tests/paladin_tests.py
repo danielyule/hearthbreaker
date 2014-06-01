@@ -1,6 +1,6 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
+from hsgame.agents.basic_agents import PredictableBot
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.replay import SavedGame

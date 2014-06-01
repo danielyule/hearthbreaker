@@ -1,11 +1,10 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
+from hsgame.agents.basic_agents import PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for, StackedDeck
-from hsgame.replay import SavedGame
 
 from hsgame.cards import *
 

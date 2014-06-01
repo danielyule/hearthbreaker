@@ -9,7 +9,6 @@ from hsgame.constants import CHARACTER_CLASS
 from hsgame.cards import *
 
 import hsgame.game_objects
-import sys
 
 import random
 __author__ = 'Daniel'

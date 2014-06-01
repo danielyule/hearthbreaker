@@ -1,7 +1,5 @@
 __author__ = 'Daniel'
 
-import hsgame.targeting
-
 
 def draw_card(minion):
     minion.player.draw()

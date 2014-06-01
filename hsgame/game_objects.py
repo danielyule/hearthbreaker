@@ -23,7 +23,10 @@ def card_lookup(card_name):
         for card_type in Card.__subclasses__():
             card_lookup_rec(card_type)
 
-    return card_table[card_name]()
+    card = card_table[card_name]
+    if card is not None:
+        return card()
+    return None
 
 
 class GameException(Exception):
@@ -254,13 +257,13 @@ class Character(Bindable,metaclass=abc.ABCMeta):
     def choose_target(self, targets):
         pass
 
-    def delayed_trigger(self, event, *args, **kwargs):
-        self.delayed.append({'event': event, 'args': args, 'kwargs': kwargs})
+    def delayed_trigger(self, event, *args):
+        self.delayed.append({'event': event, 'args': args})
         self.player.game.delayed_minions.append(self)
 
     def activate_delayed(self):
         for delayed in self.delayed:
-            self.trigger(delayed['event'], *delayed['args'], **delayed['kwargs'])
+            self.trigger(delayed['event'], *delayed['args'])
 
         self.delayed = []
 

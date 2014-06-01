@@ -1,4 +1,3 @@
-import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard

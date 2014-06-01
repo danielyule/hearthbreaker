@@ -10,9 +10,8 @@ import random
 import unittest
 from unittest.mock import Mock, call
 
-from hsgame.game_objects import Player, Game, Deck, Bindable, card_lookup, SecretCard
+from hsgame.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
-import hsgame.cards
 
 
 class TestGame(unittest.TestCase):

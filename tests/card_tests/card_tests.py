@@ -1,6 +1,6 @@
 from hsgame.agents.basic_agents import DoNothingBot
 from hsgame.constants import CHARACTER_CLASS, MINION_TYPE
-from hsgame.game_objects import card_lookup, Player
+from hsgame.game_objects import card_lookup
 from tests.testing_utils import generate_game_for
 import unittest
 import csv
@@ -12,7 +12,7 @@ __author__ = 'Daniel'
 class CardTest(unittest.TestCase):
 
     #Make sure that the cards have been initialized correctly based on the data in cards.csv
-    def test_AllCards(self):
+    def test_all_cards(self):
         fake_game = generate_game_for(StonetuskBoar, StonetuskBoar, DoNothingBot, DoNothingBot)
         file = open("cards.csv", "r")
         reader = csv.DictReader(file)

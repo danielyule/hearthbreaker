@@ -3,7 +3,6 @@ from hsgame.agents.user_agents import Observer
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game, card_lookup
 from hsgame.agents.basic_agents import DoNothingBot
-import hsgame.cards
 
 __author__ = 'Daniel'
 

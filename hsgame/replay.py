@@ -85,8 +85,9 @@ class ProxyCard:
     def to_output(self):
         return str(self)
 
+
 class ReplayAction:
-        def play(self):
+        def play(self, game):
             pass
 
 
@@ -165,7 +166,7 @@ class PowerAction(ReplayAction):
     def play(self, game):
         if self.target is not None:
             game.current_player.agent.next_target = self.target.resolve()
-        self.character.resolve().attack()
+        self.target.resolve().attack()
         game.current_player.agent.next_target = None
 
 
