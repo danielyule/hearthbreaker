@@ -211,3 +211,17 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(3, game.players[0].minions[0].max_health)
         self.assertEqual(5, len(game.players[1].hand))
+
+    def test_ShadowMadness(self):
+        game = generate_game_for(StonetuskBoar, ShadowMadness, MinionPlayingAgent, SpellTestingAgent)
+        
+        # Play some Stonetusk Boar.
+        for turn in range(0, 7):
+            game.play_single_turn()
+        
+        self.assertEqual(4, len(game.players[0].minions))        
+        
+        # Shadow Madness should be played, gaining control of one of the Stonetusk Boars, no attack occur and the minion should return to the opponent again.
+        game.play_single_turn()
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))

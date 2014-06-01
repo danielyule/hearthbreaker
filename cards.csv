@@ -292,7 +292,7 @@ no,Secretkeeper,"Whenever a Secret is played, gain +1/+1.",,,1,1,2,Expert,Minion
 no,Sen'jin Shieldmasta,Taunt,,,4,3,5,Basic,Minion
 no,Sense Demons,Put 2 random Demons from your deck into your hand.,,Warlock,3,,,Expert,Spell
 no,Shadow Bolt,Deal 4 damage to a minion.,,Warlock,3,,,Basic,Spell
-no,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until end of turn.,,Priest,4,,,Expert,Spell
+yes,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until end of turn.,,Priest,4,,,Expert,Spell
 no,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,,Basic,Spell
 no,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Basic,Spell
 no,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Expert,Spell
