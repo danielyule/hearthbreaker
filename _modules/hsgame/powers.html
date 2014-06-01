@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.powers &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.powers</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">hsgame.constants</span>
+<span class="kn">import</span> <span class="nn">hsgame.game_objects</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+<div class="viewcode-block" id="powers"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.powers">[docs]</a><span class="k">def</span> <span class="nf">powers</span><span class="p">(</span><span class="n">character_class</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">character_class</span> <span class="o">==</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">DRUID</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DruidPower</span>
+    <span class="k">elif</span> <span class="n">character_class</span> <span class="o">==</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MagePower</span>
+    <span class="k">elif</span> <span class="n">character_class</span> <span class="o">==</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PriestPower</span>
+    <span class="k">elif</span> <span class="n">character_class</span> <span class="o">==</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">PaladinPower</span>
+
+</div>
+<div class="viewcode-block" id="Power"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power">[docs]</a><span class="k">class</span> <span class="nc">Power</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero</span> <span class="o">=</span> <span class="n">hero</span>
+
+<div class="viewcode-block" id="Power.can_use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power.can_use">[docs]</a>    <span class="k">def</span> <span class="nf">can_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">mana</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+</div>
+<div class="viewcode-block" id="Power.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">can_use</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;used_power&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">mana</span> <span class="o">-=</span> <span class="mi">2</span>
+
+</div></div>
+<div class="viewcode-block" id="DruidPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.DruidPower">[docs]</a><span class="k">class</span> <span class="nc">DruidPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DruidPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.DruidPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">increase_temp_attack</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">increase_armour</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="MagePower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.MagePower">[docs]</a><span class="k">class</span> <span class="nc">MagePower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MagePower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.MagePower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">find_power_target</span><span class="p">()</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">damage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="PriestPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PriestPower">[docs]</a><span class="k">class</span> <span class="nc">PriestPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PriestPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PriestPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">find_power_target</span><span class="p">()</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="PaladinPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PaladinPower">[docs]</a><span class="k">class</span> <span class="nc">PaladinPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="PaladinPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PaladinPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">SilverHandRecruit</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">MinionCard</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Silver Hand Recruit&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">SPECIAL</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
+
+        <span class="n">recruit_card</span> <span class="o">=</span> <span class="n">SilverHandRecruit</span><span class="p">()</span>
+        <span class="n">recruit_card</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span><span class="o">.</span><span class="n">add_to_board</span><span class="p">(</span><span class="n">recruit_card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

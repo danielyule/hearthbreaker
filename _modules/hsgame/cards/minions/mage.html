@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.cards.minions.mage &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.cards.minions.mage</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">hsgame.cards</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+<span class="kn">from</span> <span class="nn">hsgame.constants</span> <span class="kn">import</span> <span class="n">CHARACTER_CLASS</span><span class="p">,</span> <span class="n">CARD_RARITY</span>
+<span class="kn">from</span> <span class="nn">hsgame.game_objects</span> <span class="kn">import</span> <span class="n">MinionCard</span><span class="p">,</span> <span class="n">Minion</span><span class="p">,</span> <span class="n">SecretCard</span>
+
+
+<div class="viewcode-block" id="ManaWyrm"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.ManaWyrm">[docs]</a><span class="k">class</span> <span class="nc">ManaWyrm</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mana Wyrm&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ManaWyrm.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.ManaWyrm.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">increase_attack</span><span class="p">(</span><span class="n">card</span><span class="p">):</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="n">increase_attack</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="n">increase_attack</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="SorcerersApprentice"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.SorcerersApprentice">[docs]</a><span class="k">class</span> <span class="nc">SorcerersApprentice</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Sorcerer&#39;s Apprentice&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SorcerersApprentice.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.SorcerersApprentice.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">class</span> <span class="nc">Filter</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">is_spell</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="nb">filter</span> <span class="o">=</span> <span class="n">Filter</span><span class="p">()</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="nb">filter</span><span class="p">))</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="KirinTorMage"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.KirinTorMage">[docs]</a><span class="k">class</span> <span class="nc">KirinTorMage</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Kirin Tor Mage&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KirinTorMage.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.KirinTorMage.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">first_secret_cost_zero</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">class</span> <span class="nc">Filter</span><span class="p">:</span>
+                <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="c">#To make sure that no matter what the cost of a secret, it will be 0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">=</span> <span class="mi">100</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filter</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">c</span><span class="p">:</span> <span class="nb">type</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SecretCard</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">def</span> <span class="nf">card_used</span><span class="p">(</span><span class="n">card</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">card</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SecretCard</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;card_used&quot;</span><span class="p">,</span> <span class="n">card_used</span><span class="p">)</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="n">turn_ended</span><span class="p">)</span>
+                    <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mana_filter</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">turn_ended</span><span class="p">():</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;card_used&quot;</span><span class="p">,</span> <span class="n">card_used</span><span class="p">)</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">mana_filter</span><span class="p">)</span>
+            <span class="n">mana_filter</span> <span class="o">=</span> <span class="n">Filter</span><span class="p">()</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_used&quot;</span><span class="p">,</span> <span class="n">card_used</span><span class="p">)</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="n">turn_ended</span><span class="p">)</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mana_filter</span><span class="p">)</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">first_secret_cost_zero</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="EtherealArcanist"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.EtherealArcanist">[docs]</a><span class="k">class</span> <span class="nc">EtherealArcanist</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ethereal Arcanist&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="EtherealArcanist.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.EtherealArcanist.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">increase_stats</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">secrets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">minion</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">minion</span><span class="o">.</span><span class="n">increase_health</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">silence</span><span class="p">():</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="n">increase_stats</span><span class="p">)</span>
+
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="n">increase_stats</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="n">silence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="WaterElemental"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.WaterElemental">[docs]</a><span class="k">class</span> <span class="nc">WaterElemental</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Water Elemental&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WaterElemental.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.WaterElemental.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">did_damage</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="n">target</span><span class="p">):</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;did_damage&quot;</span><span class="p">,</span> <span class="n">did_damage</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="ArchmageAntonidas"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.ArchmageAntonidas">[docs]</a><span class="k">class</span> <span class="nc">ArchmageAntonidas</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Archmage Antonidas&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">LEGENDARY</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArchmageAntonidas.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.ArchmageAntonidas.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">add_fireball</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">hand</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">hand</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">cards</span><span class="o">.</span><span class="n">Fireball</span><span class="p">())</span>
+
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="n">add_fireball</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="p">:</span> <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="n">add_fireball</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

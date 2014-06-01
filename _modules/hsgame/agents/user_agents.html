@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.agents.user_agents &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.agents.user_agents</h1><div class="highlight"><pre>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+
+<div class="viewcode-block" id="Observer"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer">[docs]</a><span class="k">class</span> <span class="nc">Observer</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">writer</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span> <span class="o">=</span> <span class="n">writer</span>
+
+<div class="viewcode-block" id="Observer.observe"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.observe">[docs]</a>    <span class="k">def</span> <span class="nf">observe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_started&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_started</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_ended</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;died&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">died</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_drawn&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_drawn</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_put back&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_put_back</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;damaged&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">damaged</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_started&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_started</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_ended</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;died&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">died</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_drawn&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_drawn</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_put back&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_put_back</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;damaged&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">damaged</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="Observer.turn_started"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.turn_started">[docs]</a>    <span class="k">def</span> <span class="nf">turn_started</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Turn started for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Observer.turn_ended"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.turn_ended">[docs]</a>    <span class="k">def</span> <span class="nf">turn_ended</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Turn ended for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Observer.died"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.died">[docs]</a>    <span class="k">def</span> <span class="nf">died</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; died!</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Observer.card_drawn"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.card_drawn">[docs]</a>    <span class="k">def</span> <span class="nf">card_drawn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; drew card &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">card</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Observer.card_put_back"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.card_put_back">[docs]</a>    <span class="k">def</span> <span class="nf">card_put_back</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; put back card &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">card</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Observer.damaged"><a class="viewcode-back" href="../../../hsgame.agents.html#hsgame.agents.user_agents.Observer.damaged">[docs]</a>    <span class="k">def</span> <span class="nf">damaged</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">what</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">what</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">what</span> <span class="o">=</span> <span class="s">&quot;fatigue&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">player</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; was damaged &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot; by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">what</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

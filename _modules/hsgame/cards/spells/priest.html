@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.cards.spells.priest &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.cards.spells.priest</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">hsgame.targeting</span>
+<span class="kn">from</span> <span class="nn">hsgame.constants</span> <span class="kn">import</span> <span class="n">CHARACTER_CLASS</span><span class="p">,</span> <span class="n">CARD_RARITY</span>
+<span class="kn">from</span> <span class="nn">hsgame.game_objects</span> <span class="kn">import</span> <span class="n">Card</span><span class="p">,</span> <span class="n">Minion</span><span class="p">,</span> <span class="n">MinionCard</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+
+<div class="viewcode-block" id="CircleOfHealing"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.CircleOfHealing">[docs]</a><span class="k">class</span> <span class="nc">CircleOfHealing</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Circle of Healing&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CircleOfHealing.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.CircleOfHealing.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="DivineSpirit"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.DivineSpirit">[docs]</a><span class="k">class</span> <span class="nc">DivineSpirit</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Divine Spirit&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DivineSpirit.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.DivineSpirit.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="c"># Increases by health, not max_health - source: http://www.hearthhead.com/card=1361/divine-spirit#comments:id=1908273</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_health</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">health</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="HolyFire"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolyFire">[docs]</a><span class="k">class</span> <span class="nc">HolyFire</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Holy Fire&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HolyFire.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolyFire.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c"># The heal aspect of the card is not affected by +spell damage cards</span>
+        </div></div>
+<div class="viewcode-block" id="HolyNova"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolyNova">[docs]</a><span class="k">class</span> <span class="nc">HolyNova</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span> <span class="c"># TODO: Can this card be cast if no minions is in play?</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Holy Nova&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HolyNova.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolyNova.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>  
+        
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">:</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="HolySmite"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolySmite">[docs]</a><span class="k">class</span> <span class="nc">HolySmite</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Holy Smite&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="HolySmite.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.HolySmite.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="InnerFire"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.InnerFire">[docs]</a><span class="k">class</span> <span class="nc">InnerFire</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Inner Fire&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="InnerFire.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.InnerFire.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="c"># This will increase/decrease a minions attack to its current health</span>
+        <span class="c"># It will set the attack to its current health, not max health (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">health</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">attack_power</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="MassDispel"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MassDispel">[docs]</a><span class="k">class</span> <span class="nc">MassDispel</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span> <span class="c"># TODO: Can this spell be cast if the enemy have no minions?</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mass Dispel&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MassDispel.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MassDispel.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">silence</span><span class="p">()</span>
+            
+        <span class="n">player</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+        </div></div>
+<div class="viewcode-block" id="MindBlast"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindBlast">[docs]</a><span class="k">class</span> <span class="nc">MindBlast</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mind Blast&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MindBlast.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindBlast.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="MindControl"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindControl">[docs]</a><span class="k">class</span> <span class="nc">MindControl</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mind Control&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_enemy_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MindControl.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindControl.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">remove_from_board</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">add_to_board</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="MindVision"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindVision">[docs]</a><span class="k">class</span> <span class="nc">MindVision</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span> <span class="c"># TODO: Can this card be played if opponent has no cards in hand?</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mind Vision&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MindVision.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.MindVision.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="n">card</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hand</span><span class="p">[</span><span class="n">game</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hand</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hand</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">card</span><span class="p">)</span>
+        </div></div>
+<div class="viewcode-block" id="Mindgames"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.Mindgames">[docs]</a><span class="k">class</span> <span class="nc">Mindgames</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mindgames&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Mindgames.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.Mindgames.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="k">class</span> <span class="nc">ShadowOfNothing</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Shadow of Nothing&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">SPECIAL</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+                <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">minion</span>
+        
+        <span class="n">minions</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">deck</span><span class="o">.</span><span class="n">used</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">deck</span><span class="o">.</span><span class="n">cards</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">is_spell</span><span class="p">():</span>
+                <span class="n">minions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">deck</span><span class="o">.</span><span class="n">cards</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+                
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">minions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">minions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ShadowOfNothing</span><span class="p">())</span>
+
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">minions</span><span class="p">[</span><span class="n">game</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">minions</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)])</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="o">.</span><span class="n">add_to_board</span><span class="p">(</span><span class="n">minion</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="PowerWordShield"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.PowerWordShield">[docs]</a><span class="k">class</span> <span class="nc">PowerWordShield</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Power Word: Shield&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PowerWordShield.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.priest.PowerWordShield.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_health</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

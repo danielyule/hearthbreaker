@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.cards.minions.neutral &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.cards.minions.neutral</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">hsgame.cards.battlecries</span> <span class="kn">import</span> <span class="n">draw_card</span><span class="p">,</span> <span class="n">silence</span><span class="p">,</span> <span class="n">deal_one_damage</span><span class="p">,</span>\
+    <span class="n">gain_one_health_for_each_card_in_hand</span>
+<span class="kn">from</span> <span class="nn">hsgame.game_objects</span> <span class="kn">import</span> <span class="n">Minion</span><span class="p">,</span> <span class="n">MinionCard</span>
+<span class="kn">from</span> <span class="nn">hsgame.constants</span> <span class="kn">import</span> <span class="n">CARD_RARITY</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="p">,</span> <span class="n">MINION_TYPE</span>
+<span class="kn">import</span> <span class="nn">hsgame.targeting</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+
+<div class="viewcode-block" id="BloodfenRaptor"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.BloodfenRaptor">[docs]</a><span class="k">class</span> <span class="nc">BloodfenRaptor</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Bloodfen Raptor&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BloodfenRaptor.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.BloodfenRaptor.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="ElvenArcher"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.ElvenArcher">[docs]</a><span class="k">class</span> <span class="nc">ElvenArcher</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Elven Archer&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_battlecry_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ElvenArcher.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.ElvenArcher.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">deal_one_damage</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+</div></div>
+<div class="viewcode-block" id="NoviceEngineer"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.NoviceEngineer">[docs]</a><span class="k">class</span> <span class="nc">NoviceEngineer</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Novice Engineer&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NoviceEngineer.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.NoviceEngineer.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">draw_card</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+</div></div>
+<div class="viewcode-block" id="StonetuskBoar"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.StonetuskBoar">[docs]</a><span class="k">class</span> <span class="nc">StonetuskBoar</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Stonetusk Boar&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="StonetuskBoar.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.StonetuskBoar.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">minion</span>
+</div></div>
+<div class="viewcode-block" id="IronbeakOwl"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronbeakOwl">[docs]</a><span class="k">class</span> <span class="nc">IronbeakOwl</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ironbeak Owl&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_battlecry_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IronbeakOwl.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronbeakOwl.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">silence</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="WarGolem"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.WarGolem">[docs]</a><span class="k">class</span> <span class="nc">WarGolem</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;War Golem&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="WarGolem.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.WarGolem.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="MogushanWarden"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.MogushanWarden">[docs]</a><span class="k">class</span> <span class="nc">MogushanWarden</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mogu&#39;shan Warden&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MogushanWarden.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.MogushanWarden.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">taunt</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="OasisSnapjaw"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.OasisSnapjaw">[docs]</a><span class="k">class</span> <span class="nc">OasisSnapjaw</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Oasis Snapjaw&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OasisSnapjaw.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.OasisSnapjaw.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="FaerieDragon"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.FaerieDragon">[docs]</a><span class="k">class</span> <span class="nc">FaerieDragon</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Faerie Dragon&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FaerieDragon.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.FaerieDragon.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">silence</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_targettable</span> <span class="o">=</span> <span class="k">lambda</span> <span class="p">:</span> <span class="bp">True</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">DRAGON</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">spell_targettable</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">False</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="n">silence</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="KoboldGeomancer"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.KoboldGeomancer">[docs]</a><span class="k">class</span> <span class="nc">KoboldGeomancer</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Kobold Geomancer&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KoboldGeomancer.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.KoboldGeomancer.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">spell_power</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="IronfurGrizzly"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronfurGrizzly">[docs]</a><span class="k">class</span> <span class="nc">IronfurGrizzly</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ironfur Grizzly&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IronfurGrizzly.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronfurGrizzly.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">taunt</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">minion</span>
+</div></div>
+<div class="viewcode-block" id="ArgentSquire"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.ArgentSquire">[docs]</a><span class="k">class</span> <span class="nc">ArgentSquire</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Argent Squire&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArgentSquire.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.ArgentSquire.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">minion</span>
+    </div></div>
+<div class="viewcode-block" id="SilvermoonGuardian"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.SilvermoonGuardian">[docs]</a><span class="k">class</span> <span class="nc">SilvermoonGuardian</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Silvermoon Guardian&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SilvermoonGuardian.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.SilvermoonGuardian.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">return</span> <span class="n">minion</span>
+    </div></div>
+<div class="viewcode-block" id="TwilightDrake"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.TwilightDrake">[docs]</a><span class="k">class</span> <span class="nc">TwilightDrake</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Twilight Drake&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="TwilightDrake.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.TwilightDrake.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">DRAGON</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">gain_one_health_for_each_card_in_hand</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">minion</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

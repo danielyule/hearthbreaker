@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hsgame.cards.spells.mage &mdash; hsgame  documentation</title>
+    
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hsgame.cards.spells.mage</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">from</span> <span class="nn">hsgame.constants</span> <span class="kn">import</span> <span class="n">CHARACTER_CLASS</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="p">,</span> <span class="n">MINION_TYPE</span>
+<span class="kn">from</span> <span class="nn">hsgame.game_objects</span> <span class="kn">import</span> <span class="n">Card</span><span class="p">,</span> <span class="n">Minion</span><span class="p">,</span> <span class="n">MinionCard</span><span class="p">,</span> <span class="n">SecretCard</span>
+<span class="kn">import</span> <span class="nn">hsgame.targeting</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
+
+
+<div class="viewcode-block" id="ArcaneMissiles"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneMissiles">[docs]</a><span class="k">class</span> <span class="nc">ArcaneMissiles</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Arcane Missiles&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArcaneMissiles.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneMissiles.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">):</span>
+            <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">targets</span><span class="p">[</span><span class="n">game</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="IceLance"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceLance">[docs]</a><span class="k">class</span> <span class="nc">IceLance</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ice Lance&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IceLance.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceLance.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="MirrorImage"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.MirrorImage">[docs]</a><span class="k">class</span> <span class="nc">MirrorImage</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mirror Image&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MirrorImage.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.MirrorImage.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">MirrorImageMinion</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mirror Image&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">SPECIAL</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+                <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">minion</span><span class="o">.</span><span class="n">taunt</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">return</span> <span class="n">minion</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">mirror_image</span> <span class="o">=</span> <span class="n">MirrorImageMinion</span><span class="p">()</span>
+            <span class="n">mirror_image</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="n">player</span><span class="p">)</span><span class="o">.</span><span class="n">add_to_board</span><span class="p">(</span><span class="n">mirror_image</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="ArcaneExplosion"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneExplosion">[docs]</a><span class="k">class</span> <span class="nc">ArcaneExplosion</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Arcane Explosion&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArcaneExplosion.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneExplosion.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Frostbolt"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Frostbolt">[docs]</a><span class="k">class</span> <span class="nc">Frostbolt</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Frostbolt&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Frostbolt.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Frostbolt.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">3</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="ArcaneIntellect"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneIntellect">[docs]</a><span class="k">class</span> <span class="nc">ArcaneIntellect</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Arcane Intellect&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArcaneIntellect.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ArcaneIntellect.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="FrostNova"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.FrostNova">[docs]</a><span class="k">class</span> <span class="nc">FrostNova</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Frost Nova&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FrostNova.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.FrostNova.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="p">:</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="Counterspell"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Counterspell">[docs]</a><span class="k">class</span> <span class="nc">Counterspell</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Counterspell&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Counterspell.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Counterspell.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+</div>
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
+        <span class="n">card</span><span class="o">.</span><span class="n">cancel</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Counterspell.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Counterspell.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Counterspell.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Counterspell.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="IceBarrier"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBarrier">[docs]</a><span class="k">class</span> <span class="nc">IceBarrier</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ice Barrier&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">armour</span> <span class="o">+=</span> <span class="mi">8</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+
+<div class="viewcode-block" id="IceBarrier.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBarrier.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;attacked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="IceBarrier.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBarrier.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;attacked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="MirrorEntity"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.MirrorEntity">[docs]</a><span class="k">class</span> <span class="nc">MirrorEntity</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Mirror Entity&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minion</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">minion</span><span class="o">.</span><span class="n">player</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
+            <span class="n">mirror</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">minion</span><span class="p">)</span>
+            <span class="n">mirror</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="n">player</span>
+            <span class="n">mirror</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">minion</span><span class="o">.</span><span class="n">card</span><span class="p">)</span>
+            <span class="n">mirror</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mirror</span><span class="p">)</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;minion_added&quot;</span><span class="p">,</span> <span class="n">mirror</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MirrorEntity.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.MirrorEntity.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;minion_added&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MirrorEntity.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.MirrorEntity.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;minion_added&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Spellbender"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Spellbender">[docs]</a><span class="k">class</span> <span class="nc">Spellbender</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Spellbender&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">card</span><span class="o">.</span><span class="n">targetable</span><span class="p">:</span>
+            <span class="k">class</span> <span class="nc">SpellbenderMinion</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+                <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Spellbender&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">SPECIAL</span><span class="p">)</span>
+
+                <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">choose_bender</span><span class="p">(</span><span class="n">targets</span><span class="p">):</span>
+                <span class="n">minion_card</span> <span class="o">=</span> <span class="n">SpellbenderMinion</span><span class="p">()</span>
+                <span class="n">minion</span> <span class="o">=</span> <span class="n">minion_card</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+                <span class="n">minion</span><span class="o">.</span><span class="n">add_to_board</span><span class="p">(</span><span class="n">minion_card</span><span class="p">,</span> <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+                <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_target</span> <span class="o">=</span> <span class="n">old_target</span>
+                <span class="k">return</span> <span class="n">minion</span>
+
+            <span class="n">old_target</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_target</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_target</span> <span class="o">=</span> <span class="n">choose_bender</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Spellbender.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Spellbender.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Spellbender.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Spellbender.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Vaporize"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Vaporize">[docs]</a><span class="k">class</span> <span class="nc">Vaporize</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Vaporize&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">attacker</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Minion</span><span class="p">:</span>
+            <span class="n">attacker</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">attacker</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Vaporize.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Vaporize.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;attacked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Vaporize.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Vaporize.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;attacked&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="IceBlock"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBlock">[docs]</a><span class="k">class</span> <span class="nc">IceBlock</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ice Block&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_reveal_if_fatal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">health</span> <span class="o">-</span> <span class="n">amount</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">immune</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">health</span> <span class="o">+=</span> <span class="n">amount</span>
+            <span class="c">#TODO Check if this spell will also prevent damage to armour.</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
+            <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;secret_damaged&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal_if_fatal</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IceBlock.activate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBlock.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;secret_damaged&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal_if_fatal</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="IceBlock.deactivate"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.IceBlock.deactivate">[docs]</a>    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;secret_damaged&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal_if_fatal</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="ConeOfCold"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ConeOfCold">[docs]</a><span class="k">class</span> <span class="nc">ConeOfCold</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Cone of Cold&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ConeOfCold.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.ConeOfCold.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">index</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">index</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">minion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">minion</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="Fireball"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Fireball">[docs]</a><span class="k">class</span> <span class="nc">Fireball</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Fireball&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Fireball.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Fireball.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">6</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Polymorph"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Polymorph">[docs]</a><span class="k">class</span> <span class="nc">Polymorph</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Polymorph&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Polymorph.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Polymorph.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+
+        <span class="k">class</span> <span class="nc">Sheep</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Sheep&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">SPECIAL</span><span class="p">)</span>
+
+            <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
+
+        <span class="n">sheep</span> <span class="o">=</span> <span class="n">Sheep</span><span class="p">()</span>
+        <span class="n">minion</span> <span class="o">=</span> <span class="n">sheep</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">minion</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="n">sheep</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="n">minion</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">minion</span>
+
+</div></div>
+<div class="viewcode-block" id="Blizzard"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Blizzard">[docs]</a><span class="k">class</span> <span class="nc">Blizzard</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Blizzard&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Blizzard.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Blizzard.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="Flamestrike"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Flamestrike">[docs]</a><span class="k">class</span> <span class="nc">Flamestrike</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Flamestrike&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Flamestrike.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Flamestrike.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">4</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Pyroblast"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Pyroblast">[docs]</a><span class="k">class</span> <span class="nc">Pyroblast</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Pyroblast&quot;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Pyroblast.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.mage.Pyroblast.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">10</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>
