@@ -137,3 +137,11 @@ class TwilightDrake(MinionCard):
         minion = Minion(4, 1, MINION_TYPE.DRAGON)
         minion.bind('added_to_board', gain_one_health_for_each_card_in_hand)
         return minion
+    
+class MagmaRager(MinionCard):
+    def __init__(self):
+        super().__init__("Magma Rager", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(5, 1)
+    

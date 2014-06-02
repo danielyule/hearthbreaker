@@ -14,7 +14,8 @@ from hsgame.cards.minions.neutral import \
     IronfurGrizzly, \
     ArgentSquire, \
     SilvermoonGuardian, \
-    TwilightDrake
+    TwilightDrake, \
+    MagmaRager
 
 from hsgame.cards.minions.druid import \
     KeeperOfTheGrove, \
