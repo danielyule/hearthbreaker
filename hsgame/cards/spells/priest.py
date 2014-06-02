@@ -155,18 +155,21 @@ class ShadowMadness(Card):
         super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, hsgame.targeting.find_enemy_minion_spell_target, lambda target: target.attack_power <= 3 and target.spell_targetable())
 
     def use(self, player, game):
+        
+        def switch_side(*args):
+            minion.remove_from_board()
+            minion.add_to_board(self.target.card, self.target.game, self.target.player, 0)
+        
         super().use(player, game)
         
         minion = copy.copy(self.target)
         minion.charge = True
+        minion.bind_once("silenced", lambda p: p.unbind("turn_ended", switch_side), player)
         
         self.target.remove_from_board()
         minion.add_to_board(minion.card, game, player, 0)
         
-        # TODO: How does silence work with this card? Do you keep the card?
-        # TODO: And make sure these two next lines doesn't occur if a card like Youthful Brewmaster have been played on this card
-        player.bind_once("turn_ended", lambda m: m.remove_from_board(), minion)
-        player.bind_once("turn_ended", lambda m: m.add_to_board(self.target.card, self.target.game, self.target.player, 0), self.target)
+        player.bind_once("turn_ended", switch_side)
         
 class Silence(Card):
     def __init__(self):

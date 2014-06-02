@@ -213,18 +213,45 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, len(game.players[1].hand))
 
     def test_ShadowMadness(self):
-        game = generate_game_for(StonetuskBoar, ShadowMadness, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([MagmaRager, MogushanWarden, WarGolem], [ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, Silence], MinionPlayingAgent, PredictableAgentWithoutHeroPower)
         
-        # Play some Stonetusk Boar.
-        for turn in range(0, 7):
+        # Magma Rager should be played
+        for turn in range(0, 5):
             game.play_single_turn()
         
-        self.assertEqual(4, len(game.players[0].minions))        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        self.assertEqual(6, len(game.players[1].hand))
         
-        # Shadow Madness should be played, gaining control of one of the Stonetusk Boars, no attack occur and the minion should return to the opponent again.
+        # Shadow Madness shouldn't be played, since Magma Rager has attack > 3
         game.play_single_turn()
-        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[1].hand))
+        
+        # Mogu'shan Warden should be played
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Mogu'shan Warden", game.players[0].minions[0].card.name)
+        
+        # Shadow Madness should be played, targeting the Mogu'shan that will attack the Magma.
+        # Results in killing the Magma, and Mogu'shan takes 5 damage before being returned to the owner.
+        game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Mogu'shan Warden", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        
+        # Nothing should happen, no mana for War Golem
+        game.play_single_turn()
+        
+        # Shadow Madness should be played again targeting the damaged Mogu'shan. Silence should follow after, that target
+        # the "mind controlled" Mogu'shan, making it stay on our side when turn ends.
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual("Mogu'shan Warden", game.players[1].minions[0].card.name)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(29, game.players[0].hero.health)
 
     def test_Silence(self):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
