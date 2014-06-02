@@ -168,3 +168,12 @@ class ShadowMadness(Card):
         player.bind_once("turn_ended", lambda m: m.remove_from_board(), minion)
         player.bind_once("turn_ended", lambda m: m.add_to_board(self.target.card, self.target.game, self.target.player, 0), self.target)
         
+class Silence(Card):
+    def __init__(self):
+        super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.silence()
+        

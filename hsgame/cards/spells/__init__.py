@@ -75,4 +75,5 @@ from hsgame.cards.spells.priest import \
     MindVision, \
     Mindgames, \
     PowerWordShield, \
-    ShadowMadness
+    ShadowMadness, \
+    Silence

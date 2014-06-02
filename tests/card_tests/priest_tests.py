@@ -225,3 +225,21 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Silence(self):
+        game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
+
+        # Ironfur Grizzly should be played
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].taunt)
+        
+        # Silence should be played, targeting the grizzly
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        self.assertFalse(game.players[0].minions[0].taunt)
+        

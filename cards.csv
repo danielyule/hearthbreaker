@@ -304,7 +304,7 @@ no,Shield Slam,Deal 1 damage to a minion for each Armor you have.,,Warrior,1,,,E
 no,Shieldbearer,Taunt,,,1,0,4,Expert,Minion
 no,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Basic,Spell
 no,SI:7 Agent,Combo: Deal 2 damage.,,Rogue,3,3,3,Expert,Minion
-no,Silence,Silence a minion.,,Priest,0,,,Expert,Spell
+yes,Silence,Silence a minion.,,Priest,0,,,Expert,Spell
 no,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Expert,Minion
 no,Silverback Patriarch,Taunt,Beast,,3,1,4,Basic,Minion
 yes,Silvermoon Guardian,Divine Shield,,,4,3,3,Expert,Minion
