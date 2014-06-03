@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame package &mdash; hsgame  documentation</title>
+    <title>hsgame package &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,11 +26,16 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="index.html" />
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="index.html" />
     <link rel="next" title="hsgame.agents package" href="hsgame.agents.html" />
     <link rel="prev" title="Welcome to hsgame’s documentation!" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -36,16 +44,19 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.agents.html" title="hsgame.agents package"
-             accesskey="N">next</a> |</li>
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Welcome to hsgame’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">hsgame  documentation</a> &raquo;</li> 
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -260,10 +271,75 @@
 <dt id="hsgame.game_objects.Bindable">
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Bindable</tt><a class="reference internal" href="_modules/hsgame/game_objects.html#Bindable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<p>A class which inherits from Bindable has an event structure added to it.</p>
+<p>This event structure follows the observer pattern.  It consists of two parts: binding and triggering.
+A function handler is bound to an event using the <a class="reference internal" href="#hsgame.game_objects.Bindable.bind" title="hsgame.game_objects.Bindable.bind"><tt class="xref py py-meth docutils literal"><span class="pre">bind()</span></tt></a> or <a class="reference internal" href="#hsgame.game_objects.Bindable.bind_once" title="hsgame.game_objects.Bindable.bind_once"><tt class="xref py py-meth docutils literal"><span class="pre">bind_once()</span></tt></a> methods.  When the event is
+triggered using the <a class="reference internal" href="#hsgame.game_objects.Bindable.trigger" title="hsgame.game_objects.Bindable.trigger"><tt class="xref py py-meth docutils literal"><span class="pre">trigger()</span></tt></a> method, then any function handlers which have been bound to that event are
+called.</p>
+<p>Arguments can be passed to a bound function when binding or when triggering, or both.  Arguments from triggering
+are passed first, followed by arguments from binding.</p>
+<p>Functions can be bound such that they are called each time an event is triggered, or so that they are only called
+the next time a function is triggered.  The former case is handled by <a class="reference internal" href="#hsgame.game_objects.Bindable.bind" title="hsgame.game_objects.Bindable.bind"><tt class="xref py py-meth docutils literal"><span class="pre">bind()</span></tt></a> and the latter by
+<a class="reference internal" href="#hsgame.game_objects.Bindable.bind_once" title="hsgame.game_objects.Bindable.bind_once"><tt class="xref py py-meth docutils literal"><span class="pre">bind_once()</span></tt></a></p>
+<p><strong>Examples</strong>:</p>
+<p>Simple Binding:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">EventTarget</span><span class="p">(</span><span class="n">Bindable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">fangs</span><span class="p">,</span> <span class="n">scales</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;fangs: {:d}, scales: {:d}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fangs</span><span class="p">,</span> <span class="n">scales</span><span class="p">))</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">EventTarget</span><span class="p">()</span>
+<span class="n">target</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;attack&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">,</span> <span class="mi">1001</span><span class="p">)</span>
+<span class="n">target</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;attack&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>             <span class="c"># outputs &quot;fangs: 2, scales: 1001&quot;</span>
+<span class="n">target</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;attack&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>             <span class="c"># outputs &quot;fangs: 6, scales: 1001&quot;</span>
+</pre></div>
+</div>
+<p>Binding Once:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">EventTarget</span><span class="p">(</span><span class="n">Bindable</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">joke</span><span class="p">):</span>
+     <span class="k">print</span><span class="p">(</span><span class="s">&quot;{:s}! HAHAHA&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">joke</span><span class="p">))</span>
+
+<span class="n">target</span> <span class="o">=</span> <span class="n">EventTarget</span><span class="p">()</span>
+<span class="n">target</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;joke_told&quot;</span><span class="p">,</span> <span class="n">handler</span><span class="p">)</span>
+
+<span class="c"># outputs &quot;Well, I&#39;d better replace it then! HAHAHA&quot;</span>
+<span class="n">target</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;joke_told&quot;</span><span class="p">,</span> <span class="s">&quot;Well, I&#39;d better replace it then&quot;</span><span class="p">)</span>
+
+<span class="c"># outputs nothing</span>
+<span class="n">target</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;joke_told&quot;</span><span class="p">,</span> <span class="s">&quot;What a senseless waste of human life&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Any class which subclasses this class must be sure to call <a class="reference internal" href="#hsgame.game_objects.Bindable.__init__" title="hsgame.game_objects.Bindable.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Bindable.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Bindable.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a new :class:Bindable.  Must be called by any subclasses.</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.bind">
 <tt class="descname">bind</tt><big>(</big><em>event</em>, <em>function</em>, <em>*args</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Bindable.bind"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.bind" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Bind a function to an event.  Each time the event is triggered, the function will be called.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>str</strong> (<em>event</em>) &#8211; The event to bind a function to</li>
+<li><strong>function</strong> (<em>function</em>) &#8211; The function to bind.  The parameters are not checked until it is called, so
+ensure its signature matches the parameters called from <a class="reference internal" href="#hsgame.game_objects.Bindable.trigger" title="hsgame.game_objects.Bindable.trigger"><tt class="xref py py-meth docutils literal"><span class="pre">trigger()</span></tt></a></li>
+<li><strong>args</strong> &#8211; Any other parameters to be called</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.bind_once">
@@ -284,8 +360,18 @@
 
 <dl class="class">
 <dt id="hsgame.game_objects.Card">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>target_func=None</em>, <em>filter_func=&lt;function Card.&lt;lambda&gt; at 0x0000000004202BF8&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Card"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>target_func=None</em>, <em>filter_func=&lt;function Card.&lt;lambda&gt; at 0x0000000005D980D0&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Card"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Card.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>target_func=None</em>, <em>filter_func=&lt;function Card.&lt;lambda&gt; at 0x0000000005D980D0&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Card.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;name: string
+&#64;mana: int
+&#64;gold: int
+&#64;character_class: CHARACTER_CLASS
+&#64;status: CARD_STATUS</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Card.can_use">
 <tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Card.can_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.can_use" title="Permalink to this definition">¶</a></dt>
@@ -312,6 +398,11 @@
 <dt id="hsgame.game_objects.Character">
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Character</tt><big>(</big><em>attack_power</em>, <em>health</em>, <em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Character"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Character.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>health</em>, <em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Character.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Character.activate_delayed">
 <tt class="descname">activate_delayed</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Character.activate_delayed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.activate_delayed" title="Permalink to this definition">¶</a></dt>
@@ -414,6 +505,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Deck</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Deck"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
+<dt id="hsgame.game_objects.Deck.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Deck.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.game_objects.Deck.can_draw">
 <tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Deck.can_draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.can_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -432,8 +528,13 @@
 
 <dl class="class">
 <dt id="hsgame.game_objects.Game">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002FD8C88&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002F5AAD8&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Game"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Game.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002F5AAD8&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Game.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Game.game_over">
 <tt class="descname">game_over</tt><big>(</big><em>attacker</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Game.game_over"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.game_over" title="Permalink to this definition">¶</a></dt>
@@ -470,12 +571,23 @@
 <dt id="hsgame.game_objects.GameException">
 <em class="property">exception </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">GameException</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#GameException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
+<p>An <a class="reference external" href="http://docs.python.org/3.2/library/exceptions.html#Exception" title="(in Python v3.2)"><tt class="xref py py-class docutils literal"><span class="pre">Exception</span></tt></a> relating to the operation of the game</p>
+<dl class="method">
+<dt id="hsgame.game_objects.GameException.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#GameException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Hero">
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Hero</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Hero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Character" title="hsgame.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Character</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Hero.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Hero.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.attack">
 <tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Hero.attack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.attack" title="Permalink to this definition">¶</a></dt>
@@ -517,6 +629,11 @@
 <dt id="hsgame.game_objects.Minion">
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Minion</tt><big>(</big><em>attack</em>, <em>health</em>, <em>type=0</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Minion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Character" title="hsgame.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Character</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Minion.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>attack</em>, <em>health</em>, <em>type=0</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Minion.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.add_to_board">
 <tt class="descname">add_to_board</tt><big>(</big><em>card</em>, <em>game</em>, <em>player</em>, <em>index</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Minion.add_to_board"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.add_to_board" title="Permalink to this definition">¶</a></dt>
@@ -566,8 +683,13 @@
 
 <dl class="class">
 <dt id="hsgame.game_objects.MinionCard">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x0000000004331048&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#MinionCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x0000000005D98488&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#MinionCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.MinionCard.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x0000000005D98488&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#MinionCard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.can_use">
 <tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#MinionCard.can_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.can_use" title="Permalink to this definition">¶</a></dt>
@@ -592,8 +714,13 @@
 
 <dl class="class">
 <dt id="hsgame.game_objects.Player">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002FD8C88&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002F5AAD8&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.Player.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random=&lt;bound method Random.randint of &lt;random.Random object at 0x0000000002F5AAD8&gt;&gt;</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Player.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.Player.can_draw">
 <tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#Player.can_draw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.can_draw" title="Permalink to this definition">¶</a></dt>
@@ -620,6 +747,11 @@
 <dt id="hsgame.game_objects.SecretCard">
 <em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">SecretCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#SecretCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.game_objects.SecretCard.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>status</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#SecretCard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.activate">
 <tt class="descname">activate</tt><big>(</big><em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#SecretCard.activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.activate" title="Permalink to this definition">¶</a></dt>
@@ -650,7 +782,19 @@
 <dl class="function">
 <dt id="hsgame.game_objects.card_lookup">
 <tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">card_lookup</tt><big>(</big><em>card_name</em><big>)</big><a class="reference internal" href="_modules/hsgame/game_objects.html#card_lookup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.card_lookup" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Given a the name of a card as a string, return an object corresponding to that card</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>card_type</strong> (<a class="reference external" href="http://docs.python.org/3.2/library/functions.html#str" title="(in Python v3.2)"><em>str</em></a>) &#8211; The name of the card in English</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An instance of a subclass of Card corresponding to the given card name or None if no Card
+by that name exists.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-hsgame.powers">
@@ -659,6 +803,11 @@
 <dt id="hsgame.powers.DruidPower">
 <em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">DruidPower</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#DruidPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.DruidPower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.powers.Power" title="hsgame.powers.Power"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.powers.Power</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.powers.DruidPower.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#DruidPower.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.DruidPower.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.powers.DruidPower.use">
 <tt class="descname">use</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#DruidPower.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.DruidPower.use" title="Permalink to this definition">¶</a></dt>
@@ -671,6 +820,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">MagePower</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#MagePower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.MagePower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.powers.Power" title="hsgame.powers.Power"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.powers.Power</span></tt></a></p>
 <dl class="method">
+<dt id="hsgame.powers.MagePower.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#MagePower.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.MagePower.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.powers.MagePower.use">
 <tt class="descname">use</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#MagePower.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.MagePower.use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -682,6 +836,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">PaladinPower</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PaladinPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PaladinPower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.powers.Power" title="hsgame.powers.Power"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.powers.Power</span></tt></a></p>
 <dl class="method">
+<dt id="hsgame.powers.PaladinPower.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PaladinPower.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PaladinPower.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.powers.PaladinPower.use">
 <tt class="descname">use</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PaladinPower.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PaladinPower.use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -692,6 +851,11 @@
 <dt id="hsgame.powers.Power">
 <em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">Power</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#Power"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.powers.Power.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#Power.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.powers.Power.can_use">
 <tt class="descname">can_use</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#Power.can_use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.can_use" title="Permalink to this definition">¶</a></dt>
@@ -708,6 +872,11 @@
 <dt id="hsgame.powers.PriestPower">
 <em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">PriestPower</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PriestPower"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PriestPower" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.powers.Power" title="hsgame.powers.Power"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.powers.Power</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.powers.PriestPower.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PriestPower.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PriestPower.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.powers.PriestPower.use">
 <tt class="descname">use</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/powers.html#PriestPower.use"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.PriestPower.use" title="Permalink to this definition">¶</a></dt>
@@ -728,6 +897,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">AttackAction</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#AttackAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
+<dt id="hsgame.replay.AttackAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#AttackAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.replay.AttackAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#AttackAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -743,6 +917,11 @@
 <dt id="hsgame.replay.ConcedeAction">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ConcedeAction</tt><a class="reference internal" href="_modules/hsgame/replay.html#ConcedeAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.replay.ConcedeAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ConcedeAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.replay.ConcedeAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ConcedeAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.play" title="Permalink to this definition">¶</a></dt>
@@ -760,6 +939,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">MinionAction</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#MinionAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
+<dt id="hsgame.replay.MinionAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#MinionAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.replay.MinionAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#MinionAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -776,6 +960,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">PowerAction</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#PowerAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
+<dt id="hsgame.replay.PowerAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#PowerAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.replay.PowerAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#PowerAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -791,6 +980,11 @@
 <dt id="hsgame.replay.ProxyCard">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCard</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.replay.ProxyCard.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCard.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.replay.ProxyCard.resolve">
 <tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCard.resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.resolve" title="Permalink to this definition">¶</a></dt>
@@ -813,6 +1007,11 @@
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCharacter</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCharacter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
+<dt id="hsgame.replay.ProxyCharacter.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCharacter.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
 <dt id="hsgame.replay.ProxyCharacter.resolve">
 <tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ProxyCharacter.resolve"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.resolve" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
@@ -828,12 +1027,22 @@
 <dt id="hsgame.replay.RecordingGame">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">RecordingGame</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#RecordingGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Game" title="hsgame.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Game</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.replay.RecordingGame.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#RecordingGame.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.Replay">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">Replay</tt><a class="reference internal" href="_modules/hsgame/replay.html#Replay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.replay.Replay.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#Replay.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.replay.Replay.parse_replay">
 <tt class="descname">parse_replay</tt><big>(</big><em>replayfile</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#Replay.parse_replay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.parse_replay" title="Permalink to this definition">¶</a></dt>
@@ -906,18 +1115,33 @@
 <dt id="hsgame.replay.ReplayException">
 <em class="property">exception </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ReplayException</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ReplayException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
+<dl class="method">
+<dt id="hsgame.replay.ReplayException.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#ReplayException.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.SavedGame">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SavedGame</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#SavedGame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Game" title="hsgame.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Game</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.replay.SavedGame.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#SavedGame.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.SpellAction">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SpellAction</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#SpellAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.replay.SpellAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#SpellAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.replay.SpellAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#SpellAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.play" title="Permalink to this definition">¶</a></dt>
@@ -934,6 +1158,11 @@
 <dt id="hsgame.replay.TurnEndAction">
 <em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">TurnEndAction</tt><big>(</big><em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#TurnEndAction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
+<dl class="method">
+<dt id="hsgame.replay.TurnEndAction.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>game=None</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#TurnEndAction.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.replay.TurnEndAction.play">
 <tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hsgame/replay.html#TurnEndAction.play"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.play" title="Permalink to this definition">¶</a></dt>
@@ -1000,9 +1229,9 @@
         </div>
       </div>
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
+        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
+    <h3><a href="index.html">Page contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">hsgame package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -1016,12 +1245,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to hsgame&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="hsgame.agents.html"
-                        title="next chapter">hsgame.agents package</a></p>
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="index.html"
+                          title="Previous page">&larr; Welcome to hsgame&#8217;s documentation!</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="hsgame.agents.html"
+                          title="Next page">&rarr; hsgame.agents package</a></p>
+  </div>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/hsgame.txt"
@@ -1044,6 +1278,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -1052,19 +1288,22 @@
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.agents.html" title="hsgame.agents package"
-             >next</a> |</li>
+             >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Welcome to hsgame’s documentation!"
-             >previous</a> |</li>
-        <li><a href="index.html">hsgame  documentation</a> &raquo;</li> 
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

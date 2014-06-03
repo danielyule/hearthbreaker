@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame.agents package &mdash; hsgame  documentation</title>
+    <title>hsgame.agents package &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,12 +26,17 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="index.html" />
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="index.html" />
     <link rel="up" title="hsgame package" href="hsgame.html" />
     <link rel="next" title="hsgame.cards package" href="hsgame.cards.html" />
     <link rel="prev" title="hsgame package" href="hsgame.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -37,17 +45,20 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.cards.html" title="hsgame.cards package"
-             accesskey="N">next</a> |</li>
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">hsgame  documentation</a> &raquo;</li>
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="hsgame.html" accesskey="U">hsgame package</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -65,6 +76,11 @@
 <dt id="hsgame.agents.basic_agents.DoNothingBot">
 <em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">DoNothingBot</tt><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#DoNothingBot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.agents.basic_agents.DoNothingBot.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#DoNothingBot.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.choose_index">
 <tt class="descname">choose_index</tt><big>(</big><em>card</em><big>)</big><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#DoNothingBot.choose_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_index" title="Permalink to this definition">¶</a></dt>
@@ -101,6 +117,11 @@
 <dt id="hsgame.agents.basic_agents.PredictableBot">
 <em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">PredictableBot</tt><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#PredictableBot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.agents.basic_agents.PredictableBot.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#PredictableBot.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.PredictableBot.choose_index">
 <tt class="descname">choose_index</tt><big>(</big><em>card</em><big>)</big><a class="reference internal" href="_modules/hsgame/agents/basic_agents.html#PredictableBot.choose_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.choose_index" title="Permalink to this definition">¶</a></dt>
@@ -140,6 +161,11 @@
 <dt id="hsgame.agents.user_agents.Observer">
 <em class="property">class </em><tt class="descclassname">hsgame.agents.user_agents.</tt><tt class="descname">Observer</tt><big>(</big><em>writer</em><big>)</big><a class="reference internal" href="_modules/hsgame/agents/user_agents.html#Observer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dl class="method">
+<dt id="hsgame.agents.user_agents.Observer.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>writer</em><big>)</big><a class="reference internal" href="_modules/hsgame/agents/user_agents.html#Observer.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.card_drawn">
 <tt class="descname">card_drawn</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference internal" href="_modules/hsgame/agents/user_agents.html#Observer.card_drawn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.card_drawn" title="Permalink to this definition">¶</a></dt>
@@ -188,9 +214,9 @@
         </div>
       </div>
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
+        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
+    <h3><a href="index.html">Page contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">hsgame.agents package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-hsgame.agents.basic_agents">hsgame.agents.basic_agents module</a></li>
@@ -200,12 +226,17 @@
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="hsgame.html"
-                        title="previous chapter">hsgame package</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="hsgame.cards.html"
-                        title="next chapter">hsgame.cards package</a></p>
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="hsgame.html"
+                          title="Previous page">&larr; hsgame package</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="hsgame.cards.html"
+                          title="Next page">&rarr; hsgame.cards package</a></p>
+  </div>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/hsgame.agents.txt"
@@ -228,6 +259,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -236,20 +269,23 @@
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.cards.html" title="hsgame.cards package"
-             >next</a> |</li>
+             >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             >previous</a> |</li>
-        <li><a href="index.html">hsgame  documentation</a> &raquo;</li>
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="hsgame.html" >hsgame package</a> &raquo;</li> 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

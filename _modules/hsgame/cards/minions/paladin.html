@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame.cards.minions.paladin &mdash; hsgame  documentation</title>
+    <title>hsgame.cards.minions.paladin &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,10 +26,15 @@
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <script type="text/javascript" src="../../../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../../../_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="../../../../index.html" />
     <link rel="up" title="Module code" href="../../../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,11 +43,14 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -56,27 +67,27 @@
 
 
 <div class="viewcode-block" id="AldorPeacekeeper"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.AldorPeacekeeper">[docs]</a><span class="k">class</span> <span class="nc">AldorPeacekeeper</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AldorPeacekeeper.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.AldorPeacekeeper.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Aldor Peacekeeper&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_enemy_minion_battlecry_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="AldorPeacekeeper.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.AldorPeacekeeper.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">change_attack_to_one</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">minion</span>
     </div></div>
 <div class="viewcode-block" id="ArgentProtector"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.ArgentProtector">[docs]</a><span class="k">class</span> <span class="nc">ArgentProtector</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ArgentProtector.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.ArgentProtector.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Argent Protector&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_friendly_minion_battlecry_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="ArgentProtector.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.ArgentProtector.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">give_divine_shield</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">minion</span>
     </div></div>
 <div class="viewcode-block" id="GuardianOfKings"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.GuardianOfKings">[docs]</a><span class="k">class</span> <span class="nc">GuardianOfKings</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GuardianOfKings.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.GuardianOfKings.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Guardian of Kings&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="GuardianOfKings.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.paladin.GuardianOfKings.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
         <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
@@ -105,6 +116,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -113,14 +126,17 @@
              >index</a></li>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

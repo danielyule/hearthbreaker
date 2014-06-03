@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame.powers &mdash; hsgame  documentation</title>
+    <title>hsgame.powers &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,10 +26,15 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="../../index.html" />
+    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,11 +43,14 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -65,9 +76,9 @@
 </div>
 <div class="viewcode-block" id="Power"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power">[docs]</a><span class="k">class</span> <span class="nc">Power</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+<div class="viewcode-block" id="Power.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hero</span> <span class="o">=</span> <span class="n">hero</span>
-
+</div>
 <div class="viewcode-block" id="Power.can_use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.Power.can_use">[docs]</a>    <span class="k">def</span> <span class="nf">can_use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">mana</span> <span class="o">&gt;=</span> <span class="mi">2</span>
 </div>
@@ -79,9 +90,9 @@
 </div></div>
 <div class="viewcode-block" id="DruidPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.DruidPower">[docs]</a><span class="k">class</span> <span class="nc">DruidPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+<div class="viewcode-block" id="DruidPower.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.DruidPower.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="DruidPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.DruidPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">increase_temp_attack</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -90,9 +101,9 @@
 </div></div>
 <div class="viewcode-block" id="MagePower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.MagePower">[docs]</a><span class="k">class</span> <span class="nc">MagePower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+<div class="viewcode-block" id="MagePower.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.MagePower.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="MagePower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.MagePower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
         <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">find_power_target</span><span class="p">()</span>
@@ -101,9 +112,9 @@
 </div></div>
 <div class="viewcode-block" id="PriestPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PriestPower">[docs]</a><span class="k">class</span> <span class="nc">PriestPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+<div class="viewcode-block" id="PriestPower.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PriestPower.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="PriestPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PriestPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">()</span>
         <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">find_power_target</span><span class="p">()</span>
@@ -112,9 +123,9 @@
 </div></div>
 <div class="viewcode-block" id="PaladinPower"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PaladinPower">[docs]</a><span class="k">class</span> <span class="nc">PaladinPower</span><span class="p">(</span><span class="n">Power</span><span class="p">):</span>
     
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
+<div class="viewcode-block" id="PaladinPower.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PaladinPower.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hero</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">hero</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="PaladinPower.use"><a class="viewcode-back" href="../../hsgame.html#hsgame.powers.PaladinPower.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">class</span> <span class="nc">SilverHandRecruit</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">MinionCard</span><span class="p">):</span>
             <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -151,6 +162,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -159,14 +172,17 @@
              >index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

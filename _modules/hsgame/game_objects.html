@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame.game_objects &mdash; hsgame  documentation</title>
+    <title>hsgame.game_objects &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,10 +26,15 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="../../index.html" />
+    <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,11 +43,14 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -60,6 +71,13 @@
 
 
 <div class="viewcode-block" id="card_lookup"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.card_lookup">[docs]</a><span class="k">def</span> <span class="nf">card_lookup</span><span class="p">(</span><span class="n">card_name</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a the name of a card as a string, return an object corresponding to that card</span>
+
+<span class="sd">    :param str card_type: The name of the card in English</span>
+<span class="sd">    :return: An instance of a subclass of Card corresponding to the given card name or None if no Card</span>
+<span class="sd">             by that name exists.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">card_lookup_rec</span><span class="p">(</span><span class="n">card_type</span><span class="p">):</span>
         <span class="n">subclasses</span> <span class="o">=</span> <span class="n">card_type</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subclasses</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
@@ -79,15 +97,80 @@
 
 </div>
 <div class="viewcode-block" id="GameException"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.GameException">[docs]</a><span class="k">class</span> <span class="nc">GameException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An :class:`Exception` relating to the operation of the game</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GameException.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.GameException.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-</div>
+</div></div>
 <div class="viewcode-block" id="Bindable"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Bindable">[docs]</a><span class="k">class</span> <span class="nc">Bindable</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class which inherits from Bindable has an event structure added to it.</span>
 
+<span class="sd">    This event structure follows the observer pattern.  It consists of two parts: binding and triggering.</span>
+<span class="sd">    A function handler is bound to an event using the :meth:`bind` or :meth:`bind_once` methods.  When the event is</span>
+<span class="sd">    triggered using the :meth:`trigger` method, then any function handlers which have been bound to that event are</span>
+<span class="sd">    called.</span>
+
+<span class="sd">    Arguments can be passed to a bound function when binding or when triggering, or both.  Arguments from triggering</span>
+<span class="sd">    are passed first, followed by arguments from binding.</span>
+
+<span class="sd">    Functions can be bound such that they are called each time an event is triggered, or so that they are only called</span>
+<span class="sd">    the next time a function is triggered.  The former case is handled by :meth:`bind` and the latter by</span>
+<span class="sd">    :meth:`bind_once`</span>
+
+<span class="sd">    **Examples**:</span>
+
+<span class="sd">    Simple Binding::</span>
+
+<span class="sd">       class EventTarget(Bindable):</span>
+<span class="sd">           def __init__(self):</span>
+<span class="sd">               super().__init__()</span>
+
+<span class="sd">       def handler(fangs, scales):</span>
+<span class="sd">           print(&quot;fangs: {:d}, scales: {:d}&quot;.format(fangs, scales))</span>
+
+<span class="sd">       target = EventTarget()</span>
+<span class="sd">       target.bind(&quot;attack&quot;, handler, 1001)</span>
+<span class="sd">       target.trigger(&quot;attack&quot;, 2)             # outputs &quot;fangs: 2, scales: 1001&quot;</span>
+<span class="sd">       target.trigger(&quot;attack&quot;, 6)             # outputs &quot;fangs: 6, scales: 1001&quot;</span>
+
+<span class="sd">    Binding Once::</span>
+
+<span class="sd">       class EventTarget(Bindable):</span>
+<span class="sd">           def __init__(self):</span>
+<span class="sd">               super().__init__()</span>
+
+<span class="sd">       def handler(joke):</span>
+<span class="sd">            print(&quot;{:s}! HAHAHA&quot;.format(joke))</span>
+
+<span class="sd">       target = EventTarget()</span>
+<span class="sd">       target.bind_once(&quot;joke_told&quot;, handler)</span>
+
+<span class="sd">       # outputs &quot;Well, I&#39;d better replace it then! HAHAHA&quot;</span>
+<span class="sd">       target.trigger(&quot;joke_told&quot;, &quot;Well, I&#39;d better replace it then&quot;)</span>
+
+<span class="sd">       # outputs nothing</span>
+<span class="sd">       target.trigger(&quot;joke_told&quot;, &quot;What a senseless waste of human life&quot;)</span>
+
+<span class="sd">    Any class which subclasses this class must be sure to call :meth:`__init__`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Bindable.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Bindable.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set up a new :class:Bindable.  Must be called by any subclasses.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">{}</span>
+</div>
 <div class="viewcode-block" id="Bindable.bind"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Bindable.bind">[docs]</a>    <span class="k">def</span> <span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Bind a function to an event.  Each time the event is triggered, the function will be called.</span>
+
+<span class="sd">        :param event str: The event to bind a function to</span>
+<span class="sd">        :param function function: The function to bind.  The parameters are not checked until it is called, so</span>
+<span class="sd">                                  ensure its signature matches the parameters called from :meth:`trigger`</span>
+<span class="sd">        :param args: Any other parameters to be called</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">class</span> <span class="nc">Handler</span><span class="p">:</span>
             <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
@@ -135,7 +218,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Card"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Card">[docs]</a><span class="k">class</span> <span class="nc">Card</span><span class="p">(</span><span class="n">Bindable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">target_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Card.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Card.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">target_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">filter_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">target</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">spell_targetable</span><span class="p">()):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            @name: string</span>
@@ -156,7 +239,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">get_targets</span> <span class="o">=</span> <span class="n">target_func</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filter_func</span> <span class="o">=</span> <span class="n">filter_func</span>
-
+</div>
 <div class="viewcode-block" id="Card.can_use"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Card.can_use">[docs]</a>    <span class="k">def</span> <span class="nf">can_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">targetable</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_targets</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_func</span><span class="p">)</span>
@@ -189,10 +272,10 @@
 
 </div>
 <div class="viewcode-block" id="MinionCard"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.MinionCard">[docs]</a><span class="k">class</span> <span class="nc">MinionCard</span><span class="p">(</span><span class="n">Card</span><span class="p">,</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">targeting_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+<div class="viewcode-block" id="MinionCard.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.MinionCard.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">targeting_func</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">filter_func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">target</span><span class="p">:</span> <span class="ow">not</span> <span class="n">target</span><span class="o">.</span><span class="n">stealth</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">targeting_func</span><span class="p">,</span> <span class="n">filter_func</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="MinionCard.can_use"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.MinionCard.can_use">[docs]</a>    <span class="k">def</span> <span class="nf">can_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">can_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
 </div>
@@ -209,10 +292,10 @@
 
 </div></div>
 <div class="viewcode-block" id="SecretCard"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.SecretCard">[docs]</a><span class="k">class</span> <span class="nc">SecretCard</span><span class="p">(</span><span class="n">Card</span><span class="p">,</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
+<div class="viewcode-block" id="SecretCard.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.SecretCard.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">mana</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="bp">None</span>
-
+</div>
 <div class="viewcode-block" id="SecretCard.can_use"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.SecretCard.can_use">[docs]</a>    <span class="k">def</span> <span class="nf">can_use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">can_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">secret</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">secret</span> <span class="ow">in</span> <span class="n">player</span><span class="o">.</span><span class="n">secrets</span><span class="p">]</span>
 </div>
@@ -235,7 +318,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Character"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Character">[docs]</a><span class="k">class</span> <span class="nc">Character</span><span class="p">(</span><span class="n">Bindable</span><span class="p">,</span><span class="n">metaclass</span><span class="o">=</span><span class="n">abc</span><span class="o">.</span><span class="n">ABCMeta</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack_power</span><span class="p">,</span> <span class="n">health</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+<div class="viewcode-block" id="Character.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Character.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack_power</span><span class="p">,</span> <span class="n">health</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">health</span> <span class="o">=</span> <span class="n">health</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_health</span> <span class="o">=</span> <span class="n">health</span>
@@ -251,7 +334,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">immune</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delayed</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stealth</span> <span class="o">=</span> <span class="bp">False</span>
-
+</div>
 <div class="viewcode-block" id="Character.turn_complete"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Character.turn_complete">[docs]</a>    <span class="k">def</span> <span class="nf">turn_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_attack</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;attack_decreased&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp_attack</span><span class="p">)</span>
@@ -405,7 +488,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Minion"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Minion">[docs]</a><span class="k">class</span> <span class="nc">Minion</span><span class="p">(</span><span class="n">Character</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack</span><span class="p">,</span> <span class="n">health</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">NONE</span><span class="p">):</span>
+<div class="viewcode-block" id="Minion.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Minion.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attack</span><span class="p">,</span> <span class="n">health</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">NONE</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">attack</span><span class="p">,</span> <span class="n">health</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="nb">type</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">taunt</span> <span class="o">=</span> <span class="bp">False</span>
@@ -415,7 +498,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spell_power</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">False</span>
-
+</div>
 <div class="viewcode-block" id="Minion.add_to_board"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Minion.add_to_board">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_board</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="n">card</span>
         <span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
@@ -478,12 +561,12 @@
 
 </div>
 <div class="viewcode-block" id="Deck"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Deck">[docs]</a><span class="k">class</span> <span class="nc">Deck</span><span class="p">:</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="p">,</span> <span class="n">character_class</span><span class="p">):</span>
+<div class="viewcode-block" id="Deck.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Deck.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="p">,</span> <span class="n">character_class</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">cards</span> <span class="o">=</span> <span class="n">cards</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">character_class</span> <span class="o">=</span> <span class="n">character_class</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">used</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="mi">30</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="mi">30</span>
-
+</div>
 <div class="viewcode-block" id="Deck.can_draw"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Deck.can_draw">[docs]</a>    <span class="k">def</span> <span class="nf">can_draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">&gt;</span> <span class="mi">0</span>
 </div>
@@ -515,7 +598,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Hero"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Hero">[docs]</a><span class="k">class</span> <span class="nc">Hero</span><span class="p">(</span><span class="n">Character</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+<div class="viewcode-block" id="Hero.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Hero.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character_class</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">armour</span> <span class="o">=</span> <span class="mi">0</span>
@@ -524,7 +607,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="o">=</span> <span class="n">player</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">power</span> <span class="o">=</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">powers</span><span class="o">.</span><span class="n">powers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character_class</span><span class="p">)(</span><span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">turn_complete</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Hero.attack"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Hero.attack">[docs]</a>    <span class="k">def</span> <span class="nf">attack</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;attacking&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">attack</span><span class="p">()</span>
@@ -557,7 +640,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Player"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Player">[docs]</a><span class="k">class</span> <span class="nc">Player</span><span class="p">(</span><span class="n">Bindable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">deck</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">):</span>
+<div class="viewcode-block" id="Player.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Player.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">deck</span><span class="p">,</span> <span class="n">agent</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">hero</span> <span class="o">=</span> <span class="n">Hero</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span class="n">character_class</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
@@ -574,7 +657,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">secrets</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mana_filters</span> <span class="o">=</span> <span class="p">[]</span>
 
-
+</div>
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="c">#pragma: no cover</span>
         <span class="k">return</span> <span class="s">&quot;Player: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
 
@@ -608,7 +691,7 @@
 
 </div></div>
 <div class="viewcode-block" id="Game"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Game">[docs]</a><span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="n">Bindable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decks</span><span class="p">,</span> <span class="n">agents</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">):</span>
+<div class="viewcode-block" id="Game.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Game.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decks</span><span class="p">,</span> <span class="n">agents</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delayed_minions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="o">=</span> <span class="n">random</span>
@@ -633,7 +716,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;died&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_over</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;died&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_over</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Game.pre_game"><a class="viewcode-back" href="../../hsgame.html#hsgame.game_objects.Game.pre_game">[docs]</a>    <span class="k">def</span> <span class="nf">pre_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">card_keep_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">do_card_check</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hand</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">trigger</span><span class="p">(</span><span class="s">&quot;kept_cards&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hand</span><span class="p">,</span> <span class="n">card_keep_index</span><span class="p">)</span>
@@ -763,6 +846,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -771,14 +856,17 @@
              >index</a></li>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

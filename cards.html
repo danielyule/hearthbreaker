@@ -1,0 +1,4357 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Implemented Cards &mdash; Hearthstone Simulator</title>
+    
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="index.html" />
+    <link rel="prev" title="hsgame.cards.spells package" href="hsgame.cards.spells.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="hsgame.cards.spells.html" title="hsgame.cards.spells package"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="implemented-cards">
+<h1>Implemented Cards<a class="headerlink" href="#implemented-cards" title="Permalink to this headline">¶</a></h1>
+<p>The following table lists all cards in Hearthstone, their stats and their implementation status in the simulator.</p>
+<table border="1" class="docutils">
+<caption>Implemented Cards</caption>
+<colgroup>
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+<col width="10%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Implemented?</th>
+<th class="head">Name</th>
+<th class="head">Text</th>
+<th class="head">Race</th>
+<th class="head">Class</th>
+<th class="head">Cost</th>
+<th class="head">Attack</th>
+<th class="head">Health</th>
+<th class="head">Type</th>
+<th class="head">Minion/Spell</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>no</td>
+<td>Abomination</td>
+<td>Taunt. Deathrattle: Deal 2 damage to ALL characters.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Abusive Sergeant</td>
+<td>Battlecry: Give a minion +2 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Acidic Swamp Ooze</td>
+<td>Battlecry: Destroy your opponent&#8217;s weapon.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Acolyte of Pain</td>
+<td>Whenever this minion takes damage, draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>1</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Al&#8217;Akir the Windlord</td>
+<td>Windfury, Charge, Divine Shield, Taunt</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>8</td>
+<td>3</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Alarm-o-Bot</td>
+<td>At the start of your turn, swap this minion with a random one in your hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Aldor Peacekeeper</td>
+<td>Battlecry: Change an enemy minion&#8217;s Attack to 1.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Alexstrasza</td>
+<td>Battlecry: Set a hero&#8217;s remaining Health to 15.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Amani Berserker</td>
+<td>Enrage: +3 Attack</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ancestral Healing</td>
+<td>Restore a minion to full Health and give it Taunt.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Ancestral Spirit</td>
+<td>Choose a minion. When that minion is destroyed, return it to the battlefield.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ancient Brewmaster</td>
+<td>Battlecry: Return a friendly minion from the battlefield to your hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>5</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Ancient Mage</td>
+<td>Battlecry: Give adjacent minions Spell Damage +1.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Ancient of Lore</td>
+<td>Choose One - Draw 2 cards; or Restore 5 Health.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>7</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Ancient of War</td>
+<td>Choose One - +5 Attack; or +5 Health and Taunt.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>7</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ancient Watcher</td>
+<td>Can&#8217;t Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Angry Chicken</td>
+<td>Enrage: +5 Attack.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Animal Companion</td>
+<td>Summon a random Beast Companion.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Arathi Weaponsmith</td>
+<td>Battlecry: Equip a 2/2 weapon.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Arcane Explosion</td>
+<td>Deal 1 damage to all enemy minions.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Arcane Golem</td>
+<td>Charge. Battlecry: Give your opponent a Mana Crystal.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>4</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Arcane Intellect</td>
+<td>Draw 2 cards.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Arcane Missiles</td>
+<td>Deal 3 damage randomly split among enemy characters.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Arcane Shot</td>
+<td>Deal 2 damage.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Arcanite Reaper</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>5</td>
+<td>5</td>
+<td>2</td>
+<td>Basic</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Archmage</td>
+<td>Spell Damage +1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>7</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Archmage Antonidas</td>
+<td>Whenever you cast a spell, put a &#8216;Fireball&#8217; spell into your hand.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>7</td>
+<td>5</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Argent Commander</td>
+<td>Charge, Divine Shield</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Argent Protector</td>
+<td>Battlecry: Give a friendly minion Divine Shield.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Argent Squire</td>
+<td>Divine Shield</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Armorsmith</td>
+<td>Whenever a friendly minion takes damage, gain 1 Armor.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>1</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Assassin&#8217;s Blade</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>5</td>
+<td>3</td>
+<td>4</td>
+<td>Basic</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Assassinate</td>
+<td>Destroy an enemy minion.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Auchenai Soulpriest</td>
+<td>Your cards and powers that restore Health now deal damage instead.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Avenging Wrath</td>
+<td>Deal 8 damage randomly split among enemy characters.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Azure Drake</td>
+<td>Spell Damage +1. Battlecry: Draw a card.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Backstab</td>
+<td>Deal 2 damage to an undamaged minion.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Bane of Doom</td>
+<td>Deal 2 damage to a character. If that kills it, summon a random Demon.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Baron Geddon</td>
+<td>At the end of your turn, deal 2 damage to ALL other characters.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>7</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Battle Rage</td>
+<td>Draw a card for each damaged friendly character.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Bestial Wrath</td>
+<td>Give a Beast +2 Attack and Immune this turn.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Betrayal</td>
+<td>Force an enemy minion to deal its damage to the minions next to it.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Big Game Hunter</td>
+<td>Battlecry: Destroy a minion with an Attack of 7 or more.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>4</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Bite</td>
+<td>Give your hero +4 Attack this turn and 4 Armor.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Blade Flurry</td>
+<td>Destroy your weapon and deal its damage to all enemies.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Blessed Champion</td>
+<td>Double a minion&#8217;s Attack.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Blessing of Kings</td>
+<td>Give a minion +4/+4. (+4 Attack/+4 Health)</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Blessing of Might</td>
+<td>Give a minion +3 Attack.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Blessing of Wisdom</td>
+<td>Choose a minion. Whenever it attacks, draw a card.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Blizzard</td>
+<td>Deal 2 damage to all enemy minions and Freeze them.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Blood Imp</td>
+<td>Stealth. At the end of your turn, give another random friendly minion +1 Health.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Blood Knight</td>
+<td>Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Bloodfen Raptor</td>
+<td>&nbsp;</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Bloodlust</td>
+<td>Give your minions +3 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Bloodmage Thalnos</td>
+<td>Spell Damage +1. Deathrattle: Draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Bloodsail Corsair</td>
+<td>Battlecry: Remove 1 Durability from your opponent&#8217;s weapon.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Bloodsail Raider</td>
+<td>Battlecry: Gain Attack equal to the Attack of your weapon.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Bluegill Warrior</td>
+<td>Charge</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Booty Bay Bodyguard</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Boulderfist Ogre</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>6</td>
+<td>7</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Brawl</td>
+<td>Destroy all minions except one. (chosen randomly)</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Cabal Shadow Priest</td>
+<td>Battlecry: Take control of an enemy minion that has 2 or less Attack.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>6</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Cairne Bloodhoof</td>
+<td>Deathrattle: Summon a 4/5 Baine Bloodhoof.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Captain Greenskin</td>
+<td>Battlecry: Give your weapon +1/+1.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Captain&#8217;s Parrot</td>
+<td>Battlecry: Put a random Pirate from your deck into your hand.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>Reward</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Cenarius</td>
+<td>Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>9</td>
+<td>5</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Charge</td>
+<td>Give a friendly minion +2 Attack and Charge.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Chillwind Yeti</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Circle of Healing</td>
+<td>Restore 4 Health to ALL minions.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Claw</td>
+<td>Give your hero +2 Attack this turn and 2 Armor.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Cleave</td>
+<td>Deal 2 damage to two random enemy minions.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Cold Blood</td>
+<td>Give a minion +2 Attack. Combo: +4 Attack instead.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Coldlight Oracle</td>
+<td>Battlecry: Each player draws 2 cards.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Coldlight Seer</td>
+<td>Battlecry: Give ALL other Murlocs +2 Health.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Commanding Shout</td>
+<td>Your minions can&#8217;t be reduced below 1 Health this turn. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Conceal</td>
+<td>Give your minions Stealth until your next turn.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Cone of Cold</td>
+<td>Freeze a minion and the minions next to it, and deal 1 damage to them.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Consecration</td>
+<td>Deal 2 damage to all enemies.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Core Hound</td>
+<td>&nbsp;</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>9</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Corruption</td>
+<td>Choose an enemy minion. At the start of your turn, destroy it.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Counterspell</td>
+<td>Secret: When your opponent casts a spell, Counter it.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Crazed Alchemist</td>
+<td>Battlecry: Swap the Attack and Health of a minion.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Cruel Taskmaster</td>
+<td>Battlecry: Deal 1 damage to a minion and give it +2 Attack.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Cult Master</td>
+<td>Whenever one of your other minions dies, draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Dalaran Mage</td>
+<td>Spell Damage +1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>1</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Dark Iron Dwarf</td>
+<td>Battlecry: Give a minion +2 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Darkscale Healer</td>
+<td>Battlecry: Restore 2 Health to all friendly characters.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Deadly Poison</td>
+<td>Give your weapon +2 Attack.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Deadly Shot</td>
+<td>Destroy a random enemy minion.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Deathwing</td>
+<td>Battlecry: Destroy all other minions and discard your hand.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>10</td>
+<td>12</td>
+<td>12</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Defender of Argus</td>
+<td>Battlecry: Give adjacent minions +1/+1 and Taunt.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Defias Ringleader</td>
+<td>Combo: Summon a 2/1 Defias Bandit.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Demolisher</td>
+<td>At the start of your turn, deal 2 damage to a random enemy.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>1</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Demonfire</td>
+<td>Deal 2 damage to a minion. If it?s a friendly Demon, give it +2/+2 instead.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Dire Wolf Alpha</td>
+<td>Adjacent minions have +1 Attack.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Divine Favor</td>
+<td>Draw cards until you have as many in hand as your opponent.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Divine Spirit</td>
+<td>Double a minion&#8217;s Health.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Doomguard</td>
+<td>Charge. Battlecry: Discard two random cards.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>5</td>
+<td>5</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Doomhammer</td>
+<td>Windfury, Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>5</td>
+<td>2</td>
+<td>8</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Doomsayer</td>
+<td>At the start of your turn, destroy ALL minions.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>0</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Dragonling Mechanic</td>
+<td>Battlecry: Summon a 2/1 Mechanical Dragonling.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Drain Life</td>
+<td>Deal 2 damage. Restore 2 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Dread Corsair</td>
+<td>Taunt. Costs (1) less per Attack of your weapon.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Dread Infernal</td>
+<td>Battlecry: Deal 1 damage to ALL other characters.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Druid of the Claw</td>
+<td>Choose One - Charge; or +2 Health and Taunt.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Dust Devil</td>
+<td>Windfury. Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Eaglehorn Bow</td>
+<td>Whenever a Secret is revealed, gain +1 Durability.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Earth Elemental</td>
+<td>Taunt. Overload: (3)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>5</td>
+<td>7</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Earth Shock</td>
+<td>Silence a minion, then deal 1 damage to it.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Earthen Ring Farseer</td>
+<td>Battlecry: Restore 3 Health.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Edwin VanCleef</td>
+<td>Combo: Gain +2/+2 for each card played earlier this turn.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Elite Tauren Chieftain</td>
+<td>Battlecry: Give both players the power to ROCK! (with a Power Chord card)</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>Promotion</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Elven Archer</td>
+<td>Battlecry: Deal 1 damage.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Emperor Cobra</td>
+<td>Destroy any minion damaged by this minion.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Equality</td>
+<td>Change the Health of ALL minions to 1.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Ethereal Arcanist</td>
+<td>If you control a Secret at the end of your turn, gain +2/+2.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Eviscerate</td>
+<td>Deal 2 damage. Combo: Deal 4 damage instead.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Execute</td>
+<td>Destroy a damaged enemy minion.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Explosive Shot</td>
+<td>Deal 5 damage to a minion and 2 damage to adjacent ones.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Explosive Trap</td>
+<td>Secret: When your hero is attacked, deal 2 damage to all enemies.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Eye for an Eye</td>
+<td>Secret: When your hero takes damage, deal that much damage to the enemy hero.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Faceless Manipulator</td>
+<td>Battlecry: Choose a minion and become a copy of it.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Faerie Dragon</td>
+<td>Can&#8217;t be targeted by Spells or Hero Powers.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Fan of Knives</td>
+<td>Deal 1 damage to all enemy minions. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Far Sight</td>
+<td>Draw a card. That card costs (3) less.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Felguard</td>
+<td>Taunt. Battlecry: Destroy one of your Mana Crystals.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>3</td>
+<td>3</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Fen Creeper</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>3</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Feral Spirit</td>
+<td>Summon two 2/3 Spirit Wolves with Taunt. Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Fiery War Axe</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Basic</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Fire Elemental</td>
+<td>Battlecry: Deal 3 damage.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Fireball</td>
+<td>Deal 6 damage.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Flame Imp</td>
+<td>Battlecry: Deal 3 damage to your hero.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>1</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Flamestrike</td>
+<td>Deal 4 damage to all enemy minions.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>7</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Flametongue Totem</td>
+<td>Adjacent minions have +2 Attack.</td>
+<td>Totem</td>
+<td>Shaman</td>
+<td>2</td>
+<td>0</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Flare</td>
+<td>All minions lose Stealth. Destroy all enemy Secrets. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Flesheating Ghoul</td>
+<td>Whenever a minion dies, gain +1 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Force of Nature</td>
+<td>Summon three 2/2 Treants with Charge that die at the end of the turn.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Forked Lightning</td>
+<td>Deal 2 damage to 2 random enemy minions. Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Freezing Trap</td>
+<td>Secret: When an enemy minion attacks, return it to its owner&#8217;s hand and it costs (2) more.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Frost Elemental</td>
+<td>Battlecry: Freeze a character.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Frost Nova</td>
+<td>Freeze all enemy minions.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Frost Shock</td>
+<td>Deal 1 damage to an enemy character and Freeze it.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Frostbolt</td>
+<td>Deal 3 damage to a character and Freeze it.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Frostwolf Grunt</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Frostwolf Warlord</td>
+<td>Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Frothing Berserker</td>
+<td>Whenever a minion takes damage, gain +1 Attack.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Gadgetzan Auctioneer</td>
+<td>Whenever you cast a spell, draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Gelbin Mekkatorque</td>
+<td>Battlecry: Summon an AWESOME invention.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>Promotion</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Gladiator&#8217;s Longbow</td>
+<td>Your hero is Immune while attacking.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>7</td>
+<td>5</td>
+<td>2</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Gnomish Inventor</td>
+<td>Battlecry: Draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Goldshire Footman</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Gorehowl</td>
+<td>Attacking a minion costs 1 Attack instead of 1 Durability.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>7</td>
+<td>7</td>
+<td>1</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Grimscale Oracle</td>
+<td>ALL other Murlocs have +1 Attack.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Grommash Hellscream</td>
+<td>Charge. Enrage: +6 Attack</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>8</td>
+<td>4</td>
+<td>9</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Gruul</td>
+<td>At the end of each turn, gain +1/+1 .</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>8</td>
+<td>7</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Guardian of Kings</td>
+<td>Battlecry: Restore 6 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>7</td>
+<td>5</td>
+<td>6</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Gurubashi Berserker</td>
+<td>Whenever this minion takes damage, gain +3 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>2</td>
+<td>7</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Hammer of Wrath</td>
+<td>Deal 3 damage. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Hand of Protection</td>
+<td>Give a minion Divine Shield.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Harrison Jones</td>
+<td>Battlecry: Destroy your opponent&#8217;s weapon and draw cards equal to its Durability.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Harvest Golem</td>
+<td>Deathrattle: Summon a 2/1 Damaged Golem.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Headcrack</td>
+<td>Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Healing Touch</td>
+<td>Restore 8 Health.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Hellfire</td>
+<td>Deal 3 damage to ALL characters.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Heroic Strike</td>
+<td>Give your hero +4 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Hex</td>
+<td>Transform a minion into a 0/1 Frog with Taunt.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Hogger</td>
+<td>At the end of your turn, summon a 2/2 Gnoll with Taunt.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Holy Fire</td>
+<td>Deal 5 damage. Restore 5 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Holy Light</td>
+<td>Restore 6 Health.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Holy Nova</td>
+<td>Deal 2 damage to all enemies. Restore 2 Health to all friendly characters.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Holy Smite</td>
+<td>Deal 2 damage.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Holy Wrath</td>
+<td>Draw a card and deal damage equal to its cost.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Houndmaster</td>
+<td>Battlecry: Give a friendly Beast +2/+2 and Taunt.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Humility</td>
+<td>Change a minion&#8217;s Attack to 1.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Hungry Crab</td>
+<td>Battlecry: Destroy a Murloc and gain +2/+2.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Hunter&#8217;s Mark</td>
+<td>Change a minion&#8217;s Health to 1.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Ice Barrier</td>
+<td>Secret: As soon as your hero is attacked, gain 8 Armor.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Ice Block</td>
+<td>Secret: When your hero takes fatal damage, prevent it and become Immune this turn.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Ice Lance</td>
+<td>Freeze a character. If it was already Frozen, deal 4 damage instead.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Illidan Stormrage</td>
+<td>Whenever you play a card, summon a 2/1 Flame of Azzinoth.</td>
+<td>Demon</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>7</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Imp Master</td>
+<td>At the end of your turn, deal 1 damage to this minion and summon a 1/1 Imp.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>1</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Injured Blademaster</td>
+<td>Battlecry: Deal 4 damage to HIMSELF.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>4</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Inner Fire</td>
+<td>Change a minion&#8217;s Attack to be equal to its Health.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Inner Rage</td>
+<td>Deal 1 damage to a minion and give it +2 Attack.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Innervate</td>
+<td>Gain 2 Mana Crystals this turn only.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Ironbark Protector</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Ironbeak Owl</td>
+<td>Battlecry: Silence a minion.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ironforge Rifleman</td>
+<td>Battlecry: Deal 1 damage.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Ironfur Grizzly</td>
+<td>Taunt</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Jungle Panther</td>
+<td>Stealth</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>4</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Keeper of the Grove</td>
+<td>Choose One - Deal 2 damage; or Silence a minion.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Kidnapper</td>
+<td>Combo: Return a minion to its owner&#8217;s hand.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>6</td>
+<td>5</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Kill Command</td>
+<td>Deal 3 damage. If you have a Beast, deal 5 damage instead.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>King Krush</td>
+<td>Charge</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>9</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>King Mukla</td>
+<td>Battlecry: Give your opponent 2 Bananas.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Kirin Tor Mage</td>
+<td>Battlecry: The next Secret you play this turn costs (0).</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>4</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Knife Juggler</td>
+<td>After you summon a minion, deal 1 damage to a random enemy.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Kobold Geomancer</td>
+<td>Spell Damage +1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Kor&#8217;kron Elite</td>
+<td>Charge</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Lava Burst</td>
+<td>Deal 5 damage. Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Lay on Hands</td>
+<td>Restore 8 Health. Draw 3 cards.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>8</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Leeroy Jenkins</td>
+<td>Charge. Battlecry: Summon two 1/1 Whelps for your opponent.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>6</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Leper Gnome</td>
+<td>Deathrattle: Deal 2 damage to the enemy hero.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Light&#8217;s Justice</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>1</td>
+<td>4</td>
+<td>Basic</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Lightning Bolt</td>
+<td>Deal 3 damage. Overload: (1)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Lightning Storm</td>
+<td>Deal 2-3 damage to all enemy minions. Overload: (2)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Lightspawn</td>
+<td>This minion&#8217;s Attack is always equal to its Health.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>4</td>
+<td>0</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Lightwarden</td>
+<td>Whenever a character is healed, gain +2 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Lightwell</td>
+<td>At the start of your turn, restore 3 Health to a damaged friendly character.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>2</td>
+<td>0</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Loot Hoarder</td>
+<td>Deathrattle: Draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Lord Jaraxxus</td>
+<td>Battlecry: Destroy your hero and replace him with Lord Jaraxxus.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>9</td>
+<td>3</td>
+<td>15</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Lord of the Arena</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Lorewalker Cho</td>
+<td>Whenever a player casts a spell, put a copy into the other player?s hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Mad Bomber</td>
+<td>Battlecry: Deal 3 damage randomly split between all other characters.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Magma Rager</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>5</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Malygos</td>
+<td>Spell Damage +5</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>4</td>
+<td>12</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mana Addict</td>
+<td>Whenever you cast a spell, gain +2 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Mana Tide Totem</td>
+<td>At the end of your turn, draw a card.</td>
+<td>Totem</td>
+<td>Shaman</td>
+<td>3</td>
+<td>0</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mana Wraith</td>
+<td>ALL minions cost (1) more.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Mana Wyrm</td>
+<td>Whenever you cast a spell, gain +1 Attack.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mark of Nature</td>
+<td>Choose One - Give a minion +4 Attack; or +4 Health and Taunt.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Mark of the Wild</td>
+<td>Give a minion Taunt and +2/+2. (+2 Attack/+2 Health)</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mass Dispel</td>
+<td>Silence all enemy minions. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Master of Disguise</td>
+<td>Battlecry: Give a friendly minion Stealth.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Master Swordsmith</td>
+<td>At the end of your turn, give another random friendly minion +1 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Millhouse Manastorm</td>
+<td>Battlecry: Enemy spells cost (0) next turn.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mind Blast</td>
+<td>Deal 5 damage to the enemy hero.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Mind Control</td>
+<td>Take control of an enemy minion.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>10</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mind Control Tech</td>
+<td>Battlecry: If your opponent has 4 or more minions, take control of one at random.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Mind Vision</td>
+<td>Put a copy of a random card in your opponent&#8217;s hand into your hand.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mindgames</td>
+<td>Put a copy of a random minion from your opponent&#8217;s deck into the battlefield.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Mirror Entity</td>
+<td>Secret: When your opponent plays a minion, summon a copy of it.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mirror Image</td>
+<td>Summon two 0/2 minions with Taunt.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Misdirection</td>
+<td>Secret: When a character attacks your hero, instead he attacks another random character.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Mogu&#8217;shan Warden</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>1</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Molten Giant</td>
+<td>Costs (1) less for each damage your hero has taken.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>20</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Moonfire</td>
+<td>Deal 1 damage.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Mortal Coil</td>
+<td>Deal 1 damage to a minion. If that kills it, draw a card.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mortal Strike</td>
+<td>Deal 4 damage. If you have 12 or less Health, deal 6 instead.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Mountain Giant</td>
+<td>Costs (1) less for each other card in your hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>12</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Multi-Shot</td>
+<td>Deal 3 damage to two random enemy minions.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Murloc Raider</td>
+<td>&nbsp;</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Murloc Tidecaller</td>
+<td>Whenever a Murloc is summoned, gain +1 Attack.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Murloc Tidehunter</td>
+<td>Battlecry: Summon a 1/1 Murloc Scout.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Murloc Warleader</td>
+<td>ALL other Murlocs have +2/+1.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Nat Pagle</td>
+<td>At the start of your turn, you have a 50% chance to draw an extra card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>0</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Naturalize</td>
+<td>Destroy a minion. Your opponent draws 2 cards.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Nightblade</td>
+<td>Battlecry: Deal 3 damage to the enemy hero.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Noble Sacrifice</td>
+<td>Secret: When an enemy attacks, summon a 2/1 Defender as the new target.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Northshire Cleric</td>
+<td>Whenever a minion is healed, draw a card.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Nourish</td>
+<td>Choose One - Gain 2 Mana Crystals; or Draw 3 cards.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Novice Engineer</td>
+<td>Battlecry: Draw a card.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Nozdormu</td>
+<td>Players only have 15 seconds to take their turns.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Oasis Snapjaw</td>
+<td>&nbsp;</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>7</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Ogre Magi</td>
+<td>Spell Damage +1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Old Murk-Eye</td>
+<td>Charge. Has +1 Attack for each other Murloc on the battlefield.</td>
+<td>Murloc</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>4</td>
+<td>Reward</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Onyxia</td>
+<td>Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Patient Assassin</td>
+<td>Stealth. Destroy any minion damaged by this minion.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Perdition&#8217;s Blade</td>
+<td>Battlecry: Deal 1 damage. Combo: Deal 2 instead.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Pint-Sized Summoner</td>
+<td>The first minion you play each turn costs (1) less.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Pit Lord</td>
+<td>Battlecry: Deal 5 damage to your hero.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Polymorph</td>
+<td>Transform a minion into a 1/1 Sheep.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Power of the Wild</td>
+<td>Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Power Overwhelming</td>
+<td>Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Power Word: Shield</td>
+<td>Give a minion +2 Health. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Preparation</td>
+<td>The next spell you cast this turn costs (3) less.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Priestess of Elune</td>
+<td>Battlecry: Restore 4 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Prophet Velen</td>
+<td>Double the damage and healing of your spells and Hero Power.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Pyroblast</td>
+<td>Deal 10 damage.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>10</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Questing Adventurer</td>
+<td>Whenever you play a card, gain +1/+1.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Raging Worgen</td>
+<td>Enrage: Windfury and +1 Attack</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ragnaros the Firelord</td>
+<td>Can&#8217;t Attack. At the end of your turn, deal 8 damage to a random enemy.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>8</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Raid Leader</td>
+<td>Your other minions have +1 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Rampage</td>
+<td>Give a damaged minion +3/+3.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Ravenholdt Assassin</td>
+<td>Stealth</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>7</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Razorfen Hunter</td>
+<td>Battlecry: Summon a 1/1 Boar.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Reckless Rocketeer</td>
+<td>Charge</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>5</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Redemption</td>
+<td>Secret: When one of your minions dies, return it to life with 1 Health.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Repentance</td>
+<td>Secret: When your opponent plays a minion, reduce its Health to 1.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>River Crocolisk</td>
+<td>&nbsp;</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Rockbiter Weapon</td>
+<td>Give a friendly character +3 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Sacrificial Pact</td>
+<td>Destroy a Demon. Restore 5 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sap</td>
+<td>Return an enemy minion to your opponent&#8217;s hand.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Savage Roar</td>
+<td>Give your characters +2 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Savagery</td>
+<td>Deal damage equal to your hero&#8217;s Attack to a minion.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Savannah Highmane</td>
+<td>Deathrattle: Summon two 2/2 Hyenas.</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>6</td>
+<td>6</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Scarlet Crusader</td>
+<td>Divine Shield</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Scavenging Hyena</td>
+<td>Whenever a friendly Beast dies, gain +2/+1.</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sea Giant</td>
+<td>Costs (1) less for each other minion on the battlefield.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>10</td>
+<td>8</td>
+<td>8</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Secretkeeper</td>
+<td>Whenever a Secret is played, gain +1/+1.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sen&#8217;jin Shieldmasta</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Sense Demons</td>
+<td>Put 2 random Demons from your deck into your hand.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shadow Bolt</td>
+<td>Deal 4 damage to a minion.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shadow Madness</td>
+<td>Gain control of an enemy minion with 3 or less Attack until end of turn.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shadow Word: Death</td>
+<td>Destroy a minion with an Attack of 5 or more.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shadow Word: Pain</td>
+<td>Destroy a minion with 3 or less Attack.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shadowflame</td>
+<td>Destroy a friendly minion and deal its Attack damage to all enemy minions.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shadowform</td>
+<td>Your Hero Power becomes &#8216;Deal 2 damage&#8217;. If already in Shadowform: 3 damage.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shadowstep</td>
+<td>Return a friendly minion to your hand. It costs (2) less.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shattered Sun Cleric</td>
+<td>Battlecry: Give a friendly minion +1/+1.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shield Block</td>
+<td>Gain 5 Armor. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shield Slam</td>
+<td>Deal 1 damage to a minion for each Armor you have.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Shieldbearer</td>
+<td>Taunt</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>0</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shiv</td>
+<td>Deal 1 damage. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>SI:7 Agent</td>
+<td>Combo: Deal 2 damage.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Silence</td>
+<td>Silence a minion.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Silver Hand Knight</td>
+<td>Battlecry: Summon a 2/2 Squire.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Silverback Patriarch</td>
+<td>Taunt</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>1</td>
+<td>4</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Silvermoon Guardian</td>
+<td>Divine Shield</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Sinister Strike</td>
+<td>Deal 3 damage to the enemy hero.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Siphon Soul</td>
+<td>Destroy a minion. Restore 3 Health to your hero.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Slam</td>
+<td>Deal 2 damage to a minion. If it survives, draw a card.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Snake Trap</td>
+<td>Secret: When one of your minions is attacked, summon three 1/1 Snakes.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Snipe</td>
+<td>Secret: When your opponent plays a minion, deal 4 damage to it.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Sorcerer&#8217;s Apprentice</td>
+<td>Your spells cost (1) less.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Soul of the Forest</td>
+<td>Give your minions &#8220;Deathrattle: Summon a 2/2 Treant.&#8221;</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Soulfire</td>
+<td>Deal 4 damage. Discard a random card.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Southsea Captain</td>
+<td>Your other Pirates have +1/+1.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Southsea Deckhand</td>
+<td>Has Charge while you have a weapon equipped.</td>
+<td>Pirate</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Spellbender</td>
+<td>Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Spellbreaker</td>
+<td>Battlecry: Silence a minion.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Spiteful Smith</td>
+<td>Enrage: Your weapon has +2 Attack.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sprint</td>
+<td>Draw 4 cards.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>7</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Stampeding Kodo</td>
+<td>Battlecry: Destroy a random enemy minion with 2 or less Attack.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>3</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>yes</td>
+<td>Starfall</td>
+<td>Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>5</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Starfire</td>
+<td>Deal 5 damage. Draw a card.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Starving Buzzard</td>
+<td>Whenever you summon a Beast, draw a card.</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>2</td>
+<td>2</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Stonetusk Boar</td>
+<td>Charge</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Stormforged Axe</td>
+<td>Overload: (1)</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Stormpike Commando</td>
+<td>Battlecry: Deal 2 damage.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Stormwind Champion</td>
+<td>Your other minions have +1/+1.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>6</td>
+<td>6</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Stormwind Knight</td>
+<td>Charge</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>2</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Stranglethorn Tiger</td>
+<td>Stealth</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Succubus</td>
+<td>Battlecry: Discard a random card.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>2</td>
+<td>4</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Summoning Portal</td>
+<td>Your minions cost (2) less, but not less than (1).</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>4</td>
+<td>0</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Sunfury Protector</td>
+<td>Battlecry: Give adjacent minions Taunt.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sunwalker</td>
+<td>Taunt. Divine Shield</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Swipe</td>
+<td>Deal 4 damage to an enemy and 1 damage to all other enemies.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>4</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sword of Justice</td>
+<td>Whenever you summon a minion, give it +1/+1 and this loses 1 Durability.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>3</td>
+<td>1</td>
+<td>5</td>
+<td>Expert</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Sylvanas Windrunner</td>
+<td>Deathrattle: Take control of a random enemy minion.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>5</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Tauren Warrior</td>
+<td>Taunt. Enrage: +3 Attack</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Temple Enforcer</td>
+<td>Battlecry: Give a friendly minion +3 Health.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>The Beast</td>
+<td>Deathrattle: Summon a 3/3 Finkle Einhorn for your opponent.</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>9</td>
+<td>7</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>The Black Knight</td>
+<td>Battlecry: Destroy an enemy minion with Taunt.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Thoughtsteal</td>
+<td>Copy 2 cards from your opponent&#8217;s deck and put them into your hand.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Thrallmar Farseer</td>
+<td>Windfury</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Timber Wolf</td>
+<td>Your other Beasts have +1 Attack.</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Tinkmaster Overspark</td>
+<td>Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Tirion Fordring</td>
+<td>Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>8</td>
+<td>6</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Totemic Might</td>
+<td>Give your Totems +2 Health.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>0</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Tracking</td>
+<td>Look at the top three cards of your deck. Draw one and discard the others.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Truesilver Champion</td>
+<td>Whenever your hero attacks, restore 2 Health to it.</td>
+<td>&nbsp;</td>
+<td>Paladin</td>
+<td>4</td>
+<td>4</td>
+<td>2</td>
+<td>Basic</td>
+<td>Weapon</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Tundra Rhino</td>
+<td>Your Beasts have Charge.</td>
+<td>Beast</td>
+<td>Hunter</td>
+<td>5</td>
+<td>2</td>
+<td>5</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Twilight Drake</td>
+<td>Battlecry: Gain +1 Health for each card in your hand.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Twisting Nether</td>
+<td>Destroy all minions.</td>
+<td>&nbsp;</td>
+<td>Warlock</td>
+<td>8</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Unbound Elemental</td>
+<td>Whenever you play a card with Overload, gain +1/+1.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>3</td>
+<td>2</td>
+<td>4</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Unleash the Hounds</td>
+<td>For each enemy minion, summon a 1/1 Hound with Charge.</td>
+<td>&nbsp;</td>
+<td>Hunter</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Upgrade!</td>
+<td>If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Vanish</td>
+<td>Return all minions to their owner&#8217;s hand.</td>
+<td>&nbsp;</td>
+<td>Rogue</td>
+<td>6</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Vaporize</td>
+<td>Secret: When a minion attacks your hero, destroy it.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Venture Co. Mercenary</td>
+<td>Your minions cost (3) more.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>7</td>
+<td>6</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Violet Teacher</td>
+<td>Whenever you cast a spell, summon a 1/1 Violet Apprentice.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>3</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Void Terror</td>
+<td>Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Voidwalker</td>
+<td>Taunt</td>
+<td>Demon</td>
+<td>Warlock</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Voodoo Doctor</td>
+<td>Battlecry: Restore 2 Health.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>War Golem</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Warsong Commander</td>
+<td>Whenever you summon a minion with 3 or less Attack, give it Charge.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>3</td>
+<td>2</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Water Elemental</td>
+<td>Freeze any character damaged by this minion.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>3</td>
+<td>6</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Whirlwind</td>
+<td>Deal 1 damage to ALL minions.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Wild Growth</td>
+<td>Gain an empty Mana Crystal.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Wild Pyromancer</td>
+<td>After you cast a spell, deal 1 damage to ALL minions.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Windfury</td>
+<td>Give a minion Windfury.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Basic</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Windfury Harpy</td>
+<td>Windfury</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>4</td>
+<td>5</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Windspeaker</td>
+<td>Battlecry: Give a friendly minion Windfury.</td>
+<td>&nbsp;</td>
+<td>Shaman</td>
+<td>4</td>
+<td>3</td>
+<td>3</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Wisp</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Wolfrider</td>
+<td>Charge</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>1</td>
+<td>Basic</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Worgen Infiltrator</td>
+<td>Stealth</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>yes</td>
+<td>Wrath</td>
+<td>Choose One - Deal 3 damage to a minion; or 1 damage and draw a card.</td>
+<td>&nbsp;</td>
+<td>Druid</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Expert</td>
+<td>Spell</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Young Dragonhawk</td>
+<td>Windfury</td>
+<td>Beast</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Young Priestess</td>
+<td>At the end of your turn, give another random friendly minion +1 Health.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Youthful Brewmaster</td>
+<td>Battlecry: Return a friendly minion from the battlefield to your hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Ysera</td>
+<td>At the end of your turn, draw a Dream Card.</td>
+<td>Dragon</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>4</td>
+<td>12</td>
+<td>Expert</td>
+<td>Minion</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="hsgame.cards.spells.html"
+                          title="Previous page">&larr; hsgame.cards.spells package</a></p>
+  </div>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/cards.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="hsgame.cards.spells.html" title="hsgame.cards.spells package"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>

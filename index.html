@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to hsgame’s documentation! &mdash; hsgame  documentation</title>
+    <title>Welcome to hsgame’s documentation! &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,10 +26,15 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="#" />
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="#" />
     <link rel="next" title="hsgame package" href="hsgame.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,13 +43,16 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             accesskey="N">next</a> |</li>
-        <li><a href="#">hsgame  documentation</a> &raquo;</li> 
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
+    <li><a href="#">HS Sim</a> &raquo;</li>
+ 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -50,6 +61,14 @@
             
   <div class="section" id="welcome-to-hsgame-s-documentation">
 <h1>Welcome to hsgame&#8217;s documentation!<a class="headerlink" href="#welcome-to-hsgame-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
+data mining of Blizzard&#8217;s <a class="reference external" href="http://battle.net/hearthstone">Hearthstone: Heroes of WarCraft</a>.  The end goal
+is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
+them.  The results from these games can be used to determine cards which work well together and cards which do not, and
+possibly discover new deck types.
+The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.</p>
+<p>The project is currently under construction.  A list of cards and their implementation status is available at <a class="reference internal" href="cards.html"><em>Implemented Cards</em></a></p>
+<p>The following mechanics have</p>
 <p>Contents:</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -80,9 +99,9 @@
 <li class="toctree-l2"><a class="reference internal" href="hsgame.html#module-hsgame">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="cards.html">Implemented Cards</a></li>
 </ul>
 </div>
-<p><a href="#id1"><span class="problematic" id="id2">:include:`../readme.md`</span></a></p>
 </div>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
@@ -98,16 +117,19 @@
         </div>
       </div>
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
+        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
+    <h3><a href="#">Page contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">Welcome to hsgame&#8217;s documentation!</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
-  <h4>Next topic</h4>
-  <p class="topless"><a href="hsgame.html"
-                        title="next chapter">hsgame package</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="hsgame.html"
+                          title="Next page">&rarr; hsgame package</a></p>
+  </div>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/index.txt"
@@ -130,6 +152,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -138,16 +162,19 @@
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             >next</a> |</li>
-        <li><a href="#">hsgame  documentation</a> &raquo;</li> 
+             >next</a> &nbsp; &nbsp;</li>
+    <li><a href="#">HS Sim</a> &raquo;</li>
+ 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>

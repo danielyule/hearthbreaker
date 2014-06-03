@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -6,10 +8,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hsgame.cards.spells.paladin &mdash; hsgame  documentation</title>
+    <title>hsgame.cards.spells.paladin &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,10 +26,15 @@
     <script type="text/javascript" src="../../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../../_static/doctools.js"></script>
-    <link rel="top" title="hsgame  documentation" href="../../../../index.html" />
+    <script type="text/javascript" src="../../../../_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="../../../../_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="../../../../index.html" />
     <link rel="up" title="Module code" href="../../../index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -35,11 +43,14 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -55,9 +66,9 @@
 
 
 <div class="viewcode-block" id="AvengingWrath"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.AvengingWrath">[docs]</a><span class="k">class</span> <span class="nc">AvengingWrath</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="AvengingWrath.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.AvengingWrath.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Avenging Wrath&quot;</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="AvengingWrath.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.AvengingWrath.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">):</span>
@@ -67,34 +78,34 @@
             <span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="BlessedChampion"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessedChampion">[docs]</a><span class="k">class</span> <span class="nc">BlessedChampion</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BlessedChampion.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessedChampion.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Blessed Champion&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="BlessedChampion.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessedChampion.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">attack_power</span><span class="p">)</span>
         </div></div>
 <div class="viewcode-block" id="BlessingOfKings"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfKings">[docs]</a><span class="k">class</span> <span class="nc">BlessingOfKings</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BlessingOfKings.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfKings.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Blessing of Kings&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="BlessingOfKings.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfKings.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_health</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="BlessingOfMight"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfMight">[docs]</a><span class="k">class</span> <span class="nc">BlessingOfMight</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BlessingOfMight.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfMight.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Blessing of Might&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="BlessingOfMight.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfMight.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="BlessingOfWisdom"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfWisdom">[docs]</a><span class="k">class</span> <span class="nc">BlessingOfWisdom</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="BlessingOfWisdom.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfWisdom.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Blessing of Wisdom&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="BlessingOfWisdom.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.BlessingOfWisdom.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
 
         <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -107,9 +118,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;silenced&quot;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">minion</span><span class="p">:</span> <span class="n">minion</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;attack_player&quot;</span><span class="p">,</span> <span class="n">draw</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="Consecration"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Consecration">[docs]</a><span class="k">class</span> <span class="nc">Consecration</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Consecration.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Consecration.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Consecration&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="Consecration.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Consecration.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">minion</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">():</span>
@@ -117,18 +128,18 @@
         <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="DivineFavor"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.DivineFavor">[docs]</a><span class="k">class</span> <span class="nc">DivineFavor</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="DivineFavor.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.DivineFavor.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Divine Favor&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="DivineFavor.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.DivineFavor.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hand</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">hand</span><span class="p">):</span>
             <span class="n">player</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </div></div>
 <div class="viewcode-block" id="Equality"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Equality">[docs]</a><span class="k">class</span> <span class="nc">Equality</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Equality.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Equality.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Equality&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="Equality.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Equality.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
@@ -142,9 +153,9 @@
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">can_use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="HammerOfWrath"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HammerOfWrath">[docs]</a><span class="k">class</span> <span class="nc">HammerOfWrath</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HammerOfWrath.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HammerOfWrath.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Hammer of Wrath&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
-        
+        </div>
 <div class="viewcode-block" id="HammerOfWrath.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HammerOfWrath.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
@@ -152,27 +163,27 @@
         <span class="n">player</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 </div></div>
 <div class="viewcode-block" id="HandOfProtection"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HandOfProtection">[docs]</a><span class="k">class</span> <span class="nc">HandOfProtection</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HandOfProtection.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HandOfProtection.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Hand of Protection&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="HandOfProtection.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HandOfProtection.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">True</span>
         </div></div>
 <div class="viewcode-block" id="HolyLight"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyLight">[docs]</a><span class="k">class</span> <span class="nc">HolyLight</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HolyLight.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyLight.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Holy Light&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="HolyLight.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyLight.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">heal</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
         </div></div>
 <div class="viewcode-block" id="HolyWrath"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyWrath">[docs]</a><span class="k">class</span> <span class="nc">HolyWrath</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="HolyWrath.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyWrath.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Holy Wrath&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="HolyWrath.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.HolyWrath.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
@@ -181,9 +192,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">spell_damage</span><span class="p">(</span><span class="n">cost</span> <span class="o">+</span> <span class="n">player</span><span class="o">.</span><span class="n">spell_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="Humility"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Humility">[docs]</a><span class="k">class</span> <span class="nc">Humility</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Humility.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Humility.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Humility&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="Humility.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Humility.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
@@ -191,9 +202,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">increase_attack</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">attack_power</span><span class="p">)</span>
         </div></div>
 <div class="viewcode-block" id="LayOnHands"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.LayOnHands">[docs]</a><span class="k">class</span> <span class="nc">LayOnHands</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="LayOnHands.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.LayOnHands.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Lay on Hands&quot;</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span><span class="p">)</span>
-
+</div>
 <div class="viewcode-block" id="LayOnHands.use"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.LayOnHands.use">[docs]</a>    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
         
@@ -204,9 +215,9 @@
 
 </div></div>
 <div class="viewcode-block" id="EyeForAnEye"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.EyeForAnEye">[docs]</a><span class="k">class</span> <span class="nc">EyeForAnEye</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="EyeForAnEye.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.EyeForAnEye.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Eye for an Eye&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">what</span><span class="p">):</span>
         <span class="n">what</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">damage</span><span class="p">(</span><span class="n">amount</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>
@@ -219,9 +230,9 @@
 
 </div></div>
 <div class="viewcode-block" id="NobleSacrifice"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.NobleSacrifice">[docs]</a><span class="k">class</span> <span class="nc">NobleSacrifice</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="NobleSacrifice.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.NobleSacrifice.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Noble Sacrifice&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">):</span>
         <span class="n">player</span> <span class="o">=</span> <span class="n">attacker</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span>
         
@@ -253,9 +264,9 @@
         <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;attacking&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="Redemption"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Redemption">[docs]</a><span class="k">class</span> <span class="nc">Redemption</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Redemption.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Redemption.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Redemption&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minion</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">minion</span><span class="o">.</span><span class="n">player</span> <span class="ow">is</span> <span class="n">player</span><span class="p">:</span>
             <span class="n">resurrection</span> <span class="o">=</span> <span class="n">minion</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">create_minion</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
@@ -274,9 +285,9 @@
         <span class="n">player</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;minion_died&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="Repentance"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Repentance">[docs]</a><span class="k">class</span> <span class="nc">Repentance</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Repentance.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.spells.html#hsgame.cards.spells.paladin.Repentance.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Repentance&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PALADIN</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
-
+</div>
     <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minion</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">minion</span><span class="o">.</span><span class="n">player</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
             <span class="n">minion</span><span class="o">.</span><span class="n">decrease_health</span><span class="p">(</span><span class="n">minion</span><span class="o">.</span><span class="n">max_health</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
@@ -313,6 +324,8 @@
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -321,14 +334,17 @@
              >index</a></li>
         <li class="right" >
           <a href="../../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li><a href="../../../../index.html">hsgame  documentation</a> &raquo;</li>
+             >modules</a> &nbsp; &nbsp;</li>
+    <li><a href="../../../../index.html">HS Sim</a> &raquo;</li>
+
           <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>
