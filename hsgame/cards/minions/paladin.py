@@ -11,18 +11,14 @@ class AldorPeacekeeper(MinionCard):
         super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targeting.find_enemy_minion_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(3, 3)
-        minion.bind("added_to_board", change_attack_to_one)
-        return minion
+        return Minion(3, 3, battlecry=change_attack_to_one)
     
 class ArgentProtector(MinionCard):
     def __init__(self):
         super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        minion.bind("added_to_board", give_divine_shield)
-        return minion
+        return Minion(2, 2, battlecry=give_divine_shield)
     
 class GuardianOfKings(MinionCard):
     def __init__(self):

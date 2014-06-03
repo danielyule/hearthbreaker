@@ -26,9 +26,9 @@ class KeeperOfTheGrove(MinionCard):
         option = player.agent.choose_option(moonfire, dispell)
         minion = Minion(2, 4)
         if option == moonfire:
-            minion.bind("added_to_board", deal_two_damage)
+            minion.battlecry = deal_two_damage
         else:
-            minion.bind("added_to_board", silence)
+            minion.battlecry = silence
 
         return minion
 

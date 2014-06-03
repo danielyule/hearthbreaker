@@ -19,18 +19,16 @@ class ElvenArcher(MinionCard):
         super().__init__("Elven Archer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(1, 1)
-        minion.bind("added_to_board", deal_one_damage)
-        return minion
+        return Minion(1, 1, battlecry=deal_one_damage)
+
 
 class NoviceEngineer(MinionCard):
     def __init__(self):
         super().__init__("Novice Engineer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(1, 1)
-        minion.bind('added_to_board', draw_card)
-        return minion
+        return Minion(1, 1, battlecry=draw_card)
+
 
 class StonetuskBoar(MinionCard):
     def __init__(self):
@@ -41,14 +39,13 @@ class StonetuskBoar(MinionCard):
         minion.charge = True
         return minion
 
+
 class IronbeakOwl(MinionCard):
     def __init__(self):
         super().__init__("Ironbeak Owl", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(2, 1, MINION_TYPE.BEAST)
-        minion.bind('added_to_board', silence)
-        return minion
+        return Minion(2, 1, MINION_TYPE.BEAST, silence)
 
 
 class WarGolem(MinionCard):
@@ -119,7 +116,8 @@ class ArgentSquire(MinionCard):
         minion = Minion(1, 1)
         minion.divine_shield = True
         return minion
-    
+
+
 class SilvermoonGuardian(MinionCard):
     def __init__(self):
         super().__init__("Silvermoon Guardian", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
@@ -128,16 +126,16 @@ class SilvermoonGuardian(MinionCard):
         minion = Minion(3, 3)
         minion.divine_shield = True
         return minion
-    
+
+
 class TwilightDrake(MinionCard):
     def __init__(self):
         super().__init__("Twilight Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(4, 1, MINION_TYPE.DRAGON)
-        minion.bind('added_to_board', gain_one_health_for_each_card_in_hand)
-        return minion
-    
+        return Minion(4, 1, MINION_TYPE.DRAGON, battlecry=gain_one_health_for_each_card_in_hand)
+
+
 class MagmaRager(MinionCard):
     def __init__(self):
         super().__init__("Magma Rager", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)

@@ -63,9 +63,7 @@ class KirinTorMage(MinionCard):
             player.bind("card_used", card_used)
             player.bind_once("turn_ended", turn_ended)
             player.mana_filters.append(mana_filter)
-        minion = Minion(4, 3)
-        minion.bind("added_to_board", first_secret_cost_zero)
-        return minion
+        return Minion(4, 3, battlecry=first_secret_cost_zero)
 
 
 class EtherealArcanist(MinionCard):

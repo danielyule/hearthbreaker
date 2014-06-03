@@ -11,6 +11,13 @@ card_table = {}
 
 
 def card_lookup(card_name):
+    """
+    Given a the name of a card as a string, return an object corresponding to that card
+
+    :param str card_type: The name of the card in English
+    :return: An instance of a subclass of Card corresponding to the given card name or None if no Card
+             by that name exists.
+    """
     def card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
         if len(subclasses) is 0:
@@ -30,15 +37,84 @@ def card_lookup(card_name):
 
 
 class GameException(Exception):
+    """
+    An :class:`Exception` relating to the operation of the game
+    """
     def __init__(self, message):
         super().__init__(message)
 
 
 class Bindable:
+    """
+    A class which inherits from Bindable has an event structure added to it.
+
+    This event structure follows the observer pattern.  It consists of two parts: binding and triggering.
+    A function handler is bound to an event using the :meth:`bind` or :meth:`bind_once` methods.  When the event is
+    triggered using the :meth:`trigger` method, then any function handlers which have been bound to that event are
+    called.
+
+    Arguments can be passed to a bound function when binding or when triggering, or both.  Arguments from triggering
+    are passed first, followed by arguments from binding.
+
+    Functions can be bound such that they are called each time an event is triggered, or so that they are only called
+    the next time a function is triggered.  The former case is handled by :meth:`bind` and the latter by
+    :meth:`bind_once`
+
+    **Examples**:
+
+    Simple Binding::
+
+       class EventTarget(Bindable):
+           def __init__(self):
+               super().__init__()
+
+       def handler(fangs, scales):
+           print("fangs: {:d}, scales: {:d}".format(fangs, scales))
+
+       target = EventTarget()
+       target.bind("attack", handler, 1001)
+       target.trigger("attack", 2)             # outputs "fangs: 2, scales: 1001"
+       target.trigger("attack", 6)             # outputs "fangs: 6, scales: 1001"
+
+    Binding Once::
+
+       class EventTarget(Bindable):
+           def __init__(self):
+               super().__init__()
+
+       def handler(joke):
+            print("{:s}! HAHAHA".format(joke))
+
+       target = EventTarget()
+       target.bind_once("joke_told", handler)
+
+       # outputs "Well, I'd better replace it then! HAHAHA"
+       target.trigger("joke_told", "Well, I'd better replace it then")
+
+       # outputs nothing
+       target.trigger("joke_told", "What a senseless waste of human life")
+
+    Any class which subclasses this class must be sure to call :meth:`__init__`
+    """
     def __init__(self):
+        """
+        Set up a new :class:`Bindable`.  Must be called by any subclasses.
+        """
         self.events = {}
 
     def bind(self, event, function, *args):
+        """
+        Bind a function to an event.  Each time the event is triggered, the function will be called.
+
+        Any parameters passed to this method will be appended to the paramters passed to the trigger function
+        and passed to the bound function.
+
+        :param event str: The event to bind a function to
+        :param function function: The function to bind.  The parameters are not checked until it is called, so
+                                  ensure its signature matches the parameters called from :meth:`trigger`
+        :param *args: Any other parameters to be called
+        :see: :class:`Bindable`
+        """
         class Handler:
             def __init__(self):
                 self.args = args
@@ -46,13 +122,25 @@ class Bindable:
                 self.remove = False
                 self.active = False
 
-
         if not event in self.events:
             self.events[event] = []
 
         self.events[event].append(Handler())
 
     def bind_once(self, event, function, *args):
+        """
+        Bind a function to an event.  This function will only be called the next time the event is triggered, and
+        then ignored.
+
+        Any parameters passed to this method will be appended to the paramters passed to the trigger function
+        and passed to the bound function.
+
+        :param event str: The event to bind a function to
+        :param function function: The function to bind.  The parameters are not checked until it is called, so
+                                  ensure its signature matches the parameters called from :meth:`trigger`
+        :param *args: Any other parameters to be called
+        :see: :class:`Bindable`
+        """
         class Handler:
             def __init__(self):
                 self.args = args
@@ -66,6 +154,15 @@ class Bindable:
         self.events[event].append(Handler())
 
     def trigger(self, event, *args):
+        """
+        Trigger an event.  Any functions which have been bound to that event will be called.
+
+        The parameters passed to this function as `args` will be passed along to the bound functions.
+
+        :param string event: The name of the event to trigger
+        :param *args: The remaining arguments to pass to the bound function
+        :see: :class:`Bindable`
+        """
         if event in self.events:
             for handler in self.events[event].copy():
                 if not handler.active:
@@ -75,10 +172,19 @@ class Bindable:
                     handler.active = False
                     if handler.remove:
                         self.events[event].remove(handler)
+                        #tidy up the events dict so we don't have entries for events with no handlers
                         if len(self.events[event]) is 0:
                             del (self.events[event])
 
     def unbind(self, event, function):
+        """
+        Unbind a function from an event.  When this event is triggered, the function is no longer called.
+
+        `function` must be the same function reference as was passed in to :meth:`bind` or :meth:`bind_once`
+
+        :param string event: The event to unbind the function from
+        :param function function: The function to unbind.
+        """
         if event in self.events:
             self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
             if len(self.events[event]) is 0:
@@ -143,6 +249,7 @@ class MinionCard(Card,metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, status, targeting_func=None,
                  filter_func=lambda target: not target.stealth):
         super().__init__(name, mana, character_class, status, targeting_func, filter_func)
+
 
     def can_use(self, player, game):
         return super().can_use(player, game)
@@ -356,7 +463,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
 
 
 class Minion(Character):
-    def __init__(self, attack, health, type=hsgame.constants.MINION_TYPE.NONE):
+    def __init__(self, attack, health, type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None):
         super().__init__(attack, health, None)
         self.type = type
         self.taunt = False
@@ -366,6 +473,8 @@ class Minion(Character):
         self.charge = False
         self.spell_power = 0
         self.divine_shield = False
+        self.battlecry = battlecry
+        self.deathrattle = deathrattle
 
     def add_to_board(self, card, game, player, index):
         self.card = card
@@ -373,7 +482,8 @@ class Minion(Character):
         self.game = game
         self.player = player
         player.spell_power += self.spell_power
-        self.trigger("added_to_board", self)
+        if self.battlecry is not None:
+            self.battlecry(self)
         self.game.trigger("minion_added", self)
         for minion in player.minions:
             if minion.index >= index:
@@ -402,6 +512,8 @@ class Minion(Character):
         self.player.spell_power -= self.spell_power
         self.spell_power = 0
         self.divine_shield = False
+        self.battlecry = None
+        self.deathrattle = None
 
     def damage(self, amount, attacker):
         if self.divine_shield:
@@ -410,9 +522,13 @@ class Minion(Character):
             super().damage(amount, attacker)
 
     def die(self, by):
+        # Since deathrattle gets removed by silence, save it
+        deathrattle = self.deathrattle
         self.bind_once("died", lambda c: self.silence())
         super().die(by)
         self.game.trigger("minion_died", self, by)
+        if deathrattle is not None:
+            deathrattle()
         self.remove_from_board()
 
     def can_be_attacked(self):
@@ -525,11 +641,8 @@ class Player(Bindable):
         self.secrets = []
         self.mana_filters = []
 
-
     def __str__(self): #pragma: no cover
         return "Player: " + self.name
-
-
 
     def draw(self):
         if self.can_draw():
@@ -555,7 +668,6 @@ class Player(Bindable):
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
-
 
 
 class Game(Bindable):
@@ -607,8 +719,6 @@ class Game(Bindable):
 
         for card in put_back_cards:
             self.players[1].put_back(card)
-
-
 
     def start(self):
         self.pre_game()
