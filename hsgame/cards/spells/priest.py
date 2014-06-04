@@ -171,6 +171,36 @@ class ShadowMadness(Card):
         
         player.bind_once("turn_ended", switch_side)
         
+class ShadowWordDeath(Card):
+    def __init__(self):
+        super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target, lambda target: target.attack_power >= 5 and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+        
+class ShadowWordPain(Card):
+    def __init__(self):
+        super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target, lambda target: target.attack_power <= 3 and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+        
+class Shadowform(Card):
+    def __init__(self):
+        super().__init__("Shadowform", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if type(player.hero.power) is hsgame.powers.PriestPower:
+            player.hero.power = hsgame.powers.MindSpike(player.hero)
+        elif type(player.hero.power) is hsgame.powers.MindSpike:
+            player.hero.power = hsgame.powers.MindShatter(player.hero)
+        
 class Silence(Card):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)

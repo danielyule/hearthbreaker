@@ -5,6 +5,7 @@ from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for, StackedDeck
+from hsgame.replay import SavedGame
 
 from hsgame.cards import *
 
@@ -253,6 +254,91 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(29, game.players[0].hero.health)
 
+    def test_ShadowWordDeath(self):
+        game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, MinionPlayingAgent, SpellTestingAgent)
+
+        # Ironfur Grizzly should be played
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+        # Nothing should happen, since the attack of Grizzly is 3
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Magma Rager should be played        
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        
+        # Shadow Word: Death should be played, targeting the Magma Rager
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+    def test_ShadowWordPain(self):
+        game = generate_game_for([MagmaRager, IronfurGrizzly], ShadowWordPain, MinionPlayingAgent, SpellTestingAgent)
+
+        # Magma Rager should be played
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        
+        # Nothing should happen, since the attack of Magma Rager is 5
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Ironfur Grizzly should be played
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+        # Shadow Word: Pain should be played, targeting the Grizzly
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        
+    def test_Shadowform(self):
+        game = generate_game_for(IronfurGrizzly, Shadowform, MinionPlayingAgent, PredictableBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual("Lesser Heal", game.players[1].hero.power.__str__())
+        
+        # Shadowform should be played
+        game.play_single_turn()
+        self.assertEqual("Mind Spike", game.players[1].hero.power.__str__())
+
+        # Nothing special
+        game.play_single_turn()
+
+        # Mind Spike should be used, and Shadowform should be played
+        game.play_single_turn()
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual("Mind Shatter", game.players[1].hero.power.__str__())
+        
+        # Nothing special
+        game.play_single_turn()
+        self.assertEqual(6, len(game.players[0].minions))
+        
+        # Mind Shatter should be used, and Shadowform should be played (but nothing will happen, we are already at Mind Shatter)
+        game.play_single_turn()
+        self.assertEqual("Mind Shatter", game.players[1].hero.power.__str__())
+        self.assertEqual(5, len(game.players[0].minions))
+        
+        
+        # Test using the hero power, then cast Shadowform and use the new power (this is possible)
+        game = SavedGame("tests/replays/card_tests/Shadowform.rep")
+        game.start()
+        self.assertEqual(10, game.players[0].max_mana)
+        self.assertEqual(3, game.players[0].mana)
+        self.assertEqual(28, game.players[1].hero.health)
+    
     def test_Silence(self):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
 

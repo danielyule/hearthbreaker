@@ -40,7 +40,7 @@ class ProxyCharacter:
             if ref[0] == "p1":
                 char = game.players[0].minions[int(ref[1])]
             else:
-               char = game.players[1].minions[int(ref[1])]
+                char = game.players[1].minions[int(ref[1])]
 
         return char
 
@@ -165,8 +165,8 @@ class PowerAction(ReplayAction):
 
     def play(self, game):
         if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve()
-        self.target.resolve().attack()
+            game.current_player.agent.next_target = self.target.resolve(game)
+        game.current_player.hero.power.use()
         game.current_player.agent.next_target = None
 
 
