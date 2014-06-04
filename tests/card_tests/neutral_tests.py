@@ -145,6 +145,18 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[2].attack_power)
         self.assertEqual(1, game.current_player.minions[3].attack_power)
 
+        #Add a new boar on the left of the wolf since we haven't tested that yet
+        boar.create_minion(game.current_player).add_to_board(boar, game, game.current_player, 1)
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+
+        l_minion = game.current_player.minions[1]
+        l_minion.die(None)
+        l_minion.activate_delayed()
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].attack_power)
+
         #If the wolf is silenced, then the boars to either side should no longer have increased attack
         game.current_player.minions[1].silence()
         self.assertEqual(1, game.current_player.minions[0].attack_power)
