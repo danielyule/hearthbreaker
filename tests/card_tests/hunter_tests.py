@@ -35,3 +35,50 @@ class TestHunter(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[0].max_health)
+
+
+    def test_TimberWolf(self):
+        game = generate_game_for([StonetuskBoar, FaerieDragon, KoboldGeomancer, TimberWolf],
+                                 StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[3].attack_power)
+        self.assertEqual(3, game.current_player.minions[2].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[5].attack_power)
+        self.assertEqual(3, game.current_player.minions[4].attack_power)
+        self.assertEqual(2, game.current_player.minions[3].attack_power)
+        self.assertEqual(1, game.current_player.minions[2].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+
+        game.current_player.minions[1].die(None)
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[4].attack_power)
+        self.assertEqual(3, game.current_player.minions[3].attack_power)
+        self.assertEqual(2, game.current_player.minions[2].attack_power)
+        self.assertEqual(1, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+
+        game.current_player.minions[3].die(None)
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[3].attack_power)
+        self.assertEqual(2, game.current_player.minions[2].attack_power)
+        self.assertEqual(1, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+
+        wolf = game.current_player.minions[1]
+        wolf.die(None)
+        wolf.activate_delayed()
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[2].attack_power)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].attack_power)

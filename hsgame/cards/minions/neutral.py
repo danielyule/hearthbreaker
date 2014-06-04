@@ -156,7 +156,7 @@ class DireWolfAlpha(MinionCard):
             m.attack_power -= 1
 
         def add_effect(m, index):
-            m.add_adjacency_effect(increase_attack, decrease_attack)
+            m.add_board_effect(increase_attack, decrease_attack, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
 
         minion = Minion(2, 2, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)

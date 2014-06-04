@@ -28,6 +28,10 @@ from hsgame.cards.minions.druid import (
     Cenarius
 )
 
+from hsgame.cards.minions.hunter import (
+    TimberWolf
+)
+
 from hsgame.cards.minions.mage import (
     ManaWyrm,
     SorcerersApprentice,

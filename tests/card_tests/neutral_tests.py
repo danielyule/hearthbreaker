@@ -118,16 +118,12 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[3].attack_power)
 
         #When removing the minion at index 0, we should not get an error
-        l_minion = game.current_player.minions[0]
-        l_minion.die(None)
-        l_minion.activate_delayed()
+        game.current_player.minions[0].die(None)
         self.assertEqual(3, len(game.current_player.minions))
 
         #When removing the minion at index 1, we should have a new minion at index 1,
         #and its attack should be increased
-        r_minion = game.current_player.minions[1]
-        r_minion.die(None)
-        r_minion.activate_delayed()
+        game.current_player.minions[1].die(None)
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[1].attack_power)
 
@@ -151,9 +147,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[0].attack_power)
         self.assertEqual(2, game.current_player.minions[1].attack_power)
 
-        l_minion = game.current_player.minions[1]
-        l_minion.die(None)
-        l_minion.activate_delayed()
+        game.current_player.minions[1].die(None)
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].attack_power)
 

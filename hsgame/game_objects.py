@@ -592,10 +592,10 @@ class Minion(Character):
         deathrattle = self.deathrattle
         self.bind_once("died", lambda c: self.silence())
         super().die(by)
-        self.game.trigger("minion_died", self, by)
         if deathrattle is not None:
             deathrattle()
         self.remove_from_board()
+        self.game.trigger("minion_died", self, by)
 
     def can_be_attacked(self):
         return not self.stealth
@@ -609,66 +609,46 @@ class Minion(Character):
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
 
-    def add_adjacency_effect(self, effect, effect_silence):
+    def add_board_effect(self, effect, effect_silence, filter_func=lambda m: True):
         """
-        Adds an effect to this minion that will affect the minions on either side.
+        Adds an effect to this minion that will affect minions on its side of the board
 
         This method sets up the effect so that it will update when new minions are added
         or other minions die, or the original minion is silenced
 
-        :param function effect: the effect to apply to adjacent minions.  Takes one paramter: the minion to affect.
+        :param function effect: the effect to apply to other minions.  Takes one paramter: the minion to affect.
         :param function effect_silence: a function which will undo the effect when this minion is silenced. Takes
                                         one parameter: the minion to affect.
+        :param function filter_func: A function that selects which minions to apply this effect to. Takes
+                                     one paramter: the minion to test and returns true if the minion should be
+                                     affected, and false otherwise.
         """
-        def left_minion_died(killer, minion):
-            if minion.index > 0:
-                apply_left_effect(self.player.minions[minion.index - 1])
+        def minion_added(m):
+            board_changed()
 
-        def apply_left_effect(minion):
-            effect(minion)
-            minion.bind("died", left_minion_died, minion)
+        def minion_died(m, by):
+            board_changed()
 
-        def right_minion_died(killer, minion):
-            if minion.index < len(self.player.minions):
-                apply_left_effect(self.player.minions[minion.index])
-
-        def apply_right_effect(minion):
-            effect(minion)
-            minion.bind("died", right_minion_died, minion)
-
-        def minion_added(minion):
-            if minion.index is self.index - 1:
-                if minion.index > 0:
-                    old_left = self.player.minions[minion.index - 1]
-                    effect_silence(old_left)
-                    old_left.unbind("died", left_minion_died)
-                apply_left_effect(minion)
-            elif minion.index is self.index + 1:
-                if minion.index < len(self.player.minions) - 1:
-                    old_right = self.player.minions[minion.index + 1]
-                    effect_silence(old_right)
-                    old_right.unbind("died", right_minion_died)
-                apply_right_effect(minion)
+        def board_changed():
+            nonlocal affected_minions
+            silenced()
+            affected_minions = []
+            for m in filter(filter_func, self.player.minions):
+                effect(m)
+                affected_minions.append(m)
 
         def silenced():
-            if self.index > 0:
-                left = self.player.minions[self.index - 1]
-                effect_silence(left)
-                left.unbind("died", left_minion_died)
-            if self.index < len(self.player.minions) - 1:
-                right = self.player.minions[self.index + 1]
-                effect_silence(right)
-                right.unbind("died", right_minion_died)
+            for m in affected_minions:
+                effect_silence(m)
 
+        affected_minions = []
+        for minion in filter(filter_func, self.player.minions):
+            effect(minion)
+            affected_minions.append(minion)
 
-        if self.index > 0:
-            apply_left_effect(self.player.minions[self.index - 1])
-        if self.index < len(self.player.minions) - 1:
-            apply_right_effect(self.player.minions[self.index + 1])
         self.player.game.bind("minion_added", minion_added)
-        self.bind("silenced", silenced)
-
-
+        self.player.game.bind("minion_died", minion_died)
+        self.bind_once("silenced", silenced)
 class Deck:
     def __init__(self, cards, character_class):
         self.cards = cards
