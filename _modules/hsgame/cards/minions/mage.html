@@ -123,9 +123,7 @@
             <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_used&quot;</span><span class="p">,</span> <span class="n">card_used</span><span class="p">)</span>
             <span class="n">player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="n">turn_ended</span><span class="p">)</span>
             <span class="n">player</span><span class="o">.</span><span class="n">mana_filters</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">mana_filter</span><span class="p">)</span>
-        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">first_secret_cost_zero</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">minion</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">battlecry</span><span class="o">=</span><span class="n">first_secret_cost_zero</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="EtherealArcanist"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.mage.EtherealArcanist">[docs]</a><span class="k">class</span> <span class="nc">EtherealArcanist</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>

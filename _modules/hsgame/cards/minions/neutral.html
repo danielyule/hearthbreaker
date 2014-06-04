@@ -79,18 +79,16 @@
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Elven Archer&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_battlecry_target</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ElvenArcher.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.ElvenArcher.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
-        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">deal_one_damage</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">minion</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">battlecry</span><span class="o">=</span><span class="n">deal_one_damage</span><span class="p">)</span>
+
 </div></div>
 <div class="viewcode-block" id="NoviceEngineer"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.NoviceEngineer">[docs]</a><span class="k">class</span> <span class="nc">NoviceEngineer</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
 <div class="viewcode-block" id="NoviceEngineer.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.NoviceEngineer.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Novice Engineer&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="NoviceEngineer.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.NoviceEngineer.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
-        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">draw_card</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">minion</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">battlecry</span><span class="o">=</span><span class="n">draw_card</span><span class="p">)</span>
+
 </div></div>
 <div class="viewcode-block" id="StonetuskBoar"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.StonetuskBoar">[docs]</a><span class="k">class</span> <span class="nc">StonetuskBoar</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
 <div class="viewcode-block" id="StonetuskBoar.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.StonetuskBoar.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -100,15 +98,14 @@
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
         <span class="n">minion</span><span class="o">.</span><span class="n">charge</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">minion</span>
+
 </div></div>
 <div class="viewcode-block" id="IronbeakOwl"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronbeakOwl">[docs]</a><span class="k">class</span> <span class="nc">IronbeakOwl</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
 <div class="viewcode-block" id="IronbeakOwl.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronbeakOwl.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Ironbeak Owl&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_minion_battlecry_target</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="IronbeakOwl.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.IronbeakOwl.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
-        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">)</span>
-        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">silence</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">minion</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">BEAST</span><span class="p">,</span> <span class="n">silence</span><span class="p">)</span>
 
 </div></div>
 <div class="viewcode-block" id="WarGolem"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.WarGolem">[docs]</a><span class="k">class</span> <span class="nc">WarGolem</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
@@ -179,7 +176,8 @@
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">minion</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">minion</span>
-    </div></div>
+
+</div></div>
 <div class="viewcode-block" id="SilvermoonGuardian"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.SilvermoonGuardian">[docs]</a><span class="k">class</span> <span class="nc">SilvermoonGuardian</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
 <div class="viewcode-block" id="SilvermoonGuardian.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.SilvermoonGuardian.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Silvermoon Guardian&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
@@ -188,15 +186,23 @@
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
         <span class="n">minion</span><span class="o">.</span><span class="n">divine_shield</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="k">return</span> <span class="n">minion</span>
-    </div></div>
+
+</div></div>
 <div class="viewcode-block" id="TwilightDrake"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.TwilightDrake">[docs]</a><span class="k">class</span> <span class="nc">TwilightDrake</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
 <div class="viewcode-block" id="TwilightDrake.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.TwilightDrake.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Twilight Drake&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">RARE</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="TwilightDrake.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.TwilightDrake.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
-        <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">DRAGON</span><span class="p">)</span>
-        <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;added_to_board&#39;</span><span class="p">,</span> <span class="n">gain_one_health_for_each_card_in_hand</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">minion</span></div></div>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">MINION_TYPE</span><span class="o">.</span><span class="n">DRAGON</span><span class="p">,</span> <span class="n">battlecry</span><span class="o">=</span><span class="n">gain_one_health_for_each_card_in_hand</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="MagmaRager"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.MagmaRager">[docs]</a><span class="k">class</span> <span class="nc">MagmaRager</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+<div class="viewcode-block" id="MagmaRager.__init__"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.MagmaRager.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Magma Rager&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">FREE</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="MagmaRager.create_minion"><a class="viewcode-back" href="../../../../hsgame.cards.minions.html#hsgame.cards.minions.neutral.MagmaRager.create_minion">[docs]</a>    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    </div></div>
 </pre></div>
 
           </div>

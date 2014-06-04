@@ -12,13 +12,7 @@ Subpackages
 Submodules
 ----------
 
-hsgame.constants module
------------------------
 
-.. automodule:: hsgame.constants
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 hsgame.game_objects module
 --------------------------
@@ -52,6 +46,13 @@ hsgame.targeting module
     :undoc-members:
     :show-inheritance:
 
+hsgame.constants module
+-----------------------
+
+.. automodule:: hsgame.constants
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 Module contents
 ---------------

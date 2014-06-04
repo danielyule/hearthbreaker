@@ -86,9 +86,9 @@
         <span class="n">option</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_option</span><span class="p">(</span><span class="n">moonfire</span><span class="p">,</span> <span class="n">dispell</span><span class="p">)</span>
         <span class="n">minion</span> <span class="o">=</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">option</span> <span class="o">==</span> <span class="n">moonfire</span><span class="p">:</span>
-            <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">deal_two_damage</span><span class="p">)</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">battlecry</span> <span class="o">=</span> <span class="n">deal_two_damage</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">minion</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;added_to_board&quot;</span><span class="p">,</span> <span class="n">silence</span><span class="p">)</span>
+            <span class="n">minion</span><span class="o">.</span><span class="n">battlecry</span> <span class="o">=</span> <span class="n">silence</span>
 
         <span class="k">return</span> <span class="n">minion</span>
 
