@@ -296,7 +296,7 @@ yes,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until e
 yes,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,,Basic,Spell
 yes,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Basic,Spell
 no,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Expert,Spell
-no,Shadowform,Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.,,Priest,3,,,Expert,Spell
+yes,Shadowform,Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.,,Priest,3,,,Expert,Spell
 no,Shadowstep,Return a friendly minion to your hand. It costs (2) less.,,Rogue,0,,,Expert,Spell
 no,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Basic,Minion
 no,Shield Block,Gain 5 Armor. Draw a card.,,Warrior,3,,,Basic,Spell

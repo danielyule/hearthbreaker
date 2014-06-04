@@ -59,6 +59,39 @@ class PriestPower(Power):
         super().use()
         target = self.hero.find_power_target()
         target.heal(2)
+        
+    def __str__(self):
+        return "Lesser Heal"
+        
+
+# Special power the priest can obtain via the card Shadowform
+class MindSpike(Power):
+    
+    def __init__(self, hero):
+        super().__init__(hero)
+
+    def use(self):
+        super().use()
+        target = self.hero.find_power_target()
+        target.damage(2, None)
+        
+    def __str__(self):
+        return "Mind Spike"
+        
+
+# Special power the priest can obtain via the card Shadowform
+class MindShatter(Power):
+    
+    def __init__(self, hero):
+        super().__init__(hero)
+
+    def use(self):
+        super().use()
+        target = self.hero.find_power_target()
+        target.damage(3, None)
+        
+    def __str__(self):
+        return "Mind Shatter"
 
 
 class PaladinPower(Power):

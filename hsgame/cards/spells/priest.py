@@ -189,6 +189,18 @@ class ShadowWordPain(Card):
 
         self.target.die(self)
         
+class Shadowform(Card):
+    def __init__(self):
+        super().__init__("Shadowform", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if type(player.hero.power) is hsgame.powers.PriestPower:
+            player.hero.power = hsgame.powers.MindSpike(player.hero)
+        elif type(player.hero.power) is hsgame.powers.MindSpike:
+            player.hero.power = hsgame.powers.MindShatter(player.hero)
+        
 class Silence(Card):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
