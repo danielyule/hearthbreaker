@@ -171,6 +171,15 @@ class ShadowMadness(Card):
         
         player.bind_once("turn_ended", switch_side)
         
+class ShadowWordDeath(Card):
+    def __init__(self):
+        super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target, lambda target: target.attack_power >= 5 and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+        
 class Silence(Card):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)

@@ -76,4 +76,5 @@ from hsgame.cards.spells.priest import \
     Mindgames, \
     PowerWordShield, \
     ShadowMadness, \
+    ShadowWordDeath, \
     Silence

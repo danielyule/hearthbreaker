@@ -253,6 +253,30 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(29, game.players[0].hero.health)
 
+    def test_ShadowWordDeath(self):
+        game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, MinionPlayingAgent, SpellTestingAgent)
+
+        # Ironfur Grizzly should be played
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+        # Nothing should happen, since the attack of Grizzly is 3
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Magma Rager should be played        
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        
+        # Shadow Word: Death should be played, targeting the Magma Rager
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)        
+    
     def test_Silence(self):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
 
