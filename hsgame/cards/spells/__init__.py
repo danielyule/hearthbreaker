@@ -77,4 +77,5 @@ from hsgame.cards.spells.priest import \
     PowerWordShield, \
     ShadowMadness, \
     ShadowWordDeath, \
+    ShadowWordPain, \
     Silence

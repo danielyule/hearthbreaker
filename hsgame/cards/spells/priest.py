@@ -180,6 +180,15 @@ class ShadowWordDeath(Card):
 
         self.target.die(self)
         
+class ShadowWordPain(Card):
+    def __init__(self):
+        super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target, lambda target: target.attack_power <= 3 and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+        
 class Silence(Card):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)

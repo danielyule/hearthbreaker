@@ -275,7 +275,31 @@ class TestPriest(unittest.TestCase):
         # Shadow Word: Death should be played, targeting the Magma Rager
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)        
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+    def test_ShadowWordPain(self):
+        game = generate_game_for([MagmaRager, IronfurGrizzly], ShadowWordPain, MinionPlayingAgent, SpellTestingAgent)
+
+        # Magma Rager should be played
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
+        
+        # Nothing should happen, since the attack of Magma Rager is 5
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Ironfur Grizzly should be played
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
+        
+        # Shadow Word: Pain should be played, targeting the Grizzly
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
     
     def test_Silence(self):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
