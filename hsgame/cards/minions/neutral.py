@@ -142,4 +142,22 @@ class MagmaRager(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 1)
-    
+
+
+class DireWolfAlpha(MinionCard):
+    def __init__(self):
+        super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def increase_attack(m):
+            m.attack_power += 1
+
+        def decrease_attack(m):
+            m.attack_power -= 1
+
+        def add_effect(m, index):
+            m.add_adjacency_effect(increase_attack, decrease_attack)
+
+        minion = Minion(2, 2, MINION_TYPE.BEAST)
+        minion.bind("added_to_board", add_effect)
+        return minion

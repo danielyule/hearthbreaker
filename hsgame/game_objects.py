@@ -436,6 +436,8 @@ class Card(Bindable):
         This cost is the base cost for the card, modified by any effects from the card itself, or
         from other cards (such as :class:`hsgame.cards.minions.neutral.VentureCoMercenary`)
 
+        :param Player player: The player who is trying to use the card.
+
         :return int: representing the actual mana cost of this card.
         """
         calc_mana = self.mana
@@ -547,13 +549,14 @@ class Minion(Character):
         player.spell_power += self.spell_power
         if self.battlecry is not None:
             self.battlecry(self)
-        self.game.trigger("minion_added", self)
         for minion in player.minions:
             if minion.index >= index:
                 minion.index += 1
         self.index = index
         if self.charge:
             self.active = True
+        self.game.trigger("minion_added", self)
+        self.trigger("added_to_board", self, index)
         player.bind("turn_ended", self.turn_complete)
         
     def remove_from_board(self):
@@ -605,6 +608,65 @@ class Minion(Character):
 
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
+
+    def add_adjacency_effect(self, effect, effect_silence):
+        """
+        Adds an effect to this minion that will affect the minions on either side.
+
+        This method sets up the effect so that it will update when new minions are added
+        or other minions die, or the original minion is silenced
+
+        :param function effect: the effect to apply to adjacent minions.  Takes one paramter: the minion to affect.
+        :param function effect_silence: a function which will undo the effect when this minion is silenced. Takes
+                                        one parameter: the minion to affect.
+        """
+        def left_minion_died(killer, minion):
+            if minion.index > 0:
+                apply_left_effect(self.player.minions[minion.index - 1])
+
+        def apply_left_effect(minion):
+            effect(minion)
+            minion.bind("died", left_minion_died, minion)
+
+        def right_minion_died(killer, minion):
+            if minion.index < len(self.player.minions):
+                apply_left_effect(self.player.minions[minion.index])
+
+        def apply_right_effect(minion):
+            effect(minion)
+            minion.bind("died", right_minion_died, minion)
+
+        def minion_added(minion):
+            if minion.index is self.index - 1:
+                if minion.index > 0:
+                    old_left = self.player.minions[minion.index - 1]
+                    effect_silence(old_left)
+                    old_left.unbind("died", left_minion_died)
+                apply_left_effect(minion)
+            elif minion.index is self.index + 1:
+                if minion.index < len(self.player.minions) - 1:
+                    old_right = self.player.minions[minion.index + 1]
+                    effect_silence(old_right)
+                    old_right.unbind("died", right_minion_died)
+                apply_right_effect(minion)
+
+        def silenced():
+            if self.index > 0:
+                left = self.player.minions[self.index - 1]
+                effect_silence(left)
+                left.unbind("died", left_minion_died)
+            if self.index < len(self.player.minions) - 1:
+                right = self.player.minions[self.index + 1]
+                effect_silence(right)
+                right.unbind("died", right_minion_died)
+
+
+        if self.index > 0:
+            apply_left_effect(self.player.minions[self.index - 1])
+        if self.index < len(self.player.minions) - 1:
+            apply_right_effect(self.player.minions[self.index + 1])
+        self.player.game.bind("minion_added", minion_added)
+        self.bind("silenced", silenced)
 
 
 class Deck:

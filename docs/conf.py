@@ -12,12 +12,16 @@
 #
 # All configuration values have a default; values that are commented out
 # serve to show the default.
+import inspect
 
 import sys
 import os
 
 # import Cloud
 import cloud_sptheme as csp
+
+# import source code so that inspection works correctly
+import hsgame
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -34,7 +38,7 @@ sys.path.insert(0, os.path.abspath('../'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.viewcode',
+    'sphinx.ext.linkcode',
     'sphinx.ext.intersphinx'
 ]
 
@@ -346,3 +350,25 @@ def skip(app, what, name, obj, skip, options):
 
 def setup(app):
     app.connect("autodoc-skip-member", skip)
+
+
+#Borrowed from the sphinx documentation example http://sphinx-doc.org/latest/ext/linkcode.html#confval-linkcode_resolve
+def linkcode_resolve(domain, info):
+
+    if domain != "py":
+        return None
+    if not info['module']:
+        return None
+    filename = info['module'].replace('.', '/')
+    cls = None
+    path = ".".join([info['module'], info['fullname']])
+    for path_part in path.split('.'):
+        if cls is None:
+            cls = globals()[path_part]
+        else:
+            cls = getattr(cls, path_part)
+    try:
+        (lines, line_no) = inspect.getsourcelines(cls)
+    except TypeError:
+        return None
+    return "http://github.com/danielyule/hearthstone-simulator/blob/master/{:s}.py#L{:d}".format(filename, line_no)
