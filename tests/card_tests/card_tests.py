@@ -27,6 +27,6 @@ class CardTest(unittest.TestCase):
                     minion.silence()
                     self.assertEqual(int(row["Attack"]), minion.attack_power, row["Name"])
                     self.assertEqual(int(row["Health"]), minion.health, row["Name"])
-                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.type, row["Name"])
+                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.minion_type, row["Name"])
 
         file.close()

@@ -492,7 +492,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual("Sheep", game.other_player.minions[0].card.name)
-        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].type)
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].minion_type)
 
     def test_Blizzard(self):
         game = generate_game_for(Blizzard, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)

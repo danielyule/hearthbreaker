@@ -14,15 +14,15 @@ def card_lookup(card_name):
     """
     Given a the name of a card as a string, return an object corresponding to that card
 
-    :param str card_type: The name of the card in English
+    :param str card_name: A string representing the name of the card in English
     :return: An instance of a subclass of Card corresponding to the given card name or None if no Card
              by that name exists.
     """
     def card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
         if len(subclasses) is 0:
-                card = card_type()
-                card_table[card.name] = card_type
+                c = card_type()
+                card_table[c.name] = card_type
         for sub_type in subclasses:
             card_lookup_rec(sub_type)
 
@@ -112,7 +112,7 @@ class Bindable:
         :param event str: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param *args: Any other parameters to be called
+        :param args: Any other parameters to be called
         :see: :class:`Bindable`
         """
         class Handler:
@@ -138,7 +138,7 @@ class Bindable:
         :param event str: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param *args: Any other parameters to be called
+        :param args: Any other parameters to be called
         :see: :class:`Bindable`
         """
         class Handler:
@@ -160,7 +160,7 @@ class Bindable:
         The parameters passed to this function as `args` will be passed along to the bound functions.
 
         :param string event: The name of the event to trigger
-        :param *args: The remaining arguments to pass to the bound function
+        :param args: The remaining arguments to pass to the bound function
         :see: :class:`Bindable`
         """
         if event in self.events:
@@ -191,108 +191,7 @@ class Bindable:
                 del (self.events[event])
 
 
-class Card(Bindable):
-    def __init__(self, name, mana, character_class, status, target_func=None,
-                 filter_func=lambda target: target.spell_targetable()):
-        """
-            @name: string
-            @mana: int
-            @gold: int
-            @character_class: CHARACTER_CLASS
-            @status: CARD_STATUS
-        """
-        super().__init__()
-        self.name = name
-        self.mana = mana
-        self.character_class = character_class
-        self.status = status
-        self.cancel = False
-        self.targetable = target_func is not None
-        if self.targetable:
-            self.targets = []
-            self.target = None
-            self.get_targets = target_func
-            self.filter_func = filter_func
-
-    def can_use(self, player, game):
-        if self.targetable:
-            self.targets = self.get_targets(game, self.filter_func)
-            if self.targets is not None and len(self.targets) is 0:
-                return False
-
-        return player.mana >= self.mana_cost(player)
-
-    def mana_cost(self, player):
-        calc_mana = self.mana
-        for filter in player.mana_filters:
-            if filter.filter(self):
-                calc_mana -= filter.amount
-                if calc_mana < filter.min:
-                    return filter.min
-        return calc_mana
-
-    def use(self, player, game):
-        if self.targetable:
-            if self.targets is None:
-                self.target = None
-            else:
-                self.target = player.agent.choose_target(self.targets)
-
-    def is_spell(self):
-        return True
-
-    def __str__(self):  # pragma: no cover
-        return self.name + " (" + str(self.mana) + " mana)"
-
-
-class MinionCard(Card,metaclass=abc.ABCMeta):
-    def __init__(self, name, mana, character_class, status, targeting_func=None,
-                 filter_func=lambda target: not target.stealth):
-        super().__init__(name, mana, character_class, status, targeting_func, filter_func)
-
-
-    def can_use(self, player, game):
-        return super().can_use(player, game)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
-
-    @abc.abstractmethod
-    def create_minion(self, player):
-        pass
-
-    def is_spell(self):
-        return False
-
-
-class SecretCard(Card,metaclass=abc.ABCMeta):
-    def __init__(self, name, mana, character_class, status):
-        super().__init__(name, mana, character_class, status, None)
-        self.player = None
-
-    def can_use(self, player, game):
-        return super().can_use(player, game) and self.name not in [secret.name for secret in player.secrets]
-
-    def use(self, player, game):
-        super().use(player, game)
-        player.secrets.append(self)
-        self.player = player
-
-    def reveal(self):
-        self.player.trigger("secret_revealed", self)
-        self.player.secrets.remove(self)
-
-    @abc.abstractmethod
-    def activate(self, player):
-        pass
-
-    @abc.abstractmethod
-    def deactivate(self, player):
-        pass
-
-
-class Character(Bindable,metaclass=abc.ABCMeta):
+class Character(Bindable, metaclass=abc.ABCMeta):
     def __init__(self, attack_power, health, player):
         super().__init__()
         self.health = health
@@ -340,7 +239,7 @@ class Character(Bindable,metaclass=abc.ABCMeta):
             target.trigger("attacked", self)
             if self.dead:
                 return
-            my_attack = self.attack_power + self.temp_attack #In case the damage causes my attack to grow
+            my_attack = self.attack_power + self.temp_attack  # In case the damage causes my attack to grow
             self.physical_damage(target.attack_power, target)
             target.physical_damage(my_attack, self)
             target.activate_delayed()
@@ -429,9 +328,9 @@ class Character(Bindable,metaclass=abc.ABCMeta):
         self.frozen = False
         self.frozen_this_turn = False
 
-    def spell_damage(self, amount, spellCard):
-        self.trigger("spell_damaged", amount, spellCard)
-        self.damage(amount, spellCard)
+    def spell_damage(self, amount, spell_card):
+        self.trigger("spell_damaged", amount, spell_card)
+        self.damage(amount, spell_card)
 
     def physical_damage(self, amount, attacker):
         self.trigger("physically_damaged", amount, attacker)
@@ -461,11 +360,175 @@ class Character(Bindable,metaclass=abc.ABCMeta):
     def can_attack(self):
         return self.attack_power + self.temp_attack > 0 and self.active and not self.frozen
 
+    def spell_targetable(self):
+        return True
+
+
+def _is_spell_targetable(target):
+    return target.spell_targetable()
+
+
+class Card(Bindable):
+    """
+    Represents a card in Heathstone.  Every card is implemented as a subclass, either directly or through
+    :class:`MinionCard`, :class:`SecretCard` or :class:`WeaponCard`.  If it is a direct subclass of this
+    class then it is a standard spell, whereas if it is a subclass of one of :class:`MinionCard`, :class:`SecretCard`
+    or :class:`WeaponCard`., then it is a minion, secret or weapon respectively.
+
+    In order to play a card, it should be passed to :meth:`Game.play_card`.  Simply calling :meth:`use` will
+    cause its effect, but not update the game state.
+    """
+    def __init__(self, name, mana, character_class, rarity, target_func=None,
+                 filter_func=_is_spell_targetable):
+        """
+            Creates a new :class:`Card`.
+
+            :param string name: The name of the card in English
+            :param int mana: The base amount of mana this card costs
+            :param int character_class: A constant from :class:`hsgame.constants.CHARACTER_CLASS` denoting
+                                        which character this card belongs to or
+                                        :const:`hsgame.constants.CHARACTER_CLASS.ALL` if neutral
+            :param int rarity: A constant from :class:`hsgame.constants.CARD_RARITY` denoting the rarity of the card.
+            :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
+                                         the card is assumed not to require a target.  If `target_func` returns
+                                         an empty list, then the card cannot be played.  If it returns None, then the
+                                         card is played, but with no target (i.e. a battlecry which has no valid target
+                                         will not stop the minion from being played).
+
+                                         See :mod:`hsgame.targeting` for more details.
+            :param function filter_func: A boolean function which can be used to filter the list of targets. An example
+                                         for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
+                                         returns true if the target's attack is less than 3.
+        """
+        super().__init__()
+        self.name = name
+        self.mana = mana
+        self.character_class = character_class
+        self.rarity = rarity
+        self.cancel = False
+        self.targetable = target_func is not None
+        if self.targetable:
+            self.targets = []
+            self.target = None
+            self.get_targets = target_func
+            self.filter_func = filter_func
+
+    def can_use(self, player, game):
+        """
+        Verifies if the card can be used with the game state as it is.
+
+        Checks that the player has enough mana to play the card, and that the card has a valid
+        target if it requires one.
+
+        :return bool: True if the card can be played, false otherwise.
+        """
+        if self.targetable:
+            self.targets = self.get_targets(game, self.filter_func)
+            if self.targets is not None and len(self.targets) is 0:
+                return False
+
+        return player.mana >= self.mana_cost(player)
+
+    def mana_cost(self, player):
+        """
+        Calculates the mana cost for this card.
+
+        This cost is the base cost for the card, modified by any effects from the card itself, or
+        from other cards (such as :class:`hsgame.cards.minions.neutral.VentureCoMercenary`)
+
+        :return int: representing the actual mana cost of this card.
+        """
+        calc_mana = self.mana
+        for mana_filter in player.mana_filters:
+            if mana_filter.filter(self):
+                calc_mana -= mana_filter.amount
+                if calc_mana < mana_filter.min:
+                    return mana_filter.min
+        return calc_mana
+
+    def use(self, player, game):
+        """
+        Use the card.
+
+        This method will cause the card's effect, but will not update the game state or trigger any events.
+        To play a card correctly, use :meth:`Game.play_card`.
+
+        Implementations of new cards should override this method, but be sure to call `super().use(player, game)`
+
+        :param Player player: The player who is using the card.
+        :param Game game: The game this card is being used in.
+        """
+        if self.targetable:
+            if self.targets is None:
+                self.target = None
+            else:
+                self.target = player.agent.choose_target(self.targets)
+
+    def is_spell(self):
+        """
+        Verifies if this is a spell card (or a secret card)
+
+        :return bool: True if the card is a spell card, false otherwise
+        """
+        return True
+
+    def __str__(self):  # pragma: no cover
+        """
+        Outputs a decription of the card for debugging purposes.
+        """
+        return self.name + " (" + str(self.mana) + " mana)"
+
+
+class MinionCard(Card, metaclass=abc.ABCMeta):
+    def __init__(self, name, mana, character_class, rarity, targeting_func=None,
+                 filter_func=lambda target: not target.stealth):
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
+
+    @abc.abstractmethod
+    def create_minion(self, player):
+        pass
+
+    def is_spell(self):
+        return False
+
+
+class SecretCard(Card, metaclass=abc.ABCMeta):
+    def __init__(self, name, mana, character_class, rarity):
+        super().__init__(name, mana, character_class, rarity, None)
+        self.player = None
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and self.name not in [secret.name for secret in player.secrets]
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.secrets.append(self)
+        self.player = player
+
+    def reveal(self):
+        self.player.trigger("secret_revealed", self)
+        self.player.secrets.remove(self)
+
+    @abc.abstractmethod
+    def activate(self, player):
+        pass
+
+    @abc.abstractmethod
+    def deactivate(self, player):
+        pass
+
 
 class Minion(Character):
-    def __init__(self, attack, health, type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None):
+    def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None):
         super().__init__(attack, health, None)
-        self.type = type
+        self.minion_type = minion_type
         self.taunt = False
         self.game = None
         self.card = None
@@ -540,7 +603,7 @@ class Minion(Character):
     def choose_target(self, targets):
         return self.player.choose_target(targets)
 
-    def __str__(self): #pragma: no cover
+    def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
 
 
@@ -554,11 +617,11 @@ class Deck:
     def can_draw(self):
         return self.left > 0
 
-    def draw(self, random):
+    def draw(self, random_func):
         if not self.can_draw():
             raise GameException("Cannot draw more than 30 cards")
 
-        index = random(0, self.left - 1)
+        index = random_func(0, self.left - 1)
         count = 0
         i = 0
         while count <= index:
@@ -610,9 +673,6 @@ class Hero(Character):
     def die(self, by):
         super().die(by)
 
-    def spell_targetable(self):
-        return True
-
     def find_power_target(self):
         targets = hsgame.targeting.find_spell_target(self.player.game, lambda t: t.spell_targetable())
         target = self.choose_target(targets)
@@ -624,7 +684,7 @@ class Hero(Character):
 
 
 class Player(Bindable):
-    def __init__(self, name, deck, agent, game, random=random.randint):
+    def __init__(self, name, deck, agent, game, random_func=random.randint):
         super().__init__()
         self.hero = Hero(deck.character_class, self)
         self.name = name
@@ -633,7 +693,7 @@ class Player(Bindable):
         self.deck = deck
         self.spell_power = 0
         self.minions = []
-        self.random = random
+        self.random = random_func
         self.hand = []
         self.fatigue = 0
         self.agent = agent
@@ -641,7 +701,7 @@ class Player(Bindable):
         self.secrets = []
         self.mana_filters = []
 
-    def __str__(self): #pragma: no cover
+    def __str__(self):  # pragma: no cover
         return "Player: " + self.name
 
     def draw(self):
@@ -671,28 +731,27 @@ class Player(Bindable):
 
 
 class Game(Bindable):
-    def __init__(self, decks, agents, random=random.randint):
+    def __init__(self, decks, agents, random_func=random.randint):
         super().__init__()
         self.delayed_minions = []
-        self.random = random
-        first_player = random(0, 1)
+        self.random = random_func
+        first_player = random_func(0, 1)
         if first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
-        self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self, random),
-                        Player("two", decks[play_order[1]], agents[play_order[1]], self, random)]
+        self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self, random_func),
+                        Player("two", decks[play_order[1]], agents[play_order[1]], self, random_func)]
         agents[0].set_game(self)
         agents[1].set_game(self)
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.game_ended = False
-        for i in range(0,3):
+        for i in range(0, 3):
             self.players[0].draw()
 
-        for i in range(0,4):
+        for i in range(0, 4):
             self.players[1].draw()
-
 
         self.players[0].hero.bind("died", self.game_over)
         self.players[1].hero.bind("died", self.game_over)
@@ -796,17 +855,6 @@ class Game(Bindable):
 
             self.delayed_minions = []
 
-
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
         self.trigger("minion_removed", minion, player)
-
-
-
-
-
-
-
-
-
-

@@ -16,7 +16,7 @@ class StackedDeck(Deck):
         cards.extend(card_pattern[:30 - len(cards)])
         super().__init__(cards, character_class)
 
-    def draw(self, random):
+    def draw(self, random_func):
         for card_index in range(0, 30):
             if not self.used[card_index]:
                 self.used[card_index] = True
