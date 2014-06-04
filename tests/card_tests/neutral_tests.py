@@ -162,5 +162,3 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[0].attack_power)
         self.assertEqual(1, game.current_player.minions[2].attack_power)
         self.assertEqual(1, game.current_player.minions[3].attack_power)
-
-

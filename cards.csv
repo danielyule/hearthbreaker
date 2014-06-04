@@ -174,7 +174,7 @@ yes,Holy Wrath,Draw a card and deal damage equal to its cost.,,Paladin,5,,,Exper
 no,Houndmaster,Battlecry: Give a friendly Beast +2/+2 and Taunt.,,Hunter,4,4,3,Basic,Minion
 yes,Humility,Change a minion's Attack to 1.,,Paladin,1,,,Basic,Spell
 no,Hungry Crab,Battlecry: Destroy a Murloc and gain +2/+2.,Beast,,1,1,2,Expert,Minion
-no,Hunter's Mark,Change a minion's Health to 1.,,Hunter,0,,,Basic,Spell
+yes,Hunter's Mark,Change a minion's Health to 1.,,Hunter,0,,,Basic,Spell
 yes,Ice Barrier,"Secret: As soon as your hero is attacked, gain 8 Armor.",,Mage,3,,,Expert,Spell
 yes,Ice Block,"Secret: When your hero takes fatal damage, prevent it and become Immune this turn.",,Mage,3,,,Expert,Spell
 yes,Ice Lance,"Freeze a character. If it was already Frozen, deal 4 damage instead.",,Mage,1,,,Expert,Spell

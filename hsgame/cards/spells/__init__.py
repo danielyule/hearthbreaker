@@ -21,6 +21,10 @@ from hsgame.cards.spells.druid import \
     ForceOfNature, \
     Starfire
 
+from hsgame.cards.spells.hunter import (
+    HuntersMark
+)
+
 from hsgame.cards.spells.mage import \
     ArcaneMissiles, \
     IceLance, \

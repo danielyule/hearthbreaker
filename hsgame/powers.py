@@ -6,6 +6,8 @@ __author__ = 'Daniel'
 def powers(character_class):
     if character_class == hsgame.constants.CHARACTER_CLASS.DRUID:
         return DruidPower
+    elif character_class == hsgame.constants.CHARACTER_CLASS.HUNTER:
+        return HunterPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.MAGE:
         return MagePower
     elif character_class == hsgame.constants.CHARACTER_CLASS.PRIEST:
@@ -37,6 +39,15 @@ class DruidPower(Power):
         super().use()
         self.hero.increase_temp_attack(1)
         self.hero.increase_armour(1)
+
+
+class HunterPower(Power):
+    def __init__(self, hero):
+        super().__init__(hero)
+
+    def use(self):
+        super().use()
+        self.hero.player.game.other_player.hero.damage(2, None)
 
 
 class MagePower(Power):
