@@ -46,3 +46,7 @@ from hsgame.cards.minions.paladin import (
     ArgentProtector,
     GuardianOfKings
 )
+
+from hsgame.cards.minions.priest import (
+    CabalShadowPriest
+)

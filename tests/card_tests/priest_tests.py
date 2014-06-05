@@ -367,3 +367,15 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Ironfur Grizzly", game.players[0].hand[-1].name)
         self.assertEqual("Ironfur Grizzly", game.players[0].hand[-2].name)
         
+    def test_CabalShadowPriest(self):
+        game = generate_game_for(CabalShadowPriest, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[1].minions))
+
+        # Cabal Shadow Priest should be played, targeting one boar
+        game.play_single_turn()
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(2, len(game.players[0].minions))

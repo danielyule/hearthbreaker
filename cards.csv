@@ -60,7 +60,7 @@ no,Bluegill Warrior,Charge,Murloc,,2,2,1,Basic,Minion
 no,Booty Bay Bodyguard,Taunt,,,5,5,4,Basic,Minion
 no,Boulderfist Ogre,,,,6,6,7,Basic,Minion
 no,Brawl,Destroy all minions except one. (chosen randomly),,Warrior,5,,,Expert,Spell
-no,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or less Attack.,,Priest,6,4,5,Expert,Minion
+yes,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or less Attack.,,Priest,6,4,5,Expert,Minion
 no,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Expert,Minion
 no,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Expert,Minion
 no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Reward,Minion
