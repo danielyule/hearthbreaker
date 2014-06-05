@@ -324,6 +324,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def silence(self):
         self.trigger("silenced")
+        self.temp_attack = 0
+        self.immune = False
         self.wind_fury = False
         self.frozen = False
         self.frozen_this_turn = False
@@ -557,7 +559,6 @@ class Minion(Character):
             self.active = True
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
-        player.bind("turn_ended", self.turn_complete)
         
     def remove_from_board(self):
         self.player.spell_power -= self.spell_power
@@ -565,7 +566,6 @@ class Minion(Character):
             if minion.index > self.index:
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
-        self.player.unbind("turn_ended", self.turn_complete)
 
     def attack(self):
         super().attack()
@@ -649,6 +649,8 @@ class Minion(Character):
         self.player.game.bind("minion_added", minion_added)
         self.player.game.bind("minion_died", minion_died)
         self.bind_once("silenced", silenced)
+
+
 class Deck:
     def __init__(self, cards, character_class):
         self.cards = cards
@@ -695,7 +697,6 @@ class Hero(Character):
         self.character_class = character_class
         self.player = player
         self.power = hsgame.powers.powers(self.character_class)(self)
-        self.player.bind("turn_ended", self.turn_complete)
 
     def attack(self):
         self.trigger("attacking", self)
@@ -853,6 +854,9 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
+        self.current_player.hero.turn_complete()
+        self.other_player.hero.turn_complete()
+
         if self.current_player.hero.frozen_this_turn:
             self.current_player.hero.frozen_this_turn = False
         else:
@@ -861,6 +865,7 @@ class Game(Bindable):
         self.other_player.hero.frozen_this_turn = False
         for minion in self.other_player.minions:
             minion.frozen_this_turn = False
+            minion.turn_complete()
 
         self.current_player.hero.active = True
         for minion in self.current_player.minions:
@@ -870,6 +875,7 @@ class Game(Bindable):
                 minion.frozen_this_turn = False
             else:
                 minion.frozen = False
+                minion.turn_complete()
 
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)

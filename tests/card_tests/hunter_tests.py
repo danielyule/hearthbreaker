@@ -36,7 +36,6 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[0].max_health)
 
-
     def test_TimberWolf(self):
         game = generate_game_for([StonetuskBoar, FaerieDragon, KoboldGeomancer, TimberWolf],
                                  StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -82,3 +81,24 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[2].attack_power)
         self.assertEqual(2, game.current_player.minions[1].attack_power)
         self.assertEqual(3, game.current_player.minions[0].attack_power)
+
+    def test_ArcaneShot(self):
+        game = generate_game_for(ArcaneShot, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.players[0].spell_power = 1
+        game.play_single_turn()
+        self.assertEqual(27, game.other_player.hero.health)
+
+    def test_BestialWrath(self):
+
+        def verify_bwrath():
+            self.assertEqual(2, game.other_player.minions[0].temp_attack)
+            self.assertTrue(game.other_player.minions[0].immune)
+
+        game = generate_game_for(StonetuskBoar, BestialWrath, MinionPlayingAgent, SpellTestingAgent)
+        game.play_single_turn()
+        game.other_player.bind("turn_ended", verify_bwrath)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].immune)
+        self.assertEqual(0, game.other_player.minions[0].temp_attack)
+
