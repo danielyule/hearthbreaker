@@ -88,5 +88,6 @@ from hsgame.cards.spells.priest import (
     ShadowWordDeath,
     ShadowWordPain,
     Shadowform,
-    Silence
+    Silence,
+    Thoughtsteal
 )

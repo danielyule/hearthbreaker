@@ -343,7 +343,7 @@ no,Tauren Warrior,Taunt. Enrage: +3 Attack,,,3,2,3,Expert,Minion
 no,Temple Enforcer,Battlecry: Give a friendly minion +3 Health.,,Priest,6,6,6,Expert,Minion
 no,The Beast,Deathrattle: Summon a 3/3 Finkle Einhorn for your opponent.,Beast,,6,9,7,Expert,Minion
 no,The Black Knight,Battlecry: Destroy an enemy minion with Taunt.,,,6,4,5,Expert,Minion
-no,Thoughtsteal,Copy 2 cards from your opponent's deck and put them into your hand.,,Priest,3,,,Expert,Spell
+yes,Thoughtsteal,Copy 2 cards from your opponent's deck and put them into your hand.,,Priest,3,,,Expert,Spell
 no,Thrallmar Farseer,Windfury,,,3,2,3,Expert,Minion
 yes,Timber Wolf,Your other Beasts have +1 Attack.,Beast,Hunter,1,1,1,Basic,Minion
 no,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.,,,3,3,3,Expert,Minion

@@ -356,3 +356,14 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
         self.assertFalse(game.players[0].minions[0].taunt)
         
+    def test_Thoughtsteal(self):
+        game = generate_game_for(Thoughtsteal, IronfurGrizzly, SpellTestingAgent, DoNothingBot)
+
+        # Thoughtsteal should be played, copying two grizzly
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual("Ironfur Grizzly", game.players[0].hand[-1].name)
+        self.assertEqual("Ironfur Grizzly", game.players[0].hand[-2].name)
+        

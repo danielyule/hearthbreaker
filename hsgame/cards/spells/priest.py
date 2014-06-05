@@ -210,3 +210,22 @@ class Silence(Card):
         
         self.target.silence()
         
+class Thoughtsteal(Card):
+    def __init__(self):
+        super().__init__("Thoughtsteal", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+                
+        cards = []
+        
+        for index in range(0, 30):
+            if not game.other_player.deck.used[index]:
+                cards.append(game.other_player.deck.cards[index])
+        
+        for i in range(0, 2):
+            if not len(cards) == 0 and not len(player.hand) == 10: # TODO: We are assuming nothing will happen if you have 10 cards in hand. Will you even see the card go up in flames?
+                rand = game.random(0, len(cards) - 1)
+                card = copy.copy(cards.pop(rand)) # TODO: We are assuming you can't copy the same card twice
+                player.hand.append(card)
+        
