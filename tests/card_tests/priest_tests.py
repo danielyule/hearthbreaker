@@ -379,3 +379,17 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(4, len(game.players[1].minions))
         self.assertEqual(2, len(game.players[0].minions))
+
+    def test_Lightwell(self):
+        game = generate_game_for(Lightwell, StonetuskBoar, MinionPlayingAgent, PredictableBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        # Lightwell is out, it should heal at the beginning of this turn
+        game.play_single_turn()
+        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(5, game.players[0].minions[0].health)

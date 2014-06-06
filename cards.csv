@@ -207,7 +207,7 @@ no,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Expert,Spell
 no,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Expert,Spell
 no,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Expert,Minion
 no,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Expert,Minion
-no,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Expert,Minion
+yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Expert,Minion
 no,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Expert,Minion
 no,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Expert,Minion
 no,Lord of the Arena,Taunt,,,6,6,5,Basic,Minion
