@@ -19,17 +19,12 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def heal_friendly_character():
-            targets = []
-            if player.hero.health != 30:
-                targets.append(player.hero)
-            for minion in player.minions:
-                if (minion.health != minion.max_health):
-                    targets.append(minion)
+        def heal_damaged_friendly_character():
+            targets = hsgame.targeting.find_friendly_spell_target(player.game, lambda character: character.health != character.max_health)
             if len(targets) != 0:
                 targets[player.game.random(0, len(targets) - 1)].heal(3)
         
         minion = Minion(0, 5)
-        player.bind("turn_started", heal_friendly_character)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_friendly_character))
+        player.bind("turn_started", heal_damaged_friendly_character)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_damaged_friendly_character))
         return minion

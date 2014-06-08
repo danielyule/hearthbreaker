@@ -31,6 +31,15 @@ def find_enemy_spell_target(game, filter_function):
     return targets
 
 
+def find_friendly_spell_target(game, filter_function):
+
+    targets = game.current_player.minions.copy()
+    targets.append(game.current_player.hero)
+
+    targets = [target for target in targets if filter_function(target)]
+    return targets
+
+
 def find_minion_spell_target(game, filter_function):
     targets = game.other_player.minions.copy()
     targets.extend(game.current_player.minions)

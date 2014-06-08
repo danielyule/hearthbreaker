@@ -391,5 +391,5 @@ class TestPriest(unittest.TestCase):
 
         # Lightwell is out, it should heal at the beginning of this turn
         game.play_single_turn()
-        self.assertEqual(29, game.players[0].hero.health)
-        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(30, game.players[0].hero.health)
