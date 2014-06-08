@@ -205,7 +205,7 @@ no,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Expert,Mini
 no,Light's Justice,,,Paladin,1,1,4,Basic,Weapon
 no,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Expert,Spell
 no,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Expert,Spell
-no,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Expert,Minion
+yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Expert,Minion
 no,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Expert,Minion
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Expert,Minion
 no,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Expert,Minion

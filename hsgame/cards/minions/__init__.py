@@ -49,6 +49,7 @@ from hsgame.cards.minions.paladin import (
 
 from hsgame.cards.minions.priest import (
     CabalShadowPriest,
+    Lightspawn,
     Lightwell,
     NorthshireCleric
 )

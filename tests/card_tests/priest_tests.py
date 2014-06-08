@@ -43,7 +43,8 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Circle of Healing should be played
         self.assertEqual(game.players[0].minions[0].max_health, game.players[0].minions[0].health)
         self.assertEqual(game.players[1].minions[0].max_health, game.players[1].minions[0].health)
-        
+
+
     def test_DivineSpirit(self):
         game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -75,7 +76,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].health)
         self.assertEqual(7, game.players[1].minions[0].max_health)
-        
+
+
     def test_HolyFire(self):
         game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -92,7 +94,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(7, game.players[1].minions[0].max_health)
         self.assertEqual(25, game.players[0].hero.health)
-        
+
+
     def test_HolyNova(self):
         deck1 = StackedDeck([MogushanWarden(), HolyNova()], CHARACTER_CLASS.PRIEST)
         deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
@@ -111,14 +114,16 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Holy Nova should be played
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual(5, game.players[1].minions[0].health)
-        
+
+
     def test_HolySmite(self):
         game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingBot)
         
         self.assertEqual(30, game.players[1].hero.health)
         game.play_single_turn() # Holy Smite should be played
         self.assertEqual(28, game.players[1].hero.health)
-        
+
+
     def test_InnerFire(self):
         game = generate_game_for(InnerFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -135,7 +140,8 @@ class TestPriest(unittest.TestCase):
         game.players[1].minions[0].silence()
         self.assertEqual(1, game.players[1].minions[0].attack_power)
         self.assertEqual(7, game.players[1].minions[0].health)
-        
+
+
     def test_MassDispel(self):
         game = generate_game_for(MassDispel, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -149,7 +155,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertFalse(game.players[1].minions[0].taunt)
         self.assertEqual(8, len(game.players[0].hand))
-        
+
+
     def test_MindBlast(self):
         game = generate_game_for(MindBlast, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -159,7 +166,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(30, game.players[1].hero.health)
         game.play_single_turn() # Mind Blast should be played
         self.assertEqual(25, game.players[1].hero.health)
-        
+
+
     def test_MindControl(self):
         game = generate_game_for(MindControl, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         
@@ -171,7 +179,8 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Mind Control should be played
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(5, len(game.players[1].minions))
-        
+
+
     def test_MindVision(self):
         game = generate_game_for(MindVision, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
                 
@@ -181,7 +190,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual("Mogu'shan Warden", game.players[0].hand[-1].name)
         self.assertEqual(4, len(game.players[1].hand))
-        
+
+
     def test_Mindgames(self):
         game = generate_game_for(Mindgames, MogushanWarden, SpellTestingAgent, DoNothingBot)
         
@@ -200,7 +210,8 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn() # Mindgames should be played, opponent have no cards left in deck so Shadow of Nothing should be summoned
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Shadow of Nothing", game.players[0].minions[0].card.name)
-        
+
+
     def test_PowerWordShield(self):
         game = generate_game_for(StonetuskBoar, PowerWordShield, MinionPlayingAgent, SpellTestingAgent)
         
@@ -212,6 +223,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(3, game.players[0].minions[0].max_health)
         self.assertEqual(5, len(game.players[1].hand))
+
 
     def test_ShadowMadness(self):
         game = generate_game_for([MagmaRager, MogushanWarden, WarGolem], [ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, Silence], MinionPlayingAgent, PredictableAgentWithoutHeroPower)
@@ -254,6 +266,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(29, game.players[0].hero.health)
 
+
     def test_ShadowWordDeath(self):
         game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, MinionPlayingAgent, SpellTestingAgent)
 
@@ -277,7 +290,8 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
-        
+
+
     def test_ShadowWordPain(self):
         game = generate_game_for([MagmaRager, IronfurGrizzly], ShadowWordPain, MinionPlayingAgent, SpellTestingAgent)
 
@@ -301,7 +315,8 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
-        
+
+
     def test_Shadowform(self):
         game = generate_game_for(IronfurGrizzly, Shadowform, MinionPlayingAgent, PredictableBot)
 
@@ -338,7 +353,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(10, game.players[0].max_mana)
         self.assertEqual(3, game.players[0].mana)
         self.assertEqual(28, game.players[1].hero.health)
-    
+
+
     def test_Silence(self):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
 
@@ -355,7 +371,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
         self.assertFalse(game.players[0].minions[0].taunt)
-        
+
+
     def test_Thoughtsteal(self):
         game = generate_game_for(Thoughtsteal, IronfurGrizzly, SpellTestingAgent, DoNothingBot)
 
@@ -366,7 +383,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual("Ironfur Grizzly", game.players[0].hand[-1].name)
         self.assertEqual("Ironfur Grizzly", game.players[0].hand[-2].name)
-        
+
+
     def test_CabalShadowPriest(self):
         game = generate_game_for(CabalShadowPriest, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
 
@@ -379,6 +397,37 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(4, len(game.players[1].minions))
         self.assertEqual(2, len(game.players[0].minions))
+
+
+    def test_Lightspawn(self):
+        game = generate_game_for(Lightspawn, StonetuskBoar, MinionPlayingAgent, PredictableBot)
+
+        # Lightspawn should be played
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].attack_power)
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        # Lightspawn should have taken some hits
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].attack_power)
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.players[0].minions[0].heal(2)
+        self.assertEqual(4, game.players[0].minions[0].attack_power)
+        self.assertEqual(4, game.players[0].minions[0].health)
+        
+        game.players[0].minions[0].increase_health(4)
+        self.assertEqual(8, game.players[0].minions[0].attack_power)
+        self.assertEqual(8, game.players[0].minions[0].health)
+
+        game.players[0].minions[0].decrease_health(2) # max_health goes from 9 to 7
+        self.assertEqual(7, game.players[0].minions[0].attack_power)
+        self.assertEqual(7, game.players[0].minions[0].health)
+
 
     def test_Lightwell(self):
         game = generate_game_for(Lightwell, StonetuskBoar, MinionPlayingAgent, PredictableBot)
@@ -393,6 +442,7 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.players[0].minions[1].health)
         self.assertEqual(30, game.players[0].hero.health)
+
 
     def test_NorthshireCleric(self):
         game = generate_game_for(NorthshireCleric, StonetuskBoar, PredictableBot, PredictableBot)

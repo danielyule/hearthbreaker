@@ -12,8 +12,23 @@ class CabalShadowPriest(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 5, battlecry=take_control_of_minion)
-    
-    
+
+
+class Lightspawn(MinionCard):
+    def __init__(self):
+        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def attack_equal_to_health():
+            minion.increase_attack(minion.health - minion.attack_power)
+                
+        minion = Minion(0, 5)
+        minion.increase_attack(minion.health - minion.attack_power)
+        minion.bind("health_impact", attack_equal_to_health)
+        minion.bind_once("silenced", lambda: minion.unbind("health_impact", attack_equal_to_health))
+        return minion
+
+
 class Lightwell(MinionCard):
     def __init__(self):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
