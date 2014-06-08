@@ -393,3 +393,28 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.players[0].minions[1].health)
         self.assertEqual(30, game.players[0].hero.health)
+
+    def test_NorthshireCleric(self):
+        game = generate_game_for(NorthshireCleric, StonetuskBoar, PredictableBot, PredictableBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(26, game.players[0].deck.left)
+
+        # Northshire is damaged, should get a heal and a card should be drawn
+        game.play_single_turn()
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(24, game.players[0].deck.left)
+        
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        
+        # Silence one Northshire, the other one should still work
+        game.players[0].minions[0].silence()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(22, game.players[0].deck.left)
+        game.play_single_turn()
+        self.assertEqual(20, game.players[0].deck.left)

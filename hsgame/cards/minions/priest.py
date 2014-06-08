@@ -28,3 +28,17 @@ class Lightwell(MinionCard):
         player.bind("turn_started", heal_damaged_friendly_character)
         minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_damaged_friendly_character))
         return minion
+    
+    
+class NorthshireCleric(MinionCard):
+    def __init__(self):
+        super().__init__("Northshire Cleric", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        def draw_card():
+            player.draw()
+        
+        minion = Minion(1, 3)
+        player.game.bind("minion_healed", draw_card)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", draw_card))
+        return minion

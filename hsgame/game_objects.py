@@ -587,6 +587,10 @@ class Minion(Character):
         else:
             super().damage(amount, attacker)
 
+    def heal(self, amount):
+        super().heal(amount)
+        self.game.trigger("minion_healed")
+
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
         deathrattle = self.deathrattle
