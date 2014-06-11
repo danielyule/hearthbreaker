@@ -16,7 +16,8 @@ from hsgame.cards.minions.neutral import (
     SilvermoonGuardian,
     TwilightDrake,
     MagmaRager,
-    DireWolfAlpha
+    DireWolfAlpha,
+    WorgenInfiltrator
 )
 
 from hsgame.cards.minions.druid import (

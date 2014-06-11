@@ -102,3 +102,32 @@ class TestHunter(unittest.TestCase):
         self.assertFalse(game.other_player.minions[0].immune)
         self.assertEqual(0, game.other_player.minions[0].temp_attack)
 
+    def test_Flare(self):
+
+        game = generate_game_for(Vaporize, [WorgenInfiltrator, WorgenInfiltrator, ArcaneShot, Flare],
+                                 SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].stealth)
+        self.assertTrue(game.other_player.minions[1].stealth)
+        self.assertEqual(3, len(game.other_player.hand))
+
+        old_play = game.other_player.agent.do_turn
+
+        def _play_and_attack(player):
+            old_play(player)
+            player.minions[2].attack()
+
+        game.other_player.agent.do_turn = _play_and_attack
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertFalse(game.current_player.minions[2].stealth)
+        self.assertFalse(game.current_player.minions[3].stealth)
+        self.assertEqual(2, len(game.current_player.hand))
+
+

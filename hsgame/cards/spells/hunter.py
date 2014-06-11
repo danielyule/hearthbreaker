@@ -45,3 +45,19 @@ class BestialWrath(Card):
         self.target.temp_attack += 2
         player.bind_once("turn_ended", remove_immunity)
         self.target.bind_once("silenced", silenced)
+
+
+class Flare(Card):
+    def __init__(self):
+        super().__init__("Flare", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in hsgame.targeting.find_minion_spell_target(game, lambda m: m.stealth):
+            minion.stealth = False
+
+        for secret in game.other_player.secrets:
+            secret.deactivate(game.other_player)
+
+        game.other_player.secrets = []
+        player.draw()

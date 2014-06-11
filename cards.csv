@@ -133,7 +133,7 @@ yes,Fireball,Deal 6 damage.,,Mage,4,,,Basic,Spell
 no,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Expert,Minion
 yes,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Basic,Spell
 no,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Basic,Minion
-no,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Expert,Spell
+yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Expert,Spell
 no,Flesheating Ghoul,"Whenever a minion dies, gain +1 Attack.",,,3,2,3,Expert,Minion
 yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Expert,Spell
 no,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Expert,Spell
@@ -375,7 +375,7 @@ no,Windfury Harpy,Windfury,,,6,4,5,Expert,Minion
 no,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Basic,Minion
 no,Wisp,,,,0,1,1,Expert,Minion
 no,Wolfrider,Charge,,,3,3,1,Basic,Minion
-no,Worgen Infiltrator,Stealth,,,1,2,1,Expert,Minion
+yes,Worgen Infiltrator,Stealth,,,1,2,1,Expert,Minion
 yes,Wrath,Choose One - Deal 3 damage to a minion; or 1 damage and draw a card.,,Druid,2,,,Expert,Spell
 no,Young Dragonhawk,Windfury,Beast,,1,1,1,Expert,Minion
 no,Young Priestess,"At the end of your turn, give another random friendly minion +1 Health.",,,1,2,1,Expert,Minion

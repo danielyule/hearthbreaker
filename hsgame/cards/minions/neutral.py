@@ -161,3 +161,13 @@ class DireWolfAlpha(MinionCard):
         minion = Minion(2, 2, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)
         return minion
+
+
+class WorgenInfiltrator(MinionCard):
+    def __init__(self):
+        super().__init__("Worgen Infiltrator", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(2, 1)
+        minion.stealth = True
+        return minion

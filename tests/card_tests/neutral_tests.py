@@ -1,8 +1,9 @@
 import random
 from hsgame.agents.basic_agents import DoNothingBot
-from tests.testing_agents import MinionPlayingAgent
+from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
+import hsgame.targeting
 
 __author__ = 'Daniel'
 
@@ -156,3 +157,18 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[0].attack_power)
         self.assertEqual(1, game.current_player.minions[2].attack_power)
         self.assertEqual(1, game.current_player.minions[3].attack_power)
+
+    def test_WorgenInfiltrator(self):
+        game = generate_game_for([WorgenInfiltrator, ElvenArcher], [ArcaneShot], MinionPlayingAgent, SpellTestingAgent)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].stealth)
+
+        def _choose_target(targets):
+            self.assertEqual(2, len(targets))
+            return targets[0]
+
+        game.players[0].agent.choose_target = _choose_target
+        game.players[1].agent.choose_target = _choose_target
+        game.play_single_turn()
+        game.play_single_turn()

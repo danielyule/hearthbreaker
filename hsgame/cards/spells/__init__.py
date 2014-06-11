@@ -25,7 +25,8 @@ from hsgame.cards.spells.druid import (
 from hsgame.cards.spells.hunter import (
     HuntersMark,
     ArcaneShot,
-    BestialWrath
+    BestialWrath,
+    Flare
 )
 
 from hsgame.cards.spells.mage import (
