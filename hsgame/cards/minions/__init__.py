@@ -17,7 +17,12 @@ from hsgame.cards.minions.neutral import (
     TwilightDrake,
     MagmaRager,
     DireWolfAlpha,
-    WorgenInfiltrator
+    WorgenInfiltrator,
+    Archmage,
+    DalaranMage,
+    Malygos,
+    AzureDrake,
+    OgreMagi
 )
 
 from hsgame.cards.minions.druid import (
