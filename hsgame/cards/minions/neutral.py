@@ -171,3 +171,58 @@ class WorgenInfiltrator(MinionCard):
         minion = Minion(2, 1)
         minion.stealth = True
         return minion
+
+
+class Archmage(MinionCard):
+
+    def __init__(self):
+        super().__init__("Archmage", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 7)
+        minion.spell_power = 1
+        return minion
+
+
+class DalaranMage(MinionCard):
+
+    def __init__(self):
+        super().__init__("Dalaran Mage", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(1, 4)
+        minion.spell_power = 1
+        return minion
+
+
+class Malygos(MinionCard):
+
+    def __init__(self):
+        super().__init__("Malygos", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        minion = Minion(4, 12, MINION_TYPE.DRAGON)
+        minion.spell_power = 5
+        return minion
+
+
+class AzureDrake(MinionCard):
+
+    def __init__(self):
+        super().__init__("Azure Drake", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 4, MINION_TYPE.DRAGON, battlecry=draw_card)
+        minion.spell_power = 1
+        return minion
+
+
+class OgreMagi(MinionCard):
+
+    def __init__(self):
+        super().__init__("Ogre Magi", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 4)
+        minion.spell_power = 1
+        return minion
