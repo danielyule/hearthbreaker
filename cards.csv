@@ -24,7 +24,7 @@ yes,Arcane Intellect,Draw 2 cards.,,Mage,3,,,Basic,Spell
 yes,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1,,,Basic,Spell
 yes,Arcane Shot,Deal 2 damage.,,Hunter,1,,,Basic,Spell
 no,Arcanite Reaper,,,Warrior,5,5,2,Basic,Weapon
-no,Archmage,Spell Damage +1,,,6,4,7,Basic,Minion
+yes,Archmage,Spell Damage +1,,,6,4,7,Basic,Minion
 no,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into your hand.",,Mage,7,5,7,Expert,Minion
 no,Argent Commander,"Charge, Divine Shield",,,6,4,2,Expert,Minion
 yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Expert,Minion
@@ -34,7 +34,7 @@ no,Assassin's Blade,,,Rogue,5,3,4,Basic,Weapon
 no,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Basic,Spell
 no,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Expert,Minion
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Expert,Spell
-no,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Expert,Minion
+yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Expert,Minion
 no,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Basic,Spell
 no,Bane of Doom,"Deal 2 damage to a character. If that kills it, summon a random Demon.",,Warlock,5,,,Expert,Spell
 no,Baron Geddon,"At the end of your turn, deal 2 damage to ALL other characters.",,,7,7,5,Expert,Minion
@@ -83,7 +83,7 @@ yes,Counterspell,"Secret: When your opponent casts a spell, Counter it.",,Mage,3
 no,Crazed Alchemist,Battlecry: Swap the Attack and Health of a minion.,,,2,2,2,Expert,Minion
 no,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.,,Warrior,2,2,2,Expert,Minion
 no,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Expert,Minion
-no,Dalaran Mage,Spell Damage +1,,,3,1,4,Basic,Minion
+yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Basic,Minion
 no,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Expert,Minion
 no,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Basic,Minion
 no,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Basic,Spell
@@ -214,7 +214,7 @@ no,Lord of the Arena,Taunt,,,6,6,5,Basic,Minion
 no,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Expert,Minion
 no,Mad Bomber,Battlecry: Deal 3 damage randomly split between all other characters.,,,2,3,2,Expert,Minion
 yes,Magma Rager,,,,3,5,1,Basic,Minion
-no,Malygos,Spell Damage +5,Dragon,,9,4,12,Expert,Minion
+yes,Malygos,Spell Damage +5,Dragon,,9,4,12,Expert,Minion
 no,Mana Addict,"Whenever you cast a spell, gain +2 Attack this turn.",,,2,1,3,Expert,Minion
 no,Mana Tide Totem,"At the end of your turn, draw a card.",Totem,Shaman,3,0,3,Expert,Minion
 no,Mana Wraith,ALL minions cost (1) more.,,,2,2,2,Expert,Minion
@@ -253,7 +253,7 @@ yes,Nourish,Choose One - Gain 2 Mana Crystals; or Draw 3 cards.,,Druid,5,,,Exper
 yes,Novice Engineer,Battlecry: Draw a card.,,,2,1,1,Basic,Minion
 no,Nozdormu,Players only have 15 seconds to take their turns.,Dragon,,9,8,8,Expert,Minion
 no,Oasis Snapjaw,,Beast,,4,2,7,Basic,Minion
-no,Ogre Magi,Spell Damage +1,,,4,4,4,Basic,Minion
+yes,Ogre Magi,Spell Damage +1,,,4,4,4,Basic,Minion
 no,Old Murk-Eye,Charge. Has +1 Attack for each other Murloc on the battlefield.,Murloc,,4,2,4,Reward,Minion
 no,Onyxia,Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.,Dragon,,9,8,8,Expert,Minion
 no,Patient Assassin,Stealth. Destroy any minion damaged by this minion.,,Rogue,2,1,1,Expert,Minion
