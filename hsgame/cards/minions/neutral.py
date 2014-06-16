@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand
+    gain_one_health_for_each_card_in_hand, deal_enemy_hero_two_damage
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -225,4 +225,43 @@ class OgreMagi(MinionCard):
     def create_minion(self, player):
         minion = Minion(4, 4)
         minion.spell_power = 1
+        return minion
+
+class Spellbreaker(MinionCard):
+    def __init__(self):
+        super().__init__("Spellbreaker", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(4, 3, MINION_TYPE.BEAST, silence)
+
+
+class BloodmageThalnos(MinionCard):
+    def __init__(self):
+        super().__init__("Bloodmage Thalnos", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        minion = Minion(1, 1)
+        minion.spell_power = 1
+        minion.bind("died", draw_card)
+        minion.bind_once("silenced", lambda m: m.unbind("died", draw_card), minion)
+        return minion
+
+class LootHoarder(MinionCard):
+    def __init__(self):
+        super().__init__("Loot Hoarder", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(2, 1)
+        minion.bind("died", draw_card)
+        minion.bind_once("silenced", lambda m: m.unbind("died", draw_card), minion)
+        return minion
+
+class LeperGnome(MinionCard): #idk, maybe this will work
+    def __init__(self):
+        super().__init__("Leper Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(2, 1)
+        minion.bind("died", deal_enemy_hero_two_damage)
+        minion.bind_once("silenced", lambda m: m.unbind("died", deal_enemy_hero_two_damage), minion)
         return minion
