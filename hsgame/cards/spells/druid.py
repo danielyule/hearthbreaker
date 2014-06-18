@@ -12,7 +12,10 @@ class Innervate(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.mana += 2
+        if player.mana < 8:
+            player.mana += 2
+        else:
+            player.mana = 10
 
 
 class Moonfire(Card):
