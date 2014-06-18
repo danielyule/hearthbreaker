@@ -196,10 +196,11 @@ class Shadowform(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        if type(player.hero.power) is hsgame.powers.PriestPower:
+        if type(player.hero.power) is not hsgame.powers.MindShatter and type(player.hero.power) is not hsgame.powers.MindSpike:
             player.hero.power = hsgame.powers.MindSpike(player.hero)
         elif type(player.hero.power) is hsgame.powers.MindSpike:
             player.hero.power = hsgame.powers.MindShatter(player.hero)
+        
         
 class Silence(Card):
     def __init__(self):
