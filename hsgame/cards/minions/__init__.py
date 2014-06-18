@@ -66,7 +66,7 @@ from hsgame.cards.minions.priest import (
     NorthshireCleric
 )
 
-from hsgame.cards.minions.priest import (
+from hsgame.cards.minions.warlock import (
     FlameImp,
     PitLord,
     VoidWalker,
