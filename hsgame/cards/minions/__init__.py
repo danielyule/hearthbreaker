@@ -65,3 +65,11 @@ from hsgame.cards.minions.priest import (
     Lightwell,
     NorthshireCleric
 )
+
+from hsgame.cards.minions.priest import (
+    FlameImp,
+    PitLord,
+    VoidWalker,
+    DreadInfernal,
+    Felguard
+)
