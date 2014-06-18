@@ -53,7 +53,7 @@ no,Blood Imp,"Stealth. At the end of your turn, give another random friendly min
 no,Blood Knight,Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.,,,3,3,3,Expert,Minion
 yes,Bloodfen Raptor,,Beast,,2,3,2,Basic,Minion
 no,Bloodlust,Give your minions +3 Attack this turn.,,Shaman,5,,,Basic,Spell
-no,Bloodmage Thalnos,Spell Damage +1. Deathrattle: Draw a card.,,,2,1,1,Expert,Minion
+yes,Bloodmage Thalnos,Spell Damage +1. Deathrattle: Draw a card.,,,2,1,1,Expert,Minion
 no,Bloodsail Corsair,Battlecry: Remove 1 Durability from your opponent's weapon.,Pirate,,1,1,2,Expert,Minion
 no,Bloodsail Raider,Battlecry: Gain Attack equal to the Attack of your weapon.,Pirate,,2,2,3,Expert,Minion
 no,Bluegill Warrior,Charge,Murloc,,2,2,1,Basic,Minion
@@ -201,14 +201,14 @@ no,Kor'kron Elite,Charge,,Warrior,4,4,3,Basic,Minion
 no,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Expert,Spell
 yes,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Expert,Spell
 no,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Expert,Minion
-no,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Expert,Minion
+yes,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Expert,Minion
 no,Light's Justice,,,Paladin,1,1,4,Basic,Weapon
 no,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Expert,Spell
 no,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Expert,Spell
 yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Expert,Minion
 no,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Expert,Minion
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Expert,Minion
-no,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Expert,Minion
+yes,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Expert,Minion
 no,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Expert,Minion
 no,Lord of the Arena,Taunt,,,6,6,5,Basic,Minion
 no,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Expert,Minion
@@ -234,11 +234,11 @@ yes,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of i
 yes,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Basic,Spell
 no,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Expert,Spell
 yes,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
-no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion
+yes,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Basic,Spell
 no,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Basic,Spell
 no,Mortal Strike,"Deal 4 damage. If you have 12 or less Health, deal 6 instead.",,Warrior,4,,,Expert,Spell
-no,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Expert,Minion
+yes,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Expert,Minion
 no,Multi-Shot,Deal 3 damage to two random enemy minions.,,Hunter,4,,,Basic,Spell
 no,Murloc Raider,,Murloc,,1,2,1,Basic,Minion
 no,Murloc Tidecaller,"Whenever a Murloc is summoned, gain +1 Attack.",Murloc,,1,1,2,Expert,Minion
@@ -287,7 +287,7 @@ yes,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Exp
 no,Savannah Highmane,Deathrattle: Summon two 2/2 Hyenas.,Beast,Hunter,6,6,5,Expert,Minion
 no,Scarlet Crusader,Divine Shield,,,3,3,1,Expert,Minion
 no,Scavenging Hyena,"Whenever a friendly Beast dies, gain +2/+1.",Beast,Hunter,2,2,2,Expert,Minion
-no,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,Expert,Minion
+yes,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,Expert,Minion
 no,Secretkeeper,"Whenever a Secret is played, gain +1/+1.",,,1,1,2,Expert,Minion
 no,Sen'jin Shieldmasta,Taunt,,,4,3,5,Basic,Minion
 no,Sense Demons,Put 2 random Demons from your deck into your hand.,,Warlock,3,,,Expert,Spell
@@ -319,7 +319,7 @@ no,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Basic,Spell
 no,Southsea Captain,Your other Pirates have +1/+1.,Pirate,,3,3,3,Expert,Minion
 no,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,Expert,Minion
 yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.",,Mage,3,,,Expert,Spell
-no,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Expert,Minion
+yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Expert,Minion
 no,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Expert,Minion
 no,Sprint,Draw 4 cards.,,Rogue,7,,,Basic,Spell
 no,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Expert,Minion
