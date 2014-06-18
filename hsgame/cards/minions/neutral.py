@@ -265,3 +265,24 @@ class LeperGnome(MinionCard): #idk, maybe this will work
         minion.bind("died", deal_enemy_hero_two_damage)
         minion.bind_once("silenced", lambda m: m.unbind("died", deal_enemy_hero_two_damage), minion)
         return minion
+
+class SeaGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Sea Giant", max(0, 10 - len(player.minions) - len(other_player.minions)), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
+
+class MoltenGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Molten Giant", max(0, 20 + player.hero.health - 30, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        #once we add jaraxxus we need a player.hero.max_health variable
+    def create_minion(self, player):
+        return Minion(8, 8)
+        
+class MountainGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Mountain Giant", 12 - len(minion.player.hand), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
