@@ -100,9 +100,9 @@ no,Doomguard,Charge. Battlecry: Discard two random cards.,Demon,Warlock,5,5,7,Ex
 no,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Expert,Weapon
 no,Doomsayer,"At the start of your turn, destroy ALL minions.",,,2,0,7,Expert,Minion
 no,Dragonling Mechanic,Battlecry: Summon a 2/1 Mechanical Dragonling.,,,4,2,4,Basic,Minion
-no,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Basic,Spell
+yes,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Basic,Spell
 no,Dread Corsair,Taunt. Costs (1) less per Attack of your weapon.,Pirate,,4,3,3,Expert,Minion
-no,Dread Infernal,Battlecry: Deal 1 damage to ALL other characters.,Demon,Warlock,6,6,6,Basic,Minion
+yes,Dread Infernal,Battlecry: Deal 1 damage to ALL other characters.,Demon,Warlock,6,6,6,Basic,Minion
 yes,Druid of the Claw,Choose One - Charge; or +2 Health and Taunt.,,Druid,5,4,4,Expert,Minion
 no,Dust Devil,Windfury. Overload: (2),,Shaman,1,3,1,Expert,Minion
 no,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3,3,2,Expert,Weapon
@@ -124,13 +124,13 @@ no,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,
 no,Faerie Dragon,Can't be targeted by Spells or Hero Powers.,Dragon,,2,3,2,Expert,Minion
 no,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Basic,Spell
 no,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Expert,Spell
-no,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,3,3,5,Expert,Minion
+yes,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,3,3,5,Expert,Minion
 no,Fen Creeper,Taunt,,,5,3,6,Expert,Minion
 no,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Expert,Spell
 no,Fiery War Axe,,,Warrior,2,3,2,Basic,Weapon
 no,Fire Elemental,Battlecry: Deal 3 damage.,,Shaman,6,6,5,Basic,Minion
 yes,Fireball,Deal 6 damage.,,Mage,4,,,Basic,Spell
-no,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Expert,Minion
+yes,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Expert,Minion
 yes,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Basic,Spell
 no,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Basic,Minion
 yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Expert,Spell
@@ -162,7 +162,7 @@ no,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal
 no,Harvest Golem,Deathrattle: Summon a 2/1 Damaged Golem.,,,3,2,3,Expert,Minion
 no,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.,,Rogue,3,,,Expert,Spell
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Basic,Spell
-no,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Basic,Spell
+yes,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Basic,Spell
 no,Heroic Strike,Give your hero +4 Attack this turn.,,Warrior,2,,,Basic,Spell
 no,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Basic,Spell
 no,Hogger,"At the end of your turn, summon a 2/2 Gnoll with Taunt.",,,6,4,4,Expert,Minion
@@ -236,7 +236,7 @@ no,Misdirection,"Secret: When a character attacks your hero, instead he attacks 
 yes,Mogu'shan Warden,Taunt,,,4,1,7,Expert,Minion
 yes,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Expert,Minion
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Basic,Spell
-no,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Basic,Spell
+yes,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Basic,Spell
 no,Mortal Strike,"Deal 4 damage. If you have 12 or less Health, deal 6 instead.",,Warrior,4,,,Expert,Spell
 yes,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Expert,Minion
 no,Multi-Shot,Deal 3 damage to two random enemy minions.,,Hunter,4,,,Basic,Spell
@@ -259,7 +259,7 @@ no,Onyxia,Battlecry: Summon 1/1 Whelps until your side of the battlefield is ful
 no,Patient Assassin,Stealth. Destroy any minion damaged by this minion.,,Rogue,2,1,1,Expert,Minion
 no,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,2,2,Expert,Weapon
 no,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Expert,Minion
-no,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Expert,Minion
+yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Expert,Minion
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Basic,Spell
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Expert,Spell
 no,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Expert,Spell
@@ -291,7 +291,7 @@ yes,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,
 no,Secretkeeper,"Whenever a Secret is played, gain +1/+1.",,,1,1,2,Expert,Minion
 no,Sen'jin Shieldmasta,Taunt,,,4,3,5,Basic,Minion
 no,Sense Demons,Put 2 random Demons from your deck into your hand.,,Warlock,3,,,Expert,Spell
-no,Shadow Bolt,Deal 4 damage to a minion.,,Warlock,3,,,Basic,Spell
+yes,Shadow Bolt,Deal 4 damage to a minion.,,Warlock,3,,,Basic,Spell
 yes,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until end of turn.,,Priest,4,,,Expert,Spell
 yes,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,,Basic,Spell
 yes,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Basic,Spell
@@ -362,7 +362,7 @@ yes,Vaporize,"Secret: When a minion attacks your hero, destroy it.",,Mage,3,,,Ex
 no,Venture Co. Mercenary,Your minions cost (3) more.,,,5,7,6,Expert,Minion
 no,Violet Teacher,"Whenever you cast a spell, summon a 1/1 Violet Apprentice.",,,4,3,5,Expert,Minion
 no,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Expert,Minion
-no,Voidwalker,Taunt,Demon,Warlock,1,1,3,Basic,Minion
+yes,Voidwalker,Taunt,Demon,Warlock,1,1,3,Basic,Minion
 no,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Basic,Minion
 yes,War Golem,,,,7,7,7,Basic,Minion
 no,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Basic,Minion
