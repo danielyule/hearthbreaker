@@ -54,3 +54,18 @@ def take_control_of_minion(minion):
         m = copy.copy(minion.card.target)
         minion.card.target.remove_from_board()
         m.add_to_board(m.card, minion.game, minion.player, 0)
+        
+def deal_one_damage_all_characters(minion):
+    targets = game.other_player.minions.copy()
+    targets.extend(game.current_player.minions)
+    targets.append(game.other_player.hero)
+    targets.append(game.current_player.hero)
+    for minion in targets:
+        minion.damage(1, None)
+
+def destroy_own_crystal(minion):
+    player.max_mana -= 1
+    
+def give_enemy_crystal(minion):
+    if other_player.max_mana < 10:
+        other_player.max_mana += 1
