@@ -22,6 +22,17 @@ def deal_two_damage(minion):
     if minion.card.target is not None:
         minion.card.target.damage(2, None)
         
+def deal_three_damage(minion):
+    if minion.card.target is not None:
+        minion.card.target.damage(3, None)
+
+def deal_four_damage(minion):
+    if minion.card.target is not None:
+        minion.card.target.damage(4, None)
+
+def deal_five_damage(minion):
+    if minion.card.target is not None:
+        minion.card.target.damage(5, None)
         
 def change_attack_to_one(minion):
     if minion.card.target is not None:
@@ -43,7 +54,3 @@ def take_control_of_minion(minion):
         m = copy.copy(minion.card.target)
         minion.card.target.remove_from_board()
         m.add_to_board(m.card, minion.game, minion.player, 0)
-
-def deal_enemy_hero_two_damage(minion):
-    game.other_player.hero.spell_damage(2, self)
-    #idk if this works
