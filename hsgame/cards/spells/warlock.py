@@ -35,3 +35,13 @@ class ShadowBolt(Card):
         super().use(player, game)
         self.target.spell_damage(4 + player.spell_power, self)
 
+class DrainLife(Card):
+    def __init__(self):
+        super().__init__("Drain Life", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        self.target.spell_damage(2 + player.spell_power, self)
+        player.hero.heal(2)
+
