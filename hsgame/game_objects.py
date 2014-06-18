@@ -352,12 +352,15 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("player_damaged", amount, player)
         self.damage(amount, player)
 
-    def heal(self, amount):
-        self.trigger("healed", amount)
-        self.health += amount
-        if self.health > self.max_health:
-            self.health = self.max_health
-        self.trigger("health_impact")
+    def heal(self, amount, card):
+        if amount < 0:
+            self.spell_damage(-amount, card)
+        if amount > 0:
+            self.trigger("healed", amount)
+            self.health += amount
+            if self.health > self.max_health:
+                self.health = self.max_health
+            self.trigger("health_impact")
 
     def die(self, by):
         self.delayed_trigger("died", by)
@@ -591,9 +594,10 @@ class Minion(Character):
         else:
             super().damage(amount, attacker)
 
-    def heal(self, amount):
-        super().heal(amount)
-        self.game.trigger("minion_healed")
+    def heal(self, amount, card):
+        super().heal(amount, card)
+        if amount > 0:
+            self.game.trigger("minion_healed")
 
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
@@ -750,6 +754,9 @@ class Player(Bindable):
         self.agent = agent
         self.game = game
         self.secrets = []
+        self.spell_multiplier = 1
+        self.heal_muliplier = 1
+        self.heal_does_damage = False
         self.mana_filters = []
 
     def __str__(self):  # pragma: no cover
@@ -771,6 +778,15 @@ class Player(Bindable):
 
     def can_draw(self):
         return self.deck.can_draw()
+
+    def effective_spell_power(self, base_damage):
+        return (base_damage + self.spell_power) * self.spell_multiplier
+
+    def effective_heal_power(self, base_heal):
+        if self.heal_does_damage:
+            return (base_heal + self.spell_power) * self.spell_multiplier
+        else:
+            return base_heal * self.heal_muliplier
 
     def put_back(self, card):
         self.hand.remove(card)

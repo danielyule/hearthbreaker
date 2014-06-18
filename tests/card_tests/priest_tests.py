@@ -416,7 +416,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].attack_power)
         self.assertEqual(2, game.players[0].minions[0].health)
 
-        game.players[0].minions[0].heal(2)
+        game.players[0].minions[0].heal(2, None)
         self.assertEqual(4, game.players[0].minions[0].attack_power)
         self.assertEqual(4, game.players[0].minions[0].health)
         

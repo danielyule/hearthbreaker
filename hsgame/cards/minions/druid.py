@@ -75,7 +75,7 @@ class AncientOfLore(MinionCard):
                 super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
-                player.hero.heal(5)
+                player.hero.heal(player.effective_heal_power(5), self)
 
         class AncientTeachings(Card):
             def __init__(self):

@@ -64,8 +64,8 @@ class Consecration(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(2 + player.spell_power, self)
-        game.other_player.hero.spell_damage(2 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(2), self)
+        game.other_player.hero.spell_damage(player.effective_spell_power(2), self)
 
 class DivineFavor(Card):
     def __init__(self):
@@ -99,7 +99,7 @@ class HammerOfWrath(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.spell_damage(3 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(3), self)
         player.draw()
 
 class HandOfProtection(Card):
@@ -118,7 +118,7 @@ class HolyLight(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.heal(6)
+        self.target.heal(player.effective_heal_power(6), self)
         
 class HolyWrath(Card):
     def __init__(self):
@@ -148,7 +148,7 @@ class LayOnHands(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.heal(8)
+        self.target.heal(player.effective_heal_power(8), self)
         player.draw()
         player.draw()
         player.draw()

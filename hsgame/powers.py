@@ -58,7 +58,7 @@ class MagePower(Power):
     def use(self):
         super().use()
         target = self.hero.find_power_target()
-        target.damage(1, None)
+        target.damage(1 * self.hero.player.spell_multiplier, None)
 
 
 class PriestPower(Power):
@@ -69,7 +69,10 @@ class PriestPower(Power):
     def use(self):
         super().use()
         target = self.hero.find_power_target()
-        target.heal(2)
+        if self.hero.player.heal_does_damage:
+            target.damage(2 * self.hero.player.spell_multiplier, None)
+        else:
+            target.heal(2 * self.hero.player.heal_muliplier, None)
         
     def __str__(self):
         return "Lesser Heal"

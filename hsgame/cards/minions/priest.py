@@ -37,7 +37,7 @@ class Lightwell(MinionCard):
         def heal_damaged_friendly_character():
             targets = hsgame.targeting.find_friendly_spell_target(player.game, lambda character: character.health != character.max_health)
             if len(targets) != 0:
-                targets[player.game.random(0, len(targets) - 1)].heal(3)
+                targets[player.game.random(0, len(targets) - 1)].heal(player.effective_heal_power(3), minion)
         
         minion = Minion(0, 5)
         player.bind("turn_started", heal_damaged_friendly_character)

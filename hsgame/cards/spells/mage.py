@@ -58,7 +58,7 @@ class ArcaneExplosion(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(1 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(1), self)
 
 
 class Frostbolt(Card):
@@ -68,7 +68,7 @@ class Frostbolt(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(3 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(3), self)
         self.target.freeze()
 
 
@@ -226,17 +226,17 @@ class ConeOfCold(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.spell_damage(1 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(1), self)
         self.target.freeze()
         index = self.target.index
         if self.target.index > 0:
             minion = self.target.player.minions[index - 1]
-            minion.spell_damage(1 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(1), self)
             minion.freeze()
 
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
-            minion.spell_damage(1 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(1), self)
             minion.freeze()
 
 
@@ -247,7 +247,7 @@ class Fireball(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(6 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(6), self)
 
 
 class Polymorph(Card):
@@ -279,7 +279,7 @@ class Blizzard(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(2 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(2), self)
             minion.freeze()
 
 
@@ -290,7 +290,7 @@ class Flamestrike(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(4 + player.spell_power, self)
+            minion.spell_damage(player.effective_spell_power(4), self)
 
 
 class Pyroblast(Card):
@@ -299,4 +299,4 @@ class Pyroblast(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(10 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(10), self)

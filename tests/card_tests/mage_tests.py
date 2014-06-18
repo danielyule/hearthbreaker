@@ -12,13 +12,14 @@ from hsgame.cards import *
 
 __author__ = 'Daniel'
 
+
 class TestMage(unittest.TestCase):
 
     def setUp(self):
         random.seed(1857)
 
     def test_ArcaneMissiles(self):
-        game = generate_game_for(MogushanWarden, ArcaneMissiles, MinionPlayingAgent,SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, ArcaneMissiles, MinionPlayingAgent, SpellTestingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -161,7 +162,6 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.current_player.minions[1].taunt)
         self.assertEqual("Mirror Image", game.current_player.minions[1].card.name)
         self.assertEqual(0, game.current_player.minions[1].card.mana)
-
 
     def test_ArcaneExplosion(self):
         game = generate_game_for(BloodfenRaptor, ArcaneExplosion, MinionPlayingAgent, SpellTestingAgent)
@@ -343,7 +343,6 @@ class TestMage(unittest.TestCase):
         #The arcane intellect should not have caused the Spellbender to activate
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(1, len(game.other_player.secrets))
-
 
     def test_Vaporize(self):
         game = generate_game_for(Vaporize, FaerieDragon, SpellTestingAgent, MinionAttackingAgent)

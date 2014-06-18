@@ -22,7 +22,7 @@ class ArcaneShot(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(2 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(2), self)
 
 
 class BestialWrath(Card):
@@ -61,3 +61,4 @@ class Flare(Card):
 
         game.other_player.secrets = []
         player.draw()
+

@@ -21,7 +21,7 @@ class Moonfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(1 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(1), self)
 
 
 class Claw(Card):
@@ -158,7 +158,7 @@ class HealingTouch(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.heal(8)
+        self.target.heal(player.effective_heal_power(8), self)
 
 
 class MarkOfNature(Card):
@@ -247,10 +247,10 @@ class Swipe(Card):
         #must be copied or as units die, they'll be removed from the list
         for minion in game.other_player.minions.copy():
             if minion is not self.target:
-                minion.spell_damage(1 + player.spell_power, self)
+                minion.spell_damage(player.effective_spell_power(1), self)
 
         if self.target is not game.other_player.hero:
-            game.other_player.hero.spell_damage(1 + player.spell_power, self)
+            game.other_player.hero.spell_damage(player.effective_spell_power(1), self)
 
 
 class Nourish(Card):
@@ -307,7 +307,7 @@ class Starfall(Card):
 
             def use(self, player, game):
                 for minion in game.other_player.minions.copy():
-                    minion.spell_damage(2 + player.spell_power, self)
+                    minion.spell_damage(player.effective_spell_power(2), self)
 
         class DamageOne(Card):
 
@@ -317,7 +317,7 @@ class Starfall(Card):
             def use(self, player, game):
                 targets = hsgame.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
                 target = player.agent.choose_target(targets)
-                target.spell_damage(5 + player.spell_power, self)
+                target.spell_damage(player.effective_spell_power(5), self)
 
         option = player.agent.choose_option(DamageAll(), DamageOne())
         option.use(player, game)
@@ -354,6 +354,6 @@ class Starfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(5 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(5), self)
         player.draw()
 

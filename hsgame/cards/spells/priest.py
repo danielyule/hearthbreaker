@@ -17,7 +17,7 @@ class CircleOfHealing(Card):
         targets.extend(player.minions)
 
         for minion in targets:
-            minion.heal(4 + player.spell_power)
+            minion.heal(player.effective_heal_power(4), self)
 
 class DivineSpirit(Card):
     def __init__(self):
@@ -36,8 +36,8 @@ class HolyFire(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.spell_damage(5 + player.spell_power, self)
-        player.hero.heal(5) # The heal aspect of the card is not affected by +spell damage cards
+        self.target.spell_damage(player.effective_spell_power(5), self)
+        player.hero.heal(player.effective_heal_power(5), self)
         
 class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
@@ -47,10 +47,10 @@ class HolyNova(Card): # TODO: Can this card be cast if no minions is in play?
         super().use(player, game)
         
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(2 + player.spell_power, self)  
+            minion.spell_damage(player.effective_spell_power(2), self)
         
         for minion in player.minions:
-            minion.heal(2)
+            minion.heal(player.effective_heal_power(2), self)
 
 class HolySmite(Card):
     def __init__(self):
@@ -59,7 +59,7 @@ class HolySmite(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.spell_damage(2 + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(2), self)
         
 class InnerFire(Card):
     def __init__(self):
@@ -91,7 +91,7 @@ class MindBlast(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        game.other_player.hero.spell_damage(5 + player.spell_power, self)
+        game.other_player.hero.spell_damage(player.effective_spell_power(5), self)
         
 class MindControl(Card):
     def __init__(self):
