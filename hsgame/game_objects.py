@@ -312,8 +312,11 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def decrease_health(self, amount):
         def silence():
-            # I think silence only restores its max health again. It does not heal as well.
-            self.max_health += amount
+            if self.max_health = self.health:
+                self.max_health += amount
+                self.health += amount
+            else:
+                self.max_health += amount
         self.trigger("health_decreased", amount)
         self.max_health -= amount
         if self.health > self.max_health:
@@ -548,6 +551,8 @@ class Minion(Character):
         self.deathrattle = deathrattle
 
     def add_to_board(self, card, game, player, index):
+        if len(player.minions) >= 7:
+            raise GameException("Only 7 minions allowed on the field at a time")
         self.card = card
         player.minions.insert(index, self)
         self.game = game
