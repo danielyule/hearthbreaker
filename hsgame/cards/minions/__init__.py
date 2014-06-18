@@ -22,7 +22,13 @@ from hsgame.cards.minions.neutral import (
     DalaranMage,
     Malygos,
     AzureDrake,
-    OgreMagi
+    OgreMagi,
+    BloodmageThalnos,
+    LootHoarder,
+    MoltenGiant,
+    SeaGiant,
+    MountainGiant,
+    LeperGnome
 )
 
 from hsgame.cards.minions.druid import (
