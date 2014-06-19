@@ -1,7 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import MinionCard, Minion, Card
-from hsgame.cards.battlecries import deal_three_damage, deal_five_damage, deal_one_damage_all_characters, destroy_own_crystal
+from hsgame.game_objects import MinionCard, Minion, Card, 
+from hsgame.cards.battlecries import deal_three_damage, deal_five_damage, deal_one_damage_all_characters, destroy_own_crystal, discard_one, discard_two
 
 __author__ = 'randomflyingtaco'
 #let the train wreck begin
@@ -43,4 +43,21 @@ class Felguard(MinionCard):
     def create_minion(self, player):
         minion = Minion(3, 5, MINION_TYPE.DEMON, battlecry=destroy_own_crystal)
         minion.taunt = True
+        return minion
+
+class Doomguard(MinionCard):
+    def __init__(self):
+        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        minion = Minion(5, 7, MINION_TYPE.DEMON, battlecry=discard_two)
+        minion.charge = True
+        return minion
+        
+class Succubus(MinionCard):
+    def __init__(self):
+        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 3, MINION_TYPE.DEMON, battlecry=discard_one)
         return minion
