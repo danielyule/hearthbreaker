@@ -133,3 +133,22 @@ class WarlockPower(Power):
         super().use()
         self.hero.player.game.current_player.hero.damage(2, None)
         self.hero.player.game.current_player.draw()  #idk path for this
+
+
+class JaraxxusPower(Power):
+    
+    def __init__(self, hero):
+        super().__init__(hero)
+        
+    def use(self):
+        class Infernal(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Infernal", 6, hsgame.constants.CHARACTER_CLASS.WARLOCK, hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                return hsgame.game_objects.Minion(6, 6)
+
+        super().use()
+
+        infernal_card = Infernal()
+        infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
