@@ -69,3 +69,14 @@ def destroy_own_crystal(minion):
 def give_enemy_crystal(minion):
     if other_player.max_mana < 10:
         other_player.max_mana += 1
+        
+def discard_one(minion):
+    player.discard()
+    
+def discard_two(minion):
+    player.discard()
+    player.discard()
+
+def discard_all(minion):
+    for i in range(len(player.hand)):
+        player.discard()
