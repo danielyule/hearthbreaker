@@ -782,6 +782,11 @@ class Player(Bindable):
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
 
+    def discard(self): #need a super?
+        targets = self.hand
+        target = targets[game.random(0, len(targets) - 1)]
+        self.hand.remove(target)
+
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
 
