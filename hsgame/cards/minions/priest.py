@@ -6,6 +6,32 @@ from hsgame.cards.battlecries import take_control_of_minion
 __author__ = 'Daniel'
 
 
+class AuchenaiSoulpriest(MinionCard):
+    def __init__(self):
+        super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def remove_heal_does_damage():
+            player.heal_does_damage = False
+
+            # If another Auchenai Soulpriest is alive and not silenced, keep heal_does_damage as True
+            for m in player.minions:
+                if m.card.name == "Auchenai Soulpriest" and m.silence == False and m is not minion:
+                    player.heal_does_damage = True
+        
+        def silence():
+            remove_heal_does_damage()
+            
+        def die(by):
+            remove_heal_does_damage()
+        
+        minion = Minion(3, 5)
+        minion.bind("died", die)
+        minion.bind_once("silenced", silence)
+        player.heal_does_damage = True
+        return minion
+
+
 class CabalShadowPriest(MinionCard):
     def __init__(self):
         super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC, hsgame.targeting.find_enemy_minion_battlecry_target, lambda target: target.attack_power <= 2 and target.spell_targetable())

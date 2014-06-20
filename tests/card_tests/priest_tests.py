@@ -468,3 +468,29 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(22, game.players[0].deck.left)
         game.play_single_turn()
         self.assertEqual(20, game.players[0].deck.left)
+
+
+    def test_AuchenaiSoulpriest(self):
+        game = generate_game_for(AuchenaiSoulpriest, StonetuskBoar, PredictableBot, DoNothingBot)
+        
+        # Auchenai Soulpriest should be played
+        for turn in range(0, 11):
+            game.play_single_turn()
+            
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Auchenai Soulpriest", game.players[0].minions[0].card.name)
+        
+        game.play_single_turn()
+        # Hero power will be used on own minion, which should now cause 2 damage instead of 2 heal.
+        game.play_single_turn()
+        
+        self.assertEqual(3, game.players[0].minions[1].health)
+        game.players[0].minions[1].silence()
+        game.players[0].minions[0].die(None)
+        
+        game.play_single_turn()
+        # Hero power should heal again
+        game.play_single_turn()
+        
+        # This minion should not have taken damage and received heal instead
+        self.assertEqual(5, game.players[0].minions[1].health)

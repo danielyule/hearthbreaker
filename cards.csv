@@ -32,7 +32,7 @@ yes,Argent Squire,Divine Shield,,,1,1,1,Expert,Minion
 no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Expert,Minion
 no,Assassin's Blade,,,Rogue,5,3,4,Basic,Weapon
 no,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Basic,Spell
-no,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Expert,Minion
+yes,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Expert,Minion
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Expert,Spell
 no,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Expert,Minion
 no,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Basic,Spell
