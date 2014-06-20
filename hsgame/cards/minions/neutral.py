@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand, deal_enemy_hero_two_damage
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -286,3 +286,322 @@ class MountainGiant(MinionCard):
 
     def create_minion(self, player):
         return Minion(8, 8)
+
+class IronforgeRifleman(MinionCard):
+    def __init__(self):
+        super().__init__("Ironforge Rifleman", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(2, 2, battlecry=deal_one_damage)
+        
+class GnomishInventor(MinionCard):
+    def __init__(self):
+        super().__init__("Gnomish Inventor", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(2, 4, battlecry=draw_card)
+        
+class GoldshireFootman(MinionCard):
+    def __init__(self):
+        super().__init__("Goldshire Footman", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(1, 2)
+        minion.taunt = True
+        return minion
+
+class FrostwolfGrunt(MinionCard):
+    def __init__(self):
+        super().__init__("Frostwolf Grunt", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(1, 2)
+        minion.taunt = True
+        return minion
+        
+class IronfurGrizzly(MinionCard):
+    def __init__(self):
+        super().__init__("Ironfur Grizzly", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(3, 3, MINION_TYPE.BEAST)
+        minion.taunt = True
+        return minion
+
+class LordoftheArena(MinionCard):
+    def __init__(self):
+        super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(6, 5)
+        minion.taunt = True
+        return minion
+        
+class MurlocRaider(MinionCard):
+    def __init__(self):
+        super().__init__("Murloc Raider", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(2, 1, MINION_TYPE.MURLOC)
+        
+class ManaAddict(MinionCard):
+    def __init__(self):
+        super().__init__("Mana Addict", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def increase_attack(card):
+            minion.increase_temp_attack(2)
+        minion = Minion(1, 3)
+        player.bind("spell_cast", increase_attack)
+        minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
+        return minion
+        
+class OasisSnapjaw(MinionCard):
+    def __init__(self):
+        super().__init__("Oasis Snapjaw", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(2, 7, MINION_TYPE.BEAST)
+
+class RecklessRocketeer(MinionCard):
+    def __init__(self):
+        super().__init__("Reckless Rocketeer", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(5, 2)
+        minion.charge = True
+        return minion
+        
+class RiverCrocolisk(MinionCard):
+    def __init__(self):
+        super().__init__("River Crocolisk", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(2, 3, MINION_TYPE.BEAST)
+        
+class SenjinShieldmasta(MinionCard):
+    def __init__(self):
+        super().__init__("Sen'jin Shieldmasta", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(3, 5)
+        minion.taunt = True
+        return minion
+        
+class ScarletCrusader(MinionCard):
+    def __init__(self):
+        super().__init__("Scarlet Crusader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(3, 1)
+        minion.divine_shield = True
+        return minion
+
+class Shielbearer(MinionCard):
+    def __init__(self):
+        super().__init__("Shieldbearer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(0, 4)
+        minion.taunt = True
+        return minion
+        
+class SilverbackPatriarch(MinionCard):
+    def __init__(self):
+        super().__init__("Silverback Patriarch", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(1, 4, MINION_TYPE.BEAST)
+        minion.taunt = True
+        return minion
+        
+class JunglePanther(MinionCard):
+    def __init__(self):
+        super().__init__("Jungle Panther", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(4, 2, MINION_TYPE.BEAST)
+        minion.stealth = True
+        return minion
+
+class RavenholdtAssassin(MinionCard):
+    def __init__(self):
+        super().__init__("Ravenholdt Assassin", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(7, 5)
+        minion.stealth = True
+        return minion
+
+class StormpikeCommando(MinionCard):
+    def __init__(self):
+        super().__init__("Stormpike Commando", 5, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(4, 2, battlecry=deal_two_damage)
+
+class StormwindKnight(MinionCard):
+    def __init__(self):
+        super().__init__("Stormwind Knight", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(2, 5)
+        minion.charge = True
+        return minion
+        
+class StranglethornTiger(MinionCard):
+    def __init__(self):
+        super().__init__("Stranglethorn Tiger", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(5, 5, MINION_TYPE.BEAST)
+        minion.stealth = True
+        return minion
+        
+class Sunwalker(MinionCard):
+    def __init__(self):
+        super().__init__("Sunwalker", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(4, 5)
+        minion.divine_shield = True
+        minion.taunt = True
+        return minion
+        
+class ThrallmarFarseer(MinionCard):
+    def __init__(self):
+        super().__init__("Thrallmar Farseer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(2, 3)
+        minion.wind_fury = True
+        return minion
+        
+class WindfuryHarpy(MinionCard):
+    def __init__(self):
+        super().__init__("Windfury Harpy", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(4, 5)
+        minion.wind_fury = True
+        return minion
+        
+class YoungDragonhawk(MinionCard):
+    def __init__(self):
+        super().__init__("Young Dragonhawk", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(1, 1, MINION_TYPE.BEAST)
+        minion.wind_fury = True
+        return minion
+
+class Wolfrider(MinionCard):
+    def __init__(self):
+        super().__init__("Wolfrider", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(3, 1)
+        minion.charge = True
+        return minion
+
+class BootyBayBodyguard(MinionCard):
+    def __init__(self):
+        super().__init__("Booty Bay Bodyguard", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(5, 4)
+        minion.taunt = True
+        return minion
+        
+class BoulderfistOgre(MinionCard):
+    def __init__(self):
+        super().__init__("BoulderfistOgre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(6, 7)
+
+class ChillwindYeti(MinionCard):
+    def __init__(self):
+        super().__init__("Chillwind Yeti", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 5)
+        
+class CoreHound(MinionCard):
+    def __init__(self):
+        super().__init__("BoulderfistOgre", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(9, 5, MINION_TYPE.BEAST)
+        
+class VoodooDoctor(MinionCard):
+    def __init__(self):
+        super().__init__("Voodoo Doctor", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(2, 1, battlecry=heal_two)
+
+class EarthenRingFarseer(MinionCard):
+    def __init__(self):
+        super().__init__("Earthen Ring Farseer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(3, 3, battlecry=heal_three)
+
+class ArcaneGolem(MinionCard):
+    def __init__(self):
+        super().__init__("Arcane Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        minion = Minion(4, 2, battlecry=give_enemy_crystal)
+        minion.charge = True
+        return minion
+        
+class PriestessofElune(MinionCard):
+    def __init__(self):
+        super().__init__("Priestess of Elune", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(5, 4)
+        player.hero.heal(4)
+        return minion
+        
+        
+class DarkscaleHealer(MinionCard):
+    def __init__(self):
+        super().__init__("Darkscale Healer", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(4, 5)
+        targets = game.current_player.minions.copy()
+        targets.append(game.current_player.hero)
+        for minion in targets:
+            minion.heal(player.effective_heal_power(2))
+        return minion        
+
+class ArgentCommander(MinionCard):
+    def __init__(self):
+        super().__init__("Argent Commander", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(4, 2)
+        minion.divine_shield = True
+        minion.charge = True
+        return minion
+        
+class BluegillWarrior(MinionCard):
+    def __init__(self):
+        super().__init__("Bluegill Warrior", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        minion = Minion(2, 1, MINION_TYPE.MURLOC)
+        minion.charge = True
+        return minion
+                
+class Wisp(MinionCard):
+    def __init__(self):
+        super().__init__("Wisp", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+                
