@@ -12,6 +12,13 @@ def silence(minion):
     if minion.card.target is not None:
         minion.card.target.silence()
 
+def heal_two(minion):
+    if minion.card.target is not None:
+        minion.card.target.heal(player.effective_heal_power(2), None)
+        
+def heal_three(minion):
+    if minion.card.target is not None:
+        minion.card.target.heal(player.effective_heal_power(3), None)
 
 def deal_one_damage(minion):
     if minion.card.target is not None:
@@ -62,7 +69,7 @@ def deal_one_damage_all_characters(minion):
     targets.append(game.current_player.hero)
     for minion in targets:
         minion.damage(1, None)
-
+        
 def destroy_own_crystal(minion):
     player.max_mana -= 1
     
