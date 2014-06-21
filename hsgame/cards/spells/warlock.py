@@ -150,7 +150,7 @@ class SenseDemons(Card):
                 
 class BaneofDoom(Card):
     def __init__(self):
-        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
+        super().__init__("Bane of Dooml", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
 
         def use(self, player, game):
             demon_list = []
@@ -191,7 +191,7 @@ class Corruption(Card):
 
 class PowerOverwhelming(Card):
     def __init__(self):
-        super().__init__("PowerOverwhelming", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Power Overwhelming", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
