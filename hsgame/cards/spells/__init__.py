@@ -97,5 +97,16 @@ from hsgame.cards.spells.warlock import (
     MortalCoil,
     Hellfire,
     ShadowBolt,
-    DrainLife
+    DrainLife,
+    Soulfire,
+    TwistingNether,
+    Demonfire,
+    LordJaraxxus,
+    SacrificialPact,
+    SiphonSoul,
+    SenseDemons,
+    BaneofDoom,
+    Shadowflame,
+    Corruption,
+    PowerOverwhelming
 )
