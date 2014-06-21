@@ -275,7 +275,7 @@ class SeaGiant(MinionCard):
 
 class MoltenGiant(MinionCard):
     def __init__(self):
-        super().__init__("Molten Giant", max(0, 20 + player.hero.health - 30, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Molten Giant", max(0, 20 + player.hero.health - 30), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
         #once we add jaraxxus we need a player.hero.max_health variable
     def create_minion(self, player):
         return Minion(8, 8)
