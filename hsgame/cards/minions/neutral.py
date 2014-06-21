@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -554,9 +554,7 @@ class ArcaneGolem(MinionCard):
         super().__init__("Arcane Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        if other_player.max_mana < 10:
-            other_player.max_mana += 1        
-        minion = Minion(4, 2)
+        minion = Minion(4, 2, battlecry=give_enemy_crystal)
         minion.charge = True
         return minion
         
