@@ -268,7 +268,7 @@ class LeperGnome(MinionCard): #idk, maybe this will work
 
 class SeaGiant(MinionCard):
     def __init__(self):
-        super().__init__("Sea Giant", max(0, 10 - len(player.minions) - len(other_player.minions)), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Sea Giant", max(0, 10 - len(current_player.minions) - len(other_player.minions)), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
         return Minion(8, 8)
