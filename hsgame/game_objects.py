@@ -784,7 +784,7 @@ class Player(Bindable):
 
     def discard(self): #need a super?
         targets = self.hand
-        target = targets[game.random(0, len(targets) - 1)]
+        target = targets[self.random(0, len(targets) - 1)]
         self.hand.remove(target)
 
     def choose_target(self, targets):
