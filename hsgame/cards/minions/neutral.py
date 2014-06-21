@@ -1,6 +1,6 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three
-from hsgame.game_objects import Minion, MinionCard
+from hsgame.game_objects import Minion, MinionCard, game
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
 __author__ = 'Daniel'
