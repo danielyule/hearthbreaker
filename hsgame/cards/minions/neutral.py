@@ -1,6 +1,6 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three
-from hsgame.game_objects import Minion, MinionCard, Game
+from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
 __author__ = 'Daniel'
@@ -266,27 +266,27 @@ class LeperGnome(MinionCard): #idk, maybe this will work
         minion.bind_once("silenced", lambda m: m.unbind("died", deal_enemy_hero_two_damage), minion)
         return minion
 
-class SeaGiant(MinionCard):
-    minion_count = len(game.current_player.minions) + len(game.other_player.minions)
-    def __init__(self):
-        super().__init__("Sea Giant", max(0, 10 - minion_count), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+#class SeaGiant(MinionCard):
+#    minion_count = len(game.current_player.minions) + len(game.other_player.minions)
+#    def __init__(self):
+#        super().__init__("Sea Giant", max(0, 10 - minion_count), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
-    def create_minion(self, player):
-        return Minion(8, 8)
+#    def create_minion(self, player):
+#        return Minion(8, 8)
 
-class MoltenGiant(MinionCard):
-    def __init__(self):
-        super().__init__("Molten Giant", max(0, 20 + game.current_player.hero.health - 30), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+#class MoltenGiant(MinionCard):
+#    def __init__(self):
+#        super().__init__("Molten Giant", max(0, 20 + game.current_player.hero.health - 30), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
         #once we add jaraxxus we need a player.hero.max_health variable
-    def create_minion(self, player):
-        return Minion(8, 8)
+#    def create_minion(self, player):
+#        return Minion(8, 8)
         
-class MountainGiant(MinionCard):
-    def __init__(self):
-        super().__init__("Mountain Giant", 12 - len(minion.player.hand), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+#class MountainGiant(MinionCard):
+#    def __init__(self):
+#        super().__init__("Mountain Giant", 12 - len(minion.player.hand), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
-    def create_minion(self, player):
-        return Minion(8, 8)
+#    def create_minion(self, player):
+#        return Minion(8, 8)
 
 class IronforgeRifleman(MinionCard):
     def __init__(self):
