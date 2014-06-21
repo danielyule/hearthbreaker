@@ -398,7 +398,7 @@ class ScarletCrusader(MinionCard):
         minion.divine_shield = True
         return minion
 
-class Shielbearer(MinionCard):
+class Shieldbearer(MinionCard):
     def __init__(self):
         super().__init__("Shieldbearer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
