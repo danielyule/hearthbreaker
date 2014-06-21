@@ -36,13 +36,13 @@ class DreadInfernal(MinionCard):
         super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        targets = game.other_player.minions.copy()
-        targets.extend(game.current_player.minions)
-        targets.append(game.other_player.hero)
-        targets.append(game.current_player.hero)
-        for minion in targets:
-            minion.damage(1, None)
-        return Minion(6, 6, MINION_TYPE.DEMON)
+   #     targets = game.other_player.minions.copy()
+    #    targets.extend(game.current_player.minions)
+     #   targets.append(game.other_player.hero)
+      #  targets.append(game.current_player.hero)
+       # for minion in targets:
+        #    minion.damage(1, None)
+        return Minion(6, 6, MINION_TYPE.DEMON, battlecry=deal_one_damage_all_characters)
 
 class Felguard(MinionCard):
     def __init__(self):
