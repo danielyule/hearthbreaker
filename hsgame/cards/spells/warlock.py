@@ -86,7 +86,7 @@ class LordJaraxxus(Card):
         
     def use(self, player, game):
         super().use(player, game)
-        self.hero.max_health = 15
+        #self.hero.max_health = 15
         self.hero.health = 15
         player.hero.power = hsgame.powers.JaraxxusPower(player.hero)
         #weapons not in yet, need to give 3/8 Blood Fury
@@ -130,7 +130,7 @@ class SenseDemons(Card):
         
         for index in range(0, 30):
             if not game.current_player.deck.used[index] and not game.current_player.deck.cards[index].is_spell():
-                #and minion.minion_type is MINION_TYPE.DEMON:
+                #and minion.minion_type is MINION_TYPE.DEMON:  I know this won't work, but how do I pull type info from the deck of cards
                 minions.append(game.other_player.deck.cards[index])
                 
         if len(minions) == 1:
@@ -139,9 +139,64 @@ class SenseDemons(Card):
             minions.append(WorthlessImp())
             minions.append(WorthlessImp())
 
-        minion = copy.copy(minions[game.random(0, len(minions) - 1)])
-                for i in range(0, 2):
-            if not len(cards) == 0 and not len(player.hand) == 10: # TODO: We are assuming nothing will happen if you have 10 cards in hand. Will you even see the card go up in flames?
-                rand = game.random(0, len(cards) - 1)
-                card = copy.copy(cards.pop(rand)) # TODO: We are assuming you can't copy the same card twice
-                player.hand.append(card)
+        for i in range(0, 2):
+            rand = game.random(0, len(minions) - 1)
+            card = copy.copy(minions.pop(rand))   
+            self.trigger("card_drawn", card)        #can i have triggers here?  how do i command specific draws
+            if len(self.hand) < 10:
+                self.hand.append(card)
+            else:
+                self.trigger("card_destroyed", card)
+                
+class BaneofDoom(Card):
+    def __init__(self):
+        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
+
+        def use(self, player, game):
+            demon_list = []
+            #demon_list.append(BloodImp())
+            demon_list.append(Voidwalker())    
+            demon_list.append(FlameImp())    
+            demon_list.append(DreadInfernal())    
+            demon_list.append(Succubus())    
+            demon_list.append(Felguard())    
+            card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
+            if minion.health <= player.effective_spell_power(2):
+                target.spell_damage(player.effective_spell_power(2), self)
+                minion.create_minion(player).add_to_board(card, game, player, 0)
+            else:  
+                target.spell_damage(player.effective_spell_power(2), self)
+                
+class Shadowflame(Card):
+    def __init__(self):
+        super().__init__("Shadowflame", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, hsgame.targeting.find_friendly_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        shadowflame_damage = self.target.attack_power + self.target.temp_attack
+        targets = game.other_player.minions.copy()
+        self.target.die(self)
+        for minion in targets:
+            minion.spell_damage(player.effective_spell_power(shadowflame_damage), self)
+
+class Corruption(Card):
+    def __init__(self):
+        super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        minion.bind_once("turn_started", lambda minion: game.remove_minion(minion, player), target)  #will this trigger at the start of the opponents turn so i need to use current+player?
+        minion.bind_once("silenced", lambda minion: unbind("turn_started", lambda minion: game.remove_minion(minion, player), target), minion)
+
+class PowerOverwhelming(Card):
+    def __init__(self):
+        super().__init__("PowerOverwhelming", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        minion.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), target)
+        minion.bind_once("silenced", lambda minion: unbind("turn_ended", lambda minion: game.remove_minion(minion, player), target), minion)
+        self.target.increase_attack(4)
+        self.target.increase_health(4)
