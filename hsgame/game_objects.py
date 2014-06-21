@@ -312,7 +312,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def decrease_health(self, amount):
         def silence():
-            if self.max_health = self.health:
+            if self.max_health == self.health:
                 self.max_health += amount
                 self.health += amount
             else:
