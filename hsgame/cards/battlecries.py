@@ -14,11 +14,11 @@ def silence(minion):
 
 def heal_two(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(player.effective_heal_power(2), None)
+        minion.card.target.heal(2, None)
         
 def heal_three(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(player.effective_heal_power(3), None)
+        minion.card.target.heal(3, None)
 
 def deal_one_damage(minion):
     if minion.card.target is not None:
