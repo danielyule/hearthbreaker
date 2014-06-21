@@ -1,6 +1,6 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import MinionCard, Minion, Card, 
+from hsgame.game_objects import MinionCard, Minion, Card
 from hsgame.cards.battlecries import deal_three_damage, deal_five_damage, deal_one_damage_all_characters, destroy_own_crystal, discard_one, discard_two
 
 __author__ = 'randomflyingtaco'
