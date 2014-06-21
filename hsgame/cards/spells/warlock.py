@@ -150,7 +150,7 @@ class SenseDemons(Card):
                 
 class BaneofDoom(Card):
     def __init__(self):
-        super().__init__("Bane of Doom", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
+        super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
 
         def use(self, player, game):
             demon_list = []
