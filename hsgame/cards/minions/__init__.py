@@ -40,7 +40,7 @@ from hsgame.cards.minions.neutral import (
     SenjinShieldmasta,
     ScarletCrusader,
     Shieldbearer,
-    SilverbackPartriarch,
+    SilverbackPatriarch,
     JunglePanther,
     RavenholdtAssassin,
     StormpikeCommando,
