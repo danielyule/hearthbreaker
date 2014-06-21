@@ -201,7 +201,7 @@ class TestCommon(unittest.TestCase):
     def test_Archmage(self):
         game = generate_game_for(Archmage, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
 
-        for i in range(0, 13):
+        for i in range(0, 11):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
