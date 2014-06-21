@@ -69,7 +69,7 @@ class TwistingNether(Card):
 
 class Demonfire(Card):
     def __init__(self):
-        super().__init__("Demonfire", 8, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
+        super().__init__("Demonfire", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
