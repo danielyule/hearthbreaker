@@ -36,7 +36,7 @@ no,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Expert,Spell
 yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Expert,Minion
 no,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Basic,Spell
-no,Bane of Doom,"Deal 2 damage to a character. If that kills it, summon a random Demon.",,Warlock,5,,,Expert,Spell
+yes,Bane of Doom,"Deal 2 damage to a character. If that kills it, summon a random Demon.",,Warlock,5,,,Expert,Spell
 no,Baron Geddon,"At the end of your turn, deal 2 damage to ALL other characters.",,,7,7,5,Expert,Minion
 no,Battle Rage,Draw a card for each damaged friendly character.,,Warrior,2,,,Expert,Spell
 yes,Bestial Wrath,Give a Beast +2 Attack and Immune this turn.,,Hunter,1,,,Expert,Spell
@@ -78,7 +78,7 @@ no,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Expert,Spe
 yes,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Expert,Spell
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Basic,Spell
 yes,Core Hound,,Beast,,7,9,5,Basic,Minion
-no,Corruption,"Choose an enemy minion. At the start of your turn, destroy it.",,Warlock,1,,,Basic,Spell
+yes,Corruption,"Choose an enemy minion. At the start of your turn, destroy it.",,Warlock,1,,,Basic,Spell
 yes,Counterspell,"Secret: When your opponent casts a spell, Counter it.",,Mage,3,,,Expert,Spell
 no,Crazed Alchemist,Battlecry: Swap the Attack and Health of a minion.,,,2,2,2,Expert,Minion
 no,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.,,Warrior,2,2,2,Expert,Minion
@@ -262,7 +262,7 @@ no,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2
 yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Expert,Minion
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Basic,Spell
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Expert,Spell
-no,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Expert,Spell
+yes,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Expert,Spell
 yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Basic,Spell
 no,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Expert,Spell
 yes,Priestess of Elune,Battlecry: Restore 4 Health to your hero.,,,6,5,4,Expert,Minion
@@ -295,7 +295,7 @@ yes,Shadow Bolt,Deal 4 damage to a minion.,,Warlock,3,,,Basic,Spell
 yes,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until end of turn.,,Priest,4,,,Expert,Spell
 yes,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,,Basic,Spell
 yes,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Basic,Spell
-no,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Expert,Spell
+yes,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Expert,Spell
 yes,Shadowform,Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.,,Priest,3,,,Expert,Spell
 no,Shadowstep,Return a friendly minion to your hand. It costs (2) less.,,Rogue,0,,,Expert,Spell
 no,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Basic,Minion
@@ -333,7 +333,7 @@ no,Stormwind Champion,Your other minions have +1/+1.,,,7,6,6,Basic,Minion
 yes,Stormwind Knight,Charge,,,4,2,5,Basic,Minion
 yes,Stranglethorn Tiger,Stealth,Beast,,5,5,5,Expert,Minion
 yes,Succubus,Battlecry: Discard a random card.,Demon,Warlock,2,4,3,Basic,Minion
-no,Summoning Portal,"Your minions cost (2) less, but not less than (1).",,Warlock,4,0,4,Expert,Minion
+yes,Summoning Portal,"Your minions cost (2) less, but not less than (1).",,Warlock,4,0,4,Expert,Minion
 no,Sunfury Protector,Battlecry: Give adjacent minions Taunt.,,,2,2,3,Expert,Minion
 yes,Sunwalker,Taunt. Divine Shield,,,6,4,5,Expert,Minion
 yes,Swipe,Deal 4 damage to an enemy and 1 damage to all other enemies.,,Druid,4,,,Basic,Spell
