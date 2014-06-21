@@ -516,7 +516,7 @@ class BootyBayBodyguard(MinionCard):
         
 class BoulderfistOgre(MinionCard):
     def __init__(self):
-        super().__init__("BoulderfistOgre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Boulderfist Ogre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         return Minion(6, 7)
@@ -530,7 +530,7 @@ class ChillwindYeti(MinionCard):
         
 class CoreHound(MinionCard):
     def __init__(self):
-        super().__init__("BoulderfistOgre", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Core Hound", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         return Minion(9, 5, MINION_TYPE.BEAST)
