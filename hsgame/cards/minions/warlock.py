@@ -8,17 +8,19 @@ __author__ = 'randomflyingtaco'
 
 class FlameImp(MinionCard):
     def __init__(self):
-        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_hero_battlecry_target)
+        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 2, MINION_TYPE.DEMON, battlecry=deal_three_damage)
+        player.hero.damage(3, None)
+        return Minion(3, 2, MINION_TYPE.DEMON)
 
 class PitLord(MinionCard):
     def __init__(self):
-        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, hsgame.targeting.find_friendly_hero_battlecry_target)
+        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        return Minion(5, 6, MINION_TYPE.DEMON, battlecry=deal_five_damage)
+        player.hero.damage(5, None)
+        return Minion(5, 6, MINION_TYPE.DEMON)
 
 class VoidWalker(MinionCard):
     def __init__(self):
@@ -34,14 +36,21 @@ class DreadInfernal(MinionCard):
         super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(6, 6, MINION_TYPE.DEMON, battlecry=deal_one_damage_all_characters)
+        targets = game.other_player.minions.copy()
+        targets.extend(game.current_player.minions)
+        targets.append(game.other_player.hero)
+        targets.append(game.current_player.hero)
+        for minion in targets:
+            minion.damage(1, None)
+        return Minion(6, 6, MINION_TYPE.DEMON)
 
 class Felguard(MinionCard):
     def __init__(self):
         super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(3, 5, MINION_TYPE.DEMON, battlecry=destroy_own_crystal)
+        player.max_mana -= 1
+        minion = Minion(3, 5, MINION_TYPE.DEMON)
         minion.taunt = True
         return minion
 
@@ -50,7 +59,9 @@ class Doomguard(MinionCard):
         super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(5, 7, MINION_TYPE.DEMON, battlecry=discard_two)
+        player.discard()
+        player.discard()
+        minion = Minion(5, 7, MINION_TYPE.DEMON)
         minion.charge = True
         return minion
         
@@ -59,5 +70,23 @@ class Succubus(MinionCard):
         super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(4, 3, MINION_TYPE.DEMON, battlecry=discard_one)
+        player.discard()
+        minion = Minion(4, 3, MINION_TYPE.DEMON)
+        return minion
+
+class SummoningPortal(MinionCard):
+    def __init__(self):
+        super().__init__("Summoning Portal", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        class Filter:
+            def __init__(self):
+                self.amount = 2
+                self.filter = lambda c: not c.is_spell()
+                self.min = 1
+
+        filter = Filter()
+        minion = Minion(0, 4)
+        minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
+        player.mana_filters.append(filter)
         return minion
