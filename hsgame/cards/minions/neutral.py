@@ -268,14 +268,14 @@ class LeperGnome(MinionCard): #idk, maybe this will work
 
 class SeaGiant(MinionCard):
     def __init__(self):
-        super().__init__("Sea Giant", max(0, 10 - len(current_player.minions) - len(other_player.minions)), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Sea Giant", max(0, 10 - len(game.current_player.minions) - len(game.other_player.minions)), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
         return Minion(8, 8)
 
 class MoltenGiant(MinionCard):
     def __init__(self):
-        super().__init__("Molten Giant", max(0, 20 + player.hero.health - 30), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Molten Giant", max(0, 20 + game.current_player.hero.health - 30), CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
         #once we add jaraxxus we need a player.hero.max_health variable
     def create_minion(self, player):
         return Minion(8, 8)
