@@ -554,7 +554,9 @@ class ArcaneGolem(MinionCard):
         super().__init__("Arcane Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(4, 2, battlecry=give_enemy_crystal)
+        if other_player.max_mana < 10:
+            other_player.max_mana += 1        
+        minion = Minion(4, 2)
         minion.charge = True
         return minion
         
