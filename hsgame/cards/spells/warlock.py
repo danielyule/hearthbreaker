@@ -79,16 +79,16 @@ class Demonfire(Card):
             self.target.increase_health(2)
         else:
             self.target.spell_damage(player.effective_spell_power(2), self)
-            
-class LordJaraxxus(Card):
-    def __init__(self):
-        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY)
-        
-    def use(self, player, game):
-        super().use(player, game)
-        #self.hero.max_health = 15
-        self.hero.health = 15
-        player.hero.power = hsgame.powers.JaraxxusPower(player.hero)
+      #Jaraxxus is a minion      
+#class LordJaraxxus(Card):
+ #   def __init__(self):
+  #      super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY)
+   #     
+    #def use(self, player, game):
+     #   super().use(player, game)
+      #  #self.hero.max_health = 15
+       # self.hero.health = 15
+        #player.hero.power = hsgame.powers.JaraxxusPower(player.hero)
         #weapons not in yet, need to give 3/8 Blood Fury
         
 class SacrificialPact(Card):
