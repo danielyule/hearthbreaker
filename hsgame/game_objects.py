@@ -760,6 +760,7 @@ class Player(Bindable):
         self.heal_multiplier = 1
         self.heal_does_damage = False
         self.mana_filters = []
+        self.overload = 0
 
     def __str__(self):  # pragma: no cover
         return "Player: " + self.name
@@ -871,7 +872,10 @@ class Game(Bindable):
 
         for secret in self.other_player.secrets:
             secret.activate(self.other_player)
-        self.current_player.mana = self.current_player.max_mana
+        self.current_player.mana = self.current_player.max_mana - self.current_player.overload
+        if self.current_player.mana < 0:
+            self.current_player.mana = 0 
+        self.current_player.overload = 0
         self.current_player.trigger("turn_started")
         self.current_player.draw()
 
