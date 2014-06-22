@@ -50,8 +50,8 @@ class Lightspawn(MinionCard):
                 
         minion = Minion(0, 5)
         minion.increase_attack(minion.health - minion.attack_power)
-        minion.bind("health_impact", attack_equal_to_health)
-        minion.bind_once("silenced", lambda: minion.unbind("health_impact", attack_equal_to_health))
+        minion.bind("health_changed", attack_equal_to_health)
+        minion.bind_once("silenced", lambda: minion.unbind("health_changed", attack_equal_to_health))
         return minion
 
 

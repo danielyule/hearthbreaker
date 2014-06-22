@@ -283,7 +283,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 attacker.delayed_trigger("did_damage", amount, self)
             elif type(attacker) is Player:
                 attacker.trigger("did_damage", amount, self)
-            self.trigger("health_impact")
+            self.trigger("health_changed")
             if self.health <= 0:
                 self.die(attacker)
 
@@ -307,7 +307,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("health_increased", amount)
         self.max_health += amount
         self.health += amount
-        self.trigger("health_impact")
+        self.trigger("health_changed")
         self.bind_once('silenced', silence)
 
     def decrease_health(self, amount):
@@ -318,7 +318,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.max_health -= amount
         if self.health > self.max_health:
             self.health = self.max_health
-        self.trigger("health_impact")
+        self.trigger("health_changed")
         self.bind_once('silenced', silence)
 
     def freeze(self):
@@ -360,7 +360,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.health += amount
             if self.health > self.max_health:
                 self.health = self.max_health
-            self.trigger("health_impact")
+            self.trigger("health_changed")
 
     def die(self, by):
         self.delayed_trigger("died", by)

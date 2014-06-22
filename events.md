@@ -59,4 +59,4 @@ Events Triggered in hssim
  * health_increased(amount)
  * health_decreased(amount)
  * silenced
- * health_impact
+ * health_changed
