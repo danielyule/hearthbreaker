@@ -14,6 +14,8 @@ def powers(character_class):
         return PriestPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.PALADIN:
         return PaladinPower
+    elif character_class == hsgame.constants.CHARACTER_CLASS.SHAMAN:
+        return ShamanPower
 
 
 class Power:
@@ -126,3 +128,83 @@ class PaladinPower(Power):
         recruit_card = SilverHandRecruit()
         recruit_card.create_minion(None).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
 
+
+class ShamanPower(Power):
+    
+    def __init__(self, hero):
+        self.healing_totem = False
+        self.searing_totem = False
+        self.stoneclaw_totem = False
+        self.wrath_of_air_totem = False
+        
+        super().__init__(hero)
+    
+    def can_use(self):
+        self.healing_totem = False
+        self.searing_totem = False
+        self.stoneclaw_totem = False
+        self.wrath_of_air_totem = False
+        
+        for minion in self.hero.player.minions:
+            if minion.card.name == "Healing Totem":
+                self.healing_totem = True
+            elif minion.card.name == "Searing Totem":
+                self.searing_totem = True
+            elif minion.card.name == "Stoneclaw Totem":
+                self.stoneclaw_totem = True
+            elif minion.card.name == "Wrath of Air Totem":
+                self.wrath_of_air_totem = True
+        
+        if self.healing_totem and self.searing_totem and self.stoneclaw_totem and self.wrath_of_air_totem:
+            return False
+        
+        return super().can_use()
+    
+    def use(self):
+        class HealingTotem(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                # TODO: Effect - http://www.hearthhead.com/card=764/healing-totem
+                return hsgame.game_objects.Minion(0, 2)
+                        
+        class SearingTotem(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Searing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                return hsgame.game_objects.Minion(1, 1)
+            
+        class StoneclawTotem(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Stoneclaw Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                minion = hsgame.game_objects.Minion(0, 2)
+                minion.taunt = True
+                return minion
+
+        class WrathOfAirTotem(hsgame.game_objects.MinionCard):
+            def __init__(self):
+                super().__init__("Wrath of Air Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                minion = hsgame.game_objects.Minion(0, 2)
+                minion.spell_power = 1
+                return minion
+
+        super().use()
+
+        totems = []
+        if not self.healing_totem:
+            totems.append(HealingTotem())
+        if not self.searing_totem:
+            totems.append(SearingTotem())
+        if not self.stoneclaw_totem:
+            totems.append(StoneclawTotem())
+        if not self.wrath_of_air_totem:
+            totems.append(WrathOfAirTotem())
+
+        random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
+        random_totem.create_minion(None).add_to_board(random_totem, self.hero.player.game, self.hero.player, 0)

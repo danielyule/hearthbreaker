@@ -57,3 +57,7 @@ from hsgame.cards.minions.priest import (
     ProphetVelen,
     TempleEnforcer
 )
+
+from hsgame.cards.minions.shaman import (
+    AlAkirTheWindlord
+)
