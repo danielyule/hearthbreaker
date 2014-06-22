@@ -66,14 +66,6 @@ class MogushanWarden(MinionCard):
         return minion
 
 
-class OasisSnapjaw(MinionCard):
-    def __init__(self):
-        super().__init__("Oasis Snapjaw", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
-
-    def create_minion(self, player):
-        return Minion(2, 7, MINION_TYPE.BEAST)
-
-
 class FaerieDragon(MinionCard):
     def __init__(self):
         super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
