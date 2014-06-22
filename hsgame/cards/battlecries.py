@@ -7,7 +7,6 @@ __author__ = 'Daniel'
 def draw_card(minion):
     minion.player.draw()
 
-
 def silence(minion):
     if minion.card.target is not None:
         minion.card.target.silence()
@@ -24,23 +23,25 @@ def deal_one_damage(minion):
     if minion.card.target is not None:
         minion.card.target.damage(1, None)
 
-
 def deal_two_damage(minion):
     if minion.card.target is not None:
         minion.card.target.damage(2, None)
-        
-def deal_three_damage(minion):
-    if minion.card.target is not None:
-        minion.card.target.damage(3, None)
 
-def deal_four_damage(minion):
-    if minion.card.target is not None:
-        minion.card.target.damage(4, None)
-
-def deal_five_damage(minion):
-    if minion.card.target is not None:
-        minion.card.target.damage(5, None)
+def flame_imp(minion):
+    minion.player.hero.damage(3, None)
+    
+def nightblade(minion):
+    minion.other_player.hero.damage(3, None)
         
+def pit_lord(minion):
+    minion.player.hero.damage(5, None)
+    
+def priestess_of_elune(minion):
+    minion.player.hero.heal(4, None)
+    
+def guardian_of_kings(minion):
+    minion.player.hero.heal(6, None)
+    
 def change_attack_to_one(minion):
     if minion.card.target is not None:
         # This will increase/decrease a minions attack to 1
@@ -87,3 +88,22 @@ def discard_two(minion):
 def discard_all(minion):
     for i in range(len(player.hand)):
         player.discard()
+
+def darkscale_healer(minion):        
+    targets = game.current_player.minions.copy()
+    targets.append(game.current_player.hero)
+    for minion in targets:
+        minion.heal(2)
+
+def ssc(minion):
+    if minion.card.target is not None:
+        minion.card.target.increase_attack(1)
+        minion.card.target.increase_health(1)
+    
+def destroy_target(minion):
+    if minion.card.target is not None:
+        minion.card.target.die()
+    
+def two_temp_attack(minion):
+    if minion.card.target is not None:
+        minion.card.target.increase_temp_attack(2)
