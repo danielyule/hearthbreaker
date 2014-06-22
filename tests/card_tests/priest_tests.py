@@ -476,9 +476,10 @@ class TestPriest(unittest.TestCase):
         # Auchenai Soulpriest should be played
         for turn in range(0, 11):
             game.play_single_turn()
-            
+        
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Auchenai Soulpriest", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].heal_does_damage)
         
         game.play_single_turn()
         # Hero power will be used on own minion, which should now cause 2 damage instead of 2 heal.
@@ -486,7 +487,11 @@ class TestPriest(unittest.TestCase):
         
         self.assertEqual(3, game.players[0].minions[1].health)
         game.players[0].minions[1].silence()
-        game.players[0].minions[0].die(None)
+        self.assertTrue(game.players[0].heal_does_damage)
+        soulpriest = game.players[0].minions[0]
+        soulpriest.die(None)
+        soulpriest.activate_delayed()
+        self.assertFalse(game.players[0].heal_does_damage)
         
         game.play_single_turn()
         # Hero power should heal again

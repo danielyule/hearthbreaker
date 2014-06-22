@@ -16,7 +16,7 @@ class AuchenaiSoulpriest(MinionCard):
 
             # If another Auchenai Soulpriest is alive and not silenced, keep heal_does_damage as True
             for m in player.minions:
-                if m.card.name == "Auchenai Soulpriest" and m.silence == False and m is not minion:
+                if m.card.name == "Auchenai Soulpriest" and m.silenced == False and m is not minion:
                     player.heal_does_damage = True
         
         def silence():

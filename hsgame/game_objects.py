@@ -549,6 +549,7 @@ class Minion(Character):
         self.divine_shield = False
         self.battlecry = battlecry
         self.deathrattle = deathrattle
+        self.silenced = False
 
     def add_to_board(self, card, game, player, index):
         self.card = card
@@ -587,6 +588,7 @@ class Minion(Character):
         self.divine_shield = False
         self.battlecry = None
         self.deathrattle = None
+        self.silenced = True
 
     def damage(self, amount, attacker):
         if self.divine_shield:
