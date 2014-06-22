@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, destroy_target, two_temp_attack
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -589,3 +589,37 @@ class Wisp(MinionCard):
     def create_minion(self, player):
         return Minion(1, 1)
                 
+class Nightblade(MinionCard):
+    def __init__(self):
+        super().__init__("Nightblade", 5, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        return Minion(4, 4, battlecry=nightblade)
+        
+class ShatteredSunCleric(MinionCard):
+    def __init__(self):
+        super().__init__("Shattered Sun Cleric", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(3, 2, battlecry=ssc)        
+
+class TheBlackKnight(MinionCard):
+    def __init__(self):
+        super().__init__("The Black Knight", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, hsgame.targeting.find_minion_battlecry_target, lambda minion: minion.taunt)
+
+    def create_minion(self, player):
+        return Minion(4, 5, battlecry=destroy_target) 
+        
+class AbusiveSergeant(MinionCard):
+    def __init__(self):
+        super().__init__("Abusive Sergeant", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(2, 1, battlecry=two_temp_attack) 
+        
+class DarkIronDwarf(MinionCard):
+    def __init__(self):
+        super().__init__("Dark Iron Dwarf", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(4, 4, battlecry=two_temp_attack) 
