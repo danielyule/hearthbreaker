@@ -329,7 +329,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.frozen = True
 
     def silence(self):
-        self.trigger("silenced", self)
+        self.trigger("silenced")
         self.temp_attack = 0
         self.immune = False
         self.wind_fury = False
