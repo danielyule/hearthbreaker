@@ -101,7 +101,6 @@ from hsgame.cards.spells.warlock import (
     Soulfire,
     TwistingNether,
     Demonfire,
-    LordJaraxxus,
     SacrificialPact,
     SiphonSoul,
     SenseDemons,
