@@ -1,6 +1,6 @@
 Implemented?,Name,Text,Race,Class,Cost,Attack,Health,Type,Minion/Spell
 no,Abomination,Taunt. Deathrattle: Deal 2 damage to ALL characters.,,,5,4,4,Expert,Minion
-no,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Expert,Minion
+yes,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Expert,Minion
 no,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Basic,Minion
 no,Acolyte of Pain,"Whenever this minion takes damage, draw a card.",,,3,1,3,Expert,Minion
 no,Al'Akir the Windlord,"Windfury, Charge, Divine Shield, Taunt",,Shaman,8,3,5,Expert,Minion
@@ -84,8 +84,8 @@ no,Crazed Alchemist,Battlecry: Swap the Attack and Health of a minion.,,,2,2,2,E
 no,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.,,Warrior,2,2,2,Expert,Minion
 no,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Expert,Minion
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Basic,Minion
-no,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Expert,Minion
-no,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Basic,Minion
+yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Expert,Minion
+yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Basic,Minion
 no,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Basic,Spell
 no,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Expert,Spell
 no,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Expert,Minion
@@ -246,7 +246,7 @@ no,Murloc Tidehunter,Battlecry: Summon a 1/1 Murloc Scout.,Murloc,,2,2,1,Basic,M
 no,Murloc Warleader,ALL other Murlocs have +2/+1.,Murloc,,3,3,3,Expert,Minion
 no,Nat Pagle,"At the start of your turn, you have a 50% chance to draw an extra card.",,,2,0,4,Expert,Minion
 yes,Naturalize,Destroy a minion. Your opponent draws 2 cards.,,Druid,1,,,Expert,Spell
-no,Nightblade,Battlecry: Deal 3 damage to the enemy hero.,,,5,4,4,Basic,Minion
+yes,Nightblade,Battlecry: Deal 3 damage to the enemy hero.,,,5,4,4,Basic,Minion
 yes,Noble Sacrifice,"Secret: When an enemy attacks, summon a 2/1 Defender as the new target.",,Paladin,1,,,Expert,Spell
 yes,Northshire Cleric,"Whenever a minion is healed, draw a card.",,Priest,1,1,3,Basic,Minion
 yes,Nourish,Choose One - Gain 2 Mana Crystals; or Draw 3 cards.,,Druid,5,,,Expert,Spell
@@ -298,7 +298,7 @@ yes,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Basic,
 yes,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Expert,Spell
 yes,Shadowform,Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.,,Priest,3,,,Expert,Spell
 no,Shadowstep,Return a friendly minion to your hand. It costs (2) less.,,Rogue,0,,,Expert,Spell
-no,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Basic,Minion
+yes,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Basic,Minion
 no,Shield Block,Gain 5 Armor. Draw a card.,,Warrior,3,,,Basic,Spell
 no,Shield Slam,Deal 1 damage to a minion for each Armor you have.,,Warrior,1,,,Expert,Spell
 yes,Shieldbearer,Taunt,,,1,0,4,Expert,Minion
@@ -342,7 +342,7 @@ no,Sylvanas Windrunner,Deathrattle: Take control of a random enemy minion.,,,6,5
 no,Tauren Warrior,Taunt. Enrage: +3 Attack,,,3,2,3,Expert,Minion
 no,Temple Enforcer,Battlecry: Give a friendly minion +3 Health.,,Priest,6,6,6,Expert,Minion
 no,The Beast,Deathrattle: Summon a 3/3 Finkle Einhorn for your opponent.,Beast,,6,9,7,Expert,Minion
-no,The Black Knight,Battlecry: Destroy an enemy minion with Taunt.,,,6,4,5,Expert,Minion
+yes,The Black Knight,Battlecry: Destroy an enemy minion with Taunt.,,,6,4,5,Expert,Minion
 yes,Thoughtsteal,Copy 2 cards from your opponent's deck and put them into your hand.,,Priest,3,,,Expert,Spell
 yes,Thrallmar Farseer,Windfury,,,3,2,3,Expert,Minion
 yes,Timber Wolf,Your other Beasts have +1 Attack.,Beast,Hunter,1,1,1,Basic,Minion
