@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -95,17 +95,6 @@ class KoboldGeomancer(MinionCard):
     def create_minion(self, player):
         minion = Minion(2, 2)
         minion.spell_power = 1
-        return minion
-
-
-class IronfurGrizzly(MinionCard):
-
-    def __init__(self):
-        super().__init__("Ironfur Grizzly", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
-
-    def create_minion(self, player):
-        minion = Minion(3, 3)
-        minion.taunt = True
         return minion
 
 class ArgentSquire(MinionCard):
@@ -563,21 +552,15 @@ class PriestessofElune(MinionCard):
         super().__init__("Priestess of Elune", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(5, 4)
-        player.hero.heal(4)
+        minion = Minion(5, 4, battlecry=priestess_of_elune)
         return minion
-        
         
 class DarkscaleHealer(MinionCard):
     def __init__(self):
         super().__init__("Darkscale Healer", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(4, 5)
-        targets = game.current_player.minions.copy()
-        targets.append(game.current_player.hero)
-        for minion in targets:
-            minion.heal(player.effective_heal_power(2))
+        minion = Minion(4, 5, battlecry=darkscale_healer)
         return minion        
 
 class ArgentCommander(MinionCard):
