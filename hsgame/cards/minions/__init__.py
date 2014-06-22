@@ -11,7 +11,6 @@ from hsgame.cards.minions.neutral import (
     FaerieDragon,
     KoboldGeomancer,
     ElvenArcher,
-    IronfurGrizzly,
     ArgentSquire,
     SilvermoonGuardian,
     TwilightDrake,
@@ -62,7 +61,12 @@ from hsgame.cards.minions.neutral import (
     DarkscaleHealer,
     ArgentCommander,
     BluegillWarrior,
-    Wisp
+    Wisp,
+    Nightblade,
+    ShatteredSunCleric,
+    TheBlackKnight,
+    AbusiveSergeant,
+    DarkIronDwarf
 )
 
 from hsgame.cards.minions.druid import (
