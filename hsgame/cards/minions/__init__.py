@@ -7,7 +7,6 @@ from hsgame.cards.minions.neutral import (
     StonetuskBoar,
     WarGolem,
     MogushanWarden,
-    OasisSnapjaw,
     FaerieDragon,
     KoboldGeomancer,
     ElvenArcher,
