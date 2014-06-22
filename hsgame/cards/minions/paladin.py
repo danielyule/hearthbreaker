@@ -1,7 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
-from hsgame.cards.battlecries import change_attack_to_one, give_divine_shield
+from hsgame.cards.battlecries import change_attack_to_one, give_divine_shield, guardian_of_kings
 
 __author__ = 'Daniel'
 
@@ -25,6 +25,5 @@ class GuardianOfKings(MinionCard):
         super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(5, 6)
-        player.hero.heal(6)
+        minion = Minion(5, 6, battlecry=guardian_of_kings)
         return minion
