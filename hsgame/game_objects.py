@@ -757,7 +757,7 @@ class Player(Bindable):
         self.game = game
         self.secrets = []
         self.spell_multiplier = 1
-        self.heal_muliplier = 1
+        self.heal_multiplier = 1
         self.heal_does_damage = False
         self.mana_filters = []
 
@@ -788,7 +788,7 @@ class Player(Bindable):
         if self.heal_does_damage:
             return (base_heal + self.spell_power) * self.spell_multiplier
         else:
-            return base_heal * self.heal_muliplier
+            return base_heal * self.heal_multiplier
 
     def put_back(self, card):
         self.hand.remove(card)

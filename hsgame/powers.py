@@ -72,7 +72,7 @@ class PriestPower(Power):
         if self.hero.player.heal_does_damage:
             target.damage(2 * self.hero.player.spell_multiplier, None)
         else:
-            target.heal(2 * self.hero.player.heal_muliplier, None)
+            target.heal(2 * self.hero.player.heal_multiplier, None)
         
     def __str__(self):
         return "Lesser Heal"

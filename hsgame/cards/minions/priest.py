@@ -11,22 +11,15 @@ class AuchenaiSoulpriest(MinionCard):
         super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def remove_heal_does_damage():
+        def silence():
             player.heal_does_damage = False
 
             # If another Auchenai Soulpriest is alive and not silenced, keep heal_does_damage as True
             for m in player.minions:
                 if m.card.name == "Auchenai Soulpriest" and m.silenced == False and m is not minion:
                     player.heal_does_damage = True
-        
-        def silence():
-            remove_heal_does_damage()
-            
-        def die(by):
-            remove_heal_does_damage()
-        
+                    
         minion = Minion(3, 5)
-        minion.bind("died", die)
         minion.bind_once("silenced", silence)
         player.heal_does_damage = True
         return minion
@@ -82,4 +75,20 @@ class NorthshireCleric(MinionCard):
         minion = Minion(1, 3)
         player.game.bind("minion_healed", draw_card)
         minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", draw_card))
+        return minion
+    
+    
+class ProphetVelen(MinionCard):
+    def __init__(self):
+        super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def silence():
+            player.heal_multiplier //= 2
+            player.spell_multiplier //= 2
+                
+        minion = Minion(7, 7)
+        minion.bind_once("silenced", silence)
+        player.heal_multiplier *= 2
+        player.spell_multiplier *= 2
         return minion

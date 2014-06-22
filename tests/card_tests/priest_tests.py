@@ -499,3 +499,39 @@ class TestPriest(unittest.TestCase):
         
         # This minion should not have taken damage and received heal instead
         self.assertEqual(5, game.players[0].minions[1].health)
+
+
+    def test_ProphetVelen(self):
+        game = generate_game_for([ProphetVelen, ProphetVelen, MindBlast], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        
+        # Prophet Velen should be played
+        for turn in range(0, 13):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Prophet Velen", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].spell_multiplier)
+        self.assertEqual(2, game.players[0].heal_multiplier)
+        
+        game.play_single_turn()
+        # Another Prophet Velen should be played
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].spell_multiplier)
+        self.assertEqual(4, game.players[0].heal_multiplier)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+        # Mind Blast should be played, dealing 5 * 4 = 20 damage
+        game.play_single_turn()
+
+        self.assertEqual(10, game.players[1].hero.health)
+        velen = game.players[0].minions[0]
+        velen.die(None)
+        velen.activate_delayed()
+        self.assertEqual(2, game.players[0].spell_multiplier)
+        self.assertEqual(2, game.players[0].heal_multiplier)
+        game.players[0].minions[0].silence()
+        self.assertEqual(1, game.players[0].spell_multiplier)
+        self.assertEqual(1, game.players[0].heal_multiplier)

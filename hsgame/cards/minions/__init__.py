@@ -53,5 +53,6 @@ from hsgame.cards.minions.priest import (
     CabalShadowPriest,
     Lightspawn,
     Lightwell,
-    NorthshireCleric
+    NorthshireCleric,
+    ProphetVelen
 )
