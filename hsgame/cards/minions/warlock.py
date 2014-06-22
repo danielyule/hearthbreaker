@@ -1,7 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
-from hsgame.cards.battlecries import deal_three_damage, deal_five_damage, deal_one_damage_all_characters, destroy_own_crystal, discard_one, discard_two
+from hsgame.cards.battlecries import deal_one_damage_all_characters, destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
 
 __author__ = 'randomflyingtaco'
 #let the train wreck begin
@@ -11,16 +11,14 @@ class FlameImp(MinionCard):
         super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        player.hero.damage(3, None)
-        return Minion(3, 2, MINION_TYPE.DEMON)
+        return Minion(3, 2, MINION_TYPE.DEMON, battlecry=flame_imp)
 
 class PitLord(MinionCard):
     def __init__(self):
         super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        player.hero.damage(5, None)
-        return Minion(5, 6, MINION_TYPE.DEMON)
+        return Minion(5, 6, MINION_TYPE.DEMON, battlecry=pit_lord)
 
 class VoidWalker(MinionCard):
     def __init__(self):
@@ -49,8 +47,7 @@ class Felguard(MinionCard):
         super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        player.max_mana -= 1
-        minion = Minion(3, 5, MINION_TYPE.DEMON)
+        minion = Minion(3, 5, MINION_TYPE.DEMON, battlecry=destroy_own_crystal)
         minion.taunt = True
         return minion
 
@@ -59,9 +56,7 @@ class Doomguard(MinionCard):
         super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        player.discard()
-        player.discard()
-        minion = Minion(5, 7, MINION_TYPE.DEMON)
+        minion = Minion(5, 7, MINION_TYPE.DEMON, battlecry=discard_two)
         minion.charge = True
         return minion
         
@@ -70,8 +65,7 @@ class Succubus(MinionCard):
         super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        player.discard()
-        minion = Minion(4, 3, MINION_TYPE.DEMON)
+        minion = Minion(4, 3, MINION_TYPE.DEMON, battlecry=discard_one)
         return minion
 
 class SummoningPortal(MinionCard):
