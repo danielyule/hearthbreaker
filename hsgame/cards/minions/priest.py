@@ -1,7 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
-from hsgame.cards.battlecries import take_control_of_minion
+from hsgame.cards.battlecries import take_control_of_minion, give_three_health
 
 __author__ = 'Daniel'
 
@@ -92,3 +92,11 @@ class ProphetVelen(MinionCard):
         player.heal_multiplier *= 2
         player.spell_multiplier *= 2
         return minion
+    
+    
+class TempleEnforcer(MinionCard):
+    def __init__(self):
+        super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(6, 6, battlecry=give_three_health)

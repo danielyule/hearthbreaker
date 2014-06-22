@@ -535,3 +535,23 @@ class TestPriest(unittest.TestCase):
         game.players[0].minions[0].silence()
         self.assertEqual(1, game.players[0].spell_multiplier)
         self.assertEqual(1, game.players[0].heal_multiplier)
+        
+        
+    def test_TempleEnforcer(self):
+        game = generate_game_for([StonetuskBoar, TempleEnforcer], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        
+        for turn in range(0, 10):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].max_health)
+        
+        # Temple Enforcer should be played, targeting the Stonetusk Boar
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+        self.assertEqual(4, game.players[0].minions[1].health)
+        self.assertEqual(4, game.players[0].minions[1].max_health)

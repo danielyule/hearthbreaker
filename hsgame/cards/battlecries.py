@@ -43,3 +43,8 @@ def take_control_of_minion(minion):
         m = copy.copy(minion.card.target)
         minion.card.target.remove_from_board()
         m.add_to_board(m.card, minion.game, minion.player, 0)
+        
+        
+def give_three_health(minion):
+    if minion.card.target is not None:
+        minion.card.target.increase_health(3)
