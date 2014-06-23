@@ -22,7 +22,7 @@ class PitLord(MinionCard):
 
 class VoidWalker(MinionCard):
     def __init__(self):
-        super().__init__("Void Walker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
+        super().__init__("Voidwalker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
         minion = Minion(1, 3, MINION_TYPE.DEMON)
@@ -70,7 +70,7 @@ class Succubus(MinionCard):
 
 class SummoningPortal(MinionCard):
     def __init__(self):
-        super().__init__("Summoning Portal", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         class Filter:

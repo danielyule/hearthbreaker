@@ -14,14 +14,10 @@ def powers(character_class):
         return PriestPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.PALADIN:
         return PaladinPower
-<<<<<<< HEAD
     elif character_class == hsgame.constants.CHARACTER_CLASS.SHAMAN:
         return ShamanPower
-
-=======
     elif character_class == hsgame.constants.CHARACTER_CLASS.WARLOCK:
         return WarlockPower
->>>>>>> 250caf0f56c9c1aa080784ca48481feca489cc85
 
 class Power:
 
@@ -134,7 +130,6 @@ class PaladinPower(Power):
         recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
 
 
-<<<<<<< HEAD
 class ShamanPower(Power):
     
     def __init__(self, hero):
@@ -223,7 +218,7 @@ class ShamanPower(Power):
 
         random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
         random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player, 0)
-=======
+
 class WarlockPower(Power):
     def __init__(self, hero):
         super().__init__(hero)
@@ -251,4 +246,4 @@ class JaraxxusPower(Power):
 
         infernal_card = Infernal()
         infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
->>>>>>> 250caf0f56c9c1aa080784ca48481feca489cc85
+

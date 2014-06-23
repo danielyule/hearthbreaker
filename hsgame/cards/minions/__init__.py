@@ -120,4 +120,3 @@ from hsgame.cards.minions.warlock import (
     Succubus,
     SummoningPortal
 )
->>>>>>> 250caf0f56c9c1aa080784ca48481feca489cc85

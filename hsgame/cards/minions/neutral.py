@@ -1,5 +1,5 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage,\
-    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, destroy_target, two_temp_attack
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, destroy_target, two_temp_attack, nightblade, ssc
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -75,7 +75,7 @@ class FaerieDragon(MinionCard):
             minion.spell_targettable = lambda : True
         minion = Minion(3, 2, MINION_TYPE.DRAGON)
         minion.spell_targettable = lambda: False
-        minion.bind("silenced", silence())
+        minion.bind("silenced", silence)
         return minion
 
 
@@ -213,7 +213,7 @@ class Spellbreaker(MinionCard):
         super().__init__("Spellbreaker", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(4, 3, MINION_TYPE.BEAST, silence)
+        return Minion(4, 3, MINION_TYPE.NONE, silence)
 
 
 class BloodmageThalnos(MinionCard):
@@ -242,9 +242,11 @@ class LeperGnome(MinionCard): #idk, maybe this will work
         super().__init__("Leper Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
+        enemy_hero = player.game.other_player
+        def deal_enemy_hero_two_damage(minion):
+            enemy_hero.damage(2)
         minion = Minion(2, 1)
-        minion.bind("died", deal_enemy_hero_two_damage)
-        minion.bind_once("silenced", lambda m: m.unbind("died", deal_enemy_hero_two_damage), minion)
+        minion.deathrattle=deal_enemy_hero_two_damage
         return minion
 
 #class SeaGiant(MinionCard):
@@ -294,10 +296,10 @@ class GoldshireFootman(MinionCard):
 
 class FrostwolfGrunt(MinionCard):
     def __init__(self):
-        super().__init__("Frostwolf Grunt", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Frostwolf Grunt", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(1, 2)
+        minion = Minion(2, 2)
         minion.taunt = True
         return minion
         
@@ -328,7 +330,7 @@ class MurlocRaider(MinionCard):
         
 class ManaAddict(MinionCard):
     def __init__(self):
-        super().__init__("Mana Addict", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        super().__init__("Mana Addict", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def increase_attack(card):
