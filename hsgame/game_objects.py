@@ -192,29 +192,74 @@ class Bindable:
 
 
 class Character(Bindable, metaclass=abc.ABCMeta):
+    """
+    A Character in Hearthstone is something that can attack, i.e. a :class:`Hero` or :class:`Minion`.
+
+     This common superclass handles all of the status effects and calculations involved in attacking or being attacked.
+    """
     def __init__(self, attack_power, health, player):
+        """
+        Create a new Character with the given attack power, health and owning player
+
+        :param int attack_power: the amount of attack this character has at creation
+        :param int health: the maximum health of this character
+        :param Player player: the player this character belongs to
+        """
         super().__init__()
+
+        #: The current health of this character
         self.health = health
+        #: The maximum health of this character
         self.max_health = health
+        #: The amount of attack this character has
         self.attack_power = attack_power
+        #: Whether or not this character can attack this turn
         self.active = False
+        #: Whether or not this character has died
         self.dead = False
+        #: If this character has windfury
         self.wind_fury = False
+        #: If this character has used their first windfury attack
         self.used_wind_fury = False
+        #: If this character is currently frozen
         self.frozen = False
+        #: If the character was frozen this turn (and so won't be unfrozen before the next turn)
         self.frozen_this_turn = False
+        #: The amount this character's attack is raised this turn
         self.temp_attack = 0
+        #: The :class:`Player` that owns this character
         self.player = player
+        #: Whether or not this character is immune to damage (but not other effects)
         self.immune = False
+        #: The list of delayed events
         self.delayed = []
+        #: If this character has stealth
         self.stealth = False
 
-    def turn_complete(self):
+    def _turn_complete(self):
+        """
+        Called at the end of the turn.  Takes care of any end of turn cleanup that should happen
+        outside of any specifically bound handlers
+        """
         if self.temp_attack > 0:
             self.trigger("attack_decreased", self.temp_attack)
             self.temp_attack = 0
 
     def attack(self):
+        """
+        Causes this :class:`Character` to attack.
+
+        The Character will assemble a list of possible targets and then ask the agent associated with this Character to
+        select which target from the list it would like to attack.
+
+        This method will not succeed if the Character can't attack, either because it is not active, or it is frozen,
+        or some other factor.  All of the damage and death triggers will be processed at the end of this method, so that
+        the order or evaluation doesn't affect the calculations.  For example, if Amani Berserker is damaged in the
+        attack, its attack power shouldn't go up before the damage to its attacker is calculated.
+
+        The attack will not take place if the Character dies or is otherwise removed as a result of attacking
+        (e.g. various secrets)
+        """
         if not self.can_attack():
             raise GameException("That minion cannot attack")
 
@@ -259,9 +304,13 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.active = False
         self.stealth = False
 
-    @abc.abstractmethod
     def choose_target(self, targets):
-        pass
+        """
+        Consults the associated player to select a target from a list of targets
+
+        :param [Character] targets: the targets to choose a target from
+        """
+        return self.player.choose_target(targets)
 
     def delayed_trigger(self, event, *args):
         self.delayed.append({'event': event, 'args': args})
@@ -622,9 +671,6 @@ class Minion(Character):
     def spell_targetable(self):
         return not self.stealth
 
-    def choose_target(self, targets):
-        return self.player.choose_target(targets)
-
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
 
@@ -741,8 +787,6 @@ class Hero(Character):
         self.trigger("found_power_target", target)
         return target
 
-    def choose_target(self, targets):
-        return self.player.choose_target(targets)
 
 
 class Player(Bindable):
@@ -892,8 +936,8 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
-        self.current_player.hero.turn_complete()
-        self.other_player.hero.turn_complete()
+        self.current_player.hero._turn_complete()
+        self.other_player.hero._turn_complete()
 
         if self.current_player.hero.frozen_this_turn:
             self.current_player.hero.frozen_this_turn = False
@@ -903,7 +947,7 @@ class Game(Bindable):
         self.other_player.hero.frozen_this_turn = False
         for minion in self.other_player.minions:
             minion.frozen_this_turn = False
-            minion.turn_complete()
+            minion._turn_complete()
 
         self.current_player.hero.active = True
         for minion in self.current_player.minions:
@@ -913,7 +957,7 @@ class Game(Bindable):
                 minion.frozen_this_turn = False
             else:
                 minion.frozen = False
-                minion.turn_complete()
+                minion._turn_complete()
 
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)

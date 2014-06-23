@@ -366,7 +366,11 @@ def linkcode_resolve(domain, info):
         if cls is None:
             cls = globals()[path_part]
         else:
-            cls = getattr(cls, path_part)
+            try:
+                cls = getattr(cls, path_part)
+            except AttributeError:
+                return None
+
     try:
         (lines, line_no) = inspect.getsourcelines(cls)
     except TypeError:
