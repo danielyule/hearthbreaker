@@ -126,7 +126,7 @@ class PaladinPower(Power):
         super().use()
 
         recruit_card = SilverHandRecruit()
-        recruit_card.create_minion(None).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
+        recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
 
 
 class ShamanPower(Power):
@@ -166,8 +166,17 @@ class ShamanPower(Power):
                 super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
-                # TODO: Effect - http://www.hearthhead.com/card=764/healing-totem
-                return hsgame.game_objects.Minion(0, 2)
+                def heal_friendly_minions():
+                    for m in player.minions:
+                        m.heal(1, self)
+        
+                def silence():
+                    player.unbind("turn_ended", heal_friendly_minions)
+                
+                minion = hsgame.game_objects.Minion(0, 2)
+                player.bind("turn_ended", heal_friendly_minions)
+                minion.bind_once("silenced", silence)
+                return minion
                         
         class SearingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
@@ -207,4 +216,4 @@ class ShamanPower(Power):
             totems.append(WrathOfAirTotem())
 
         random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
-        random_totem.create_minion(None).add_to_board(random_totem, self.hero.player.game, self.hero.player, 0)
+        random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player, 0)
