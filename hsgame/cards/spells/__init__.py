@@ -92,3 +92,20 @@ from hsgame.cards.spells.priest import (
     Silence,
     Thoughtsteal
 )
+
+from hsgame.cards.spells.warlock import (
+    MortalCoil,
+    Hellfire,
+    ShadowBolt,
+    DrainLife,
+    Soulfire,
+    TwistingNether,
+    Demonfire,
+    SacrificialPact,
+    SiphonSoul,
+    SenseDemons,
+    BaneofDoom,
+    Shadowflame,
+    Corruption,
+    PowerOverwhelming
+)

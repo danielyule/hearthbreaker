@@ -271,7 +271,7 @@ class TestPriest(unittest.TestCase):
         game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, MinionPlayingAgent, SpellTestingAgent)
 
         # Ironfur Grizzly should be played
-        for turn in range(0, 3):
+        for turn in range(0, 5):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
@@ -339,12 +339,12 @@ class TestPriest(unittest.TestCase):
         
         # Nothing special
         game.play_single_turn()
-        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].minions))
         
         # Mind Shatter should be used, and Shadowform should be played (but nothing will happen, we are already at Mind Shatter)
         game.play_single_turn()
         self.assertEqual("Mind Shatter", game.players[1].hero.power.__str__())
-        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].minions))
         
         
         # Test using the hero power, then cast Shadowform and use the new power (this is possible)
@@ -359,7 +359,7 @@ class TestPriest(unittest.TestCase):
         game = generate_game_for(IronfurGrizzly, Silence, MinionPlayingAgent, SpellTestingAgent)
 
         # Ironfur Grizzly should be played
-        for turn in range(0, 3):
+        for turn in range(0, 5):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
