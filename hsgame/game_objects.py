@@ -873,8 +873,6 @@ class Game(Bindable):
         for secret in self.other_player.secrets:
             secret.activate(self.other_player)
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
-        if self.current_player.mana < 0:
-            self.current_player.mana = 0 
         self.current_player.overload = 0
         self.current_player.trigger("turn_started")
         self.current_player.draw()
