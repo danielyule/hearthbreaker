@@ -49,6 +49,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, game.other_player.minions[0].spell_power)
         self.assertEqual(0, game.other_player.spell_power)
 
+
     def test_ElvenArcher(self):
         game = generate_game_for(StonetuskBoar, ElvenArcher, MinionPlayingAgent, MinionPlayingAgent)
 
@@ -172,3 +173,97 @@ class TestCommon(unittest.TestCase):
         game.players[1].agent.choose_target = _choose_target
         game.play_single_turn()
         game.play_single_turn()
+
+
+    def test_OgreMagi(self):
+        game = generate_game_for(OgreMagi, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        for i in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[0].max_health)
+        self.assertEqual(4, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_power)
+        self.assertEqual(1, game.current_player.spell_power)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+        self.assertEqual(4, game.other_player.minions[0].max_health)
+        self.assertEqual(4, game.other_player.minions[0].attack_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_power)
+        self.assertEqual(0, game.other_player.spell_power)
+
+
+    def test_Archmage(self):
+        game = generate_game_for(Archmage, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        for i in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual(7, game.current_player.minions[0].max_health)
+        self.assertEqual(4, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_power)
+        self.assertEqual(1, game.current_player.spell_power)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(7, game.other_player.minions[0].health)
+        self.assertEqual(7, game.other_player.minions[0].max_health)
+        self.assertEqual(4, game.other_player.minions[0].attack_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_power)
+        self.assertEqual(0, game.other_player.spell_power)
+
+
+    def test_DalaranMage(self):
+        game = generate_game_for(DalaranMage, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        for i in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[0].max_health)
+        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_power)
+        self.assertEqual(1, game.current_player.spell_power)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+        self.assertEqual(4, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_power)
+        self.assertEqual(0, game.other_player.spell_power)
+
+
+    def test_AzureDrake(self):
+        game = generate_game_for(AzureDrake, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
+
+        for i in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[0].max_health)
+        self.assertEqual(4, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_power)
+        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(8, len(game.current_player.hand))
+            #3 starting cards+5 turns of draws-1 Azure Drake+1 draw from battlecry=8?
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+        self.assertEqual(4, game.other_player.minions[0].max_health)
+        self.assertEqual(4, game.other_player.minions[0].attack_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_power)
+        self.assertEqual(0, game.other_player.spell_power)
+

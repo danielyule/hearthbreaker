@@ -169,7 +169,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[1].max_health)
         #Test to ensure that silencing works correctly
         game.players[0].minions[0].silence()
-        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(7, game.players[0].minions[0].health)
         self.assertEqual(7, game.players[0].minions[0].max_health)
 
     def test_HammerOfWrath(self):
