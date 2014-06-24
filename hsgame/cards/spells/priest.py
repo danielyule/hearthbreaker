@@ -150,26 +150,34 @@ class PowerWordShield(Card):
         self.target.increase_health(2)
         player.draw()
 
+
 class ShadowMadness(Card):
     def __init__(self):
         super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, hsgame.targeting.find_enemy_minion_spell_target, lambda target: target.attack_power <= 3 and target.spell_targetable())
 
     def use(self, player, game):
         
+        def unbind_turn_ended():
+            player.unbind("turn_ended", switch_side)
+        
         def switch_side(*args):
+            minion.unbind("silenced", unbind_turn_ended)
+            m = copy.deepcopy(minion)
+            
             minion.remove_from_board()
-            minion.add_to_board(self.target.card, self.target.game, self.target.player, 0)
+            m.add_to_board(self.target.card, self.target.game, self.target.player, 0)
         
         super().use(player, game)
         
-        minion = copy.copy(self.target)
+        minion = copy.deepcopy(self.target)
         minion.charge = True
-        minion.bind_once("silenced", lambda p: p.unbind("turn_ended", switch_side), player)
+        minion.bind_once("silenced", unbind_turn_ended)
         
         self.target.remove_from_board()
         minion.add_to_board(minion.card, game, player, 0)
         
         player.bind_once("turn_ended", switch_side)
+        
         
 class ShadowWordDeath(Card):
     def __init__(self):
