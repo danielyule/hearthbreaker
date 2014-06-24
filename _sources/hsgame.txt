@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     hsgame.agents
-    hsgame.cards
 
 Submodules
 ----------
