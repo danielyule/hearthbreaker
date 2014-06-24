@@ -15,8 +15,6 @@ The goal is not to create a clone of Hearthstone which players can use to replac
 
 The project is currently under construction.  A list of cards and their implementation status is available at :doc:`cards`
 
-The following mechanics have
-
 Contents:
 
 .. toctree::

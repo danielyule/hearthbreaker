@@ -112,7 +112,7 @@ class Bindable:
         :param event str: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param args: Any other parameters to be called
+        :param list args: Any other parameters to be called
         :see: :class:`Bindable`
         """
         class Handler:
@@ -160,7 +160,7 @@ class Bindable:
         The parameters passed to this function as `args` will be passed along to the bound functions.
 
         :param string event: The name of the event to trigger
-        :param args: The remaining arguments to pass to the bound function
+        :param list args: The remaining arguments to pass to the bound function
         :see: :class:`Bindable`
         """
         if event in self.events:
@@ -308,11 +308,22 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         """
         Consults the associated player to select a target from a list of targets
 
-        :param [Character] targets: the targets to choose a target from
+        :param list[Character] targets: the targets to choose a target from
         """
         return self.player.choose_target(targets)
 
     def delayed_trigger(self, event, *args):
+        """
+        Set up a delayed trigger for an event.  Any events triggered with this method will not be called until
+        :meth:`activate_delayed` is called.
+
+        The purpose of this method is to allow for simeltaneous events.  For example, if a minion is attacked
+        then any damage events should be triggered after the attack, and at the same time as each other.
+
+        :param string event: The event to set up a delayed trigger for
+        :param list args: The arguments to pass to the handler when it is called.
+        :see: :class:`Bindable`
+        """
         self.delayed.append({'event': event, 'args': args})
         self.player.game.delayed_minions.append(self)
 
@@ -537,7 +548,7 @@ class Card(Bindable):
 
     def __str__(self):  # pragma: no cover
         """
-        Outputs a decription of the card for debugging purposes.
+        Outputs a description of the card for debugging purposes.
         """
         return self.name + " (" + str(self.mana) + " mana)"
 
@@ -786,7 +797,6 @@ class Hero(Character):
         target = self.choose_target(targets)
         self.trigger("found_power_target", target)
         return target
-
 
 
 class Player(Bindable):

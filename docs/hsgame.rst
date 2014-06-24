@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     hsgame.agents
-    hsgame.cards
 
 Submodules
 ----------
@@ -21,6 +20,7 @@ hsgame.game_objects module
     :members:
     :undoc-members:
     :show-inheritance:
+
 
 hsgame.powers module
 --------------------

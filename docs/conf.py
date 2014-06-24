@@ -339,7 +339,11 @@ epub_exclude_files = ['search.html']
 # If false, no index is generated.
 #epub_use_index = True
 
-intersphinx_mapping = {'python': ('http://docs.python.org/3.2', None)}
+intersphinx_mapping = {'python': ('http://docs.python.org/3.3', None)}
+
+
+# Autodoc concerns
+autodoc_member_order = 'groupwise'
 
 
 def skip(app, what, name, obj, skip, options):
