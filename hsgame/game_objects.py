@@ -634,7 +634,7 @@ class Minion(Character):
         self.trigger("added_to_board", self, index)
         
     def remove_from_board(self):
-        self.player.spell_power -= self.spell_power
+        self.silence() # Neutralize all possible effects
         for minion in self.player.minions:
             if minion.index > self.index:
                 minion.index -= 1
