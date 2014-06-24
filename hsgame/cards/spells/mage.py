@@ -11,7 +11,7 @@ class ArcaneMissiles(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for i in range(0, 3 + player.spell_power):
+        for i in range(0, player.effective_spell_power(3)):
             targets = game.other_player.minions.copy()
             targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) - 1)]

@@ -54,7 +54,7 @@ class Savagery(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.hero.temp_attack + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(player.hero.temp_attack), self)
 
 
 class MarkOfTheWild(Card):
@@ -138,7 +138,7 @@ class Wrath(Card):
                 super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.spell_damage(1 + player.spell_power, wrath)
+                target.spell_damage(player.effective_spell_power(1), wrath)
                 player.draw()
 
         class WrathThree(Card):
@@ -146,7 +146,7 @@ class Wrath(Card):
                 super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.spell_damage(3 + player.spell_power, wrath)
+                target.spell_damage(player.effective_spell_power(3), wrath)
 
         super().use(player, game)
         option = game.current_player.agent.choose_option(WrathOne(), WrathThree())

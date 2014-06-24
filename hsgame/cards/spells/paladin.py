@@ -11,7 +11,7 @@ class AvengingWrath(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for i in range(0, 8 + player.spell_power):
+        for i in range(0, player.effective_spell_power(8)):
             targets = game.other_player.minions.copy()
             targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) - 1)]
@@ -129,7 +129,7 @@ class HolyWrath(Card):
         
         player.draw()
         cost = player.hand[-1].mana
-        self.target.spell_damage(cost + player.spell_power, self)
+        self.target.spell_damage(player.effective_spell_power(cost), self)
 
 class Humility(Card):
     def __init__(self):
