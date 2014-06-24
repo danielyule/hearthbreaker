@@ -25,6 +25,12 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(9, game.current_player.mana)
 
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        # The mana should not go over 10 on turn 9 (or any other turn)
+        self.assertEqual(10, game.current_player.mana)
+
     def test_Moonfire(self):
         game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, MinionPlayingAgent)
         game.play_single_turn()
