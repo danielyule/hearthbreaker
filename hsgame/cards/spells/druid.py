@@ -233,8 +233,7 @@ class SoulOfTheForest(Card):
 
         super().use(player, game)
         for minion in player.minions:
-            minion.bind("died", summon_treant)
-            minion.bind_once("silenced", lambda m: m.unbind("died", summon_treant), minion)
+            minion.deathrattle = summon_treant
 
 
 class Swipe(Card):
