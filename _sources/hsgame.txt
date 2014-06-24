@@ -22,6 +22,7 @@ hsgame.game_objects module
     :undoc-members:
     :show-inheritance:
 
+
 hsgame.powers module
 --------------------
 
