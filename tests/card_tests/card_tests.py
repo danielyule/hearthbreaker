@@ -28,5 +28,9 @@ class CardTest(unittest.TestCase):
                     self.assertEqual(int(row["Attack"]), minion.attack_power, row["Name"])
                     self.assertEqual(int(row["Health"]), minion.health, row["Name"])
                     self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.minion_type, row["Name"])
+                elif row["Minion/Spell"] == "Weapon":
+                    weapon = card.create_weapon(fake_game.current_player)
+                    self.assertEqual(int(row["Attack"]), weapon.attack_power, row["Name"])
+                    self.assertEqual(int(row["Health"]), weapon.durability, row["Name"])
 
         file.close()

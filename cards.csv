@@ -1,5 +1,5 @@
 Implemented?,Name,Text,Race,Class,Cost,Attack,Health,Type,Minion/Spell
-no,Abomination,Taunt. Deathrattle: Deal 2 damage to ALL characters.,,,5,4,4,Expert,Minion
+yes,Abomination,Taunt. Deathrattle: Deal 2 damage to ALL characters.,,,5,4,4,Expert,Minion
 yes,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Expert,Minion
 no,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Basic,Minion
 no,Acolyte of Pain,"Whenever this minion takes damage, draw a card.",,,3,1,3,Expert,Minion
@@ -105,7 +105,7 @@ no,Dread Corsair,Taunt. Costs (1) less per Attack of your weapon.,Pirate,,4,3,3,
 yes,Dread Infernal,Battlecry: Deal 1 damage to ALL other characters.,Demon,Warlock,6,6,6,Basic,Minion
 yes,Druid of the Claw,Choose One - Charge; or +2 Health and Taunt.,,Druid,5,4,4,Expert,Minion
 yes,Dust Devil,Windfury. Overload: (2),,Shaman,1,3,1,Expert,Minion
-no,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3,3,2,Expert,Weapon
+yes,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3,3,2,Expert,Weapon
 no,Earth Elemental,Taunt. Overload: (3),,Shaman,5,7,8,Expert,Minion
 no,Earth Shock,"Silence a minion, then deal 1 damage to it.",,Shaman,1,,,Expert,Spell
 yes,Earthen Ring Farseer,Battlecry: Restore 3 Health.,,,3,3,3,Expert,Minion

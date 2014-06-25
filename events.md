@@ -60,3 +60,6 @@ Events Triggered in hssim
  * health_decreased(amount)
  * silenced
  * health_changed
+ 
+##Weapon
+ * destroyed

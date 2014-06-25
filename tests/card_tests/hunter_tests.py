@@ -130,4 +130,18 @@ class TestHunter(unittest.TestCase):
         self.assertFalse(game.current_player.minions[3].stealth)
         self.assertEqual(2, len(game.current_player.hand))
 
+    def test_EaglehornBow(self):
+        game = generate_game_for(EaglehornBow, EyeForAnEye, PredictableBot, SpellTestingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.current_player.hero.weapon.durability)
+        self.assertEqual(3, game.current_player.hero.weapon.attack_power)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, game.current_player.hero.weapon.durability)
+        self.assertEqual(3, game.current_player.hero.weapon.attack_power)
 

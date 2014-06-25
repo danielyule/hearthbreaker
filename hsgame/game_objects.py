@@ -729,6 +729,83 @@ class Minion(Character):
         self.bind_once("silenced", silenced)
 
 
+class WeaponCard(Card, metaclass=abc.ABCMeta):
+    """
+    Represents a :class:`Card` for creating a :class:`Weapon`
+    """
+    def __init__(self,name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth):
+        """
+        Create a new :class:`WeaponCard`
+
+        :param string name: The name of the weapon in English
+        :param int mana: The base amount of mana this card costs
+        :param int character_class: A constant from :class:`hsgame.constants.CHARACTER_CLASS` denoting
+                                    which character this card belongs to or
+                                    :const:`hsgame.constants.CHARACTER_CLASS.ALL` if neutral
+        :param int rarity: A constant from :class:`hsgame.constants.CARD_RARITY` denoting the rarity of the card.
+        :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
+                                     the weapon is assumed not to require a target for its battlecry.
+                                     If `target_func` returns None, then the card is played, but with no target (i.e. a
+                                      battlecry which has no valid target will not stop the weapon from being played).
+                                     See :mod:`hsgame.targeting` for more details.
+        :param function filter_func: A boolean function which can be used to filter the list of targets. An example
+                                     for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
+                                     returns true if the target's attack is less than 3.  Currently no weapons require
+                                     anything but the default
+        """
+        super().__init__(name, mana, character_class, rarity, target_func, filter_func)
+
+    def use(self, player, game):
+        """
+        Create a new weapon and attack it to the player's hero
+
+        :param Player player: The player who will use this weapon
+        :param Game game: The game this weapon will be used in
+        """
+        super().use(player, game)
+        weapon = self.create_weapon(player)
+        player.hero.weapon = weapon
+
+    @abc.abstractmethod
+    def create_weapon(self, player):
+        """
+        Create a new weapon.  Any new weapon cards which are created must override this method.
+        """
+        pass
+
+    def is_spell(self):
+        return False
+
+
+class Weapon(Bindable):
+    """
+    Represents a Hearthstone weapon.  All weapons have been attacked power and durability.  The logic for handling the
+    attacks is handled by :class:`Hero`, but it can be modified through the use of events.
+    """
+    def __init__(self, attack_power, durability, battlecry=None):
+        """
+        Creates a new weapon with the given attack power and durability.  A battlecry can also optionally be set.
+        :param int attack_power: The amount of attack this weapon gives the hero
+        :param int durability: The number of times this weapon can be used to attack before being discarded
+        :param function battlecry: Called when this weapon is first placed
+        """
+        super().__init__()
+        #:  The amount of attack this weapon gives the hero
+        self.attack_power = attack_power
+        #: The number of times this weapon can be used to attack before being discarded
+        self.durability = durability
+        #: Called when this weapon is first placed
+        self.battlecry = battlecry
+        #: The :class:`Player` associated with this weapon
+        self.player = None
+        #: The :class:`WeaponCard` that created this weapon
+        self.card = None
+
+    def destroy(self):
+        self.trigger("destroyed")
+        self.player.hero.weapon = None
+
+
 class Deck:
     def __init__(self, cards, character_class):
         self.cards = cards
@@ -775,10 +852,15 @@ class Hero(Character):
         self.character_class = character_class
         self.player = player
         self.power = hsgame.powers.powers(self.character_class)(self)
+        self.weapon = None
 
     def attack(self):
         self.trigger("attacking", self)
         super().attack()
+        if self.weapon is not None:
+            self.weapon.durability -= 1
+            if self.weapon.durability is 0:
+                self.weapon.destroy()
 
     def damage(self, amount, attacker):
         self.armour -= amount
@@ -941,6 +1023,8 @@ class Game(Bindable):
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.trigger("turn_started")
+        if self.current_player.hero.weapon is not None:
+            self.current_player.hero.increase_temp_attack(self.current_player.hero.weapon.attack_power)
         self.current_player.draw()
 
     def game_over(self, attacker):
