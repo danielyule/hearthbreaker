@@ -158,8 +158,9 @@ class EyeForAnEye(SecretCard):
     def __init__(self):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
+
     def _reveal(self, amount, what):
-        what.player.hero.damage(amount, self)
+        self.player.game.current_player.hero.damage(amount, self)
         super().reveal()
 
     def activate(self, player):
