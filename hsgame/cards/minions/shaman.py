@@ -17,3 +17,14 @@ class AlAkirTheWindlord(MinionCard):
         minion.divine_shield = True
         minion.taunt = True
         return minion
+
+
+class DustDevil(MinionCard):
+    def __init__(self):
+        super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):                    
+        minion = Minion(3, 1)
+        minion.wind_fury = True
+        player.overload += 2
+        return minion

@@ -61,3 +61,21 @@ class TestShaman(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].charge)
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertTrue(game.players[0].minions[0].taunt)
+        
+        
+    def test_DustDevil(self):
+        game = generate_game_for(DustDevil, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Dust Devil", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].wind_fury)
+        self.assertEqual(2, game.players[0].overload)
+
+        game.play_single_turn()
+        # Overload should cause that we start this turn with 0 mana
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, game.players[0].overload)
+        self.assertEqual(0, game.players[0].mana)
+        self.assertEqual(2, game.players[0].max_mana)
