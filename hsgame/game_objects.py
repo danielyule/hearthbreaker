@@ -334,6 +334,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.delayed = []
 
     def damage(self, amount, attacker):
+        if self.dead:
+            return
         if not self.immune:
             self.delayed_trigger("damaged", amount, attacker)
             #The response of a secret to damage must happen immediately

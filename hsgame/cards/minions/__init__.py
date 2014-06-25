@@ -65,7 +65,8 @@ from hsgame.cards.minions.neutral import (
     ShatteredSunCleric,
     TheBlackKnight,
     AbusiveSergeant,
-    DarkIronDwarf
+    DarkIronDwarf,
+    Abomination
 )
 
 from hsgame.cards.minions.druid import (

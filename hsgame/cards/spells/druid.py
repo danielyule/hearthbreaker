@@ -219,21 +219,28 @@ class SoulOfTheForest(Card):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
+        def apply_deathrattle(minion):
+            def summon_treant(*args):
+                if old_death_rattle is not None:
+                    old_death_rattle(*args)
 
-        def summon_treant(*args):
-            class Treant(MinionCard):
-                def __init__(self):
-                    super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+                class Treant(MinionCard):
+                    def __init__(self):
+                        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
-                def create_minion(self, _):
-                    return Minion(2, 2)
+                    def create_minion(self, _):
+                        return Minion(2, 2)
 
-            treant = Treant()
-            treant.create_minion(player).add_to_board(treant, game, player, len(player.minions))
+                treant = Treant()
+                treant.create_minion(player).add_to_board(treant, game, player, len(player.minions))
+
+            old_death_rattle = minion.deathrattle
+            minion.deathrattle = summon_treant
+
 
         super().use(player, game)
         for minion in player.minions:
-            minion.deathrattle = summon_treant
+            apply_deathrattle(minion)
 
 
 class Swipe(Card):

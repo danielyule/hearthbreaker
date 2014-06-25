@@ -616,4 +616,16 @@ class DarkIronDwarf(MinionCard):
         super().__init__("Dark Iron Dwarf", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(4, 4, battlecry=two_temp_attack) 
+        return Minion(4, 4, battlecry=two_temp_attack)
+
+
+class Abomination(MinionCard):
+    def __init__(self):
+        super().__init__("Abomination", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def deal_two_to_all():
+            for target in hsgame.targeting.find_spell_target(player.game, lambda x: True):
+                target.damage(2, self)
+
+        return Minion(4, 4, deathrattle=deal_two_to_all)

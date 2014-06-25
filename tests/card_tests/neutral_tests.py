@@ -267,3 +267,33 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, game.other_player.minions[0].spell_power)
         self.assertEqual(0, game.other_player.spell_power)
 
+
+    def test_Abomination(self):
+        game = generate_game_for([Abomination, Abomination, Abomination, Abomination, Abomination, SoulOfTheForest],
+                                 Fireball, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Abomination", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+        self.assertEqual(22, game.other_player.hero.health)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Abomination", game.current_player.minions[0].card.name)
+        self.assertEqual(10, game.current_player.hero.health)
+
+        #The fireball should hit the abomination, which will cause it to go off
+        #The soul of the forest will then activate, which will create a Treant.
+        #The Second fireball will then hit the treant, so the enemy hero will only
+        #be damaged by the Abomination deathrattle
+        game.play_single_turn()
+        self.assertEqual(8, game.other_player.hero.health)
