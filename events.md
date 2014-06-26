@@ -2,33 +2,18 @@ Events Triggered in hssim
 =========================
 
 ##Player
- * damaged (amount)
- * died (attacker)
+
  * card_drawn (card)
  * card_put_back(card)
  * card_destroyed(card)
+ * card_discarded(card)
  * card_played(card)
  * card_used(card)
  * spell_cast (card)
  * turn_started
  * turn_ended
- * attacking (attacker)
- * attack_minion
- * attack_player
- * attacked (attacker)
- * fatigue_damage(amount)
- * damaged(amount, what)
- * spell_damaged(amount, card)
- * physically_damaged(amount, attacker)
- * minion_damaged(amount, minion)
- * player_damaged(amount, player)
- * attack increased(amount)
- * attack_decreased(amount)
- * armour_increased(amount)
- * heal(amount)
+ * attacking(attacker)
  * secret_revealed (secret)
- * used_power
- * found_power_target(target)
 
 ##Game
  * minion_on_minion_attack(minion, target)
@@ -40,26 +25,37 @@ Events Triggered in hssim
  * kept_cards(card_array)
  * minion_removed(minion, player)
  * minion_healed
-
-##Minion
- * added_to_board(minion)
- * attacking (attacker)
- * attack_minion
- * attack_player
+ 
+##Character
+ * attack_minion (target)
+ * attack_player (target)
  * attacked(attacker)
+ * attack_completed
  * damaged(amount, attacker)
  * healed(amount)
  * spell_damaged(amount, card)
+ * secret_damaged(amount, attacker)
  * physically_damaged(amount, attacker)
  * minion_damaged(amount, minion)
  * player_damaged(amount, player)
+ * did_damage(amount, target)
  * died (attacker)
  * attack increased(amount)
  * attack_decreased(amount)
  * health_increased(amount)
  * health_decreased(amount)
- * silenced
  * health_changed
+ 
+##Minion (Character)
+ * added_to_board(minion)
+ * silenced
+
+ 
+##Hero (Character)
+ * armour_increased
+ * used_power
+ * found_power_target(target)
+ * fatigue_damage(fatigue)
  
 ##Weapon
  * destroyed

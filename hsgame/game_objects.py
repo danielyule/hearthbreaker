@@ -298,6 +298,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             #TODO check if the player's weapon is out in the case of Misdirection
 
         self.activate_delayed()
+        self.trigger("attack_completed")
         if self.wind_fury and not self.used_wind_fury:
             self.used_wind_fury = True
         else:
@@ -405,17 +406,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
     def physical_damage(self, amount, attacker):
         self.trigger("physically_damaged", amount, attacker)
         if type(attacker) is Player:
-            self.player_damage(amount, attacker)
+            self.trigger("player_damaged", amount, attacker)
         else:
-            self.minion_damage(amount, attacker)
-
-    def minion_damage(self, amount, minion):
-        self.trigger("minion_damaged", amount, minion)
-        self.damage(amount, minion)
-
-    def player_damage(self, amount, player):
-        self.trigger("player_damaged", amount, player)
-        self.damage(amount, player)
+            self.trigger("minion_damaged", amount, attacker)
+        self.damage(amount, attacker)
 
     def heal(self, amount, card):
         if amount < 0:
@@ -855,7 +849,6 @@ class Hero(Character):
         self.weapon = None
 
     def attack(self):
-        self.trigger("attacking", self)
         super().attack()
         if self.weapon is not None:
             self.weapon.durability -= 1
@@ -918,7 +911,7 @@ class Player(Bindable):
                 self.trigger("card_destroyed", card)
         else:
             self.fatigue += 1
-            self.trigger("fatigue_damage", self.fatigue)
+            self.hero.trigger("fatigue_damage", self.fatigue)
             self.hero.damage(self.fatigue, None)
             self.hero.activate_delayed()
 
@@ -943,6 +936,7 @@ class Player(Bindable):
         targets = self.hand
         target = targets[self.random(0, len(targets) - 1)]
         self.hand.remove(target)
+        self.trigger("card_discarded", target)
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
