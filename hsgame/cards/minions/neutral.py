@@ -16,7 +16,7 @@ class BloodfenRaptor(MinionCard):
 
 class ElvenArcher(MinionCard):
     def __init__(self):
-        super().__init__("Elven Archer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+        super().__init__("Elven Archer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         return Minion(1, 1, battlecry=deal_one_damage)
@@ -50,7 +50,7 @@ class IronbeakOwl(MinionCard):
 
 class WarGolem(MinionCard):
     def __init__(self):
-        super().__init__("War Golem", 7, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("War Golem", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         return Minion(7, 7)
@@ -82,7 +82,7 @@ class FaerieDragon(MinionCard):
 class KoboldGeomancer(MinionCard):
 
     def __init__(self):
-        super().__init__("Kobold Geomancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Kobold Geomancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(2, 2)
@@ -157,7 +157,7 @@ class WorgenInfiltrator(MinionCard):
 class Archmage(MinionCard):
 
     def __init__(self):
-        super().__init__("Archmage", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Archmage", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(4, 7)
@@ -168,7 +168,7 @@ class Archmage(MinionCard):
 class DalaranMage(MinionCard):
 
     def __init__(self):
-        super().__init__("Dalaran Mage", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Dalaran Mage", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(1, 4)
@@ -201,7 +201,7 @@ class AzureDrake(MinionCard):
 class OgreMagi(MinionCard):
 
     def __init__(self):
-        super().__init__("Ogre Magi", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Ogre Magi", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(4, 4)
@@ -273,21 +273,21 @@ class LeperGnome(MinionCard): #idk, maybe this will work
 
 class IronforgeRifleman(MinionCard):
     def __init__(self):
-        super().__init__("Ironforge Rifleman", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+        super().__init__("Ironforge Rifleman", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         return Minion(2, 2, battlecry=deal_one_damage)
         
 class GnomishInventor(MinionCard):
     def __init__(self):
-        super().__init__("Gnomish Inventor", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Gnomish Inventor", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         return Minion(2, 4, battlecry=draw_card)
         
 class GoldshireFootman(MinionCard):
     def __init__(self):
-        super().__init__("Goldshire Footman", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Goldshire Footman", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(1, 2)
@@ -296,7 +296,7 @@ class GoldshireFootman(MinionCard):
 
 class FrostwolfGrunt(MinionCard):
     def __init__(self):
-        super().__init__("Frostwolf Grunt", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Frostwolf Grunt", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(2, 2)
@@ -305,7 +305,7 @@ class FrostwolfGrunt(MinionCard):
         
 class IronfurGrizzly(MinionCard):
     def __init__(self):
-        super().__init__("Ironfur Grizzly", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Ironfur Grizzly", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(3, 3, MINION_TYPE.BEAST)
@@ -314,7 +314,7 @@ class IronfurGrizzly(MinionCard):
 
 class LordoftheArena(MinionCard):
     def __init__(self):
-        super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(6, 5)
@@ -330,7 +330,7 @@ class MurlocRaider(MinionCard):
         
 class ManaAddict(MinionCard):
     def __init__(self):
-        super().__init__("Mana Addict", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Mana Addict", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def increase_attack(card):
@@ -383,7 +383,7 @@ class ScarletCrusader(MinionCard):
 
 class Shieldbearer(MinionCard):
     def __init__(self):
-        super().__init__("Shieldbearer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Shieldbearer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(0, 4)
@@ -410,7 +410,7 @@ class JunglePanther(MinionCard):
 
 class RavenholdtAssassin(MinionCard):
     def __init__(self):
-        super().__init__("Ravenholdt Assassin", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Ravenholdt Assassin", 7, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         minion = Minion(7, 5)
@@ -419,14 +419,14 @@ class RavenholdtAssassin(MinionCard):
 
 class StormpikeCommando(MinionCard):
     def __init__(self):
-        super().__init__("Stormpike Commando", 5, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+        super().__init__("Stormpike Commando", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         return Minion(4, 2, battlecry=deal_two_damage)
 
 class StormwindKnight(MinionCard):
     def __init__(self):
-        super().__init__("Stormwind Knight", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Stormwind Knight", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(2, 5)
@@ -444,7 +444,7 @@ class StranglethornTiger(MinionCard):
         
 class Sunwalker(MinionCard):
     def __init__(self):
-        super().__init__("Sunwalker", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Sunwalker", 6, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         minion = Minion(4, 5)
@@ -499,7 +499,7 @@ class BootyBayBodyguard(MinionCard):
         
 class BoulderfistOgre(MinionCard):
     def __init__(self):
-        super().__init__("Boulderfist Ogre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Boulderfist Ogre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
         return Minion(6, 7)
@@ -527,7 +527,7 @@ class VoodooDoctor(MinionCard):
 
 class EarthenRingFarseer(MinionCard):
     def __init__(self):
-        super().__init__("Earthen Ring Farseer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_battlecry_target)
+        super().__init__("Earthen Ring Farseer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         return Minion(3, 3, battlecry=heal_three)
@@ -559,7 +559,7 @@ class DarkscaleHealer(MinionCard):
 
 class ArgentCommander(MinionCard):
     def __init__(self):
-        super().__init__("Argent Commander", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Argent Commander", 6, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         minion = Minion(4, 2)
@@ -569,7 +569,7 @@ class ArgentCommander(MinionCard):
         
 class BluegillWarrior(MinionCard):
     def __init__(self):
-        super().__init__("Bluegill Warrior", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Bluegill Warrior", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(2, 1, MINION_TYPE.MURLOC)
@@ -592,7 +592,7 @@ class Nightblade(MinionCard):
         
 class ShatteredSunCleric(MinionCard):
     def __init__(self):
-        super().__init__("Shattered Sun Cleric", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, hsgame.targeting.find_friendly_minion_battlecry_target)
+        super().__init__("Shattered Sun Cleric", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(3, 2, battlecry=ssc)        

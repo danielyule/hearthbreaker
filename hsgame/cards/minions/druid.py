@@ -123,7 +123,7 @@ class AncientOfWar(MinionCard):
 class IronbarkProtector (MinionCard):
 
     def __init__(self):
-        super().__init__("Ironbark Protector", 8, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
+        super().__init__("Ironbark Protector", 8, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         minion = Minion(8, 8)

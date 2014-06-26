@@ -7,7 +7,7 @@ __author__ = 'Daniel'
 
 class HuntersMark(Card):
     def __init__(self):
-        super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE,
+        super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):

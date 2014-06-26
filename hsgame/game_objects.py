@@ -793,7 +793,7 @@ class Weapon(Bindable):
         :param function battlecry: Called when this weapon is first placed
         """
         super().__init__()
-        #:  The amount of attack this weapon gives the hero
+        #: The amount of attack this weapon gives the hero
         self.attack_power = attack_power
         #: The number of times this weapon can be used to attack before being discarded
         self.durability = durability

@@ -31,7 +31,7 @@ class VoidWalker(MinionCard):
         
 class DreadInfernal(MinionCard):
     def __init__(self):
-        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
+        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
    #     targets = game.other_player.minions.copy()

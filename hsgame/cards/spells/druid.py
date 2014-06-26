@@ -20,7 +20,7 @@ class Innervate(Card):
 
 class Moonfire(Card):
     def __init__(self):
-        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -50,7 +50,7 @@ class Naturalize(Card):
 
 class Savagery(Card):
     def __init__(self):
-        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
+        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -246,7 +246,7 @@ class SoulOfTheForest(Card):
 class Swipe(Card):
 
     def __init__(self):
-        super().__init__("Swipe", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE, hsgame.targeting.find_enemy_spell_target)
+        super().__init__("Swipe", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_enemy_spell_target)
 
 
     def use(self, player, game):
@@ -359,7 +359,7 @@ class ForceOfNature(Card):
 class Starfire(Card):
 
     def __init__(self):
-        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

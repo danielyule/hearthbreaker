@@ -63,7 +63,7 @@ class ArcaneExplosion(Card):
 
 class Frostbolt(Card):
     def __init__(self):
-        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
+        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -84,7 +84,7 @@ class ArcaneIntellect(Card):
 
 class FrostNova(Card):
     def __init__(self):
-        super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
+        super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -285,7 +285,7 @@ class Blizzard(Card):
 
 class Flamestrike(Card):
     def __init__(self):
-        super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
+        super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)

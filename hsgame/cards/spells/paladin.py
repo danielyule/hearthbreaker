@@ -7,7 +7,7 @@ __author__ = 'Daniel'
 
 class AvengingWrath(Card):
     def __init__(self):
-        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)

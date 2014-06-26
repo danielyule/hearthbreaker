@@ -87,7 +87,7 @@ class EtherealArcanist(MinionCard):
 
 class WaterElemental(MinionCard):
     def __init__(self):
-        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
+        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def did_damage(amount, target):

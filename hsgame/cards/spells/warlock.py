@@ -6,7 +6,7 @@ __author__ = 'randomflyingtaco'
 
 class MortalCoil(Card):
     def __init__(self):
-        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target)
+        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
         def use(self, player, game):
             if minion.health <= player.effective_spell_power(1):
@@ -49,7 +49,7 @@ class DrainLife(Card):
 
 class Soulfire(Card):
     def __init__(self):
-        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -93,7 +93,7 @@ class Demonfire(Card):
         
 class SacrificialPact(Card):
     def __init__(self):
-        super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE,
+        super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target,
                          lambda minion: minion.minion_type is MINION_TYPE.DEMON)
 
@@ -181,7 +181,7 @@ class Shadowflame(Card):
 
 class Corruption(Card):
     def __init__(self):
-        super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE,
+        super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hsgame.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
