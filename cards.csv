@@ -147,7 +147,7 @@ no,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the
 no,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Expert,Minion
 no,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Expert,Minion
 no,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Promotion,Minion
-no,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Expert,Weapon
+yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Expert,Weapon
 yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Basic,Minion
 yes,Goldshire Footman,Taunt,,,1,1,2,Basic,Minion
 no,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Expert,Weapon

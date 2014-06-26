@@ -1,7 +1,7 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
@@ -144,4 +144,14 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(2, game.current_player.hero.weapon.durability)
         self.assertEqual(3, game.current_player.hero.weapon.attack_power)
+
+    def test_GladiatorsLongbow(self):
+        game = generate_game_for(GladiatorsLongbow, WaterElemental, PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertFalse(game.current_player.hero.frozen)
 

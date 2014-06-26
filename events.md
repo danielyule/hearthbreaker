@@ -27,9 +27,9 @@ Events Triggered in hssim
  * minion_healed
  
 ##Character
+ * attack
  * attack_minion (target)
  * attack_player (target)
- * attacked(attacker)
  * attack_completed
  * damaged(amount, attacker)
  * healed(amount)

@@ -278,7 +278,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         self.player.trigger("attacking", self)
         target = self.choose_target(targets)
-
+        self.trigger("attack", target)
         if isinstance(target, Minion):
             self.trigger("attack_minion", target)
             target.trigger("attacked", self)
@@ -361,6 +361,11 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         self.trigger("attack_increased", amount)
         self.temp_attack += amount
+
+    def decrease_temp_attack(self, amount):
+
+        self.trigger("attack_decreased", amount)
+        self.temp_attack -= amount
 
     def increase_health(self, amount):
         def silence():
@@ -757,8 +762,12 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         :param Game game: The game this weapon will be used in
         """
         super().use(player, game)
+        if player.hero.weapon is not None:
+            player.hero.weapon.destroy()
         weapon = self.create_weapon(player)
         player.hero.weapon = weapon
+        weapon.player = player
+        player.hero.increase_temp_attack(weapon.attack_power)
 
     @abc.abstractmethod
     def create_weapon(self, player):
@@ -798,6 +807,7 @@ class Weapon(Bindable):
     def destroy(self):
         self.trigger("destroyed")
         self.player.hero.weapon = None
+        self.player.hero.decrease_temp_attack(self.attack_power)
 
 
 class Deck:

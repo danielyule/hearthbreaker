@@ -66,15 +66,15 @@ class PredictableAgentWithoutHeroPower(DoNothingBot):
     def do_turn(self, player):
         done_something = True
 
-        if player.hero.can_attack():
-            player.hero.attack()
-
         while done_something:
             done_something = False
             for card in player.hand:
                 if card.can_use(player, self.game):
                     self.game.play_card(card)
                     done_something = True
+
+        if player.hero.can_attack():
+            player.hero.attack()
 
         for minion in player.minions:
             if minion.can_attack():
