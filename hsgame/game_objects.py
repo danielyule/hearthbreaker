@@ -757,7 +757,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
     def use(self, player, game):
         """
-        Create a new weapon and attack it to the player's hero
+        Create a new weapon and attach it to the player's hero
 
         :param Player player: The player who will use this weapon
         :param Game game: The game this weapon will be used in
