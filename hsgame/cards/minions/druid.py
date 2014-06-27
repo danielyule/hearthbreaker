@@ -115,7 +115,7 @@ class AncientOfWar(MinionCard):
             minion.increase_health(5)
             minion.taunt = True
         else:
-            minion.increase_attack(5)
+            minion.change_attack(5)
 
         return minion
 
@@ -145,7 +145,7 @@ class Cenarius(MinionCard):
 
             def use(self, player, game):
                 for minion in player.minions:
-                    minion.increase_attack(2)
+                    minion.change_attack(2)
                     minion.increase_health(2)
                     minion.taunt = True
 

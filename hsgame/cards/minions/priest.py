@@ -39,11 +39,17 @@ class Lightspawn(MinionCard):
 
     def create_minion(self, player):
         def attack_equal_to_health():
-            minion.increase_attack(minion.health - minion.attack_power)
+            minion.unbind("attack_changed", prevent_attack_change)
+            minion.change_attack(minion.health - minion.attack_power)
+            minion.bind("attack_changed", prevent_attack_change)
+
+        def prevent_attack_change(amount):
+            minion.attack_power -= amount
                 
         minion = Minion(0, 5)
-        minion.increase_attack(minion.health - minion.attack_power)
+        minion.change_attack(minion.health - minion.attack_power)
         minion.bind("health_changed", attack_equal_to_health)
+        minion.bind("attack_changed", prevent_attack_change)
         minion.bind_once("silenced", lambda: minion.unbind("health_changed", attack_equal_to_health))
         return minion
 

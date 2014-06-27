@@ -251,12 +251,12 @@ class TestDruid(unittest.TestCase):
 
         minion_increase_mock = Mock()
 
-        game.other_player.minions[0].bind("attack_increased", minion_increase_mock)
-        game.other_player.minions[1].bind("attack_increased", minion_increase_mock)
+        game.other_player.minions[0].bind("attack_changed", minion_increase_mock)
+        game.other_player.minions[1].bind("attack_changed", minion_increase_mock)
 
         player_increase_mock = Mock()
 
-        game.other_player.hero.bind("attack_increased", player_increase_mock)
+        game.other_player.hero.bind("attack_changed", player_increase_mock)
 
 
         game.play_single_turn()

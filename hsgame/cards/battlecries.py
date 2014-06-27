@@ -45,7 +45,7 @@ def guardian_of_kings(minion):
 def change_attack_to_one(minion):
     if minion.card.target is not None:
         # This will increase/decrease a minions attack to 1
-        minion.card.target.increase_attack(1 - minion.card.target.attack_power)
+        minion.card.target.change_attack(1 - minion.card.target.attack_power)
         
         
 def give_divine_shield(minion):
@@ -103,7 +103,7 @@ def darkscale_healer(minion):
 
 def ssc(minion):
     if minion.card.target is not None:
-        minion.card.target.increase_attack(1)
+        minion.card.target.change_attack(1)
         minion.card.target.increase_health(1)
     
 def destroy_target(minion):
@@ -112,4 +112,4 @@ def destroy_target(minion):
     
 def two_temp_attack(minion):
     if minion.card.target is not None:
-        minion.card.target.increase_temp_attack(2)
+        minion.card.target.change_temp_attack(2)

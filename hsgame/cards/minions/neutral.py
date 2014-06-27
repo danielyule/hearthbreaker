@@ -132,9 +132,11 @@ class DireWolfAlpha(MinionCard):
     def create_minion(self, player):
         def increase_attack(m):
             m.attack_power += 1
+            m.trigger("attack_changed", 1)
 
         def decrease_attack(m):
             m.attack_power -= 1
+            m.trigger("attack_changed", -1)
 
         def add_effect(m, index):
             m.add_board_effect(increase_attack, decrease_attack, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
@@ -334,7 +336,7 @@ class ManaAddict(MinionCard):
 
     def create_minion(self, player):
         def increase_attack(card):
-            minion.increase_temp_attack(2)
+            minion.change_temp_attack(2)
         minion = Minion(1, 3)
         player.bind("spell_cast", increase_attack)
         minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))

@@ -33,7 +33,7 @@ class Claw(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.hero.increase_temp_attack(2)
+        player.hero.change_temp_attack(2)
         player.hero.increase_armour(2)
 
 
@@ -63,7 +63,7 @@ class MarkOfTheWild(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.increase_attack(2)
+        self.target.change_attack(2)
         self.target.increase_health(2)
         self.target.taunt = True
 
@@ -81,7 +81,7 @@ class PowerOfTheWild(Card):
 
             def use(self, player, game):
                 for minion in player.minions:
-                    minion.increase_attack(1)
+                    minion.change_attack(1)
                     minion.increase_health(1)
 
         class SummonPanther(Card):
@@ -174,7 +174,7 @@ class MarkOfNature(Card):
                 super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
-                target.increase_attack(4)
+                target.change_attack(4)
 
         class MarkOfNatureHealth(Card):
             def __init__(self):
@@ -197,8 +197,8 @@ class SavageRoar(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in player.minions:
-            minion.increase_temp_attack(2)
-        player.hero.increase_temp_attack(2)
+            minion.change_temp_attack(2)
+        player.hero.change_temp_attack(2)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) > 0
@@ -210,7 +210,7 @@ class Bite(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.hero.increase_temp_attack(4)
+        player.hero.change_temp_attack(4)
         player.hero.increase_armour(4)
 
 

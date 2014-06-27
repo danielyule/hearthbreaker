@@ -40,8 +40,7 @@ Events Triggered in hssim
  * player_damaged(amount, player)
  * did_damage(amount, target)
  * died (attacker)
- * attack increased(amount)
- * attack_decreased(amount)
+ * attack_changed(amount)
  * health_increased(amount)
  * health_decreased(amount)
  * health_changed

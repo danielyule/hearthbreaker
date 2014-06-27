@@ -75,7 +75,7 @@ class Demonfire(Card):
         super().use(player, game)
         targets = hsgame.targeting.find_minion_spell_target(game, lambda minion: minion.minion_type is MINION_TYPE.DEMON)
         if target in targets:
-            self.target.increase_attack(2)
+            self.target.change_attack(2)
             self.target.increase_health(2)
         else:
             self.target.damage(player.effective_spell_damage(2), self)
@@ -198,5 +198,5 @@ class PowerOverwhelming(Card):
         super().use(player, game)
         minion.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), target)
         minion.bind_once("silenced", lambda minion: unbind("turn_ended", lambda minion: game.remove_minion(minion, player), target), minion)
-        self.target.increase_attack(4)
+        self.target.change_attack(4)
         self.target.increase_health(4)

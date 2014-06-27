@@ -159,6 +159,16 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[2].attack_power)
         self.assertEqual(1, game.current_player.minions[3].attack_power)
 
+    def test_DireWolfAlphaWithLightspawn(self):
+        game = generate_game_for([DireWolfAlpha, Lightspawn], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].health)
+
     def test_WorgenInfiltrator(self):
         game = generate_game_for([WorgenInfiltrator, ElvenArcher], [ArcaneShot], MinionPlayingAgent, SpellTestingAgent)
         game.play_single_turn()

@@ -351,22 +351,17 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             if self.health <= 0:
                 self.die(attacker)
 
-    def increase_attack(self, amount):
+    def change_attack(self, amount):
         def silence():
             self.attack_power -= amount
-        self.trigger("attack_increased", amount)
+        self.trigger("attack_changed", amount)
         self.attack_power += amount
         self.bind_once('silenced', silence)
 
-    def increase_temp_attack(self, amount):
+    def change_temp_attack(self, amount):
 
-        self.trigger("attack_increased", amount)
+        self.trigger("attack_changed", amount)
         self.temp_attack += amount
-
-    def decrease_temp_attack(self, amount):
-
-        self.trigger("attack_decreased", amount)
-        self.temp_attack -= amount
 
     def increase_health(self, amount):
         def silence():
@@ -756,7 +751,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         weapon = self.create_weapon(player)
         player.hero.weapon = weapon
         weapon.player = player
-        player.hero.increase_temp_attack(weapon.attack_power)
+        player.hero.change_temp_attack(weapon.attack_power)
 
     @abc.abstractmethod
     def create_weapon(self, player):
@@ -796,7 +791,7 @@ class Weapon(Bindable):
     def destroy(self):
         self.trigger("destroyed")
         self.player.hero.weapon = None
-        self.player.hero.decrease_temp_attack(self.attack_power)
+        self.player.hero.change_temp_attack(-self.attack_power)
 
 
 class Deck:
@@ -1017,7 +1012,7 @@ class Game(Bindable):
         self.current_player.overload = 0
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
-            self.current_player.hero.increase_temp_attack(self.current_player.hero.weapon.attack_power)
+            self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
         self.current_player.draw()
 
     def game_over(self, attacker):

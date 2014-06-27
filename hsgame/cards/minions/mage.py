@@ -12,7 +12,7 @@ class ManaWyrm(MinionCard):
 
     def create_minion(self, player):
         def increase_attack(card):
-            minion.increase_attack(1)
+            minion.change_attack(1)
         minion = Minion(1, 3)
         player.bind("spell_cast", increase_attack)
         minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
@@ -73,7 +73,7 @@ class EtherealArcanist(MinionCard):
     def create_minion(self, player):
         def increase_stats():
             if len(player.secrets) > 0:
-                minion.increase_attack(2)
+                minion.change_attack(2)
                 minion.increase_health(2)
 
         def silence():

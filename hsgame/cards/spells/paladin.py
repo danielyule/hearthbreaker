@@ -23,7 +23,7 @@ class BlessedChampion(Card):
         
     def use(self, player, game):
         super().use(player, game)
-        self.target.increase_attack(self.target.attack_power)
+        self.target.change_attack(self.target.attack_power)
         
 class BlessingOfKings(Card):
     def __init__(self):
@@ -31,7 +31,7 @@ class BlessingOfKings(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.increase_attack(4)
+        self.target.change_attack(4)
         self.target.increase_health(4)
 
 class BlessingOfMight(Card):
@@ -40,7 +40,7 @@ class BlessingOfMight(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.increase_attack(3)
+        self.target.change_attack(3)
 
 class BlessingOfWisdom(Card):
     def __init__(self):
@@ -139,7 +139,7 @@ class Humility(Card):
         super().use(player, game)
         
         # This will increase/decrease a minions attack to 1
-        self.target.increase_attack(1 - self.target.attack_power)
+        self.target.change_attack(1 - self.target.attack_power)
         
 class LayOnHands(Card):
     def __init__(self):
