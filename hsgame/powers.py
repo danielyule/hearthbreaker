@@ -201,7 +201,7 @@ class ShamanPower(Power):
 
             def create_minion(self, player):
                 minion = hsgame.game_objects.Minion(0, 2)
-                minion.spell_power = 1
+                minion.spell_damage = 1
                 return minion
 
         super().use()

@@ -21,7 +21,8 @@ class CardTest(unittest.TestCase):
                 card = card_lookup(row["Name"])
                 self.assertEqual(int(row["Cost"]), card.mana, row["Name"])
                 self.assertEqual(CHARACTER_CLASS.from_str(row["Class"]), card.character_class, row["Name"])
-                self.assertEqual(CARD_RARITY.from_str(row["Rarity"]), card.rarity, "Expected card '{0}' to have rarity {1}".format(row["Name"], row["Rarity"]))
+                self.assertEqual(CARD_RARITY.from_str(row["Rarity"]), card.rarity,
+                                 "Expected card '{0}' to have rarity {1}".format(row["Name"], row["Rarity"]))
                 if row["Type"] == "Minion":
                     minion = card.create_minion(fake_game.current_player)
                     minion.player = fake_game.current_player

@@ -281,21 +281,16 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("attack", target)
         if isinstance(target, Minion):
             self.trigger("attack_minion", target)
-            target.trigger("attacked", self)
-            if self.dead:
-                return
-            my_attack = self.attack_power + self.temp_attack  # In case the damage causes my attack to grow
-            self.physical_damage(target.attack_power, target)
-            target.physical_damage(my_attack, self)
-            target.activate_delayed()
+
         else:
             self.trigger("attack_player", target)
-            target.trigger("attacked", self)
-            if self.dead:
-                return
-            target.physical_damage(self.attack_power + self.temp_attack, self)
-            target.activate_delayed()
-            #TODO check if the player's weapon is out in the case of Misdirection
+        target.trigger("attacked", self)
+        if self.dead:
+            return
+        my_attack = self.attack_power + self.temp_attack  # In case the damage causes my attack to grow
+        self.damage(target.attack_power + target.temp_attack, target)
+        target.damage(my_attack, self)
+        target.activate_delayed()
 
         self.activate_delayed()
         self.trigger("attack_completed")
@@ -338,14 +333,20 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         if self.dead:
             return
         if not self.immune:
+            if type(attacker) is Minion:
+                self.trigger("physically_damaged", amount, attacker)
+                self.trigger("minion_damaged", amount, attacker)
+            elif type(attacker) is Player:
+                self.trigger("physically_damaged", amount, attacker)
+                self.trigger("player_damaged", amount, attacker)
+            elif issubclass(type(attacker), Card):
+                self.trigger("spell_damaged", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
             #The response of a secret to damage must happen immediately
             self.trigger("secret_damaged", amount, attacker)
             self.health -= amount
-            if type(attacker) is Minion:
+            if issubclass(type(attacker), Character):
                 attacker.delayed_trigger("did_damage", amount, self)
-            elif type(attacker) is Player:
-                attacker.trigger("did_damage", amount, self)
             self.trigger("health_changed")
             if self.health <= 0:
                 self.die(attacker)
@@ -404,21 +405,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.frozen = False
         self.frozen_this_turn = False
 
-    def spell_damage(self, amount, spell_card):
-        self.trigger("spell_damaged", amount, spell_card)
-        self.damage(amount, spell_card)
-
-    def physical_damage(self, amount, attacker):
-        self.trigger("physically_damaged", amount, attacker)
-        if type(attacker) is Player:
-            self.trigger("player_damaged", amount, attacker)
-        else:
-            self.trigger("minion_damaged", amount, attacker)
-        self.damage(amount, attacker)
-
     def heal(self, amount, card):
         if amount < 0:
-            self.spell_damage(-amount, card)
+            self.damage(-amount, card)
         if amount > 0:
             self.trigger("healed", amount)
             self.health += amount
@@ -609,7 +598,7 @@ class Minion(Character):
         self.card = None
         self.index = -1
         self.charge = False
-        self.spell_power = 0
+        self.spell_damage = 0
         self.divine_shield = False
         self.battlecry = battlecry
         self.deathrattle = deathrattle
@@ -622,7 +611,7 @@ class Minion(Character):
         player.minions.insert(index, self)
         self.game = game
         self.player = player
-        player.spell_power += self.spell_power
+        player.spell_damage += self.spell_damage
         if self.battlecry is not None:
             self.battlecry(self)
         for minion in player.minions:
@@ -649,8 +638,8 @@ class Minion(Character):
         self.taunt = False
         self.stealth = False
         self.charge = False
-        self.player.spell_power -= self.spell_power
-        self.spell_power = 0
+        self.player.spell_damage -= self.spell_damage
+        self.spell_damage = 0
         self.divine_shield = False
         self.battlecry = None
         self.deathrattle = None
@@ -894,7 +883,7 @@ class Player(Bindable):
         self.mana = 0
         self.max_mana = 0
         self.deck = deck
-        self.spell_power = 0
+        self.spell_damage = 0
         self.minions = []
         self.random = random_func
         self.hand = []
@@ -928,12 +917,12 @@ class Player(Bindable):
     def can_draw(self):
         return self.deck.can_draw()
 
-    def effective_spell_power(self, base_damage):
-        return (base_damage + self.spell_power) * self.spell_multiplier
+    def effective_spell_damage(self, base_damage):
+        return (base_damage + self.spell_damage) * self.spell_multiplier
 
     def effective_heal_power(self, base_heal):
         if self.heal_does_damage:
-            return (base_heal + self.spell_power) * self.spell_multiplier
+            return (base_heal + self.spell_damage) * self.spell_multiplier
         else:
             return base_heal * self.heal_multiplier
 

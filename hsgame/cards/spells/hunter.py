@@ -22,7 +22,7 @@ class ArcaneShot(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.effective_spell_power(2), self)
+        self.target.damage(player.effective_spell_damage(2), self)
 
 
 class BestialWrath(Card):

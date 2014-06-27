@@ -9,11 +9,11 @@ class MortalCoil(Card):
         super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_minion_spell_target)
 
         def use(self, player, game):
-            if minion.health <= player.effective_spell_power(1):
-                target.spell_damage(player.effective_spell_power(1), self)
+            if minion.health <= player.effective_spell_damage(1):
+                target.damage(player.effective_spell_damage(1), self)
                 player.draw()
             else:  
-                target.spell_damage(player.effective_spell_power(1), self)
+                target.damage(player.effective_spell_damage(1), self)
                #not sure how necessary this is, making sure damage before draw but need to compare health before dealing damage
                
 class Hellfire(Card):
@@ -27,7 +27,7 @@ class Hellfire(Card):
         targets.append(game.other_player.hero)
         targets.append(game.current_player.hero)
         for minion in targets:
-            minion.spell_damage(player.effective_spell_power(3), self)
+            minion.damage(player.effective_spell_damage(3), self)
 
 class ShadowBolt(Card):
     def __init__(self):
@@ -36,7 +36,7 @@ class ShadowBolt(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.effective_spell_power(4), self)
+        self.target.damage(player.effective_spell_damage(4), self)
 
 class DrainLife(Card):
     def __init__(self):
@@ -44,7 +44,7 @@ class DrainLife(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.effective_spell_power(2), self)
+        self.target.damage(player.effective_spell_damage(2), self)
         self.hero.heal(player.effective_heal_power(2))
 
 class Soulfire(Card):
@@ -53,7 +53,7 @@ class Soulfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.spell_damage(player.effective_spell_power(4), self)
+        self.target.damage(player.effective_spell_damage(4), self)
         player.discard()
         
 class TwistingNether(Card):
@@ -78,7 +78,7 @@ class Demonfire(Card):
             self.target.increase_attack(2)
             self.target.increase_health(2)
         else:
-            self.target.spell_damage(player.effective_spell_power(2), self)
+            self.target.damage(player.effective_spell_damage(2), self)
       #Jaraxxus is a minion      
 #class LordJaraxxus(Card):
  #   def __init__(self):
@@ -161,11 +161,11 @@ class BaneofDoom(Card):
             demon_list.append(Succubus())    
             demon_list.append(Felguard())    
             card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
-            if minion.health <= player.effective_spell_power(2):
-                target.spell_damage(player.effective_spell_power(2), self)
+            if minion.health <= player.effective_spell_damage(2):
+                target.damage(player.effective_spell_damage(2), self)
                 minion.create_minion(player).add_to_board(card, game, player, 0)
             else:  
-                target.spell_damage(player.effective_spell_power(2), self)
+                target.damage(player.effective_spell_damage(2), self)
                 
 class Shadowflame(Card):
     def __init__(self):
@@ -177,7 +177,7 @@ class Shadowflame(Card):
         targets = game.other_player.minions.copy()
         self.target.die(self)
         for minion in targets:
-            minion.spell_damage(player.effective_spell_power(shadowflame_damage), self)
+            minion.damage(player.effective_spell_damage(shadowflame_damage), self)
 
 class Corruption(Card):
     def __init__(self):

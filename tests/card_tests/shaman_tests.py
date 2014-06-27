@@ -41,7 +41,7 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual("Wrath of Air Totem", game.players[0].minions[0].card.name)
-        self.assertEqual(1, game.players[0].minions[0].spell_power)
+        self.assertEqual(1, game.players[0].minions[0].spell_damage)
 
         # All Totems are out, nothing should be summoned
         game.play_single_turn()

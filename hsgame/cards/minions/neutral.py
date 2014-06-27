@@ -86,7 +86,7 @@ class KoboldGeomancer(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(2, 2)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         return minion
 
 class ArgentSquire(MinionCard):
@@ -161,7 +161,7 @@ class Archmage(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(4, 7)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         return minion
 
 
@@ -172,7 +172,7 @@ class DalaranMage(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(1, 4)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         return minion
 
 
@@ -183,7 +183,7 @@ class Malygos(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(4, 12, MINION_TYPE.DRAGON)
-        minion.spell_power = 5
+        minion.spell_damage = 5
         return minion
 
 
@@ -194,7 +194,7 @@ class AzureDrake(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(4, 4, MINION_TYPE.DRAGON, battlecry=draw_card)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         return minion
 
 
@@ -205,7 +205,7 @@ class OgreMagi(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(4, 4)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         return minion
 
 class Spellbreaker(MinionCard):
@@ -222,7 +222,7 @@ class BloodmageThalnos(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(1, 1)
-        minion.spell_power = 1
+        minion.spell_damage = 1
         minion.bind("died", draw_card)
         minion.bind_once("silenced", lambda m: m.unbind("died", draw_card), minion)
         return minion

@@ -11,11 +11,11 @@ class AvengingWrath(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for i in range(0, player.effective_spell_power(8)):
+        for i in range(0, player.effective_spell_damage(8)):
             targets = game.other_player.minions.copy()
             targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) - 1)]
-            target.spell_damage(1, self)
+            target.damage(1, self)
 
 class BlessedChampion(Card):
     def __init__(self):
@@ -64,8 +64,8 @@ class Consecration(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions.copy():
-            minion.spell_damage(player.effective_spell_power(2), self)
-        game.other_player.hero.spell_damage(player.effective_spell_power(2), self)
+            minion.damage(player.effective_spell_damage(2), self)
+        game.other_player.hero.damage(player.effective_spell_damage(2), self)
 
 class DivineFavor(Card):
     def __init__(self):
@@ -99,7 +99,7 @@ class HammerOfWrath(Card):
     def use(self, player, game):
         super().use(player, game)
         
-        self.target.spell_damage(player.effective_spell_power(3), self)
+        self.target.damage(player.effective_spell_damage(3), self)
         player.draw()
 
 class HandOfProtection(Card):
@@ -129,7 +129,7 @@ class HolyWrath(Card):
         
         player.draw()
         cost = player.hand[-1].mana
-        self.target.spell_damage(player.effective_spell_power(cost), self)
+        self.target.damage(player.effective_spell_damage(cost), self)
 
 class Humility(Card):
     def __init__(self):

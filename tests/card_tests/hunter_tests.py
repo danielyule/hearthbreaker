@@ -84,7 +84,7 @@ class TestHunter(unittest.TestCase):
 
     def test_ArcaneShot(self):
         game = generate_game_for(ArcaneShot, StonetuskBoar, SpellTestingAgent, DoNothingBot)
-        game.players[0].spell_power = 1
+        game.players[0].spell_damage = 1
         game.play_single_turn()
         self.assertEqual(27, game.other_player.hero.health)
 

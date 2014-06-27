@@ -37,8 +37,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(2, game.current_player.minions[0].max_health)
         self.assertEqual(2, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].spell_power)
-        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
 
@@ -46,8 +46,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].health)
         self.assertEqual(2, game.other_player.minions[0].max_health)
         self.assertEqual(2, game.other_player.minions[0].attack_power)
-        self.assertEqual(0, game.other_player.minions[0].spell_power)
-        self.assertEqual(0, game.other_player.spell_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_damage)
+        self.assertEqual(0, game.other_player.spell_damage)
 
 
     def test_ElvenArcher(self):
@@ -185,8 +185,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].max_health)
         self.assertEqual(4, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].spell_power)
-        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
 
@@ -194,8 +194,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].max_health)
         self.assertEqual(4, game.other_player.minions[0].attack_power)
-        self.assertEqual(0, game.other_player.minions[0].spell_power)
-        self.assertEqual(0, game.other_player.spell_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_damage)
+        self.assertEqual(0, game.other_player.spell_damage)
 
 
     def test_Archmage(self):
@@ -208,8 +208,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(7, game.current_player.minions[0].health)
         self.assertEqual(7, game.current_player.minions[0].max_health)
         self.assertEqual(4, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].spell_power)
-        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
 
@@ -217,8 +217,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(7, game.other_player.minions[0].health)
         self.assertEqual(7, game.other_player.minions[0].max_health)
         self.assertEqual(4, game.other_player.minions[0].attack_power)
-        self.assertEqual(0, game.other_player.minions[0].spell_power)
-        self.assertEqual(0, game.other_player.spell_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_damage)
+        self.assertEqual(0, game.other_player.spell_damage)
 
 
     def test_DalaranMage(self):
@@ -231,8 +231,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].max_health)
         self.assertEqual(1, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].spell_power)
-        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
 
@@ -240,8 +240,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].max_health)
         self.assertEqual(1, game.other_player.minions[0].attack_power)
-        self.assertEqual(0, game.other_player.minions[0].spell_power)
-        self.assertEqual(0, game.other_player.spell_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_damage)
+        self.assertEqual(0, game.other_player.spell_damage)
 
 
     def test_AzureDrake(self):
@@ -254,8 +254,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].max_health)
         self.assertEqual(4, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].spell_power)
-        self.assertEqual(1, game.current_player.spell_power)
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
         self.assertEqual(8, len(game.current_player.hand))
             #3 starting cards+5 turns of draws-1 Azure Drake+1 draw from battlecry=8?
         game.play_single_turn()
@@ -264,8 +264,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].max_health)
         self.assertEqual(4, game.other_player.minions[0].attack_power)
-        self.assertEqual(0, game.other_player.minions[0].spell_power)
-        self.assertEqual(0, game.other_player.spell_power)
+        self.assertEqual(0, game.other_player.minions[0].spell_damage)
+        self.assertEqual(0, game.other_player.spell_damage)
 
 
     def test_Abomination(self):
