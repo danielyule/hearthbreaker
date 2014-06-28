@@ -22,6 +22,7 @@ Contents:
 
    hsgame
    cards
+   contributing
 
 
 

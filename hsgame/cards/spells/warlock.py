@@ -1,6 +1,8 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, Minion, MinionCard
+from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard
 
 __author__ = 'randomflyingtaco'
 
@@ -10,14 +12,14 @@ class MortalCoil(Card):
         super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
-        def use(self, player, game):
-            if minion.health <= player.effective_spell_damage(1):
-                target.damage(player.effective_spell_damage(1), self)
-                player.draw()
-            else:
-                target.damage(player.effective_spell_damage(1), self)
-                # not sure how necessary this is, making sure damage before
-                # draw but need to compare health before dealing damage
+    def use(self, player, game):
+        if self.target.health <= player.effective_spell_damage(1):
+            self.target.damage(player.effective_spell_damage(1), self)
+            player.draw()
+        else:
+            self.target.damage(player.effective_spell_damage(1), self)
+            # not sure how necessary this is, making sure damage before
+            # draw but need to compare health before dealing damage
 
 
 class Hellfire(Card):
@@ -51,7 +53,7 @@ class DrainLife(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(2), self)
-        self.hero.heal(player.effective_heal_power(2))
+        player.hero.heal(player.effective_heal_power(2))
 
 
 class Soulfire(Card):
@@ -73,7 +75,7 @@ class TwistingNether(Card):
         targets = game.other_player.minions.copy()
         targets.extend(game.current_player.minions)
         for minion in targets:
-            self.minion.die(self)
+            minion.die(self)
 
 
 class Demonfire(Card):
@@ -83,9 +85,7 @@ class Demonfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        targets = hsgame.targeting.find_minion_spell_target(game,
-                                                            lambda minion: minion.minion_type is MINION_TYPE.DEMON)
-        if target in targets:
+        if isinstance(self.target, Minion) and self.target.type is MINION_TYPE.DEMON:
             self.target.change_attack(2)
             self.target.increase_health(2)
         else:
@@ -114,7 +114,7 @@ class SacrificialPact(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.die(self)
-        self.hero.heal(player.effective_heal_power(5))
+        player.hero.heal(player.effective_heal_power(5))
 
 
 class SiphonSoul(Card):
@@ -125,7 +125,7 @@ class SiphonSoul(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.die(self)
-        self.hero.heal(player.effective_heal_power(3))
+        player.hero.heal(player.effective_heal_power(3))
 
 
 class SenseDemons(Card):
@@ -139,7 +139,7 @@ class SenseDemons(Card):
             def __init__(self):
                 super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL)
 
-            def create_minion(self, player):
+            def create_minion(self, p):
                 minion = Minion(1, 1, MINION_TYPE.DEMON)
                 return minion
 
@@ -161,10 +161,10 @@ class SenseDemons(Card):
             rand = game.random(0, len(minions) - 1)
             card = copy.copy(minions.pop(rand))
             self.trigger("card_drawn", card)  # can i have triggers here?  how do i command specific draws
-            if len(self.hand) < 10:
-                self.hand.append(card)
+            if len(player.hand) < 10:
+                player.hand.append(card)
             else:
-                self.trigger("card_destroyed", card)
+                player.trigger("card_destroyed", card)
 
 
 class BaneofDoom(Card):
@@ -172,20 +172,14 @@ class BaneofDoom(Card):
         super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
                          hsgame.targeting.find_spell_target)
 
-        def use(self, player, game):
-            demon_list = []
-            # demon_list.append(BloodImp())
-            demon_list.append(Voidwalker())
-            demon_list.append(FlameImp())
-            demon_list.append(DreadInfernal())
-            demon_list.append(Succubus())
-            demon_list.append(Felguard())
-            card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
-            if minion.health <= player.effective_spell_damage(2):
-                target.damage(player.effective_spell_damage(2), self)
-                minion.create_minion(player).add_to_board(card, game, player, 0)
-            else:
-                target.damage(player.effective_spell_damage(2), self)
+    def use(self, player, game):
+        demon_list = [VoidWalker(), FlameImp, DreadInfernal(), Succubus(), Felguard()]
+        card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
+        if self.target.health <= player.effective_spell_damage(2):
+            self.target.damage(player.effective_spell_damage(2), self)
+            self.target.create_minion(player).add_to_board(card, game, player, 0)
+        else:
+            self.target.damage(player.effective_spell_damage(2), self)
 
 
 class Shadowflame(Card):
@@ -209,11 +203,12 @@ class Corruption(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        minion.bind_once("turn_started", lambda minion: game.remove_minion(minion, player),
-                         target)  # will this trigger at the start of the opponents turn so i need to use current_player
-        minion.bind_once("silenced",
-                         lambda minion: unbind("turn_started", lambda minion: game.remove_minion(minion, player),
-                                               target), minion)
+
+        def remove_minion(p):
+            game.remove_minion(self.target, self.target.player)
+
+        player.bind_once("turn_started", remove_minion)
+        self.target.bind_once("silenced", lambda minion: player.unbind("turn_started", remove_minion))
 
 
 class PowerOverwhelming(Card):
@@ -223,9 +218,10 @@ class PowerOverwhelming(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        minion.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), target)
-        minion.bind_once("silenced",
-                         lambda minion: unbind("turn_ended", lambda minion: game.remove_minion(minion, player), target),
-                         minion)
+
+        def remove_minion(p):
+            game.remove_minion(self.target, self.target.player)
+        player.bind_once("turn_ended", remove_minion)
+        self.target.bind_once("silenced", lambda minion: player.unbind("turn_ended", remove_minion))
         self.target.change_attack(4)
         self.target.increase_health(4)

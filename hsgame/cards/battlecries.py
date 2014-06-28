@@ -81,40 +81,40 @@ def give_three_health(minion):
 
 
 def deal_one_damage_all_characters(minion):
-    targets = game.other_player.minions.copy()
-    targets.extend(game.current_player.minions)
-    targets.append(game.other_player.hero)
-    targets.append(game.current_player.hero)
+    targets = minion.player.game.other_player.minions.copy()
+    targets.extend(minion.player.game.current_player.minions)
+    targets.append(minion.player.game.other_player.hero)
+    targets.append(minion.player.game.current_player.hero)
     for minion in targets:
         minion.damage(1, None)
 
 
 def destroy_own_crystal(minion):
-    player.max_mana -= 1
+    minion.player.max_mana -= 1
 
 
 def give_enemy_crystal(minion):
-    if other_player.max_mana < 10:
-        other_player.max_mana += 1
+    if minion.game.other_player.max_mana < 10:
+        minion.game.other_player.max_mana += 1
 
 
 def discard_one(minion):
-    player.discard()
+    minion.player.discard()
 
 
 def discard_two(minion):
-    player.discard()
-    player.discard()
+    minion.player.discard()
+    minion.player.discard()
 
 
 def discard_all(minion):
-    for i in range(len(player.hand)):
-        player.discard()
+    for i in range(len(minion.player.hand)):
+        minion.player.discard()
 
 
 def darkscale_healer(minion):
-    targets = game.current_player.minions.copy()
-    targets.append(game.current_player.hero)
+    targets = minion.player.game.current_player.minions.copy()
+    targets.append(minion.player.game.current_player.hero)
     for minion in targets:
         minion.heal(2)
 

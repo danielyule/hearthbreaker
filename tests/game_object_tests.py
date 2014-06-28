@@ -10,7 +10,7 @@ from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 __author__ = 'Daniel'
 import random
 import unittest
-from unittest.mock import Mock, call
+from unittest.mock import Mock
 
 from hsgame.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
@@ -72,7 +72,6 @@ class TestGame(unittest.TestCase):
     def test_first_turn(self):
         card_set1 = []
         card_set2 = []
-        test_env = self
 
         for cardIndex in range(0, 30):
             card_set1.append(card_lookup("Stonetusk Boar"))
