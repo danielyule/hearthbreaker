@@ -1,7 +1,10 @@
 import copy
+
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targeting
+
+
 __author__ = 'Daniel'
 
 
@@ -46,6 +49,7 @@ class MirrorImage(Card):
                 minion = Minion(0, 2)
                 minion.taunt = True
                 return minion
+
         for i in range(0, 2):
             mirror_image = MirrorImageMinion()
             mirror_image.create_minion(player).add_to_board(mirror_image, game, player, 0)
@@ -207,7 +211,7 @@ class IceBlock(SecretCard):
         if player.hero.health - amount <= 0:
             player.hero.immune = True
             player.hero.health += amount
-            #TODO Check if this spell will also prevent damage to armour.
+            # TODO Check if this spell will also prevent damage to armour.
             super().reveal()
             player.hero.unbind("secret_damaged", self._reveal_if_fatal)
 

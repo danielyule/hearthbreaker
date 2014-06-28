@@ -22,4 +22,3 @@ class TimberWolf(MinionCard):
         minion = Minion(1, 1, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)
         return minion
-

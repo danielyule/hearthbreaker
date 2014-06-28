@@ -13,6 +13,7 @@ class ManaWyrm(MinionCard):
     def create_minion(self, player):
         def increase_attack(card):
             minion.change_attack(1)
+
         minion = Minion(1, 3)
         player.bind("spell_cast", increase_attack)
         minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
@@ -45,7 +46,7 @@ class KirinTorMage(MinionCard):
         def first_secret_cost_zero(m):
             class Filter:
                 def __init__(self):
-                    #To make sure that no matter what the cost of a secret, it will be 0
+                    # To make sure that no matter what the cost of a secret, it will be 0
                     self.amount = 100
                     self.filter = lambda c: type(c) in SecretCard.__subclasses__()
                     self.min = 0
@@ -59,10 +60,12 @@ class KirinTorMage(MinionCard):
             def turn_ended():
                 player.unbind("card_used", card_used)
                 player.mana_filters.remove(mana_filter)
+
             mana_filter = Filter()
             player.bind("card_used", card_used)
             player.bind_once("turn_ended", turn_ended)
             player.mana_filters.append(mana_filter)
+
         return Minion(4, 3, battlecry=first_secret_cost_zero)
 
 
@@ -108,5 +111,5 @@ class ArchmageAntonidas(MinionCard):
                 player.hand.append(hsgame.cards.Fireball())
 
         player.bind("spell_cast", add_fireball)
-        player.bind_once("silenced", lambda : player.unbind("spell_cast", add_fireball))
+        player.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
         return Minion(5, 7)

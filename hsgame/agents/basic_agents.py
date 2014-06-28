@@ -1,5 +1,6 @@
 __author__ = 'Daniel'
 
+
 class DoNothingBot:
     def __init__(self):
         self.game = None
@@ -21,6 +22,7 @@ class DoNothingBot:
 
     def choose_option(self, *options):
         return options[0]
+
 
 class PredictableBot:
     def __init__(self):
@@ -48,8 +50,6 @@ class PredictableBot:
         for minion in player.minions:
             if minion.can_attack():
                 minion.attack()
-
-
 
     def set_game(self, game):
         self.game = game

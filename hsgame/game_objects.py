@@ -1,8 +1,9 @@
 import random
+import abc
+
 import hsgame.powers
 import hsgame.targeting
 import hsgame.constants
-import abc
 
 
 __author__ = 'Daniel'
@@ -18,11 +19,12 @@ def card_lookup(card_name):
     :return: An instance of a subclass of Card corresponding to the given card name or None if no Card
              by that name exists.
     """
+
     def card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
         if len(subclasses) is 0:
-                c = card_type()
-                card_table[c.name] = card_type
+            c = card_type()
+            card_table[c.name] = card_type
         for sub_type in subclasses:
             card_lookup_rec(sub_type)
 
@@ -40,6 +42,7 @@ class GameException(Exception):
     """
     An :class:`Exception` relating to the operation of the game
     """
+
     def __init__(self, message):
         super().__init__(message)
 
@@ -96,6 +99,7 @@ class Bindable:
 
     Any class which subclasses this class must be sure to call :meth:`__init__`
     """
+
     def __init__(self):
         """
         Set up a new :class:`Bindable`.  Must be called by any subclasses.
@@ -115,6 +119,7 @@ class Bindable:
         :param list args: Any other parameters to be called
         :see: :class:`Bindable`
         """
+
         class Handler:
             def __init__(self):
                 self.args = args
@@ -122,7 +127,7 @@ class Bindable:
                 self.remove = False
                 self.active = False
 
-        if not event in self.events:
+        if event not in self.events:
             self.events[event] = []
 
         self.events[event].append(Handler())
@@ -141,6 +146,7 @@ class Bindable:
         :param args: Any other parameters to be called
         :see: :class:`Bindable`
         """
+
         class Handler:
             def __init__(self):
                 self.args = args
@@ -148,7 +154,7 @@ class Bindable:
                 self.remove = True
                 self.active = False
 
-        if not event in self.events:
+        if event not in self.events:
             self.events[event] = []
 
         self.events[event].append(Handler())
@@ -172,7 +178,7 @@ class Bindable:
                     handler.active = False
                     if handler.remove:
                         self.events[event].remove(handler)
-                        #tidy up the events dict so we don't have entries for events with no handlers
+                        # tidy up the events dict so we don't have entries for events with no handlers
                         if len(self.events[event]) is 0:
                             del (self.events[event])
 
@@ -197,17 +203,17 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
      This common superclass handles all of the status effects and calculations involved in attacking or being attacked.
     """
-    def __init__(self, attack_power, health, player):
+
+    def __init__(self, attack_power, health):
         """
-        Create a new Character with the given attack power, health and owning player
+        Create a new Character with the given attack power and health
 
         :param int attack_power: the amount of attack this character has at creation
         :param int health: the maximum health of this character
-        :param Player player: the player this character belongs to
         """
         super().__init__()
 
-        #: The current health of this character
+        # : The current health of this character
         self.health = health
         #: The maximum health of this character
         self.max_health = health
@@ -228,7 +234,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: The amount this character's attack is raised this turn
         self.temp_attack = 0
         #: The :class:`Player` that owns this character
-        self.player = player
+        self.player = None
         #: Whether or not this character is immune to damage (but not other effects)
         self.immune = False
         #: The list of delayed events
@@ -342,7 +348,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             elif issubclass(type(attacker), Card):
                 self.trigger("spell_damaged", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
-            #The response of a secret to damage must happen immediately
+            # The response of a secret to damage must happen immediately
             self.trigger("secret_damaged", amount, attacker)
             self.health -= amount
             if issubclass(type(attacker), Character):
@@ -354,6 +360,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
     def change_attack(self, amount):
         def silence():
             self.attack_power -= amount
+
         self.trigger("attack_changed", amount)
         self.attack_power += amount
         self.bind_once('silenced', silence)
@@ -368,6 +375,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.max_health -= amount
             if self.max_health < self.health:
                 self.health = self.max_health
+
         self.trigger("health_increased", amount)
         self.max_health += amount
         self.health += amount
@@ -381,6 +389,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.health += amount
             else:
                 self.max_health += amount
+
         self.trigger("health_decreased", amount)
         self.max_health -= amount
         if self.health > self.max_health:
@@ -435,6 +444,7 @@ class Card(Bindable):
     In order to play a card, it should be passed to :meth:`Game.play_card`.  Simply calling :meth:`use` will
     cause its effect, but not update the game state.
     """
+
     def __init__(self, name, mana, character_class, rarity, target_func=None,
                  filter_func=_is_spell_targetable):
         """
@@ -586,7 +596,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 class Minion(Character):
     def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None):
-        super().__init__(attack, health, None)
+        super().__init__(attack, health)
         self.minion_type = minion_type
         self.taunt = False
         self.game = None
@@ -617,9 +627,9 @@ class Minion(Character):
             self.active = True
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
-        
+
     def remove_from_board(self):
-        self.silence() # Neutralize all possible effects
+        self.silence()  # Neutralize all possible effects
         for minion in self.player.minions:
             if minion.index > self.index:
                 minion.index -= 1
@@ -684,6 +694,7 @@ class Minion(Character):
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
         """
+
         def minion_added(m):
             board_changed()
 
@@ -716,7 +727,8 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
     """
     Represents a :class:`Card` for creating a :class:`Weapon`
     """
-    def __init__(self,name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth):
+
+    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth):
         """
         Create a new :class:`WeaponCard`
 
@@ -769,6 +781,7 @@ class Weapon(Bindable):
     Represents a Hearthstone weapon.  All weapons have been attacked power and durability.  The logic for handling the
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
     """
+
     def __init__(self, attack_power, durability, battlecry=None):
         """
         Creates a new weapon with the given attack power and durability.  A battlecry can also optionally be set.
@@ -777,7 +790,7 @@ class Weapon(Bindable):
         :param function battlecry: Called when this weapon is first placed
         """
         super().__init__()
-        #: The amount of attack this weapon gives the hero
+        # : The amount of attack this weapon gives the hero
         self.attack_power = attack_power
         #: The number of times this weapon can be used to attack before being discarded
         self.durability = durability
@@ -833,7 +846,7 @@ class Deck:
 
 class Hero(Character):
     def __init__(self, character_class, player):
-        super().__init__(0, 30, player)
+        super().__init__(0, 30)
 
         self.armour = 0
         self.weapon = None
@@ -926,7 +939,7 @@ class Player(Bindable):
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
 
-    def discard(self): #need a super?
+    def discard(self):
         targets = self.hand
         target = targets[self.random(0, len(targets) - 1)]
         self.hand.remove(target)

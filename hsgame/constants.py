@@ -17,6 +17,7 @@ class CARD_RARITY:
         "LEGENDARY": LEGENDARY,
         "SPECIAL": SPECIAL,
     }
+
     @staticmethod
     def from_str(rarity_name):
         return CARD_RARITY.__rarities[rarity_name.upper()]
@@ -35,22 +36,22 @@ class CHARACTER_CLASS:
     WARLOCK = 9
 
     __classes = {
-            "MAGE": MAGE,
-            "HUNTER": HUNTER,
-            "SHAMAN": SHAMAN,
-            "WARRIOR": WARRIOR,
-            "DRUID": DRUID,
-            "PRIEST": PRIEST,
-            "PALADIN": PALADIN,
-            "ROGUE": ROGUE,
-            "WARLOCK": WARLOCK,
-            "": ALL,
-        }
+        "MAGE": MAGE,
+        "HUNTER": HUNTER,
+        "SHAMAN": SHAMAN,
+        "WARRIOR": WARRIOR,
+        "DRUID": DRUID,
+        "PRIEST": PRIEST,
+        "PALADIN": PALADIN,
+        "ROGUE": ROGUE,
+        "WARLOCK": WARLOCK,
+        "": ALL,
+    }
 
     @staticmethod
     def from_str(class_name):
         return CHARACTER_CLASS.__classes[class_name.upper()]
-    
+
     @staticmethod
     def to_str(class_number):
         classes = {

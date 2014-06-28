@@ -11,6 +11,7 @@ class EaglehornBow(WeaponCard):
     def create_weapon(self, player):
         def increase_durability(s):
             weapon.durability += 1
+
         weapon = Weapon(3, 2)
         player.game.players[0].bind("secret_revealed", increase_durability)
         player.game.players[1].bind("secret_revealed", increase_durability)

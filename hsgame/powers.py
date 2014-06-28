@@ -3,6 +3,7 @@ import hsgame.game_objects
 
 __author__ = 'Daniel'
 
+
 def powers(character_class):
     if character_class == hsgame.constants.CHARACTER_CLASS.DRUID:
         return DruidPower
@@ -19,8 +20,8 @@ def powers(character_class):
     elif character_class == hsgame.constants.CHARACTER_CLASS.WARLOCK:
         return WarlockPower
 
-class Power:
 
+class Power:
     def __init__(self, hero):
         self.hero = hero
 
@@ -34,7 +35,6 @@ class Power:
 
 
 class DruidPower(Power):
-
     def __init__(self, hero):
         super().__init__(hero)
 
@@ -54,7 +54,6 @@ class HunterPower(Power):
 
 
 class MagePower(Power):
-
     def __init__(self, hero):
         super().__init__(hero)
 
@@ -65,7 +64,6 @@ class MagePower(Power):
 
 
 class PriestPower(Power):
-
     def __init__(self, hero):
         super().__init__(hero)
 
@@ -76,14 +74,13 @@ class PriestPower(Power):
             target.damage(2 * self.hero.player.spell_multiplier, None)
         else:
             target.heal(2 * self.hero.player.heal_multiplier, None)
-        
+
     def __str__(self):
         return "Lesser Heal"
-        
+
 
 # Special power the priest can obtain via the card Shadowform
 class MindSpike(Power):
-    
     def __init__(self, hero):
         super().__init__(hero)
 
@@ -91,14 +88,13 @@ class MindSpike(Power):
         super().use()
         target = self.hero.find_power_target()
         target.damage(2, None)
-        
+
     def __str__(self):
         return "Mind Spike"
-        
+
 
 # Special power the priest can obtain via the card Shadowform
 class MindShatter(Power):
-    
     def __init__(self, hero):
         super().__init__(hero)
 
@@ -106,20 +102,20 @@ class MindShatter(Power):
         super().use()
         target = self.hero.find_power_target()
         target.damage(3, None)
-        
+
     def __str__(self):
         return "Mind Shatter"
 
 
 class PaladinPower(Power):
-    
     def __init__(self, hero):
         super().__init__(hero)
-        
+
     def use(self):
         class SilverHandRecruit(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Silver Hand Recruit", 1, hsgame.constants.CHARACTER_CLASS.PALADIN, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Silver Hand Recruit", 1, hsgame.constants.CHARACTER_CLASS.PALADIN,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 return hsgame.game_objects.Minion(1, 1)
@@ -127,25 +123,25 @@ class PaladinPower(Power):
         super().use()
 
         recruit_card = SilverHandRecruit()
-        recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player, 0)
+        recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player,
+                                                                  0)
 
 
 class ShamanPower(Power):
-    
     def __init__(self, hero):
         self.healing_totem = False
         self.searing_totem = False
         self.stoneclaw_totem = False
         self.wrath_of_air_totem = False
-        
+
         super().__init__(hero)
-    
+
     def can_use(self):
         self.healing_totem = False
         self.searing_totem = False
         self.stoneclaw_totem = False
         self.wrath_of_air_totem = False
-        
+
         for minion in self.hero.player.minions:
             if minion.card.name == "Healing Totem":
                 self.healing_totem = True
@@ -155,40 +151,43 @@ class ShamanPower(Power):
                 self.stoneclaw_totem = True
             elif minion.card.name == "Wrath of Air Totem":
                 self.wrath_of_air_totem = True
-        
+
         if self.healing_totem and self.searing_totem and self.stoneclaw_totem and self.wrath_of_air_totem:
             return False
-        
+
         return super().can_use()
-    
+
     def use(self):
         class HealingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 def heal_friendly_minions():
                     for m in player.minions:
                         m.heal(1, self)
-        
+
                 def silence():
                     player.unbind("turn_ended", heal_friendly_minions)
-                
+
                 minion = hsgame.game_objects.Minion(0, 2)
                 player.bind("turn_ended", heal_friendly_minions)
                 minion.bind_once("silenced", silence)
                 return minion
-                        
+
         class SearingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Searing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Searing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 return hsgame.game_objects.Minion(1, 1)
-            
+
         class StoneclawTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Stoneclaw Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Stoneclaw Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 minion = hsgame.game_objects.Minion(0, 2)
@@ -197,7 +196,8 @@ class ShamanPower(Power):
 
         class WrathOfAirTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Wrath of Air Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Wrath of Air Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 minion = hsgame.game_objects.Minion(0, 2)
@@ -217,7 +217,9 @@ class ShamanPower(Power):
             totems.append(WrathOfAirTotem())
 
         random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
-        random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player, 0)
+        random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player,
+                                                                  0)
+
 
 class WarlockPower(Power):
     def __init__(self, hero):
@@ -226,18 +228,18 @@ class WarlockPower(Power):
     def use(self):
         super().use()
         self.hero.player.game.current_player.hero.damage(2, None)
-        self.hero.player.game.current_player.draw()  #idk path for this
+        self.hero.player.game.current_player.draw()  # idk path for this
 
 
 class JaraxxusPower(Power):
-    
     def __init__(self, hero):
         super().__init__(hero)
-        
+
     def use(self):
         class Infernal(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Infernal", 6, hsgame.constants.CHARACTER_CLASS.WARLOCK, hsgame.constants.CARD_RARITY.SPECIAL)
+                super().__init__("Infernal", 6, hsgame.constants.CHARACTER_CLASS.WARLOCK,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 return hsgame.game_objects.Minion(6, 6)
@@ -246,4 +248,3 @@ class JaraxxusPower(Power):
 
         infernal_card = Infernal()
         infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
-

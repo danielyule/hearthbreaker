@@ -90,7 +90,7 @@ from hsgame.cards.minions.mage import (
     WaterElemental,
     ArchmageAntonidas
 )
-    
+
 from hsgame.cards.minions.paladin import (
     AldorPeacekeeper,
     ArgentProtector,

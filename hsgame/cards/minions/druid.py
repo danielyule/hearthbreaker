@@ -34,13 +34,12 @@ class KeeperOfTheGrove(MinionCard):
 
 
 class DruidOfTheClaw(MinionCard):
-
     def __init__(self):
         super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
 
-        #These are basically placeholders to give the agent something to choose
+        # These are basically placeholders to give the agent something to choose
         class CatForm(Card):
             def __init__(self):
                 super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -63,13 +62,11 @@ class DruidOfTheClaw(MinionCard):
 
 
 class AncientOfLore(MinionCard):
-
     def __init__(self):
         super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-
-        #These are basically placeholders to give the agent something to choose
+        # These are basically placeholders to give the agent something to choose
         class AncientSecrets(Card):
             def __init__(self):
                 super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -92,13 +89,12 @@ class AncientOfLore(MinionCard):
 
 
 class AncientOfWar(MinionCard):
-
     def __init__(self):
         super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
 
-        #These are basically placeholders to give the agent something to choose
+        # These are basically placeholders to give the agent something to choose
         class Health(Card):
             def __init__(self):
                 super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -120,8 +116,7 @@ class AncientOfWar(MinionCard):
         return minion
 
 
-class IronbarkProtector (MinionCard):
-
+class IronbarkProtector(MinionCard):
     def __init__(self):
         super().__init__("Ironbark Protector", 8, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -132,16 +127,16 @@ class IronbarkProtector (MinionCard):
 
 
 class Cenarius(MinionCard):
-
     def __init__(self):
         super().__init__("Cenarius", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
 
-        #These are basically placeholders to give the agent something to choose
+        # These are basically placeholders to give the agent something to choose
         class IncreaseStats(Card):
             def __init__(self):
-                super().__init__("Give your other minions +2/+2 and taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Give your other minions +2/+2 and taunt", 0, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 for minion in player.minions:
@@ -162,7 +157,8 @@ class Cenarius(MinionCard):
                         minion = Minion(2, 2, MINION_TYPE.NONE)
                         minion.taunt = True
                         return minion
-                #TODO Check if Cenarius summons the minions before or after himself
+
+                # TODO Check if Cenarius summons the minions before or after himself
                 for i in [0, 1]:
                     treant = Treant()
                     treant.create_minion(player).add_to_board(treant, game, player, 0)

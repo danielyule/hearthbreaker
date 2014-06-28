@@ -1,10 +1,12 @@
 from random import randint
 import re
+
 import hsgame
 import hsgame.constants
 import hsgame.game_objects
 import hsgame.cards
 import hsgame.game_objects
+
 
 __author__ = 'Daniel'
 
@@ -15,7 +17,6 @@ class ReplayException(Exception):
 
 
 class ProxyCharacter:
-
     def __init__(self, character_ref, game=None):
         if type(character_ref) is str:
             self.character_ref = character_ref
@@ -52,10 +53,9 @@ class ProxyCharacter:
 
 
 class ProxyCard:
-
     def __init__(self, card_reference, game=None):
         self.card_ref = -1
-        if type(card_reference) is str:
+        if isinstance(card_reference, str):
             self.card_ref = card_reference
         else:
             index = 0
@@ -87,8 +87,8 @@ class ProxyCard:
 
 
 class ReplayAction:
-        def play(self, game):
-            pass
+    def play(self, game):
+        pass
 
 
 class SpellAction(ReplayAction):
@@ -140,7 +140,7 @@ class AttackAction(ReplayAction):
         self.target = ProxyCharacter(target, game)
 
     def to_output_string(self):
-            return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
+        return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
 
     def play(self, game):
         game.current_player.agent.next_target = self.target.resolve(game)
@@ -194,7 +194,6 @@ class ConcedeAction(ReplayAction):
 
 
 class Replay:
-
     def __init__(self):
         self.actions = []
         self.random_numbers = []
@@ -271,12 +270,11 @@ class Replay:
             for pattern_length in range(1, 15):
                 matched = True
                 for index in range(pattern_length, 30):
-                    if type(cards[index % pattern_length]) is not type(cards[index]):
+                    if not isinstance(cards[index % pattern_length], type(cards[index])):
                         matched = False
                         break
                 if matched:
                     return cards[0:pattern_length]
-
 
         if 'write' not in dir(file):
             writer = open(file, 'w')
@@ -362,15 +360,14 @@ class Replay:
                 self.actions.append(ConcedeAction())
         replayfile.close()
         if len(self.keeps) is 0:
-            self.keeps = [[0,1,2],[0,1,2,3]]
+            self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
+
 
 class RecordingGame(hsgame.game_objects.Game):
-
     def __init__(self, decks, agents):
         game = self
 
         class RecordingAgent:
-
             __slots__ = ['agent']
 
             def __init__(self, proxied_agent):
@@ -391,7 +388,6 @@ class RecordingGame(hsgame.game_objects.Game):
 
                 game.replay.record_option_chosen(options.index(option))
                 return option
-
 
             def __getattr__(self, item):
                 return self.agent.__getattribute__(item)
@@ -428,7 +424,6 @@ class RecordingGame(hsgame.game_objects.Game):
 
 
 class SavedGame(hsgame.game_objects.Game):
-
     def __init__(self, replay_file):
 
         replay = Replay()
@@ -464,7 +459,8 @@ class SavedGame(hsgame.game_objects.Game):
 
             def do_turn(self, player):
                 nonlocal action_index
-                while action_index < len(replay.actions) and not player.hero.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
+                while action_index < len(replay.actions) and not player.hero.dead and type(
+                        replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
                     replay.actions[action_index].play(game_ref)
                     action_index += 1
 

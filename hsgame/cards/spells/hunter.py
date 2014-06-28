@@ -61,4 +61,3 @@ class Flare(Card):
 
         game.other_player.secrets = []
         player.draw()
-
