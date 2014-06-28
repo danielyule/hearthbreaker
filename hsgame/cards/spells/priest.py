@@ -264,8 +264,8 @@ class Thoughtsteal(Card):
 
         for i in range(0, 2):
             if not len(cards) == 0 and not len(player.hand) == 10:
-            # TODO: We are assuming nothing will happen if you have 10 cards in hand.
-            # Will you even see the card go up in flames?
+                # TODO: We are assuming nothing will happen if you have 10 cards in hand.
+                # Will you even see the card go up in flames?
                 rand = game.random(0, len(cards) - 1)
                 card = copy.copy(cards.pop(rand))  # TODO: We are assuming you can't copy the same card twice
                 player.hand.append(card)

@@ -1,6 +1,6 @@
 from unittest.mock import Mock, call
-from hsgame.constants import CHARACTER_CLASS
 
+from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import *
@@ -15,13 +15,12 @@ import unittest
 
 
 class TestDruid(unittest.TestCase):
-
     def setUp(self):
         random.seed(1857)
 
     def test_Innervate(self):
         game = generate_game_for(Innervate, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
-        #triggers all four innervate cards the player is holding.
+        # triggers all four innervate cards the player is holding.
         game.play_single_turn()
         self.assertEqual(9, game.current_player.mana)
 
@@ -77,7 +76,8 @@ class TestDruid(unittest.TestCase):
 
     def test_ClawAndSavagery(self):
 
-        game = generate_game_for(BloodfenRaptor, [Claw, Claw, Savagery], MinionPlayingAgent, EnemyMinionSpellTestingAgent)
+        game = generate_game_for(BloodfenRaptor, [Claw, Claw, Savagery], MinionPlayingAgent,
+                                 EnemyMinionSpellTestingAgent)
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
@@ -97,7 +97,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[0].health)
         self.assertEqual(3, game.other_player.minions[0].max_health)
 
-        #Test that this spell is being silenced properly as well
+        # Test that this spell is being silenced properly as well
         game.other_player.minions[0].silence()
         self.assertEqual(1, game.other_player.minions[0].attack_power)
         self.assertEqual(1, game.other_player.minions[0].health)
@@ -107,7 +107,7 @@ class TestDruid(unittest.TestCase):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
 
-        #This is a test of the +1/+1 option of the Power Of the Wild Card
+        # This is a test of the +1/+1 option of the Power Of the Wild Card
         game = Game([deck1, deck2], [MinionPlayingAgent(), MinionPlayingAgent()])
         game.current_player = game.players[1]
 
@@ -122,7 +122,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].attack_power)
         self.assertEqual(2, game.current_player.minions[1].max_health)
 
-        #This is a test of the "Summon Panther" option of the Power of the Wild Card
+        # This is a test of the "Summon Panther" option of the Power of the Wild Card
 
         agent = MinionPlayingAgent()
         agent.choose_option = Mock(side_effect=lambda *options: options[1])
@@ -150,7 +150,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.current_player.max_mana)
 
-        #Make sure that the case where the player is at 10 mana works as well.
+        # Make sure that the case where the player is at 10 mana works as well.
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -158,12 +158,11 @@ class TestDruid(unittest.TestCase):
         card_draw_mock = Mock(side_effect=game.other_player.draw)
         game.other_player.draw = card_draw_mock
         game.play_single_turn()
-        #Each time the player draws, they will draw another wild growth, which will turn into excess mana, which will
-        #draw another card.  However, because of the ordering of the cards, the last excess mana will be after
-        #a wild growth, which prevents SpellTestingAgent from playing the card, so only 5 draws are made instead of the
+        # Each time the player draws, they will draw another wild growth, which will turn into excess mana, which will
+        # draw another card.  However, because of the ordering of the cards, the last excess mana will be after
+        # a wild growth, which prevents SpellTestingAgent from playing the card, so only 5 draws are made instead of the
         # possible 6
         self.assertEqual(5, card_draw_mock.call_count)
-
 
     def test_Wrath(self):
         game = generate_game_for(Wrath, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
@@ -188,7 +187,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.other_player.minions))
-        #Two wraths will have been played
+        # Two wraths will have been played
         self.assertEqual(1, game.other_player.minions[0].health)
 
     def test_HealingTouch(self):
@@ -220,6 +219,7 @@ class TestDruid(unittest.TestCase):
 
         def mock_choose(*options):
             return options[1]
+
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), MarkOfNature()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
         agent = MinionPlayingAgent()
@@ -258,16 +258,15 @@ class TestDruid(unittest.TestCase):
 
         game.other_player.hero.bind("attack_changed", player_increase_mock)
 
-
         game.play_single_turn()
 
         self.assertEqual(0, game.current_player.mana)
 
-        #Make sure the attack got increased
+        # Make sure the attack got increased
         self.assertListEqual([call(2), call(2)], minion_increase_mock.call_args_list)
         self.assertListEqual([call(2)], player_increase_mock.call_args_list)
 
-        #And make sure that it went down again
+        # And make sure that it went down again
         self.assertEqual(0, game.current_player.minions[0].temp_attack)
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
         self.assertEqual(0, game.current_player.hero.attack_power)
@@ -300,8 +299,8 @@ class TestDruid(unittest.TestCase):
         self.assertEqual("Treant", game.other_player.minions[1].card.name)
 
     def test_Swipe(self):
-        deck1 = StackedDeck([BloodfenRaptor(), StonetuskBoar(), StonetuskBoar()],CHARACTER_CLASS.DRUID)
-        deck2 = StackedDeck([Swipe()], CHARACTER_CLASS.DRUID,)
+        deck1 = StackedDeck([BloodfenRaptor(), StonetuskBoar(), StonetuskBoar()], CHARACTER_CLASS.DRUID)
+        deck2 = StackedDeck([Swipe()], CHARACTER_CLASS.DRUID, )
         game = Game([deck1, deck2], [MinionPlayingAgent(), EnemyMinionSpellTestingAgent()])
         game.pre_game()
         game.current_player = game.players[1]
@@ -322,14 +321,13 @@ class TestDruid(unittest.TestCase):
         self.assertListEqual([call(4, swipe_card), call(1, swipe_card), call(1, swipe_card)],
                              spell_damage_mock.call_args_list)
 
-        #The bloodfen raptor should be left, with one hp
+        # The bloodfen raptor should be left, with one hp
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(29, game.other_player.hero.health)
 
-
     def test_KeeperOfTheGrove(self):
-        #Test Moonfire option
+        # Test Moonfire option
 
         game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
 
@@ -346,7 +344,7 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(2, len(game.other_player.minions))
 
-        #Test Dispel option
+        # Test Dispel option
 
         random.seed(1857)
 
@@ -367,7 +365,7 @@ class TestDruid(unittest.TestCase):
 
         self.assertFalse(game.other_player.minions[0].charge)
 
-        #Test when there are no targets for the spell
+        # Test when there are no targets for the spell
         random.seed(1857)
         game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
 
@@ -382,7 +380,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Keeper of the Grove", game.current_player.minions[0].card.name)
 
-
     def test_DruidOfTheClaw(self):
         game = SavedGame("tests/replays/card_tests/DruidOfTheClaw.rep")
         game.start()
@@ -395,9 +392,8 @@ class TestDruid(unittest.TestCase):
 
     def test_Nourish(self):
 
-        #Test gaining two mana
+        # Test gaining two mana
         game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingBot)
-
 
         game.play_single_turn()
         game.play_single_turn()
@@ -412,18 +408,17 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(7, game.current_player.max_mana)
         self.assertEqual(7, len(game.current_player.hand))
 
-        #Ensure that the case where we would be over 10 mana is handled correctly
+        # Ensure that the case where we would be over 10 mana is handled correctly
 
         game.play_single_turn()
         game.play_single_turn()
-        #Nourish is played twice.  The first brings the player to 10, the second only increases the active mana, not
-        #max_mana
+        # Nourish is played twice.  The first brings the player to 10, the second only increases the active mana, not
+        # max_mana
 
         self.assertEqual(10, game.current_player.max_mana)
         self.assertEqual(2, game.current_player.mana)
 
-
-        #Test drawing three cards
+        # Test drawing three cards
         random.seed(1857)
         game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         game.players[0].agent.choose_option = Mock(side_effect=lambda gain2, draw3: draw3)
@@ -443,7 +438,7 @@ class TestDruid(unittest.TestCase):
 
     def test_Starfall(self):
 
-        #Test gaining two mana
+        # Test gaining two mana
         game = generate_game_for(Starfall, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 
         game.play_single_turn()
@@ -460,7 +455,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(30, game.other_player.hero.health)
 
-        #Test drawing three cards
+        # Test drawing three cards
         random.seed(1857)
         game = generate_game_for(Starfall, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
         game.players[0].agent.choose_option = Mock(side_effect=lambda damageAll, damageOne: damageOne)
@@ -679,7 +674,6 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(7, len(game.current_player.minions))
         self.assertFalse(game.other_player.minions[0].taunt)
 
-
     def test_Cenarius(self):
         deck1 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([WarGolem(), WarGolem(), Cenarius(), Cenarius()], CHARACTER_CLASS.DRUID)
@@ -745,4 +739,3 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[2].max_health)
         self.assertTrue(game.current_player.minions[2].taunt)
         self.assertEqual("Treant", game.current_player.minions[2].card.name)
-

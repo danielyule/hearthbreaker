@@ -1,9 +1,11 @@
 import copy
+
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from tests.testing_agents import SpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
+
 
 __author__ = 'Daniel'
 import random
@@ -13,9 +15,7 @@ from unittest.mock import Mock, call
 from hsgame.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 
-
 class TestGame(unittest.TestCase):
-
     def setUp(self):
         random.seed(1857)
 
@@ -34,7 +34,6 @@ class TestGame(unittest.TestCase):
 
         class MockAgent1:
             def do_card_check(self, cards):
-
                 test_env.assertEqual(len(cards), 3)
                 checked_cards.append(list(cards))
                 return [False, True, True]
@@ -44,7 +43,6 @@ class TestGame(unittest.TestCase):
 
         class MockAgent2:
             def do_card_check(self, cards):
-
                 test_env.assertEqual(len(cards), 4)
                 checked_cards.append(list(cards))
                 return [False, True, True, False]
@@ -116,22 +114,22 @@ class TestGame(unittest.TestCase):
             game.current_player.bind("turn_ended", assert_different)
             game.other_player.bind("turn_ended", assert_same)
 
-            #save the events as they are prior to the secret being played
+            # save the events as they are prior to the secret being played
             events = copy.copy(game.events)
             events.update(game.other_player.hero.events)
             events.update(game.other_player.events)
             events.update(game.current_player.hero.events)
             events.update(game.current_player.events)
 
-            #The secret is played, but the events aren't updated until the secret is activated
+            # The secret is played, but the events aren't updated until the secret is activated
             game.play_single_turn()
 
             self.assertEqual(1, len(game.current_player.secrets))
 
-            #Now the events should be changed
+            # Now the events should be changed
             game.play_single_turn()
 
-            #Now the events should be reset
+            # Now the events should be reset
             game.play_single_turn()
 
     def test_physical_hero_attacks(self):
@@ -145,7 +143,6 @@ class TestGame(unittest.TestCase):
 
 
 class TestBinding(unittest.TestCase):
-
     def test_bind(self):
         event = Mock()
         binder = Bindable()
@@ -178,6 +175,3 @@ class TestBinding(unittest.TestCase):
         binder.trigger("test")
         event.assert_called_with(5)
         event2.assert_called_with()
-
-
-

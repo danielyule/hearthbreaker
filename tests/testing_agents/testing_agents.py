@@ -61,7 +61,7 @@ class MinionAttackingAgent(MinionPlayingAgent):
             if minion.can_attack():
                 minion.attack()
 
-                
+
 class PredictableAgentWithoutHeroPower(DoNothingBot):
     def do_turn(self, player):
         done_something = True

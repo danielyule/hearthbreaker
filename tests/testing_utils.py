@@ -1,13 +1,14 @@
 import copy
 import collections
+
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
+
 
 __author__ = 'Daniel'
 
 
 class StackedDeck(Deck):
-
     def __init__(self, card_pattern, character_class):
         cards = []
         while len(cards) + len(card_pattern) < 30:
@@ -53,4 +54,3 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     game.other_player = game.players[0]
     game.pre_game()
     return game
-
