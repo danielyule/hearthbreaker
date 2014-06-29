@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,8 +10,9 @@
     
     <title>hsgame package &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -23,11 +26,16 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
     <link rel="top" title="Hearthstone Simulator" href="index.html" />
     <link rel="next" title="hsgame.agents package" href="hsgame.agents.html" />
     <link rel="prev" title="Welcome to hsgame’s documentation!" href="index.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+    <div class="relbar-top">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -36,16 +44,19 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.agents.html" title="hsgame.agents package"
-             accesskey="N">next</a> |</li>
+             accesskey="N">next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Welcome to hsgame’s documentation!"
-             accesskey="P">previous</a> |</li>
-        <li><a href="index.html">HS Sim</a> &raquo;</li> 
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
       </ul>
-    </div>  
+    </div>
+    </div>
+  
 
     <div class="document">
       <div class="documentwrapper">
@@ -153,7 +164,7 @@ and passed to the bound function.</p>
 <li><strong>str</strong> (<em>event</em>) &#8211; The event to bind a function to</li>
 <li><strong>function</strong> (<em>function</em>) &#8211; The function to bind.  The parameters are not checked until it is called, so
 ensure its signature matches the parameters called from <a class="reference internal" href="#hsgame.game_objects.Bindable.trigger" title="hsgame.game_objects.Bindable.trigger"><tt class="xref py py-meth docutils literal"><span class="pre">trigger()</span></tt></a></li>
-<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.2/library/functions.html#list" title="(in Python v3.2)"><em>list</em></a>) &#8211; Any other parameters to be called</li>
+<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#list" title="(in Python v3.3)"><em>list</em></a>) &#8211; Any other parameters to be called</li>
 </ul>
 </td>
 </tr>
@@ -201,7 +212,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>event</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/string.html#module-string" title="(in Python v3.3)"><em>string</em></a>) &#8211; The name of the event to trigger</li>
-<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.2/library/functions.html#list" title="(in Python v3.2)"><em>list</em></a>) &#8211; The remaining arguments to pass to the bound function</li>
+<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#list" title="(in Python v3.3)"><em>list</em></a>) &#8211; The remaining arguments to pass to the bound function</li>
 </ul>
 </td>
 </tr>
@@ -448,7 +459,7 @@ then any damage events should be triggered after the attack, and at the same tim
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>event</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/string.html#module-string" title="(in Python v3.3)"><em>string</em></a>) &#8211; The event to set up a delayed trigger for</li>
-<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.2/library/functions.html#list" title="(in Python v3.2)"><em>list</em></a>) &#8211; The arguments to pass to the handler when it is called.</li>
+<li><strong>args</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#list" title="(in Python v3.3)"><em>list</em></a>) &#8211; The arguments to pass to the handler when it is called.</li>
 </ul>
 </td>
 </tr>
@@ -986,7 +997,7 @@ anything but the default</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>card_name</strong> (<a class="reference external" href="http://docs.python.org/3.2/library/functions.html#str" title="(in Python v3.2)"><em>str</em></a>) &#8211; A string representing the name of the card in English</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>card_name</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#str" title="(in Python v3.3)"><em>str</em></a>) &#8211; A string representing the name of the card in English</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">An instance of a subclass of Card corresponding to the given card name or None if no Card
 by that name exists.</td>
@@ -1700,9 +1711,9 @@ by that name exists.</td>
         </div>
       </div>
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
+        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
+    <h3><a href="index.html">Page contents</a></h3>
+    <ul>
 <li><a class="reference internal" href="#">hsgame package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
@@ -1716,12 +1727,17 @@ by that name exists.</td>
 </li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to hsgame&#8217;s documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="hsgame.agents.html"
-                        title="next chapter">hsgame.agents package</a></p>
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="index.html"
+                          title="Previous page">&larr; Welcome to hsgame&#8217;s documentation!</a></p>
+  </div>
+  <div class="sphinxnext">
+    <h4>Next page</h4>
+    <p class="topless"><a href="hsgame.agents.html"
+                          title="Next page">&rarr; hsgame.agents package</a></p>
+  </div>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/hsgame.txt"
@@ -1744,6 +1760,8 @@ by that name exists.</td>
       </div>
       <div class="clearer"></div>
     </div>
+    <div class="relbar-bottom">
+        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -1752,18 +1770,22 @@ by that name exists.</td>
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
+             >modules</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="hsgame.agents.html" title="hsgame.agents package"
-             >next</a> |</li>
+             >next</a> &nbsp; &nbsp;</li>
         <li class="right" >
           <a href="index.html" title="Welcome to hsgame’s documentation!"
-             >previous</a> |</li>
-        <li><a href="index.html">HS Sim</a> &raquo;</li> 
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
       </ul>
     </div>
+    </div>
+
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
     </div>
+    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>
