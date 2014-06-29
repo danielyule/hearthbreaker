@@ -2,14 +2,16 @@ import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard
-from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard
+from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
+    Succubus, Felguard
 
 __author__ = 'randomflyingtaco'
 
 
 class MortalCoil(Card):
     def __init__(self):
-        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -24,7 +26,8 @@ class MortalCoil(Card):
 
 class Hellfire(Card):
     def __init__(self):
-        super().__init__("Hellfire", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
+        super().__init__("Hellfire", 4, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -38,7 +41,8 @@ class Hellfire(Card):
 
 class ShadowBolt(Card):
     def __init__(self):
-        super().__init__("Shadow Bolt", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE,
+        super().__init__("Shadow Bolt", 3, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -48,7 +52,8 @@ class ShadowBolt(Card):
 
 class DrainLife(Card):
     def __init__(self):
-        super().__init__("Drain Life", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Drain Life", 3, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -58,7 +63,9 @@ class DrainLife(Card):
 
 class Soulfire(Card):
     def __init__(self):
-        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -68,7 +75,8 @@ class Soulfire(Card):
 
 class TwistingNether(Card):
     def __init__(self):
-        super().__init__("Twisting Nether", 8, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC)
+        super().__init__("Twisting Nether", 8, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
@@ -80,7 +88,8 @@ class TwistingNether(Card):
 
 class Demonfire(Card):
     def __init__(self):
-        super().__init__("Demonfire", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Demonfire", 2, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -107,7 +116,8 @@ class Demonfire(Card):
 
 class SacrificialPact(Card):
     def __init__(self):
-        super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target,
                          lambda minion: minion.minion_type is MINION_TYPE.DEMON)
 
@@ -119,7 +129,8 @@ class SacrificialPact(Card):
 
 class SiphonSoul(Card):
     def __init__(self):
-        super().__init__("Siphon Soul", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
+        super().__init__("Siphon Soul", 6, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -130,14 +141,16 @@ class SiphonSoul(Card):
 
 class SenseDemons(Card):
     def __init__(self):
-        super().__init__("Sense Demons", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
+        super().__init__("Sense Demons", 3, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
         class WorthlessImp(MinionCard):
             def __init__(self):
-                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL)
+                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK,
+                                 CARD_RARITY.SPECIAL)
 
             def create_minion(self, p):
                 minion = Minion(1, 1, MINION_TYPE.DEMON)
@@ -148,7 +161,8 @@ class SenseDemons(Card):
         for index in range(0, 30):
             if not game.current_player.deck.used[index] and not game.current_player.deck.cards[index].is_spell():
                 # and minion.minion_type is MINION_TYPE.DEMON:
-                # I know this won't work, but how do I pull type info from the deck of cards
+                # I know this won't work, but how do I pull type info from the
+                # deck of cards
                 minions.append(game.other_player.deck.cards[index])
 
         if len(minions) == 1:
@@ -160,7 +174,8 @@ class SenseDemons(Card):
         for i in range(0, 2):
             rand = game.random(0, len(minions) - 1)
             card = copy.copy(minions.pop(rand))
-            self.trigger("card_drawn", card)  # can i have triggers here?  how do i command specific draws
+            # can i have triggers here?  how do i command specific draws
+            self.trigger("card_drawn", card)
             if len(player.hand) < 10:
                 player.hand.append(card)
             else:
@@ -169,22 +184,26 @@ class SenseDemons(Card):
 
 class BaneofDoom(Card):
     def __init__(self):
-        super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
+        super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.EPIC,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
-        demon_list = [VoidWalker(), FlameImp, DreadInfernal(), Succubus(), Felguard()]
+        demon_list = [VoidWalker(), FlameImp, DreadInfernal(), Succubus(),
+                      Felguard()]
         card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
         if self.target.health <= player.effective_spell_damage(2):
             self.target.damage(player.effective_spell_damage(2), self)
-            self.target.create_minion(player).add_to_board(card, game, player, 0)
+            self.target.create_minion(player).add_to_board(card, game, player,
+                                                           0)
         else:
             self.target.damage(player.effective_spell_damage(2), self)
 
 
 class Shadowflame(Card):
     def __init__(self):
-        super().__init__("Shadowflame", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
+        super().__init__("Shadowflame", 4, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
@@ -193,12 +212,14 @@ class Shadowflame(Card):
         targets = game.other_player.minions.copy()
         self.target.die(self)
         for minion in targets:
-            minion.damage(player.effective_spell_damage(shadowflame_damage), self)
+            minion.damage(player.effective_spell_damage(shadowflame_damage),
+                          self)
 
 
 class Corruption(Card):
     def __init__(self):
-        super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
@@ -208,12 +229,15 @@ class Corruption(Card):
             game.remove_minion(self.target, self.target.player)
 
         player.bind_once("turn_started", remove_minion)
-        self.target.bind_once("silenced", lambda minion: player.unbind("turn_started", remove_minion))
+        self.target.bind_once("silenced",
+                              lambda minion: player.unbind("turn_started",
+                                                           remove_minion))
 
 
 class PowerOverwhelming(Card):
     def __init__(self):
-        super().__init__("Power Overwhelming", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Power Overwhelming", 1, CHARACTER_CLASS.WARLOCK,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
@@ -222,6 +246,8 @@ class PowerOverwhelming(Card):
         def remove_minion(p):
             game.remove_minion(self.target, self.target.player)
         player.bind_once("turn_ended", remove_minion)
-        self.target.bind_once("silenced", lambda minion: player.unbind("turn_ended", remove_minion))
+        self.target.bind_once("silenced",
+                              lambda minion: player.unbind("turn_ended",
+                                                           remove_minion))
         self.target.change_attack(4)
         self.target.increase_health(4)

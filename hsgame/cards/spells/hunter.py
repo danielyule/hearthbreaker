@@ -7,7 +7,8 @@ __author__ = 'Daniel'
 
 class HuntersMark(Card):
     def __init__(self):
-        super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+        super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -17,7 +18,8 @@ class HuntersMark(Card):
 
 class ArcaneShot(Card):
     def __init__(self):
-        super().__init__("Arcane Shot", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE,
+        super().__init__("Arcane Shot", 1, CHARACTER_CLASS.HUNTER,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -27,7 +29,8 @@ class ArcaneShot(Card):
 
 class BestialWrath(Card):
     def __init__(self):
-        super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC,
+        super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
+                         CARD_RARITY.EPIC,
                          hsgame.targeting.find_minion_spell_target,
                          lambda minion: minion.minion_type is MINION_TYPE.BEAST)
 
@@ -53,7 +56,8 @@ class Flare(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in hsgame.targeting.find_minion_spell_target(game, lambda m: m.stealth):
+        for minion in hsgame.targeting.find_minion_spell_target(game,
+                                                                lambda m: m.stealth):
             minion.stealth = False
 
         for secret in game.other_player.secrets:

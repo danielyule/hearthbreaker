@@ -8,7 +8,8 @@ from hsgame.game_objects import Card, MinionCard, Minion
 # Druid Spells
 class Innervate(Card):
     def __init__(self):
-        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
+        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -20,7 +21,9 @@ class Innervate(Card):
 
 class Moonfire(Card):
     def __init__(self):
-        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -39,7 +42,8 @@ class Claw(Card):
 
 class Naturalize(Card):
     def __init__(self):
-        super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+        super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -51,7 +55,8 @@ class Naturalize(Card):
 
 class Savagery(Card):
     def __init__(self):
-        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -61,7 +66,8 @@ class Savagery(Card):
 
 class MarkOfTheWild(Card):
     def __init__(self):
-        super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
+        super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -73,14 +79,17 @@ class MarkOfTheWild(Card):
 
 class PowerOfTheWild(Card):
     def __init__(self):
-        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
         class LeaderOfThePack(Card):
             def __init__(self):
-                super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+                super().__init__("Leader of the Pack", 0,
+                                 CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.COMMON)
 
             def use(self, player, game):
                 for minion in player.minions:
@@ -89,18 +98,22 @@ class PowerOfTheWild(Card):
 
         class SummonPanther(Card):
             def __init__(self):
-                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 class Panther(MinionCard):
                     def __init__(self):
-                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID,
+                                         CARD_RARITY.SPECIAL)
 
                     def create_minion(self, _):
                         return Minion(3, 2, MINION_TYPE.BEAST)
 
                 panther = Panther()
-                panther.create_minion(player).add_to_board(panther, game, player, len(player.minions))
+                panther.create_minion(player).add_to_board(panther, game,
+                                                           player,
+                                                           len(player.minions))
 
         option = player.agent.choose_option(LeaderOfThePack(), SummonPanther())
         option.use(player, game)
@@ -108,7 +121,8 @@ class PowerOfTheWild(Card):
 
 class WildGrowth(Card):
     def __init__(self):
-        super().__init__("Wild Growth", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
+        super().__init__("Wild Growth", 2, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -121,7 +135,8 @@ class WildGrowth(Card):
 # Special card that only appears in tandem with Wild Growth
 class ExcessMana(Card):
     def __init__(self):
-        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.SPECIAL)
 
     def use(self, player, game):
         super().use(player, game)
@@ -136,7 +151,8 @@ class Wrath(Card):
     def use(self, player, game):
         class WrathOne(Card):
             def __init__(self):
-                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL,
                                  hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -145,14 +161,16 @@ class Wrath(Card):
 
         class WrathThree(Card):
             def __init__(self):
-                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL,
                                  hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.damage(player.effective_spell_damage(3), wrath)
 
         super().use(player, game)
-        option = game.current_player.agent.choose_option(WrathOne(), WrathThree())
+        option = game.current_player.agent.choose_option(WrathOne(),
+                                                         WrathThree())
         target = self.target
         wrath = self
         option.use(player, game)
@@ -160,7 +178,8 @@ class Wrath(Card):
 
 class HealingTouch(Card):
     def __init__(self):
-        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
+        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -170,13 +189,16 @@ class HealingTouch(Card):
 
 class MarkOfNature(Card):
     def __init__(self):
-        super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+        super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         class MarkOfNatureAttack(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Mark of Nature +4 Attack", 0,
+                                 CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL,
                                  hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -184,7 +206,9 @@ class MarkOfNature(Card):
 
         class MarkOfNatureHealth(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Mark of Nature +4 Health", 0,
+                                 CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL,
                                  hsgame.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -193,13 +217,15 @@ class MarkOfNature(Card):
 
         super().use(player, game)
         target = self.target
-        option = game.current_player.agent.choose_option(MarkOfNatureAttack(), MarkOfNatureHealth())
+        option = game.current_player.agent.choose_option(MarkOfNatureAttack(),
+                                                         MarkOfNatureHealth())
         option.use(player, game)
 
 
 class SavageRoar(Card):
     def __init__(self):
-        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -223,7 +249,8 @@ class Bite(Card):
 
 class SoulOfTheForest(Card):
     def __init__(self):
-        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         def apply_deathrattle(minion):
@@ -233,13 +260,15 @@ class SoulOfTheForest(Card):
 
                 class Treant(MinionCard):
                     def __init__(self):
-                        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+                        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID,
+                                         CARD_RARITY.COMMON)
 
                     def create_minion(self, _):
                         return Minion(2, 2)
 
                 treant = Treant()
-                treant.create_minion(player).add_to_board(treant, game, player, len(player.minions))
+                treant.create_minion(player).add_to_board(treant, game, player,
+                                                          len(player.minions))
 
             old_death_rattle = minion.deathrattle
             minion.deathrattle = summon_treant
@@ -264,7 +293,8 @@ class Swipe(Card):
                 minion.damage(player.effective_spell_damage(1), self)
 
         if self.target is not game.other_player.hero:
-            game.other_player.hero.damage(player.effective_spell_damage(1), self)
+            game.other_player.hero.damage(player.effective_spell_damage(1),
+                                          self)
 
 
 class Nourish(Card):
@@ -277,7 +307,9 @@ class Nourish(Card):
         class Gain2(Card):
 
             def __init__(self):
-                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Gain 2 mana crystals", 0,
+                                 CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 if player.max_mana < 8:
@@ -290,7 +322,8 @@ class Nourish(Card):
         class Draw3(Card):
 
             def __init__(self):
-                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 player.draw()
@@ -303,7 +336,8 @@ class Nourish(Card):
 
 class Starfall(Card):
     def __init__(self):
-        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.RARE)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) > 0
@@ -313,7 +347,8 @@ class Starfall(Card):
 
         class DamageAll(Card):
             def __init__(self):
-                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Do two damage to all enemy minions", 0,
+                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 for minion in game.other_player.minions.copy():
@@ -321,10 +356,12 @@ class Starfall(Card):
 
         class DamageOne(Card):
             def __init__(self):
-                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Do five damage to an enemy minion", 0,
+                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
-                targets = hsgame.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
+                targets = hsgame.targeting.find_minion_spell_target(game,
+                                                                    lambda t: t.spell_targetable())
                 target = player.agent.choose_target(targets)
                 target.damage(player.effective_spell_damage(5), self)
 
@@ -334,14 +371,16 @@ class Starfall(Card):
 
 class ForceOfNature(Card):
     def __init__(self):
-        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
+        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
 
         class Treant(MinionCard):
             def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID,
+                                 CARD_RARITY.COMMON)
 
             def create_minion(self, player):
                 minion = Minion(2, 2)
@@ -352,12 +391,16 @@ class ForceOfNature(Card):
             treant_card = Treant()
             treant = treant_card.create_minion(player)
             treant.add_to_board(treant_card, game, player, 0)
-            player.bind_once("turn_ended", lambda minion: game.remove_minion(minion, player), treant)
+            player.bind_once("turn_ended",
+                             lambda minion: game.remove_minion(minion, player),
+                             treant)
 
 
 class Starfire(Card):
     def __init__(self):
-        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID,
+                         CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

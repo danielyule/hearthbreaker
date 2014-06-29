@@ -7,7 +7,8 @@ __author__ = 'Daniel'
 
 class AvengingWrath(Card):
     def __init__(self):
-        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
+        super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
@@ -20,7 +21,8 @@ class AvengingWrath(Card):
 
 class BlessedChampion(Card):
     def __init__(self):
-        super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
+        super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -30,7 +32,8 @@ class BlessedChampion(Card):
 
 class BlessingOfKings(Card):
     def __init__(self):
-        super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+        super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -41,7 +44,8 @@ class BlessingOfKings(Card):
 
 class BlessingOfMight(Card):
     def __init__(self):
-        super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
+        super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -51,7 +55,8 @@ class BlessingOfMight(Card):
 
 class BlessingOfWisdom(Card):
     def __init__(self):
-        super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+        super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -61,13 +66,18 @@ class BlessingOfWisdom(Card):
         super().use(player, game)
         self.target.bind("attack_minion", draw, self.target)
         self.target.bind("attack_player", draw, self.target)
-        self.target.bind_once("silenced", lambda minion: minion.unbind("attack_minion", draw), self.target)
-        self.target.bind_once("silenced", lambda minion: minion.unbind("attack_player", draw), self.target)
+        self.target.bind_once("silenced",
+                              lambda minion: minion.unbind("attack_minion",
+                                                           draw), self.target)
+        self.target.bind_once("silenced",
+                              lambda minion: minion.unbind("attack_player",
+                                                           draw), self.target)
 
 
 class Consecration(Card):
     def __init__(self):
-        super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -78,7 +88,8 @@ class Consecration(Card):
 
 class DivineFavor(Card):
     def __init__(self):
-        super().__init__("Divine Favor", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE)
+        super().__init__("Divine Favor", 3, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -88,7 +99,8 @@ class DivineFavor(Card):
 
 class Equality(Card):
     def __init__(self):
-        super().__init__("Equality", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE)
+        super().__init__("Equality", 2, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -105,7 +117,8 @@ class Equality(Card):
 
 class HammerOfWrath(Card):
     def __init__(self):
-        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
+        super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -117,7 +130,8 @@ class HammerOfWrath(Card):
 
 class HandOfProtection(Card):
     def __init__(self):
-        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
+        super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -128,7 +142,8 @@ class HandOfProtection(Card):
 
 class HolyLight(Card):
     def __init__(self):
-        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -138,7 +153,8 @@ class HolyLight(Card):
 
 class HolyWrath(Card):
     def __init__(self):
-        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, hsgame.targeting.find_spell_target)
+        super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.RARE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -150,7 +166,8 @@ class HolyWrath(Card):
 
 class Humility(Card):
     def __init__(self):
-        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+        super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -162,7 +179,8 @@ class Humility(Card):
 
 class LayOnHands(Card):
     def __init__(self):
-        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
+        super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.EPIC,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -176,7 +194,8 @@ class LayOnHands(Card):
 
 class EyeForAnEye(SecretCard):
     def __init__(self):
-        super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON)
 
     def _reveal(self, amount, what):
         self.player.game.current_player.hero.damage(amount, self)
@@ -191,7 +210,8 @@ class EyeForAnEye(SecretCard):
 
 class NobleSacrifice(SecretCard):
     def __init__(self):
-        super().__init__("Noble Sacrifice", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Noble Sacrifice", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON)
 
     def _reveal(self, attacker):
         player = attacker.game.other_player
@@ -199,7 +219,8 @@ class NobleSacrifice(SecretCard):
         if len(player.minions) < 7:
             class DefenderMinion(MinionCard):
                 def __init__(self):
-                    super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+                    super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN,
+                                     CARD_RARITY.SPECIAL)
 
                 def create_minion(self, p):
                     return Minion(2, 1)
@@ -226,7 +247,8 @@ class NobleSacrifice(SecretCard):
 
 class Redemption(SecretCard):
     def __init__(self):
-        super().__init__("Redemption", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Redemption", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON)
 
     def _reveal(self, minion, by, player):
         if minion.player is player:
@@ -248,7 +270,8 @@ class Redemption(SecretCard):
 
 class Repentance(SecretCard):
     def __init__(self):
-        super().__init__("Repentance", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Repentance", 1, CHARACTER_CLASS.PALADIN,
+                         CARD_RARITY.COMMON)
 
     def _reveal(self, minion, player):
         if minion.player is not player:

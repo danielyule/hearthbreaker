@@ -10,7 +10,8 @@ __author__ = 'Daniel'
 
 class CircleOfHealing(Card):
     def __init__(self):
-        super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+        super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -24,7 +25,8 @@ class CircleOfHealing(Card):
 
 class DivineSpirit(Card):
     def __init__(self):
-        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -37,7 +39,8 @@ class DivineSpirit(Card):
 
 class HolyFire(Card):
     def __init__(self):
-        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
+        super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -49,7 +52,8 @@ class HolyFire(Card):
 
 class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
-        super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+        super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -63,7 +67,8 @@ class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
 
 class HolySmite(Card):
     def __init__(self):
-        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
+        super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -73,7 +78,8 @@ class HolySmite(Card):
 
 class InnerFire(Card):
     def __init__(self):
-        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -82,12 +88,15 @@ class InnerFire(Card):
         # This will increase/decrease a minions attack to its current health
         # It will set the attack to its current health, not max health
         # (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)
-        self.target.change_attack(self.target.health - self.target.attack_power)
+        delta = self.target.health - self.target.attack_power
+        self.target.change_attack(delta)
 
 
-class MassDispel(Card):  # TODO: Can this spell be cast if the enemy have no minions?
+# TODO: Can this spell be cast if the enemy have no minions?
+class MassDispel(Card):
     def __init__(self):
-        super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
+        super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -100,7 +109,8 @@ class MassDispel(Card):  # TODO: Can this spell be cast if the enemy have no min
 
 class MindBlast(Card):
     def __init__(self):
-        super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE)
+        super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -110,7 +120,8 @@ class MindBlast(Card):
 
 class MindControl(Card):
     def __init__(self):
-        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
@@ -120,27 +131,32 @@ class MindControl(Card):
         self.target.add_to_board(self.target.card, self.target.game, player, 0)
 
 
-class MindVision(Card):  # TODO: Can this card be played if opponent has no cards in hand?
+# TODO: Can this card be played if opponent has no cards in hand?
+class MindVision(Card):
     def __init__(self):
-        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
-        card = copy.deepcopy(game.other_player.hand[game.random(0, len(game.other_player.hand) - 1)])
+        card = copy.deepcopy(game.other_player.hand[game.random(0,
+                                                                len(game.other_player.hand) - 1)])
         player.hand.append(card)
 
 
 class Mindgames(Card):
     def __init__(self):
-        super().__init__("Mindgames", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+        super().__init__("Mindgames", 4, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
 
         class ShadowOfNothing(MinionCard):
             def __init__(self):
-                super().__init__("Shadow of Nothing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
+                super().__init__("Shadow of Nothing", 0,
+                                 CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
 
             def create_minion(self, p):
                 minion = Minion(0, 1)
@@ -161,7 +177,8 @@ class Mindgames(Card):
 
 class PowerWordShield(Card):
     def __init__(self):
-        super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE,
+        super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -173,7 +190,8 @@ class PowerWordShield(Card):
 
 class ShadowMadness(Card):
     def __init__(self):
-        super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
+        super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.RARE,
                          hsgame.targeting.find_enemy_minion_spell_target,
                          lambda target: target.attack_power <= 3 and target.spell_targetable())
 
@@ -186,7 +204,8 @@ class ShadowMadness(Card):
             m = copy.deepcopy(minion)
 
             minion.remove_from_board()
-            m.add_to_board(self.target.card, self.target.game, self.target.player, 0)
+            m.add_to_board(self.target.card, self.target.game,
+                           self.target.player, 0)
 
         super().use(player, game)
 
@@ -202,7 +221,8 @@ class ShadowMadness(Card):
 
 class ShadowWordDeath(Card):
     def __init__(self):
-        super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target,
                          lambda target: target.attack_power >= 5 and target.spell_targetable())
 
@@ -214,7 +234,8 @@ class ShadowWordDeath(Card):
 
 class ShadowWordPain(Card):
     def __init__(self):
-        super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE,
+        super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target,
                          lambda target: target.attack_power <= 3 and target.spell_targetable())
 
@@ -226,7 +247,8 @@ class ShadowWordPain(Card):
 
 class Shadowform(Card):
     def __init__(self):
-        super().__init__("Shadowform", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+        super().__init__("Shadowform", 3, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
@@ -240,7 +262,8 @@ class Shadowform(Card):
 
 class Silence(Card):
     def __init__(self):
-        super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -251,7 +274,8 @@ class Silence(Card):
 
 class Thoughtsteal(Card):
     def __init__(self):
-        super().__init__("Thoughtsteal", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+        super().__init__("Thoughtsteal", 3, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -264,8 +288,9 @@ class Thoughtsteal(Card):
 
         for i in range(0, 2):
             if not len(cards) == 0 and not len(player.hand) == 10:
-                # TODO: We are assuming nothing will happen if you have 10 cards in hand.
-                # Will you even see the card go up in flames?
+                # TODO: We are assuming nothing will happen if you have 10
+                # cards in hand. Will you even see the card go up in flames?
                 rand = game.random(0, len(cards) - 1)
-                card = copy.copy(cards.pop(rand))  # TODO: We are assuming you can't copy the same card twice
+                # TODO: We are assuming you can't copy the same card twice
+                card = copy.copy(cards.pop(rand))
                 player.hand.append(card)
