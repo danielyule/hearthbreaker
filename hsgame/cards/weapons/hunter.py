@@ -6,7 +6,8 @@ __author__ = 'Daniel'
 
 class EaglehornBow(WeaponCard):
     def __init__(self):
-        super().__init__("Eaglehorn Bow", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+        super().__init__("Eaglehorn Bow", 3, CHARACTER_CLASS.HUNTER,
+                         CARD_RARITY.RARE)
 
     def create_weapon(self, player):
         def increase_durability(s):
@@ -22,7 +23,8 @@ class EaglehornBow(WeaponCard):
 
 class GladiatorsLongbow(WeaponCard):
     def __init__(self):
-        super().__init__("Gladiator's Longbow", 7, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
+        super().__init__("Gladiator's Longbow", 7, CHARACTER_CLASS.HUNTER,
+                         CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
         def make_immune(ignored_target):
