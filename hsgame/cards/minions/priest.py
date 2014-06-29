@@ -8,13 +8,15 @@ __author__ = 'Daniel'
 
 class AuchenaiSoulpriest(MinionCard):
     def __init__(self):
-        super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
+        super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def silence():
             player.heal_does_damage = False
 
-            # If another Auchenai Soulpriest is alive and not silenced, keep heal_does_damage as True
+            # If another Auchenai Soulpriest is alive and not silenced, keep
+            # heal_does_damage as True
             for m in player.minions:
                 if m.card.name == "Auchenai Soulpriest" and not m.silenced and m is not minion:
                     player.heal_does_damage = True
@@ -27,8 +29,10 @@ class AuchenaiSoulpriest(MinionCard):
 
 class CabalShadowPriest(MinionCard):
     def __init__(self):
-        super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
-                         hsgame.targeting.find_enemy_minion_battlecry_target, lambda target: target.attack_power <= 2)
+        super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.EPIC,
+                         hsgame.targeting.find_enemy_minion_battlecry_target,
+                         lambda target: target.attack_power <= 2)
 
     def create_minion(self, player):
         return Minion(4, 5, battlecry=take_control_of_minion)
@@ -36,7 +40,8 @@ class CabalShadowPriest(MinionCard):
 
 class Lightspawn(MinionCard):
     def __init__(self):
-        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def attack_equal_to_health():
@@ -51,13 +56,16 @@ class Lightspawn(MinionCard):
         minion.change_attack(minion.health - minion.attack_power)
         minion.bind("health_changed", attack_equal_to_health)
         minion.bind("attack_changed", prevent_attack_change)
-        minion.bind_once("silenced", lambda: minion.unbind("health_changed", attack_equal_to_health))
+        minion.bind_once("silenced",
+                         lambda: minion.unbind("health_changed",
+                                               attack_equal_to_health))
         return minion
 
 
 class Lightwell(MinionCard):
     def __init__(self):
-        super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
+        super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def heal_damaged_friendly_character():
@@ -69,13 +77,16 @@ class Lightwell(MinionCard):
 
         minion = Minion(0, 5)
         player.bind("turn_started", heal_damaged_friendly_character)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_damaged_friendly_character))
+        minion.bind_once("silenced",
+                         lambda: player.unbind("turn_started",
+                                               heal_damaged_friendly_character))
         return minion
 
 
 class NorthshireCleric(MinionCard):
     def __init__(self):
-        super().__init__("Northshire Cleric", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.FREE)
+        super().__init__("Northshire Cleric", 1, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.FREE)
 
     def create_minion(self, player):
         def draw_card():
@@ -83,13 +94,16 @@ class NorthshireCleric(MinionCard):
 
         minion = Minion(1, 3)
         player.game.bind("minion_healed", draw_card)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", draw_card))
+        minion.bind_once("silenced",
+                         lambda: player.game.unbind("minion_healed",
+                                                    draw_card))
         return minion
 
 
 class ProphetVelen(MinionCard):
     def __init__(self):
-        super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY)
+        super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
         def silence():
@@ -105,7 +119,8 @@ class ProphetVelen(MinionCard):
 
 class TempleEnforcer(MinionCard):
     def __init__(self):
-        super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+        super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST,
+                         CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):

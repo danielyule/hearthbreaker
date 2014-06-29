@@ -8,7 +8,8 @@ from hsgame.game_objects import MinionCard, Minion, SecretCard
 
 class ManaWyrm(MinionCard):
     def __init__(self):
-        super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def increase_attack(card):
@@ -16,13 +17,15 @@ class ManaWyrm(MinionCard):
 
         minion = Minion(1, 3)
         player.bind("spell_cast", increase_attack)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
+        minion.bind_once("silenced", lambda: player.unbind("spell_cast",
+                                                           increase_attack))
         return minion
 
 
 class SorcerersApprentice(MinionCard):
     def __init__(self):
-        super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         class Filter:
@@ -33,20 +36,23 @@ class SorcerersApprentice(MinionCard):
 
         filter = Filter()
         minion = Minion(3, 2)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
+        minion.bind_once("silenced",
+                         lambda: player.mana_filters.remove(filter))
         player.mana_filters.append(filter)
         return minion
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
-        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def first_secret_cost_zero(m):
             class Filter:
                 def __init__(self):
-                    # To make sure that no matter what the cost of a secret, it will be 0
+                    # To make sure that no matter what the cost of a secret, it
+                    # will be 0
                     self.amount = 100
                     self.filter = lambda c: type(c) in SecretCard.__subclasses__()
                     self.min = 0
@@ -71,7 +77,8 @@ class KirinTorMage(MinionCard):
 
 class EtherealArcanist(MinionCard):
     def __init__(self):
-        super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+        super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def increase_stats():
@@ -90,7 +97,8 @@ class EtherealArcanist(MinionCard):
 
 class WaterElemental(MinionCard):
     def __init__(self):
-        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def did_damage(amount, target):
@@ -103,7 +111,8 @@ class WaterElemental(MinionCard):
 
 class ArchmageAntonidas(MinionCard):
     def __init__(self):
-        super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY)
+        super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE,
+                         CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
         def add_fireball(c):
@@ -111,5 +120,6 @@ class ArchmageAntonidas(MinionCard):
                 player.hand.append(hsgame.cards.Fireball())
 
         player.bind("spell_cast", add_fireball)
-        player.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
+        player.bind_once("silenced", lambda: player.unbind("spell_cast",
+                                                           add_fireball))
         return Minion(5, 7)
