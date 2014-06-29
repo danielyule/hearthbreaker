@@ -450,6 +450,11 @@ class Card(Bindable):
         """
             Creates a new :class:`Card`.
 
+            ``target_func`` and ``filter_func`` have very specific behavior.  In use, the target function is called with
+             the filter function as a parameter to generate the list of possible targets for the card, then ask the
+             agent to choose the appropriate target.  The selected target will be available as the :attr:`target`
+             attribute of :class:`Card`. As such, it is critical to call :meth:`use` in any overriding implementations.
+
             :param string name: The name of the card in English
             :param int mana: The base amount of mana this card costs
             :param int character_class: A constant from :class:`hsgame.constants.CHARACTER_CLASS` denoting
@@ -584,6 +589,10 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
     def reveal(self):
         self.player.trigger("secret_revealed", self)
         self.player.secrets.remove(self)
+
+    @abc.abstractmethod
+    def _reveal(self, *args):
+        pass
 
     @abc.abstractmethod
     def activate(self, player):
@@ -741,7 +750,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
                                      the weapon is assumed not to require a target for its battlecry.
                                      If `target_func` returns None, then the card is played, but with no target (i.e. a
-                                      battlecry which has no valid target will not stop the weapon from being played).
+                                     battlecry which has no valid target will not stop the weapon from being played).
                                      See :mod:`hsgame.targeting` for more details.
         :param function filter_func: A boolean function which can be used to filter the list of targets. An example
                                      for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
