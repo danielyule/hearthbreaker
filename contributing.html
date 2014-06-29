@@ -1,0 +1,315 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Contributing &mdash; Hearthstone Simulator</title>
+    
+    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
+    <script type="text/javascript" src="_static/cloud.js"></script>
+    <link rel="top" title="Hearthstone Simulator" href="index.html" />
+    <link rel="prev" title="Implemented Cards" href="cards.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <div class="relbar-top">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="cards.html" title="Implemented Cards"
+             accesskey="P">previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>This document is designed as a quick start guide to get new contributors up and running as fast as possible.
+Everything in this document can be gleaned from reading other card&#8217;s implementations, but is collected here for
+ease of reference.</p>
+<p>Currently, the most straightforward way to contribute is to implement cards that have not yet been implemented, although
+any contributions at all are welcome.  Other options include finding and filing issues, joining the
+<a class="reference external" href="https://groups.google.com/forum/#!forum/hearthstone-simulator-dev">developer mailing list</a>  and adding your voice to
+the discussions or helping test edge cases or researching others&#8217; work in finding strange applications of Hearthstone&#8217;s
+logic.</p>
+<p>All code should conform to the style dictated by <a class="reference external" href="http://legacy.python.org/dev/peps/pep-0008/">Python&#8217;s PEP8 Style Guide</a>
+The only exception is that unit tests for cards are named <tt class="docutils literal"><span class="pre">test_CardName</span></tt> where <tt class="docutils literal"><span class="pre">CardName</span></tt> is the name of the class.
+This is to match the CamelCase convention for card names, but it contradicts the convention for method names to be
+written in lowercase with underscores separating the words.  PEP8 Validation can be done by the
+<a class="reference external" href="https://pypi.python.org/pypi/flake8">flake8 tool</a>.  It can be installed with</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install flake8
+</pre></div>
+</div>
+<p>It can then be run on the whole project by running the following command in the root directory.</p>
+<div class="highlight-python"><div class="highlight"><pre>flake8 .
+</pre></div>
+</div>
+<p>Any new code should be accompanied with a unit test which runs through the new code at least once.  All tests can be invoked with</p>
+<div class="highlight-python"><div class="highlight"><pre>python -m unittest discover -s tests -p *_tests.py
+</pre></div>
+</div>
+<div class="section" id="adding-new-cards">
+<h2>Adding new cards<a class="headerlink" href="#adding-new-cards" title="Permalink to this headline">¶</a></h2>
+<p>Every card added to the game is implemented as a subclass of <a class="reference internal" href="hsgame.html#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> (for spells) or its
+subclasses <a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard" title="hsgame.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a> (for minions),
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard" title="hsgame.game_objects.SecretCard"><tt class="xref py py-class docutils literal"><span class="pre">SecretCard</span></tt></a> (for secrets) or
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.WeaponCard" title="hsgame.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a> (for Weapons).</p>
+<p>Cards are organized first by type, then by class.  So, for example, <tt class="docutils literal"><span class="pre">Corruption</span></tt> would be found in
+<tt class="docutils literal"><span class="pre">hsgame/cards/spells/warlock.py</span></tt>, whereas <tt class="docutils literal"><span class="pre">EaglehornBow</span></tt> would be found in <tt class="docutils literal"><span class="pre">hsgame/cards/weapons/hunter.py</span></tt>.
+All cards are imported by the <tt class="docutils literal"><span class="pre">__init__.py</span></tt> in their card type folder.  So, for example, <tt class="docutils literal"><span class="pre">GuardianOfKings</span></tt> is
+imported in <tt class="docutils literal"><span class="pre">hsgame/cards/minions/__init__.py</span></tt>.  These are then imported by <tt class="docutils literal"><span class="pre">hsgame/cards/__init__.py</span></tt> so that
+simply writing <tt class="docutils literal"><span class="pre">from</span> <span class="pre">hsgame.cards</span> <span class="pre">import</span> <span class="pre">*</span></tt> will import all cards and nothing else.</p>
+<dl class="docutils">
+<dt>So, when implementing a new card, follow these steps:</dt>
+<dd><ol class="first last arabic simple">
+<li>Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)</li>
+<li>Create a constructor for that class which calls the super&#8217;s constructor with the needed attributes</li>
+<li>Add the method which performs the action of the card (<a class="reference internal" href="hsgame.html#hsgame.game_objects.Card.use" title="hsgame.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> for spells, <a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard.create_minion" title="hsgame.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> for minions, <a class="reference internal" href="hsgame.html#hsgame.game_objects.WeaponCard.create_weapon" title="hsgame.game_objects.WeaponCard.create_weapon"><tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt></a> for
+weapons, and <a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.activate" title="hsgame.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a>, <a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.deactivate" title="hsgame.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a> and <tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt> for secrets &#8211; see the section for each type of card)</li>
+<li>Add an entry to the appropriate <tt class="docutils literal"><span class="pre">__init__.py</span></tt></li>
+<li>Change the card&#8217;s entry in <tt class="docutils literal"><span class="pre">cards.csv</span></tt> to &#8216;yes&#8217; in the first column</li>
+<li>Write at least one test for the new card</li>
+</ol>
+</dd>
+</dl>
+<div class="section" id="creating-a-constructor">
+<h3>Creating a Constructor<a class="headerlink" href="#creating-a-constructor" title="Permalink to this headline">¶</a></h3>
+<p>All cards must have a constructor that takes zero arguments.  This constructor must invoke the super instructor
+with information about the card.  Details can be found in the documentation for
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.Card.__init__" title="hsgame.game_objects.Card.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">Card.__init__</span></tt></a>, but essentially the following properties must be set:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Card name in English</p>
+</li>
+<li><p class="first">The card&#8217;s basic mana cost</p>
+</li>
+<li><p class="first">The character class associated with the card</p>
+</li>
+<li><p class="first">The card&#8217;s rarity</p>
+</li>
+<li><dl class="first docutils">
+<dt>(optional) a function for finding targets for the card (e.g. only enemy minions).  This is typically taken from the</dt>
+<dd><p class="first last">targeting module</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>(optional) a function for filtering targets (e.g. minions with less than three attack).  This is typically a lambda</dt>
+<dd><p class="first last">function that takes a possible target as input and returns a boolean</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>For example, here is the implementation of Cabal Shadow Priest, with comments for clarity:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">CabalShadowPriest</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span>
+                         <span class="s">&quot;Cabal Shadow Priest&quot;</span><span class="p">,</span>                               <span class="c"># The name of the card in English</span>
+                         <span class="mi">6</span><span class="p">,</span>                                                   <span class="c"># The card&#39;s mana cost</span>
+                         <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span>                              <span class="c"># The card can only be included in a Priest deck</span>
+                         <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">,</span>                                    <span class="c"># The card&#39;s rarity is epic (has a purple gem)</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_enemy_minion_battlecry_target</span><span class="p">,</span> <span class="c"># The card targets enemy minions only</span>
+                         <span class="k">lambda</span> <span class="n">target</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">attack_power</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>             <span class="c"># Among enemy minions, only those with attack less than 2</span>
+
+    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">battlecry</span><span class="o">=</span><span class="n">take_control_of_minion</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specific-instructions-for-card-types">
+<h3>Specific Instructions for Card Types<a class="headerlink" href="#specific-instructions-for-card-types" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="creating-a-new-spell">
+<h4>Creating a new spell<a class="headerlink" href="#creating-a-new-spell" title="Permalink to this headline">¶</a></h4>
+<p>Spells are direct subclasses of <a class="reference internal" href="hsgame.html#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a>.  In addition to creating a constructor, you must also
+override the <a class="reference internal" href="hsgame.html#hsgame.game_objects.Card.use" title="hsgame.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> method.  This method takes two parameters, player and game.
+The player is the player who played the card, and game is the game that the card was played in.  It is essential that
+implementations include a call to super. This call reduces the players mana by the cost of the card, and uses the
+targeting function to generate a list of targets.  This list of available as <tt class="docutils literal"><span class="pre">self.target</span></tt>.  For example when
+implementing <a class="reference external" href="http://hearthstone.gamepedia.com/Barrel_Toss">Barrel Toss</a> the code would look as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">BarrelToss</span><span class="p">(</span><span class="n">Card</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Barrel Toss&quot;</span><span class="p">,</span>                             <span class="c"># The card&#39;s name in English</span>
+                         <span class="mi">1</span><span class="p">,</span>                                         <span class="c"># The card&#39;s mana cost</span>
+                         <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MUKLA</span><span class="p">,</span>                     <span class="c"># Which character can use this card</span>
+                         <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span>                        <span class="c"># How rare the card is</span>
+                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span>         <span class="c"># This spell can target any character</span>
+                         <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>                                   <span class="c"># Must call super().use() first</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">damage</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">effective_spell_damage</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>  <span class="c"># calculate spell damage and damage</span>
+                                                                    <span class="c"># the target</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-new-secret">
+<h4>Creating a new secret<a class="headerlink" href="#creating-a-new-secret" title="Permalink to this headline">¶</a></h4>
+<p>Secrets are more complicated than normal spells, because they are activated on the enemy player&#8217;s term and deactivated
+on the player&#8217;s turn.  As such they make heavy use of the game&#8217;s
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">event</span> <span class="pre">binding</span> <span class="pre">system</span></tt></a>.  Secrets require three methods:</p>
+<dl class="docutils">
+<dt><a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.activate" title="hsgame.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a></dt>
+<dd>Fires at the beginning of the enemy player&#8217;s turn.  Should be used to bind any event listeners needed for the secret.</dd>
+<dt><a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.deactivate" title="hsgame.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a></dt>
+<dd>Fires at the end of the enemy player&#8217;s turn.  Should be used to unbind any event listeners that the secret set up in
+<tt class="docutils literal"><span class="pre">activate</span></tt>.</dd>
+<dt><tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt></dt>
+<dd>Should be called by the event listeners set up in <tt class="docutils literal"><span class="pre">activate</span></tt>.  This method does whatever the action of the secret
+is.  Make sure to call super().reveal (no underscore) somewhere in the body of this method.</dd>
+</dl>
+<p>For example, suppose we were going to implement a Warlock secret which did one damage to all characters when a spell is
+played.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">UnstableMagicks</span><span class="p">(</span><span class="n">SecretCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Unstable Magicks&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">WARLOCK</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">LEGENDARY</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind_once</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>              <span class="c"># We shall want to perform the action</span>
+                                                                  <span class="c"># of the secret when a spell is played</span>
+
+    <span class="k">def</span> <span class="nf">deactivate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="s">&quot;spell_cast&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reveal</span><span class="p">)</span>                 <span class="c"># On our own turn, we don&#39;t want the secret</span>
+                                                                  <span class="c"># to activate</span>
+
+    <span class="k">def</span> <span class="nf">_reveal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attacker</span><span class="p">):</span>                                  <span class="c"># This method will be called when the</span>
+        <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>                <span class="c"># secret is revealed.  But only because</span>
+        <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>               <span class="c"># it&#39;s set up that way in activate()</span>
+        <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>                    <span class="c"># _reveal() will not be called unless it&#39;s</span>
+        <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>                  <span class="c"># bound in activate.</span>
+        <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">damage</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">reveal</span><span class="p">()</span>                                          <span class="c"># Always be sure to call super().reveal()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-a-new-minion">
+<h4>Creating a new minion<a class="headerlink" href="#creating-a-new-minion" title="Permalink to this headline">¶</a></h4>
+</div>
+<div class="section" id="creating-a-new-weapon">
+<h4>Creating a new weapon<a class="headerlink" href="#creating-a-new-weapon" title="Permalink to this headline">¶</a></h4>
+</div>
+</div>
+<div class="section" id="unit-testing-techniques">
+<h3>Unit Testing Techniques<a class="headerlink" href="#unit-testing-techniques" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
+    <h3><a href="index.html">Page contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Contributing</a><ul>
+<li><a class="reference internal" href="#adding-new-cards">Adding new cards</a><ul>
+<li><a class="reference internal" href="#creating-a-constructor">Creating a Constructor</a></li>
+<li><a class="reference internal" href="#specific-instructions-for-card-types">Specific Instructions for Card Types</a><ul>
+<li><a class="reference internal" href="#creating-a-new-spell">Creating a new spell</a></li>
+<li><a class="reference internal" href="#creating-a-new-secret">Creating a new secret</a></li>
+<li><a class="reference internal" href="#creating-a-new-minion">Creating a new minion</a></li>
+<li><a class="reference internal" href="#creating-a-new-weapon">Creating a new weapon</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#unit-testing-techniques">Unit Testing Techniques</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div class="sphinxprev">
+    <h4>Previous page</h4>
+    <p class="topless"><a href="cards.html"
+                          title="Previous page">&larr; Implemented Cards</a></p>
+  </div>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/contributing.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> &nbsp; &nbsp;</li>
+        <li class="right" >
+          <a href="cards.html" title="Implemented Cards"
+             >previous</a> &nbsp; &nbsp;</li>
+    <li><a href="index.html">HS Sim</a> &raquo;</li>
+ 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer">
+        &copy; Copyright 2014, Daniel Yule.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
