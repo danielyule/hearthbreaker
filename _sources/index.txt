@@ -7,7 +7,7 @@ Welcome to hsgame's documentation!
 ==================================
 
 The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
-data mining of Blizzard's `Hearthstone: Heroes of WarCraft <http://battle.net/hearthstone>`_.  The end goal
+data mining of Blizzard's .  The end goal
 is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
 them.  The results from these games can be used to determine cards which work well together and cards which do not, and
 possibly discover new deck types.
@@ -18,7 +18,7 @@ The project is currently under construction.  A list of cards and their implemen
 Contents:
 
 .. toctree::
-   :maxdepth: 4
+   :titlesonly:
 
    hsgame
    cards

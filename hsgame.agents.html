@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -10,9 +8,8 @@
     
     <title>hsgame.agents package &mdash; Hearthstone Simulator</title>
     
-    <link rel="stylesheet" href="_static/cloud.css" type="text/css" />
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
@@ -26,17 +23,12 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/jquery.cookie.js"></script>
-    <script type="text/javascript" src="_static/cloud.js"></script>
     <link rel="top" title="Hearthstone Simulator" href="index.html" />
     <link rel="up" title="hsgame package" href="hsgame.html" />
-    <link rel="next" title="hsgame.cards package" href="hsgame.cards.html" />
+    <link rel="next" title="Implemented Cards" href="cards.html" />
     <link rel="prev" title="hsgame package" href="hsgame.html" /> 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <div class="relbar-top">
-        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -45,20 +37,17 @@
              accesskey="I">index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
+             >modules</a> |</li>
         <li class="right" >
-          <a href="hsgame.cards.html" title="hsgame.cards package"
-             accesskey="N">next</a> &nbsp; &nbsp;</li>
+          <a href="cards.html" title="Implemented Cards"
+             accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             accesskey="P">previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">HS Sim</a> &raquo;</li>
-
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">HS Sim</a> &raquo;</li>
           <li><a href="hsgame.html" accesskey="U">hsgame package</a> &raquo;</li> 
       </ul>
-    </div>
-    </div>
-  
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
@@ -74,52 +63,52 @@
 <span id="hsgame-agents-basic-agents-module"></span><h2>hsgame.agents.basic_agents module<a class="headerlink" href="#module-hsgame.agents.basic_agents" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hsgame.agents.basic_agents.DoNothingBot">
-<em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">DoNothingBot</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L3"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">DoNothingBot</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.choose_index">
-<tt class="descname">choose_index</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_index" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_index</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L20"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.choose_option">
-<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_option" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_option" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.do_card_check">
-<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.do_card_check" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L8"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.do_card_check" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.do_turn">
-<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.do_turn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.do_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.DoNothingBot.set_game">
-<tt class="descname">set_game</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.set_game" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">set_game</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.DoNothingBot.set_game" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.agents.basic_agents.PredictableBot">
-<em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">PredictableBot</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.agents.basic_agents.</tt><tt class="descname">PredictableBot</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.PredictableBot.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L28"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -139,12 +128,12 @@
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.PredictableBot.do_card_check">
-<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.do_card_check" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.do_card_check" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.basic_agents.PredictableBot.do_turn">
-<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.do_turn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/basic_agents.py#L34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.basic_agents.PredictableBot.do_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -163,42 +152,42 @@
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>writer</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>writer</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.card_drawn">
-<tt class="descname">card_drawn</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.card_drawn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">card_drawn</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.card_drawn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.card_put_back">
-<tt class="descname">card_put_back</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L38"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.card_put_back" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">card_put_back</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.card_put_back" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.damaged">
-<tt class="descname">damaged</tt><big>(</big><em>amount</em>, <em>what</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L41"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.damaged" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">damaged</tt><big>(</big><em>amount</em>, <em>what</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.damaged" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.died">
-<tt class="descname">died</tt><big>(</big><em>attacker</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.died" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">died</tt><big>(</big><em>attacker</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.died" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.observe">
-<tt class="descname">observe</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.observe" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">observe</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.observe" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.turn_ended">
-<tt class="descname">turn_ended</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.turn_ended" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">turn_ended</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L28"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.turn_ended" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.agents.user_agents.Observer.turn_started">
-<tt class="descname">turn_started</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.turn_started" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">turn_started</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/agents/user_agents.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.agents.user_agents.Observer.turn_started" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -214,9 +203,9 @@
         </div>
       </div>
       <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper"><div class="sphinxlocaltoc">
-    <h3><a href="index.html">Page contents</a></h3>
-    <ul>
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
 <li><a class="reference internal" href="#">hsgame.agents package</a><ul>
 <li><a class="reference internal" href="#submodules">Submodules</a></li>
 <li><a class="reference internal" href="#module-hsgame.agents.basic_agents">hsgame.agents.basic_agents module</a></li>
@@ -226,17 +215,12 @@
 </li>
 </ul>
 
-  </div>
-  <div class="sphinxprev">
-    <h4>Previous page</h4>
-    <p class="topless"><a href="hsgame.html"
-                          title="Previous page">&larr; hsgame package</a></p>
-  </div>
-  <div class="sphinxnext">
-    <h4>Next page</h4>
-    <p class="topless"><a href="hsgame.cards.html"
-                          title="Next page">&rarr; hsgame.cards package</a></p>
-  </div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="hsgame.html"
+                        title="previous chapter">hsgame package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cards.html"
+                        title="next chapter">Implemented Cards</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/hsgame.agents.txt"
@@ -259,8 +243,6 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="relbar-bottom">
-        
     <div class="related">
       <h3>Navigation</h3>
       <ul>
@@ -269,23 +251,19 @@
              >index</a></li>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
+             >modules</a> |</li>
         <li class="right" >
-          <a href="hsgame.cards.html" title="hsgame.cards package"
-             >next</a> &nbsp; &nbsp;</li>
+          <a href="cards.html" title="Implemented Cards"
+             >next</a> |</li>
         <li class="right" >
           <a href="hsgame.html" title="hsgame package"
-             >previous</a> &nbsp; &nbsp;</li>
-    <li><a href="index.html">HS Sim</a> &raquo;</li>
-
+             >previous</a> |</li>
+        <li><a href="index.html">HS Sim</a> &raquo;</li>
           <li><a href="hsgame.html" >hsgame package</a> &raquo;</li> 
       </ul>
     </div>
-    </div>
-
     <div class="footer">
         &copy; Copyright 2014, Daniel Yule.
     </div>
-    <!-- cloud_sptheme 1.4 -->
   </body>
 </html>
