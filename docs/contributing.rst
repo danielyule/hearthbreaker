@@ -11,7 +11,7 @@ All code should conform to the style dictated by `Python's PEP8 Style Guide <htt
 The only exception is that unit tests for cards are named ``test_CardName`` where ``CardName`` is the name of the class.
 This is to match the CamelCase convention for card names, but it contradicts the convention for method names to be
 written in lowercase with underscores separating the words.  PEP8 Validation can be done by the
-`pep8 tool<https://pypi.python.org/pypi/pep8>`_.  It can be installed with
+`pep8 tool <https://pypi.python.org/pypi/pep8>`_.  It can be installed with
 ::
     pip install pep8
 
