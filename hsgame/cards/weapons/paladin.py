@@ -23,6 +23,8 @@ class SwordOfJustice(WeaponCard):
                 minion.increase_health(1)
                 minion.change_attack(1)
                 weapon.durability -= 1
+                if weapon.durability == 0:
+                    weapon.destroy()
 
         def on_destroy():
             player.game.unbind("minion_added", buff_minion)
