@@ -31,3 +31,20 @@ class SwordOfJustice(WeaponCard):
         player.game.bind("minion_added", buff_minion)
         weapon.bind_once("destroyed", on_destroy)
         return weapon
+
+
+class TruesilverChampion(WeaponCard):
+    def __init__(self):
+        super().__init__("Truesilver Champion", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def create_weapon(self, player):
+        def heal(attacker):
+            player.hero.heal(2, self)
+
+        def on_destroy():
+            player.hero.unbind("attack", heal)
+
+        weapon = Weapon(4, 2)
+        player.hero.bind("attack", heal)
+        weapon.bind_once("destroyed", on_destroy)
+        return weapon

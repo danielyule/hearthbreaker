@@ -441,3 +441,17 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].max_health)
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual(1, game.players[0].minions[0].attack_power)
+
+    def test_TruesilverChampion(self):
+        game = generate_game_for(TruesilverChampion, StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 MinionPlayingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+        
+        game.players[0].hero.health = 20
+        # Truesilver Champion should be played, and hero will attack once, healing by two but get one damage from boar
+        game.play_single_turn()
+        self.assertEqual(4, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(1, game.players[0].hero.weapon.durability)
+        self.assertEqual(21, game.players[0].hero.health)

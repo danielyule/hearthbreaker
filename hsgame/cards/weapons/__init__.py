@@ -7,5 +7,6 @@ from hsgame.cards.weapons.hunter import (
 
 from hsgame.cards.weapons.paladin import (
     LightsJustice,
-    SwordOfJustice
+    SwordOfJustice,
+    TruesilverChampion
 )

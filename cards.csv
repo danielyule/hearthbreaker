@@ -350,7 +350,7 @@ no,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 De
 no,Tirion Fordring,Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.,,Paladin,8,6,6,Legendary,Minion
 no,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell
 no,Tracking,Look at the top three cards of your deck. Draw one and discard the others.,,Hunter,1,,,Free,Spell
-no,Truesilver Champion,"Whenever your hero attacks, restore 2 Health to it.",,Paladin,4,4,2,Common,Weapon
+yes,Truesilver Champion,"Whenever your hero attacks, restore 2 Health to it.",,Paladin,4,4,2,Common,Weapon
 no,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Common,Minion
 yes,Twilight Drake,Battlecry: Gain +1 Health for each card in your hand.,Dragon,,4,4,1,Rare,Minion
 yes,Twisting Nether,Destroy all minions.,,Warlock,8,,,Epic,Spell
