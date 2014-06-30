@@ -457,3 +457,23 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.weapon.attack_power)
         self.assertEqual(1, game.players[0].hero.weapon.durability)
         self.assertEqual(21, game.players[0].hero.health)
+
+    def test_TirionFordring(self):
+        game = generate_game_for(TirionFordring, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        # Tirion Fordring should be played
+        for turn in range(0, 15):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].attack_power)
+        self.assertEqual(6, game.players[0].minions[0].health)
+        self.assertEqual("Tirion Fordring", game.players[0].minions[0].card.name)
+        self.assertEqual(None, game.players[0].hero.weapon)
+        
+        # Let Tirion Fordring die, and a weapon should be equiped
+        tirion = game.players[0].minions[0]
+        tirion.die(None)
+        tirion.activate_delayed()
+        self.assertEqual(5, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(3, game.players[0].hero.weapon.durability)
