@@ -50,15 +50,21 @@ class Lightspawn(MinionCard):
             minion.bind("attack_changed", prevent_attack_change)
 
         def prevent_attack_change(amount):
+            nonlocal attack_delta
             minion.attack_power -= amount
+            attack_delta += amount
 
+        def silence():
+            minion.unbind("health_changed", attack_equal_to_health)
+            if attack_delta > 0:
+                minion.attack_power = attack_delta
+
+        attack_delta = 0
         minion = Minion(0, 5)
         minion.change_attack(minion.health - minion.attack_power)
         minion.bind("health_changed", attack_equal_to_health)
         minion.bind("attack_changed", prevent_attack_change)
-        minion.bind_once("silenced",
-                         lambda: minion.unbind("health_changed",
-                                               attack_equal_to_health))
+        minion.bind_once("silenced", silence)
         return minion
 
 
