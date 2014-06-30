@@ -56,6 +56,7 @@ class Lightspawn(MinionCard):
 
         def silence():
             minion.unbind("health_changed", attack_equal_to_health)
+            minion.unbind("attack_changed", prevent_attack_change)
             if attack_delta > 0:
                 minion.attack_power = attack_delta
 
