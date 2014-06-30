@@ -6,5 +6,6 @@ from hsgame.cards.weapons.hunter import (
 )
 
 from hsgame.cards.weapons.paladin import (
-    LightsJustice
+    LightsJustice,
+    SwordOfJustice
 )

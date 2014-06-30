@@ -11,3 +11,23 @@ class LightsJustice(WeaponCard):
     def create_weapon(self, player):
         weapon = Weapon(1, 4)
         return weapon
+
+
+class SwordOfJustice(WeaponCard):
+    def __init__(self):
+        super().__init__("Sword of Justice", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
+
+    def create_weapon(self, player):
+        def buff_minion(minion):
+            if minion.player is player:
+                minion.increase_health(1)
+                minion.change_attack(1)
+                weapon.durability -= 1
+
+        def on_destroy():
+            player.game.unbind("minion_added", buff_minion)
+
+        weapon = Weapon(1, 5)
+        player.game.bind("minion_added", buff_minion)
+        weapon.bind_once("destroyed", on_destroy)
+        return weapon

@@ -408,3 +408,36 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, game.players[0].hero.weapon.attack_power)
         self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+    def test_SwordOfJustice(self):
+        game = generate_game_for([SwordOfJustice, StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar,
+                                  StonetuskBoar, StonetuskBoar], StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+        
+        # Sword of Justice should be played, and hero will attack once
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+        game.play_single_turn()
+        # Three minions will be played, buffing each one, and then hero will attack with the final durability
+        game.play_single_turn()
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(None, game.players[0].hero.weapon)
+        self.assertEqual(2, game.players[0].minions[0].max_health)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].attack_power)
+        self.assertEqual(2, game.players[0].minions[1].max_health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[1].attack_power)
+        self.assertEqual(2, game.players[0].minions[2].max_health)
+        self.assertEqual(2, game.players[0].minions[2].health)
+        self.assertEqual(2, game.players[0].minions[2].attack_power)
+        game.players[0].minions[0].silence()
+        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].attack_power)

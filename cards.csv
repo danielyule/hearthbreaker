@@ -337,7 +337,7 @@ yes,Summoning Portal,"Your minions cost (2) less, but not less than (1).",,Warlo
 no,Sunfury Protector,Battlecry: Give adjacent minions Taunt.,,,2,2,3,Rare,Minion
 yes,Sunwalker,Taunt. Divine Shield,,,6,4,5,Rare,Minion
 yes,Swipe,Deal 4 damage to an enemy and 1 damage to all other enemies.,,Druid,4,,,Common,Spell
-no,Sword of Justice,"Whenever you summon a minion, give it +1/+1 and this loses 1 Durability.",,Paladin,3,1,5,Epic,Weapon
+yes,Sword of Justice,"Whenever you summon a minion, give it +1/+1 and this loses 1 Durability.",,Paladin,3,1,5,Epic,Weapon
 no,Sylvanas Windrunner,Deathrattle: Take control of a random enemy minion.,,,6,5,5,Legendary,Minion
 no,Tauren Warrior,Taunt. Enrage: +3 Attack,,,3,2,3,Common,Minion
 yes,Temple Enforcer,Battlecry: Give a friendly minion +3 Health.,,Priest,6,6,6,Common,Minion
