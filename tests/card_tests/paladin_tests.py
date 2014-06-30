@@ -400,3 +400,11 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].max_health)
         self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_LightsJustice(self):
+        game = generate_game_for(LightsJustice, StonetuskBoar, PredictableBot, DoNothingBot)
+
+        # Light's Justice should be played
+        game.play_single_turn()
+        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
