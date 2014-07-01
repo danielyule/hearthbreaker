@@ -74,3 +74,15 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(0, game.players[0].overload)
         self.assertEqual(0, game.players[0].mana)
         self.assertEqual(2, game.players[0].max_mana)
+
+    def test_EarthElemental(self):
+        game = generate_game_for(EarthElemental, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        # Earth Elemental should be played
+        for turn in range(0, 9):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Earth Elemental", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertEqual(3, game.players[0].overload)

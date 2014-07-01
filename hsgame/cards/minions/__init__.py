@@ -110,7 +110,8 @@ from hsgame.cards.minions.priest import (
 
 from hsgame.cards.minions.shaman import (
     AlAkirTheWindlord,
-    DustDevil
+    DustDevil,
+    EarthElemental
 )
 
 from hsgame.cards.minions.warlock import (
