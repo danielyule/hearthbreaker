@@ -161,7 +161,7 @@ class ShamanPower(Power):
         class HealingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL)
+                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
 
             def create_minion(self, player):
                 def heal_friendly_minions():
@@ -179,7 +179,7 @@ class ShamanPower(Power):
         class SearingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Searing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL)
+                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
 
             def create_minion(self, player):
                 return hsgame.game_objects.Minion(1, 1)
@@ -187,7 +187,7 @@ class ShamanPower(Power):
         class StoneclawTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Stoneclaw Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL)
+                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
 
             def create_minion(self, player):
                 minion = hsgame.game_objects.Minion(0, 2)
@@ -197,7 +197,7 @@ class ShamanPower(Power):
         class WrathOfAirTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Wrath of Air Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL)
+                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
 
             def create_minion(self, player):
                 minion = hsgame.game_objects.Minion(0, 2)
