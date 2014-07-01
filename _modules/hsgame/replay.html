@@ -1,19 +1,18 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
     <title>hsgame.replay &mdash; Hearthstone Simulator</title>
-    
-    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
-    
+
+    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono"
+          type="text/css"/>
+
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -22,43 +21,48 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
+
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="Hearthstone Simulator" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <div class="relbar-top">
-        
+    <link rel="top" title="Hearthstone Simulator" href="../../index.html"/>
+    <link rel="up" title="Module code" href="../index.html"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="relbar-top">
+
     <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="../../genindex.html" title="General Index"
+                   accesskey="I">index</a></li>
+            <li class="right">
+                <a href="../../py-modindex.html" title="Python Module Index"
+                        >modules</a> &nbsp; &nbsp;</li>
+            <li><a href="../../index.html">HS Sim</a> &raquo;</li>
 
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
+            <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li>
+        </ul>
     </div>
-    </div>
-  
+</div>
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <h1>Source code for hsgame.replay</h1><div class="highlight"><pre>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span>
+
+<div class="document">
+<div class="documentwrapper">
+<div class="bodywrapper">
+<div class="body">
+
+<h1>Source code for hsgame.replay</h1>
+
+<div class="highlight">
+<pre>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span
+        class="n">randint</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">hsgame</span>
 <span class="kn">import</span> <span class="nn">hsgame.constants</span>
@@ -69,530 +73,1221 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
 
 
-<div class="viewcode-block" id="ReplayException"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ReplayException">[docs]</a><span class="k">class</span> <span class="nc">ReplayException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-<div class="viewcode-block" id="ReplayException.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ReplayException.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+<div class="viewcode-block" id="ReplayException"><a class="viewcode-back"
+                                                    href="../../hsgame.html#hsgame.replay.ReplayException">[docs]</a><span
+        class="k">class</span> <span class="nc">ReplayException</span><span class="p">(</span><span
+        class="ne">Exception</span><span class="p">):</span>
 
-</div></div>
-<div class="viewcode-block" id="ProxyCharacter"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCharacter">[docs]</a><span class="k">class</span> <span class="nc">ProxyCharacter</span><span class="p">:</span>
+    <div class="viewcode-block" id="ReplayException.__init__"><a class="viewcode-back"
+                                                                 href="../../hsgame.html#hsgame.replay.ReplayException.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span
+                class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ProxyCharacter.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCharacter.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character_ref</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span class="o">=</span> <span class="n">character_ref</span>
-        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Hero</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">character_ref</span> <span class="o">==</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span class="o">=</span> <span class="s">&quot;p1&quot;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span class="o">=</span> <span class="s">&quot;p2&quot;</span>
-        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Minion</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">character_ref</span><span class="o">.</span><span class="n">player</span> <span class="o">==</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span class="o">=</span> <span class="s">&quot;p1:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">character_ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span class="o">=</span> <span class="s">&quot;p2:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">character_ref</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    </div>
 </div>
-<div class="viewcode-block" id="ProxyCharacter.resolve"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCharacter.resolve">[docs]</a>    <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ref</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;p1&quot;</span><span class="p">:</span>
-            <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span>
+<div class="viewcode-block" id="ProxyCharacter"><a class="viewcode-back"
+                                                   href="../../hsgame.html#hsgame.replay.ProxyCharacter">[docs]</a><span
+        class="k">class</span> <span class="nc">ProxyCharacter</span><span class="p">:</span>
+
+    <div class="viewcode-block" id="ProxyCharacter.__init__"><a class="viewcode-back"
+                                                                href="../../hsgame.html#hsgame.replay.ProxyCharacter.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">character_ref</span><span
+                class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span
+                class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span
+                class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span
+                class="nb">str</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span
+                class="o">=</span> <span class="n">character_ref</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span
+                class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span
+                class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span
+                class="o">.</span><span class="n">Hero</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">character_ref</span> <span class="o">==</span> <span
+                class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span
+                class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span
+                class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span
+                class="o">=</span> <span class="s">&quot;p1&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ref</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s">&quot;p1&quot;</span><span class="p">:</span>
-                <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-            <span class="k">else</span><span class="p">:</span>
-               <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span
+                class="o">=</span> <span class="s">&quot;p2&quot;</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span
+                class="n">character_ref</span><span class="p">)</span> <span class="ow">is</span> <span
+                class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span
+                class="o">.</span><span class="n">Minion</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">character_ref</span><span class="o">.</span><span
+                class="n">player</span> <span class="o">==</span> <span class="n">game</span><span
+                class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span
+                class="o">=</span> <span class="s">&quot;p1:&quot;</span> <span class="o">+</span> <span
+                class="nb">str</span><span class="p">(</span><span class="n">character_ref</span><span
+                class="o">.</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span> <span
+                class="o">=</span> <span class="s">&quot;p2:&quot;</span> <span class="o">+</span> <span
+                class="nb">str</span><span class="p">(</span><span class="n">character_ref</span><span
+                class="o">.</span><span class="n">index</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="ProxyCharacter.resolve"><a class="viewcode-back"
+                                                               href="../../hsgame.html#hsgame.replay.ProxyCharacter.resolve">[docs]</a>
+        <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">character_ref</span><span class="o">.</span><span class="n">split</span><span
+                class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">]</span> <span class="o">==</span> <span class="s">&quot;p1&quot;</span><span
+                class="p">:</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+                class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span
+                class="o">.</span><span class="n">hero</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+                class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span
+                class="o">.</span><span class="n">hero</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref</span><span
+                class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ref</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">]</span> <span class="o">==</span> <span class="s">&quot;p1&quot;</span><span
+                class="p">:</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+                class="n">players</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span
+                class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="nb">int</span><span
+                class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span
+                class="p">])]</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="n">char</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+                class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span
+                class="o">.</span><span class="n">minions</span><span class="p">[</span><span class="nb">int</span><span
+                class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span
+                class="p">])]</span>
 
         <span class="k">return</span> <span class="n">char</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">character_ref</span>
+
+    <div class="viewcode-block" id="ProxyCharacter.to_output"><a class="viewcode-back"
+                                                                 href="../../hsgame.html#hsgame.replay.ProxyCharacter.to_output">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">)</span>
+
+    </div>
 </div>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">character_ref</span>
+<div class="viewcode-block" id="ProxyCard"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard">[docs]</a><span
+        class="k">class</span> <span class="nc">ProxyCard</span><span class="p">:</span>
 
-<div class="viewcode-block" id="ProxyCharacter.to_output"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCharacter.to_output">[docs]</a>    <span class="k">def</span> <span class="nf">to_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-</div></div>
-<div class="viewcode-block" id="ProxyCard"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard">[docs]</a><span class="k">class</span> <span class="nc">ProxyCard</span><span class="p">:</span>
-
-<div class="viewcode-block" id="ProxyCard.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card_reference</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">card_reference</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span> <span class="n">card_reference</span>
+    <div class="viewcode-block" id="ProxyCard.__init__"><a class="viewcode-back"
+                                                           href="../../hsgame.html#hsgame.replay.ProxyCard.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">card_reference</span><span
+                class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span
+                class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span>
+        <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span
+                class="n">card_reference</span><span class="p">)</span> <span class="ow">is</span> <span
+                class="nb">str</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span>
+        <span class="n">card_reference</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
-            <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hand</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">card</span> <span class="ow">is</span> <span class="n">card_reference</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span> <span class="n">index</span>
-                    <span class="k">break</span>
-                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span
+                class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+                class="o">.</span><span class="n">hand</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">card</span> <span class="ow">is</span> <span
+                class="n">card_reference</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span>
+        <span class="n">index</span>
+        <span class="k">break</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="ow">is</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Could not find card in hand&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span>
+        <span class="ow">is</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Could not find card in hand&quot;</span><span
+                class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">targetable</span> <span class="o">=</span> <span class="bp">False</span>
-</div>
-<div class="viewcode-block" id="ProxyCard.set_option"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard.set_option">[docs]</a>    <span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span> <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="ProxyCard.resolve"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard.resolve">[docs]</a>    <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_option</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">return</span> <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hand</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-</div>
-    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targetable</span> <span class="o">=</span>
+        <span class="bp">False</span>
+    </div>
+    <div class="viewcode-block" id="ProxyCard.set_option"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.replay.ProxyCard.set_option">[docs]</a>
+        <span class="k">def</span> <span class="nf">set_option</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_ref</span> <span class="o">=</span>
+        <span class="s">&quot;:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span
+                class="p">(</span><span class="n">option</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="ProxyCard.resolve"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.replay.ProxyCard.resolve">[docs]</a>
+        <span class="k">def</span> <span class="nf">resolve</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">ref</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">card_ref</span><span class="o">.</span><span class="n">split</span><span
+                class="p">(</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ref</span><span
+                class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_option</span> <span
+                class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span
+                class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">game</span><span class="o">.</span><span
+                class="n">current_player</span><span class="o">.</span><span class="n">hand</span><span
+                class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ref</span><span
+                class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    </div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span
+            class="p">):</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span
+            class="o">.</span><span class="n">card_ref</span><span class="p">)</span>
 
-<div class="viewcode-block" id="ProxyCard.to_output"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ProxyCard.to_output">[docs]</a>    <span class="k">def</span> <span class="nf">to_output</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <div class="viewcode-block" id="ProxyCard.to_output"><a class="viewcode-back"
+                                                            href="../../hsgame.html#hsgame.replay.ProxyCard.to_output">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">)</span>
 
-</div></div>
-<div class="viewcode-block" id="ReplayAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ReplayAction">[docs]</a><span class="k">class</span> <span class="nc">ReplayAction</span><span class="p">:</span>
-<div class="viewcode-block" id="ReplayAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ReplayAction.play">[docs]</a>        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-            <span class="k">pass</span>
+    </div>
+</div>
+<div class="viewcode-block" id="ReplayAction"><a class="viewcode-back"
+                                                 href="../../hsgame.html#hsgame.replay.ReplayAction">[docs]</a><span
+        class="k">class</span> <span class="nc">ReplayAction</span><span class="p">:</span>
 
-</div></div>
-<div class="viewcode-block" id="SpellAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SpellAction">[docs]</a><span class="k">class</span> <span class="nc">SpellAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="SpellAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SpellAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="n">card</span>
-        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
-</div>
-<div class="viewcode-block" id="SpellAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SpellAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">play_card</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">))</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">None</span>
-</div>
-<div class="viewcode-block" id="SpellAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SpellAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&#39;play({0},{1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">to_output</span><span class="p">())</span>
-        <span class="k">return</span> <span class="s">&#39;play({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">())</span>
-
-</div></div>
-<div class="viewcode-block" id="MinionAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.MinionAction">[docs]</a><span class="k">class</span> <span class="nc">MinionAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="MinionAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.MinionAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span class="n">card</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">index</span>
-        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
-</div>
-<div class="viewcode-block" id="MinionAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.MinionAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&#39;summon({0},{1},{2})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">to_output</span><span class="p">())</span>
-        <span class="k">return</span> <span class="s">&#39;summon({0},{1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="MinionAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.MinionAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">play_card</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">))</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">nextIndex</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-
-</div></div>
-<div class="viewcode-block" id="AttackAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.AttackAction">[docs]</a><span class="k">class</span> <span class="nc">AttackAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="AttackAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.AttackAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">character</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">character</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="AttackAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.AttackAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="k">return</span> <span class="s">&#39;attack({0},{1})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">to_output</span><span class="p">())</span>
-</div>
-<div class="viewcode-block" id="AttackAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.AttackAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">)</span><span class="o">.</span><span class="n">attack</span><span class="p">()</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">None</span>
-
-</div></div>
-<div class="viewcode-block" id="PowerAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.PowerAction">[docs]</a><span class="k">class</span> <span class="nc">PowerAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="PowerAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.PowerAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
-        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
-</div>
-<div class="viewcode-block" id="PowerAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.PowerAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&#39;power({0})&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">to_output</span><span class="p">())</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s">&#39;power()&#39;</span>
-</div>
-<div class="viewcode-block" id="PowerAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.PowerAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">attack</span><span class="p">()</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">None</span>
-
-</div></div>
-<div class="viewcode-block" id="TurnEndAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.TurnEndAction">[docs]</a><span class="k">class</span> <span class="nc">TurnEndAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="TurnEndAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.TurnEndAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <div class="viewcode-block" id="ReplayAction.play"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.replay.ReplayAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="k">pass</span>
+
+    </div>
 </div>
-<div class="viewcode-block" id="TurnEndAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.TurnEndAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="SpellAction"><a class="viewcode-back"
+                                                href="../../hsgame.html#hsgame.replay.SpellAction">[docs]</a><span
+        class="k">class</span> <span class="nc">SpellAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="SpellAction.__init__"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.replay.SpellAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span
+                class="n">target</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+        <span class="n">game</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span
+                class="n">card</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span>
+        <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="bp">None</span>
+    </div>
+    <div class="viewcode-block" id="SpellAction.play"><a class="viewcode-back"
+                                                         href="../../hsgame.html#hsgame.replay.SpellAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">resolve</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">play_card</span><span class="p">(</span><span
+                class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span
+                class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">))</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">None</span>
+    </div>
+    <div class="viewcode-block" id="SpellAction.to_output_string"><a class="viewcode-back"
+                                                                     href="../../hsgame.html#hsgame.replay.SpellAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;play({0},{1})&#39;</span><span class="o">.</span><span
+                class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span
+                class="n">to_output</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s">&#39;play({0})&#39;</span><span class="o">.</span><span class="n">format</span><span
+                class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card</span><span
+                class="o">.</span><span class="n">to_output</span><span class="p">())</span>
+
+    </div>
+</div>
+<div class="viewcode-block" id="MinionAction"><a class="viewcode-back"
+                                                 href="../../hsgame.html#hsgame.replay.MinionAction">[docs]</a><span
+        class="k">class</span> <span class="nc">MinionAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="MinionAction.__init__"><a class="viewcode-back"
+                                                              href="../../hsgame.html#hsgame.replay.MinionAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span
+                class="n">index</span><span class="p">,</span> <span class="n">target</span><span
+                class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">game</span><span
+                class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card</span> <span class="o">=</span> <span
+                class="n">card</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span
+                class="n">index</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span>
+        <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="bp">None</span>
+    </div>
+    <div class="viewcode-block" id="MinionAction.to_output_string"><a class="viewcode-back"
+                                                                      href="../../hsgame.html#hsgame.replay.MinionAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;summon({0},{1},{2})&#39;</span><span class="o">.</span><span
+                class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span
+                class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span
+                class="n">to_output</span><span class="p">())</span>
+        <span class="k">return</span> <span class="s">&#39;summon({0},{1})&#39;</span><span class="o">.</span><span
+                class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">card</span><span class="o">.</span><span class="n">to_output</span><span class="p">(),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="MinionAction.play"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.replay.MinionAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">resolve</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_index</span> <span class="o">=</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">play_card</span><span class="p">(</span><span
+                class="bp">self</span><span class="o">.</span><span class="n">card</span><span class="o">.</span><span
+                class="n">resolve</span><span class="p">(</span><span class="n">game</span><span class="p">))</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">nextIndex</span> <span class="o">=</span>
+        <span class="o">-</span><span class="mi">1</span>
+
+    </div>
+</div>
+<div class="viewcode-block" id="AttackAction"><a class="viewcode-back"
+                                                 href="../../hsgame.html#hsgame.replay.AttackAction">[docs]</a><span
+        class="k">class</span> <span class="nc">AttackAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="AttackAction.__init__"><a class="viewcode-back"
+                                                              href="../../hsgame.html#hsgame.replay.AttackAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span
+                class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character</span> <span class="o">=</span>
+        <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">character</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="AttackAction.to_output_string"><a class="viewcode-back"
+                                                                      href="../../hsgame.html#hsgame.replay.AttackAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s">&#39;attack({0},{1})&#39;</span><span class="o">.</span><span
+                class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">character</span><span class="o">.</span><span class="n">to_output</span><span
+                class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">to_output</span><span
+                class="p">())</span>
+    </div>
+    <div class="viewcode-block" id="AttackAction.play"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.replay.AttackAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">resolve</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">character</span><span
+                class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">game</span><span
+                class="p">)</span><span class="o">.</span><span class="n">attack</span><span class="p">()</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">None</span>
+
+    </div>
+</div>
+<div class="viewcode-block" id="PowerAction"><a class="viewcode-back"
+                                                href="../../hsgame.html#hsgame.replay.PowerAction">[docs]</a><span
+        class="k">class</span> <span class="nc">PowerAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="PowerAction.__init__"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.replay.PowerAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">target</span><span
+                class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">game</span><span
+                class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">target</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span>
+        <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span
+                class="n">game</span>
+    </div>
+    <div class="viewcode-block" id="PowerAction.to_output_string"><a class="viewcode-back"
+                                                                     href="../../hsgame.html#hsgame.replay.PowerAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;power({0})&#39;</span><span class="o">.</span><span
+                class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">to_output</span><span
+                class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s">&#39;power()&#39;</span>
+    </div>
+    <div class="viewcode-block" id="PowerAction.play"><a class="viewcode-back"
+                                                         href="../../hsgame.html#hsgame.replay.PowerAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span>
+        <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">target</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span
+                class="n">resolve</span><span class="p">()</span><span class="o">.</span><span
+                class="n">attack</span><span class="p">()</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">next_target</span> <span
+                class="o">=</span> <span class="bp">None</span>
+
+    </div>
+</div>
+<div class="viewcode-block" id="TurnEndAction"><a class="viewcode-back"
+                                                  href="../../hsgame.html#hsgame.replay.TurnEndAction">[docs]</a><span
+        class="k">class</span> <span class="nc">TurnEndAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="TurnEndAction.__init__"><a class="viewcode-back"
+                                                               href="../../hsgame.html#hsgame.replay.TurnEndAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span
+                class="bp">None</span><span class="p">):</span>
+        <span class="k">pass</span>
+    </div>
+    <div class="viewcode-block" id="TurnEndAction.to_output_string"><a class="viewcode-back"
+                                                                       href="../../hsgame.html#hsgame.replay.TurnEndAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;end()&#39;</span>
-</div>
-<div class="viewcode-block" id="TurnEndAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.TurnEndAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+    </div>
+    <div class="viewcode-block" id="TurnEndAction.play"><a class="viewcode-back"
+                                                           href="../../hsgame.html#hsgame.replay.TurnEndAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="k">pass</span>
 
-</div></div>
-<div class="viewcode-block" id="ConcedeAction"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ConcedeAction">[docs]</a><span class="k">class</span> <span class="nc">ConcedeAction</span><span class="p">(</span><span class="n">ReplayAction</span><span class="p">):</span>
-<div class="viewcode-block" id="ConcedeAction.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ConcedeAction.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">pass</span>
+    </div>
 </div>
-<div class="viewcode-block" id="ConcedeAction.to_output_string"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ConcedeAction.to_output_string">[docs]</a>    <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="ConcedeAction"><a class="viewcode-back"
+                                                  href="../../hsgame.html#hsgame.replay.ConcedeAction">[docs]</a><span
+        class="k">class</span> <span class="nc">ConcedeAction</span><span class="p">(</span><span
+        class="n">ReplayAction</span><span class="p">):</span>
+
+    <div class="viewcode-block" id="ConcedeAction.__init__"><a class="viewcode-back"
+                                                               href="../../hsgame.html#hsgame.replay.ConcedeAction.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+    </div>
+    <div class="viewcode-block" id="ConcedeAction.to_output_string"><a class="viewcode-back"
+                                                                       href="../../hsgame.html#hsgame.replay.ConcedeAction.to_output_string">[docs]</a>
+        <span class="k">def</span> <span class="nf">to_output_string</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&quot;concede()&quot;</span>
-</div>
-<div class="viewcode-block" id="ConcedeAction.play"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.ConcedeAction.play">[docs]</a>    <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
-        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">activate_delayed</span><span class="p">()</span>
+    </div>
+    <div class="viewcode-block" id="ConcedeAction.play"><a class="viewcode-back"
+                                                           href="../../hsgame.html#hsgame.replay.ConcedeAction.play">[docs]</a>
+        <span class="k">def</span> <span class="nf">play</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">hero</span><span class="o">.</span><span class="n">die</span><span class="p">(</span><span
+                class="bp">None</span><span class="p">)</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span
+                class="n">hero</span><span class="o">.</span><span class="n">activate_delayed</span><span
+                class="p">()</span>
 
-</div></div>
-<div class="viewcode-block" id="Replay"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay">[docs]</a><span class="k">class</span> <span class="nc">Replay</span><span class="p">:</span>
+    </div>
+</div>
+<div class="viewcode-block" id="Replay"><a class="viewcode-back"
+                                           href="../../hsgame.html#hsgame.replay.Replay">[docs]</a><span
+        class="k">class</span> <span class="nc">Replay</span><span class="p">:</span>
 
-<div class="viewcode-block" id="Replay.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card_class</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decks</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span> <span class="o">=</span> <span class="p">[]</span>
-</div>
-<div class="viewcode-block" id="Replay.save_decks"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.save_decks">[docs]</a>    <span class="k">def</span> <span class="nf">save_decks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deck1</span><span class="p">,</span> <span class="n">deck2</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">decks</span> <span class="o">=</span> <span class="p">[</span><span class="n">deck1</span><span class="p">,</span> <span class="n">deck2</span><span class="p">]</span>
-</div>
-<div class="viewcode-block" id="Replay.record_random"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_random">[docs]</a>    <span class="k">def</span> <span class="nf">record_random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.record_turn_end"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_turn_end">[docs]</a>    <span class="k">def</span> <span class="nf">record_turn_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TurnEndAction</span><span class="p">())</span>
-</div>
-    <span class="k">def</span> <span class="nf">_save_played_card</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">card_class</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">MinionCard</span><span class="p">):</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="o">.</span><span class="n">targetable</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span><span class="p">,</span> <span class="n">game</span><span class="p">))</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="bp">None</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span class="bp">None</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="n">game</span><span class="p">))</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="bp">None</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="o">.</span><span class="n">targetable</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span><span class="p">,</span> <span class="n">game</span><span class="p">))</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="bp">None</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="n">game</span><span class="p">))</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="bp">None</span>
+    <div class="viewcode-block" id="Replay.__init__"><a class="viewcode-back"
+                                                        href="../../hsgame.html#hsgame.replay.Replay.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span>
+        <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span
+                class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span>
+        <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_class</span> <span class="o">=</span>
+        <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span>
+        <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span>
+        <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decks</span> <span class="o">=</span> <span
+                class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span> <span class="o">=</span> <span
+                class="p">[]</span>
+    </div>
+    <div class="viewcode-block" id="Replay.save_decks"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.replay.Replay.save_decks">[docs]</a>
+        <span class="k">def</span> <span class="nf">save_decks</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">deck1</span><span class="p">,</span>
+        <span class="n">deck2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decks</span> <span class="o">=</span> <span
+                class="p">[</span><span class="n">deck1</span><span class="p">,</span> <span class="n">deck2</span><span
+                class="p">]</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_random"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.replay.Replay.record_random">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_random</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span
+                class="o">.</span><span class="n">append</span><span class="p">(</span><span
+                class="n">result</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_turn_end"><a class="viewcode-back"
+                                                               href="../../hsgame.html#hsgame.replay.Replay.record_turn_end">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_turn_end</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">TurnEndAction</span><span
+                class="p">())</span>
+    </div>
+    <span class="k">def</span> <span class="nf">_save_played_card</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span
+            class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span
+            class="bp">self</span><span class="o">.</span><span class="n">card_class</span><span class="p">,</span>
+    <span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span
+            class="o">.</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="o">.</span><span class="n">targetable</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">last_index</span><span class="p">,</span> <span class="bp">self</span><span
+            class="o">.</span><span class="n">last_target</span><span class="p">,</span> <span
+            class="n">game</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span
+            class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span
+            class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span>
+    <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">last_index</span><span class="p">,</span> <span class="n">game</span><span class="o">=</span><span
+            class="n">game</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span
+            class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span
+            class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="o">.</span><span class="n">targetable</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+            class="n">last_target</span><span class="p">,</span> <span class="n">game</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span
+            class="bp">None</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span>
+    <span class="bp">None</span>
+    <span class="k">else</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+            class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span
+            class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+            class="p">,</span> <span class="n">game</span><span class="o">=</span><span class="n">game</span><span
+            class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span
+            class="bp">None</span>
 
-<div class="viewcode-block" id="Replay.record_card_played"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_card_played">[docs]</a>    <span class="k">def</span> <span class="nf">record_card_played</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span> <span class="n">ProxyCard</span><span class="p">(</span><span class="n">card</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="o">.</span><span class="n">targetable</span> <span class="o">=</span> <span class="n">card</span><span class="o">.</span><span class="n">targetable</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">card_class</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="n">card</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.record_option_chosen"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_option_chosen">[docs]</a>    <span class="k">def</span> <span class="nf">record_option_chosen</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.record_attack"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_attack">[docs]</a>    <span class="k">def</span> <span class="nf">record_attack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">attacker</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AttackAction</span><span class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="Replay.record_power"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_power">[docs]</a>    <span class="k">def</span> <span class="nf">record_power</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span class="p">(</span><span class="n">game</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PowerAction</span><span class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">game</span><span class="p">))</span>
-</div>
-<div class="viewcode-block" id="Replay.record_power_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_power_target">[docs]</a>    <span class="k">def</span> <span class="nf">record_power_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.record_kept_index"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.record_kept_index">[docs]</a>    <span class="k">def</span> <span class="nf">record_kept_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="p">,</span> <span class="n">card_index</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+    <div class="viewcode-block" id="Replay.record_card_played"><a class="viewcode-back"
+                                                                  href="../../hsgame.html#hsgame.replay.Replay.record_card_played">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_card_played</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">card</span><span class="p">,</span> <span class="n">game</span><span
+                class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span> <span class="o">=</span>
+        <span class="n">ProxyCard</span><span class="p">(</span><span class="n">card</span><span class="p">,</span>
+        <span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+                class="o">.</span><span class="n">targetable</span> <span class="o">=</span> <span class="n">card</span><span
+                class="o">.</span><span class="n">targetable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">card_class</span> <span class="o">=</span>
+        <span class="nb">type</span><span class="p">(</span><span class="n">card</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_option_chosen"><a class="viewcode-back"
+                                                                    href="../../hsgame.html#hsgame.replay.Replay.record_option_chosen">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_option_chosen</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">option</span><span class="p">,</span> <span
+                class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_card</span><span
+                class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="n">option</span><span
+                class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_attack"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.replay.Replay.record_attack">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_attack</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span>
+        <span class="n">attacker</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">AttackAction</span><span
+                class="p">(</span><span class="n">attacker</span><span class="p">,</span> <span
+                class="n">target</span><span class="p">,</span> <span class="n">game</span><span class="p">))</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_power"><a class="viewcode-back"
+                                                            href="../../hsgame.html#hsgame.replay.Replay.record_power">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_power</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_played_card</span><span
+                class="p">(</span><span class="n">game</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">PowerAction</span><span
+                class="p">(</span><span class="n">game</span><span class="o">=</span><span class="n">game</span><span
+                class="p">))</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_power_target"><a class="viewcode-back"
+                                                                   href="../../hsgame.html#hsgame.replay.Replay.record_power_target">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_power_target</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">target</span><span class="p">,</span> <span
+                class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span
+                class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">actions</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span
+                class="p">]</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span
+                class="n">ProxyCharacter</span><span class="p">(</span><span class="n">target</span><span
+                class="p">,</span> <span class="n">game</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.record_kept_index"><a class="viewcode-back"
+                                                                 href="../../hsgame.html#hsgame.replay.Replay.record_kept_index">[docs]</a>
+        <span class="k">def</span> <span class="nf">record_kept_index</span><span class="p">(</span><span class="bp">self</span><span
+                class="p">,</span> <span class="n">cards</span><span class="p">,</span> <span
+                class="n">card_index</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
         <span class="n">k_arr</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cards</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="n">card_index</span><span class="p">[</span><span class="n">index</span><span class="p">]:</span>
-                <span class="n">k_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k_arr</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.write_replay"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.write_replay">[docs]</a>    <span class="k">def</span> <span class="nf">write_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span
+                class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span
+                class="p">(</span><span class="n">cards</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">card_index</span><span class="p">[</span><span
+                class="n">index</span><span class="p">]:</span>
+        <span class="n">k_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+                class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">k_arr</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.write_replay"><a class="viewcode-back"
+                                                            href="../../hsgame.html#hsgame.replay.Replay.write_replay">[docs]</a>
+        <span class="k">def</span> <span class="nf">write_replay</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
 
         <span class="c"># Mostly for testing, this function will check if the deck is made up of a repeating pattern</span>
         <span class="c"># and if so, shorten the output, since the parser will generate the pattern from a shorter sample</span>
-        <span class="k">def</span> <span class="nf">shorten_deck</span><span class="p">(</span><span class="n">cards</span><span class="p">):</span>
-            <span class="k">for</span> <span class="n">pattern_length</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span class="p">):</span>
-                <span class="n">matched</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pattern_length</span><span class="p">,</span> <span class="mi">30</span><span class="p">):</span>
-                    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cards</span><span class="p">[</span><span class="n">index</span> <span class="o">%</span> <span class="n">pattern_length</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">cards</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
-                        <span class="n">matched</span> <span class="o">=</span> <span class="bp">False</span>
-                        <span class="k">break</span>
-                <span class="k">if</span> <span class="n">matched</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">cards</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">pattern_length</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">shorten_deck</span><span class="p">(</span><span
+                class="n">cards</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">pattern_length</span> <span class="ow">in</span> <span class="nb">range</span><span
+                class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">15</span><span
+                class="p">):</span>
+        <span class="n">matched</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span
+                class="p">(</span><span class="n">pattern_length</span><span class="p">,</span> <span
+                class="mi">30</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">cards</span><span
+                class="p">[</span><span class="n">index</span> <span class="o">%</span> <span
+                class="n">pattern_length</span><span class="p">])</span> <span class="ow">is</span> <span
+                class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span
+                class="n">cards</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
+        <span class="n">matched</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">break</span>
+        <span class="k">if</span> <span class="n">matched</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cards</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">:</span><span class="n">pattern_length</span><span class="p">]</span>
 
 
-        <span class="k">if</span> <span class="s">&#39;write&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;write&#39;</span> <span class="ow">not</span> <span
+                class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span
+                class="nb">file</span><span class="p">):</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span
+                class="nb">file</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span
+                class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">writer</span> <span class="o">=</span> <span class="nb">file</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="nb">file</span>
 
-        <span class="k">for</span> <span class="n">deck</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">decks</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;deck(&quot;</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">to_str</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span class="n">character_class</span><span class="p">))</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">card</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span class="n">shorten_deck</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span class="n">cards</span><span class="p">)]))</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">deck</span> <span class="ow">in</span> <span
+                class="bp">self</span><span class="o">.</span><span class="n">decks</span><span class="p">:</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;deck(&quot;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span
+                class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span
+                class="n">to_str</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span
+                class="n">character_class</span><span class="p">))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;,&quot;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span
+                class="p">([</span><span class="n">card</span><span class="o">.</span><span class="n">name</span> <span
+                class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span
+                class="n">shorten_deck</span><span class="p">(</span><span class="n">deck</span><span class="o">.</span><span
+                class="n">cards</span><span class="p">)]))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span class="p">):</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;random()</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">random_numbers</span><span class="o">.</span><span class="n">count</span><span
+                class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">==</span> <span
+                class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">random_numbers</span><span class="p">):</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;random()</span><span class="se">\n</span><span class="s">&quot;</span><span
+                class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;random(&quot;</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span class="p">]))</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;random(&quot;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span
+                class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">num</span><span
+                class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span
+                class="p">]))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">keep</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;keep(&quot;</span><span class="p">)</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keep</span><span class="p">]))</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">keep</span> <span class="ow">in</span> <span
+                class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="p">:</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;keep(&quot;</span><span class="p">)</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span
+                class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">k</span><span
+                class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span
+                class="n">keep</span><span class="p">]))</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="s">&quot;)</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">:</span>
-            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">action</span><span class="o">.</span><span class="n">to_output_string</span><span class="p">()</span> <span class="o">+</span> <span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
-</div>
-<div class="viewcode-block" id="Replay.parse_replay"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.Replay.parse_replay">[docs]</a>    <span class="k">def</span> <span class="nf">parse_replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayfile</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">actions</span><span class="p">:</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span
+                class="n">action</span><span class="o">.</span><span class="n">to_output_string</span><span
+                class="p">()</span> <span class="o">+</span> <span class="s">&quot;</span><span
+                class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+    </div>
+    <div class="viewcode-block" id="Replay.parse_replay"><a class="viewcode-back"
+                                                            href="../../hsgame.html#hsgame.replay.Replay.parse_replay">[docs]</a>
+        <span class="k">def</span> <span class="nf">parse_replay</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">replayfile</span><span
+                class="p">):</span>
 
-        <span class="k">if</span> <span class="s">&#39;read&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">replayfile</span><span class="p">):</span>
-            <span class="n">replayfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">replayfile</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
-        <span class="n">line_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;\s*(\w*)\s*\(([^)]*)\)\s*(;.*)?$&quot;</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">replayfile</span><span class="p">:</span>
-            <span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">line_pattern</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span class="p">)]</span>
-            <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;play&#39;</span><span class="p">:</span>
-                <span class="n">card</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">target</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span class="p">(</span><span class="n">ProxyCard</span><span class="p">(</span><span class="n">card</span><span class="p">),</span> <span class="n">target</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s">&#39;read&#39;</span> <span class="ow">not</span> <span
+                class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span
+                class="n">replayfile</span><span class="p">):</span>
+        <span class="n">replayfile</span> <span class="o">=</span> <span class="nb">open</span><span
+                class="p">(</span><span class="n">replayfile</span><span class="p">,</span> <span
+                class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">line_pattern</span> <span class="o">=</span> <span class="n">re</span><span
+                class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">&quot;\s*(\w*)\s*\(([^)]*)\)\s*(;.*)?$&quot;</span><span
+                class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span
+                class="n">replayfile</span><span class="p">:</span>
+        <span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">args</span><span
+                class="p">)</span> <span class="o">=</span> <span class="n">line_pattern</span><span
+                class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">line</span><span
+                class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span
+                class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="n">arg</span><span
+                class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span
+                class="n">arg</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span
+                class="n">split</span><span class="p">(</span><span class="s">&quot;,&quot;</span><span
+                class="p">)]</span>
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span
+                class="s">&#39;play&#39;</span><span class="p">:</span>
+        <span class="n">card</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span
+                class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span
+                class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span
+                class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">SpellAction</span><span
+                class="p">(</span><span class="n">ProxyCard</span><span class="p">(</span><span
+                class="n">card</span><span class="p">),</span> <span class="n">target</span><span class="p">))</span>
 
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;summon&#39;</span><span class="p">:</span>
-                <span class="n">card</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;summon&#39;</span><span
+                class="p">:</span>
+        <span class="n">card</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span
+                class="mi">0</span><span class="p">]</span>
 
-                <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span
+                class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">target</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span
+                class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span
+                class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">None</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span class="p">(</span><span class="n">ProxyCard</span><span class="p">(</span><span class="n">card</span><span class="p">),</span> <span class="n">index</span><span class="p">,</span> <span class="n">target</span><span class="p">))</span>
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;attack&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">AttackAction</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;power&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PowerAction</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;end&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">TurnEndAction</span><span class="p">())</span>
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Only one random number list per file&quot;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span class="o">=</span> <span class="p">[]</span>
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;deck&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">decks</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Maximum of two decks per file&quot;</span><span class="p">)</span>
-                <span class="n">deck_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-                <span class="n">cards</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">card_lookup</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">index</span> <span class="o">%</span> <span class="p">(</span><span class="n">deck_size</span><span class="p">)])</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">)]</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">decks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Deck</span><span class="p">(</span><span class="n">cards</span><span class="p">,</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">MinionAction</span><span
+                class="p">(</span><span class="n">ProxyCard</span><span class="p">(</span><span
+                class="n">card</span><span class="p">),</span> <span class="n">index</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;attack&#39;</span><span
+                class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">AttackAction</span><span
+                class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span
+                class="p">]))</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;power&#39;</span><span
+                class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span
+                class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">PowerAction</span><span
+                class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span
+                class="p">]))</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;end&#39;</span><span
+                class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">TurnEndAction</span><span
+                class="p">())</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;random&#39;</span><span
+                class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span
+                class="o">.</span><span class="n">random_numbers</span><span class="p">)</span> <span
+                class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Only one random number list per file&quot;</span><span
+                class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span
+                class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span
+                class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span
+                class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span
+                class="n">num</span><span class="p">)</span> <span class="k">for</span> <span class="n">num</span> <span
+                class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">random_numbers</span> <span
+                class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;deck&#39;</span><span
+                class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span
+                class="o">.</span><span class="n">decks</span><span class="p">)</span> <span class="o">&gt;</span> <span
+                class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Maximum of two decks per file&quot;</span><span
+                class="p">)</span>
+        <span class="n">deck_size</span> <span class="o">=</span> <span class="nb">len</span><span
+                class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">-</span> <span
+                class="mi">1</span>
+        <span class="n">cards</span> <span class="o">=</span> <span class="p">[</span><span class="n">hsgame</span><span
+                class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span
+                class="n">card_lookup</span><span class="p">(</span><span class="n">args</span><span
+                class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="n">index</span> <span
+                class="o">%</span> <span class="p">(</span><span class="n">deck_size</span><span class="p">)])</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span
+                class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span
+                class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">decks</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">hsgame</span><span
+                class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Deck</span><span
+                class="p">(</span><span class="n">cards</span><span class="p">,</span> <span
+                class="n">hsgame</span><span class="o">.</span><span class="n">constants</span><span
+                class="o">.</span><span class="n">CHARACTER_CLASS</span><span class="o">.</span><span
+                class="n">from_str</span><span class="p">(</span><span class="n">args</span><span
+                class="p">[</span><span class="mi">0</span><span class="p">])))</span>
 
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;keep&#39;</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Maximum of two keep directives per file&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;keep&#39;</span><span
+                class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span
+                class="o">.</span><span class="n">keeps</span><span class="p">)</span> <span class="o">&gt;</span> <span
+                class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ReplayException</span><span class="p">(</span><span class="s">&quot;Maximum of two keep directives per file&quot;</span><span
+                class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 
-            <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;concede&#39;</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ConcedeAction</span><span class="p">())</span>
+        <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="s">&#39;concede&#39;</span><span
+                class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span
+                class="n">append</span><span class="p">(</span><span class="n">ConcedeAction</span><span
+                class="p">())</span>
         <span class="n">replayfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">keeps</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]]</span>
-</div></div>
-<div class="viewcode-block" id="RecordingGame"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.RecordingGame">[docs]</a><span class="k">class</span> <span class="nc">RecordingGame</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Game</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span
+                class="o">.</span><span class="n">keeps</span><span class="p">)</span> <span class="ow">is</span> <span
+                class="mi">0</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keeps</span> <span class="o">=</span> <span
+                class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span
+                class="p">,</span><span class="mi">2</span><span class="p">],[</span><span class="mi">0</span><span
+                class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span
+                class="p">,</span><span class="mi">3</span><span class="p">]]</span>
+    </div>
+</div>
+<div class="viewcode-block" id="RecordingGame"><a class="viewcode-back"
+                                                  href="../../hsgame.html#hsgame.replay.RecordingGame">[docs]</a><span
+        class="k">class</span> <span class="nc">RecordingGame</span><span class="p">(</span><span
+        class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span
+        class="n">Game</span><span class="p">):</span>
 
-<div class="viewcode-block" id="RecordingGame.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.RecordingGame.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">decks</span><span class="p">,</span> <span class="n">agents</span><span class="p">):</span>
+    <div class="viewcode-block" id="RecordingGame.__init__"><a class="viewcode-back"
+                                                               href="../../hsgame.html#hsgame.replay.RecordingGame.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">decks</span><span class="p">,</span>
+        <span class="n">agents</span><span class="p">):</span>
         <span class="n">game</span> <span class="o">=</span> <span class="bp">self</span>
 
         <span class="k">class</span> <span class="nc">RecordingAgent</span><span class="p">:</span>
 
-            <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;agent&#39;</span><span class="p">]</span>
+        <span class="n">__slots__</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;agent&#39;</span><span
+                class="p">]</span>
 
-            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">proxied_agent</span><span class="p">):</span>
-                <span class="nb">object</span><span class="o">.</span><span class="n">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s">&quot;agent&quot;</span><span class="p">,</span> <span class="n">proxied_agent</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">proxied_agent</span><span
+                class="p">):</span>
+        <span class="nb">object</span><span class="o">.</span><span class="n">__setattr__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="s">&quot;agent&quot;</span><span
+                class="p">,</span> <span class="n">proxied_agent</span><span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">choose_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
-                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_index</span><span class="p">(</span><span class="n">card</span><span class="p">)</span>
-                <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">last_index</span> <span class="o">=</span> <span class="n">index</span>
-                <span class="k">return</span> <span class="n">index</span>
+        <span class="k">def</span> <span class="nf">choose_index</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">choose_index</span><span
+                class="p">(</span><span class="n">card</span><span class="p">)</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">last_index</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="k">return</span> <span class="n">index</span>
 
-            <span class="k">def</span> <span class="nf">choose_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
-                <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_target</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
-                <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">last_target</span> <span class="o">=</span> <span class="n">target</span>
-                <span class="k">return</span> <span class="n">target</span>
+        <span class="k">def</span> <span class="nf">choose_target</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">choose_target</span><span
+                class="p">(</span><span class="n">targets</span><span class="p">)</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">last_target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="k">return</span> <span class="n">target</span>
 
-            <span class="k">def</span> <span class="nf">choose_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">options</span><span class="p">):</span>
-                <span class="n">option</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">choose_option</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">choose_option</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="o">*</span><span
+                class="n">options</span><span class="p">):</span>
+        <span class="n">option</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">choose_option</span><span
+                class="p">(</span><span class="n">options</span><span class="p">)</span>
 
-                <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_option_chosen</span><span class="p">(</span><span class="n">options</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">option</span><span class="p">))</span>
-                <span class="k">return</span> <span class="n">option</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_option_chosen</span><span class="p">(</span><span class="n">options</span><span
+                class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">option</span><span
+                class="p">))</span>
+        <span class="k">return</span> <span class="n">option</span>
 
 
-            <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">agent</span><span class="o">.</span><span class="n">__getattribute__</span><span
+                class="p">(</span><span class="n">item</span><span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getattribute__</span><span class="p">(</span><span class="s">&quot;agent&quot;</span><span class="p">),</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span
+                class="n">value</span><span class="p">):</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span
+                class="n">__getattribute__</span><span class="p">(</span><span class="s">&quot;agent&quot;</span><span
+                class="p">),</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span
+                class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">bind_attacks</span><span class="p">(</span><span class="n">character</span><span class="p">):</span>
-            <span class="n">character</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;attack_minion&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_attack</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">character</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&#39;attack_player&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_attack</span><span class="p">,</span> <span class="n">character</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">bind_attacks</span><span class="p">(</span><span
+                class="n">character</span><span class="p">):</span>
+        <span class="n">character</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&#39;attack_minion&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_attack</span><span class="p">,</span> <span class="n">character</span><span
+                class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">character</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&#39;attack_player&#39;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_attack</span><span class="p">,</span> <span class="n">character</span><span
+                class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">replay</span> <span class="o">=</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">Replay</span><span class="p">()</span>
-        <span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span class="n">RecordingAgent</span><span class="p">(</span><span class="n">agents</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">RecordingAgent</span><span class="p">(</span><span class="n">agents</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replay</span> <span class="o">=</span> <span
+                class="n">hsgame</span><span class="o">.</span><span class="n">replay</span><span
+                class="o">.</span><span class="n">Replay</span><span class="p">()</span>
+        <span class="n">agents</span> <span class="o">=</span> <span class="p">[</span><span
+                class="n">RecordingAgent</span><span class="p">(</span><span class="n">agents</span><span
+                class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span
+                class="n">RecordingAgent</span><span class="p">(</span><span class="n">agents</span><span
+                class="p">[</span><span class="mi">1</span><span class="p">])]</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">decks</span><span class="p">,</span> <span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_random</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span
+                class="n">__init__</span><span class="p">(</span><span class="n">decks</span><span class="p">,</span>
+        <span class="n">agents</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">_find_random</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">save_decks</span><span class="p">(</span><span class="o">*</span><span class="n">decks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">save_decks</span><span class="p">(</span><span class="o">*</span><span
+                class="n">decks</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;minion_added&quot;</span><span class="p">,</span> <span class="n">bind_attacks</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&quot;minion_added&quot;</span><span class="p">,</span> <span
+                class="n">bind_attacks</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;kept_cards&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_kept_index</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&quot;kept_cards&quot;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_kept_index</span><span class="p">,</span> <span class="bp">self</span><span
+                class="p">)</span>
 
-        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">players</span><span class="p">:</span>
-            <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_turn_end</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;used_power&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_power</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;found_power_target&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_power_target</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;card_played&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_card_played</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-            <span class="n">bind_attacks</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">player</span> <span class="ow">in</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">players</span><span class="p">:</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&quot;turn_ended&quot;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_turn_end</span><span class="p">,</span> <span class="bp">self</span><span
+                class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&quot;used_power&quot;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">record_power</span><span class="p">,</span> <span class="bp">self</span><span
+                class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span
+                class="n">bind</span><span class="p">(</span><span class="s">&quot;found_power_target&quot;</span><span
+                class="p">,</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">replay</span><span class="o">.</span><span class="n">record_power_target</span><span
+                class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span
+                class="s">&quot;card_played&quot;</span><span class="p">,</span> <span class="bp">self</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_card_played</span><span
+                class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="n">bind_attacks</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span
+                class="n">hero</span><span class="p">)</span>
+    </div>
+    <span class="k">def</span> <span class="nf">_find_random</span><span class="p">(</span><span
+            class="bp">self</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span>
+    <span class="n">upper_bound</span><span class="p">):</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span
+            class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span
+            class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+            class="n">record_random</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+
 </div>
-    <span class="k">def</span> <span class="nf">_find_random</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="n">lower_bound</span><span class="p">,</span> <span class="n">upper_bound</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">record_random</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">result</span>
+<div class="viewcode-block" id="SavedGame"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SavedGame">[docs]</a><span
+        class="k">class</span> <span class="nc">SavedGame</span><span class="p">(</span><span
+        class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span
+        class="n">Game</span><span class="p">):</span>
 
-</div>
-<div class="viewcode-block" id="SavedGame"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SavedGame">[docs]</a><span class="k">class</span> <span class="nc">SavedGame</span><span class="p">(</span><span class="n">hsgame</span><span class="o">.</span><span class="n">game_objects</span><span class="o">.</span><span class="n">Game</span><span class="p">):</span>
-
-<div class="viewcode-block" id="SavedGame.__init__"><a class="viewcode-back" href="../../hsgame.html#hsgame.replay.SavedGame.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replay_file</span><span class="p">):</span>
+    <div class="viewcode-block" id="SavedGame.__init__"><a class="viewcode-back"
+                                                           href="../../hsgame.html#hsgame.replay.SavedGame.__init__">[docs]</a>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">replay_file</span><span
+                class="p">):</span>
 
         <span class="n">replay</span> <span class="o">=</span> <span class="n">Replay</span><span class="p">()</span>
-        <span class="n">replay</span><span class="o">.</span><span class="n">parse_replay</span><span class="p">(</span><span class="n">replay_file</span><span class="p">)</span>
+        <span class="n">replay</span><span class="o">.</span><span class="n">parse_replay</span><span class="p">(</span><span
+                class="n">replay_file</span><span class="p">)</span>
 
         <span class="n">action_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">random_index</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">game_ref</span> <span class="o">=</span> <span class="bp">self</span>
         <span class="n">k_index</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="k">def</span> <span class="nf">replay_random</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-            <span class="n">nonlocal</span> <span class="n">random_index</span>
-            <span class="n">random_index</span> <span class="o">+=</span> <span class="mi">1</span>
-            <span class="k">return</span> <span class="n">replay</span><span class="o">.</span><span class="n">random_numbers</span><span class="p">[</span><span class="n">random_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">replay_random</span><span class="p">(</span><span
+                class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="n">nonlocal</span> <span class="n">random_index</span>
+        <span class="n">random_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">replay</span><span class="o">.</span><span class="n">random_numbers</span><span
+                class="p">[</span><span class="n">random_index</span> <span class="o">-</span> <span class="mi">1</span><span
+                class="p">]</span>
 
-        <span class="k">def</span> <span class="nf">null_random</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
-            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">def</span> <span class="nf">null_random</span><span class="p">(</span><span
+                class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">0</span>
 
         <span class="k">class</span> <span class="nc">ReplayAgent</span><span class="p">:</span>
 
-            <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span> <span class="bp">None</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">next_index</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">next_option</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_target</span> <span class="o">=</span>
+        <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_index</span> <span class="o">=</span>
+        <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">next_option</span> <span class="o">=</span>
+        <span class="bp">None</span>
 
-            <span class="k">def</span> <span class="nf">do_card_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="p">):</span>
-                <span class="n">nonlocal</span> <span class="n">k_index</span>
-                <span class="n">keep_arr</span> <span class="o">=</span> <span class="p">[</span><span class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">replay</span><span class="o">.</span><span class="n">keeps</span><span class="p">[</span><span class="n">k_index</span><span class="p">]:</span>
-                    <span class="n">keep_arr</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
-                <span class="n">k_index</span> <span class="o">+=</span> <span class="mi">1</span>
-                <span class="k">return</span> <span class="n">keep_arr</span>
+        <span class="k">def</span> <span class="nf">do_card_check</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">cards</span><span class="p">):</span>
+        <span class="n">nonlocal</span> <span class="n">k_index</span>
+        <span class="n">keep_arr</span> <span class="o">=</span> <span class="p">[</span><span
+                class="bp">False</span><span class="p">]</span> <span class="o">*</span> <span
+                class="nb">len</span><span class="p">(</span><span class="n">cards</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">replay</span><span
+                class="o">.</span><span class="n">keeps</span><span class="p">[</span><span
+                class="n">k_index</span><span class="p">]:</span>
+        <span class="n">keep_arr</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span
+                class="n">index</span><span class="p">)]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">k_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">keep_arr</span>
 
-            <span class="k">def</span> <span class="nf">do_turn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
-                <span class="n">nonlocal</span> <span class="n">action_index</span>
-                <span class="k">while</span> <span class="n">action_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">replay</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">dead</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">replay</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="n">action_index</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">hsgame</span><span class="o">.</span><span class="n">replay</span><span class="o">.</span><span class="n">TurnEndAction</span><span class="p">:</span>
-                    <span class="n">replay</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="n">action_index</span><span class="p">]</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="n">game_ref</span><span class="p">)</span>
-                    <span class="n">action_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">def</span> <span class="nf">do_turn</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="n">nonlocal</span> <span class="n">action_index</span>
+        <span class="k">while</span> <span class="n">action_index</span> <span class="o">&lt;</span> <span class="nb">len</span><span
+                class="p">(</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">actions</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span>
+        <span class="n">player</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span
+                class="n">dead</span> <span class="ow">and</span> <span class="nb">type</span><span
+                class="p">(</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">actions</span><span class="p">[</span><span class="n">action_index</span><span
+                class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">hsgame</span><span
+                class="o">.</span><span class="n">replay</span><span class="o">.</span><span
+                class="n">TurnEndAction</span><span class="p">:</span>
+        <span class="n">replay</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span
+                class="n">action_index</span><span class="p">]</span><span class="o">.</span><span class="n">play</span><span
+                class="p">(</span><span class="n">game_ref</span><span class="p">)</span>
+        <span class="n">action_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-                <span class="n">action_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">action_index</span> <span class="o">+=</span> <span class="mi">1</span>
 
-            <span class="k">def</span> <span class="nf">set_game</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
-                <span class="k">pass</span>
+        <span class="k">def</span> <span class="nf">set_game</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="k">pass</span>
 
-            <span class="k">def</span> <span class="nf">choose_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_target</span>
+        <span class="k">def</span> <span class="nf">choose_target</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">next_target</span>
 
-            <span class="k">def</span> <span class="nf">choose_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">next_index</span>
+        <span class="k">def</span> <span class="nf">choose_index</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="n">card</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span
+                class="n">next_index</span>
 
-            <span class="k">def</span> <span class="nf">choose_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">options</span><span class="p">):</span>
-                <span class="k">return</span> <span class="n">options</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">next_option</span><span class="p">]</span>
+        <span class="k">def</span> <span class="nf">choose_option</span><span class="p">(</span><span
+                class="bp">self</span><span class="p">,</span> <span class="o">*</span><span
+                class="n">options</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">options</span><span class="p">[</span><span class="bp">self</span><span
+                class="o">.</span><span class="n">next_option</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">replay</span><span class="o">.</span><span class="n">random_numbers</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">random_func</span> <span class="o">=</span> <span class="n">null_random</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">replay</span><span
+                class="o">.</span><span class="n">random_numbers</span><span class="p">)</span> <span
+                class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">random_func</span> <span class="o">=</span> <span class="n">null_random</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">random_func</span> <span class="o">=</span> <span class="n">replay_random</span>
+        <span class="n">random_func</span> <span class="o">=</span> <span class="n">replay_random</span>
 
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">replay</span><span class="o">.</span><span class="n">decks</span><span class="p">,</span> <span class="p">[</span><span class="n">ReplayAgent</span><span class="p">(),</span> <span class="n">ReplayAgent</span><span class="p">()],</span> <span class="n">random_func</span><span class="p">)</span></div></div>
-</pre></div>
-
-          </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span
+                class="n">__init__</span><span class="p">(</span><span class="n">replay</span><span
+                class="o">.</span><span class="n">decks</span><span class="p">,</span> <span class="p">[</span><span
+                class="n">ReplayAgent</span><span class="p">(),</span> <span class="n">ReplayAgent</span><span
+                class="p">()],</span> <span class="n">random_func</span><span class="p">)</span></div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+</pre>
+</div>
+
+</div>
+</div>
+</div>
+<div class="sphinxsidebar">
+    <div class="sphinxsidebarwrapper">
+        <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+
+            <form class="search" action="../../search.html" method="get">
+                <input type="text" name="q"/>
+                <input type="submit" value="Go"/>
+                <input type="hidden" name="check_keywords" value="yes"/>
+                <input type="hidden" name="area" value="default"/>
+            </form>
+            <p class="searchtip" style="font-size: 90%">
+                Enter search terms or a module, class or function name.
+            </p>
         </div>
-      </div>
-      <div class="clearer"></div>
+        <script type="text/javascript">$('#searchbox').show(0);</script>
     </div>
-    <div class="relbar-bottom">
-        
+</div>
+<div class="clearer"></div>
+</div>
+<div class="relbar-bottom">
+
     <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="../../genindex.html" title="General Index"
+                        >index</a></li>
+            <li class="right">
+                <a href="../../py-modindex.html" title="Python Module Index"
+                        >modules</a> &nbsp; &nbsp;</li>
+            <li><a href="../../index.html">HS Sim</a> &raquo;</li>
 
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
-      </ul>
+            <li><a href="../index.html">Module code</a> &raquo;</li>
+        </ul>
     </div>
-    </div>
+</div>
 
-    <div class="footer">
-        &copy; Copyright 2014, Daniel Yule.
-    </div>
-    <!-- cloud_sptheme 1.4 -->
-  </body>
+<div class="footer">
+    &copy; Copyright 2014, Daniel Yule.
+</div>
+<!-- cloud_sptheme 1.4 -->
+</body>
 </html>

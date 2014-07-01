@@ -1,19 +1,18 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
     <title>hsgame.targeting &mdash; Hearthstone Simulator</title>
-    
-    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono" type="text/css" />
-    
+
+    <link rel="stylesheet" href="../../_static/cloud.css" type="text/css"/>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css"/>
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noticia+Text|Open+Sans|Droid+Sans+Mono"
+          type="text/css"/>
+
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
@@ -22,160 +21,250 @@
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
       };
+
     </script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../_static/jquery.cookie.js"></script>
     <script type="text/javascript" src="../../_static/cloud.js"></script>
-    <link rel="top" title="Hearthstone Simulator" href="../../index.html" />
-    <link rel="up" title="Module code" href="../index.html" /> 
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-  </head>
-  <body>
-    <div class="relbar-top">
-        
+    <link rel="top" title="Hearthstone Simulator" href="../../index.html"/>
+    <link rel="up" title="Module code" href="../index.html"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div class="relbar-top">
+
     <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="../../genindex.html" title="General Index"
+                   accesskey="I">index</a></li>
+            <li class="right">
+                <a href="../../py-modindex.html" title="Python Module Index"
+                        >modules</a> &nbsp; &nbsp;</li>
+            <li><a href="../../index.html">HS Sim</a> &raquo;</li>
 
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
-      </ul>
+            <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li>
+        </ul>
     </div>
-    </div>
-  
+</div>
 
-    <div class="document">
-      <div class="documentwrapper">
+
+<div class="document">
+    <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
-            
-  <h1>Source code for hsgame.targeting</h1><div class="highlight"><pre>
+            <div class="body">
+
+                <h1>Source code for hsgame.targeting</h1>
+
+                <div class="highlight"><pre>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Daniel&#39;</span>
 
 
-<div class="viewcode-block" id="find_spell_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_spell_target">[docs]</a><span class="k">def</span> <span class="nf">find_spell_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+<div class="viewcode-block" id="find_spell_target"><a class="viewcode-back"
+                                                      href="../../hsgame.html#hsgame.targeting.find_spell_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_spell_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">minions</span><span class="p">)</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">other_player</span><span
+            class="o">.</span><span class="n">hero</span><span class="p">)</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">hero</span><span class="p">)</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_battlecry_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_battlecry_target">[docs]</a><span class="k">def</span> <span class="nf">find_battlecry_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
+<div class="viewcode-block" id="find_battlecry_target"><a class="viewcode-back"
+                                                          href="../../hsgame.html#hsgame.targeting.find_battlecry_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_battlecry_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">minions</span><span class="p">)</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">other_player</span><span
+            class="o">.</span><span class="n">hero</span><span class="p">)</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">hero</span><span class="p">)</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_enemy_spell_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_enemy_spell_target">[docs]</a><span class="k">def</span> <span class="nf">find_enemy_spell_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+<div class="viewcode-block" id="find_enemy_spell_target"><a class="viewcode-back"
+                                                            href="../../hsgame.html#hsgame.targeting.find_enemy_spell_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_enemy_spell_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">hero</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">other_player</span><span
+            class="o">.</span><span class="n">hero</span><span class="p">)</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_minion_spell_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_minion_spell_target">[docs]</a><span class="k">def</span> <span class="nf">find_minion_spell_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
+<div class="viewcode-block" id="find_minion_spell_target"><a class="viewcode-back"
+                                                             href="../../hsgame.html#hsgame.targeting.find_minion_spell_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_minion_spell_target</span><span class="p">(</span><span class="n">game</span><span
+        class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">minions</span><span class="p">)</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_minion_battlecry_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_minion_battlecry_target">[docs]</a><span class="k">def</span> <span class="nf">find_minion_battlecry_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="p">)</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+<div class="viewcode-block" id="find_minion_battlecry_target"><a class="viewcode-back"
+                                                                 href="../../hsgame.html#hsgame.targeting.find_minion_battlecry_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_minion_battlecry_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span
+            class="n">game</span><span class="o">.</span><span class="n">current_player</span><span
+            class="o">.</span><span class="n">minions</span><span class="p">)</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span
+            class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">None</span>
 
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_enemy_minion_spell_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_enemy_minion_spell_target">[docs]</a><span class="k">def</span> <span class="nf">find_enemy_minion_spell_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+<div class="viewcode-block" id="find_enemy_minion_spell_target"><a class="viewcode-back"
+                                                                   href="../../hsgame.html#hsgame.targeting.find_enemy_minion_spell_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_enemy_minion_spell_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_enemy_minion_battlecry_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_enemy_minion_battlecry_target">[docs]</a><span class="k">def</span> <span class="nf">find_enemy_minion_battlecry_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+<div class="viewcode-block" id="find_enemy_minion_battlecry_target"><a class="viewcode-back"
+                                                                       href="../../hsgame.html#hsgame.targeting.find_enemy_minion_battlecry_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_enemy_minion_battlecry_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">other_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span
+            class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">None</span>
     <span class="k">return</span> <span class="n">targets</span>
 
 </div>
-<div class="viewcode-block" id="find_friendly_minion_battlecry_target"><a class="viewcode-back" href="../../hsgame.html#hsgame.targeting.find_friendly_minion_battlecry_target">[docs]</a><span class="k">def</span> <span class="nf">find_friendly_minion_battlecry_target</span><span class="p">(</span><span class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span> <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">target</span><span class="p">)]</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">None</span>
+<div class="viewcode-block" id="find_friendly_minion_battlecry_target"><a class="viewcode-back"
+                                                                          href="../../hsgame.html#hsgame.targeting.find_friendly_minion_battlecry_target">[docs]</a><span
+        class="k">def</span> <span class="nf">find_friendly_minion_battlecry_target</span><span class="p">(</span><span
+        class="n">game</span><span class="p">,</span> <span class="n">filter_function</span><span class="p">):</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span
+            class="n">current_player</span><span class="o">.</span><span class="n">minions</span><span
+            class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">targets</span> <span class="o">=</span> <span class="p">[</span><span class="n">target</span> <span
+            class="k">for</span> <span class="n">target</span> <span class="ow">in</span> <span class="n">targets</span>
+    <span class="k">if</span> <span class="n">filter_function</span><span class="p">(</span><span
+            class="n">target</span><span class="p">)]</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">targets</span><span
+            class="p">)</span> <span class="ow">is</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">None</span>
     <span class="k">return</span> <span class="n">targets</span></div>
-</pre></div>
+</pre>
+                </div>
 
-          </div>
+            </div>
         </div>
-      </div>
-      <div class="sphinxsidebar">
+    </div>
+    <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+            <div id="searchbox" style="display: none">
+                <h3>Quick search</h3>
+
+                <form class="search" action="../../search.html" method="get">
+                    <input type="text" name="q"/>
+                    <input type="submit" value="Go"/>
+                    <input type="hidden" name="check_keywords" value="yes"/>
+                    <input type="hidden" name="area" value="default"/>
+                </form>
+                <p class="searchtip" style="font-size: 90%">
+                    Enter search terms or a module, class or function name.
+                </p>
+            </div>
+            <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
-      </div>
-      <div class="clearer"></div>
     </div>
-    <div class="relbar-bottom">
-        
+    <div class="clearer"></div>
+</div>
+<div class="relbar-bottom">
+
     <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../py-modindex.html" title="Python Module Index"
-             >modules</a> &nbsp; &nbsp;</li>
-    <li><a href="../../index.html">HS Sim</a> &raquo;</li>
+        <h3>Navigation</h3>
+        <ul>
+            <li class="right" style="margin-right: 10px">
+                <a href="../../genindex.html" title="General Index"
+                        >index</a></li>
+            <li class="right">
+                <a href="../../py-modindex.html" title="Python Module Index"
+                        >modules</a> &nbsp; &nbsp;</li>
+            <li><a href="../../index.html">HS Sim</a> &raquo;</li>
 
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
-      </ul>
+            <li><a href="../index.html">Module code</a> &raquo;</li>
+        </ul>
     </div>
-    </div>
+</div>
 
-    <div class="footer">
-        &copy; Copyright 2014, Daniel Yule.
-    </div>
-    <!-- cloud_sptheme 1.4 -->
-  </body>
+<div class="footer">
+    &copy; Copyright 2014, Daniel Yule.
+</div>
+<!-- cloud_sptheme 1.4 -->
+</body>
 </html>
