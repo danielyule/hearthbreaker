@@ -176,7 +176,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[0].health)
 
         game.current_player.minions[1].silence()
-        
+
         self.assertEqual(0, game.current_player.minions[0].attack_power)
         self.assertEqual(5, game.current_player.minions[0].health)
 

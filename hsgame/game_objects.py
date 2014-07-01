@@ -216,7 +216,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         # : The current health of this character
         self.health = health
-        #: The maximum health of this character
+        # : The maximum health of this character
         self.max_health = health
         #: The amount of attack this character has
         self.attack_power = attack_power
@@ -801,7 +801,7 @@ class Weapon(Bindable):
         super().__init__()
         # : The amount of attack this weapon gives the hero
         self.attack_power = attack_power
-        #: The number of times this weapon can be used to attack before being discarded
+        # : The number of times this weapon can be used to attack before being discarded
         self.durability = durability
         #: Called when this weapon is first placed
         self.battlecry = battlecry
@@ -814,7 +814,7 @@ class Weapon(Bindable):
         self.trigger("destroyed")
         self.player.hero.weapon = None
         self.player.hero.change_temp_attack(-self.attack_power)
-        
+
     def equip(self, player):
         self.player = player
         if self.player.hero.weapon is not None:

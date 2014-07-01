@@ -415,13 +415,13 @@ class TestPaladin(unittest.TestCase):
 
         for turn in range(0, 4):
             game.play_single_turn()
-        
+
         # Sword of Justice should be played, and hero will attack once
         game.play_single_turn()
         self.assertEqual(1, game.players[0].hero.weapon.attack_power)
         self.assertEqual(5, game.players[0].hero.weapon.durability)
 
-        # Four minions should have been played, buffing each one 
+        # Four minions should have been played, buffing each one
         for turn in range(0, 9):
             game.play_single_turn()
         self.assertEqual(1, game.players[0].hero.weapon.durability)
@@ -430,7 +430,7 @@ class TestPaladin(unittest.TestCase):
             self.assertEqual(2, game.players[0].minions[i].max_health)
             self.assertEqual(2, game.players[0].minions[i].health)
             self.assertEqual(6, game.players[0].minions[i].attack_power)
-        
+
         # A fifth minion should be played, buffed by the last durability of the weapon which should be destroyed
         game.play_single_turn()
         self.assertEqual(None, game.players[0].hero.weapon)
@@ -438,7 +438,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].max_health)
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertEqual(6, game.players[0].minions[0].attack_power)
-            
+
         game.players[0].minions[0].silence()
         self.assertEqual(1, game.players[0].minions[0].max_health)
         self.assertEqual(1, game.players[0].minions[0].health)
@@ -450,7 +450,7 @@ class TestPaladin(unittest.TestCase):
 
         for turn in range(0, 6):
             game.play_single_turn()
-        
+
         game.players[0].hero.health = 20
         # Truesilver Champion should be played, and hero will attack once, healing by two but get one damage from boar
         game.play_single_turn()
@@ -464,13 +464,13 @@ class TestPaladin(unittest.TestCase):
         # Tirion Fordring should be played
         for turn in range(0, 15):
             game.play_single_turn()
-        
+
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(6, game.players[0].minions[0].attack_power)
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual("Tirion Fordring", game.players[0].minions[0].card.name)
         self.assertEqual(None, game.players[0].hero.weapon)
-        
+
         # Let Tirion Fordring die, and a weapon should be equiped
         tirion = game.players[0].minions[0]
         tirion.die(None)

@@ -1,9 +1,11 @@
 import copy
+
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard
 from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
     Succubus, Felguard
+
 
 __author__ = 'randomflyingtaco'
 
@@ -245,6 +247,7 @@ class PowerOverwhelming(Card):
 
         def remove_minion(p):
             game.remove_minion(self.target, self.target.player)
+
         player.bind_once("turn_ended", remove_minion)
         self.target.bind_once("silenced",
                               lambda minion: player.unbind("turn_ended",

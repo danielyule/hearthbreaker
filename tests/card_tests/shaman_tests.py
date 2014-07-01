@@ -81,7 +81,7 @@ class TestShaman(unittest.TestCase):
         # Earth Elemental should be played
         for turn in range(0, 9):
             game.play_single_turn()
-        
+
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Earth Elemental", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].taunt)
@@ -92,9 +92,9 @@ class TestShaman(unittest.TestCase):
 
         for turn in range(0, 10):
             game.play_single_turn()
-        
+
         self.assertEqual(30, game.players[1].hero.health)
-        
+
         # Fire Elemental should be played, and its battlecry dealing three damage to opponent
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))

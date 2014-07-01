@@ -42,7 +42,7 @@ class DreadInfernal(MinionCard):
                          CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        #     targets = game.other_player.minions.copy()
+        # targets = game.other_player.minions.copy()
         #    targets.extend(game.current_player.minions)
         #   targets.append(game.other_player.hero)
         #  targets.append(game.current_player.hero)
