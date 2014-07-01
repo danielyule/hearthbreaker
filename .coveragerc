@@ -1,4 +1,4 @@
 [report]
 exclude_lines =
-pragma: no cover
-pass$
+    pragma: no cover
+    pass$
