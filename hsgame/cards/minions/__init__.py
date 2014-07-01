@@ -94,7 +94,8 @@ from hsgame.cards.minions.mage import (
 from hsgame.cards.minions.paladin import (
     AldorPeacekeeper,
     ArgentProtector,
-    GuardianOfKings
+    GuardianOfKings,
+    TirionFordring
 )
 
 from hsgame.cards.minions.priest import (
