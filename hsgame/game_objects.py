@@ -680,7 +680,7 @@ class Minion(Character):
         self.bind_once("died", lambda c: self.silence())
         super().die(by)
         if deathrattle is not None:
-            deathrattle()
+            deathrattle(self)
         self.remove_from_board()
         self.game.trigger("minion_died", self, by)
 

@@ -21,6 +21,7 @@ from hsgame.cards.minions.neutral import (
     Malygos,
     AzureDrake,
     OgreMagi,
+    Spellbreaker,
     BloodmageThalnos,
     LootHoarder,
     LeperGnome,

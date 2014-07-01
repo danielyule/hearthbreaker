@@ -46,7 +46,7 @@ class TirionFordring(MinionCard):
                 weapon = Weapon(5, 3)
                 return weapon
 
-        def equip_ashbringer():
+        def equip_ashbringer(minion):
             ashbringer = Ashbringer().create_weapon(player)
             ashbringer.equip(player)
 

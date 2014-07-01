@@ -298,6 +298,6 @@ card is a spell that does four damage to its target.
                                  DoNothingBot)            # The second player needs only get hit with the smash
         for turn in range(0, 4):                          # Advance the game to the turn before smash is played
             game.play_single_turn()
-        self.assertEqual(30, game.players[1].hero.health) # Ensure the second player's health hasn't been affected yet
+        self.assertEqual(30, game.players[1].hero.health) # Ensure the second player's health hasn't been affected
         game.play_single_turn()                           # Play Hogger Smash
         self.assertEqual(26, game.players[1].hero.health) # Make sure it did the damage it should have

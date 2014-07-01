@@ -1,6 +1,6 @@
 import random
 
-from hsgame.agents.basic_agents import DoNothingBot
+from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
@@ -274,7 +274,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
         self.assertEqual(8, len(game.current_player.hand))
-        # 3 starting cards+5 turns of draws-1 Azure Drake+1 draw from battlecry=8?
         game.play_single_turn()
 
         self.assertEqual(1, len(game.other_player.minions))
@@ -283,6 +282,21 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].attack_power)
         self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
+
+    def test_Malygos(self):
+        game = generate_game_for([Malygos, MindBlast], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for i in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].spell_damage)
+        self.assertEqual(5, game.current_player.spell_damage)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(20, game.other_player.hero.health)
 
     def test_Abomination(self):
         game = generate_game_for([Abomination, Abomination, Abomination, Abomination, Abomination, SoulOfTheForest],
@@ -313,3 +327,28 @@ class TestCommon(unittest.TestCase):
         # be damaged by the Abomination deathrattle
         game.play_single_turn()
         self.assertEqual(8, game.other_player.hero.health)
+
+    def test_SpellBreaker(self):
+        game = generate_game_for(Spellbreaker, LeperGnome, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertTrue(game.other_player.minions[0].silenced)
+        game.other_player.minions[0].die(None)
+        game.other_player.minions[0].activate_delayed()
+
+        self.assertEqual(30, game.current_player.hero.health)
+
+    def test_BloodmageThalnos(self):
+        game = generate_game_for(BloodmageThalnos, StonetuskBoar, MinionPlayingAgent, PredictableBot)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].spell_damage)
+        self.assertEqual(1, game.current_player.spell_damage)
+
+        # The other player will now use their hero power to kill Thalnos, drawing a card
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, len(game.other_player.hand))

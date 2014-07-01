@@ -251,11 +251,8 @@ class BloodmageThalnos(MinionCard):
                          CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        minion = Minion(1, 1)
+        minion = Minion(1, 1, deathrattle=draw_card)
         minion.spell_damage = 1
-        minion.bind("died", draw_card)
-        minion.bind_once("silenced", lambda m: m.unbind("died", draw_card),
-                         minion)
         return minion
 
 
@@ -734,7 +731,7 @@ class Abomination(MinionCard):
                          CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def deal_two_to_all():
+        def deal_two_to_all(minion):
             for target in hsgame.targeting.find_spell_target(player.game,
                                                              lambda x: True):
                 target.damage(2, self)
