@@ -85,6 +85,19 @@ written in lowercase with underscores separating the words.  PEP8 Validation can
 <div class="highlight-python"><div class="highlight"><pre>python -m unittest discover -s tests -p *_tests.py
 </pre></div>
 </div>
+<p>Contributions should follow the standard <a class="reference external" href="https://guides.github.com/introduction/flow/index.html">GitHub workflow</a>:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Fork the repository</li>
+<li>Clone from the forked repository</li>
+<li>Create a feature branch</li>
+<li>Make some changes</li>
+<li>As soon as you have completed anything (a card, a bug fix, a new feature, etc), submit a pull request</li>
+<li>Ensure the code is passing Travis CI&#8217;s tests</li>
+<li>Make any changes requested in review</li>
+<li>Back to step 3</li>
+</ol>
+</div></blockquote>
 <div class="section" id="adding-new-cards">
 <h2>Adding new cards<a class="headerlink" href="#adding-new-cards" title="Permalink to this headline">¶</a></h2>
 <p>Every card added to the game is implemented as a subclass of <a class="reference internal" href="hsgame.html#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> (for spells) or its
@@ -99,13 +112,14 @@ simply writing <tt class="docutils literal"><span class="pre">from</span> <span 
 <dl class="docutils">
 <dt>So, when implementing a new card, follow these steps:</dt>
 <dd><ol class="first last arabic simple">
+<li>Write at least one test for the new card</li>
 <li>Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)</li>
 <li>Create a constructor for that class which calls the super&#8217;s constructor with the needed attributes</li>
 <li>Add the method which performs the action of the card (<a class="reference internal" href="hsgame.html#hsgame.game_objects.Card.use" title="hsgame.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> for spells, <a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard.create_minion" title="hsgame.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> for minions, <a class="reference internal" href="hsgame.html#hsgame.game_objects.WeaponCard.create_weapon" title="hsgame.game_objects.WeaponCard.create_weapon"><tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt></a> for
 weapons, and <a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.activate" title="hsgame.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a>, <a class="reference internal" href="hsgame.html#hsgame.game_objects.SecretCard.deactivate" title="hsgame.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a> and <tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt> for secrets &#8211; see the section for each type of card)</li>
 <li>Add an entry to the appropriate <tt class="docutils literal"><span class="pre">__init__.py</span></tt></li>
 <li>Change the card&#8217;s entry in <tt class="docutils literal"><span class="pre">cards.csv</span></tt> to &#8216;yes&#8217; in the first column</li>
-<li>Write at least one test for the new card</li>
+<li>Run <tt class="docutils literal"><span class="pre">flake8</span></tt> in the project&#8217;s root folder to ensure proper formatting.</li>
 </ol>
 </dd>
 </dl>
@@ -223,13 +237,116 @@ played.</p>
 </div>
 <div class="section" id="creating-a-new-minion">
 <h4>Creating a new minion<a class="headerlink" href="#creating-a-new-minion" title="Permalink to this headline">¶</a></h4>
+<p>Minions are created through the <a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard.create_minion" title="hsgame.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> method of
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard" title="hsgame.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a>.  This method should create the
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.Minion" title="hsgame.game_objects.Minion"><tt class="xref py py-class docutils literal"><span class="pre">Minion</span></tt></a> object, attach any handlers that are needed, and return the created minion.</p>
+<p>The Minion object only requires two parameters in its constructor: <tt class="docutils literal"><span class="pre">attack</span></tt> and <tt class="docutils literal"><span class="pre">health</span></tt>, but can optionally include
+the minion&#8217;s race (Murloc, Giant, Dragon, etc) or its battlecry or deathrattle if necessary.</p>
+<p>If the battlecry requires targeting, then the function used for selecting targets should be included in the call
+to <tt class="docutils literal"><span class="pre">super().__init__()</span></tt>.  Battlecries and deathrattles are functions with one parameter: minion, meaning the
+minion doing the battlecry or deathrattle.</p>
+<p>For example, if we were creating a card for <a class="reference external" href="http://hearthstone.gamepedia.com/Crazy_Monkey">Crazy Monkey</a> we might
+implement it as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">CrazyMonkey</span><span class="p">(</span><span class="n">MinionCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Crazy Monkey&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MUKLA</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Minion</span><span class="p">(</span>                          <span class="c"># Create a new Minion</span>
+                      <span class="mi">1</span><span class="p">,</span>                        <span class="c"># The minion has 1 attack</span>
+                      <span class="mi">2</span><span class="p">,</span>                        <span class="c"># The minion has 2 health</span>
+                      <span class="n">battlecry</span><span class="o">=</span><span class="n">throw_bananas</span><span class="p">)</span>  <span class="c"># The battlecry is to throw bananas. This</span>
+                                                <span class="c"># assumes that throw_bananas is defined somewhere</span>
+                                                <span class="c"># else, most likely in hsgame/cards/battlecries.py</span>
+</pre></div>
+</div>
+<p>In <tt class="docutils literal"><span class="pre">hsgame/cards/battlecries.py</span></tt> meanwhile, <tt class="docutils literal"><span class="pre">throw_bananas</span></tt> might be defined like</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">throw_bananas</span><span class="p">(</span><span class="n">minion</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">banana</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>                  <span class="c"># We need to give the other player two bananas</span>
+        <span class="p">(</span><span class="n">minion</span><span class="o">.</span><span class="n">player</span>                          <span class="c"># Get the player associated with this minion</span>
+             <span class="o">.</span><span class="n">game</span>                              <span class="c"># Get the game the player is a part of</span>
+             <span class="o">.</span><span class="n">other_player</span>                      <span class="c"># other_player always refers to the non-active player</span>
+             <span class="o">.</span><span class="n">hand</span>                              <span class="c"># Player.hand is a list of cards</span>
+             <span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Banana</span><span class="p">()))</span>                 <span class="c"># Add a new instance of the banana card (defined elsewhere)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="creating-a-new-weapon">
 <h4>Creating a new weapon<a class="headerlink" href="#creating-a-new-weapon" title="Permalink to this headline">¶</a></h4>
+<p>Weapons are created in a similar manner to minions, although they use a
+<tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt> method rather than a
+<a class="reference internal" href="hsgame.html#hsgame.game_objects.MinionCard.create_minion" title="hsgame.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> method.  Just like minions, weapons can have
+battlecries and deathrattles, although their basic attributes are attack and durability rather than attack and health.</p>
+<p>For example, implementing the <a class="reference external" href="http://hearthstone.gamepedia.com/Warglaive_of_Azzinoth">Warglaive of Azzinoth</a> might
+look like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">WarglaiveOfAzzinoth</span><span class="p">(</span><span class="n">WeaponCard</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="s">&quot;Warglaive of Azzinoth&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">STORMRAGE</span><span class="p">,</span> <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_weapon</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Weapon</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="unit-testing-techniques">
 <h3>Unit Testing Techniques<a class="headerlink" href="#unit-testing-techniques" title="Permalink to this headline">¶</a></h3>
+<p>All unit tests are built using the <a class="reference external" href="https://docs.python.org/3/library/unittest.html">python unit test library</a>.  There
+must be at minimum one test for each card, or possibly more if the card is especially complex, or has finicky
+interactions with other cards.</p>
+<p>The basic attributes for each card (mana cost, rarity, health if it&#8217;s a minion, etc) are tested automatically against
+the data in <a class="reference external" href="https://github.com/danielyule/hearthstone-simulator/blob/master/cards.csv">cards.csv</a>, so you do not need
+to test these things yourself.  Any card which has a yes in its implemented column in cards.csv will be automatically
+tested.</p>
+<p>Each card unit tests consists of a game played with that card and some others.  The decks used in unit testing are not
+constrained by the two copies of any card limitation, so any number can be used.</p>
+<p>Most unit tests utilize the <tt class="xref py py-meth docutils literal"><span class="pre">generate_game_for</span></tt> method.  This method takes
+four parameters, all of which are classes, rather than instances of those classes.  The first two are the cards used to
+compose the decks of the two players.  If a list is passed into either parameter, then the cards in that list are
+repeated until a deck of thirty is made up.  If only a single card is passed in then the entire deck is made up of
+copies of that card.</p>
+<p>The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
+agents:</p>
+<p><a class="reference internal" href="hsgame.agents.html#hsgame.agents.basic_agents.DoNothingBot" title="hsgame.agents.basic_agents.DoNothingBot"><tt class="xref py py-class docutils literal"><span class="pre">DoNothingBot</span></tt></a></p>
+<blockquote>
+<div>As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
+the enemy player doesn&#8217;t need to do anything.</div></blockquote>
+<p><tt class="xref py py-class docutils literal"><span class="pre">SpellTestingAgent</span></tt></p>
+<blockquote>
+<div>This agent will play as many cards on its turn as it has the mana for, in the order they are presented in the deck.
+For targeting this agents will select the first elements in the list of targets presented to it, which means an
+enemy minion if one is down, then a friendly minion if one is present, or if there are no minions, the enemy hero.
+There are variations on this agent, which will target specific groups, such as EnemySpellTestingAgent, which will
+only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
+hero power)</div></blockquote>
+<p><tt class="xref py py-class docutils literal"><span class="pre">SpellTestingAgent</span></tt></p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Predictable bought tries to do everything it can in a very particular order:</dt>
+<dd><ol class="first last arabic simple">
+<li>Use the hero ability</li>
+<li>Play as many cards as it has mana for, in the order they are in the deck.</li>
+<li>Attack with the hero if possible (The targeting works similar to spell testing agent above)</li>
+<li>Attack with any active minions.</li>
+</ol>
+</dd>
+</dl>
+</div></blockquote>
+<p>With this in mind, let&#8217;s create a unit test for <a class="reference external" href="http://hearthstone.gamepedia.com/Hogger_SMASH!">Hogger SMASH</a>.  This
+card is a spell that does four damage to its target.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">test_HoggerSmash</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">game</span> <span class="o">=</span> <span class="n">generate_game_for</span><span class="p">(</span>                         <span class="c"># We use generate_game_for to create a test game</span>
+                             <span class="n">HoggerSmash</span><span class="p">,</span>             <span class="c"># The first player will have 30 Hogger SMASH!es</span>
+                             <span class="n">MogushanWarden</span><span class="p">,</span>          <span class="c"># The second player will have 30 Wardens</span>
+                             <span class="n">SpellTestingAgent</span><span class="p">,</span>       <span class="c"># The first player will try to play SMASH!</span>
+                             <span class="n">DoNothingBot</span><span class="p">)</span>            <span class="c"># The second player needs only get hit with the smash</span>
+    <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>                          <span class="c"># Advance the game to the turn before smash is played</span>
+        <span class="n">game</span><span class="o">.</span><span class="n">play_single_turn</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">health</span><span class="p">)</span> <span class="c"># Ensure the second player&#39;s health hasn&#39;t been affected yet</span>
+    <span class="n">game</span><span class="o">.</span><span class="n">play_single_turn</span><span class="p">()</span>                           <span class="c"># Play Hogger Smash</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">26</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">health</span><span class="p">)</span> <span class="c"># Make sure it did the damage it should have</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
