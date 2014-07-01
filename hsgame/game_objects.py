@@ -771,12 +771,8 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         :param Game game: The game this weapon will be used in
         """
         super().use(player, game)
-        if player.hero.weapon is not None:
-            player.hero.weapon.destroy()
         weapon = self.create_weapon(player)
-        player.hero.weapon = weapon
-        weapon.player = player
-        player.hero.change_temp_attack(weapon.attack_power)
+        weapon.equip(player)
 
     @abc.abstractmethod
     def create_weapon(self, player):
@@ -818,6 +814,13 @@ class Weapon(Bindable):
         self.trigger("destroyed")
         self.player.hero.weapon = None
         self.player.hero.change_temp_attack(-self.attack_power)
+        
+    def equip(self, player):
+        self.player = player
+        if self.player.hero.weapon is not None:
+            self.player.hero.weapon.destroy()
+        self.player.hero.weapon = self
+        self.player.hero.change_temp_attack(self.attack_power)
 
 
 class Deck:

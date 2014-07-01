@@ -48,7 +48,7 @@ class TirionFordring(MinionCard):
 
         def equip_ashbringer():
             ashbringer = Ashbringer().create_weapon(player)
-            player.hero.weapon = ashbringer
+            ashbringer.equip(player)
 
         minion = Minion(6, 6, deathrattle=equip_ashbringer)
         minion.divine_shield = True
