@@ -95,7 +95,7 @@ For example, here is the implementation of Cabal Shadow Priest, with comments fo
                              CHARACTER_CLASS.PRIEST,                              # The card can only be included in a Priest deck
                              CARD_RARITY.EPIC,                                    # The card's rarity is epic (has a purple gem)
                              hsgame.targeting.find_enemy_minion_battlecry_target, # The card targets enemy minions only
-                             lambda target: target.attack_power <= 2)             # Among enemy minions, only those with attack less than 2
+                             lambda target: target.attack_power <= 2)             # Among enemy minions, only those with 2 or less attack
 
         def create_minion(self, player):
             return Minion(4, 5, battlecry=take_control_of_minion)
