@@ -86,3 +86,17 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Earth Elemental", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].taunt)
         self.assertEqual(3, game.players[0].overload)
+
+    def test_FireElemental(self):
+        game = generate_game_for(FireElemental, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+        
+        self.assertEqual(30, game.players[1].hero.health)
+        
+        # Fire Elemental should be played, and its battlecry dealing three damage to opponent
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Fire Elemental", game.players[0].minions[0].card.name)
+        self.assertEqual(27, game.players[1].hero.health)

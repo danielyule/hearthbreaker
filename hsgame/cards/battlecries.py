@@ -33,6 +33,11 @@ def deal_two_damage(minion):
         minion.card.target.damage(2, None)
 
 
+def deal_three_damage(minion):
+    if minion.card.target is not None:
+        minion.card.target.damage(3, None)
+
+
 def flame_imp(minion):
     minion.player.hero.damage(3, None)
 

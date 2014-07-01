@@ -128,7 +128,7 @@ yes,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,
 no,Fen Creeper,Taunt,,,5,3,6,Common,Minion
 no,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Rare,Spell
 no,Fiery War Axe,,,Warrior,2,3,2,Free,Weapon
-no,Fire Elemental,Battlecry: Deal 3 damage.,,Shaman,6,6,5,Common,Minion
+yes,Fire Elemental,Battlecry: Deal 3 damage.,,Shaman,6,6,5,Common,Minion
 yes,Fireball,Deal 6 damage.,,Mage,4,,,Free,Spell
 yes,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Common,Minion
 yes,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Common,Spell

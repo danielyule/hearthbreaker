@@ -1,5 +1,7 @@
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
+from hsgame.cards.battlecries import deal_three_damage
 
 __author__ = 'Daniel'
 
@@ -36,4 +38,14 @@ class EarthElemental(MinionCard):
         minion = Minion(7, 8)
         minion.taunt = True
         player.overload += 3
+        return minion
+
+
+class FireElemental(MinionCard):
+    def __init__(self):
+        super().__init__("Fire Elemental", 6, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        minion = Minion(6, 5, battlecry=deal_three_damage)
         return minion
