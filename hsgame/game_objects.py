@@ -18,6 +18,7 @@ def card_lookup(card_name):
     :param str card_name: A string representing the name of the card in English
     :return: An instance of a subclass of Card corresponding to the given card name or None if no Card
              by that name exists.
+    :rtype: hsgame.game_objects.Card
     """
 
     def card_lookup_rec(card_type):
@@ -492,7 +493,8 @@ class Card(Bindable):
         Checks that the player has enough mana to play the card, and that the card has a valid
         target if it requires one.
 
-        :return bool: True if the card can be played, false otherwise.
+        :return: True if the card can be played, false otherwise.
+        :rtype: bool
         """
         if self.targetable:
             self.targets = self.get_targets(game, self.filter_func)
@@ -508,9 +510,10 @@ class Card(Bindable):
         This cost is the base cost for the card, modified by any effects from the card itself, or
         from other cards (such as :class:`hsgame.cards.minions.neutral.VentureCoMercenary`)
 
-        :param Player player: The player who is trying to use the card.
+        :param hsgame.game_objects.Player player: The player who is trying to use the card.
 
-        :return int: representing the actual mana cost of this card.
+        :return: representing the actual mana cost of this card.
+        :rtype: int
         """
         calc_mana = self.mana
         for mana_filter in player.mana_filters:
@@ -527,10 +530,10 @@ class Card(Bindable):
         This method will cause the card's effect, but will not update the game state or trigger any events.
         To play a card correctly, use :meth:`Game.play_card`.
 
-        Implementations of new cards should override this method, but be sure to call `super().use(player, game)`
+        Implementations of new cards should override this method, but be sure to call ``super().use(player, game)``
 
-        :param Player player: The player who is using the card.
-        :param Game game: The game this card is being used in.
+        :param hsgame.game_objects.Player player: The player who is using the card.
+        :param hsgame.game_objects.Game game: The game this card is being used in.
         """
         if self.targetable:
             if self.targets is None:
@@ -542,7 +545,8 @@ class Card(Bindable):
         """
         Verifies if this is a spell card (or a secret card)
 
-        :return bool: True if the card is a spell card, false otherwise
+        :return: True if the card is a spell card, false otherwise
+        :rtype: bool
         """
         return True
 

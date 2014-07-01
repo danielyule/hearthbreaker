@@ -34,6 +34,17 @@ Any new code should be accompanied with a unit test which runs through the new c
 
     python -m unittest discover -s tests -p *_tests.py
 
+Contributions should follow the standard `GitHub workflow <https://guides.github.com/introduction/flow/index.html>`_:
+
+ 1. Fork the repository
+ 2. Clone from the forked repository
+ 3. Create a feature branch
+ 4. Make some changes
+ 5. As soon as you have completed anything (a card, a bug fix, a new feature, etc), submit a pull request
+ 6. Ensure the code is passing Travis CI's tests
+ 7. Make any changes requested in review
+ 8. Back to step 3
+
 Adding new cards
 ````````````````
 Every card added to the game is implemented as a subclass of :class:`Card <hsgame.game_objects.Card>` (for spells) or its
@@ -48,13 +59,14 @@ imported in ``hsgame/cards/minions/__init__.py``.  These are then imported by ``
 simply writing ``from hsgame.cards import *`` will import all cards and nothing else.
 
 So, when implementing a new card, follow these steps:
- 1. Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)
- 2. Create a constructor for that class which calls the super's constructor with the needed attributes
- 3. Add the method which performs the action of the card (:meth:`use <hsgame.game_objects.Card.use>` for spells, :meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hsgame.game_objects.WeaponCard.create_weapon>` for
+ 1. Write at least one test for the new card
+ 2. Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)
+ 3. Create a constructor for that class which calls the super's constructor with the needed attributes
+ 4. Add the method which performs the action of the card (:meth:`use <hsgame.game_objects.Card.use>` for spells, :meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hsgame.game_objects.WeaponCard.create_weapon>` for
     weapons, and :meth:`activate <hsgame.game_objects.SecretCard.activate>`, :meth:`deactivate <hsgame.game_objects.SecretCard.deactivate>` and :meth:`_reveal <hsgame.game_objects.SecretCard._reveal>` for secrets -- see the section for each type of card)
- 4. Add an entry to the appropriate ``__init__.py``
- 5. Change the card's entry in ``cards.csv`` to 'yes' in the first column
- 6. Write at least one test for the new card
+ 5. Add an entry to the appropriate ``__init__.py``
+ 6. Change the card's entry in ``cards.csv`` to 'yes' in the first column
+ 7. Run ``flake8`` in the project's root folder to ensure proper formatting.
 
 Creating a Constructor
 ''''''''''''''''''''''
@@ -166,9 +178,126 @@ played.
 Creating a new minion
 .....................
 
+Minions are created through the :meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` method of
+:class:`MinionCard <hsgame.game_objects.MinionCard>`.  This method should create the
+:class:`Minion <hsgame.game_objects.Minion>` object, attach any handlers that are needed, and return the created minion.
+
+The Minion object only requires two parameters in its constructor: ``attack`` and ``health``, but can optionally include
+the minion's race (Murloc, Giant, Dragon, etc) or its battlecry or deathrattle if necessary.
+
+If the battlecry requires targeting, then the function used for selecting targets should be included in the call
+to ``super().__init__()``.  Battlecries and deathrattles are functions with one parameter: minion, meaning the
+minion doing the battlecry or deathrattle.
+
+For example, if we were creating a card for `Crazy Monkey <http://hearthstone.gamepedia.com/Crazy_Monkey>`_ we might
+implement it as follows:
+
+::
+
+    class CrazyMonkey(MinionCard):
+        def __init__(self):
+            super().__init__("Crazy Monkey", 1, CHARACTER_CLASS.MUKLA, CARD_RARITY.COMMON)
+
+        def create_minion(self, player):
+            return Minion(                          # Create a new Minion
+                          1,                        # The minion has 1 attack
+                          2,                        # The minion has 2 health
+                          battlecry=throw_bananas)  # The battlecry is to throw bananas. This
+                                                    # assumes that throw_bananas is defined somewhere
+                                                    # else, most likely in hsgame/cards/battlecries.py
+
+
+
+In ``hsgame/cards/battlecries.py`` meanwhile, ``throw_bananas`` might be defined like
+
+::
+
+    def throw_bananas(minion):
+        for banana in range(0, 2):                  # We need to give the other player two bananas
+            (minion.player                          # Get the player associated with this minion
+                 .game                              # Get the game the player is a part of
+                 .other_player                      # other_player always refers to the non-active player
+                 .hand                              # Player.hand is a list of cards
+                 .append(Banana()))                 # Add a new instance of the banana card (defined elsewhere)
+
 Creating a new weapon
 .....................
 
+Weapons are created in a similar manner to minions, although they use a
+:meth:`create_weapon <hsgame.game_objects.MinionCard.create_weapon>` method rather than a
+:meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` method.  Just like minions, weapons can have
+battlecries and deathrattles, although their basic attributes are attack and durability rather than attack and health.
+
+For example, implementing the `Warglaive of Azzinoth <http://hearthstone.gamepedia.com/Warglaive_of_Azzinoth>`_ might
+look like this:
+
+::
+
+    class WarglaiveOfAzzinoth(WeaponCard):
+        def __init__(self):
+            super().__init__("Warglaive of Azzinoth", 2, CHARACTER_CLASS.STORMRAGE, CARD_RARITY.COMMON)
+
+        def create_weapon(self, player):
+            return Weapon(2, 2)
 
 Unit Testing Techniques
 '''''''''''''''''''''''
+All unit tests are built using the `python unit test library <https://docs.python.org/3/library/unittest.html>`_.  There
+must be at minimum one test for each card, or possibly more if the card is especially complex, or has finicky
+interactions with other cards.
+
+The basic attributes for each card (mana cost, rarity, health if it's a minion, etc) are tested automatically against
+the data in `cards.csv <https://github.com/danielyule/hearthstone-simulator/blob/master/cards.csv>`_, so you do not need
+to test these things yourself.  Any card which has a yes in its implemented column in cards.csv will be automatically
+tested.
+
+Each card unit tests consists of a game played with that card and some others.  The decks used in unit testing are not
+constrained by the two copies of any card limitation, so any number can be used.
+
+Most unit tests utilize the :meth:`generate_game_for <tests.testing_utils.generate_game_for>` method.  This method takes
+four parameters, all of which are classes, rather than instances of those classes.  The first two are the cards used to
+compose the decks of the two players.  If a list is passed into either parameter, then the cards in that list are
+repeated until a deck of thirty is made up.  If only a single card is passed in then the entire deck is made up of
+copies of that card.
+
+The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
+agents:
+
+:class:`DoNothingBot <hsgame.agents.basic_agents.DoNothingBot>`
+
+    As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
+    the enemy player doesn't need to do anything.
+
+:class:`SpellTestingAgent <tests.testing_agents.testing_agents.SpellTestingAgent>`
+
+    This agent will play as many cards on its turn as it has the mana for, in the order they are presented in the deck.
+    For targeting this agents will select the first elements in the list of targets presented to it, which means an
+    enemy minion if one is down, then a friendly minion if one is present, or if there are no minions, the enemy hero.
+    There are variations on this agent, which will target specific groups, such as EnemySpellTestingAgent, which will
+    only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
+    hero power)
+
+:class:`SpellTestingAgent <tests.testing_agents.testing_agents.SpellTestingAgent>`
+
+    Predictable bought tries to do everything it can in a very particular order:
+     1. Use the hero ability
+     2. Play as many cards as it has mana for, in the order they are in the deck.
+     3. Attack with the hero if possible (The targeting works similar to spell testing agent above)
+     4. Attack with any active minions.
+
+With this in mind, let's create a unit test for `Hogger SMASH <http://hearthstone.gamepedia.com/Hogger_SMASH!>`_.  This
+card is a spell that does four damage to its target.
+
+::
+
+    def test_HoggerSmash(self):
+        game = generate_game_for(                         # We use generate_game_for to create a test game
+                                 HoggerSmash,             # The first player will have 30 Hogger SMASH!es
+                                 MogushanWarden,          # The second player will have 30 Wardens
+                                 SpellTestingAgent,       # The first player will try to play SMASH!
+                                 DoNothingBot)            # The second player needs only get hit with the smash
+        for turn in range(0, 4):                          # Advance the game to the turn before smash is played
+            game.play_single_turn()
+        self.assertEqual(30, game.players[1].hero.health) # Ensure the second player's health hasn't been affected yet
+        game.play_single_turn()                           # Play Hogger Smash
+        self.assertEqual(26, game.players[1].hero.health) # Make sure it did the damage it should have

@@ -50,4 +50,6 @@ All pull requests which implement new cards must also include a unit test for th
 
 All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
 
+For more specifics about contributing, see the [contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
