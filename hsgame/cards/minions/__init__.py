@@ -112,7 +112,8 @@ from hsgame.cards.minions.shaman import (
     AlAkirTheWindlord,
     DustDevil,
     EarthElemental,
-    FireElemental
+    FireElemental,
+    FlametongueTotem
 )
 
 from hsgame.cards.minions.warlock import (
