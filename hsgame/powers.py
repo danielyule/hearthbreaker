@@ -161,7 +161,7 @@ class ShamanPower(Power):
         class HealingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Healing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
                 def heal_friendly_minions():
@@ -171,7 +171,7 @@ class ShamanPower(Power):
                 def silence():
                     player.unbind("turn_ended", heal_friendly_minions)
 
-                minion = hsgame.game_objects.Minion(0, 2)
+                minion = hsgame.game_objects.Minion(0, 2, hsgame.constants.MINION_TYPE.TOTEM)
                 player.bind("turn_ended", heal_friendly_minions)
                 minion.bind_once("silenced", silence)
                 return minion
@@ -179,28 +179,28 @@ class ShamanPower(Power):
         class SearingTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Searing Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
-                return hsgame.game_objects.Minion(1, 1)
+                return hsgame.game_objects.Minion(1, 1, hsgame.constants.MINION_TYPE.TOTEM)
 
         class StoneclawTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Stoneclaw Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
-                minion = hsgame.game_objects.Minion(0, 2)
+                minion = hsgame.game_objects.Minion(0, 2, hsgame.constants.MINION_TYPE.TOTEM)
                 minion.taunt = True
                 return minion
 
         class WrathOfAirTotem(hsgame.game_objects.MinionCard):
             def __init__(self):
                 super().__init__("Wrath of Air Totem", 1, hsgame.constants.CHARACTER_CLASS.SHAMAN,
-                                 hsgame.constants.CARD_RARITY.SPECIAL, hsgame.constants.MINION_TYPE.TOTEM)
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
-                minion = hsgame.game_objects.Minion(0, 2)
+                minion = hsgame.game_objects.Minion(0, 2, hsgame.constants.MINION_TYPE.TOTEM)
                 minion.spell_damage = 1
                 return minion
 
