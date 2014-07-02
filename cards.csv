@@ -52,7 +52,7 @@ yes,Blizzard,Deal 2 damage to all enemy minions and Freeze them.,,Mage,6,,,Rare,
 no,Blood Imp,"Stealth. At the end of your turn, give another random friendly minion +1 Health.",Demon,Warlock,1,0,1,Common,Minion
 no,Blood Knight,Battlecry: All minions lose Divine Shield. Gain +3/+3 for each Shield lost.,,,3,3,3,Epic,Minion
 yes,Bloodfen Raptor,,Beast,,2,3,2,Free,Minion
-no,Bloodlust,Give your minions +3 Attack this turn.,,Shaman,5,,,Common,Spell
+yes,Bloodlust,Give your minions +3 Attack this turn.,,Shaman,5,,,Common,Spell
 yes,Bloodmage Thalnos,Spell Damage +1. Deathrattle: Draw a card.,,,2,1,1,Legendary,Minion
 no,Bloodsail Corsair,Battlecry: Remove 1 Durability from your opponent's weapon.,Pirate,,1,1,2,Rare,Minion
 no,Bloodsail Raider,Battlecry: Gain Attack equal to the Attack of your weapon.,Pirate,,2,2,3,Common,Minion

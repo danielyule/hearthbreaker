@@ -38,3 +38,14 @@ class AncestralSpirit(Card):
         super().use(player, game)
 
         apply_deathrattle(self.target)
+
+
+class Bloodlust(Card):
+    def __init__(self):
+        super().__init__("Bloodlust", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for minion in player.minions:
+            minion.temp_attack += 3

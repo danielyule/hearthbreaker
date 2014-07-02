@@ -239,3 +239,19 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Argent Commander", game.players[0].minions[0].card.name)
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].divine_shield)
+
+    def test_Bloodlust(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, Bloodlust], StonetuskBoar,
+                                 MinionAttackingAgent, DoNothingBot)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(20, game.players[1].hero.health)
+
+        # Bloodlust should be played, resulting in 4 * 4 = 16 damage
+        game.play_single_turn()
+        self.assertEqual(4, game.players[1].hero.health)
+        # Attack power should be back to normal
+        self.assertEqual(1, game.players[0].minions[0].attack_power)
