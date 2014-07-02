@@ -98,7 +98,8 @@ from hsgame.cards.spells.shaman import (
     AncestralHealing,
     AncestralSpirit,
     Bloodlust,
-    EarthShock
+    EarthShock,
+    FarSight
 )
 
 from hsgame.cards.spells.warlock import (

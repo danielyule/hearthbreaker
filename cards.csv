@@ -123,7 +123,7 @@ yes,Eye for an Eye,"Secret: When your hero takes damage, deal that much damage t
 no,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion
 yes,Faerie Dragon,Can't be targeted by Spells or Hero Powers.,Dragon,,2,3,2,Common,Minion
 no,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Common,Spell
-no,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell
+yes,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell
 yes,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,3,3,5,Rare,Minion
 no,Fen Creeper,Taunt,,,5,3,6,Common,Minion
 no,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Rare,Spell

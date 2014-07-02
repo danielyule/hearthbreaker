@@ -268,3 +268,18 @@ class TestShaman(unittest.TestCase):
         # Earth Shock should be played, resulting in silence which removes the divine shield and then 1 damage
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
+
+    def test_FarSight(self):
+        game = generate_game_for(FarSight, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        # Far Sight should have been played, our latest card should cost 3 - 3 = 0
+        self.assertEqual(0, game.players[0].hand[-1].mana_cost(game.players[0]))
+        self.assertEqual(3, game.players[0].hand[0].mana_cost(game.players[0]))
+        # Draw a card to make sure the new card doesn't get the effect
+        game.players[0].draw()
+        self.assertEqual(3, game.players[0].hand[-1].mana_cost(game.players[0]))
+        # Our old card shouldn't have been affected
+        self.assertEqual(0, game.players[0].hand[-2].mana_cost(game.players[0]))

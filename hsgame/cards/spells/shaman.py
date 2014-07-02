@@ -61,3 +61,27 @@ class EarthShock(Card):
 
         self.target.silence()
         self.target.damage(player.effective_spell_damage(1), self)
+
+
+class FarSight(Card):
+    def __init__(self):
+        super().__init__("Far Sight", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        class Filter:
+            def __init__(self, card):
+                self.amount = 3
+                self.filter = lambda c: c is card
+                self.min = 0
+
+        def reduce_cost(card):
+            nonlocal filter
+            filter = Filter(card)
+            player.unbind("card_drawn", reduce_cost)
+
+        super().use(player, game)
+
+        filter = None
+        player.bind("card_drawn", reduce_cost)
+        player.draw()
+        player.mana_filters.append(filter)
