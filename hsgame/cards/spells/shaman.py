@@ -49,3 +49,15 @@ class Bloodlust(Card):
 
         for minion in player.minions:
             minion.temp_attack += 3
+
+
+class EarthShock(Card):
+    def __init__(self):
+        super().__init__("Earth Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.silence()
+        self.target.damage(player.effective_spell_damage(1), self)

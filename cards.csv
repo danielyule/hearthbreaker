@@ -107,7 +107,7 @@ yes,Druid of the Claw,Choose One - Charge; or +2 Health and Taunt.,,Druid,5,4,4,
 yes,Dust Devil,Windfury. Overload: (2),,Shaman,1,3,1,Common,Minion
 yes,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3,3,2,Rare,Weapon
 yes,Earth Elemental,Taunt. Overload: (3),,Shaman,5,7,8,Epic,Minion
-no,Earth Shock,"Silence a minion, then deal 1 damage to it.",,Shaman,1,,,Common,Spell
+yes,Earth Shock,"Silence a minion, then deal 1 damage to it.",,Shaman,1,,,Common,Spell
 yes,Earthen Ring Farseer,Battlecry: Restore 3 Health.,,,3,3,3,Common,Minion
 no,Edwin VanCleef,Combo: Gain +2/+2 for each card played earlier this turn.,,Rogue,3,2,2,Legendary,Minion
 no,Elite Tauren Chieftain,Battlecry: Give both players the power to ROCK! (with a Power Chord card),,,5,5,5,Legendary,Minion

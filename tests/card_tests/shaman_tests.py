@@ -255,3 +255,16 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(4, game.players[1].hero.health)
         # Attack power should be back to normal
         self.assertEqual(1, game.players[0].minions[0].attack_power)
+
+    def test_EarthShock(self):
+        game = generate_game_for(EarthShock, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertTrue(game.players[1].minions[0].divine_shield)
+
+        # Earth Shock should be played, resulting in silence which removes the divine shield and then 1 damage
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))

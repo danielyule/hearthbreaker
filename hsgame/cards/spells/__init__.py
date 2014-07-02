@@ -97,7 +97,8 @@ from hsgame.cards.spells.priest import (
 from hsgame.cards.spells.shaman import (
     AncestralHealing,
     AncestralSpirit,
-    Bloodlust
+    Bloodlust,
+    EarthShock
 )
 
 from hsgame.cards.spells.warlock import (
