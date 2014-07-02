@@ -94,6 +94,10 @@ from hsgame.cards.spells.priest import (
     Thoughtsteal
 )
 
+from hsgame.cards.spells.shaman import (
+    AncestralHealing
+)
+
 from hsgame.cards.spells.warlock import (
     MortalCoil,
     Hellfire,

@@ -197,3 +197,19 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Windspeaker", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[1].wind_fury)
+
+    def test_AncestralHealing(self):
+        game = generate_game_for([FlametongueTotem, AncestralHealing], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Flametongue Totem", game.players[0].minions[0].card.name)
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertFalse(game.players[0].minions[0].taunt)
+        game.players[0].minions[0].health = 1
+
+        game.play_single_turn()
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].taunt)
