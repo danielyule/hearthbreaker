@@ -1,7 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion
-from hsgame.cards.battlecries import deal_three_damage
+from hsgame.cards.battlecries import deal_three_damage, give_windfury
 
 __author__ = 'Daniel'
 
@@ -84,4 +84,14 @@ class ManaTideTotem(MinionCard):
         minion = Minion(0, 3, MINION_TYPE.TOTEM)
         player.bind("turn_ended", draw_card)
         minion.bind_once("silenced", lambda: player.unbind("turn_ended", draw_card))
+        return minion
+
+
+class Windspeaker(MinionCard):
+    def __init__(self):
+        super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        minion = Minion(3, 3, battlecry=give_windfury)
         return minion

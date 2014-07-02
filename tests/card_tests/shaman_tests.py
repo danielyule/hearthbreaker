@@ -181,3 +181,19 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(22, game.players[0].deck.left)
+
+    def test_Windspeaker(self):
+        game = generate_game_for([StonetuskBoar, Windspeaker], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertFalse(game.players[0].minions[0].wind_fury)
+
+        # Windspeaker should be played, giving the boar windfury
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Windspeaker", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[1].wind_fury)

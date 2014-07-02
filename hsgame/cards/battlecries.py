@@ -138,3 +138,8 @@ def destroy_target(minion):
 def two_temp_attack(minion):
     if minion.card.target is not None:
         minion.card.target.change_temp_attack(2)
+
+
+def give_windfury(minion):
+    if minion.card.target is not None:
+        minion.card.target.wind_fury = True

@@ -372,7 +372,7 @@ yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell
 no,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion
 no,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell
 yes,Windfury Harpy,Windfury,,,6,4,5,Common,Minion
-no,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion
+yes,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion
 yes,Wisp,,,,0,1,1,Common,Minion
 yes,Wolfrider,Charge,,,3,3,1,Free,Minion
 yes,Worgen Infiltrator,Stealth,,,1,2,1,Common,Minion
