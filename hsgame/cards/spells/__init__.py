@@ -95,7 +95,8 @@ from hsgame.cards.spells.priest import (
 )
 
 from hsgame.cards.spells.shaman import (
-    AncestralHealing
+    AncestralHealing,
+    AncestralSpirit
 )
 
 from hsgame.cards.spells.warlock import (

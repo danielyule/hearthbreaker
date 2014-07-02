@@ -213,3 +213,29 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].taunt)
+
+    def test_AncestralSpirit(self):
+        game = generate_game_for([ArgentCommander, AncestralSpirit], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Argent Commander", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].divine_shield)
+
+        game.play_single_turn()
+        # Ancestral Spirit should be played on the Argent Commander
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        game.players[0].minions[0].health = 1
+        game.players[0].minions[0].divine_shield = False
+        # Let the minion die in order to test Ancestral Spirit 
+        commander = game.players[0].minions[0]
+        commander.die(None)
+        commander.activate_delayed()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Argent Commander", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].divine_shield)
