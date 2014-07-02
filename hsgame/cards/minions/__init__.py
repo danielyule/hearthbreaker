@@ -114,7 +114,8 @@ from hsgame.cards.minions.shaman import (
     DustDevil,
     EarthElemental,
     FireElemental,
-    FlametongueTotem
+    FlametongueTotem,
+    ManaTideTotem
 )
 
 from hsgame.cards.minions.warlock import (

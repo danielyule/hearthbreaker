@@ -159,3 +159,25 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].attack_power)
         self.assertEqual(1, game.players[0].minions[2].attack_power)
         self.assertEqual(1, game.players[0].minions[3].attack_power)
+
+    def test_ManaTideTotem(self):
+        game = generate_game_for([ManaTideTotem, WarGolem], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(25, game.players[0].deck.left)
+        self.assertEqual(0, len(game.players[0].minions))
+
+        # Mana Tide Totem should be played, and we should draw a card at the end of turn
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Mana Tide Totem", game.players[0].minions[0].card.name)
+        self.assertEqual(23, game.players[0].deck.left)
+
+        game.play_single_turn()
+        # Silence, we should only draw one card next turn
+        game.players[0].minions[0].silence()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(22, game.players[0].deck.left)

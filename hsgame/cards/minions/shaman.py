@@ -71,3 +71,17 @@ class FlametongueTotem(MinionCard):
         minion = Minion(0, 3, MINION_TYPE.TOTEM)
         minion.bind("added_to_board", add_effect)
         return minion
+
+
+class ManaTideTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def draw_card():
+            player.draw()
+
+        minion = Minion(0, 3, MINION_TYPE.TOTEM)
+        player.bind("turn_ended", draw_card)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", draw_card))
+        return minion
