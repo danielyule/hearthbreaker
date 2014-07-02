@@ -156,3 +156,13 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertFalse(game.current_player.hero.frozen)
+
+    def test_Tracking(self):
+        game = generate_game_for([Tracking, Tracking, Tracking, Tracking,
+                                  StonetuskBoar, BloodfenRaptor, KoboldGeomancer],
+                                 StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.hand))
+        self.assertEqual("Stonetusk Boar", game.current_player.hand[3].name)
+        self.assertEqual(23, game.current_player.deck.left)
