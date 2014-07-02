@@ -231,7 +231,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         game.players[0].minions[0].health = 1
         game.players[0].minions[0].divine_shield = False
-        # Let the minion die in order to test Ancestral Spirit 
+        # Let the minion die in order to test Ancestral Spirit
         commander = game.players[0].minions[0]
         commander.die(None)
         commander.activate_delayed()
