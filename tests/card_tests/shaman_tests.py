@@ -414,3 +414,20 @@ class TestShaman(unittest.TestCase):
         # Windfury should be played
         game.play_single_turn()
         self.assertTrue(game.players[1].minions[0].windfury)
+
+    def test_Doomhammer(self):
+        game = generate_game_for(Doomhammer, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertFalse(game.players[0].hero.windfury)
+
+        # Doomhammer should be played
+        game.play_single_turn()
+        self.assertTrue(game.players[0].hero.windfury)
+        self.assertEqual(2, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(6, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(26, game.players[1].hero.health)

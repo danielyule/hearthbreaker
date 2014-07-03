@@ -469,6 +469,7 @@ class Card(Bindable):
             :param function filter_func: A boolean function which can be used to filter the list of targets. An example
                                          for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
                                          returns true if the target's attack is less than 3.
+            :param int overload: The amount of overload on the card
         """
         super().__init__()
         self.name = name
@@ -792,7 +793,8 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
     Represents a :class:`Card` for creating a :class:`Weapon`
     """
 
-    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth):
+    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth,
+                 overload=0):
         """
         Create a new :class:`WeaponCard`
 
@@ -811,8 +813,9 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                                      for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
                                      returns true if the target's attack is less than 3.  Currently no weapons require
                                      anything but the default
+        :param int overload: The amount of overload on the card
         """
-        super().__init__(name, mana, character_class, rarity, target_func, filter_func)
+        super().__init__(name, mana, character_class, rarity, target_func, filter_func, overload)
 
     def use(self, player, game):
         """
@@ -865,6 +868,7 @@ class Weapon(Bindable):
         self.trigger("destroyed")
         self.player.hero.weapon = None
         self.player.hero.change_temp_attack(-self.attack_power)
+        self.player.hero.windfury = False
 
     def equip(self, player):
         self.player = player

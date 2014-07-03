@@ -8,3 +8,7 @@ from hsgame.cards.weapons.paladin import (
     SwordOfJustice,
     TruesilverChampion
 )
+
+from hsgame.cards.weapons.shaman import (
+    Doomhammer
+)

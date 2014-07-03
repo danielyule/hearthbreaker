@@ -85,7 +85,7 @@ class PredictableAgentWithoutHeroPower(DoNothingBot):
                     self.game.play_card(card)
                     done_something = True
 
-        if player.hero.can_attack():
+        while player.hero.can_attack():
             player.hero.attack()
 
         for minion in player.minions:

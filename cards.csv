@@ -97,7 +97,7 @@ yes,Dire Wolf Alpha,Adjacent minions have +1 Attack.,Beast,,2,2,2,Common,Minion
 yes,Divine Favor,Draw cards until you have as many in hand as your opponent.,,Paladin,3,,,Rare,Spell
 yes,Divine Spirit,Double a minion's Health.,,Priest,2,,,Common,Spell
 yes,Doomguard,Charge. Battlecry: Discard two random cards.,Demon,Warlock,5,5,7,Rare,Minion
-no,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Epic,Weapon
+yes,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Epic,Weapon
 no,Doomsayer,"At the start of your turn, destroy ALL minions.",,,2,0,7,Epic,Minion
 no,Dragonling Mechanic,Battlecry: Summon a 2/1 Mechanical Dragonling.,,,4,2,4,Common,Minion
 yes,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Free,Spell
