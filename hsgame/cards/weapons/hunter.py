@@ -33,10 +33,10 @@ class GladiatorsLongbow(WeaponCard):
 
         def on_destroy():
             player.hero.unbind("attack", make_immune)
-            player.hero.unbind("attack_complete", end_immune)
+            player.hero.unbind("attack_completed", end_immune)
 
         weapon = Weapon(5, 2)
         player.hero.bind("attack", make_immune)
-        player.hero.bind("attack_complete", end_immune)
+        player.hero.bind("attack_completed", end_immune)
         weapon.bind_once("destroyed", on_destroy)
         return weapon

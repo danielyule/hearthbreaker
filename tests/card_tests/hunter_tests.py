@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
@@ -136,7 +136,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.hero.weapon.attack_power)
 
     def test_GladiatorsLongbow(self):
-        game = generate_game_for(GladiatorsLongbow, WaterElemental, PredictableAgentWithoutHeroPower,
+        game = generate_game_for(GladiatorsLongbow, WaterElemental, WeaponTestingAgent,
                                  MinionPlayingAgent)
         for turn in range(0, 13):
             game.play_single_turn()
@@ -145,6 +145,18 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertFalse(game.current_player.hero.frozen)
+        self.assertFalse(game.current_player.hero.immune)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertFalse(game.current_player.hero.frozen)
+        self.assertFalse(game.current_player.hero.immune)
+        self.assertEqual(0, len(game.current_player.events))
 
     def test_Tracking(self):
         game = generate_game_for([Tracking, Tracking, Tracking, Tracking,

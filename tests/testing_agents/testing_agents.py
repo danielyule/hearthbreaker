@@ -60,6 +60,20 @@ class MinionAttackingAgent(MinionPlayingAgent):
                 minion.attack()
 
 
+class WeaponTestingAgent(DoNothingBot):
+    def __init__(self):
+        super().__init__()
+        self.played_card = False
+
+    def do_turn(self, player):
+        if not self.played_card and player.hand[0].can_use(player, player.game):
+            player.game.play_card(player.hand[0])
+            self.played_card = True
+
+        if player.hero.can_attack():
+            player.hero.attack()
+
+
 class PredictableAgentWithoutHeroPower(DoNothingBot):
     def do_turn(self, player):
         done_something = True
