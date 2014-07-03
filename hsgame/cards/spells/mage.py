@@ -51,7 +51,7 @@ class MirrorImage(Card):
 
         for i in range(0, 2):
             mirror_image = MirrorImageMinion()
-            mirror_image.summon(player, game, len(player.hand))
+            mirror_image.summon(player, game, len(player.minions))
 
 
 class ArcaneExplosion(Card):

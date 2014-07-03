@@ -384,7 +384,7 @@ class ForceOfNature(Card):
 
         for i in [0, 1, 2]:
             treant_card = Treant()
-            treant_card.summon(player, game, len(player.hand))
+            treant_card.summon(player, game, len(player.minions))
 
 
 class Starfire(Card):
