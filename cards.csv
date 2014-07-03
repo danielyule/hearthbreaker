@@ -164,7 +164,7 @@ no,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand ne
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Free,Spell
 yes,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Free,Spell
 no,Heroic Strike,Give your hero +4 Attack this turn.,,Warrior,2,,,Free,Spell
-no,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Free,Spell
+yes,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Free,Spell
 no,Hogger,"At the end of your turn, summon a 2/2 Gnoll with Taunt.",,,6,4,4,Legendary,Minion
 yes,Holy Fire,Deal 5 damage. Restore 5 Health to your hero.,,Priest,6,,,Rare,Spell
 yes,Holy Light,Restore 6 Health.,,Paladin,2,,,Free,Spell

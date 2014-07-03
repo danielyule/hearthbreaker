@@ -1,5 +1,5 @@
 import hsgame.targeting
-from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
+from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard
 
 
@@ -131,3 +131,26 @@ class FrostShock(Card):
 
         self.target.damage(player.effective_spell_damage(1), self)
         self.target.freeze()
+
+
+class Hex(Card):
+    def __init__(self):
+        super().__init__("Hex", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Frog(MinionCard):
+            def __init__(self):
+                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, p):
+                minion = Minion(0, 1, MINION_TYPE.BEAST)
+                minion.taunt = True
+                return minion
+
+        frog = Frog()
+        minion = frog.create_minion(None)
+        minion.index = self.target.index
+        minion.card = frog
+        self.target.player.minions[minion.index] = minion

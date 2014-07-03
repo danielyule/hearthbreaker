@@ -3,6 +3,7 @@ import unittest
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
+from hsgame.constants import MINION_TYPE
 
 
 class TestShaman(unittest.TestCase):
@@ -320,3 +321,23 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(29, game.players[1].hero.health)
         self.assertTrue(game.players[1].hero.frozen)
+
+    def test_Hex(self):
+        game = generate_game_for(ChillwindYeti, Hex, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].taunt)
+        self.assertEqual(4, game.players[0].minions[0].attack_power)
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual("Chillwind Yeti", game.players[0].minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertEqual(0, game.players[0].minions[0].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual("Frog", game.players[0].minions[0].card.name)
+        self.assertEqual(MINION_TYPE.BEAST, game.players[0].minions[0].minion_type)

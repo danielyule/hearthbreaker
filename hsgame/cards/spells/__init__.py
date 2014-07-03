@@ -100,7 +100,8 @@ from hsgame.cards.spells.shaman import (
     FarSight,
     FeralSpirit,
     ForkedLightning,
-    FrostShock
+    FrostShock,
+    Hex
 )
 
 from hsgame.cards.spells.warlock import (
