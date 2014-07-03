@@ -1094,6 +1094,7 @@ class Game(Bindable):
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
         self.current_player.hero.power.used = False
+        self.current_player.hero.active = True
         self.current_player.draw()
 
     def game_over(self, attacker):
@@ -1114,7 +1115,6 @@ class Game(Bindable):
             minion.frozen_this_turn = False
             minion._turn_complete()
 
-        self.current_player.hero.active = True
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False
