@@ -119,3 +119,15 @@ class ForkedLightning(Card):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
+
+
+class FrostShock(Card):
+    def __init__(self):
+        super().__init__("Frost Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(1), self)
+        self.target.freeze()

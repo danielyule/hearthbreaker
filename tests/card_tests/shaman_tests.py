@@ -312,3 +312,11 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(2, game.players[0].overload)
+
+    def test_FrostShock(self):
+        game = generate_game_for(FrostShock, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        # Frost Shock should be played
+        game.play_single_turn()
+        self.assertEqual(29, game.players[1].hero.health)
+        self.assertTrue(game.players[1].hero.frozen)
