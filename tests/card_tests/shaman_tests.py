@@ -431,3 +431,13 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(6, game.players[0].hero.weapon.durability)
         self.assertEqual(2, game.players[0].overload)
         self.assertEqual(26, game.players[1].hero.health)
+
+    def test_StormforgedAxe(self):
+        game = generate_game_for(StormforgedAxe, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(3, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, game.players[0].overload)

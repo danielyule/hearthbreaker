@@ -10,5 +10,6 @@ from hsgame.cards.weapons.paladin import (
 )
 
 from hsgame.cards.weapons.shaman import (
-    Doomhammer
+    Doomhammer,
+    StormforgedAxe
 )

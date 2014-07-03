@@ -10,3 +10,12 @@ class Doomhammer(WeaponCard):
         weapon = Weapon(2, 8)
         player.hero.windfury = True
         return weapon
+
+
+class StormforgedAxe(WeaponCard):
+    def __init__(self):
+        super().__init__("Stormforged Axe", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=1)
+
+    def create_weapon(self, player):
+        weapon = Weapon(2, 3)
+        return weapon

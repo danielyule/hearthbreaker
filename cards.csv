@@ -327,7 +327,7 @@ yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy mi
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell
 no,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Common,Minion
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Free,Minion
-no,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon
+yes,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon
 yes,Stormpike Commando,Battlecry: Deal 2 damage.,,,5,4,2,Common,Minion
 no,Stormwind Champion,Your other minions have +1/+1.,,,7,6,6,Common,Minion
 yes,Stormwind Knight,Charge,,,4,2,5,Common,Minion
