@@ -103,7 +103,8 @@ from hsgame.cards.spells.shaman import (
     FrostShock,
     Hex,
     LavaBurst,
-    LightningBolt
+    LightningBolt,
+    LightningStorm
 )
 
 from hsgame.cards.spells.warlock import (

@@ -175,3 +175,14 @@ class LightningBolt(Card):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(3), self)
+
+
+class LightningStorm(Card):
+    def __init__(self):
+        super().__init__("Lightning Storm", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=2)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for minion in game.other_player.minions.copy():
+            minion.damage(player.effective_spell_damage(game.random(2, 3)), self)

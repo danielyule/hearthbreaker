@@ -204,7 +204,7 @@ no,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,
 yes,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Common,Minion
 yes,Light's Justice,,,Paladin,1,1,4,Free,Weapon
 yes,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Common,Spell
-no,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Rare,Spell
+yes,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Rare,Spell
 yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Common,Minion
 no,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Rare,Minion
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Rare,Minion

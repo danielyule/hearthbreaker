@@ -362,3 +362,17 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(27, game.players[1].hero.health)
         self.assertEqual(1, game.players[0].overload)
+
+    def test_LightningStorm(self):
+        game = generate_game_for(LightningStorm, Shieldbearer, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        # Lightning Storm should be played
+        game.play_single_turn()
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[2].health)
+        self.assertEqual(2, game.players[0].overload)
