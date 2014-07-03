@@ -668,6 +668,18 @@ class Minion(Character):
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
 
+    def replace(self, new_minion):
+        """
+        Replaces this minion with another one
+
+        :param hsgame.game_objects.Minion new_minion: The minion to replace this minion with
+        """
+        self.silence()
+        new_minion.index = self.index
+        new_minion.player = self.player
+        new_minion.game = self.game
+        self.player.minions[self.index] = new_minion
+
     def attack(self):
         super().attack()
 

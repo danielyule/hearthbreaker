@@ -276,11 +276,8 @@ class Polymorph(Card):
 
         sheep = Sheep()
         minion = sheep.create_minion(None)
-        minion.index = self.target.index
         minion.card = sheep
-        minion.player = player
-        minion.game = game
-        self.target.player.minions[minion.index] = minion
+        self.target.replace(minion)
 
 
 class Blizzard(Card):
