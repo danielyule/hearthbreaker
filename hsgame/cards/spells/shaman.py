@@ -154,3 +154,14 @@ class Hex(Card):
         minion.index = self.target.index
         minion.card = frog
         self.target.player.minions[minion.index] = minion
+
+
+class LavaBurst(Card):
+    def __init__(self):
+        super().__init__("Lava Burst", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, hsgame.targeting.find_spell_target,
+                         overload=2)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(5), self)

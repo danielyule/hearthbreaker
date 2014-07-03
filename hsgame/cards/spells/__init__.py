@@ -101,7 +101,8 @@ from hsgame.cards.spells.shaman import (
     FeralSpirit,
     ForkedLightning,
     FrostShock,
-    Hex
+    Hex,
+    LavaBurst
 )
 
 from hsgame.cards.spells.warlock import (
