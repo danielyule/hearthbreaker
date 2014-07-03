@@ -1,6 +1,6 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, Minion, MinionCard
 
 
 class AncestralHealing(Card):
@@ -82,3 +82,24 @@ class FarSight(Card):
         player.bind("card_drawn", reduce_cost)
         player.draw()
         player.mana_filters.append(filter)
+
+
+class FeralSpirit(Card):
+    def __init__(self):
+        super().__init__("Feral Spirit", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=2)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class SpiritWolf(MinionCard):
+            def __init__(self):
+                super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, p):
+                minion = Minion(2, 3)
+                minion.taunt = True
+                return minion
+
+        for i in range(0, 2):
+            spirit_wolf = SpiritWolf()
+            spirit_wolf.summon(player, game, len(player.minions))

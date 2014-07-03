@@ -276,3 +276,25 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(3, game.players[0].hand[-1].mana_cost(game.players[0]))
         # Our old card shouldn't have been affected
         self.assertEqual(0, game.players[0].hand[-2].mana_cost(game.players[0]))
+
+    def test_FeralSpirit(self):
+        game = generate_game_for(FeralSpirit, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+
+        self.assertEqual(2, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertEqual("Spirit Wolf", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].card.mana)
+
+        self.assertEqual(2, game.players[0].minions[1].attack_power)
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertTrue(game.players[0].minions[1].taunt)
+        self.assertEqual("Spirit Wolf", game.players[0].minions[1].card.name)
+        self.assertEqual(2, game.players[0].minions[1].card.mana)
+
+        self.assertEqual(2, game.players[0].overload)
