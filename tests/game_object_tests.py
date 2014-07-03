@@ -1,13 +1,8 @@
-import copy
-
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from tests.testing_agents import SpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
-
-
-__author__ = 'Daniel'
 import random
 import unittest
 from unittest.mock import Mock
@@ -95,7 +90,7 @@ class TestGame(unittest.TestCase):
                 game.play_single_turn()
 
             def assert_different():
-                new_events = copy.copy(game.events)
+                new_events = game.events.copy()
                 new_events.update(game.other_player.hero.events)
                 new_events.update(game.other_player.events)
                 new_events.update(game.current_player.hero.events)
@@ -103,7 +98,7 @@ class TestGame(unittest.TestCase):
                 self.assertNotEqual(events, new_events, secret.name)
 
             def assert_same():
-                new_events = copy.copy(game.events)
+                new_events = game.events.copy()
                 new_events.update(game.current_player.hero.events)
                 new_events.update(game.current_player.events)
                 new_events.update(game.other_player.hero.events)
@@ -114,7 +109,7 @@ class TestGame(unittest.TestCase):
             game.other_player.bind("turn_ended", assert_same)
 
             # save the events as they are prior to the secret being played
-            events = copy.copy(game.events)
+            events = game.events.copy()
             events.update(game.other_player.hero.events)
             events.update(game.other_player.events)
             events.update(game.current_player.hero.events)

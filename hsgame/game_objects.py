@@ -5,9 +5,6 @@ import hsgame.powers
 import hsgame.targeting
 import hsgame.constants
 
-
-__author__ = 'Daniel'
-
 card_table = {}
 
 
@@ -225,9 +222,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.wind_fury = False
+        self.windfury = False
         #: If this character has used their first windfury attack
-        self.used_wind_fury = False
+        self.used_windfury = False
         #: If this character is currently frozen
         self.frozen = False
         #: If the character was frozen this turn (and so won't be unfrozen before the next turn)
@@ -301,8 +298,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         self.activate_delayed()
         self.trigger("attack_completed")
-        if self.wind_fury and not self.used_wind_fury:
-            self.used_wind_fury = True
+        if self.windfury and not self.used_windfury:
+            self.used_windfury = True
         else:
             self.active = False
         self.stealth = False
@@ -406,7 +403,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("silenced")
         self.temp_attack = 0
         self.immune = False
-        self.wind_fury = False
+        self.windfury = False
         self.frozen = False
         self.frozen_this_turn = False
 
@@ -447,7 +444,7 @@ class Card(Bindable):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable):
+                 filter_func=_is_spell_targetable, overload=0):
         """
             Creates a new :class:`Card`.
 
@@ -472,6 +469,7 @@ class Card(Bindable):
             :param function filter_func: A boolean function which can be used to filter the list of targets. An example
                                          for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
                                          returns true if the target's attack is less than 3.
+            :param int overload: The amount of overload on the card
         """
         super().__init__()
         self.name = name
@@ -485,6 +483,7 @@ class Card(Bindable):
             self.target = None
             self.get_targets = target_func
             self.filter_func = filter_func
+        self.overload = overload
 
     def can_use(self, player, game):
         """
@@ -535,6 +534,7 @@ class Card(Bindable):
         :param hsgame.game_objects.Player player: The player who is using the card.
         :param hsgame.game_objects.Game game: The game this card is being used in.
         """
+        player.overload += self.overload
         if self.targetable:
             if self.targets is None:
                 self.target = None
@@ -559,15 +559,43 @@ class Card(Bindable):
 
 class MinionCard(Card, metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, rarity, targeting_func=None,
-                 filter_func=lambda target: not target.stealth):
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func)
+                 filter_func=lambda target: not target.stealth, overload=0):
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
 
     def can_use(self, player, game):
         return super().can_use(player, game)
 
     def use(self, player, game):
+        if len(player.minions) >= 7:
+            raise GameException("Only 7 minions allowed on the field at a time")
         super().use(player, game)
-        self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
+        minion = self.create_minion(player)
+        minion.card = self
+        minion.player = player
+        minion.game = game
+        if minion.battlecry is not None:
+            minion.battlecry(minion)
+        minion.add_to_board(player.agent.choose_index(self))
+        player.trigger("minion_played", minion)
+
+    def summon(self, player, game, index):
+        """
+        Summons the minion associated with this card onto the board.  This is to be used when a spell
+        created a minion, instead of being played from the hand.
+
+        If the player already has 7 minions on the board, this method does nothing
+
+        :param hsgame.game_objects.Player player: The player the summoned minion will belong to
+        :param hsgame.game_objects.Game game: The game the minion is being summoned to
+        :param int index: The index where the new minion will be added
+        """
+        if len(player.minions) < 7:
+            minion = self.create_minion(player)
+            minion.card = self
+            minion.player = player
+            minion.game = game
+            minion.add_to_board(index)
+            player.trigger("minion_summoned", minion)
 
     @abc.abstractmethod
     def create_minion(self, player):
@@ -622,17 +650,10 @@ class Minion(Character):
         self.deathrattle = deathrattle
         self.silenced = False
 
-    def add_to_board(self, card, game, player, index):
-        if len(player.minions) >= 7:
-            raise GameException("Only 7 minions allowed on the field at a time")
-        self.card = card
-        player.minions.insert(index, self)
-        self.game = game
-        self.player = player
-        player.spell_damage += self.spell_damage
-        if self.battlecry is not None:
-            self.battlecry(self)
-        for minion in player.minions:
+    def add_to_board(self, index):
+        self.player.minions.insert(index, self)
+        self.player.spell_damage += self.spell_damage
+        for minion in self.player.minions:
             if minion.index >= index:
                 minion.index += 1
         self.index = index
@@ -647,6 +668,18 @@ class Minion(Character):
             if minion.index > self.index:
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
+
+    def replace(self, new_minion):
+        """
+        Replaces this minion with another one
+
+        :param hsgame.game_objects.Minion new_minion: The minion to replace this minion with
+        """
+        self.silence()
+        new_minion.index = self.index
+        new_minion.player = self.player
+        new_minion.game = self.game
+        self.player.minions[self.index] = new_minion
 
     def attack(self):
         super().attack()
@@ -735,13 +768,33 @@ class Minion(Character):
         self.player.game.bind("minion_died", minion_died)
         self.bind_once("silenced", silenced)
 
+    def copy(self, new_owner):
+        new_minion = Minion(self.attack_power, self.max_health, self.minion_type, self.battlecry, self.deathrattle)
+        new_minion.health = self.health
+        new_minion.events = self.events.copy()
+        new_minion.stealth = self.stealth
+        new_minion.taunt = self.taunt
+        new_minion.divine_shield = self.divine_shield
+        new_minion.charge = self.charge
+        new_minion.silenced = self.silenced
+        new_minion.spell_damage = self.spell_damage
+        if self.charge and new_owner is self.game.current_player:
+            self.active = True
+        card_type = type(self.card)
+        new_minion.card = card_type()
+        new_minion.player = new_owner
+        new_minion.game = new_owner.game
+        self.trigger("copied", new_minion, new_owner)
+        return new_minion
+
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
     """
     Represents a :class:`Card` for creating a :class:`Weapon`
     """
 
-    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth):
+    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth,
+                 overload=0):
         """
         Create a new :class:`WeaponCard`
 
@@ -760,8 +813,9 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                                      for :class:`hsgame.cards.spells.priest.ShadowMadness` might be a function which
                                      returns true if the target's attack is less than 3.  Currently no weapons require
                                      anything but the default
+        :param int overload: The amount of overload on the card
         """
-        super().__init__(name, mana, character_class, rarity, target_func, filter_func)
+        super().__init__(name, mana, character_class, rarity, target_func, filter_func, overload)
 
     def use(self, player, game):
         """
@@ -814,6 +868,7 @@ class Weapon(Bindable):
         self.trigger("destroyed")
         self.player.hero.weapon = None
         self.player.hero.change_temp_attack(-self.attack_power)
+        self.player.hero.windfury = False
 
     def equip(self, player):
         self.player = player
@@ -1042,6 +1097,8 @@ class Game(Bindable):
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
+        self.current_player.hero.power.used = False
+        self.current_player.hero.active = True
         self.current_player.draw()
 
     def game_over(self, attacker):
@@ -1062,7 +1119,6 @@ class Game(Bindable):
             minion.frozen_this_turn = False
             minion._turn_complete()
 
-        self.current_player.hero.active = True
         for minion in self.current_player.minions:
             minion.active = True
             minion.used_wind_fury = False
@@ -1084,6 +1140,8 @@ class Game(Bindable):
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
+            if card.overload != 0:
+                self.current_player.trigger("overloaded")
         else:
             raise GameException("Tried to play card that could not be played")
 

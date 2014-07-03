@@ -7,9 +7,6 @@ from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
     Succubus, Felguard
 
 
-__author__ = 'randomflyingtaco'
-
-
 class MortalCoil(Card):
     def __init__(self):
         super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK,

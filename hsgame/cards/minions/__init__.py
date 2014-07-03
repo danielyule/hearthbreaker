@@ -1,5 +1,3 @@
-__author__ = 'Daniel'
-
 from hsgame.cards.minions.neutral import (
     BloodfenRaptor,
     IronbeakOwl,
@@ -118,6 +116,7 @@ from hsgame.cards.minions.shaman import (
     FireElemental,
     FlametongueTotem,
     ManaTideTotem,
+    UnboundElemental,
     Windspeaker
 )
 

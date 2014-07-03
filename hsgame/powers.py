@@ -1,8 +1,6 @@
 import hsgame.constants
 import hsgame.game_objects
 
-__author__ = 'Daniel'
-
 
 def powers(character_class):
     if character_class == hsgame.constants.CHARACTER_CLASS.DRUID:
@@ -24,14 +22,16 @@ def powers(character_class):
 class Power:
     def __init__(self, hero):
         self.hero = hero
+        self.used = False
 
     def can_use(self):
-        return self.hero.player.mana >= 2
+        return not self.used and self.hero.player.mana >= 2
 
     def use(self):
         if self.can_use():
             self.hero.player.trigger("used_power")
             self.hero.player.mana -= 2
+            self.used = True
 
 
 class DruidPower(Power):
@@ -123,8 +123,7 @@ class PaladinPower(Power):
         super().use()
 
         recruit_card = SilverHandRecruit()
-        recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player,
-                                                                  0)
+        recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
 class ShamanPower(Power):
@@ -217,8 +216,7 @@ class ShamanPower(Power):
             totems.append(WrathOfAirTotem())
 
         random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
-        random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player,
-                                                                  0)
+        random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
 class WarlockPower(Power):

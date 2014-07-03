@@ -1,5 +1,3 @@
-__author__ = 'Daniel'
-
 from hsgame.cards.spells.druid import (
     Innervate,
     Moonfire,
@@ -99,7 +97,17 @@ from hsgame.cards.spells.shaman import (
     AncestralSpirit,
     Bloodlust,
     EarthShock,
-    FarSight
+    FarSight,
+    FeralSpirit,
+    ForkedLightning,
+    FrostShock,
+    Hex,
+    LavaBurst,
+    LightningBolt,
+    LightningStorm,
+    RockbiterWeapon,
+    TotemicMight,
+    Windfury
 )
 
 from hsgame.cards.spells.warlock import (

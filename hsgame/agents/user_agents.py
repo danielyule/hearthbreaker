@@ -1,6 +1,3 @@
-__author__ = 'Daniel'
-
-
 class Observer:
     def __init__(self, writer):
         self.game = None

@@ -8,23 +8,9 @@ from hsgame.replay import SavedGame
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class TestPaladin(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
-
-    def test_PaladinPower(self):
-        game = generate_game_for(AvengingWrath, MogushanWarden, PredictableBot, DoNothingBot)
-
-        for turn in range(0, 3):
-            game.play_single_turn()
-
-        self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
-        self.assertEqual(1, game.current_player.minions[0].health)
-        self.assertEqual("Silver Hand Recruit", game.current_player.minions[0].card.name)
 
     def test_AvengingWrath(self):
         game = generate_game_for(MogushanWarden, AvengingWrath, MinionPlayingAgent, SpellTestingAgent)

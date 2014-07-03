@@ -97,7 +97,7 @@ yes,Dire Wolf Alpha,Adjacent minions have +1 Attack.,Beast,,2,2,2,Common,Minion
 yes,Divine Favor,Draw cards until you have as many in hand as your opponent.,,Paladin,3,,,Rare,Spell
 yes,Divine Spirit,Double a minion's Health.,,Priest,2,,,Common,Spell
 yes,Doomguard,Charge. Battlecry: Discard two random cards.,Demon,Warlock,5,5,7,Rare,Minion
-no,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Epic,Weapon
+yes,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Epic,Weapon
 no,Doomsayer,"At the start of your turn, destroy ALL minions.",,,2,0,7,Epic,Minion
 no,Dragonling Mechanic,Battlecry: Summon a 2/1 Mechanical Dragonling.,,,4,2,4,Common,Minion
 yes,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Free,Spell
@@ -126,7 +126,7 @@ no,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Com
 yes,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell
 yes,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,3,3,5,Rare,Minion
 yes,Fen Creeper,Taunt,,,5,3,6,Common,Minion
-no,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Rare,Spell
+yes,Feral Spirit,Summon two 2/3 Spirit Wolves with Taunt. Overload: (2),,Shaman,3,,,Rare,Spell
 no,Fiery War Axe,,,Warrior,2,3,2,Free,Weapon
 yes,Fire Elemental,Battlecry: Deal 3 damage.,,Shaman,6,6,5,Common,Minion
 yes,Fireball,Deal 6 damage.,,Mage,4,,,Free,Spell
@@ -136,11 +136,11 @@ yes,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Common
 yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Rare,Spell
 no,Flesheating Ghoul,"Whenever a minion dies, gain +1 Attack.",,,3,2,3,Common,Minion
 yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Epic,Spell
-no,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Common,Spell
+yes,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Common,Spell
 no,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's hand and it costs (2) more.",,Hunter,2,,,Common,Spell
 no,Frost Elemental,Battlecry: Freeze a character.,,,6,5,5,Common,Minion
 yes,Frost Nova,Freeze all enemy minions.,,Mage,3,,,Common,Spell
-no,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,Free,Spell
+yes,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,Free,Spell
 yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Common,Spell
 yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion
 no,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion
@@ -164,7 +164,7 @@ no,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand ne
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Free,Spell
 yes,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Free,Spell
 no,Heroic Strike,Give your hero +4 Attack this turn.,,Warrior,2,,,Free,Spell
-no,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Free,Spell
+yes,Hex,Transform a minion into a 0/1 Frog with Taunt.,,Shaman,3,,,Free,Spell
 no,Hogger,"At the end of your turn, summon a 2/2 Gnoll with Taunt.",,,6,4,4,Legendary,Minion
 yes,Holy Fire,Deal 5 damage. Restore 5 Health to your hero.,,Priest,6,,,Rare,Spell
 yes,Holy Light,Restore 6 Health.,,Paladin,2,,,Free,Spell
@@ -198,13 +198,13 @@ yes,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mag
 no,Knife Juggler,"After you summon a minion, deal 1 damage to a random enemy.",,,2,3,2,Rare,Minion
 yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Common,Minion
 no,Kor'kron Elite,Charge,,Warrior,4,4,3,Common,Minion
-no,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Rare,Spell
+yes,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Rare,Spell
 yes,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Epic,Spell
 no,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Legendary,Minion
 yes,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Common,Minion
 yes,Light's Justice,,,Paladin,1,1,4,Free,Weapon
-no,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Common,Spell
-no,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Rare,Spell
+yes,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Common,Spell
+yes,Lightning Storm,Deal 2-3 damage to all enemy minions. Overload: (2),,Shaman,3,,,Rare,Spell
 yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5,Common,Minion
 no,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Rare,Minion
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Rare,Minion
@@ -279,7 +279,7 @@ yes,Reckless Rocketeer,Charge,,,6,5,2,Free,Minion
 yes,Redemption,"Secret: When one of your minions dies, return it to life with 1 Health.",,Paladin,1,,,Common,Spell
 yes,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 1.",,Paladin,1,,,Common,Spell
 yes,River Crocolisk,,Beast,,2,2,3,Free,Minion
-no,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell
+yes,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell
 yes,Sacrificial Pact,Destroy a Demon. Restore 5 Health to your hero.,,Warlock,0,,,Common,Spell
 no,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell
 yes,Savage Roar,Give your characters +2 Attack this turn.,,Druid,3,,,Common,Spell
@@ -327,7 +327,7 @@ yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy mi
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell
 no,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Common,Minion
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Free,Minion
-no,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon
+yes,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon
 yes,Stormpike Commando,Battlecry: Deal 2 damage.,,,5,4,2,Common,Minion
 no,Stormwind Champion,Your other minions have +1/+1.,,,7,6,6,Common,Minion
 yes,Stormwind Knight,Charge,,,4,2,5,Common,Minion
@@ -348,13 +348,13 @@ yes,Thrallmar Farseer,Windfury,,,3,2,3,Common,Minion
 yes,Timber Wolf,Your other Beasts have +1 Attack.,Beast,Hunter,1,1,1,Free,Minion
 no,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.,,,3,3,3,Legendary,Minion
 yes,Tirion Fordring,Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.,,Paladin,8,6,6,Legendary,Minion
-no,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell
+yes,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell
 yes,Tracking,Look at the top three cards of your deck. Draw one and discard the others.,,Hunter,1,,,Free,Spell
 yes,Truesilver Champion,"Whenever your hero attacks, restore 2 Health to it.",,Paladin,4,4,2,Common,Weapon
 no,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Common,Minion
 yes,Twilight Drake,Battlecry: Gain +1 Health for each card in your hand.,Dragon,,4,4,1,Rare,Minion
 yes,Twisting Nether,Destroy all minions.,,Warlock,8,,,Epic,Spell
-no,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion
+yes,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion
 no,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,3,,,Common,Spell
 no,Upgrade!,"If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.",,Warrior,1,,,Rare,Spell
 no,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Common,Spell
@@ -370,7 +370,7 @@ yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Com
 no,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Common,Spell
 yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell
 no,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion
-no,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell
+yes,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell
 yes,Windfury Harpy,Windfury,,,6,4,5,Common,Minion
 yes,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion
 yes,Wisp,,,,0,1,1,Common,Minion

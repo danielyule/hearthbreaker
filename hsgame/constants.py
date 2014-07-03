@@ -1,6 +1,3 @@
-__author__ = 'Daniel'
-
-
 class CARD_RARITY:
     FREE = 1
     COMMON = 2

@@ -1,16 +1,11 @@
 from unittest.mock import Mock, call
-
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import *
-
-
-__author__ = 'Daniel'
-
-import random
 from tests.testing_utils import generate_game_for, StackedDeck
 from hsgame.cards import *
+import random
 import unittest
 
 
@@ -728,14 +723,14 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(8, game.current_player.minions[0].max_health)
         self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
 
-        self.assertEqual(2, game.current_player.minions[1].attack_power)
-        self.assertEqual(2, game.current_player.minions[1].health)
-        self.assertEqual(2, game.current_player.minions[1].max_health)
-        self.assertTrue(game.current_player.minions[1].taunt)
-        self.assertEqual("Treant", game.current_player.minions[1].card.name)
+        self.assertEqual(2, game.current_player.minions[4].attack_power)
+        self.assertEqual(2, game.current_player.minions[4].health)
+        self.assertEqual(2, game.current_player.minions[4].max_health)
+        self.assertTrue(game.current_player.minions[4].taunt)
+        self.assertEqual("Treant", game.current_player.minions[4].card.name)
 
-        self.assertEqual(2, game.current_player.minions[2].attack_power)
-        self.assertEqual(2, game.current_player.minions[2].health)
-        self.assertEqual(2, game.current_player.minions[2].max_health)
-        self.assertTrue(game.current_player.minions[2].taunt)
-        self.assertEqual("Treant", game.current_player.minions[2].card.name)
+        self.assertEqual(2, game.current_player.minions[5].attack_power)
+        self.assertEqual(2, game.current_player.minions[5].health)
+        self.assertEqual(2, game.current_player.minions[5].max_health)
+        self.assertTrue(game.current_player.minions[5].taunt)
+        self.assertEqual("Treant", game.current_player.minions[5].card.name)

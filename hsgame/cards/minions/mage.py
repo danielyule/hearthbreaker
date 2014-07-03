@@ -1,7 +1,4 @@
 import hsgame.cards
-
-__author__ = 'Daniel'
-
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion, SecretCard
 

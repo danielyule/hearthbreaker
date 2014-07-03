@@ -11,9 +11,6 @@ from hsgame.cards import *
 import hsgame.game_objects
 
 
-__author__ = 'Daniel'
-
-
 class TestReplay(unittest.TestCase):
     def test_reading_and_writing(self):
         def process_line(line):

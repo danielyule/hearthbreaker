@@ -3,8 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion
 from hsgame.cards.battlecries import deal_three_damage, give_windfury
 
-__author__ = 'Daniel'
-
 
 class AlAkirTheWindlord(MinionCard):
     def __init__(self):
@@ -12,7 +10,7 @@ class AlAkirTheWindlord(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(3, 5)
-        minion.wind_fury = True
+        minion.windfury = True
         minion.charge = True
         minion.divine_shield = True
         minion.taunt = True
@@ -21,23 +19,21 @@ class AlAkirTheWindlord(MinionCard):
 
 class DustDevil(MinionCard):
     def __init__(self):
-        super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+        super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
 
     def create_minion(self, player):
         minion = Minion(3, 1)
-        minion.wind_fury = True
-        player.overload += 2
+        minion.windfury = True
         return minion
 
 
 class EarthElemental(MinionCard):
     def __init__(self):
-        super().__init__("Earth Elemental", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
+        super().__init__("Earth Elemental", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC, overload=3)
 
     def create_minion(self, player):
         minion = Minion(7, 8)
         minion.taunt = True
-        player.overload += 3
         return minion
 
 
@@ -84,6 +80,21 @@ class ManaTideTotem(MinionCard):
         minion = Minion(0, 3, MINION_TYPE.TOTEM)
         player.bind("turn_ended", draw_card)
         minion.bind_once("silenced", lambda: player.unbind("turn_ended", draw_card))
+        return minion
+
+
+class UnboundElemental(MinionCard):
+    def __init__(self):
+        super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def buff_minion():
+            minion.increase_health(1)
+            minion.change_attack(1)
+
+        minion = Minion(2, 4)
+        player.bind("overloaded", buff_minion)
+        minion.bind_once("silenced", lambda: player.unbind("overloaded", buff_minion))
         return minion
 
 

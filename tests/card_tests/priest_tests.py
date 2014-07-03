@@ -10,22 +10,9 @@ from hsgame.replay import SavedGame
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class TestPriest(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
-
-    def test_PriestPower(self):
-        game = generate_game_for(CircleOfHealing, MogushanWarden, PredictableBot, DoNothingBot)
-
-        game.players[1].hero.health = 20
-
-        for turn in range(0, 3):
-            game.play_single_turn()
-
-        self.assertEqual(22, game.players[1].hero.health)
 
     def test_CircleOfHealing(self):
         deck1 = StackedDeck(

@@ -8,9 +8,6 @@ import hsgame.cards
 import hsgame.game_objects
 
 
-__author__ = 'Daniel'
-
-
 class ReplayException(Exception):
     def __init__(self, message):
         super().__init__(message)

@@ -1,11 +1,8 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-
-__author__ = 'Daniel'
 from hsgame.game_objects import Card, MinionCard, Minion
 
 
-# Druid Spells
 class Innervate(Card):
     def __init__(self):
         super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID,
@@ -111,9 +108,7 @@ class PowerOfTheWild(Card):
                         return Minion(3, 2, MINION_TYPE.BEAST)
 
                 panther = Panther()
-                panther.create_minion(player).add_to_board(panther, game,
-                                                           player,
-                                                           len(player.minions))
+                panther.summon(player, game, len(player.minions))
 
         option = player.agent.choose_option(LeaderOfThePack(), SummonPanther())
         option.use(player, game)
@@ -267,8 +262,7 @@ class SoulOfTheForest(Card):
                         return Minion(2, 2)
 
                 treant = Treant()
-                treant.create_minion(player).add_to_board(treant, game, player,
-                                                          len(player.minions))
+                treant.summon(player, game, len(player.minions))
 
             old_death_rattle = minion.deathrattle
             minion.deathrattle = summon_treant
@@ -385,15 +379,12 @@ class ForceOfNature(Card):
             def create_minion(self, player):
                 minion = Minion(2, 2)
                 minion.charge = True
+                player.bind_once("turn_ended", lambda: game.remove_minion(minion, player))
                 return minion
 
         for i in [0, 1, 2]:
             treant_card = Treant()
-            treant = treant_card.create_minion(player)
-            treant.add_to_board(treant_card, game, player, 0)
-            player.bind_once("turn_ended",
-                             lambda minion: game.remove_minion(minion, player),
-                             treant)
+            treant_card.summon(player, game, len(player.minions))
 
 
 class Starfire(Card):

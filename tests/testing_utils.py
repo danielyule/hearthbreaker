@@ -5,9 +5,6 @@ from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
 
 
-__author__ = 'Daniel'
-
-
 class StackedDeck(Deck):
     def __init__(self, card_pattern, character_class):
         cards = []

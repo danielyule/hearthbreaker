@@ -3,8 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
 from hsgame.cards.battlecries import silence, deal_two_damage
 
-__author__ = 'Daniel'
-
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
@@ -183,8 +181,7 @@ class Cenarius(MinionCard):
                 # himself
                 for i in [0, 1]:
                     treant = Treant()
-                    treant.create_minion(player).add_to_board(treant, game,
-                                                              player, 0)
+                    treant.summon(player, game, len(player.minions))
 
         option = player.agent.choose_option(IncreaseStats(), SummonTreants())
         option.use(player, player.game)

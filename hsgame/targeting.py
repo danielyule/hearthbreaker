@@ -1,6 +1,3 @@
-__author__ = 'Daniel'
-
-
 def find_spell_target(game, filter_function):
     targets = game.other_player.minions.copy()
     targets.extend(game.current_player.minions)

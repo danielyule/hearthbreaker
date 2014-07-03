@@ -6,8 +6,6 @@ from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
 
-__author__ = 'Daniel'
-
 
 class BloodfenRaptor(MinionCard):
     def __init__(self):
@@ -517,7 +515,7 @@ class ThrallmarFarseer(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(2, 3)
-        minion.wind_fury = True
+        minion.windfury = True
         return minion
 
 
@@ -528,7 +526,7 @@ class WindfuryHarpy(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(4, 5)
-        minion.wind_fury = True
+        minion.windfury = True
         return minion
 
 
@@ -539,7 +537,7 @@ class YoungDragonhawk(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(1, 1, MINION_TYPE.BEAST)
-        minion.wind_fury = True
+        minion.windfury = True
         return minion
 
 
