@@ -68,7 +68,8 @@ from hsgame.cards.minions.neutral import (
     AbusiveSergeant,
     DarkIronDwarf,
     Abomination,
-	FenCreeper
+	FenCreeper,
+	VentureCoMercenary
 )
 
 from hsgame.cards.minions.druid import (
