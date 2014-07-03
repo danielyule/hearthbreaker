@@ -1,4 +1,5 @@
 import random
+import unittest
 
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent
@@ -7,8 +8,6 @@ from hsgame.cards import *
 
 
 __author__ = 'Daniel'
-
-import unittest
 
 
 class TestCommon(unittest.TestCase):

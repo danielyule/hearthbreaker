@@ -241,7 +241,7 @@ class Spellbreaker(MinionCard):
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(4, 3, MINION_TYPE.NONE, silence)
+        return Minion(4, 3, silence)
 
 
 class BloodmageThalnos(MinionCard):
@@ -336,7 +336,7 @@ class IronfurGrizzly(MinionCard):
         return minion
 
 
-class LordoftheArena(MinionCard):
+class LordOfTheArena(MinionCard):
     def __init__(self):
         super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.COMMON)
@@ -622,7 +622,7 @@ class ArcaneGolem(MinionCard):
         return minion
 
 
-class PriestessofElune(MinionCard):
+class PriestessOfElune(MinionCard):
     def __init__(self):
         super().__init__("Priestess of Elune", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.COMMON)
@@ -736,3 +736,14 @@ class Abomination(MinionCard):
                 target.damage(2, self)
 
         return Minion(4, 4, deathrattle=deal_two_to_all)
+
+		
+class FenCreeper(MinionCard):
+    def __init__(self):
+        super().__init__("Fen Creeper", 5, CHARACTER_CLASS.ALL,
+                         CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(3, 6)
+        minion.taunt = True
+        return minion
