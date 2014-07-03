@@ -186,3 +186,14 @@ class LightningStorm(Card):
 
         for minion in game.other_player.minions.copy():
             minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
+
+
+class RockbiterWeapon(Card):
+    def __init__(self):
+        super().__init__("Rockbiter Weapon", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
+                         hsgame.targeting.find_friendly_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.change_temp_attack(3)

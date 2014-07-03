@@ -376,3 +376,12 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[1].health)
         self.assertEqual(2, game.players[1].minions[2].health)
         self.assertEqual(2, game.players[0].overload)
+
+    def test_RockbiterWeapon(self):
+        game = generate_game_for(RockbiterWeapon, Shieldbearer, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        self.assertEqual(30, game.players[1].hero.health)
+
+        # Rockbiter Weapon should be played and used
+        game.play_single_turn()
+        self.assertEqual(27, game.players[1].hero.health)

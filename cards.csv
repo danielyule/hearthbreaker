@@ -279,7 +279,7 @@ yes,Reckless Rocketeer,Charge,,,6,5,2,Free,Minion
 yes,Redemption,"Secret: When one of your minions dies, return it to life with 1 Health.",,Paladin,1,,,Common,Spell
 yes,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 1.",,Paladin,1,,,Common,Spell
 yes,River Crocolisk,,Beast,,2,2,3,Free,Minion
-no,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell
+yes,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell
 yes,Sacrificial Pact,Destroy a Demon. Restore 5 Health to your hero.,,Warlock,0,,,Common,Spell
 no,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell
 yes,Savage Roar,Give your characters +2 Attack this turn.,,Druid,3,,,Common,Spell
