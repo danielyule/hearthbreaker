@@ -1,7 +1,7 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord
+from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform
 from tests.testing_utils import generate_game_for
 
 
@@ -68,3 +68,25 @@ class TestPowers(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(4, len(game.players[0].minions))
+
+    def test_double_power_use(self):
+        testing_env = self
+
+        class PowerTestingAgent(DoNothingBot):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                self.turn += 1
+                if self.turn is 4:
+                    player.hero.power.use()
+                    testing_env.assertFalse(player.hero.power.can_use())
+                elif self.turn is 7:
+                    player.hero.power.use()
+                    player.game.play_card(player.hand[0])
+                    testing_env.assertTrue(player.hero.power.can_use())
+
+        game = generate_game_for(Shadowform, MogushanWarden, PowerTestingAgent, DoNothingBot)
+        for turn in range(0, 13):
+            game.play_single_turn()

@@ -258,7 +258,8 @@ Most unit tests utilize the :meth:`generate_game_for <tests.testing_utils.genera
 four parameters, all of which are classes, rather than instances of those classes.  The first two are the cards used to
 compose the decks of the two players.  If a list is passed into either parameter, then the cards in that list are
 repeated until a deck of thirty is made up.  If only a single card is passed in then the entire deck is made up of
-copies of that card.
+copies of that card.  The method will choose a character class based on the makeup of the cards passed in, or default to
+Mage if none of the cards are class specific.
 
 The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:
