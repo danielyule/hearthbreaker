@@ -153,6 +153,8 @@ class Hex(Card):
         minion = frog.create_minion(None)
         minion.index = self.target.index
         minion.card = frog
+        minion.player = player
+        minion.game = game
         self.target.player.minions[minion.index] = minion
 
 
