@@ -114,6 +114,7 @@ from hsgame.cards.minions.shaman import (
     FireElemental,
     FlametongueTotem,
     ManaTideTotem,
+    UnboundElemental,
     Windspeaker
 )
 

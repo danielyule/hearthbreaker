@@ -83,6 +83,21 @@ class ManaTideTotem(MinionCard):
         return minion
 
 
+class UnboundElemental(MinionCard):
+    def __init__(self):
+        super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def buff_minion():
+            minion.increase_health(1)
+            minion.change_attack(1)
+
+        minion = Minion(2, 4)
+        player.bind("overloaded", buff_minion)
+        minion.bind_once("silenced", lambda: player.unbind("overloaded", buff_minion))
+        return minion
+
+
 class Windspeaker(MinionCard):
     def __init__(self):
         super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,

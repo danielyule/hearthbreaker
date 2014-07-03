@@ -354,7 +354,7 @@ yes,Truesilver Champion,"Whenever your hero attacks, restore 2 Health to it.",,P
 no,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Common,Minion
 yes,Twilight Drake,Battlecry: Gain +1 Health for each card in your hand.,Dragon,,4,4,1,Rare,Minion
 yes,Twisting Nether,Destroy all minions.,,Warlock,8,,,Epic,Spell
-no,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion
+yes,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion
 no,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,3,,,Common,Spell
 no,Upgrade!,"If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.",,Warrior,1,,,Rare,Spell
 no,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Common,Spell
