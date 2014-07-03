@@ -11,14 +11,6 @@ class TestHunter(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
-    def test_hunter_power(self):
-        game = generate_game_for(HuntersMark, MogushanWarden, PredictableBot, DoNothingBot)
-
-        for turn in range(0, 3):
-            game.play_single_turn()
-
-        self.assertEqual(28, game.other_player.hero.health)
-
     def test_HuntersMark(self):
         game = generate_game_for(HuntersMark, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
 

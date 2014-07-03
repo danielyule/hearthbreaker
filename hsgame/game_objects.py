@@ -1079,6 +1079,7 @@ class Game(Bindable):
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
+        self.current_player.hero.power.used = False
         self.current_player.draw()
 
     def game_over(self, attacker):

@@ -22,14 +22,16 @@ def powers(character_class):
 class Power:
     def __init__(self, hero):
         self.hero = hero
+        self.used = False
 
     def can_use(self):
-        return self.hero.player.mana >= 2
+        return not self.used and self.hero.player.mana >= 2
 
     def use(self):
         if self.can_use():
             self.hero.player.trigger("used_power")
             self.hero.player.mana -= 2
+            self.used = True
 
 
 class DruidPower(Power):
