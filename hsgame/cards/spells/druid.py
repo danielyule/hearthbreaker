@@ -1,11 +1,8 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-
-__author__ = 'Daniel'
 from hsgame.game_objects import Card, MinionCard, Minion
 
 
-# Druid Spells
 class Innervate(Card):
     def __init__(self):
         super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID,

@@ -5,9 +5,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard
 
 
-__author__ = 'Daniel'
-
-
 class CircleOfHealing(Card):
     def __init__(self):
         super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST,

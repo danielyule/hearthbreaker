@@ -1,16 +1,11 @@
 from unittest.mock import Mock, call
-
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import *
-
-
-__author__ = 'Daniel'
-
-import random
 from tests.testing_utils import generate_game_for, StackedDeck
 from hsgame.cards import *
+import random
 import unittest
 
 

@@ -1,8 +1,6 @@
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import WeaponCard, Weapon
 
-__author__ = 'Daniel'
-
 
 class EaglehornBow(WeaponCard):
     def __init__(self):

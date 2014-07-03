@@ -3,8 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion
 from hsgame.cards.battlecries import deal_three_damage, give_windfury
 
-__author__ = 'Daniel'
-
 
 class AlAkirTheWindlord(MinionCard):
     def __init__(self):

@@ -1,8 +1,6 @@
 import hsgame.constants
 import hsgame.game_objects
 
-__author__ = 'Daniel'
-
 
 def powers(character_class):
     if character_class == hsgame.constants.CHARACTER_CLASS.DRUID:

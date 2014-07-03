@@ -2,8 +2,6 @@ import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card
 
-__author__ = 'Daniel'
-
 
 class HuntersMark(Card):
     def __init__(self):

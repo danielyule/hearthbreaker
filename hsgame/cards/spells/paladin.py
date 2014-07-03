@@ -2,8 +2,6 @@ import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 
-__author__ = 'Daniel'
-
 
 class AvengingWrath(Card):
     def __init__(self):

@@ -5,9 +5,6 @@ import hsgame.powers
 import hsgame.targeting
 import hsgame.constants
 
-
-__author__ = 'Daniel'
-
 card_table = {}
 
 

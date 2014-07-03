@@ -1,6 +1,3 @@
-__author__ = 'Daniel'
-
-
 def draw_card(minion):
     minion.player.draw()
 

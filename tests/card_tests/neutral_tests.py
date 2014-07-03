@@ -1,13 +1,8 @@
-import random
-
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
-
-
-__author__ = 'Daniel'
-
+import random
 import unittest
 
 

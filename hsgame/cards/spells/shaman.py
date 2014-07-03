@@ -3,9 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
 
-__author__ = 'Daniel'
-
-
 class AncestralHealing(Card):
     def __init__(self):
         super().__init__("Ancestral Healing", 0, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,

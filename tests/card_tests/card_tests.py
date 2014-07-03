@@ -8,9 +8,6 @@ from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class CardTest(unittest.TestCase):
     # Make sure that the cards have been initialized correctly based on the data in cards.csv
     def test_all_cards(self):

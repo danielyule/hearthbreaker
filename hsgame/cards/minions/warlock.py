@@ -3,9 +3,6 @@ from hsgame.game_objects import MinionCard, Minion
 from hsgame.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
 
-__author__ = 'randomflyingtaco'
-# let the train wreck begin
-
 
 class FlameImp(MinionCard):
     def __init__(self):

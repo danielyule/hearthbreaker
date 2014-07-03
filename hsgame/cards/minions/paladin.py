@@ -3,8 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hsgame.cards.battlecries import change_attack_to_one, give_divine_shield, guardian_of_kings
 
-__author__ = 'Daniel'
-
 
 class AldorPeacekeeper(MinionCard):
     def __init__(self):

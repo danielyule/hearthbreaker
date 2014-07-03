@@ -1,5 +1,3 @@
-__author__ = 'Daniel'
-
 from hsgame.cards.minions.neutral import (
     BloodfenRaptor,
     IronbeakOwl,

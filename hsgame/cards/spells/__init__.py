@@ -1,5 +1,3 @@
-__author__ = 'Daniel'
-
 from hsgame.cards.spells.druid import (
     Innervate,
     Moonfire,

@@ -7,9 +7,6 @@ from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class TestShaman(unittest.TestCase):
     def setUp(self):
         random.seed(1857)

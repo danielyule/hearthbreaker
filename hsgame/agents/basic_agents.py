@@ -1,6 +1,3 @@
-__author__ = 'Daniel'
-
-
 class DoNothingBot:
     def __init__(self):
         self.game = None

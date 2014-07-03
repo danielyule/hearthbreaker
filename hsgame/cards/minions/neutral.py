@@ -6,8 +6,6 @@ from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
 
-__author__ = 'Daniel'
-
 
 class BloodfenRaptor(MinionCard):
     def __init__(self):

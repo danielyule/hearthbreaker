@@ -3,9 +3,6 @@ from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targeting
 
 
-__author__ = 'Daniel'
-
-
 class ArcaneMissiles(Card):
     def __init__(self):
         super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE,

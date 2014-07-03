@@ -8,9 +8,6 @@ from hsgame.replay import SavedGame
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class TestPaladin(unittest.TestCase):
     def setUp(self):
         random.seed(1857)

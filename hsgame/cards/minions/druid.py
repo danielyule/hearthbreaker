@@ -3,8 +3,6 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion, Card
 from hsgame.cards.battlecries import silence, deal_two_damage
 
-__author__ = 'Daniel'
-
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):

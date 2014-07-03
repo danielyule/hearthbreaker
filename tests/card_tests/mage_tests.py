@@ -11,9 +11,6 @@ from tests.testing_utils import generate_game_for, StackedDeck
 from hsgame.cards import *
 
 
-__author__ = 'Daniel'
-
-
 class TestMage(unittest.TestCase):
     def setUp(self):
         random.seed(1857)

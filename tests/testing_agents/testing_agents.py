@@ -1,7 +1,5 @@
 from hsgame.agents.basic_agents import DoNothingBot
 
-__author__ = 'Daniel'
-
 
 class SpellTestingAgent(DoNothingBot):
     def __init__(self, play_on=1):
