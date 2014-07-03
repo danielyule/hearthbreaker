@@ -75,12 +75,7 @@ class Tracking(Card):
         for card_index in range(0, 3):
             if player.can_draw():
                 cards.append(player.deck.draw(game.random))
-            else:
-                player.fatigue += 1
-                player.hero.trigger("fatigue_damage", self.fatigue)
-                player.hero.damage(self.fatigue, None)
-                player.hero.activate_delayed()
-        chosen_card = player.agent.choose_option(*cards)
-
-        player.hand.append(chosen_card)
-        player.trigger("card_drawn", chosen_card)
+        if len(cards) > 0:
+            chosen_card = player.agent.choose_option(*cards)
+            player.hand.append(chosen_card)
+            player.trigger("card_drawn", chosen_card)
