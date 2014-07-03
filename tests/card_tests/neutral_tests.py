@@ -112,7 +112,7 @@ class TestCommon(unittest.TestCase):
 
         # add a new Dire wolf at index 1
         wolf = DireWolfAlpha()
-        wolf.create_minion(game.current_player).add_to_board(wolf, game, game.current_player, 1)
+        wolf.summon(game.current_player, game, 1)
 
         # The minions to either side should have their attack increased
         self.assertEqual(4, len(game.current_player.minions))
@@ -137,15 +137,15 @@ class TestCommon(unittest.TestCase):
         # We should be able to add a boar on either side of the wolf, and their attack should be increased
         # The attack of the boar which used to be next to the wolf should decrease
         boar = StonetuskBoar()
-        boar.create_minion(game.current_player).add_to_board(boar, game, game.current_player, 0)
-        boar.create_minion(game.current_player).add_to_board(boar, game, game.current_player, 2)
+        boar.summon(game.current_player, game, 0)
+        boar.summon(game.current_player, game, 2)
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].attack_power)
         self.assertEqual(2, game.current_player.minions[2].attack_power)
         self.assertEqual(1, game.current_player.minions[3].attack_power)
 
         # Add a new boar on the left of the wolf since we haven't tested that yet
-        boar.create_minion(game.current_player).add_to_board(boar, game, game.current_player, 1)
+        boar.summon(game.current_player, game, 1)
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].attack_power)
         self.assertEqual(2, game.current_player.minions[1].attack_power)

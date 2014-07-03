@@ -48,6 +48,7 @@ Events Triggered in hssim
 ##Minion (Character)
  * added_to_board(minion)
  * silenced
+ * copied(new_minion, new_owner)
 
  
 ##Hero (Character)

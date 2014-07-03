@@ -1,6 +1,3 @@
-import copy
-
-
 __author__ = 'Daniel'
 
 
@@ -75,9 +72,9 @@ def gain_one_health_for_each_card_in_hand(minion):
 
 def take_control_of_minion(minion):
     if minion.card.target is not None:
-        m = copy.copy(minion.card.target)
+        new_minion = minion.card.target.copy(minion.player)
+        new_minion.add_to_board(len(minion.player.minions))
         minion.card.target.remove_from_board()
-        m.add_to_board(m.card, minion.game, minion.player, 0)
 
 
 def give_three_health(minion):

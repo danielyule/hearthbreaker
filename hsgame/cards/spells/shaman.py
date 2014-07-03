@@ -30,7 +30,7 @@ class AncestralSpirit(Card):
                     old_death_rattle(*args)
 
                 minion = self.target.card
-                minion.create_minion(player).add_to_board(minion, game, player, 0)
+                minion.summon(player, game, len(player.minions))
 
             old_death_rattle = minion.deathrattle
             minion.deathrattle = resurrection

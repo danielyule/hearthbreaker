@@ -27,18 +27,18 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual("Healing Totem", game.players[0].minions[0].card.name)
+        self.assertEqual("Healing Totem", game.players[0].minions[1].card.name)
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual("Searing Totem", game.players[0].minions[0].card.name)
+        self.assertEqual("Searing Totem", game.players[0].minions[2].card.name)
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(4, len(game.players[0].minions))
-        self.assertEqual("Wrath of Air Totem", game.players[0].minions[0].card.name)
-        self.assertEqual(1, game.players[0].minions[0].spell_damage)
+        self.assertEqual("Wrath of Air Totem", game.players[0].minions[3].card.name)
+        self.assertEqual(1, game.players[0].minions[3].spell_damage)
 
         # All Totems are out, nothing should be summoned
         game.play_single_turn()
@@ -112,7 +112,7 @@ class TestShaman(unittest.TestCase):
 
         # add a new Flametongue Totem at index 1
         totem = FlametongueTotem()
-        totem.create_minion(game.players[0]).add_to_board(totem, game, game.players[0], 1)
+        totem.summon(game.players[0], game, 1)
 
         # The minions to either side should have their attack increased
         self.assertEqual(4, len(game.players[0].minions))
@@ -137,15 +137,15 @@ class TestShaman(unittest.TestCase):
         # We should be able to add a boar on either side of the wolf, and their attack should be increased
         # The attack of the boar which used to be next to the wolf should decrease
         boar = StonetuskBoar()
-        boar.create_minion(game.players[0]).add_to_board(boar, game, game.players[0], 0)
-        boar.create_minion(game.players[0]).add_to_board(boar, game, game.players[0], 2)
+        boar.summon(game.players[0], game, 0)
+        boar.summon(game.players[0], game, 2)
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].attack_power)
         self.assertEqual(3, game.players[0].minions[2].attack_power)
         self.assertEqual(1, game.players[0].minions[3].attack_power)
 
         # Add a new boar on the left of the totem since we haven't tested that yet
-        boar.create_minion(game.players[0]).add_to_board(boar, game, game.players[0], 1)
+        boar.summon(game.players[0], game, 1)
         self.assertEqual(5, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].attack_power)
         self.assertEqual(3, game.players[0].minions[1].attack_power)

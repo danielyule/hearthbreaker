@@ -183,8 +183,7 @@ class Cenarius(MinionCard):
                 # himself
                 for i in [0, 1]:
                     treant = Treant()
-                    treant.create_minion(player).add_to_board(treant, game,
-                                                              player, 0)
+                    treant.summon(player, game, len(player.minions))
 
         option = player.agent.choose_option(IncreaseStats(), SummonTreants())
         option.use(player, player.game)

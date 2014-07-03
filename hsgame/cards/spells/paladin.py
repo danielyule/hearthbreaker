@@ -226,11 +226,10 @@ class NobleSacrifice(SecretCard):
                     return Minion(2, 1)
 
             def choose_defender(targets):
-                minion_card = DefenderMinion()
-                minion = minion_card.create_minion(player)
-                minion.add_to_board(minion_card, player.game, player, 0)
+                defender = DefenderMinion()
+                defender.summon(player, player.game, len(player.minions))
                 player.game.current_player.agent.choose_target = old_target
-                return minion
+                return player.minions[-1]
 
             old_target = player.game.current_player.agent.choose_target
             player.game.current_player.agent.choose_target = choose_defender

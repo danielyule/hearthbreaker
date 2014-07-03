@@ -126,9 +126,9 @@ class MindControl(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
+        new_minion = self.target.copy(player)
         self.target.remove_from_board()
-        self.target.add_to_board(self.target.card, self.target.game, player, 0)
+        new_minion.add_to_board(len(player.minions))
 
 
 # TODO: Can this card be played if opponent has no cards in hand?
@@ -171,8 +171,8 @@ class Mindgames(Card):
         if len(minions) == 0:
             minions.append(ShadowOfNothing())
 
-        minion = copy.copy(minions[game.random(0, len(minions) - 1)])
-        minion.create_minion(player).add_to_board(minion, game, player, 0)
+        minion_card = copy.copy(minions[game.random(0, len(minions) - 1)])
+        minion_card.summon(player, game, 0)
 
 
 class PowerWordShield(Card):
@@ -201,20 +201,19 @@ class ShadowMadness(Card):
 
         def switch_side(*args):
             minion.unbind("silenced", unbind_turn_ended)
-            m = copy.deepcopy(minion)
+            m = minion.copy(self.target.player)
 
             minion.remove_from_board()
-            m.add_to_board(self.target.card, self.target.game,
-                           self.target.player, 0)
+            m.add_to_board(len(self.target.player.minions))
 
         super().use(player, game)
 
-        minion = copy.deepcopy(self.target)
-        minion.charge = True
+        minion = self.target.copy(player)
+        minion.active = True
         minion.bind_once("silenced", unbind_turn_ended)
-
+        # What happens if there are already 7 minions?
         self.target.remove_from_board()
-        minion.add_to_board(minion.card, game, player, 0)
+        minion.add_to_board(len(player.minions))
 
         player.bind_once("turn_ended", switch_side)
 

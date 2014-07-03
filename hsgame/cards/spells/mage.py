@@ -1,5 +1,3 @@
-import copy
-
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
 import hsgame.targeting
@@ -56,8 +54,7 @@ class MirrorImage(Card):
 
         for i in range(0, 2):
             mirror_image = MirrorImageMinion()
-            mirror_image.create_minion(player).add_to_board(mirror_image, game,
-                                                            player, 0)
+            mirror_image.summon(player, game, len(player.hand))
 
 
 class ArcaneExplosion(Card):
@@ -142,26 +139,18 @@ class IceBarrier(SecretCard):
 
 class MirrorEntity(SecretCard):
     def __init__(self):
-        super().__init__("Mirror Entity", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Mirror Entity", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def _reveal(self, minion, player):
-        if minion.player is not player:
-            mirror = copy.copy(minion)
-            mirror.player = player
-            mirror.card = copy.copy(minion.card)
-            mirror.index = len(player.minions)
-            player.minions.append(mirror)
-            player.game.trigger("minion_added", mirror)
-            super().reveal()
-        else:
-            self.activate(player)
+        mirror = minion.copy(player)
+        mirror.add_to_board(len(player.minions))
+        super().reveal()
 
     def activate(self, player):
-        player.game.bind_once("minion_added", self._reveal, player)
+        player.game.current_player.bind_once("minion_played", self._reveal, player)
 
     def deactivate(self, player):
-        player.game.unbind("minion_added", self._reveal)
+        player.game.current_player.unbind("minion_played", self._reveal)
 
 
 class Spellbender(SecretCard):
@@ -180,11 +169,11 @@ class Spellbender(SecretCard):
                     return Minion(1, 3)
 
             def choose_bender(targets):
-                minion_card = SpellbenderMinion()
-                minion = minion_card.create_minion(player)
-                minion.add_to_board(minion_card, player.game, player, 0)
+                spell_bender = SpellbenderMinion()
+                # TODO test what happens if Spellbender goes off when there are 7 minions down
+                spell_bender.summon(player, player.game, len(player.minions))
                 player.game.current_player.agent.choose_target = old_target
-                return minion
+                return player.minions[-1]
 
             old_target = player.game.current_player.agent.choose_target
             player.game.current_player.agent.choose_target = choose_bender

@@ -566,8 +566,36 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         return super().can_use(player, game)
 
     def use(self, player, game):
+        if len(player.minions) >= 7:
+            raise GameException("Only 7 minions allowed on the field at a time")
         super().use(player, game)
-        self.create_minion(player).add_to_board(self, game, player, player.agent.choose_index(self))
+        minion = self.create_minion(player)
+        minion.card = self
+        minion.player = player
+        minion.game = game
+        if minion.battlecry is not None:
+            minion.battlecry(minion)
+        minion.add_to_board(player.agent.choose_index(self))
+        player.trigger("minion_played", minion)
+
+    def summon(self, player, game, index):
+        """
+        Summons the minion associated with this card onto the board.  This is to be used when a spell
+        created a minion, instead of being played from the hand.
+
+        If the player already has 7 minions on the board, this method does nothing
+
+        :param hsgame.game_objects.Player player: The player the summoned minion will belong to
+        :param hsgame.game_objects.Game game: The game the minion is being summoned to
+        :param int index: The index where the new minion will be added
+        """
+        if len(player.minions) < 7:
+            minion = self.create_minion(player)
+            minion.card = self
+            minion.player = player
+            minion.game = game
+            minion.add_to_board(index)
+            player.trigger("minion_summoned", minion)
 
     @abc.abstractmethod
     def create_minion(self, player):
@@ -622,17 +650,10 @@ class Minion(Character):
         self.deathrattle = deathrattle
         self.silenced = False
 
-    def add_to_board(self, card, game, player, index):
-        if len(player.minions) >= 7:
-            raise GameException("Only 7 minions allowed on the field at a time")
-        self.card = card
-        player.minions.insert(index, self)
-        self.game = game
-        self.player = player
-        player.spell_damage += self.spell_damage
-        if self.battlecry is not None:
-            self.battlecry(self)
-        for minion in player.minions:
+    def add_to_board(self, index):
+        self.player.minions.insert(index, self)
+        self.player.spell_damage += self.spell_damage
+        for minion in self.player.minions:
             if minion.index >= index:
                 minion.index += 1
         self.index = index
@@ -734,6 +755,25 @@ class Minion(Character):
         self.player.game.bind("minion_added", minion_added)
         self.player.game.bind("minion_died", minion_died)
         self.bind_once("silenced", silenced)
+
+    def copy(self, new_owner):
+        new_minion = Minion(self.attack_power, self.max_health, self.minion_type, self.battlecry, self.deathrattle)
+        new_minion.health = self.health
+        new_minion.events = self.events.copy()
+        new_minion.stealth = self.stealth
+        new_minion.taunt = self.taunt
+        new_minion.divine_shield = self.divine_shield
+        new_minion.charge = self.charge
+        new_minion.silenced = self.silenced
+        new_minion.spell_damage = self.spell_damage
+        if self.charge and new_owner is self.game.current_player:
+            self.active = True
+        card_type = type(self.card)
+        new_minion.card = card_type()
+        new_minion.player = new_owner
+        new_minion.game = new_owner.game
+        self.trigger("copied", new_minion, new_owner)
+        return new_minion
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):

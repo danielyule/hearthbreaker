@@ -123,8 +123,7 @@ class PaladinPower(Power):
         super().use()
 
         recruit_card = SilverHandRecruit()
-        recruit_card.create_minion(self.hero.player).add_to_board(recruit_card, self.hero.player.game, self.hero.player,
-                                                                  0)
+        recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
 class ShamanPower(Power):
@@ -217,8 +216,7 @@ class ShamanPower(Power):
             totems.append(WrathOfAirTotem())
 
         random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
-        random_totem.create_minion(self.hero.player).add_to_board(random_totem, self.hero.player.game, self.hero.player,
-                                                                  0)
+        random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
 class WarlockPower(Power):
