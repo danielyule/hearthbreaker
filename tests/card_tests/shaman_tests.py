@@ -402,3 +402,15 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].max_health)
         self.assertEqual("Stoneclaw Totem", game.players[0].minions[1].card.name)
         self.assertEqual(4, game.players[0].minions[1].max_health)
+
+    def test_Windfury(self):
+        game = generate_game_for(Windfury, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertFalse(game.players[1].minions[0].windfury)
+
+        # Windfury should be played
+        game.play_single_turn()
+        self.assertTrue(game.players[1].minions[0].windfury)

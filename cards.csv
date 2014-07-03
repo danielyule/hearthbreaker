@@ -370,7 +370,7 @@ yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Com
 no,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Common,Spell
 yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell
 no,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion
-no,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell
+yes,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell
 yes,Windfury Harpy,Windfury,,,6,4,5,Common,Minion
 yes,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion
 yes,Wisp,,,,0,1,1,Common,Minion

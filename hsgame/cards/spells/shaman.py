@@ -209,3 +209,14 @@ class TotemicMight(Card):
         for minion in player.minions.copy():
             if minion.minion_type == MINION_TYPE.TOTEM:
                 minion.increase_health(2)
+
+
+class Windfury(Card):
+    def __init__(self):
+        super().__init__("Windfury", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.windfury = True
