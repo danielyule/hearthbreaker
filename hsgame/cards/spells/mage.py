@@ -278,6 +278,8 @@ class Polymorph(Card):
         minion = sheep.create_minion(None)
         minion.index = self.target.index
         minion.card = sheep
+        minion.player = player
+        minion.game = game
         self.target.player.minions[minion.index] = minion
 
 
