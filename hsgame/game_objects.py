@@ -444,7 +444,7 @@ class Card(Bindable):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable):
+                 filter_func=_is_spell_targetable, overload=0):
         """
             Creates a new :class:`Card`.
 
@@ -482,6 +482,7 @@ class Card(Bindable):
             self.target = None
             self.get_targets = target_func
             self.filter_func = filter_func
+        self.overload = overload
 
     def can_use(self, player, game):
         """
@@ -532,6 +533,7 @@ class Card(Bindable):
         :param hsgame.game_objects.Player player: The player who is using the card.
         :param hsgame.game_objects.Game game: The game this card is being used in.
         """
+        player.overload += self.overload
         if self.targetable:
             if self.targets is None:
                 self.target = None
@@ -556,8 +558,8 @@ class Card(Bindable):
 
 class MinionCard(Card, metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, rarity, targeting_func=None,
-                 filter_func=lambda target: not target.stealth):
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func)
+                 filter_func=lambda target: not target.stealth, overload=0):
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
 
     def can_use(self, player, game):
         return super().can_use(player, game)
@@ -1122,6 +1124,8 @@ class Game(Bindable):
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
+            if card.overload != 0:
+                self.current_player.trigger("overloaded")
         else:
             raise GameException("Tried to play card that could not be played")
 

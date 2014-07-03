@@ -19,23 +19,21 @@ class AlAkirTheWindlord(MinionCard):
 
 class DustDevil(MinionCard):
     def __init__(self):
-        super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+        super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
 
     def create_minion(self, player):
         minion = Minion(3, 1)
         minion.windfury = True
-        player.overload += 2
         return minion
 
 
 class EarthElemental(MinionCard):
     def __init__(self):
-        super().__init__("Earth Elemental", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
+        super().__init__("Earth Elemental", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC, overload=3)
 
     def create_minion(self, player):
         minion = Minion(7, 8)
         minion.taunt = True
-        player.overload += 3
         return minion
 
 

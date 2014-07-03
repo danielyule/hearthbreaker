@@ -14,6 +14,7 @@ Events Triggered in hssim
  * turn_ended
  * attacking(attacker)
  * secret_revealed (secret)
+ * overloaded
 
 ##Game
  * minion_on_minion_attack(minion, target)
