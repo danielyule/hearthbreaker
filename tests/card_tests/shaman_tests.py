@@ -4,6 +4,7 @@ from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 from hsgame.constants import MINION_TYPE
+from hsgame.agents.basic_agents import PredictableBot
 
 
 class TestShaman(unittest.TestCase):
@@ -385,3 +386,19 @@ class TestShaman(unittest.TestCase):
         # Rockbiter Weapon should be played and used
         game.play_single_turn()
         self.assertEqual(27, game.players[1].hero.health)
+
+    def test_TotemicMight(self):
+        game = generate_game_for([TotemicMight, StonetuskBoar], Shieldbearer, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+
+        # Hero power and Totemic Might should be played
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual("Stoneclaw Totem", game.players[0].minions[1].card.name)
+        self.assertEqual(4, game.players[0].minions[1].max_health)

@@ -197,3 +197,15 @@ class RockbiterWeapon(Card):
         super().use(player, game)
 
         self.target.change_temp_attack(3)
+
+
+class TotemicMight(Card):
+    def __init__(self):
+        super().__init__("Totemic Might", 0, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for minion in player.minions.copy():
+            if minion.minion_type == MINION_TYPE.TOTEM:
+                minion.increase_health(2)

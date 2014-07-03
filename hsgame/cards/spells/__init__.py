@@ -105,7 +105,8 @@ from hsgame.cards.spells.shaman import (
     LavaBurst,
     LightningBolt,
     LightningStorm,
-    RockbiterWeapon
+    RockbiterWeapon,
+    TotemicMight
 )
 
 from hsgame.cards.spells.warlock import (

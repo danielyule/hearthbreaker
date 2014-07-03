@@ -348,7 +348,7 @@ yes,Thrallmar Farseer,Windfury,,,3,2,3,Common,Minion
 yes,Timber Wolf,Your other Beasts have +1 Attack.,Beast,Hunter,1,1,1,Free,Minion
 no,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.,,,3,3,3,Legendary,Minion
 yes,Tirion Fordring,Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.,,Paladin,8,6,6,Legendary,Minion
-no,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell
+yes,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell
 yes,Tracking,Look at the top three cards of your deck. Draw one and discard the others.,,Hunter,1,,,Free,Spell
 yes,Truesilver Champion,"Whenever your hero attacks, restore 2 Health to it.",,Paladin,4,4,2,Common,Weapon
 no,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Common,Minion
