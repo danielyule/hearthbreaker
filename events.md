@@ -10,6 +10,8 @@ Events Triggered in hssim
  * card_played(card)
  * card_used(card)
  * spell_cast (card)
+ * minion_summoned(minion)
+ * minion_played(minion)
  * turn_started
  * turn_ended
  * attacking(attacker)
