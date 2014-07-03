@@ -103,3 +103,19 @@ class FeralSpirit(Card):
         for i in range(0, 2):
             spirit_wolf = SpiritWolf()
             spirit_wolf.summon(player, game, len(player.minions))
+
+
+class ForkedLightning(Card):
+    def __init__(self):
+        super().__init__("Forked Lightning", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = game.other_player.minions.copy()
+        for i in range(0, 2):
+            target = targets.pop(game.random(0, len(targets) - 1))
+            target.damage(player.effective_spell_damage(2), self)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 2

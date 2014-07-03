@@ -298,3 +298,17 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[1].card.mana)
 
         self.assertEqual(2, game.players[0].overload)
+
+    def test_ForkedLightning(self):
+        game = generate_game_for(ForkedLightning, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        # Nothing should have happened yet, since the opponent haven't got 2 minions until now
+        self.assertEqual(2, len(game.players[1].minions))
+
+        # Forked Lightning should be played
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].overload)
