@@ -86,19 +86,19 @@
 <span id="hsgame-game-objects-module"></span><h2>hsgame.game_objects module<a class="headerlink" href="#module-hsgame.game_objects" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="hsgame.game_objects.GameException">
-<em class="property">exception </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">GameException</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L42"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">GameException</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
 <p>An <a class="reference external" href="http://docs.python.org/3.3/library/exceptions.html#Exception" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">Exception</span></tt></a> relating to the operation of the game</p>
 <dl class="method">
 <dt id="hsgame.game_objects.GameException.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L47"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L44"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.GameException.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Bindable">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Bindable</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Bindable</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L48"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <p>A class which inherits from Bindable has an event structure added to it.</p>
 <p>This event structure follows the observer pattern.  It consists of two parts: binding and triggering.
@@ -146,13 +146,13 @@ the next time a function is triggered.  The former case is handled by <a class="
 <p>Any class which subclasses this class must be sure to call <a class="reference internal" href="#hsgame.game_objects.Bindable.__init__" title="hsgame.game_objects.Bindable.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">__init__()</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L104"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L101"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up a new <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">Bindable</span></tt></a>.  Must be called by any subclasses.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.bind">
-<tt class="descname">bind</tt><big>(</big><em>event</em>, <em>function</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L110"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.bind" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bind</tt><big>(</big><em>event</em>, <em>function</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L107"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.bind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bind a function to an event.  Each time the event is triggered, the function will be called.</p>
 <p>Any parameters passed to this method will be appended to the paramters passed to the trigger function
 and passed to the bound function.</p>
@@ -177,7 +177,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.bind_once">
-<tt class="descname">bind_once</tt><big>(</big><em>event</em>, <em>function</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L136"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.bind_once" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">bind_once</tt><big>(</big><em>event</em>, <em>function</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L133"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.bind_once" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bind a function to an event.  This function will only be called the next time the event is triggered, and
 then ignored.</p>
 <p>Any parameters passed to this method will be appended to the paramters passed to the trigger function
@@ -203,7 +203,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.trigger">
-<tt class="descname">trigger</tt><big>(</big><em>event</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L163"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.trigger" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">trigger</tt><big>(</big><em>event</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L160"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.trigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Trigger an event.  Any functions which have been bound to that event will be called.</p>
 <p>The parameters passed to this function as <cite>args</cite> will be passed along to the bound functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -225,7 +225,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 
 <dl class="method">
 <dt id="hsgame.game_objects.Bindable.unbind">
-<tt class="descname">unbind</tt><big>(</big><em>event</em>, <em>function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.unbind" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">unbind</tt><big>(</big><em>event</em>, <em>function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L183"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Bindable.unbind" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unbind a function from an event.  When this event is triggered, the function is no longer called.</p>
 <p><cite>function</cite> must be the same function reference as was passed in to <a class="reference internal" href="#hsgame.game_objects.Bindable.bind" title="hsgame.game_objects.Bindable.bind"><tt class="xref py py-meth docutils literal"><span class="pre">bind()</span></tt></a> or <a class="reference internal" href="#hsgame.game_objects.Bindable.bind_once" title="hsgame.game_objects.Bindable.bind_once"><tt class="xref py py-meth docutils literal"><span class="pre">bind_once()</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -246,7 +246,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 
 <dl class="class">
 <dt id="hsgame.game_objects.Card">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x00000000044568C8&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L438"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x000000000474EC80&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L435"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
 <p>Represents a card in Heathstone.  Every card is implemented as a subclass, either directly or through
 <a class="reference internal" href="#hsgame.game_objects.MinionCard" title="hsgame.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a>, <a class="reference internal" href="#hsgame.game_objects.SecretCard" title="hsgame.game_objects.SecretCard"><tt class="xref py py-class docutils literal"><span class="pre">SecretCard</span></tt></a> or <a class="reference internal" href="#hsgame.game_objects.WeaponCard" title="hsgame.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a>.  If it is a direct subclass of this
@@ -256,7 +256,7 @@ or <a class="reference internal" href="#hsgame.game_objects.WeaponCard" title="h
 cause its effect, but not update the game state.</p>
 <dl class="method">
 <dt id="hsgame.game_objects.Card.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x00000000044568C8&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L449"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x000000000474EC80&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L446"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a>.</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">target_func</span></tt> and <tt class="docutils literal"><span class="pre">filter_func</span></tt> have very specific behavior.  In use, the target function is called with</dt>
@@ -294,7 +294,7 @@ returns true if the target&#8217;s attack is less than 3.</li>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Card.can_use">
-<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L489"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.can_use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L486"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.can_use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies if the card can be used with the game state as it is.</p>
 <p>Checks that the player has enough mana to play the card, and that the card has a valid
 target if it requires one.</p>
@@ -312,7 +312,7 @@ target if it requires one.</p>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Card.is_spell">
-<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L544"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.is_spell" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L541"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.is_spell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Verifies if this is a spell card (or a secret card)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -328,7 +328,7 @@ target if it requires one.</p>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Card.mana_cost">
-<tt class="descname">mana_cost</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L506"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.mana_cost" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">mana_cost</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L503"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.mana_cost" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates the mana cost for this card.</p>
 <p>This cost is the base cost for the card, modified by any effects from the card itself, or
 from other cards (such as <tt class="xref py py-class docutils literal"><span class="pre">hsgame.cards.minions.neutral.VentureCoMercenary</span></tt>)</p>
@@ -348,7 +348,7 @@ from other cards (such as <tt class="xref py py-class docutils literal"><span cl
 
 <dl class="method">
 <dt id="hsgame.game_objects.Card.use">
-<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L526"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L523"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Card.use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use the card.</p>
 <p>This method will cause the card&#8217;s effect, but will not update the game state or trigger any events.
 To play a card correctly, use <a class="reference internal" href="#hsgame.game_objects.Game.play_card" title="hsgame.game_objects.Game.play_card"><tt class="xref py py-meth docutils literal"><span class="pre">Game.play_card()</span></tt></a>.</p>
@@ -371,14 +371,14 @@ To play a card correctly, use <a class="reference internal" href="#hsgame.game_o
 
 <dl class="class">
 <dt id="hsgame.game_objects.Character">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Character</tt><big>(</big><em>attack_power</em>, <em>health</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L201"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Character</tt><big>(</big><em>attack_power</em>, <em>health</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L198"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
 <p>A Character in Hearthstone is something that can attack, i.e. a <a class="reference internal" href="#hsgame.game_objects.Hero" title="hsgame.game_objects.Hero"><tt class="xref py py-class docutils literal"><span class="pre">Hero</span></tt></a> or <a class="reference internal" href="#hsgame.game_objects.Minion" title="hsgame.game_objects.Minion"><tt class="xref py py-class docutils literal"><span class="pre">Minion</span></tt></a>.</p>
 <blockquote>
 <div>This common superclass handles all of the status effects and calculations involved in attacking or being attacked.</div></blockquote>
 <dl class="method">
 <dt id="hsgame.game_objects.Character.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>health</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L208"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>health</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new Character with the given attack power and health</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -396,12 +396,12 @@ To play a card correctly, use <a class="reference internal" href="#hsgame.game_o
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.activate_delayed">
-<tt class="descname">activate_delayed</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L333"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.activate_delayed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">activate_delayed</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L330"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.activate_delayed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.attack">
-<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L255"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.attack" title="Permalink to this definition">¶</a></dt>
 <dd><p>Causes this <a class="reference internal" href="#hsgame.game_objects.Character" title="hsgame.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">Character</span></tt></a> to attack.</p>
 <p>The Character will assemble a list of possible targets and then ask the agent associated with this Character to
 select which target from the list it would like to attack.</p>
@@ -415,22 +415,22 @@ attack, its attack power shouldn&#8217;t go up before the damage to its attacker
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.can_attack">
-<tt class="descname">can_attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L427"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.can_attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L424"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.can_attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.change_attack">
-<tt class="descname">change_attack</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L361"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.change_attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">change_attack</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L358"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.change_attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.change_temp_attack">
-<tt class="descname">change_temp_attack</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L369"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.change_temp_attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">change_temp_attack</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L366"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.change_temp_attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L310"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.choose_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L307"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd><p>Consults the associated player to select a target from a list of targets</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -444,17 +444,17 @@ attack, its attack power shouldn&#8217;t go up before the damage to its attacker
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.damage">
-<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L339"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L336"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.decrease_health">
-<tt class="descname">decrease_health</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L386"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.decrease_health" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decrease_health</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L383"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.decrease_health" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.delayed_trigger">
-<tt class="descname">delayed_trigger</tt><big>(</big><em>event</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L318"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.delayed_trigger" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">delayed_trigger</tt><big>(</big><em>event</em>, <em>*args</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L315"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.delayed_trigger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up a delayed trigger for an event.  Any events triggered with this method will not be called until
 <a class="reference internal" href="#hsgame.game_objects.Character.activate_delayed" title="hsgame.game_objects.Character.activate_delayed"><tt class="xref py py-meth docutils literal"><span class="pre">activate_delayed()</span></tt></a> is called.</p>
 <p>The purpose of this method is to allow for simeltaneous events.  For example, if a minion is attacked
@@ -478,32 +478,32 @@ then any damage events should be triggered after the attack, and at the same tim
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.die">
-<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L423"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.die" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L420"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.die" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.freeze">
-<tt class="descname">freeze</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L401"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.freeze" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">freeze</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L398"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.freeze" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.heal">
-<tt class="descname">heal</tt><big>(</big><em>amount</em>, <em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L413"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.heal" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">heal</tt><big>(</big><em>amount</em>, <em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L410"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.heal" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.increase_health">
-<tt class="descname">increase_health</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L374"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.increase_health" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">increase_health</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L371"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.increase_health" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.silence">
-<tt class="descname">silence</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L405"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.silence" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">silence</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L402"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.silence" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Character.spell_targetable">
-<tt class="descname">spell_targetable</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L430"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.spell_targetable" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">spell_targetable</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L427"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Character.spell_targetable" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -567,14 +567,14 @@ then any damage events should be triggered after the attack, and at the same tim
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hsgame.game_objects.Character.used_wind_fury">
-<tt class="descname">used_wind_fury</tt><em class="property"> = None</em><a class="headerlink" href="#hsgame.game_objects.Character.used_wind_fury" title="Permalink to this definition">¶</a></dt>
+<dt id="hsgame.game_objects.Character.used_windfury">
+<tt class="descname">used_windfury</tt><em class="property"> = None</em><a class="headerlink" href="#hsgame.game_objects.Character.used_windfury" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this character has used their first windfury attack</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="hsgame.game_objects.Character.wind_fury">
-<tt class="descname">wind_fury</tt><em class="property"> = None</em><a class="headerlink" href="#hsgame.game_objects.Character.wind_fury" title="Permalink to this definition">¶</a></dt>
+<dt id="hsgame.game_objects.Character.windfury">
+<tt class="descname">windfury</tt><em class="property"> = None</em><a class="headerlink" href="#hsgame.game_objects.Character.windfury" title="Permalink to this definition">¶</a></dt>
 <dd><p>If this character has windfury</p>
 </dd></dl>
 
@@ -582,119 +582,119 @@ then any damage events should be triggered after the attack, and at the same tim
 
 <dl class="class">
 <dt id="hsgame.game_objects.Deck">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Deck</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L866"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Deck</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L863"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Deck.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L867"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L864"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Deck.can_draw">
-<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L873"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.can_draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L870"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.can_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Deck.draw">
-<tt class="descname">draw</tt><big>(</big><em>random_func</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L876"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">draw</tt><big>(</big><em>random_func</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L873"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Deck.put_back">
-<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L892"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.put_back" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L889"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Deck.put_back" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Game">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x00000000030E5D78&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1008"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x000000000300B9E8&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1005"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Game.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x00000000030E5D78&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1009"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x000000000300B9E8&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1006"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.game_over">
-<tt class="descname">game_over</tt><big>(</big><em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1087"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.game_over" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">game_over</tt><big>(</big><em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1085"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.game_over" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.play_card">
-<tt class="descname">play_card</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1118"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.play_card" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play_card</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1116"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.play_card" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.play_single_turn">
-<tt class="descname">play_single_turn</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1063"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.play_single_turn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play_single_turn</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1060"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.play_single_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.pre_game">
-<tt class="descname">pre_game</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1034"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.pre_game" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pre_game</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1031"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.pre_game" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.remove_minion">
-<tt class="descname">remove_minion</tt><big>(</big><em>minion</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1141"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.remove_minion" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">remove_minion</tt><big>(</big><em>minion</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1139"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.remove_minion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Game.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1057"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.start" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1054"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Game.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Hero">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Hero</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L903"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Hero</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L900"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Character" title="hsgame.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Character</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L904"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L901"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.attack">
-<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L914"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L911"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.damage">
-<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L921"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L918"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.die">
-<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L932"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.die" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L929"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.die" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.find_power_target">
-<tt class="descname">find_power_target</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L935"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.find_power_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">find_power_target</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L932"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.find_power_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Hero.increase_armour">
-<tt class="descname">increase_armour</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L928"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.increase_armour" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">increase_armour</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L925"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Hero.increase_armour" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Minion">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Minion</tt><big>(</big><em>attack</em>, <em>health</em>, <em>minion_type=0</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L638"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Minion</tt><big>(</big><em>attack</em>, <em>health</em>, <em>minion_type=0</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L635"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Character" title="hsgame.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Character</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>attack</em>, <em>health</em>, <em>minion_type=0</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L639"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>attack</em>, <em>health</em>, <em>minion_type=0</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L636"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.add_board_effect">
-<tt class="descname">add_board_effect</tt><big>(</big><em>effect</em>, <em>effect_silence</em>, <em>filter_func=&lt;function Minion.&lt;lambda&gt; at 0x0000000004453C80&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L717"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.add_board_effect" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_board_effect</tt><big>(</big><em>effect</em>, <em>effect_silence</em>, <em>filter_func=&lt;function Minion.&lt;lambda&gt; at 0x00000000047540D0&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L714"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.add_board_effect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Adds an effect to this minion that will affect minions on its side of the board</p>
 <p>This method sets up the effect so that it will update when new minions are added
 or other minions die, or the original minion is silenced</p>
@@ -718,83 +718,83 @@ affected, and false otherwise.</li>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.add_to_board">
-<tt class="descname">add_to_board</tt><big>(</big><em>index</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L653"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.add_to_board" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_to_board</tt><big>(</big><em>index</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L650"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.add_to_board" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.attack">
-<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L672"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L669"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.can_be_attacked">
-<tt class="descname">can_be_attacked</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L708"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.can_be_attacked" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_be_attacked</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L705"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.can_be_attacked" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.copy">
-<tt class="descname">copy</tt><big>(</big><em>new_owner</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L759"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>new_owner</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L756"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.damage">
-<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L687"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L684"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.die">
-<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L698"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.die" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L695"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.die" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.heal">
-<tt class="descname">heal</tt><big>(</big><em>amount</em>, <em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L693"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.heal" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">heal</tt><big>(</big><em>amount</em>, <em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L690"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.heal" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.remove_from_board">
-<tt class="descname">remove_from_board</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L665"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.remove_from_board" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">remove_from_board</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L662"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.remove_from_board" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.silence">
-<tt class="descname">silence</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L675"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.silence" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">silence</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L672"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.silence" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Minion.spell_targetable">
-<tt class="descname">spell_targetable</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L711"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.spell_targetable" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">spell_targetable</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L708"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Minion.spell_targetable" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.MinionCard">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x000000000444EB70&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L560"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x0000000004751F28&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L557"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x000000000444EB70&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L561"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x0000000004751F28&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L558"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.can_use">
-<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.can_use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L562"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.can_use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.create_minion">
-<tt class="descname">create_minion</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L600"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.create_minion" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create_minion</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L597"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.create_minion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.is_spell">
-<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L604"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.is_spell" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L601"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.is_spell" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.summon">
-<tt class="descname">summon</tt><big>(</big><em>player</em>, <em>game</em>, <em>index</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L581"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.summon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">summon</tt><big>(</big><em>player</em>, <em>game</em>, <em>index</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L578"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.summon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Summons the minion associated with this card onto the board.  This is to be used when a spell
 created a minion, instead of being played from the hand.</p>
 <p>If the player already has 7 minions on the board, this method does nothing</p>
@@ -815,102 +815,102 @@ created a minion, instead of being played from the hand.</p>
 
 <dl class="method">
 <dt id="hsgame.game_objects.MinionCard.use">
-<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L568"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.MinionCard.use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Player">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x00000000030E5D78&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L942"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x000000000300B9E8&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L939"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.Player.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x00000000030E5D78&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L943"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em>, <em>random_func=&lt;bound method Random.randint of &lt;random.Random object at 0x000000000300B9E8&gt;&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L940"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.can_draw">
-<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L981"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.can_draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L978"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.can_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1004"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.choose_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L1001"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.discard">
-<tt class="descname">discard</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L998"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.discard" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">discard</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L995"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.discard" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.draw">
-<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L967"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L964"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.effective_heal_power">
-<tt class="descname">effective_heal_power</tt><big>(</big><em>base_heal</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L987"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.effective_heal_power" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">effective_heal_power</tt><big>(</big><em>base_heal</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L984"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.effective_heal_power" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.effective_spell_damage">
-<tt class="descname">effective_spell_damage</tt><big>(</big><em>base_damage</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L984"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.effective_spell_damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">effective_spell_damage</tt><big>(</big><em>base_damage</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L981"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.effective_spell_damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Player.put_back">
-<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L993"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.put_back" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L990"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Player.put_back" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.SecretCard">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">SecretCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L608"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">SecretCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L605"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L609"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L606"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.activate">
-<tt class="descname">activate</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L629"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.activate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">activate</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L626"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.activate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.can_use">
-<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L613"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.can_use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L610"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.can_use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.deactivate">
-<tt class="descname">deactivate</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L633"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.deactivate" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">deactivate</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L630"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.deactivate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.reveal">
-<tt class="descname">reveal</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L621"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.reveal" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">reveal</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L618"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.reveal" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.SecretCard.use">
-<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L616"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L613"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.SecretCard.use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.game_objects.Weapon">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Weapon</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L828"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">Weapon</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L825"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Bindable" title="hsgame.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Bindable</span></tt></a></p>
 <p>Represents a Hearthstone weapon.  All weapons have been attacked power and durability.  The logic for handling the
 attacks is handled by <a class="reference internal" href="#hsgame.game_objects.Hero" title="hsgame.game_objects.Hero"><tt class="xref py py-class docutils literal"><span class="pre">Hero</span></tt></a>, but it can be modified through the use of events.</p>
 <dl class="method">
 <dt id="hsgame.game_objects.Weapon.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L834"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L831"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new weapon with the given attack power and durability.  A battlecry can also optionally be set.
 :param int attack_power: The amount of attack this weapon gives the hero
 :param int durability: The number of times this weapon can be used to attack before being discarded
@@ -919,12 +919,12 @@ attacks is handled by <a class="reference internal" href="#hsgame.game_objects.H
 
 <dl class="method">
 <dt id="hsgame.game_objects.Weapon.destroy">
-<tt class="descname">destroy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L853"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.destroy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">destroy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L850"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.destroy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.Weapon.equip">
-<tt class="descname">equip</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L858"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.equip" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">equip</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L855"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.Weapon.equip" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -949,12 +949,12 @@ attacks is handled by <a class="reference internal" href="#hsgame.game_objects.H
 
 <dl class="class">
 <dt id="hsgame.game_objects.WeaponCard">
-<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">WeaponCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000004587048&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L779"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">WeaponCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000004754400&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L776"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt></a></p>
 <p>Represents a <a class="reference internal" href="#hsgame.game_objects.Card" title="hsgame.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> for creating a <a class="reference internal" href="#hsgame.game_objects.Weapon" title="hsgame.game_objects.Weapon"><tt class="xref py py-class docutils literal"><span class="pre">Weapon</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.game_objects.WeaponCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000004587048&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L784"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000004754400&gt;</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L781"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new <a class="reference internal" href="#hsgame.game_objects.WeaponCard" title="hsgame.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -985,18 +985,18 @@ anything but the default</li>
 
 <dl class="method">
 <dt id="hsgame.game_objects.WeaponCard.create_weapon">
-<tt class="descname">create_weapon</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L817"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.create_weapon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create_weapon</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L814"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.create_weapon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new weapon.  Any new weapon cards which are created must override this method.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.WeaponCard.is_spell">
-<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L824"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.is_spell" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L821"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.is_spell" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.game_objects.WeaponCard.use">
-<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L806"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L803"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.WeaponCard.use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new weapon and attach it to the player&#8217;s hero</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1016,7 +1016,7 @@ anything but the default</li>
 
 <dl class="function">
 <dt id="hsgame.game_objects.card_lookup">
-<tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">card_lookup</tt><big>(</big><em>card_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.card_lookup" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.game_objects.</tt><tt class="descname">card_lookup</tt><big>(</big><em>card_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/game_objects.py#L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.game_objects.card_lookup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a the name of a card as a string, return an object corresponding to that card</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1150,21 +1150,21 @@ by that name exists.</td>
 
 <dl class="class">
 <dt id="hsgame.powers.Power">
-<em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">Power</tt><big>(</big><em>hero</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L24"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.powers.</tt><tt class="descname">Power</tt><big>(</big><em>hero</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.powers.Power.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>hero</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.powers.Power.can_use">
-<tt class="descname">can_use</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L28"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.can_use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_use</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.can_use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.powers.Power.use">
-<tt class="descname">use</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.Power.use" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1224,7 +1224,7 @@ by that name exists.</td>
 
 <dl class="function">
 <dt id="hsgame.powers.powers">
-<tt class="descclassname">hsgame.powers.</tt><tt class="descname">powers</tt><big>(</big><em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.powers" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.powers.</tt><tt class="descname">powers</tt><big>(</big><em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/powers.py#L5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.powers.powers" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -1232,283 +1232,283 @@ by that name exists.</td>
 <span id="hsgame-replay-module"></span><h2>hsgame.replay module<a class="headerlink" href="#module-hsgame.replay" title="Permalink to this headline">¶</a></h2>
 <dl class="exception">
 <dt id="hsgame.replay.ReplayException">
-<em class="property">exception </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ReplayException</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ReplayException</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.Exception</span></tt></p>
 <dl class="method">
 <dt id="hsgame.replay.ReplayException.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L15"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>message</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L12"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayException.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.AttackAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">AttackAction</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L137"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">AttackAction</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L134"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.AttackAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L138"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>character</em>, <em>target</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L135"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.AttackAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L145"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L142"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.AttackAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L142"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L139"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.AttackAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.ConcedeAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ConcedeAction</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L184"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ConcedeAction</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L181"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.ConcedeAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L182"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ConcedeAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L191"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L188"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ConcedeAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L188"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L185"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ConcedeAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.MinionAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">MinionAction</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L114"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">MinionAction</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L111"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.MinionAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L115"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>index</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L112"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.MinionAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L128"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L125"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.MinionAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L123"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L120"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.MinionAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.PowerAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">PowerAction</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L151"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">PowerAction</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L148"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.PowerAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L149"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.PowerAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L166"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L163"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.PowerAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L160"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L157"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.PowerAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.ProxyCard">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCard</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCard</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.replay.ProxyCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>card_reference</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L53"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ProxyCard.resolve">
-<tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L76"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.resolve" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.resolve" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ProxyCard.set_option">
-<tt class="descname">set_option</tt><big>(</big><em>option</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.set_option" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">set_option</tt><big>(</big><em>option</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L70"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.set_option" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ProxyCard.to_output">
-<tt class="descname">to_output</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L85"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.to_output" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L82"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCard.to_output" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.ProxyCharacter">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCharacter</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ProxyCharacter</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.replay.ProxyCharacter.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L20"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>character_ref</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ProxyCharacter.resolve">
-<tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.resolve" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">resolve</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.resolve" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.ProxyCharacter.to_output">
-<tt class="descname">to_output</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.to_output" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L48"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ProxyCharacter.to_output" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.RecordingGame">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">RecordingGame</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L366"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">RecordingGame</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L363"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Game" title="hsgame.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Game</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.RecordingGame.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L367"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L364"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.RecordingGame.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.Replay">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">Replay</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L196"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">Replay</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L193"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.replay.Replay.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L197"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L194"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.parse_replay">
-<tt class="descname">parse_replay</tt><big>(</big><em>replayfile</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L306"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.parse_replay" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">parse_replay</tt><big>(</big><em>replayfile</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L303"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.parse_replay" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_attack">
-<tt class="descname">record_attack</tt><big>(</big><em>target</em>, <em>attacker</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L247"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_attack</tt><big>(</big><em>target</em>, <em>attacker</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_card_played">
-<tt class="descname">record_card_played</tt><big>(</big><em>card</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_card_played" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_card_played</tt><big>(</big><em>card</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L235"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_card_played" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_kept_index">
-<tt class="descname">record_kept_index</tt><big>(</big><em>cards</em>, <em>card_index</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L258"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_kept_index" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_kept_index</tt><big>(</big><em>cards</em>, <em>card_index</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L255"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_kept_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_option_chosen">
-<tt class="descname">record_option_chosen</tt><big>(</big><em>option</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_option_chosen" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_option_chosen</tt><big>(</big><em>option</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L241"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_option_chosen" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_power">
-<tt class="descname">record_power</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L251"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_power" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_power</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L248"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_power" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_power_target">
-<tt class="descname">record_power_target</tt><big>(</big><em>target</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L255"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_power_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_power_target</tt><big>(</big><em>target</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L252"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_power_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_random">
-<tt class="descname">record_random</tt><big>(</big><em>result</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L210"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_random" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_random</tt><big>(</big><em>result</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_random" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.record_turn_end">
-<tt class="descname">record_turn_end</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L213"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_turn_end" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">record_turn_end</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L210"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.record_turn_end" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.save_decks">
-<tt class="descname">save_decks</tt><big>(</big><em>deck1</em>, <em>deck2</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.save_decks" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">save_decks</tt><big>(</big><em>deck1</em>, <em>deck2</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L204"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.save_decks" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.Replay.write_replay">
-<tt class="descname">write_replay</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.write_replay" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_replay</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L262"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.Replay.write_replay" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.ReplayAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ReplayAction</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">ReplayAction</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hsgame.replay.ReplayAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L90"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L87"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.ReplayAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.SavedGame">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SavedGame</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L426"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SavedGame</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L423"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.game_objects.Game" title="hsgame.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Game</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.SavedGame.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L427"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>replay_file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L424"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SavedGame.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.SpellAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SpellAction</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L94"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">SpellAction</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L91"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.SpellAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L95"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>card</em>, <em>target=None</em>, <em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.SpellAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L102"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L99"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.SpellAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L108"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L105"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.SpellAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hsgame.replay.TurnEndAction">
-<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">TurnEndAction</tt><big>(</big><em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L173"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.replay.</tt><tt class="descname">TurnEndAction</tt><big>(</big><em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L170"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hsgame.replay.ReplayAction" title="hsgame.replay.ReplayAction"><tt class="xref py py-class docutils literal"><span class="pre">hsgame.replay.ReplayAction</span></tt></a></p>
 <dl class="method">
 <dt id="hsgame.replay.TurnEndAction.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>game=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L171"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.TurnEndAction.play">
-<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L180"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.play" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.play" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hsgame.replay.TurnEndAction.to_output_string">
-<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.to_output_string" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">to_output_string</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/replay.py#L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.replay.TurnEndAction.to_output_string" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1518,52 +1518,52 @@ by that name exists.</td>
 <span id="hsgame-targeting-module"></span><h2>hsgame.targeting module<a class="headerlink" href="#module-hsgame.targeting" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="hsgame.targeting.find_battlecry_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L14"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_battlecry_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L11"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_battlecry_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_enemy_minion_battlecry_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L73"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L70"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_enemy_minion_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L59"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_minion_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_minion_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_enemy_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L24"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_enemy_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L21"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_enemy_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_friendly_minion_battlecry_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L82"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L79"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_friendly_minion_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L66"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_minion_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L63"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_minion_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_friendly_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_friendly_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_friendly_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_minion_battlecry_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L48"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_minion_battlecry_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L45"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_minion_battlecry_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_minion_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_minion_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_minion_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_minion_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="hsgame.targeting.find_spell_target">
-<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_spell_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hsgame.targeting.</tt><tt class="descname">find_spell_target</tt><big>(</big><em>game</em>, <em>filter_function</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/targeting.py#L1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.targeting.find_spell_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
@@ -1571,11 +1571,11 @@ by that name exists.</td>
 <span id="hsgame-constants-module"></span><h2>hsgame.constants module<a class="headerlink" href="#module-hsgame.constants" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hsgame.constants.CARD_RARITY">
-<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">CARD_RARITY</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L4"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CARD_RARITY" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">CARD_RARITY</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CARD_RARITY" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="staticmethod">
 <dt id="hsgame.constants.CARD_RARITY.from_str">
-<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>rarity_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L21"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CARD_RARITY.from_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>rarity_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CARD_RARITY.from_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1612,16 +1612,16 @@ by that name exists.</td>
 
 <dl class="class">
 <dt id="hsgame.constants.CHARACTER_CLASS">
-<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">CHARACTER_CLASS</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">CHARACTER_CLASS</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="staticmethod">
 <dt id="hsgame.constants.CHARACTER_CLASS.from_str">
-<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>class_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS.from_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>class_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L48"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS.from_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="staticmethod">
 <dt id="hsgame.constants.CHARACTER_CLASS.to_str">
-<em class="property">static </em><tt class="descname">to_str</tt><big>(</big><em>class_number</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L55"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS.to_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">to_str</tt><big>(</big><em>class_number</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L52"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.CHARACTER_CLASS.to_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1678,11 +1678,11 @@ by that name exists.</td>
 
 <dl class="class">
 <dt id="hsgame.constants.MINION_TYPE">
-<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">MINION_TYPE</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L71"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.MINION_TYPE" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hsgame.constants.</tt><tt class="descname">MINION_TYPE</tt><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.MINION_TYPE" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="staticmethod">
 <dt id="hsgame.constants.MINION_TYPE.from_str">
-<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>type_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.MINION_TYPE.from_str" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><tt class="descname">from_str</tt><big>(</big><em>type_name</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthstone-simulator/blob/master/hsgame/constants.py#L78"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hsgame.constants.MINION_TYPE.from_str" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">

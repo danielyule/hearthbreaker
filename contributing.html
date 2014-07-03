@@ -304,7 +304,8 @@ constrained by the two copies of any card limitation, so any number can be used.
 four parameters, all of which are classes, rather than instances of those classes.  The first two are the cards used to
 compose the decks of the two players.  If a list is passed into either parameter, then the cards in that list are
 repeated until a deck of thirty is made up.  If only a single card is passed in then the entire deck is made up of
-copies of that card.</p>
+copies of that card.  The method will choose a character class based on the makeup of the cards passed in, or default to
+Mage if none of the cards are class specific.</p>
 <p>The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:</p>
 <p><a class="reference internal" href="hsgame.agents.html#hsgame.agents.basic_agents.DoNothingBot" title="hsgame.agents.basic_agents.DoNothingBot"><tt class="xref py py-class docutils literal"><span class="pre">DoNothingBot</span></tt></a></p>
