@@ -165,3 +165,14 @@ class LavaBurst(Card):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(5), self)
+
+
+class LightningBolt(Card):
+    def __init__(self):
+        super().__init__("Lightning Bolt", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target, overload=1)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(3), self)

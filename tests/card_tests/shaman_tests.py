@@ -344,10 +344,21 @@ class TestShaman(unittest.TestCase):
 
     def test_LavaBurst(self):
         game = generate_game_for(LavaBurst, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
         for turn in range(0, 4):
             game.play_single_turn()
 
         self.assertEqual(30, game.players[1].hero.health)
+
         game.play_single_turn()
         self.assertEqual(25, game.players[1].hero.health)
         self.assertEqual(2, game.players[0].overload)
+
+    def test_LightningBolt(self):
+        game = generate_game_for(LightningBolt, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(27, game.players[1].hero.health)
+        self.assertEqual(1, game.players[0].overload)
