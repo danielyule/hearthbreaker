@@ -10,7 +10,7 @@ class AlAkirTheWindlord(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(3, 5)
-        minion.wind_fury = True
+        minion.windfury = True
         minion.charge = True
         minion.divine_shield = True
         minion.taunt = True
@@ -23,7 +23,7 @@ class DustDevil(MinionCard):
 
     def create_minion(self, player):
         minion = Minion(3, 1)
-        minion.wind_fury = True
+        minion.windfury = True
         player.overload += 2
         return minion
 

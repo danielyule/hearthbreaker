@@ -222,9 +222,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.wind_fury = False
+        self.windfury = False
         #: If this character has used their first windfury attack
-        self.used_wind_fury = False
+        self.used_windfury = False
         #: If this character is currently frozen
         self.frozen = False
         #: If the character was frozen this turn (and so won't be unfrozen before the next turn)
@@ -298,8 +298,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         self.activate_delayed()
         self.trigger("attack_completed")
-        if self.wind_fury and not self.used_wind_fury:
-            self.used_wind_fury = True
+        if self.windfury and not self.used_windfury:
+            self.used_windfury = True
         else:
             self.active = False
         self.stealth = False
@@ -403,7 +403,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("silenced")
         self.temp_attack = 0
         self.immune = False
-        self.wind_fury = False
+        self.windfury = False
         self.frozen = False
         self.frozen_this_turn = False
 

@@ -50,7 +50,7 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Al'Akir the Windlord", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[0].wind_fury)
+        self.assertTrue(game.players[0].minions[0].windfury)
         self.assertTrue(game.players[0].minions[0].charge)
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertTrue(game.players[0].minions[0].taunt)
@@ -61,7 +61,7 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Dust Devil", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[0].wind_fury)
+        self.assertTrue(game.players[0].minions[0].windfury)
         self.assertEqual(2, game.players[0].overload)
 
         game.play_single_turn()
@@ -187,7 +187,7 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
-        self.assertFalse(game.players[0].minions[0].wind_fury)
+        self.assertFalse(game.players[0].minions[0].windfury)
 
         # Windspeaker should be played, giving the boar windfury
         game.play_single_turn()
