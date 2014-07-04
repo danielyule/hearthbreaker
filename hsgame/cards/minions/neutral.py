@@ -259,10 +259,7 @@ class LootHoarder(MinionCard):
                          CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(2, 1)
-        minion.bind("died", draw_card)
-        minion.bind_once("silenced", lambda m: m.unbind("died", draw_card),
-                         minion)
+        minion = Minion(2, 1, deathrattle=draw_card)
         return minion
 
 
@@ -732,5 +729,4 @@ class Abomination(MinionCard):
             for target in hsgame.targeting.find_spell_target(player.game,
                                                              lambda x: True):
                 target.damage(2, self)
-
-        return Minion(4, 4, deathrattle=deal_two_to_all)
+        return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)

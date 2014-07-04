@@ -636,10 +636,11 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 
 class Minion(Character):
-    def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None):
+    def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None,
+                 taunt=False):
         super().__init__(attack, health)
         self.minion_type = minion_type
-        self.taunt = False
+        self.taunt = taunt
         self.game = None
         self.card = None
         self.index = -1
