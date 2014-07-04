@@ -2,7 +2,8 @@ import random
 import unittest
 
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent
+from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
+    PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
@@ -167,3 +168,29 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(4, len(game.current_player.hand))
         self.assertEqual("Stonetusk Boar", game.current_player.hand[3].name)
         self.assertEqual(23, game.current_player.deck.left)
+
+    def test_ExplosiveTrap(self):
+        game = generate_game_for(ExplosiveTrap, StonetuskBoar, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+        self.assertEqual(29, game.other_player.hero.health)
+
+        random.seed(1857)
+        game = generate_game_for(ExplosiveTrap, Frostbolt, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(27, game.other_player.hero.health)

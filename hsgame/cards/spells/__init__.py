@@ -25,7 +25,8 @@ from hsgame.cards.spells.hunter import (
     ArcaneShot,
     BestialWrath,
     Flare,
-    Tracking
+    Tracking,
+    ExplosiveTrap
 )
 
 from hsgame.cards.spells.mage import (

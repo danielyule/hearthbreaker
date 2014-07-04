@@ -1,6 +1,6 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, SecretCard
 
 
 class HuntersMark(Card):
@@ -79,3 +79,23 @@ class Tracking(Card):
             chosen_card = player.agent.choose_option(*cards)
             player.hand.append(chosen_card)
             player.trigger("card_drawn", chosen_card)
+
+
+class ExplosiveTrap(SecretCard):
+    def __init__(self):
+        super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def activate(self, player):
+        player.hero.bind("attacked", self._reveal)
+
+    def deactivate(self, player):
+        player.hero.unbind("attacked", self._reveal)
+
+    def _reveal(self, minion):
+        enemies = minion.game.current_player.minions.copy()
+        enemies.append(minion.game.current_player.hero)
+        for enemy in enemies:
+            enemy.damage(2, None)
+        for enemy in enemies:
+            enemy.activate_delayed()
+        super().reveal()
