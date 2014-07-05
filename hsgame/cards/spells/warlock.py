@@ -14,11 +14,12 @@ class MortalCoil(Card):
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
+        super().use(player, game)
         if self.target.health <= player.effective_spell_damage(1):
-            self.target.damage(player.effective_spell_damage(1), self)
-            player.draw()
+           self.target.damage(player.effective_spell_damage(1), self)
+           player.draw()
         else:
-            self.target.damage(player.effective_spell_damage(1), self)
+           self.target.damage(player.effective_spell_damage(1), self)
             # not sure how necessary this is, making sure damage before
             # draw but need to compare health before dealing damage
 
