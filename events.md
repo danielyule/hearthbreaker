@@ -47,6 +47,8 @@ Events Triggered in hssim
  * health_increased(amount)
  * health_decreased(amount)
  * health_changed
+ * enraged
+ * unenraged
  
 ##Minion (Character)
  * added_to_board(minion)

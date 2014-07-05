@@ -239,6 +239,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.delayed = []
         #: If this character has stealth
         self.stealth = False
+        #: If this character is enraged
+        self.enraged = False
 
     def _turn_complete(self):
         """
@@ -352,6 +354,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             if issubclass(type(attacker), Character):
                 attacker.delayed_trigger("did_damage", amount, self)
             self.trigger("health_changed")
+            if not self.enraged and self.health != self.max_health:
+                self.enraged = True
+                self.trigger("enraged")
             if self.health <= 0:
                 self.die(attacker)
 
@@ -392,6 +397,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.max_health -= amount
         if self.health > self.max_health:
             self.health = self.max_health
+
+        if self.enraged and self.health == self.max_health:
+            self.enraged = False
+            self.trigger("unenraged")
         self.trigger("health_changed")
         self.bind_once('silenced', silence)
 
@@ -415,6 +424,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.health += amount
             if self.health > self.max_health:
                 self.health = self.max_health
+            if self.enraged and self.health == self.max_health:
+                self.enraged = False
+                self.trigger("unenraged")
             self.trigger("health_changed")
 
     def die(self, by):

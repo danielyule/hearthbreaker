@@ -737,11 +737,18 @@ class AmaniBerserker(MinionCard):
         super().__init__("Amani Berserker", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def check_enrage():
-            if minion.health != minion.max_health:
-                minion.change_attack(5 - minion.attack_power)
-            else:
-                minion.change_attack(3 - minion.attack_power)
+        def increase_attack():
+            minion.change_attack(3)
+
+        def decrease_attack():
+            minion.change_attack(-3)
+
+        def silenced():
+            minion.unbind("enraged", increase_attack)
+            minion.unbind("unenraged", decrease_attack)
+
         minion = Minion(2, 3)
-        minion.bind("health_changed", check_enrage)
+        minion.bind("enraged", increase_attack)
+        minion.bind("unenraged", decrease_attack)
+        minion.bind("silenced", silenced)
         return minion

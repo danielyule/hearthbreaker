@@ -349,7 +349,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, len(game.other_player.hand))
 
     def test_AmaniBerserker(self):
-        game = generate_game_for([AmaniBerserker, AbusiveSergeant], ExplosiveTrap,
+        game = generate_game_for([AmaniBerserker, AbusiveSergeant, AmaniBerserker, EarthenRingFarseer], ExplosiveTrap,
                                  PredictableAgentWithoutHeroPower, SpellTestingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
@@ -358,3 +358,15 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[0].attack_power)
         self.assertEqual(5, game.current_player.minions[1].attack_power)
         self.assertEqual(23, game.other_player.hero.health)
+
+        game.current_player.minions[0].heal(2, None)
+        self.assertEqual(2, game.current_player.minions[0].attack_power)
+        game.current_player.minions[0].damage(2, None)
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+
+        game.current_player.minions[1].silence()
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        game.current_player.minions[1].heal(2, None)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        game.current_player.minions[1].damage(2, None)
+        self.assertEqual(2, game.current_player.minions[1].attack_power)
