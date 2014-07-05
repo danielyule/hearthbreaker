@@ -7,7 +7,7 @@ yes,Al'Akir the Windlord,"Windfury, Charge, Divine Shield, Taunt",,Shaman,8,3,5,
 no,Alarm-o-Bot,"At the start of your turn, swap this minion with a random one in your hand.",,,3,0,3,Rare,Minion
 yes,Aldor Peacekeeper,Battlecry: Change an enemy minion's Attack to 1.,,Paladin,3,3,3,Rare,Minion
 no,Alexstrasza,Battlecry: Set a hero's remaining Health to 15.,Dragon,,9,8,8,Legendary,Minion
-no,Amani Berserker,Enrage: +3 Attack,,,2,2,3,Common,Minion
+yes,Amani Berserker,Enrage: +3 Attack,,,2,2,3,Common,Minion
 yes,Ancestral Healing,Restore a minion to full Health and give it Taunt.,,Shaman,0,,,Free,Spell
 yes,Ancestral Spirit,"Choose a minion. When that minion is destroyed, return it to the battlefield.",,Shaman,2,,,Rare,Spell
 no,Ancient Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,4,5,4,Common,Minion

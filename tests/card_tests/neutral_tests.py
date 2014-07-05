@@ -1,5 +1,5 @@
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
-from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent
+from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 import random
@@ -347,3 +347,14 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(5, len(game.other_player.hand))
+
+    def test_AmaniBerserker(self):
+        game = generate_game_for([AmaniBerserker, AbusiveSergeant], ExplosiveTrap,
+                                 PredictableAgentWithoutHeroPower, SpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[1].attack_power)
+        self.assertEqual(23, game.other_player.hero.health)

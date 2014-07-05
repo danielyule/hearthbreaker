@@ -730,3 +730,18 @@ class Abomination(MinionCard):
                                                              lambda x: True):
                 target.damage(2, self)
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
+
+
+class AmaniBerserker(MinionCard):
+    def __init__(self):
+        super().__init__("Amani Berserker", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def check_enrage():
+            if minion.health != minion.max_health:
+                minion.change_attack(5 - minion.attack_power)
+            else:
+                minion.change_attack(3 - minion.attack_power)
+        minion = Minion(2, 3)
+        minion.bind("health_changed", check_enrage)
+        return minion
