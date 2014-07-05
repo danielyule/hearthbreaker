@@ -1,7 +1,8 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform
+from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
+    DefiasRingleader
 from tests.testing_utils import generate_game_for
 
 
@@ -37,6 +38,16 @@ class TestPowers(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(22, game.players[1].hero.health)
+
+    def test_RoguePower(self):
+        game = generate_game_for(DefiasRingleader, MogushanWarden, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(1, game.players[0].hero.weapon.durability)
+        self.assertEqual(29, game.players[1].hero.health)
 
     def test_ShamanPower(self):
         game = generate_game_for(AlAkirTheWindlord, MogushanWarden, PredictableBot, DoNothingBot)

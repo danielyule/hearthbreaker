@@ -13,6 +13,8 @@ def powers(character_class):
         return PriestPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.PALADIN:
         return PaladinPower
+    elif character_class == hsgame.constants.CHARACTER_CLASS.ROGUE:
+        return RoguePower
     elif character_class == hsgame.constants.CHARACTER_CLASS.SHAMAN:
         return ShamanPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.WARLOCK:
@@ -124,6 +126,26 @@ class PaladinPower(Power):
 
         recruit_card = SilverHandRecruit()
         recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
+
+
+class RoguePower(Power):
+    def __init__(self, hero):
+        super().__init__(hero)
+
+    def use(self):
+        class WickedKnife(hsgame.game_objects.WeaponCard):
+            def __init__(self):
+                super().__init__("Wicked Knife", 1, hsgame.constants.CHARACTER_CLASS.ROGUE,
+                                 hsgame.constants.CARD_RARITY.SPECIAL)
+
+            def create_weapon(self, player):
+                weapon = hsgame.game_objects.Weapon(1, 2)
+                return weapon
+
+        super().use()
+
+        knife = WickedKnife().create_weapon(self.hero.player)
+        knife.equip(self.hero.player)
 
 
 class ShamanPower(Power):
