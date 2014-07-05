@@ -1144,7 +1144,7 @@ class Game(Bindable):
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
-            self.cards_played += 1
+            self.current_player.cards_played += 1
             if card.overload != 0:
                 self.current_player.trigger("overloaded")
         else:
