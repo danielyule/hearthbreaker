@@ -305,7 +305,7 @@ yes,Shieldbearer,Taunt,,,1,0,4,Common,Minion
 no,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Common,Spell
 no,SI:7 Agent,Combo: Deal 2 damage.,,Rogue,3,3,3,Rare,Minion
 yes,Silence,Silence a minion.,,Priest,0,,,Common,Spell
-no,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Common,Minion
+yes,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Common,Minion
 yes,Silverback Patriarch,Taunt,Beast,,3,1,4,Common,Minion
 yes,Silvermoon Guardian,Divine Shield,,,4,3,3,Common,Minion
 no,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell

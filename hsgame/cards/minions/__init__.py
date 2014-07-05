@@ -66,7 +66,8 @@ from hsgame.cards.minions.neutral import (
     AbusiveSergeant,
     DarkIronDwarf,
     Abomination,
-    AmaniBerserker
+    AmaniBerserker,
+    SilverHandKnight
 )
 
 from hsgame.cards.minions.druid import (

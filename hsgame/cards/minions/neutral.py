@@ -752,3 +752,20 @@ class AmaniBerserker(MinionCard):
         minion.bind("unenraged", decrease_attack)
         minion.bind("silenced", silenced)
         return minion
+
+
+class SilverHandKnight(MinionCard):
+    def __init__(self):
+        super().__init__("Silver Hand Knight", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_squire(m):
+            class Squire(MinionCard):
+                def __init__(self):
+                    super().__init__("Squire", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(2, 2)
+
+            Squire().summon(player, player.game, m.index)
+        return Minion(4, 4, battlecry=summon_squire)

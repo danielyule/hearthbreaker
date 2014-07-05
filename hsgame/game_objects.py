@@ -585,9 +585,10 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.card = self
         minion.player = player
         minion.game = game
+        minion.index = player.agent.choose_index(self)
         if minion.battlecry is not None:
             minion.battlecry(minion)
-        minion.add_to_board(player.agent.choose_index(self))
+        minion.add_to_board(minion.index)
         player.trigger("minion_played", minion)
 
     def summon(self, player, game, index):
@@ -606,6 +607,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.card = self
             minion.player = player
             minion.game = game
+            minion.index = index
             minion.add_to_board(index)
             player.trigger("minion_summoned", minion)
 
@@ -666,9 +668,10 @@ class Minion(Character):
     def add_to_board(self, index):
         self.player.minions.insert(index, self)
         self.player.spell_damage += self.spell_damage
+        count = 0
         for minion in self.player.minions:
-            if minion.index >= index:
-                minion.index += 1
+            minion.index = count
+            count += 1
         self.index = index
         if self.charge:
             self.active = True

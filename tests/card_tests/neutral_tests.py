@@ -370,3 +370,26 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].attack_power)
         game.current_player.minions[1].damage(2, None)
         self.assertEqual(2, game.current_player.minions[1].attack_power)
+
+    def test_SilverHandKnight(self):
+        game = generate_game_for([OasisSnapjaw, SilverHandKnight, SilverHandKnight], StonetuskBoar, MinionPlayingAgent,
+                                 DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual("Silver Hand Knight", game.current_player.minions[0].card.name)
+        self.assertEqual("Squire", game.current_player.minions[1].card.name)
+
+        def choose_1(max):
+            return 1
+
+        game.players[0].agent.choose_index = choose_1
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual("Silver Hand Knight", game.current_player.minions[0].card.name)
+        self.assertEqual("Silver Hand Knight", game.current_player.minions[1].card.name)
+        self.assertEqual("Squire", game.current_player.minions[2].card.name)
+        self.assertEqual("Squire", game.current_player.minions[3].card.name)
