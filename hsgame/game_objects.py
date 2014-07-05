@@ -977,6 +977,7 @@ class Player(Bindable):
         self.heal_does_damage = False
         self.mana_filters = []
         self.overload = 0
+        self.cards_played = 0
 
     def __str__(self):  # pragma: no cover
         return "Player: " + self.name
@@ -1096,6 +1097,7 @@ class Game(Bindable):
             secret.activate(self.other_player)
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
+        self.current_player.cards_played = 0
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
@@ -1142,6 +1144,7 @@ class Game(Bindable):
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
+            self.cards_played += 1
             if card.overload != 0:
                 self.current_player.trigger("overloaded")
         else:
