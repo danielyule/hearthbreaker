@@ -876,7 +876,8 @@ class Weapon(Bindable):
         if self.player.hero.weapon is not None:
             self.player.hero.weapon.destroy()
         self.player.hero.weapon = self
-        self.player.hero.change_temp_attack(self.attack_power)
+        if self.player.game.current_player is self.player:
+            self.player.hero.change_temp_attack(self.attack_power)
 
 
 class Deck:
