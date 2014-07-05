@@ -108,6 +108,10 @@ from hsgame.cards.minions.priest import (
     TempleEnforcer
 )
 
+from hsgame.cards.minions.rogue import (
+    DefiasRingleader
+)
+
 from hsgame.cards.minions.shaman import (
     AlAkirTheWindlord,
     DustDevil,

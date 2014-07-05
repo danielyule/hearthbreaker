@@ -1144,7 +1144,6 @@ class Game(Bindable):
         self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
-            self.current_player.cards_played += 1
             if card.overload != 0:
                 self.current_player.trigger("overloaded")
         else:
@@ -1156,6 +1155,7 @@ class Game(Bindable):
         if not card.cancel:
             card.use(self.current_player, self)
             self.current_player.trigger("card_used", card)
+            self.current_player.cards_played += 1
             for minion in self.delayed_minions:
                 minion.activate_delayed()
 
