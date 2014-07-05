@@ -330,12 +330,27 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.player.game.delayed_minions.append(self)
 
     def activate_delayed(self):
+        """
+        Activate any events that were delayed.
+
+        :see: :meth:`delayed_trigger`
+        """
         for delayed in self.delayed:
             self.trigger(delayed['event'], *delayed['args'])
 
         self.delayed = []
 
     def damage(self, amount, attacker):
+        """
+        Deal damage to this :class:`Character`.  This method uses the ``attacker`` parameter to determine the nature
+        of the damage taken.  If the attacker is a :class:`Character`, then it is assumed to be a physical attack.
+        If attacker is a :class:`SpellCard`, then it assumes a spell attack.  If ``None``, then something else
+        (hero ability or battlecry).  This method will also trigger the various events associated with taking damage
+        or dying.
+
+        :param int amount: The amount of damage done (should be positive)
+        :param Object attacker: The :class:`Character`or :class:`SpellCard that did the damage or ``None``.
+        """
         if self.dead:
             return
         if not self.immune:
