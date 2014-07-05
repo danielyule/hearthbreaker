@@ -371,6 +371,25 @@ class TestCommon(unittest.TestCase):
         game.current_player.minions[1].damage(2, None)
         self.assertEqual(2, game.current_player.minions[1].attack_power)
 
+    def test_AmaniBerserkerWithDireWolf(self):
+        game = generate_game_for([DireWolfAlpha, AmaniBerserker], StonetuskBoar, MinionPlayingAgent,
+                                 DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        game.current_player.minions[0].damage(2, None)
+        self.assertEqual(6, game.current_player.minions[0].attack_power)
+        game.current_player.minions[1].silence()
+        self.assertEqual(5, game.current_player.minions[0].attack_power)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(6, game.current_player.minions[1].attack_power)
+        game.current_player.minions[1].heal(2, None)
+        self.assertEqual(3, game.current_player.minions[1].attack_power)
+
     def test_SilverHandKnight(self):
         game = generate_game_for([OasisSnapjaw, SilverHandKnight, SilverHandKnight], StonetuskBoar, MinionPlayingAgent,
                                  DoNothingBot)
