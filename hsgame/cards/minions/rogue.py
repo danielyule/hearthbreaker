@@ -1,6 +1,7 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
+from hsgame.cards.battlecries import give_stealth
 
 
 class DefiasRingleader(MinionCard):
@@ -51,4 +52,14 @@ class Kidnapper(MinionCard):
                     m.card.target.player.hand.append(m.card)
 
         minion = Minion(5, 3, battlecry=combo)
+        return minion
+
+
+class MasterOfDisguise(MinionCard):
+    def __init__(self):
+        super().__init__("Master of Disguise", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        minion = Minion(4, 4, battlecry=give_stealth)
         return minion

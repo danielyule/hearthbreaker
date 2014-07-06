@@ -63,6 +63,11 @@ def give_divine_shield(minion):
         minion.card.target.divine_shield = True
 
 
+def give_stealth(minion):
+    if minion.card.target is not None:
+        minion.card.target.stealth = True
+
+
 def gain_one_health_for_each_card_in_hand(minion):
     minion.increase_health(len(minion.player.hand))
 

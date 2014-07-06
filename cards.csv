@@ -222,7 +222,7 @@ yes,Mana Wyrm,"Whenever you cast a spell, gain +1 Attack.",,Mage,1,1,3,Common,Mi
 yes,Mark of Nature,Choose One - Give a minion +4 Attack; or +4 Health and Taunt.,,Druid,3,,,Common,Spell
 yes,Mark of the Wild,Give a minion Taunt and +2/+2. (+2 Attack/+2 Health),,Druid,2,,,Free,Spell
 yes,Mass Dispel,Silence all enemy minions. Draw a card.,,Priest,4,,,Rare,Spell
-no,Master of Disguise,Battlecry: Give a friendly minion Stealth.,,Rogue,4,4,4,Rare,Minion
+yes,Master of Disguise,Battlecry: Give a friendly minion Stealth.,,Rogue,4,4,4,Rare,Minion
 no,Master Swordsmith,"At the end of your turn, give another random friendly minion +1 Attack.",,,2,1,3,Rare,Minion
 no,Millhouse Manastorm,Battlecry: Enemy spells cost (0) next turn.,,,2,4,4,Legendary,Minion
 yes,Mind Blast,Deal 5 damage to the enemy hero.,,Priest,2,,,Free,Spell

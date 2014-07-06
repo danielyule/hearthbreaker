@@ -67,6 +67,21 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(10, len(game.players[1].hand))
 
+    def test_MasterOfDisguise(self):
+        game = generate_game_for([StonetuskBoar, MasterOfDisguise], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].stealth)
+
+        # Master of Disguise should be played, targeting the boar.
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+        self.assertTrue(game.players[0].minions[1].stealth)
+
     def test_Backstab(self):
         game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 
