@@ -16,10 +16,10 @@ class MortalCoil(Card):
     def use(self, player, game):
         super().use(player, game)
         if self.target.health <= player.effective_spell_damage(1) and not self.target.divine_shield:
-           self.target.damage(player.effective_spell_damage(1), self)
-           player.draw()
+            self.target.damage(player.effective_spell_damage(1), self)
+            player.draw()
         else:
-           self.target.damage(player.effective_spell_damage(1), self)
+            self.target.damage(player.effective_spell_damage(1), self)
             # not sure how necessary this is, making sure damage before
             # draw but need to compare health before dealing damage
 
@@ -215,7 +215,7 @@ class Corruption(Card):
 
         def remove_minion():
             game.remove_minion(self.target, self.target.player)
-			
+
         player.bind_once("turn_started", remove_minion)
         self.target.bind_once("silenced",
                               lambda minion: player.unbind("turn_started",

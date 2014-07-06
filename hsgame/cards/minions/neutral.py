@@ -729,11 +729,10 @@ class Abomination(MinionCard):
             for target in hsgame.targeting.find_spell_target(player.game,
                                                              lambda x: True):
                 target.damage(2, self)
+
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
 
-        return Minion(4, 4, deathrattle=deal_two_to_all)
 
-		
 class FenCreeper(MinionCard):
     def __init__(self):
         super().__init__("Fen Creeper", 5, CHARACTER_CLASS.ALL,
@@ -743,7 +742,7 @@ class FenCreeper(MinionCard):
         minion = Minion(3, 6)
         minion.taunt = True
         return minion
-		
+
 
 class VentureCoMercenary(MinionCard):
     def __init__(self):
@@ -763,7 +762,7 @@ class VentureCoMercenary(MinionCard):
                          lambda: player.mana_filters.remove(filter))
         player.mana_filters.append(filter)
         return minion
-		
+
 
 class AmaniBerserker(MinionCard):
     def __init__(self):
@@ -801,4 +800,5 @@ class SilverHandKnight(MinionCard):
                     return Minion(2, 2)
 
             Squire().summon(player, player.game, m.index)
+
         return Minion(4, 4, battlecry=summon_squire)
