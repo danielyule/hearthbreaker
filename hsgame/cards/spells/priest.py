@@ -85,7 +85,7 @@ class InnerFire(Card):
         # This will increase/decrease a minions attack to its current health
         # It will set the attack to its current health, not max health
         # (source: http://www.hearthhead.com/card=376/inner-fire#comments:id=1931155)
-        delta = self.target.health - self.target.attack_power
+        delta = self.target.health - self.target.calculate_attack()
         self.target.change_attack(delta)
 
 
@@ -190,7 +190,7 @@ class ShadowMadness(Card):
         super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE,
                          hsgame.targeting.find_enemy_minion_spell_target,
-                         lambda target: target.attack_power <= 3 and target.spell_targetable())
+                         lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
         def unbind_turn_ended():
@@ -220,7 +220,7 @@ class ShadowWordDeath(Card):
         super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target,
-                         lambda target: target.attack_power >= 5 and target.spell_targetable())
+                         lambda target: target.calculate_attack() >= 5 and target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -233,7 +233,7 @@ class ShadowWordPain(Card):
         super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target,
-                         lambda target: target.attack_power <= 3 and target.spell_targetable())
+                         lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)

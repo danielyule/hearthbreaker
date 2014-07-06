@@ -82,9 +82,9 @@ class TestShaman(unittest.TestCase):
 
         # The minions to either side should have their attack increased
         self.assertEqual(4, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].attack_power)
-        self.assertEqual(3, game.players[0].minions[2].attack_power)
-        self.assertEqual(1, game.players[0].minions[3].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[3].calculate_attack())
 
         # When removing the minion at index 0, we should not get an error
         game.players[0].minions[0].die(None)
@@ -94,11 +94,11 @@ class TestShaman(unittest.TestCase):
         # and its attack should be increased
         game.players[0].minions[1].die(None)
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[1].attack_power)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
 
         # Silencing this minion should have no effect on its attack
         game.players[0].minions[1].silence()
-        self.assertEqual(3, game.players[0].minions[1].attack_power)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
 
         # We should be able to add a boar on either side of the wolf, and their attack should be increased
         # The attack of the boar which used to be next to the wolf should decrease
@@ -106,25 +106,25 @@ class TestShaman(unittest.TestCase):
         boar.summon(game.players[0], game, 0)
         boar.summon(game.players[0], game, 2)
         self.assertEqual(4, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].attack_power)
-        self.assertEqual(3, game.players[0].minions[2].attack_power)
-        self.assertEqual(1, game.players[0].minions[3].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[3].calculate_attack())
 
         # Add a new boar on the left of the totem since we haven't tested that yet
         boar.summon(game.players[0], game, 1)
         self.assertEqual(5, len(game.players[0].minions))
-        self.assertEqual(1, game.players[0].minions[0].attack_power)
-        self.assertEqual(3, game.players[0].minions[1].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
 
         game.players[0].minions[1].die(None)
         self.assertEqual(4, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
 
         # If the totem is silenced, then the boars to either side should no longer have increased attack
         game.players[0].minions[1].silence()
-        self.assertEqual(1, game.players[0].minions[0].attack_power)
-        self.assertEqual(1, game.players[0].minions[2].attack_power)
-        self.assertEqual(1, game.players[0].minions[3].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[3].calculate_attack())
 
     def test_ManaTideTotem(self):
         game = generate_game_for([ManaTideTotem, WarGolem], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
@@ -157,25 +157,25 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Unbound Elemental", game.players[0].minions[0].card.name)
-        self.assertEqual(2, game.players[0].minions[0].attack_power)
-        self.assertEqual(4, game.players[0].minions[0].max_health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].calculate_max_health())
 
         # One Dust Devil should be played, giving the Unbound Elemental +1/+1
         game.play_single_turn()
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[-1].attack_power)
-        self.assertEqual(5, game.players[0].minions[-1].max_health)
+        self.assertEqual(3, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].calculate_max_health())
         # Test the silence
         game.players[0].minions[-1].silence()
-        self.assertEqual(2, game.players[0].minions[-1].attack_power)
-        self.assertEqual(4, game.players[0].minions[-1].max_health)
+        self.assertEqual(2, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())
 
         # Another Dust Devil, nothing should happen because of silence
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].minions[-1].attack_power)
-        self.assertEqual(4, game.players[0].minions[-1].max_health)
+        self.assertEqual(2, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())
 
     def test_Windspeaker(self):
         game = generate_game_for([StonetuskBoar, Windspeaker], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
@@ -249,7 +249,7 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(4, game.players[1].hero.health)
         # Attack power should be back to normal
-        self.assertEqual(1, game.players[0].minions[0].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
 
     def test_EarthShock(self):
         game = generate_game_for(EarthShock, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
@@ -287,13 +287,13 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(2, len(game.players[0].minions))
 
-        self.assertEqual(2, game.players[0].minions[0].attack_power)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].taunt)
         self.assertEqual("Spirit Wolf", game.players[0].minions[0].card.name)
         self.assertEqual(2, game.players[0].minions[0].card.mana)
 
-        self.assertEqual(2, game.players[0].minions[1].attack_power)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
         self.assertEqual(3, game.players[0].minions[1].health)
         self.assertTrue(game.players[0].minions[1].taunt)
         self.assertEqual("Spirit Wolf", game.players[0].minions[1].card.name)
@@ -331,14 +331,14 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertFalse(game.players[0].minions[0].taunt)
-        self.assertEqual(4, game.players[0].minions[0].attack_power)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(5, game.players[0].minions[0].health)
         self.assertEqual("Chillwind Yeti", game.players[0].minions[0].card.name)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertTrue(game.players[0].minions[0].taunt)
-        self.assertEqual(0, game.players[0].minions[0].attack_power)
+        self.assertEqual(0, game.players[0].minions[0].calculate_attack())
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual("Frog", game.players[0].minions[0].card.name)
         self.assertEqual(MINION_TYPE.BEAST, game.players[0].minions[0].minion_type)
@@ -399,9 +399,9 @@ class TestShaman(unittest.TestCase):
         # Hero power and Totemic Might should be played
         game.play_single_turn()
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
         self.assertEqual("Stoneclaw Totem", game.players[0].minions[1].card.name)
-        self.assertEqual(4, game.players[0].minions[1].max_health)
+        self.assertEqual(4, game.players[0].minions[1].calculate_max_health())
 
     def test_Windfury(self):
         game = generate_game_for(Windfury, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
@@ -427,7 +427,7 @@ class TestShaman(unittest.TestCase):
         # Doomhammer should be played
         game.play_single_turn()
         self.assertTrue(game.players[0].hero.windfury)
-        self.assertEqual(2, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(6, game.players[0].hero.weapon.durability)
         self.assertEqual(2, game.players[0].overload)
         self.assertEqual(26, game.players[1].hero.health)
@@ -438,6 +438,6 @@ class TestShaman(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
         self.assertEqual(1, game.players[0].overload)

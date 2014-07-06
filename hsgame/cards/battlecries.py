@@ -55,7 +55,7 @@ def guardian_of_kings(minion):
 def change_attack_to_one(minion):
     if minion.card.target is not None:
         # This will increase/decrease a minions attack to 1
-        minion.card.target.change_attack(1 - minion.card.target.attack_power)
+        minion.card.target.change_attack(1 - minion.card.target.calculate_attack())
 
 
 def give_divine_shield(minion):

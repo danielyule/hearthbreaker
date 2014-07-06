@@ -8,15 +8,9 @@ class TimberWolf(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        def increase_attack(m):
-            m.attack_power += 1
-
-        def decrease_attack(m):
-            m.attack_power -= 1
 
         def add_effect(m, index):
-            m.add_board_effect(increase_attack, decrease_attack,
-                               lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.BEAST)
+            m.add_aura(1, 0, lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.BEAST)
 
         minion = Minion(1, 1, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)

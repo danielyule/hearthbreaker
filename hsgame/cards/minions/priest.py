@@ -30,7 +30,7 @@ class CabalShadowPriest(MinionCard):
         super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.EPIC,
                          hsgame.targeting.find_enemy_minion_battlecry_target,
-                         lambda target: target.attack_power <= 2)
+                         lambda target: target.calculate_attack() <= 2)
 
     def create_minion(self, player):
         return Minion(4, 5, battlecry=take_control_of_minion)
@@ -43,26 +43,14 @@ class Lightspawn(MinionCard):
 
     def create_minion(self, player):
         def attack_equal_to_health():
-            minion.unbind("attack_changed", prevent_attack_change)
-            minion.change_attack(minion.health - minion.attack_power)
-            minion.bind("attack_changed", prevent_attack_change)
-
-        def prevent_attack_change(amount):
-            nonlocal attack_delta
-            minion.attack_power -= amount
-            attack_delta += amount
+            return minion.health
 
         def silence():
-            minion.unbind("health_changed", attack_equal_to_health)
-            minion.unbind("attack_changed", prevent_attack_change)
-            if attack_delta > 0:
-                minion.attack_power = attack_delta
+            minion.calculate_attack = old_calculate
 
-        attack_delta = 0
         minion = Minion(0, 5)
-        minion.change_attack(minion.health - minion.attack_power)
-        minion.bind("health_changed", attack_equal_to_health)
-        minion.bind("attack_changed", prevent_attack_change)
+        old_calculate = minion.calculate_attack
+        minion.calculate_attack = attack_equal_to_health
         minion.bind_once("silenced", silence)
         return minion
 
@@ -76,7 +64,7 @@ class Lightwell(MinionCard):
         def heal_damaged_friendly_character():
             targets = hsgame.targeting.find_friendly_spell_target(player.game,
                                                                   lambda character:
-                                                                  character.health != character.max_health)
+                                                                  character.health != character.calculate_max_health())
             if len(targets) != 0:
                 targets[player.game.random(0, len(targets) - 1)].heal(player.effective_heal_power(3), minion)
 

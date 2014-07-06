@@ -329,7 +329,7 @@ no,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Free,Minion
 yes,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon
 yes,Stormpike Commando,Battlecry: Deal 2 damage.,,,5,4,2,Common,Minion
-no,Stormwind Champion,Your other minions have +1/+1.,,,7,6,6,Common,Minion
+yes,Stormwind Champion,Your other minions have +1/+1.,,,7,6,6,Common,Minion
 yes,Stormwind Knight,Charge,,,4,2,5,Common,Minion
 yes,Stranglethorn Tiger,Stealth,Beast,,5,5,5,Common,Minion
 yes,Succubus,Battlecry: Discard a random card.,Demon,Warlock,2,4,3,Free,Minion

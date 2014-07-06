@@ -25,7 +25,7 @@ class BlessedChampion(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.change_attack(self.target.attack_power)
+        self.target.change_attack(self.target.calculate_attack())
 
 
 class BlessingOfKings(Card):
@@ -107,7 +107,7 @@ class Equality(Card):
         targets.extend(player.minions)
 
         for minion in targets:
-            minion.decrease_health(minion.max_health - 1)
+            minion.decrease_health(minion.base_health - 1)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
@@ -172,7 +172,7 @@ class Humility(Card):
         super().use(player, game)
 
         # This will increase/decrease a minions attack to 1
-        self.target.change_attack(1 - self.target.attack_power)
+        self.target.change_attack(1 - self.target.calculate_attack())
 
 
 class LayOnHands(Card):
@@ -252,6 +252,8 @@ class Redemption(SecretCard):
             resurrection = minion.card.create_minion(player)
             resurrection.index = len(player.minions)
             resurrection.health = 1
+            resurrection.player = player
+            resurrection.game = player.game
             player.minions.append(resurrection)
             player.game.trigger("minion_added", resurrection)
             super().reveal()
@@ -272,7 +274,7 @@ class Repentance(SecretCard):
 
     def _reveal(self, minion, player):
         if minion.player is not player:
-            minion.decrease_health(minion.max_health - 1)
+            minion.decrease_health(minion.calculate_max_health() - 1)
             super().reveal()
         else:
             self.activate(player)

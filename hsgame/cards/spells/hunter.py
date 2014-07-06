@@ -11,7 +11,7 @@ class HuntersMark(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.decrease_health(self.target.max_health - 1)
+        self.target.decrease_health(self.target.base_health - 1)
 
 
 class ArcaneShot(Card):

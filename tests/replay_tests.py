@@ -64,5 +64,5 @@ class TestReplay(unittest.TestCase):
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")
         self.assertEqual(panther.health, 3)
-        self.assertEqual(panther.attack_power, 4)
+        self.assertEqual(panther.calculate_attack(), 4)
         self.assertEqual(panther.index, 0)

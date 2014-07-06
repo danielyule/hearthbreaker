@@ -88,15 +88,15 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(3, game.other_player.minions[0].attack_power)
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
         self.assertEqual(3, game.other_player.minions[0].health)
-        self.assertEqual(3, game.other_player.minions[0].max_health)
+        self.assertEqual(3, game.other_player.minions[0].calculate_max_health())
 
         # Test that this spell is being silenced properly as well
         game.other_player.minions[0].silence()
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
     def test_PowerOfTheWild(self):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
@@ -111,11 +111,11 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(2, game.current_player.minions[0].attack_power)
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
         self.assertEqual(2, game.current_player.minions[0].health)
-        self.assertEqual(2, game.current_player.minions[0].max_health)
-        self.assertEqual(2, game.current_player.minions[1].attack_power)
-        self.assertEqual(2, game.current_player.minions[1].max_health)
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
 
         # This is a test of the "Summon Panther" option of the Power of the Wild Card
 
@@ -135,8 +135,8 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual("Panther", game.current_player.minions[2].card.__class__.__name__)
-        self.assertEqual(3, game.current_player.minions[2].attack_power)
-        self.assertEqual(2, game.current_player.minions[2].max_health)
+        self.assertEqual(3, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
 
     def test_WildGrowth(self):
         game = generate_game_for(WildGrowth, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
@@ -210,7 +210,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(5, game.other_player.minions[0].attack_power)
+        self.assertEqual(5, game.other_player.minions[0].calculate_attack())
 
         def mock_choose(*options):
             return options[1]
@@ -229,7 +229,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(5, game.other_player.minions[0].max_health)
+        self.assertEqual(5, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(5, game.other_player.minions[0].health)
         self.assertTrue(game.other_player.minions[0].taunt)
 
@@ -264,7 +264,7 @@ class TestDruid(unittest.TestCase):
         # And make sure that it went down again
         self.assertEqual(0, game.current_player.minions[0].temp_attack)
         self.assertEqual(0, game.current_player.minions[1].temp_attack)
-        self.assertEqual(0, game.current_player.hero.attack_power)
+        self.assertEqual(0, game.current_player.hero.calculate_attack())
 
     def test_Bite(self):
         testing_env = self
@@ -289,7 +289,7 @@ class TestDruid(unittest.TestCase):
         game = SavedGame("tests/replays/card_tests/SoulOfTheForest.rep")
         game.start()
         self.assertEqual(2, len(game.other_player.minions))
-        self.assertEqual(2, game.other_player.minions[1].attack_power)
+        self.assertEqual(2, game.other_player.minions[1].calculate_attack())
         self.assertEqual(2, game.other_player.minions[1].health)
         self.assertEqual("Treant", game.other_player.minions[1].card.name)
 
@@ -380,8 +380,8 @@ class TestDruid(unittest.TestCase):
         game.start()
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(4, game.other_player.minions[0].attack_power)
-        self.assertEqual(6, game.other_player.minions[0].max_health)
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(2, game.other_player.minions[0].health)
         self.assertTrue(game.other_player.minions[0].taunt)
 
@@ -486,9 +486,9 @@ class TestDruid(unittest.TestCase):
             self.assertEqual(3, len(game.current_player.minions))
 
             for minion in game.current_player.minions:
-                self.assertEqual(2, minion.attack_power)
+                self.assertEqual(2, minion.calculate_attack())
                 self.assertEqual(2, minion.health)
-                self.assertEqual(2, minion.max_health)
+                self.assertEqual(2, minion.calculate_max_health())
                 self.assertTrue(minion.charge)
                 self.assertEqual("Treant", minion.card.name)
 
@@ -543,7 +543,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual("Ancient of Lore", game.current_player.minions[0].card.name)
 
         random.seed(1857)
@@ -568,7 +568,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(10, len(game.current_player.hand))
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual("Ancient of Lore", game.current_player.minions[0].card.name)
 
     def test_AncientOfWar(self):
@@ -589,9 +589,9 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual(10, game.current_player.minions[0].health)
-        self.assertEqual(10, game.current_player.minions[0].max_health)
+        self.assertEqual(10, game.current_player.minions[0].calculate_max_health())
         self.assertTrue(game.current_player.minions[0].taunt)
         self.assertEqual("Ancient of War", game.current_player.minions[0].card.name)
         self.assertEqual(5, len(game.other_player.minions))
@@ -600,7 +600,7 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(6, len(game.current_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        self.assertEqual(5, game.other_player.minions[0].max_health)
+        self.assertEqual(5, game.other_player.minions[0].calculate_max_health())
         self.assertFalse(game.other_player.minions[0].taunt)
 
         random.seed(1857)
@@ -622,9 +622,9 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(10, game.current_player.minions[0].attack_power)
+        self.assertEqual(10, game.current_player.minions[0].calculate_attack())
         self.assertEqual(5, game.current_player.minions[0].health)
-        self.assertEqual(5, game.current_player.minions[0].max_health)
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
         self.assertFalse(game.current_player.minions[0].taunt)
         self.assertEqual("Ancient of War", game.current_player.minions[0].card.name)
         self.assertEqual(5, len(game.other_player.minions))
@@ -633,8 +633,8 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(6, len(game.current_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        self.assertEqual(5, game.other_player.minions[0].max_health)
-        self.assertEqual(5, game.other_player.minions[0].attack_power)
+        self.assertEqual(5, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(5, game.other_player.minions[0].calculate_attack())
         self.assertFalse(game.other_player.minions[0].taunt)
 
     def test_IronbarkProtector(self):
@@ -657,9 +657,9 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(8, game.current_player.minions[0].attack_power)
+        self.assertEqual(8, game.current_player.minions[0].calculate_attack())
         self.assertEqual(8, game.current_player.minions[0].health)
-        self.assertEqual(8, game.current_player.minions[0].max_health)
+        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
         self.assertTrue(game.current_player.minions[0].taunt)
         self.assertEqual("Ironbark Protector", game.current_player.minions[0].card.name)
         self.assertEqual(6, len(game.other_player.minions))
@@ -693,23 +693,23 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(2, len(game.other_player.minions))
         for minion in game.other_player.minions:
-            self.assertEqual(7, minion.attack_power)
+            self.assertEqual(7, minion.calculate_attack())
             self.assertEqual(7, minion.health)
-            self.assertEqual(7, minion.max_health)
+            self.assertEqual(7, minion.calculate_max_health())
         game.play_single_turn()
 
         self.assertEqual(3, len(game.current_player.minions))
 
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual(8, game.current_player.minions[0].health)
-        self.assertEqual(8, game.current_player.minions[0].max_health)
+        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
         self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
 
         for minion_index in range(1, 3):
             minion = game.current_player.minions[minion_index]
-            self.assertEqual(9, minion.attack_power)
+            self.assertEqual(9, minion.calculate_attack())
             self.assertEqual(9, minion.health)
-            self.assertEqual(9, minion.max_health)
+            self.assertEqual(9, minion.calculate_max_health())
 
         game.players[1].agent.choose_option = Mock(side_effect=lambda stats, summon: summon)
 
@@ -718,19 +718,19 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(6, len(game.current_player.minions))
 
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual(8, game.current_player.minions[0].health)
-        self.assertEqual(8, game.current_player.minions[0].max_health)
+        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
         self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
 
-        self.assertEqual(2, game.current_player.minions[4].attack_power)
+        self.assertEqual(2, game.current_player.minions[4].calculate_attack())
         self.assertEqual(2, game.current_player.minions[4].health)
-        self.assertEqual(2, game.current_player.minions[4].max_health)
+        self.assertEqual(2, game.current_player.minions[4].calculate_max_health())
         self.assertTrue(game.current_player.minions[4].taunt)
         self.assertEqual("Treant", game.current_player.minions[4].card.name)
 
-        self.assertEqual(2, game.current_player.minions[5].attack_power)
+        self.assertEqual(2, game.current_player.minions[5].calculate_attack())
         self.assertEqual(2, game.current_player.minions[5].health)
-        self.assertEqual(2, game.current_player.minions[5].max_health)
+        self.assertEqual(2, game.current_player.minions[5].calculate_max_health())
         self.assertTrue(game.current_player.minions[5].taunt)
         self.assertEqual("Treant", game.current_player.minions[5].card.name)

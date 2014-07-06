@@ -149,17 +149,9 @@ class DireWolfAlpha(MinionCard):
                          CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def increase_attack(m):
-            m.attack_power += 1
-            m.trigger("attack_changed", 1)
-
-        def decrease_attack(m):
-            m.attack_power -= 1
-            m.trigger("attack_changed", -1)
 
         def add_effect(m, index):
-            m.add_board_effect(increase_attack, decrease_attack,
-                               lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
+            m.add_aura(1, 0, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
 
         minion = Minion(2, 2, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)
@@ -802,3 +794,17 @@ class SilverHandKnight(MinionCard):
             Squire().summon(player, player.game, m.index)
 
         return Minion(4, 4, battlecry=summon_squire)
+
+
+class StormwindChampion(MinionCard):
+    def __init__(self):
+        super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+
+        def add_effect(m, index):
+            m.add_aura(1, 1, lambda mini: mini is not minion)
+
+        minion = Minion(6, 6)
+        minion.bind("added_to_board", add_effect)
+        return minion

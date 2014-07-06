@@ -52,17 +52,9 @@ class FlametongueTotem(MinionCard):
         super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def increase_attack(m):
-            m.attack_power += 2
-            m.trigger("attack_changed", 2)
-
-        def decrease_attack(m):
-            m.attack_power -= 2
-            m.trigger("attack_changed", -2)
 
         def add_effect(m, index):
-            m.add_board_effect(increase_attack, decrease_attack,
-                               lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
+            m.add_aura(2, 0, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
 
         minion = Minion(0, 3, MINION_TYPE.TOTEM)
         minion.bind("added_to_board", add_effect)

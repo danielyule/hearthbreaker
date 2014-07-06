@@ -44,7 +44,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(2, game.other_player.minions[0].max_health)
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(27, game.other_player.hero.health)
 
         return game
@@ -59,7 +59,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertFalse(game.other_player.hero.frozen)
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
         self.assertEqual(6, game.current_player.minions[0].health)
         self.assertEqual("Water Elemental", game.current_player.minions[0].card.name)
 
@@ -120,42 +120,42 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
         self.assertEqual("Mana Wyrm", game.current_player.minions[0].card.name)
 
         game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(2, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
-        self.assertEqual(2, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
         self.assertEqual(3, game.current_player.minions[1].health)
-        self.assertEqual(3, game.current_player.minions[1].max_health)
+        self.assertEqual(3, game.current_player.minions[1].calculate_max_health())
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
-        self.assertEqual(5, game.current_player.minions[1].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())
         self.assertEqual(3, game.current_player.minions[1].health)
-        self.assertEqual(3, game.current_player.minions[1].max_health)
+        self.assertEqual(3, game.current_player.minions[1].calculate_max_health())
 
     def test_MirrorImage(self):
         game = generate_game_for(MirrorImage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
-        self.assertEqual(0, game.current_player.minions[0].attack_power)
+        self.assertEqual(0, game.current_player.minions[0].calculate_attack())
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertTrue(game.current_player.minions[0].taunt)
         self.assertEqual("Mirror Image", game.current_player.minions[0].card.name)
         self.assertEqual(0, game.current_player.minions[0].card.mana)
 
-        self.assertEqual(0, game.current_player.minions[1].attack_power)
+        self.assertEqual(0, game.current_player.minions[1].calculate_attack())
         self.assertEqual(2, game.current_player.minions[1].health)
         self.assertTrue(game.current_player.minions[1].taunt)
         self.assertEqual("Mirror Image", game.current_player.minions[1].card.name)
@@ -210,7 +210,7 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual("Sorcerer's Apprentice", game.current_player.minions[0].card.name)
 
@@ -328,7 +328,7 @@ class TestMage(unittest.TestCase):
         # The moonfire should have been re-directed to the Spellbender, which should have taken one damage
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual("Spellbender", game.other_player.minions[0].card.name)
 
         # Now make sure it doesn't activate when a non-targeted spell is used
@@ -394,28 +394,28 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(5, game.current_player.minions[0].attack_power)
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual(5, game.current_player.minions[0].health)
-        self.assertEqual(5, game.current_player.minions[0].max_health)
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(7, game.current_player.minions[0].attack_power)
+        self.assertEqual(7, game.current_player.minions[0].calculate_attack())
         self.assertEqual(7, game.current_player.minions[0].health)
-        self.assertEqual(7, game.current_player.minions[0].max_health)
+        self.assertEqual(7, game.current_player.minions[0].calculate_max_health())
 
         game.current_player.minions[0].silence()
 
-        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
 
         # Test when the player has no secrets at all
         random.seed(1857)
@@ -425,9 +425,9 @@ class TestMage(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(3, game.current_player.minions[0].attack_power)
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[0].health)
-        self.assertEqual(3, game.current_player.minions[0].max_health)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
 
     def test_ConeOfCold(self):
         game = generate_game_for(ConeOfCold, [StonetuskBoar, BloodfenRaptor, BloodfenRaptor], SpellTestingAgent,
@@ -479,14 +479,14 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertTrue(game.current_player.minions[0].taunt)
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(7, game.current_player.minions[0].health)
         self.assertEqual("Mogu'shan Warden", game.current_player.minions[0].card.name)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertFalse(game.other_player.minions[0].taunt)
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual("Sheep", game.other_player.minions[0].card.name)
         self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].minion_type)

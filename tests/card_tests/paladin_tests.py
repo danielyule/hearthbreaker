@@ -35,15 +35,15 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 9):
             game.play_single_turn()
 
-        self.assertEqual(2, game.other_player.minions[0].attack_power)
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
         # Test that this spell is being silenced properly as well
         game.other_player.minions[0].silence()
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
     def test_BlessingOfKings(self):
         game = generate_game_for(BlessingOfKings, StonetuskBoar, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
@@ -51,15 +51,15 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 7):
             game.play_single_turn()
 
-        self.assertEqual(5, game.other_player.minions[0].attack_power)
+        self.assertEqual(5, game.other_player.minions[0].calculate_attack())
         self.assertEqual(5, game.other_player.minions[0].health)
-        self.assertEqual(5, game.other_player.minions[0].max_health)
+        self.assertEqual(5, game.other_player.minions[0].calculate_max_health())
 
         # Test that this spell is being silenced properly as well
         game.other_player.minions[0].silence()
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
     def test_BlessingOfMight(self):
         game = generate_game_for(StonetuskBoar, BlessingOfMight, MinionPlayingAgent, EnemyMinionSpellTestingAgent)
@@ -67,15 +67,15 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertEqual(4, game.other_player.minions[0].attack_power)
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
         # Test that this spell is being silenced properly as well
         game.other_player.minions[0].silence()
-        self.assertEqual(1, game.other_player.minions[0].attack_power)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
         self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].max_health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
     def test_BlessingOfWisdom(self):
         game = SavedGame("tests/replays/card_tests/BlessingOfWisdom.rep")
@@ -145,23 +145,23 @@ class TestPaladin(unittest.TestCase):
         # Make sure there's a minion on the playfield
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, game.players[0].minions[0].health)
-        self.assertEqual(7, game.players[0].minions[0].max_health)
+        self.assertEqual(7, game.players[0].minions[0].calculate_max_health())
         game.play_single_turn()  # Equality should be played this turn
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
         # Test it again to make sure the minion stays at 1 health
         game.play_single_turn()  # A new minion should be played
         game.play_single_turn()  # And Equality should be played here
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[0].minions[1].health)
-        self.assertEqual(1, game.players[0].minions[1].max_health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_max_health())
         # Test to ensure that silencing works correctly
         game.players[0].minions[0].silence()
         self.assertEqual(7, game.players[0].minions[0].health)
-        self.assertEqual(7, game.players[0].minions[0].max_health)
+        self.assertEqual(7, game.players[0].minions[0].calculate_max_health())
 
     def test_HammerOfWrath(self):
         game = generate_game_for(MogushanWarden, HammerOfWrath, DoNothingBot, SpellTestingAgent)
@@ -221,12 +221,12 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn()  # Bloodfen Raptor should be played
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
-        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[0].health)
         game.play_single_turn()  # Humility should be played, and target the enemy Bloodfen Raptor
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Bloodfen Raptor", game.players[0].minions[0].card.name)
-        self.assertEqual(1, game.players[0].minions[0].attack_power)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[0].health)
 
     def test_LayOnHands(self):
@@ -255,20 +255,20 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].health)
-        self.assertEqual(3, game.players[1].minions[0].attack_power)
+        self.assertEqual(3, game.players[1].minions[0].calculate_attack())
         self.assertEqual("Bloodfen Raptor", game.players[1].minions[0].card.name)
         game.play_single_turn()  # Aldor Peacekeeper should be played
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].health)
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual("Bloodfen Raptor", game.players[1].minions[0].card.name)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].health)
-        self.assertEqual(3, game.players[0].minions[0].attack_power)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual("Aldor Peacekeeper", game.players[0].minions[0].card.name)
         game.players[1].minions[0].silence()
         self.assertEqual(2, game.players[1].minions[0].health)
-        self.assertEqual(3, game.players[1].minions[0].attack_power)
+        self.assertEqual(3, game.players[1].minions[0].calculate_attack())
 
     def test_ArgentProtector(self):
         game = generate_game_for(ArgentProtector, BloodfenRaptor, MinionPlayingAgent, MinionPlayingAgent)
@@ -347,7 +347,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual("Redemption", game.players[0].secrets[0].name)
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].max_health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
@@ -357,7 +357,7 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].max_health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertFalse(game.players[0].minions[0].divine_shield)
 
@@ -365,7 +365,7 @@ class TestPaladin(unittest.TestCase):
         # Silvermoon Guardian should be killed by the mage hero power, that will trigger the secret
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(3, game.players[0].minions[0].max_health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
@@ -384,7 +384,7 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(1, game.players[1].minions[0].max_health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[1].minions[0].health)
 
     def test_LightsJustice(self):
@@ -392,7 +392,7 @@ class TestPaladin(unittest.TestCase):
 
         # Light's Justice should be played
         game.play_single_turn()
-        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
         self.assertEqual(4, game.players[0].hero.weapon.durability)
 
     def test_SwordOfJustice(self):
@@ -404,7 +404,7 @@ class TestPaladin(unittest.TestCase):
 
         # Sword of Justice should be played, and hero will attack once
         game.play_single_turn()
-        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
         self.assertEqual(5, game.players[0].hero.weapon.durability)
 
         # Four minions should have been played, buffing each one
@@ -413,22 +413,22 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].hero.weapon.durability)
         self.assertEqual(4, len(game.players[0].minions))
         for i in range(0, 4):
-            self.assertEqual(2, game.players[0].minions[i].max_health)
+            self.assertEqual(2, game.players[0].minions[i].calculate_max_health())
             self.assertEqual(2, game.players[0].minions[i].health)
-            self.assertEqual(6, game.players[0].minions[i].attack_power)
+            self.assertEqual(6, game.players[0].minions[i].calculate_attack())
 
         # A fifth minion should be played, buffed by the last durability of the weapon which should be destroyed
         game.play_single_turn()
         self.assertEqual(None, game.players[0].hero.weapon)
         self.assertEqual(5, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].minions[0].max_health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(2, game.players[0].minions[0].health)
-        self.assertEqual(6, game.players[0].minions[0].attack_power)
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
 
         game.players[0].minions[0].silence()
-        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(5, game.players[0].minions[0].attack_power)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
 
     def test_TruesilverChampion(self):
         game = generate_game_for(TruesilverChampion, StonetuskBoar, PredictableAgentWithoutHeroPower,
@@ -440,7 +440,7 @@ class TestPaladin(unittest.TestCase):
         game.players[0].hero.health = 20
         # Truesilver Champion should be played, and hero will attack once, healing by two but get one damage from boar
         game.play_single_turn()
-        self.assertEqual(4, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
         self.assertEqual(1, game.players[0].hero.weapon.durability)
         self.assertEqual(21, game.players[0].hero.health)
 
@@ -452,7 +452,7 @@ class TestPaladin(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(6, game.players[0].minions[0].attack_power)
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual("Tirion Fordring", game.players[0].minions[0].card.name)
         self.assertEqual(None, game.players[0].hero.weapon)
@@ -461,5 +461,5 @@ class TestPaladin(unittest.TestCase):
         tirion = game.players[0].minions[0]
         tirion.die(None)
         tirion.activate_delayed()
-        self.assertEqual(5, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(5, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)

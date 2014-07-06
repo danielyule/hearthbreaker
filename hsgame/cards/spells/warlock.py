@@ -196,7 +196,7 @@ class Shadowflame(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        shadowflame_damage = self.target.attack_power + self.target.temp_attack
+        shadowflame_damage = self.target.calculate_attack() + self.target.temp_attack
         targets = game.other_player.minions.copy()
         self.target.die(self)
         for minion in targets:

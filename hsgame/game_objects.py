@@ -214,9 +214,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         # : The current health of this character
         self.health = health
         # : The maximum health of this character
-        self.max_health = health
+        self.base_health = health
         #: The amount of attack this character has
-        self.attack_power = attack_power
+        self.base_attack = attack_power
         #: Whether or not this character can attack this turn
         self.active = False
         #: Whether or not this character has died
@@ -293,8 +293,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         target.trigger("attacked", self)
         if self.dead:
             return
-        my_attack = self.attack_power + self.temp_attack  # In case the damage causes my attack to grow
-        self.damage(target.attack_power + target.temp_attack, target)
+        my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
+        self.damage(target.calculate_attack(), target)
         target.damage(my_attack, self)
         target.activate_delayed()
 
@@ -313,6 +313,28 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         :param list[Character] targets: the targets to choose a target from
         """
         return self.player.choose_target(targets)
+
+    def calculate_attack(self):
+        """
+        Calculates the amount of attack this :class:`Character` has, including the base attack, any temporary attack
+        bonuses for this turn and any aura effects
+        """
+        aura_attack = 0
+        for aura in self.player.auras:
+            if aura.filter(self):
+                aura_attack += aura.attack
+        return self.base_attack + self.temp_attack + aura_attack
+
+    def calculate_max_health(self):
+        """
+        Calculates the maximum amount of health this :class:`Character` has, including the base health, and any aura
+        effects
+        """
+        aura_health = 0
+        for aura in self.player.auras:
+            if aura.filter(self):
+                aura_health += aura.health
+        return self.base_health + aura_health
 
     def delayed_trigger(self, event, *args):
         """
@@ -369,7 +391,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             if issubclass(type(attacker), Character):
                 attacker.delayed_trigger("did_damage", amount, self)
             self.trigger("health_changed")
-            if not self.enraged and self.health != self.max_health:
+            if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
                 self.trigger("enraged")
             if self.health <= 0:
@@ -377,10 +399,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def change_attack(self, amount):
         def silence():
-            self.attack_power -= amount
+            self.base_attack -= amount
 
         self.trigger("attack_changed", amount)
-        self.attack_power += amount
+        self.base_attack += amount
         self.bind_once('silenced', silence)
 
     def change_temp_attack(self, amount):
@@ -390,30 +412,30 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def increase_health(self, amount):
         def silence():
-            self.max_health -= amount
-            if self.max_health < self.health:
-                self.health = self.max_health
+            self.base_health -= amount
+            if self.calculate_max_health() < self.health:
+                self.health = self.calculate_max_health()
 
         self.trigger("health_increased", amount)
-        self.max_health += amount
+        self.base_health += amount
         self.health += amount
         self.trigger("health_changed")
         self.bind_once('silenced', silence)
 
     def decrease_health(self, amount):
         def silence():
-            if self.max_health == self.health:
-                self.max_health += amount
+            if self.calculate_max_health() == self.health:
+                self.base_health += amount
                 self.health += amount
             else:
-                self.max_health += amount
+                self.base_health += amount
 
         self.trigger("health_decreased", amount)
-        self.max_health -= amount
-        if self.health > self.max_health:
-            self.health = self.max_health
+        self.base_health -= amount
+        if self.health > self.calculate_max_health():
+            self.health = self.calculate_max_health()
 
-        if self.enraged and self.health == self.max_health:
+        if self.enraged and self.health == self.calculate_max_health():
             self.enraged = False
             self.trigger("unenraged")
         self.trigger("health_changed")
@@ -437,9 +459,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         if amount > 0:
             self.trigger("healed", amount)
             self.health += amount
-            if self.health > self.max_health:
-                self.health = self.max_health
-            if self.enraged and self.health == self.max_health:
+            if self.health > self.calculate_max_health():
+                self.health = self.calculate_max_health()
+            if self.enraged and self.health == self.calculate_max_health():
                 self.enraged = False
                 self.trigger("unenraged")
             self.trigger("health_changed")
@@ -449,7 +471,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.dead = True
 
     def can_attack(self):
-        return self.attack_power + self.temp_attack > 0 and self.active and not self.frozen
+        return self.calculate_attack() > 0 and self.active and not self.frozen
 
     def spell_targetable(self):
         return True
@@ -755,52 +777,39 @@ class Minion(Character):
         return not self.stealth
 
     def __str__(self):  # pragma: no cover
-        return "({0}) ({1}) {2} at index {3}".format(self.attack_power, self.health, self.card.name, self.index)
+        return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
 
-    def add_board_effect(self, effect, effect_silence, filter_func=lambda m: True):
+    def add_aura(self, attack, health, filter_func=lambda m: True):
         """
-        Adds an effect to this minion that will affect minions on its side of the board
+        Adds an aura effect to the :class:`Player`'s minions.  This aura can increase the attack or health of
+        the minions, or both.  The effect can be limited to only certain minions with the use of a filter
+        function.
 
-        This method sets up the effect so that it will update when new minions are added
-        or other minions die, or the original minion is silenced
-
-        :param function effect: the effect to apply to other minions.  Takes one paramter: the minion to affect.
-        :param function effect_silence: a function which will undo the effect when this minion is silenced. Takes
-                                        one parameter: the minion to affect.
+        :param int attack: The amount to increase minions' attack by
+        :param int health: The amount to increase minion's health AND max health by
         :param function filter_func: A function that selects which minions to apply this effect to. Takes
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
         """
 
-        def minion_added(m):
-            board_changed()
-
-        def minion_died(m, by):
-            board_changed()
-
-        def board_changed():
-            nonlocal affected_minions
-            silenced()
-            affected_minions = []
-            for m in filter(filter_func, self.player.minions):
-                effect(m)
-                affected_minions.append(m)
+        class Aura:
+            def __init__(self):
+                self.attack = attack
+                self.health = health
+                self.filter = filter_func
+        aura = Aura()
+        self.player.auras.append(aura)
+        for minion in filter(filter_func, self.player.minions):
+            minion.health += health
 
         def silenced():
-            for m in affected_minions:
-                effect_silence(m)
+            self.player.auras.remove(aura)
 
-        affected_minions = []
-        for minion in filter(filter_func, self.player.minions):
-            effect(minion)
-            affected_minions.append(minion)
-
-        self.player.game.bind("minion_added", minion_added)
-        self.player.game.bind("minion_died", minion_died)
         self.bind_once("silenced", silenced)
 
     def copy(self, new_owner):
-        new_minion = Minion(self.attack_power, self.max_health, self.minion_type, self.battlecry, self.deathrattle)
+        new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
+                            self.minion_type, self.battlecry, self.deathrattle)
         new_minion.health = self.health
         new_minion.events = self.events.copy()
         new_minion.stealth = self.stealth
@@ -885,7 +894,7 @@ class Weapon(Bindable):
         """
         super().__init__()
         # : The amount of attack this weapon gives the hero
-        self.attack_power = attack_power
+        self.base_attack = attack_power
         # : The number of times this weapon can be used to attack before being discarded
         self.durability = durability
         #: Called when this weapon is first placed
@@ -898,7 +907,7 @@ class Weapon(Bindable):
     def destroy(self):
         self.trigger("destroyed")
         self.player.hero.weapon = None
-        self.player.hero.change_temp_attack(-self.attack_power)
+        self.player.hero.change_temp_attack(-self.base_attack)
         self.player.hero.windfury = False
 
     def equip(self, player):
@@ -907,7 +916,7 @@ class Weapon(Bindable):
             self.player.hero.weapon.destroy()
         self.player.hero.weapon = self
         if self.player.game.current_player is self.player:
-            self.player.hero.change_temp_attack(self.attack_power)
+            self.player.hero.change_temp_attack(self.base_attack)
 
 
 class Deck:
@@ -998,6 +1007,7 @@ class Player(Bindable):
         self.minions = []
         self.random = random_func
         self.hand = []
+        self.auras = []
         self.fatigue = 0
         self.agent = agent
         self.game = game
@@ -1130,7 +1140,7 @@ class Game(Bindable):
         self.current_player.cards_played = 0
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
-            self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.attack_power)
+            self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.base_attack)
         self.current_player.hero.power.used = False
         self.current_player.hero.active = True
         self.current_player.draw()

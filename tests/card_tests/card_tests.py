@@ -62,12 +62,12 @@ class CardTest(unittest.TestCase):
                                                                            spell_damage_re.match(effect).group(1),
                                              minion.spell_damage))
                     minion.silence()
-                    self.assertEqual(int(row["Attack"]), minion.attack_power, row["Name"])
+                    self.assertEqual(int(row["Attack"]), minion.calculate_attack(), row["Name"])
                     self.assertEqual(int(row["Health"]), minion.health, row["Name"])
                     self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.minion_type, row["Name"])
                 elif row["Type"] == "Weapon":
                     weapon = card.create_weapon(fake_game.current_player)
-                    self.assertEqual(int(row["Attack"]), weapon.attack_power, row["Name"])
+                    self.assertEqual(int(row["Attack"]), weapon.base_attack, row["Name"])
                     self.assertEqual(int(row["Health"]), weapon.durability, row["Name"])
 
         file.close()

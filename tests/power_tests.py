@@ -25,7 +25,7 @@ class TestPowers(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].attack_power)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(1, game.current_player.minions[0].health)
         self.assertEqual("Silver Hand Recruit", game.current_player.minions[0].card.name)
 
@@ -45,7 +45,7 @@ class TestPowers(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(1, game.players[0].hero.weapon.attack_power)
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
         self.assertEqual(1, game.players[0].hero.weapon.durability)
         self.assertEqual(29, game.players[1].hero.health)
 

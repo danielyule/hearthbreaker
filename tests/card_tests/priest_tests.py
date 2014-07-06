@@ -29,8 +29,8 @@ class TestPriest(unittest.TestCase):
         game.players[0].minions[0].health = 4
         game.players[1].minions[0].health = 4
         game.play_single_turn()  # Circle of Healing should be played
-        self.assertEqual(game.players[0].minions[0].max_health, game.players[0].minions[0].health)
-        self.assertEqual(game.players[1].minions[0].max_health, game.players[1].minions[0].health)
+        self.assertEqual(game.players[0].minions[0].calculate_max_health(), game.players[0].minions[0].health)
+        self.assertEqual(game.players[1].minions[0].calculate_max_health(), game.players[1].minions[0].health)
 
     def test_DivineSpirit(self):
         game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
@@ -39,30 +39,30 @@ class TestPriest(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
-        self.assertEqual(7, game.players[1].minions[0].max_health)
+        self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
         game.play_single_turn()  # Two Divine Spirits should be played
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(28, game.players[1].minions[0].health)
-        self.assertEqual(28, game.players[1].minions[0].max_health)
+        self.assertEqual(28, game.players[1].minions[0].calculate_max_health())
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
-        self.assertEqual(7, game.players[1].minions[0].max_health)
+        self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
         game.play_single_turn()
         # Let's say the minion got damaged
         game.players[1].minions[0].health = 4
         game.play_single_turn()  # Three Divine Spirits should be played
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(32, game.players[1].minions[0].health)
-        self.assertEqual(35, game.players[1].minions[0].max_health)
+        self.assertEqual(35, game.players[1].minions[0].calculate_max_health())
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
-        self.assertEqual(7, game.players[1].minions[0].max_health)
+        self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
 
     def test_HolyFire(self):
         game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
@@ -72,13 +72,13 @@ class TestPriest(unittest.TestCase):
 
         game.players[0].hero.health = 20
         self.assertEqual(2, len(game.players[1].minions))
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
-        self.assertEqual(7, game.players[1].minions[0].max_health)
+        self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
         game.play_single_turn()  # Holy Fire should be played
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(2, game.players[1].minions[0].health)
-        self.assertEqual(7, game.players[1].minions[0].max_health)
+        self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
         self.assertEqual(25, game.players[0].hero.health)
 
     def test_HolyNova(self):
@@ -114,14 +114,14 @@ class TestPriest(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
         game.play_single_turn()  # Inner Fire should be played
-        self.assertEqual(7, game.players[1].minions[0].attack_power)
+        self.assertEqual(7, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
         # Test that this spell is being silenced properly as well
         game.players[1].minions[0].silence()
-        self.assertEqual(1, game.players[1].minions[0].attack_power)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(7, game.players[1].minions[0].health)
 
     def test_MassDispel(self):
@@ -199,7 +199,7 @@ class TestPriest(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].health)
-        self.assertEqual(3, game.players[0].minions[0].max_health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(5, len(game.players[1].hand))
 
     def test_ShadowMadness(self):
@@ -380,25 +380,25 @@ class TestPriest(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(5, game.players[0].minions[0].attack_power)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(5, game.players[0].minions[0].health)
 
         # Lightspawn should have taken some hits
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].minions[0].attack_power)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[0].health)
 
         game.players[0].minions[0].heal(2, None)
-        self.assertEqual(4, game.players[0].minions[0].attack_power)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(4, game.players[0].minions[0].health)
 
         game.players[0].minions[0].increase_health(4)
-        self.assertEqual(8, game.players[0].minions[0].attack_power)
+        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
         self.assertEqual(8, game.players[0].minions[0].health)
 
         game.players[0].minions[0].decrease_health(2)  # max_health goes from 9 to 7
-        self.assertEqual(7, game.players[0].minions[0].attack_power)
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
         self.assertEqual(7, game.players[0].minions[0].health)
 
     def test_Lightwell(self):
@@ -515,7 +515,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(1, game.players[0].minions[0].max_health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
 
         # Temple Enforcer should be played, targeting the Stonetusk Boar
         game.play_single_turn()
@@ -523,4 +523,4 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertEqual(4, game.players[0].minions[1].health)
-        self.assertEqual(4, game.players[0].minions[1].max_health)
+        self.assertEqual(4, game.players[0].minions[1].calculate_max_health())

@@ -29,5 +29,5 @@ class TestRogue(unittest.TestCase):
 
         self.assertEqual(5, len(game.players[0].minions))
         self.assertEqual("Defias Bandit", game.players[0].minions[1].card.name)
-        self.assertEqual(2, game.players[0].minions[1].attack_power)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
         self.assertEqual(1, game.players[0].minions[1].health)

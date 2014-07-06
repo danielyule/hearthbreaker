@@ -222,7 +222,7 @@ class TestWarlock(unittest.TestCase):
         # Demonfire to buff own Flame Imp
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, game.players[0].minions[0].health)
-        self.assertEqual(5, game.players[0].minions[0].attack_power)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
 
     def test_DemonfireAllyNonDemon(self):
         game = generate_game_for(Demonfire, StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -335,7 +335,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
 
         def verify_poweroverwhelming():
-            self.assertEqual(7, game.players[0].minions[0].attack_power)
+            self.assertEqual(7, game.players[0].minions[0].calculate_attack())
             self.assertEqual(6, game.players[0].minions[0].health)
 
         game.players[0].minions[0].bind("health_changed", verify_poweroverwhelming)

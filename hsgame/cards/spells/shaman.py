@@ -11,7 +11,7 @@ class AncestralHealing(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.heal(self.target.max_health - self.target.health, self)
+        self.target.heal(self.target.calculate_max_health() - self.target.health, self)
         self.target.taunt = True
 
 

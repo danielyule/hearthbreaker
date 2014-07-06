@@ -69,7 +69,8 @@ from hsgame.cards.minions.neutral import (
     AmaniBerserker,
     SilverHandKnight,
     FenCreeper,
-	VentureCoMercenary
+    VentureCoMercenary,
+    StormwindChampion
 )
 
 from hsgame.cards.minions.druid import (
