@@ -19,10 +19,6 @@ Events Triggered in hssim
  * overloaded
 
 ##Game
- * minion_on_minion_attack(minion, target)
- * minion_on_player_attack(minion, target)
- * player_on_minion_attack(player, target)
- * player_on_player_attack(player, target)
  * minion_added(new_minion)
  * minion_died(dead_minion)
  * kept_cards(card_array)
@@ -34,6 +30,7 @@ Events Triggered in hssim
  * attack_minion (target)
  * attack_player (target)
  * attack_completed
+ * attacked (attacker)
  * damaged(amount, attacker)
  * healed(amount)
  * spell_damaged(amount, card)
