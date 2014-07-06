@@ -1,3 +1,4 @@
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
 
@@ -34,4 +35,20 @@ class EdwinVanCleef(MinionCard):
             minion.increase_health(2)
             minion.change_attack(2)
 
+        return minion
+
+
+class Kidnapper(MinionCard):
+    def __init__(self):
+        super().__init__("Kidnapper", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC,
+                         hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        def combo(m):
+            if m.card.target is not None and player.cards_played > 0:
+                m.card.target.remove_from_board()
+                if len(m.card.target.player.hand) < 10:
+                    m.card.target.player.hand.append(m.card)
+
+        minion = Minion(5, 3, battlecry=combo)
         return minion

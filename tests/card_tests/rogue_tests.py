@@ -49,6 +49,24 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[1].calculate_attack())
         self.assertEqual(2, game.players[0].minions[1].health)
 
+    def test_Kidnapper(self):
+        game = generate_game_for([Backstab, Kidnapper], AzureDrake, PredictableAgentWithoutHeroPower,
+                                 MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(9, len(game.players[1].hand))
+
+        # Backstab should be played, targeting the drake who survives. Kidnapper should be played next, returning the
+        # drake to the owner's hand with the combo.
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Kidnapper", game.players[0].minions[0].card.name)
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(10, len(game.players[1].hand))
+
     def test_Backstab(self):
         game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 

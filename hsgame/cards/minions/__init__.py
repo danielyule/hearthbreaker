@@ -114,7 +114,8 @@ from hsgame.cards.minions.priest import (
 
 from hsgame.cards.minions.rogue import (
     DefiasRingleader,
-    EdwinVanCleef
+    EdwinVanCleef,
+    Kidnapper
 )
 
 from hsgame.cards.minions.shaman import (

@@ -190,7 +190,7 @@ yes,Ironforge Rifleman,Battlecry: Deal 1 damage.,,,3,2,2,Common,Minion
 yes,Ironfur Grizzly,Taunt,Beast,,3,3,3,Common,Minion
 yes,Jungle Panther,Stealth,Beast,,3,4,2,Common,Minion
 yes,Keeper of the Grove,Choose One - Deal 2 damage; or Silence a minion.,,Druid,4,2,4,Rare,Minion
-no,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Epic,Minion
+yes,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Epic,Minion
 no,Kill Command,"Deal 3 damage. If you have a Beast, deal 5 damage instead.",,Hunter,3,,,Common,Spell
 no,King Krush,Charge,Beast,Hunter,9,8,8,Legendary,Minion
 no,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Legendary,Minion
