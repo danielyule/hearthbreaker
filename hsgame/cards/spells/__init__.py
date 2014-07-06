@@ -121,7 +121,7 @@ from hsgame.cards.spells.warlock import (
     SacrificialPact,
     SiphonSoul,
     SenseDemons,
-    BaneofDoom,
+    BaneOfDoom,
     Shadowflame,
     Corruption,
     PowerOverwhelming
