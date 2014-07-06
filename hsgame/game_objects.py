@@ -287,7 +287,6 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.trigger("attack", target)
         if isinstance(target, Minion):
             self.trigger("attack_minion", target)
-
         else:
             self.trigger("attack_player", target)
         target.trigger("attacked", self)
@@ -612,7 +611,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
 
     def can_use(self, player, game):
-        return super().can_use(player, game)
+        return len(player.minions) < 7 and super().can_use(player, game)
 
     def use(self, player, game):
         if len(player.minions) >= 7:
