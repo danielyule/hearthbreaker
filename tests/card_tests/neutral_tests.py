@@ -442,3 +442,12 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[1].calculate_max_health())
         self.assertEqual(2, game.other_player.minions[2].health)
         self.assertEqual(2, game.other_player.minions[2].calculate_max_health())
+
+        game.other_player.minions[0].silence()
+
+        self.assertEqual(6, game.other_player.minions[0].health)
+        self.assertEqual(6, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(1, game.other_player.minions[1].calculate_max_health())
+        self.assertEqual(1, game.other_player.minions[2].health)
+        self.assertEqual(1, game.other_player.minions[2].calculate_max_health())

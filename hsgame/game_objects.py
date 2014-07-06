@@ -799,11 +799,18 @@ class Minion(Character):
                 self.filter = filter_func
         aura = Aura()
         self.player.auras.append(aura)
-        for minion in filter(filter_func, self.player.minions):
-            minion.health += health
+        if health > 0:
+            for minion in filter(filter_func, self.player.minions):
+                minion.health += health
+                minion.trigger("health_changed")
 
         def silenced():
             self.player.auras.remove(aura)
+            if health > 0:
+                for minion in filter(filter_func, self.player.minions):
+                    if minion.health > minion.calculate_max_health():
+                        minion.health = minion.calculate_max_health()
+                        minion.trigger("health_changed")
 
         self.bind_once("silenced", silenced)
 
