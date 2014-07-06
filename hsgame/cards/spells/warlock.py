@@ -14,7 +14,8 @@ class MortalCoil(Card):
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        if self.target.health <= player.effective_spell_damage(1):
+        super().use(player, game)
+        if self.target.health <= player.effective_spell_damage(1) and not self.target.divine_shield:
             self.target.damage(player.effective_spell_damage(1), self)
             player.draw()
         else:
@@ -57,7 +58,7 @@ class DrainLife(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(2), self)
-        player.hero.heal(player.effective_heal_power(2))
+        player.hero.heal(player.effective_heal_power(2), self)
 
 
 class Soulfire(Card):
@@ -93,24 +94,12 @@ class Demonfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        if isinstance(self.target, Minion) and self.target.type is MINION_TYPE.DEMON:
+        targets = player.game.current_player.minions.copy()
+        if self.target.minion_type is MINION_TYPE.DEMON and self.target in targets:
             self.target.change_attack(2)
             self.target.increase_health(2)
         else:
             self.target.damage(player.effective_spell_damage(2), self)
-            """
-            Jaraxxus is a minion
-            class LordJaraxxus(Card):
-              def __init__(self):
-                 super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY)
-
-            def use(self, player, game):
-              super().use(player, game)
-            #self.hero.max_health = 15
-            self.hero.health = 15
-            player.hero.power = hsgame.powers.JaraxxusPower(player.hero)
-            """
-            # weapons not in yet, need to give 3/8 Blood Fury
 
 
 class SacrificialPact(Card):
@@ -123,7 +112,7 @@ class SacrificialPact(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.die(self)
-        player.hero.heal(player.effective_heal_power(5))
+        player.hero.heal(player.effective_heal_power(5), self)
 
 
 class SiphonSoul(Card):
@@ -135,7 +124,7 @@ class SiphonSoul(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.die(self)
-        player.hero.heal(player.effective_heal_power(3))
+        player.hero.heal(player.effective_heal_power(3), self)
 
 
 class SenseDemons(Card):
@@ -162,7 +151,7 @@ class SenseDemons(Card):
                 # and minion.minion_type is MINION_TYPE.DEMON:
                 # I know this won't work, but how do I pull type info from the
                 # deck of cards
-                minions.append(game.other_player.deck.cards[index])
+                minions.append(game.current_player.deck.cards[index])
 
         if len(minions) == 1:
             minions.append(WorthlessImp())
@@ -181,20 +170,20 @@ class SenseDemons(Card):
                 player.trigger("card_destroyed", card)
 
 
-class BaneofDoom(Card):
+class BaneOfDoom(Card):
     def __init__(self):
         super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK,
                          CARD_RARITY.EPIC,
                          hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
-        demon_list = [VoidWalker(), FlameImp, DreadInfernal(), Succubus(),
+        super().use(player, game)
+        demon_list = [VoidWalker(), FlameImp(), DreadInfernal(), Succubus(),
                       Felguard()]
         card = copy.copy(demon_list[game.random(0, len(demon_list) - 1)])
         if self.target.health <= player.effective_spell_damage(2):
             self.target.damage(player.effective_spell_damage(2), self)
-            self.target.create_minion(player).add_to_board(card, game, player,
-                                                           0)
+            card.summon(player, game, len(player.minions))
         else:
             self.target.damage(player.effective_spell_damage(2), self)
 
@@ -224,7 +213,7 @@ class Corruption(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def remove_minion(p):
+        def remove_minion():
             game.remove_minion(self.target, self.target.player)
 
         player.bind_once("turn_started", remove_minion)
@@ -242,7 +231,7 @@ class PowerOverwhelming(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def remove_minion(p):
+        def remove_minion():
             game.remove_minion(self.target, self.target.player)
 
         player.bind_once("turn_ended", remove_minion)

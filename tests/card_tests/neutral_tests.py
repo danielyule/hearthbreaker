@@ -1,9 +1,10 @@
+import random
+import unittest
+
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from tests.testing_agents import MinionPlayingAgent, SpellTestingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
-import random
-import unittest
 
 
 class TestCommon(unittest.TestCase):

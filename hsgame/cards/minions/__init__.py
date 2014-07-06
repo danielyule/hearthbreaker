@@ -28,7 +28,7 @@ from hsgame.cards.minions.neutral import (
     GoldshireFootman,
     FrostwolfGrunt,
     IronfurGrizzly,
-    LordoftheArena,
+    LordOfTheArena,
     MurlocRaider,
     ManaAddict,
     OasisSnapjaw,
@@ -55,7 +55,7 @@ from hsgame.cards.minions.neutral import (
     VoodooDoctor,
     EarthenRingFarseer,
     ArcaneGolem,
-    PriestessofElune,
+    PriestessOfElune,
     DarkscaleHealer,
     ArgentCommander,
     BluegillWarrior,
@@ -67,7 +67,9 @@ from hsgame.cards.minions.neutral import (
     DarkIronDwarf,
     Abomination,
     AmaniBerserker,
-    SilverHandKnight
+    SilverHandKnight,
+    FenCreeper,
+	VentureCoMercenary
 )
 
 from hsgame.cards.minions.druid import (

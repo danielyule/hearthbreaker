@@ -53,7 +53,7 @@ class IronbeakOwl(MinionCard):
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(2, 1, MINION_TYPE.BEAST, silence)
+        return Minion(2, 1, MINION_TYPE.BEAST, battlecry=silence)
 
 
 class WarGolem(MinionCard):
@@ -239,7 +239,7 @@ class Spellbreaker(MinionCard):
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(4, 3, MINION_TYPE.NONE, silence)
+        return Minion(4, 3, battlecry=silence)
 
 
 class BloodmageThalnos(MinionCard):
@@ -331,7 +331,7 @@ class IronfurGrizzly(MinionCard):
         return minion
 
 
-class LordoftheArena(MinionCard):
+class LordOfTheArena(MinionCard):
     def __init__(self):
         super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.COMMON)
@@ -617,7 +617,7 @@ class ArcaneGolem(MinionCard):
         return minion
 
 
-class PriestessofElune(MinionCard):
+class PriestessOfElune(MinionCard):
     def __init__(self):
         super().__init__("Priestess of Elune", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.COMMON)
@@ -729,7 +729,39 @@ class Abomination(MinionCard):
             for target in hsgame.targeting.find_spell_target(player.game,
                                                              lambda x: True):
                 target.damage(2, self)
+
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
+
+
+class FenCreeper(MinionCard):
+    def __init__(self):
+        super().__init__("Fen Creeper", 5, CHARACTER_CLASS.ALL,
+                         CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        minion = Minion(3, 6)
+        minion.taunt = True
+        return minion
+
+
+class VentureCoMercenary(MinionCard):
+    def __init__(self):
+        super().__init__("Venture Co. Mercenary", 5, CHARACTER_CLASS.ALL,
+                         CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        class Filter:
+            def __init__(self):
+                self.amount = -3
+                self.filter = lambda c: not c.is_spell()
+                self.min = 0
+
+        filter = Filter()
+        minion = Minion(7, 6)
+        minion.bind_once("silenced",
+                         lambda: player.mana_filters.remove(filter))
+        player.mana_filters.append(filter)
+        return minion
 
 
 class AmaniBerserker(MinionCard):
@@ -768,4 +800,5 @@ class SilverHandKnight(MinionCard):
                     return Minion(2, 2)
 
             Squire().summon(player, player.game, m.index)
+
         return Minion(4, 4, battlecry=summon_squire)
