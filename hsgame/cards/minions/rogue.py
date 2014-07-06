@@ -22,3 +22,16 @@ class DefiasRingleader(MinionCard):
         minion = Minion(2, 2)
         player.bind_once("minion_played", combo)
         return minion
+
+
+class EdwinVanCleef(MinionCard):
+    def __init__(self):
+        super().__init__("Edwin VanCleef", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        minion = Minion(2, 2)
+        for combo in range(0, player.cards_played):
+            minion.increase_health(2)
+            minion.change_attack(2)
+
+        return minion

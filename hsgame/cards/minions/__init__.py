@@ -113,7 +113,8 @@ from hsgame.cards.minions.priest import (
 )
 
 from hsgame.cards.minions.rogue import (
-    DefiasRingleader
+    DefiasRingleader,
+    EdwinVanCleef
 )
 
 from hsgame.cards.minions.shaman import (
