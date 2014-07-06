@@ -48,3 +48,17 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].health)
         self.assertEqual(2, game.players[0].minions[1].calculate_attack())
         self.assertEqual(2, game.players[0].minions[1].health)
+
+    def test_Backstab(self):
+        game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        # Nothing should happen
+        game.play_single_turn()
+
+        # Boar should be played
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Backstab should be used on the undamaged boar
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))

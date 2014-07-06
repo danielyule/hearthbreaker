@@ -111,6 +111,10 @@ from hsgame.cards.spells.shaman import (
     Windfury
 )
 
+from hsgame.cards.spells.rogue import (
+    Backstab
+)
+
 from hsgame.cards.spells.warlock import (
     MortalCoil,
     Hellfire,
