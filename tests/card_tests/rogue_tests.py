@@ -103,12 +103,12 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertFalse(game.players[1].minions[0].divine_shield)
         self.assertEqual(5, game.players[1].minions[0].health)
-        
+
         # A new Patient Assassin should be played
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(7, len(game.players[0].minions))
-        
+
         # Patient Assassin should attack again, this time killing the Sunwalker since it no longer has divine shield
         game.play_single_turn()
         game.play_single_turn()
