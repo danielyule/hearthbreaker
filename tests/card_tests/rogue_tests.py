@@ -3,6 +3,7 @@ import unittest
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
+from hsgame.agents.basic_agents import PredictableBot
 
 
 class TestRogue(unittest.TestCase):
@@ -177,3 +178,26 @@ class TestRogue(unittest.TestCase):
         self.assertEqual("Emperor Cobra", game.players[0].minions[0].card.name)
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertFalse(game.players[0].minions[0].immune)
+
+    def test_BladeFlurry(self):
+        game = generate_game_for(Shieldbearer, BladeFlurry, MinionPlayingAgent, PredictableBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(3, game.players[0].minions[2].health)
+        self.assertEqual(4, game.players[0].minions[3].health)
+
+        # An attack with our knife should first happen, and then should Blade Flurry be played, destroying our knife
+        # and dealing 1 damage to all enemy minions
+        game.play_single_turn()
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[2].health)
+        self.assertEqual(3, game.players[0].minions[3].health)

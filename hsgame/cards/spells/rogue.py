@@ -50,3 +50,22 @@ class Betrayal(Card):
         if right_minion is not None:
             right_minion.damage(self.target.calculate_attack(), self.target)
         self.target.immune = original_immune
+
+
+class BladeFlurry(Card):
+    def __init__(self):
+        super().__init__("Blade Flurry", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.hero.weapon is not None:
+            # Yes, this card is affected by spell damage cards.
+            # Source: http://www.hearthhead.com/card=1064/blade-flurry#comments:id=1927317
+            attack_power = player.effective_spell_damage(player.hero.calculate_attack())
+            player.hero.weapon.destroy()
+
+            for minion in game.other_player.minions.copy():
+                minion.damage(attack_power, self)
+
+            game.other_player.hero.damage(attack_power, self)
