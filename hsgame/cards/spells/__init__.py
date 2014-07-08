@@ -95,7 +95,8 @@ from hsgame.cards.spells.priest import (
 
 from hsgame.cards.spells.rogue import (
     Assassinate,
-    Backstab
+    Backstab,
+    Betrayal
 )
 
 from hsgame.cards.spells.shaman import (

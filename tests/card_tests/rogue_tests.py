@@ -161,3 +161,19 @@ class TestRogue(unittest.TestCase):
         # Backstab should be used on the undamaged boar
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Betrayal(self):
+        game = generate_game_for([IronfurGrizzly, EmperorCobra], Betrayal, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+
+        # Betrayal should be played on the Emperor Cobra, who should kill the grizzly because of the poisonous effect,
+        # and the cobra shouldn't take any damage at all
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Emperor Cobra", game.players[0].minions[0].card.name)
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertFalse(game.players[0].minions[0].immune)
