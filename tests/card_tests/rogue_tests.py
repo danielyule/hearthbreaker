@@ -134,6 +134,20 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[1].health)
 
+    def test_Assassinate(self):
+        game = generate_game_for(Assassinate, Sunwalker, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertTrue(game.players[1].minions[0].divine_shield)
+        self.assertTrue(game.players[1].minions[0].taunt)
+
+        # Assassinate should be used on the Sunwalker
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+
     def test_Backstab(self):
         game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 

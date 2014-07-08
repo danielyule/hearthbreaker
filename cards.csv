@@ -31,7 +31,7 @@ yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2
 yes,Argent Squire,Divine Shield,,,1,1,1,Common,Minion
 no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Rare,Minion
 no,Assassin's Blade,,,Rogue,5,3,4,Common,Weapon
-no,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Free,Spell
+yes,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Free,Spell
 yes,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Rare,Minion
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Epic,Spell
 yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Rare,Minion

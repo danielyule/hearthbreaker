@@ -93,6 +93,11 @@ from hsgame.cards.spells.priest import (
     Thoughtsteal
 )
 
+from hsgame.cards.spells.rogue import (
+    Assassinate,
+    Backstab
+)
+
 from hsgame.cards.spells.shaman import (
     AncestralHealing,
     AncestralSpirit,
@@ -109,10 +114,6 @@ from hsgame.cards.spells.shaman import (
     RockbiterWeapon,
     TotemicMight,
     Windfury
-)
-
-from hsgame.cards.spells.rogue import (
-    Backstab
 )
 
 from hsgame.cards.spells.warlock import (

@@ -3,6 +3,17 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
 
+class Assassinate(Card):
+    def __init__(self):
+        super().__init__("Assassinate", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+
+
 class Backstab(Card):
     def __init__(self):
         super().__init__("Backstab", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
