@@ -284,11 +284,29 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(5, len(game.players[0].hand))
 
         game.play_single_turn()
-        # plays Sense Demons and draws 2 Doomguards
+        # plays Sense Demons and draws 2 Worthless Imps
         self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual('Worthless Imp', game.players[0].hand[5].name)
         self.assertEqual('Worthless Imp', game.players[0].hand[6].name)
+        
+        game.play_single_turn()
+        game.play_single_turn()
+        #Sense Demons again
+        self.assertEqual(9, len(game.players[0].hand))
+        
+        game.play_single_turn()
+        game.play_single_turn()
+        #Sense Demons again
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))
 
+        for turn in range(0, 4):
+            game.play_single_turn()
+        #Play 3 copies of Sense Demons and then 2 copies of Worthless Imp
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Worthless Imp", game.players[0].minions[0].card.name)
+        self.assertEqual("Worthless Imp", game.players[0].minions[1].card.name)
+        
     def test_BaneOfDoom(self):
         game = generate_game_for(BaneOfDoom, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingBot)
         imp = FlameImp()
@@ -305,9 +323,15 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(MINION_TYPE.DEMON, game.players[0].minions[0].minion_type)
         self.assertEqual("Dread Infernal", game.players[0].minions[0].card.name)
-
         # Apparently this seed always rolls Dread Infernal
-
+        mogu = MogushanWarden()
+        mogu.summon(game.players[1], game, 0)
+        game.play_single_turn()
+        game.play_single_turn()
+        # Banes the Mogushan but does not kill it
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+        
     def test_Corruption(self):
         game = generate_game_for(Corruption, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingBot)
         imp = FlameImp()
@@ -343,3 +367,29 @@ class TestWarlock(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(3, len(game.players[0].hand))
+
+    def test_Shadowflame(self):
+        game = generate_game_for(Shadowflame, Shieldbearer, SpellTestingAgent, MinionPlayingAgent)
+        imp = FlameImp()
+        imp.summon(game.players[0], game, 0)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(4, game.players[1].minions[0].health)
+        self.assertEqual(4, game.players[1].minions[1].health)
+        self.assertEqual(4, game.players[1].minions[2].health)
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
+        
+        game.play_single_turn()
+        #Uses Shadowflame on own Flame Imp
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[2].health)
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)

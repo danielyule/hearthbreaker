@@ -37,7 +37,7 @@ def flame_imp(minion):
 
 
 def nightblade(minion):
-    minion.other_player.hero.damage(3, None)
+    minion.player.game.other_player.hero.damage(3, None)
 
 
 def pit_lord(minion):
@@ -120,7 +120,7 @@ def darkscale_healer(minion):
     targets = minion.player.game.current_player.minions.copy()
     targets.append(minion.player.game.current_player.hero)
     for minion in targets:
-        minion.heal(2)
+        minion.heal(2, None)
 
 
 def ssc(minion):
@@ -131,7 +131,7 @@ def ssc(minion):
 
 def destroy_target(minion):
     if minion.card.target is not None:
-        minion.card.target.die()
+        minion.card.target.die(None)
 
 
 def two_temp_attack(minion):

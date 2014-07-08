@@ -248,9 +248,9 @@ class WarlockPower(Power):
     def use(self):
         super().use()
         self.hero.player.game.current_player.hero.damage(2, None)
-        self.hero.player.game.current_player.draw()  # idk path for this
+        self.hero.player.game.current_player.draw()
 
-
+"""
 class JaraxxusPower(Power):
     def __init__(self, hero):
         super().__init__(hero)
@@ -268,3 +268,4 @@ class JaraxxusPower(Power):
 
         infernal_card = Infernal()
         infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
+"""

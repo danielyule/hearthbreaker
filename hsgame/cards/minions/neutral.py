@@ -684,7 +684,7 @@ class TheBlackKnight(MinionCard):
     def __init__(self):
         super().__init__("The Black Knight", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.LEGENDARY,
-                         hsgame.targeting.find_minion_battlecry_target,
+                         hsgame.targeting.find_enemy_minion_battlecry_target,
                          lambda minion: minion.taunt)
 
     def create_minion(self, player):

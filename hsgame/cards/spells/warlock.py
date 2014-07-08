@@ -153,12 +153,11 @@ class SenseDemons(Card):
                 # deck of cards
                 minions.append(game.current_player.deck.cards[index])
 
-        if len(minions) == 1:
-            minions.append(WorthlessImp())
         if len(minions) == 0:
             minions.append(WorthlessImp())
+        if len(minions) == 1:
             minions.append(WorthlessImp())
-
+            
         for i in range(0, 2):
             rand = game.random(0, len(minions) - 1)
             card = copy.copy(minions.pop(rand))
