@@ -193,6 +193,7 @@ class Vaporize(SecretCard):
     def _reveal(self, attacker):
         if type(attacker) is Minion:
             attacker.die(self)
+            attacker.activate_delayed()
             super().reveal()
         else:
             self.activate(attacker.player.game.other_player)

@@ -388,7 +388,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.trigger("secret_damaged", amount, attacker)
             self.health -= amount
             if issubclass(type(attacker), Character):
-                attacker.delayed_trigger("did_damage", amount, self)
+                attacker.trigger("did_damage", amount, self)
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
@@ -761,13 +761,17 @@ class Minion(Character):
 
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
-        deathrattle = self.deathrattle
-        self.bind_once("died", lambda c: self.silence())
-        super().die(by)
-        if deathrattle is not None:
-            deathrattle(self)
-        self.remove_from_board()
-        self.game.trigger("minion_died", self, by)
+        if not self.dead:
+            deathrattle = self.deathrattle
+
+            def delayed_death(c):
+                self.silence()
+                self.remove_from_board()
+            self.bind_once("died", delayed_death)
+            super().die(by)
+            if deathrattle is not None:
+                deathrattle(self)
+            self.game.trigger("minion_died", self, by)
 
     def can_be_attacked(self):
         return not self.stealth

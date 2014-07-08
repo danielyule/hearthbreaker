@@ -112,7 +112,7 @@ yes,Earthen Ring Farseer,Battlecry: Restore 3 Health.,,,3,3,3,Common,Minion
 yes,Edwin VanCleef,Combo: Gain +2/+2 for each card played earlier this turn.,,Rogue,3,2,2,Legendary,Minion
 no,Elite Tauren Chieftain,Battlecry: Give both players the power to ROCK! (with a Power Chord card),,,5,5,5,Legendary,Minion
 yes,Elven Archer,Battlecry: Deal 1 damage.,,,1,1,1,Common,Minion
-no,Emperor Cobra,Destroy any minion damaged by this minion.,Beast,,3,2,3,Rare,Minion
+yes,Emperor Cobra,Destroy any minion damaged by this minion.,Beast,,3,2,3,Rare,Minion
 yes,Equality,Change the Health of ALL minions to 1.,,Paladin,2,,,Rare,Spell
 yes,Ethereal Arcanist,"If you control a Secret at the end of your turn, gain +2/+2.",,Mage,4,3,3,Rare,Minion
 no,Eviscerate,Deal 2 damage. Combo: Deal 4 damage instead.,,Rogue,2,,,Common,Spell

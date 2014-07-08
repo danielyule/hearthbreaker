@@ -808,3 +808,16 @@ class StormwindChampion(MinionCard):
         minion = Minion(6, 6)
         minion.bind("added_to_board", add_effect)
         return minion
+
+
+class EmperorCobra(MinionCard):
+    def __init__(self):
+        super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def on_damage(amount, target):
+            target.die(None)
+
+        minion = Minion(2, 3, MINION_TYPE.BEAST)
+        minion.bind("did_damage", on_damage)
+        return minion

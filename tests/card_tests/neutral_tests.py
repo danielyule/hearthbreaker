@@ -118,11 +118,13 @@ class TestCommon(unittest.TestCase):
 
         # When removing the minion at index 0, we should not get an error
         game.current_player.minions[0].die(None)
+        game.current_player.minions[0].activate_delayed()
         self.assertEqual(3, len(game.current_player.minions))
 
         # When removing the minion at index 1, we should have a new minion at index 1,
         # and its attack should be increased
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
 
@@ -147,6 +149,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
 
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
 
@@ -451,3 +454,25 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[1].calculate_max_health())
         self.assertEqual(1, game.other_player.minions[2].health)
         self.assertEqual(1, game.other_player.minions[2].calculate_max_health())
+
+    def test_EmperorCobra(self):
+        game = generate_game_for(EmperorCobra, [EmperorCobra, MagmaRager, ChillwindYeti],
+                                 PredictableAgentWithoutHeroPower, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))

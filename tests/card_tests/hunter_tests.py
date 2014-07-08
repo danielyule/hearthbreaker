@@ -51,6 +51,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
 
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[4].calculate_attack())
         self.assertEqual(3, game.current_player.minions[3].calculate_attack())
@@ -59,6 +60,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
 
         game.current_player.minions[3].die(None)
+        game.current_player.minions[3].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[3].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
