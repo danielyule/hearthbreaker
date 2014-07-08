@@ -70,12 +70,12 @@ class PatientAssassin(MinionCard):
         super().__init__("Patient Assassin", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        def destroy_minion(amount, target):
+        def poisonous(amount, target):
             if type(target) is Minion and not target.dead:
                 target.die(self)
 
         minion = Minion(1, 1)
         minion.stealth = True
-        minion.bind("did_damage", destroy_minion)
-        minion.bind_once("silenced", lambda: minion.unbind("did_damage", destroy_minion))
+        minion.bind("did_damage", poisonous)
+        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
         return minion

@@ -815,9 +815,11 @@ class EmperorCobra(MinionCard):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def on_damage(amount, target):
-            target.die(None)
+        def poisonous(amount, target):
+            if type(target) is Minion and not target.dead:
+                target.die(self)
 
         minion = Minion(2, 3, MINION_TYPE.BEAST)
-        minion.bind("did_damage", on_damage)
+        minion.bind("did_damage", poisonous)
+        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
         return minion
