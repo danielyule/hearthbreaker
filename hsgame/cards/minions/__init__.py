@@ -117,7 +117,8 @@ from hsgame.cards.minions.rogue import (
     DefiasRingleader,
     EdwinVanCleef,
     Kidnapper,
-    MasterOfDisguise
+    MasterOfDisguise,
+    PatientAssassin
 )
 
 from hsgame.cards.minions.shaman import (

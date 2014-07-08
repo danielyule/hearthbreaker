@@ -82,6 +82,39 @@ class TestRogue(unittest.TestCase):
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertTrue(game.players[0].minions[1].stealth)
 
+    def test_PatientAssassin(self):
+        game = generate_game_for([PatientAssassin, Shieldbearer, Shieldbearer, Shieldbearer, Shieldbearer, Shieldbearer,
+                                  Shieldbearer], [Sunwalker, Malygos], PredictableAgentWithoutHeroPower,
+                                 MinionPlayingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        # Lots of turns have passed. The opponent hero shouldn't have died of the poison effect
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(26, game.players[1].hero.health)
+        # And Sunwalker should have been played
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertTrue(game.players[1].minions[0].divine_shield)
+
+        # Patient Assassin should attack the Sunwalker, but only divine shield should be affected
+        game.play_single_turn()
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertFalse(game.players[1].minions[0].divine_shield)
+        self.assertEqual(5, game.players[1].minions[0].health)
+        
+        # A new Patient Assassin should be played
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].minions))
+        
+        # Patient Assassin should attack again, this time killing the Sunwalker since it no longer has divine shield
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
     def test_Backstab(self):
         game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 
