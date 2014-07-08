@@ -837,6 +837,11 @@ class Minion(Character):
         self.trigger("copied", new_minion, new_owner)
         return new_minion
 
+    def bounce(self):
+        self.remove_from_board()
+        if len(self.player.hand) <= 7:
+            self.player.hand.append(self.card)
+
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
     """
