@@ -137,7 +137,7 @@ yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hun
 no,Flesheating Ghoul,"Whenever a minion dies, gain +1 Attack.",,,3,2,3,Common,Minion
 yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Epic,Spell
 yes,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Common,Spell
-no,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's hand and it costs (2) more.",,Hunter,2,,,Common,Spell
+yes,Freezing Trap,"Secret: When an enemy minion attacks, return it to its owner's hand and it costs (2) more.",,Hunter,2,,,Common,Spell
 no,Frost Elemental,Battlecry: Freeze a character.,,,6,5,5,Common,Minion
 yes,Frost Nova,Freeze all enemy minions.,,Mage,3,,,Common,Spell
 yes,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,Free,Spell

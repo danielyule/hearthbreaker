@@ -196,3 +196,13 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.secrets))
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(27, game.other_player.hero.health)
+
+    def test_FreezingTrap(self):
+        game = generate_game_for(FreezingTrap, StonetuskBoar, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, len(game.current_player.hand))
+        self.assertEqual(3, game.current_player.hand[3].mana_cost(game.current_player))
