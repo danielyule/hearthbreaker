@@ -118,7 +118,8 @@ from hsgame.cards.minions.rogue import (
     EdwinVanCleef,
     Kidnapper,
     MasterOfDisguise,
-    PatientAssassin
+    PatientAssassin,
+    SI7Agent
 )
 
 from hsgame.cards.minions.shaman import (

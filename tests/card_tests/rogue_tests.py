@@ -115,6 +115,25 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(6, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
 
+    def test_SI7Agent(self):
+        game = generate_game_for(SI7Agent, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # SI:7 Agent should have been played, no combo
+        self.assertEqual(1, len(game.players[0].minions))
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+
+        # Two SI:7 should be played, the second trigger the combo targeting one of our own minions...
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[1].health)
+
     def test_Backstab(self):
         game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
 

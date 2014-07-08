@@ -79,3 +79,17 @@ class PatientAssassin(MinionCard):
         minion.bind("did_damage", poisonous)
         minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
         return minion
+
+
+class SI7Agent(MinionCard):
+    def __init__(self):
+        super().__init__("SI:7 Agent", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
+                         hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        def combo(m):
+            if m.card.target is not None and player.cards_played > 0:
+                m.card.target.damage(2, self)
+
+        minion = Minion(3, 3, battlecry=combo)
+        return minion
