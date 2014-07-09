@@ -713,6 +713,8 @@ class Minion(Character):
         self.index = index
         if self.charge:
             self.active = True
+
+        self.health += self.calculate_max_health() - self.base_health
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
 
