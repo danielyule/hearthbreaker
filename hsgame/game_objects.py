@@ -843,11 +843,12 @@ class Minion(Character):
         return new_minion
 
     def bounce(self):
-        self.remove_from_board()
         if len(self.player.hand) < 10:
+            self.remove_from_board()
             self.player.hand.append(self.card)
         else:
-            self.player.trigger("card_destroyed", self.card)
+            self.die(None)
+            self.activate_delayed()
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):

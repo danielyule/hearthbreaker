@@ -216,14 +216,12 @@ class TestHunter(unittest.TestCase):
                     player.minions[0].attack()
         game = generate_game_for(FreezingTrap, BoulderfistOgre, SpellTestingAgent, FreezingTrapAgent)
 
-        destroy_mock = unittest.mock.Mock()
-        game.players[1].bind_once("card_destroyed", destroy_mock)
-
         for turn in range(0, 12):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        minion_card = game.current_player.minions[0].card
+        death_mock = unittest.mock.Mock()
+        game.players[1].minions[0].bind_once("died", death_mock)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -233,4 +231,4 @@ class TestHunter(unittest.TestCase):
         for card in game.current_player.hand:
             self.assertEqual(6, card.mana_cost(game.current_player))
         self.assertEqual(30, game.other_player.hero.health)
-        destroy_mock.assert_called_once_with(minion_card)
+        death_mock.assert_called_once_with(None)
