@@ -841,6 +841,8 @@ class Minion(Character):
         self.remove_from_board()
         if len(self.player.hand) < 10:
             self.player.hand.append(self.card)
+        else:
+            self.player.trigger("card_destroyed", self.card)
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
