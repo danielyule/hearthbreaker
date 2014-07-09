@@ -241,6 +241,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.stealth = False
         #: If this character is enraged
         self.enraged = False
+        #: If this character has been removed from the board
+        self.removed = False
 
     def _turn_complete(self):
         """
@@ -290,7 +292,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         else:
             self.trigger("attack_player", target)
         target.trigger("attacked", self)
-        if self.dead:
+        if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
         self.damage(target.calculate_attack(), target)
@@ -720,6 +722,7 @@ class Minion(Character):
             if minion.index > self.index:
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
+        self.removed = True
 
     def replace(self, new_minion):
         """
