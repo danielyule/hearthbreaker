@@ -1,6 +1,6 @@
 import random
 import unittest
-
+import unittest.mock
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower
@@ -206,3 +206,31 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(4, len(game.current_player.hand))
         self.assertEqual(3, game.current_player.hand[3].mana_cost(game.current_player))
+
+    def test_FreezingTrap_many_cards(self):
+        class FreezingTrapAgent(DoNothingBot):
+            def do_turn(self, player):
+                if player.mana == 6:
+                    game.play_card(player.hand[0])
+                if player.mana == 7:
+                    player.minions[0].attack()
+        game = generate_game_for(FreezingTrap, BoulderfistOgre, SpellTestingAgent, FreezingTrapAgent)
+
+        destroy_mock = unittest.mock.Mock()
+        game.players[1].bind_once("card_destroyed", destroy_mock)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        minion_card = game.current_player.minions[0].card
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(10, len(game.current_player.hand))
+        self.assertEqual(0, len(game.current_player.minions))
+        for card in game.current_player.hand:
+            self.assertEqual(6, card.mana_cost(game.current_player))
+        self.assertEqual(30, game.other_player.hero.health)
+        destroy_mock.assert_called_once_with(minion_card)
