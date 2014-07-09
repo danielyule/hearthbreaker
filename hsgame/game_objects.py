@@ -839,7 +839,7 @@ class Minion(Character):
 
     def bounce(self):
         self.remove_from_board()
-        if len(self.player.hand) <= 7:
+        if len(self.player.hand) < 10:
             self.player.hand.append(self.card)
 
 
