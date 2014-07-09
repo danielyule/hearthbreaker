@@ -476,3 +476,44 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_CrazedAlchemist(self):
+        game = generate_game_for([FlametongueTotem, StormwindChampion, MagmaRager],
+                                 [CrazedAlchemist, CrazedAlchemist, BoulderfistOgre],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].health)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].damage(2, None)
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.other_player.minions[0].health)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].health)
+
+        game.other_player.minions[0].silence()
+        self.assertEqual(6, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].health)

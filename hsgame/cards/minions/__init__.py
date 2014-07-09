@@ -72,6 +72,7 @@ from hsgame.cards.minions.neutral import (
     VentureCoMercenary,
     StormwindChampion,
     EmperorCobra,
+    CrazedAlchemist,
 )
 
 from hsgame.cards.minions.druid import (

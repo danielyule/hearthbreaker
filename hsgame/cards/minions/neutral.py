@@ -823,3 +823,24 @@ class EmperorCobra(MinionCard):
         minion.bind("did_damage", poisonous)
         minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
         return minion
+
+
+class CrazedAlchemist(MinionCard):
+    def __init__(self):
+        super().__init__("Crazed Alchemist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        def swap(minion):
+            if self.target is not None:
+                temp_attack = self.target.calculate_attack()
+                temp_health = self.target.health
+                self.target.change_attack(temp_health - self.target.base_attack)
+                if temp_attack < self.target.base_health:
+                    self.target.decrease_health(self.target.base_health - temp_attack)
+                else:
+                    self.target.increase_health(temp_attack - self.target.base_health)
+                self.target.health = self.target.calculate_max_health()
+                if self.target.health is 0:
+                    self.target.die(None)
+        return Minion(2, 2, battlecry=swap)
