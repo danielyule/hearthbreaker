@@ -1,6 +1,6 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import Card, SecretCard
+from hsgame.game_objects import Card, SecretCard, Minion
 
 
 class HuntersMark(Card):
@@ -99,3 +99,25 @@ class ExplosiveTrap(SecretCard):
         for enemy in enemies:
             enemy.activate_delayed()
         super().reveal()
+
+
+class FreezingTrap(SecretCard):
+    def __init__(self):
+        super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def activate(self, player):
+        player.game.current_player.bind_once("attacking", self._reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("attacking", self._reveal)
+
+    def _reveal(self, attacker):
+        if isinstance(attacker, Minion):
+            class Filter:
+                def __init__(self):
+                    self.amount = -2
+                    self.filter = lambda c: c is card
+                    self.min = 0
+            card = attacker.card
+            attacker.bounce()
+            attacker.player.mana_filters.append(Filter())

@@ -72,7 +72,9 @@ from hsgame.cards.minions.neutral import (
     VentureCoMercenary,
     StormwindChampion,
     Deathwing,
-    Alexstrasza
+    Alexstrasza,
+    EmperorCobra,
+    CrazedAlchemist
 )
 
 from hsgame.cards.minions.druid import (
@@ -118,7 +120,9 @@ from hsgame.cards.minions.rogue import (
     DefiasRingleader,
     EdwinVanCleef,
     Kidnapper,
-    MasterOfDisguise
+    MasterOfDisguise,
+    PatientAssassin,
+    SI7Agent
 )
 
 from hsgame.cards.minions.shaman import (

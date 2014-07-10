@@ -808,14 +808,15 @@ class StormwindChampion(MinionCard):
         minion = Minion(6, 6)
         minion.bind("added_to_board", add_effect)
         return minion
+
         
 class Deathwing(MinionCard):
     def __init__(self):
         super().__init__("Deathwing", 10, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(12, 12, MINION_TYPE.DRAGON,
-                      battlecry=deathwing)
+        return Minion(12, 12, MINION_TYPE.DRAGON, battlecry=deathwing)
+
 
 class Alexstrasza(MinionCard):
     def __init__(self):
@@ -824,5 +825,40 @@ class Alexstrasza(MinionCard):
     def create_minion(self, player):
         def set_hero_health(player):
             self.target.health = 15
-        return Minion(8, 8, MINION_TYPE.DRAGON,
-                      battlecry=set_hero_health)
+        return Minion(8, 8, MINION_TYPE.DRAGON, battlecry=set_hero_health)
+
+
+class EmperorCobra(MinionCard):
+    def __init__(self):
+        super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def poisonous(amount, target):
+            if type(target) is Minion:
+                target.die(self)
+
+        minion = Minion(2, 3, MINION_TYPE.BEAST)
+        minion.bind("did_damage", poisonous)
+        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
+        return minion
+
+
+class CrazedAlchemist(MinionCard):
+    def __init__(self):
+        super().__init__("Crazed Alchemist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        def swap(minion):
+            if self.target is not None:
+                temp_attack = self.target.calculate_attack()
+                temp_health = self.target.health
+                self.target.change_attack(temp_health - self.target.base_attack)
+                if temp_attack < self.target.base_health:
+                    self.target.decrease_health(self.target.base_health - temp_attack)
+                elif temp_attack > self.target.base_health:
+                    self.target.increase_health(temp_attack - self.target.base_health)
+                self.target.health = self.target.calculate_max_health()
+                if self.target.health is 0:
+                    self.target.die(None)
+        return Minion(2, 2, battlecry=swap)

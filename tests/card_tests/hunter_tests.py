@@ -1,6 +1,6 @@
 import random
 import unittest
-
+import unittest.mock
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower
@@ -51,6 +51,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
 
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[4].calculate_attack())
         self.assertEqual(3, game.current_player.minions[3].calculate_attack())
@@ -59,6 +60,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
 
         game.current_player.minions[3].die(None)
+        game.current_player.minions[3].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[3].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
@@ -194,3 +196,39 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.secrets))
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(27, game.other_player.hero.health)
+
+    def test_FreezingTrap(self):
+        game = generate_game_for(FreezingTrap, StonetuskBoar, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, len(game.current_player.hand))
+        self.assertEqual(3, game.current_player.hand[3].mana_cost(game.current_player))
+
+    def test_FreezingTrap_many_cards(self):
+        class FreezingTrapAgent(DoNothingBot):
+            def do_turn(self, player):
+                if player.mana == 6:
+                    game.play_card(player.hand[0])
+                if player.mana == 7:
+                    player.minions[0].attack()
+        game = generate_game_for(FreezingTrap, BoulderfistOgre, SpellTestingAgent, FreezingTrapAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        death_mock = unittest.mock.Mock()
+        game.players[1].minions[0].bind_once("died", death_mock)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(10, len(game.current_player.hand))
+        self.assertEqual(0, len(game.current_player.minions))
+        for card in game.current_player.hand:
+            self.assertEqual(6, card.mana_cost(game.current_player))
+        self.assertEqual(30, game.other_player.hero.health)
+        death_mock.assert_called_once_with(None)

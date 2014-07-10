@@ -26,7 +26,8 @@ from hsgame.cards.spells.hunter import (
     BestialWrath,
     Flare,
     Tracking,
-    ExplosiveTrap
+    ExplosiveTrap,
+    FreezingTrap
 )
 
 from hsgame.cards.spells.mage import (
@@ -93,6 +94,13 @@ from hsgame.cards.spells.priest import (
     Thoughtsteal
 )
 
+from hsgame.cards.spells.rogue import (
+    Assassinate,
+    Backstab,
+    Betrayal,
+    BladeFlurry
+)
+
 from hsgame.cards.spells.shaman import (
     AncestralHealing,
     AncestralSpirit,
@@ -109,10 +117,6 @@ from hsgame.cards.spells.shaman import (
     RockbiterWeapon,
     TotemicMight,
     Windfury
-)
-
-from hsgame.cards.spells.rogue import (
-    Backstab
 )
 
 from hsgame.cards.spells.warlock import (

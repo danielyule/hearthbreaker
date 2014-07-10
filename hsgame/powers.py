@@ -63,6 +63,9 @@ class MagePower(Power):
         super().use()
         target = self.hero.find_power_target()
         target.damage(1 * self.hero.player.spell_multiplier, None)
+        for minion in self.hero.player.game.delayed_minions:
+            minion.activate_delayed()
+            self.hero.player.game.delayed_minions = []
 
 
 class PriestPower(Power):

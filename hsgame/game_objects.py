@@ -241,6 +241,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.stealth = False
         #: If this character is enraged
         self.enraged = False
+        #: If this character has been removed from the board
+        self.removed = False
 
     def _turn_complete(self):
         """
@@ -290,7 +292,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         else:
             self.trigger("attack_player", target)
         target.trigger("attacked", self)
-        if self.dead:
+        if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
         self.damage(target.calculate_attack(), target)
@@ -388,7 +390,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.trigger("secret_damaged", amount, attacker)
             self.health -= amount
             if issubclass(type(attacker), Character):
-                attacker.delayed_trigger("did_damage", amount, self)
+                attacker.trigger("did_damage", amount, self)
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
@@ -711,6 +713,8 @@ class Minion(Character):
         self.index = index
         if self.charge:
             self.active = True
+
+        self.health += self.calculate_max_health() - self.base_health
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
 
@@ -720,6 +724,7 @@ class Minion(Character):
             if minion.index > self.index:
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
+        self.removed = True
 
     def replace(self, new_minion):
         """
@@ -761,13 +766,17 @@ class Minion(Character):
 
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
-        deathrattle = self.deathrattle
-        self.bind_once("died", lambda c: self.silence())
-        super().die(by)
-        if deathrattle is not None:
-            deathrattle(self)
-        self.remove_from_board()
-        self.game.trigger("minion_died", self, by)
+        if not self.dead:
+            deathrattle = self.deathrattle
+
+            def delayed_death(c):
+                self.silence()
+                self.remove_from_board()
+            self.bind_once("died", delayed_death)
+            super().die(by)
+            if deathrattle is not None:
+                deathrattle(self)
+            self.game.trigger("minion_died", self, by)
 
     def can_be_attacked(self):
         return not self.stealth
@@ -832,6 +841,14 @@ class Minion(Character):
         new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
         return new_minion
+
+    def bounce(self):
+        if len(self.player.hand) < 10:
+            self.remove_from_board()
+            self.player.hand.append(self.card)
+        else:
+            self.die(None)
+            self.activate_delayed()
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):

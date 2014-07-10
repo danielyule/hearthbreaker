@@ -118,11 +118,13 @@ class TestCommon(unittest.TestCase):
 
         # When removing the minion at index 0, we should not get an error
         game.current_player.minions[0].die(None)
+        game.current_player.minions[0].activate_delayed()
         self.assertEqual(3, len(game.current_player.minions))
 
         # When removing the minion at index 1, we should have a new minion at index 1,
         # and its attack should be increased
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
 
@@ -147,6 +149,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
 
         game.current_player.minions[1].die(None)
+        game.current_player.minions[1].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
 
@@ -613,3 +616,66 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))        
         self.assertEqual(15, game.players[0].hero.health)
         self.assertEqual(30, game.players[1].hero.health)
+        
+    def test_EmperorCobra(self):
+        game = generate_game_for(EmperorCobra, [EmperorCobra, MagmaRager, ChillwindYeti],
+                                 PredictableAgentWithoutHeroPower, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_CrazedAlchemist(self):
+        game = generate_game_for([FlametongueTotem, StormwindChampion, MagmaRager],
+                                 [CrazedAlchemist, CrazedAlchemist, BoulderfistOgre],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].health)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].damage(2, None)
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.other_player.minions[0].health)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].health)
+
+        game.other_player.minions[0].silence()
+        self.assertEqual(6, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].health)

@@ -88,11 +88,13 @@ class TestShaman(unittest.TestCase):
 
         # When removing the minion at index 0, we should not get an error
         game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
         self.assertEqual(3, len(game.players[0].minions))
 
         # When removing the minion at index 1, we should have a new minion at index 1,
         # and its attack should be increased
         game.players[0].minions[1].die(None)
+        game.players[0].minions[1].activate_delayed()
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
 
@@ -117,6 +119,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
 
         game.players[0].minions[1].die(None)
+        game.players[0].minions[1].activate_delayed()
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
 

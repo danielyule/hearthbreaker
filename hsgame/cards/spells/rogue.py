@@ -3,6 +3,17 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
 
+class Assassinate(Card):
+    def __init__(self):
+        super().__init__("Assassinate", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+
+
 class Backstab(Card):
     def __init__(self):
         super().__init__("Backstab", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
@@ -13,3 +24,48 @@ class Backstab(Card):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(2), self)
+
+
+class Betrayal(Card):
+    def __init__(self):
+        super().__init__("Betrayal", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        left_minion = None
+        right_minion = None
+
+        index = self.target.index
+        if index > 0:
+            left_minion = game.other_player.minions[index - 1]
+        if index < min(len(game.other_player.minions) - 1, 6):
+            right_minion = game.other_player.minions[index + 1]
+
+        original_immune = self.target.immune
+        self.target.immune = True
+        if left_minion is not None:
+            left_minion.damage(self.target.calculate_attack(), self.target)
+        if right_minion is not None:
+            right_minion.damage(self.target.calculate_attack(), self.target)
+        self.target.immune = original_immune
+
+
+class BladeFlurry(Card):
+    def __init__(self):
+        super().__init__("Blade Flurry", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.hero.weapon is not None:
+            # Yes, this card is affected by spell damage cards.
+            # Source: http://www.hearthhead.com/card=1064/blade-flurry#comments:id=1927317
+            attack_power = player.effective_spell_damage(player.hero.calculate_attack())
+            player.hero.weapon.destroy()
+
+            for minion in game.other_player.minions.copy():
+                minion.damage(attack_power, self)
+
+            game.other_player.hero.damage(attack_power, self)
