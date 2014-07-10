@@ -1,7 +1,7 @@
 Implemented?,Name,Text,Race,Class,Cost,Attack,Health,Rarity,Type,Set
 yes,Abomination,Taunt. Deathrattle: Deal 2 damage to ALL characters.,,,5,4,4,Rare,Minion,Expert
 yes,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Common,Minion,Expert
-no,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Common,Minion,Basic
+yes,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Common,Minion,Basic
 no,Acolyte of Pain,"Whenever this minion takes damage, draw a card.",,,3,1,3,Common,Minion,Expert
 yes,Al'Akir the Windlord,"Windfury, Charge, Divine Shield, Taunt",,Shaman,8,3,5,Legendary,Minion,Expert
 no,Alarm-o-Bot,"At the start of your turn, swap this minion with a random one in your hand.",,,3,0,3,Rare,Minion,Expert

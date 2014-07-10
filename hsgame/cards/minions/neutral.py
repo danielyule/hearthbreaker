@@ -844,3 +844,13 @@ class CrazedAlchemist(MinionCard):
                 if self.target.health is 0:
                     self.target.die(None)
         return Minion(2, 2, battlecry=swap)
+
+
+class AcidicSwampOoze(MinionCard):
+    def __init__(self):
+        super().__init__("Acidic Swamp Ooze", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def destroy_weapon(minion):
+            player.game.other_player.hero.weapon.destroy()
+        return Minion(3, 2, battlecry=destroy_weapon)

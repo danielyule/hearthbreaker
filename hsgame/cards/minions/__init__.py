@@ -73,6 +73,7 @@ from hsgame.cards.minions.neutral import (
     StormwindChampion,
     EmperorCobra,
     CrazedAlchemist,
+    AcidicSwampOoze,
 )
 
 from hsgame.cards.minions.druid import (

@@ -240,5 +240,5 @@ class TestHunter(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(28, game.other_player.hero.health)
-        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))  # The boar has been misdirected into another boar
         self.assertEqual(30, game.current_player.hero.health)

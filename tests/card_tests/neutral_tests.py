@@ -517,3 +517,14 @@ class TestCommon(unittest.TestCase):
         game.other_player.minions[0].silence()
         self.assertEqual(6, game.other_player.minions[0].calculate_attack())
         self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_AcidicSwampOoze(self):
+        game = generate_game_for(AcidicSwampOoze, LightsJustice, SpellTestingAgent, SpellTestingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.current_player.hero.weapon is not None)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.hero.weapon is None)
