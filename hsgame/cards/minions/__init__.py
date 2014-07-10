@@ -70,7 +70,9 @@ from hsgame.cards.minions.neutral import (
     SilverHandKnight,
     FenCreeper,
     VentureCoMercenary,
-    StormwindChampion
+    StormwindChampion,
+    Deathwing,
+    Alexstrasza
 )
 
 from hsgame.cards.minions.druid import (

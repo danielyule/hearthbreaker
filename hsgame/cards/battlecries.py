@@ -111,9 +111,13 @@ def discard_two(minion):
     minion.player.discard()
 
 
-def discard_all(minion):
+def deathwing(minion):
+    targets = minion.player.game.other_player.minions.copy()
+    targets.extend(minion.player.game.current_player.minions)
+    for minion in targets:
+        minion.die(None)
     for i in range(len(minion.player.hand)):
-        minion.player.discard()
+        minion.player.game.current_player.discard()
 
 
 def darkscale_healer(minion):

@@ -1,7 +1,7 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage, \
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
-    destroy_target, two_temp_attack, nightblade, ssc
+    destroy_target, two_temp_attack, nightblade, ssc, deathwing
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -808,3 +808,21 @@ class StormwindChampion(MinionCard):
         minion = Minion(6, 6)
         minion.bind("added_to_board", add_effect)
         return minion
+        
+class Deathwing(MinionCard):
+    def __init__(self):
+        super().__init__("Deathwing", 10, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(12, 12, MINION_TYPE.DRAGON,
+                      battlecry=deathwing)
+
+class Alexstrasza(MinionCard):
+    def __init__(self):
+        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, hsgame.targeting.find_hero_target)
+
+    def create_minion(self, player):
+        def set_hero_health(player):
+            self.target.health = 15
+        return Minion(8, 8, MINION_TYPE.DRAGON,
+                      battlecry=set_hero_health)

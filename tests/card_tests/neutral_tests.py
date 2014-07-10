@@ -581,9 +581,35 @@ class TestCommon(unittest.TestCase):
         
         game.play_single_turn()
         game.play_single_turn()
-        #Refuses to play TBK without battlecry target
+
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual("The Black Knight", game.players[0].minions[0].card.name)
         self.assertEqual("The Black Knight", game.players[0].minions[1].card.name)
         self.assertEqual("Sen'jin Shieldmasta", game.players[0].minions[2].card.name)
+
+    def test_Deathwing(self):
+        game = generate_game_for(Deathwing, LordOfTheArena, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 18):        
+            game.play_single_turn()  
+        
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(9, len(game.players[1].hand))
+        
+        game.play_single_turn()
+        
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(9, len(game.players[1].hand))
+        
+    def test_Alexstrasza(self):
+        game = generate_game_for(Alexstrasza, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
+        for turn in range(0, 17):        
+            game.play_single_turn() 
+
+        self.assertEqual(1, len(game.players[0].minions))        
+        self.assertEqual(15, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
