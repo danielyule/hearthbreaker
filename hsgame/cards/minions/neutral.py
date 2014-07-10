@@ -852,5 +852,6 @@ class AcidicSwampOoze(MinionCard):
 
     def create_minion(self, player):
         def destroy_weapon(minion):
-            player.game.other_player.hero.weapon.destroy()
+            if player.game.other_player.hero.weapon is not None:
+                player.game.other_player.hero.weapon.destroy()
         return Minion(3, 2, battlecry=destroy_weapon)
