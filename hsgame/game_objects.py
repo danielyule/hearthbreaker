@@ -777,6 +777,7 @@ class Minion(Character):
             if deathrattle is not None:
                 deathrattle(self)
             self.game.trigger("minion_died", self, by)
+            self.removed = True
 
     def can_be_attacked(self):
         return not self.stealth

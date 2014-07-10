@@ -112,7 +112,7 @@ class FreezingTrap(SecretCard):
         player.game.current_player.unbind("attacking", self._reveal)
 
     def _reveal(self, attacker):
-        if isinstance(attacker, Minion):
+        if isinstance(attacker, Minion) and not attacker.removed:
             class Filter:
                 def __init__(self):
                     self.amount = -2
@@ -121,3 +121,34 @@ class FreezingTrap(SecretCard):
             card = attacker.card
             attacker.bounce()
             attacker.player.mana_filters.append(Filter())
+
+
+class Misdirection(SecretCard):
+    def __init__(self):
+        super().__init__("Misdirection", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+
+    def activate(self, player):
+        player.hero.bind_once("attacked", self._reveal)
+
+    def deactivate(self, player):
+        player.hero.unbind("attacked", self._reveal)
+
+    def _reveal(self, character):
+        game = character.player.game
+        if not character.removed:
+
+            def choose_random(targets):
+                possibilities = game.current_player.minions.copy()
+                possibilities.extend(game.other_player.minions)
+                possibilities.append(game.current_player.hero)
+                possibilities.append(game.other_player.hero)
+                old_target = old_target_func(targets)
+                possibilities.remove(old_target)
+                game.current_player.agent.choose_target = old_target_func
+                return possibilities[game.random(0, len(possibilities))]
+
+            old_target_func = game.current_player.agent.choose_target
+            game.current_player.agent.choose_target = choose_random
+            super().reveal()
+        else:
+            self.activate(game.other_player)

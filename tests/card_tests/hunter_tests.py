@@ -232,3 +232,13 @@ class TestHunter(unittest.TestCase):
             self.assertEqual(6, card.mana_cost(game.current_player))
         self.assertEqual(30, game.other_player.hero.health)
         death_mock.assert_called_once_with(None)
+
+    def test_Misdirection(self):
+        game = generate_game_for(Misdirection, StonetuskBoar, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(28, game.other_player.hero.health)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(30, game.current_player.hero.health)

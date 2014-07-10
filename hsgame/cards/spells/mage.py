@@ -169,6 +169,7 @@ class Spellbender(SecretCard):
                 spell_bender = SpellbenderMinion()
                 # TODO test what happens if Spellbender goes off when there are 7 minions down
                 spell_bender.summon(player, player.game, len(player.minions))
+                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
                 player.game.current_player.agent.choose_target = old_target
                 return player.minions[-1]
 
@@ -191,7 +192,7 @@ class Vaporize(SecretCard):
         super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def _reveal(self, attacker):
-        if type(attacker) is Minion:
+        if type(attacker) is Minion and not attacker.removed:
             attacker.die(self)
             attacker.activate_delayed()
             super().reveal()

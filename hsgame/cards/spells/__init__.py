@@ -27,7 +27,8 @@ from hsgame.cards.spells.hunter import (
     Flare,
     Tracking,
     ExplosiveTrap,
-    FreezingTrap
+    FreezingTrap,
+    Misdirection,
 )
 
 from hsgame.cards.spells.mage import (

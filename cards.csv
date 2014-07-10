@@ -232,7 +232,7 @@ yes,Mind Vision,Put a copy of a random card in your opponent's hand into your ha
 yes,Mindgames,Put a copy of a random minion from your opponent's deck into the battlefield.,,Priest,4,,,Epic,Spell
 yes,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of it.",,Mage,3,,,Common,Spell
 yes,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Common,Spell
-no,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Rare,Spell
+yes,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Rare,Spell
 yes,Mogu'shan Warden,Taunt,,,4,1,7,Common,Minion
 no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Epic,Minion
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Common,Spell
