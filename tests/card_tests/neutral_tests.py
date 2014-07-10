@@ -528,3 +528,14 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
         self.assertTrue(game.current_player.hero.weapon is None)
+
+    def test_AcidicSwampOozeWithNoWeapon(self):
+        game = generate_game_for(AcidicSwampOoze, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.current_player.hero.weapon is None)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.hero.weapon is None)
