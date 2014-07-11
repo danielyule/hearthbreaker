@@ -101,7 +101,8 @@ from hsgame.cards.spells.rogue import (
     Betrayal,
     BladeFlurry,
     ColdBlood,
-    Conceal
+    Conceal,
+    DeadlyPoison
 )
 
 from hsgame.cards.spells.shaman import (

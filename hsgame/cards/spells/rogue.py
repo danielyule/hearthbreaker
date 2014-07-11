@@ -104,3 +104,17 @@ class Conceal(Card):
                 affected_minions.append(minion)
 
         player.bind_once("turn_started", remove_stealth)
+
+
+class DeadlyPoison(Card):
+    def __init__(self):
+        super().__init__("Deadly Poison", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        player.hero.weapon.base_attack += 2
+        player.hero.change_temp_attack(2)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and player.hero.weapon is not None

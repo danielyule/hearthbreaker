@@ -231,3 +231,17 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertFalse(game.players[0].minions[0].stealth)
+
+    def test_DeadlyPoison(self):
+        game = generate_game_for(DeadlyPoison, StonetuskBoar, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        # Knife should have been played
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+
+        game.play_single_turn()
+        # Deadly Poison should have been played
+        game.play_single_turn()
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)

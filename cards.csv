@@ -86,7 +86,7 @@ no,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,C
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Common,Minion,Basic
 yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common,Minion,Expert
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
-no,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
+yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
 no,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Common,Spell,Expert
 no,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Legendary,Minion,Expert
 no,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
