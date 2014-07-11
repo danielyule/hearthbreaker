@@ -152,3 +152,18 @@ class Misdirection(SecretCard):
             super().reveal()
         else:
             self.activate(game.other_player)
+
+
+class Snipe(SecretCard):
+    def __init__(self):
+        super().__init__("Snipe", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def activate(self, player):
+        player.game.current_player.bind_once("minion_played", self._reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("minion_played", self._reveal)
+
+    def _reveal(self, minion):
+        minion.damage(4, None)
+        minion.activate_delayed()

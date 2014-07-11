@@ -242,3 +242,25 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(28, game.other_player.hero.health)
         self.assertEqual(1, len(game.current_player.minions))  # The boar has been misdirected into another boar
         self.assertEqual(30, game.current_player.hero.health)
+
+    def test_Snipe(self):
+        game = generate_game_for([MagmaRager, OasisSnapjaw, FeralSpirit], Snipe, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[2].health)

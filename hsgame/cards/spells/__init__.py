@@ -29,6 +29,7 @@ from hsgame.cards.spells.hunter import (
     ExplosiveTrap,
     FreezingTrap,
     Misdirection,
+    Snipe,
 )
 
 from hsgame.cards.spells.mage import (

@@ -312,7 +312,7 @@ no,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell,Basic
 yes,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Rare,Spell,Expert
 no,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Common,Spell,Expert
 no,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Epic,Spell,Expert
-no,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
+yes,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
 yes,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Common,Minion,Expert
 yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Common,Spell,Expert
 yes,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Common,Spell,Basic
