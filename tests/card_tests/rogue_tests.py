@@ -201,3 +201,16 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[1].health)
         self.assertEqual(2, game.players[0].minions[2].health)
         self.assertEqual(3, game.players[0].minions[3].health)
+
+    def test_ColdBlood(self):
+        game = generate_game_for([StonetuskBoar, ColdBlood, ColdBlood], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+        # Two Cold Blood should be played, targeting the Boar. The first one should not have combo, but the second one
+        # should have the combo, resulting in 2 + 4 = 6 attack buff
+        game.play_single_turn()
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())

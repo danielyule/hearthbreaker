@@ -99,7 +99,8 @@ from hsgame.cards.spells.rogue import (
     Assassinate,
     Backstab,
     Betrayal,
-    BladeFlurry
+    BladeFlurry,
+    ColdBlood
 )
 
 from hsgame.cards.spells.shaman import (

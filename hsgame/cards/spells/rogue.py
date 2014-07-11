@@ -69,3 +69,17 @@ class BladeFlurry(Card):
                 minion.damage(attack_power, self)
 
             game.other_player.hero.damage(attack_power, self)
+
+
+class ColdBlood(Card):
+    def __init__(self):
+        super().__init__("Cold Blood", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.cards_played > 0:
+            self.target.change_attack(4)
+        else:
+            self.target.change_attack(2)
