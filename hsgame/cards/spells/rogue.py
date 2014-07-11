@@ -83,3 +83,24 @@ class ColdBlood(Card):
             self.target.change_attack(4)
         else:
             self.target.change_attack(2)
+
+
+class Conceal(Card):
+    def __init__(self):
+        super().__init__("Conceal", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        def remove_stealth():
+            for minion in affected_minions:
+                minion.stealth = False
+
+        super().use(player, game)
+
+        affected_minions = []
+
+        for minion in player.minions:
+            if not minion.stealth:
+                minion.stealth = True
+                affected_minions.append(minion)
+
+        player.bind_once("turn_started", remove_stealth)

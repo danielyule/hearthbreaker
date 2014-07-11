@@ -214,3 +214,20 @@ class TestRogue(unittest.TestCase):
         # should have the combo, resulting in 2 + 4 = 6 attack buff
         game.play_single_turn()
         self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+
+    def test_Conceal(self):
+        game = generate_game_for([StonetuskBoar, Conceal, MogushanWarden], StonetuskBoar, SpellTestingAgent,
+                                 DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # Stonetusk and Conceal should have been played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].stealth)
+
+        game.play_single_turn()
+        # Conceal should fade off
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].stealth)
