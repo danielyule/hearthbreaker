@@ -232,6 +232,24 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertFalse(game.players[0].minions[0].stealth)
 
+    def test_Conceal_Silence(self):
+        game = generate_game_for([IronfurGrizzly, Conceal, BoulderfistOgre], MassDispel, SpellTestingAgent,
+                                 SpellTestingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        # Grizzly and Conceal should have been played
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].stealth)
+        # Stealth should be gone from all minions
+        game.play_single_turn()
+        self.assertFalse(game.players[0].minions[0].stealth)
+        # Conceal would be gone, but it's been removed by silence
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].stealth)
+
     def test_DeadlyPoison(self):
         game = generate_game_for(DeadlyPoison, StonetuskBoar, PredictableBot, DoNothingBot)
 

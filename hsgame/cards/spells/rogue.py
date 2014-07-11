@@ -90,20 +90,19 @@ class Conceal(Card):
         super().__init__("Conceal", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
-        def remove_stealth():
-            for minion in affected_minions:
+        def create_remove_stealth(minion):
+            def remove_stealth():
                 minion.stealth = False
+            return remove_stealth
 
         super().use(player, game)
-
-        affected_minions = []
 
         for minion in player.minions:
             if not minion.stealth:
                 minion.stealth = True
-                affected_minions.append(minion)
-
-        player.bind_once("turn_started", remove_stealth)
+                remove_stealth = create_remove_stealth(minion)
+                player.bind_once("turn_started", remove_stealth)
+                minion.bind_once("silenced", lambda: player.unbind("turn_started", remove_stealth))
 
 
 class DeadlyPoison(Card):
