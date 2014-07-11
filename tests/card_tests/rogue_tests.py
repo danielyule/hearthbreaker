@@ -263,3 +263,23 @@ class TestRogue(unittest.TestCase):
         # Deadly Poison should have been played
         game.play_single_turn()
         self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+
+    def test_Eviscerate(self):
+        game = generate_game_for(Eviscerate, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        # Eviscerate should have been played with no combo, dealing 2 damage
+        self.assertEqual(28, game.players[1].hero.health)
+
+        # Just another Eviscerate
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(26, game.players[1].hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # Two Eviscerate should have been played, the first with no combo and a second with combo, dealing
+        # 2 + 4 = 6 damage
+        self.assertEqual(20, game.players[1].hero.health)

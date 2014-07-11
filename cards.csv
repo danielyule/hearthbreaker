@@ -115,7 +115,7 @@ yes,Elven Archer,Battlecry: Deal 1 damage.,,,1,1,1,Common,Minion,Basic
 yes,Emperor Cobra,Destroy any minion damaged by this minion.,Beast,,3,2,3,Rare,Minion,Expert
 yes,Equality,Change the Health of ALL minions to 1.,,Paladin,2,,,Rare,Spell,Expert
 yes,Ethereal Arcanist,"If you control a Secret at the end of your turn, gain +2/+2.",,Mage,4,3,3,Rare,Minion,Expert
-no,Eviscerate,Deal 2 damage. Combo: Deal 4 damage instead.,,Rogue,2,,,Common,Spell,Expert
+yes,Eviscerate,Deal 2 damage. Combo: Deal 4 damage instead.,,Rogue,2,,,Common,Spell,Expert
 no,Execute,Destroy a damaged enemy minion.,,Warrior,1,,,Free,Spell,Basic
 no,Explosive Shot,Deal 5 damage to a minion and 2 damage to adjacent ones.,,Hunter,5,,,Rare,Spell,Expert
 yes,Explosive Trap,"Secret: When your hero is attacked, deal 2 damage to all enemies.",,Hunter,2,,,Common,Spell,Expert

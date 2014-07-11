@@ -117,3 +117,17 @@ class DeadlyPoison(Card):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and player.hero.weapon is not None
+
+
+class Eviscerate(Card):
+    def __init__(self):
+        super().__init__("Eviscerate", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.cards_played > 0:
+            self.target.damage(player.effective_spell_damage(4), self)
+        else:
+            self.target.damage(player.effective_spell_damage(2), self)
