@@ -74,6 +74,7 @@ from hsgame.cards.minions.neutral import (
     EmperorCobra,
     CrazedAlchemist,
     AcidicSwampOoze,
+    KnifeJuggler,
 )
 
 from hsgame.cards.minions.druid import (

@@ -702,6 +702,10 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.silenced = False
+        self.bind("did_damage", self.__on_did_damage)
+
+    def __on_did_damage(self, amount, target):
+        self.stealth = False
 
     def add_to_board(self, index):
         self.player.minions.insert(index, self)
