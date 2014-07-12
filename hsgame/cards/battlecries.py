@@ -147,7 +147,7 @@ def give_windfury(minion):
     if minion.card.target is not None:
         minion.card.target.wind_fury = True
 
-        
+
 def return_to_hand(minion):
     if minion.card.target is not None:
         minion.card.target.remove_from_board()

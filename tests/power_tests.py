@@ -79,17 +79,16 @@ class TestPowers(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(4, len(game.players[0].minions))
-        
+
     def test_WarlockPower(self):
         game = generate_game_for(Doomguard, MogushanWarden, PredictableBot, DoNothingBot)
 
         for turn in range(0, 3):
             game.play_single_turn()
-        
+
         self.assertEqual(28, game.players[0].hero.health)
         self.assertEqual(6, len(game.players[0].hand))
-            
-        
+
     def test_double_power_use(self):
         testing_env = self
 

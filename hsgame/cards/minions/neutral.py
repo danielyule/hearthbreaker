@@ -810,7 +810,7 @@ class StormwindChampion(MinionCard):
         minion.bind("added_to_board", add_effect)
         return minion
 
-        
+
 class Deathwing(MinionCard):
     def __init__(self):
         super().__init__("Deathwing", 10, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
@@ -821,7 +821,8 @@ class Deathwing(MinionCard):
 
 class Alexstrasza(MinionCard):
     def __init__(self):
-        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, hsgame.targeting.find_hero_target)
+        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, 
+                         hsgame.targeting.find_hero_target)
 
     def create_minion(self, player):
         def set_hero_health(player):
@@ -874,24 +875,26 @@ class AcidicSwampOoze(MinionCard):
             if player.game.other_player.hero.weapon is not None:
                 player.game.other_player.hero.weapon.destroy()
         return Minion(3, 2, battlecry=destroy_enemy_weapon)
-        
+
 
 class AncientBrewmaster(MinionCard):
     def __init__(self):
-        super().__init__("Ancient Brewmaster", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
+        super().__init__("Ancient Brewmaster", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, 
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(5, 4, battlecry=return_to_hand)
-        
-        
+
+
 class YouthfulBrewmaster(MinionCard):
     def __init__(self):
-        super().__init__("Youthful Brewmaster", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, hsgame.targeting.find_friendly_minion_battlecry_target)
+        super().__init__("Youthful Brewmaster", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, 
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(3, 2, battlecry=return_to_hand)
-        
-        
+
+
 class BaronGeddon(MinionCard):
     def __init__(self):
         super().__init__("Baron Geddon", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
@@ -905,6 +908,7 @@ class BaronGeddon(MinionCard):
             targets.remove(minion)
             for target in targets:
                 target.damage(2, None)
+
         def silence():
             self.unbind("turn_ended", baron_damage)
         minion = Minion(7, 5)
@@ -932,7 +936,7 @@ class AngryChicken(MinionCard):
         minion.bind("enraged", increase_attack)
         minion.bind("unenraged", decrease_attack)
         minion.bind("silenced", silenced)
-        return minion   
+        return minion
 
 
 class RagingWorgen(MinionCard):
@@ -947,7 +951,7 @@ class RagingWorgen(MinionCard):
         def decrease_attack():
             minion.change_attack(-1)
             minion.windfury = False
-            
+
         def silenced():
             minion.unbind("enraged", increase_attack)
             minion.unbind("unenraged", decrease_attack)
@@ -957,8 +961,8 @@ class RagingWorgen(MinionCard):
         minion.bind("unenraged", decrease_attack)
         minion.bind("silenced", silenced)
         return minion
-        
-        
+
+
 class TaurenWarrior(MinionCard):
     def __init__(self):
         super().__init__("Tauren Warrior", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
@@ -979,8 +983,8 @@ class TaurenWarrior(MinionCard):
         minion.bind("enraged", increase_attack)
         minion.bind("unenraged", decrease_attack)
         minion.bind("silenced", silenced)
-        return minion   
-        
+        return minion
+
 
 class SpitefulSmith(MinionCard):
     def __init__(self):
@@ -989,7 +993,8 @@ class SpitefulSmith(MinionCard):
     def create_minion(self, player):
         def increase_weapon_attack():
             minion.player.hero.weapon.base_attack += 2
-        #Bonus fails to carry across reequips and throws error if no weapon
+        # Bonus fails to carry across reequips and throws error if no weapon
+
         def decrease_weapon_attack():
             minion.player.hero.weapon.base_attack -= 2
 
@@ -1043,9 +1048,9 @@ class RaidLeader(MinionCard):
 
         minion = Minion(2, 2)
         minion.bind("added_to_board", add_effect)
-        return minion        
-        
-        
+        return minion
+
+
 class DragonlingMechanic(MinionCard):
     def __init__(self):
         super().__init__("Dragonling Mechanic", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
@@ -1058,12 +1063,12 @@ class DragonlingMechanic(MinionCard):
 
                 def create_minion(self, player):
                     return Minion(2, 1)
-                #Apparently not a dragon
+                # Apparently not a dragon
             MechanicalDragonling().summon(player, player.game, m.index)
 
         return Minion(2, 4, battlecry=summon_dragonling)
-        
-        
+
+
 class MurlocTidehunter(MinionCard):
     def __init__(self):
         super().__init__("Murloc Tidehunter", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
@@ -1080,8 +1085,8 @@ class MurlocTidehunter(MinionCard):
             MurlocScout().summon(player, player.game, m.index)
 
         return Minion(2, 1, MINION_TYPE.MURLOC, battlecry=summon_murlocscout)
-        
-        
+
+
 class RazorfenHunter(MinionCard):
     def __init__(self):
         super().__init__("Razorfen Hunter", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)

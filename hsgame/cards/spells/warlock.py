@@ -157,7 +157,7 @@ class SenseDemons(Card):
             minions.append(WorthlessImp())
         if len(minions) == 1:
             minions.append(WorthlessImp())
-            
+
         for i in range(0, 2):
             rand = game.random(0, len(minions) - 1)
             card = copy.copy(minions.pop(rand))
@@ -214,7 +214,7 @@ class Corruption(Card):
 
         def death():
             self.target.die(None)
-            
+
         player.bind_once("turn_started", death)
         self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
 
@@ -230,7 +230,7 @@ class PowerOverwhelming(Card):
 
         def death():
             self.target.die(None)
-            
+
         player.bind_once("turn_ended", death)
         self.target.bind_once("silenced", lambda: player.unbind("turn_ended", death))
         self.target.change_attack(4)

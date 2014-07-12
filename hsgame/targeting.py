@@ -84,10 +84,11 @@ def find_friendly_minion_battlecry_target(game, filter_function):
         return None
     return targets
 
+
 def find_hero_target(game, filter_function):
     targets = []
     targets.append(game.current_player.hero)
     targets.append(game.other_player.hero)
-    
+
     targets = [target for target in targets if filter_function(target)]
     return targets

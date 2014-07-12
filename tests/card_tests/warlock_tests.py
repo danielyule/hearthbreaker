@@ -288,25 +288,25 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual('Worthless Imp', game.players[0].hand[5].name)
         self.assertEqual('Worthless Imp', game.players[0].hand[6].name)
-        
+
         game.play_single_turn()
         game.play_single_turn()
-        #Sense Demons again
+        # Sense Demons again
         self.assertEqual(9, len(game.players[0].hand))
-        
+
         game.play_single_turn()
         game.play_single_turn()
-        #Sense Demons again
+        # Sense Demons again
         self.assertEqual(10, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[0].minions))
 
         for turn in range(0, 4):
             game.play_single_turn()
-        #Play 3 copies of Sense Demons and then 2 copies of Worthless Imp
+        # Play 3 copies of Sense Demons and then 2 copies of Worthless Imp
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Worthless Imp", game.players[0].minions[0].card.name)
         self.assertEqual("Worthless Imp", game.players[0].minions[1].card.name)
-        
+
     def test_BaneOfDoom(self):
         game = generate_game_for(BaneOfDoom, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingBot)
         imp = FlameImp()
@@ -331,7 +331,7 @@ class TestWarlock(unittest.TestCase):
         # Banes the Mogushan but does not kill it
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(5, game.players[1].minions[0].health)
-        
+
     def test_Corruption(self):
         game = generate_game_for(Corruption, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingBot)
         imp = FlameImp()
@@ -347,14 +347,14 @@ class TestWarlock(unittest.TestCase):
         # Enemy minion still alive until start of my turn
         self.assertEqual(1, len(game.players[1].minions))
 
-        #def just_die():
+        # def just_die():
         #    game.players[0].minions[0].activate_delayed()
-        #game.players[0].bind("turn_started", just_die)
-        
+        # game.players[0].bind("turn_started", just_die)
+
         game.play_single_turn()
         # Corruption resolves at start of my turn, no targets to use remaining cards on
         self.assertEqual(0, len(game.players[1].minions))
-        #self.assertEqual(4, len(game.players[0].hand))
+        # self.assertEqual(4, len(game.players[0].hand))
 
     def test_PowerOverwhelming(self):
         game = generate_game_for(PowerOverwhelming, StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -380,7 +380,7 @@ class TestWarlock(unittest.TestCase):
 
         for turn in range(0, 6):
             game.play_single_turn()
-        
+
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, len(game.players[1].minions))
         self.assertEqual(4, game.players[1].minions[0].health)
@@ -388,9 +388,9 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(4, game.players[1].minions[2].health)
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(30, game.players[1].hero.health)
-        
+
         game.play_single_turn()
-        #Uses Shadowflame on own Flame Imp
+        # Uses Shadowflame on own Flame Imp
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(3, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].health)
@@ -403,7 +403,7 @@ class TestWarlock(unittest.TestCase):
         game = generate_game_for([SummoningPortal, Wisp], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
         for turn in range(0, 7):
             game.play_single_turn()
-            
+
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual('Wisp', game.players[0].hand[0].name)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
