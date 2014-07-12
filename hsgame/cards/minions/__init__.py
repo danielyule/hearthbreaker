@@ -71,10 +71,25 @@ from hsgame.cards.minions.neutral import (
     FenCreeper,
     VentureCoMercenary,
     StormwindChampion,
+    Deathwing,
+    Alexstrasza,
     EmperorCobra,
     CrazedAlchemist,
     AcidicSwampOoze,
-    KnifeJuggler,
+    AncientBrewmaster,
+    YouthfulBrewmaster,
+    BaronGeddon,
+    AngryChicken,
+    RagingWorgen,
+    TaurenWarrior,
+    SpitefulSmith,
+    BloodKnight,
+    FrostwolfWarlord,
+    RaidLeader,
+    DragonlingMechanic,
+    MurlocTidehunter,
+    RazorfenHunter,
+    KnifeJuggler
 )
 
 from hsgame.cards.minions.druid import (

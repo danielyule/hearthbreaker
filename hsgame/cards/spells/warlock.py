@@ -153,10 +153,9 @@ class SenseDemons(Card):
                 # deck of cards
                 minions.append(game.current_player.deck.cards[index])
 
-        if len(minions) == 1:
-            minions.append(WorthlessImp())
         if len(minions) == 0:
             minions.append(WorthlessImp())
+        if len(minions) == 1:
             minions.append(WorthlessImp())
 
         for i in range(0, 2):
@@ -213,13 +212,11 @@ class Corruption(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def remove_minion():
-            game.remove_minion(self.target, self.target.player)
+        def death():
+            self.target.die(None)
 
-        player.bind_once("turn_started", remove_minion)
-        self.target.bind_once("silenced",
-                              lambda minion: player.unbind("turn_started",
-                                                           remove_minion))
+        player.bind_once("turn_started", death)
+        self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
 
 
 class PowerOverwhelming(Card):
@@ -231,12 +228,10 @@ class PowerOverwhelming(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def remove_minion():
-            game.remove_minion(self.target, self.target.player)
+        def death():
+            self.target.die(None)
 
-        player.bind_once("turn_ended", remove_minion)
-        self.target.bind_once("silenced",
-                              lambda minion: player.unbind("turn_ended",
-                                                           remove_minion))
+        player.bind_once("turn_ended", death)
+        self.target.bind_once("silenced", lambda: player.unbind("turn_ended", death))
         self.target.change_attack(4)
         self.target.increase_health(4)
