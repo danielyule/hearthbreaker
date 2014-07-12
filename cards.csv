@@ -241,8 +241,8 @@ no,Mortal Strike,"Deal 4 damage. If you have 12 or less Health, deal 6 instead."
 no,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Epic,Minion,Expert
 no,Multi-Shot,Deal 3 damage to two random enemy minions.,,Hunter,4,,,Free,Spell,Basic
 yes,Murloc Raider,,Murloc,,1,2,1,Free,Minion,Basic
-yes,Murloc Tidecaller,"Whenever a Murloc is summoned, gain +1 Attack.",Murloc,,1,1,2,Rare,Minion,Expert
-no,Murloc Tidehunter,Battlecry: Summon a 1/1 Murloc Scout.,Murloc,,2,2,1,Common,Minion,Basic
+no,Murloc Tidecaller,"Whenever a Murloc is summoned, gain +1 Attack.",Murloc,,1,1,2,Rare,Minion,Expert
+yes,Murloc Tidehunter,Battlecry: Summon a 1/1 Murloc Scout.,Murloc,,2,2,1,Common,Minion,Basic
 no,Murloc Warleader,ALL other Murlocs have +2/+1.,Murloc,,3,3,3,Epic,Minion,Expert
 no,Nat Pagle,"At the start of your turn, you have a 50% chance to draw an extra card.",,,2,0,4,Legendary,Minion,Expert
 yes,Naturalize,Destroy a minion. Your opponent draws 2 cards.,,Druid,1,,,Common,Spell,Expert
