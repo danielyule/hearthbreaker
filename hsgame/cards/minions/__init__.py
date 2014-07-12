@@ -74,7 +74,21 @@ from hsgame.cards.minions.neutral import (
     Deathwing,
     Alexstrasza,
     EmperorCobra,
-    CrazedAlchemist
+    CrazedAlchemist,
+    AcidicSwampOoze,
+    AncientBrewmaster,
+    YouthfulBrewmaster,
+    BaronGeddon,
+    AngryChicken,
+    RagingWorgen,
+    TaurenWarrior,
+    SpitefulSmith,
+    BloodKnight,
+    FrostwolfWarlord,
+    RaidLeader,
+    DragonlingMechanic,
+    MurlocTidehunter,
+    RazorfenHunter
 )
 
 from hsgame.cards.minions.druid import (

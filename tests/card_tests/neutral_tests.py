@@ -679,3 +679,121 @@ class TestCommon(unittest.TestCase):
         game.other_player.minions[0].silence()
         self.assertEqual(6, game.other_player.minions[0].calculate_attack())
         self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_AcidicSwampOoze(self):
+        game = generate_game_for(AcidicSwampOoze, TruesilverChampion, MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 8):        
+            game.play_single_turn()
+        self.assertEqual(2, game.players[1].hero.weapon.durability)
+        self.assertEqual(4, game.players[1].hero.weapon.base_attack)
+        
+        game.play_single_turn()
+
+        self.assertEqual(None, game.players[1].hero.weapon)
+
+    def test_BaronGeddon(self):
+        game = generate_game_for(BaronGeddon, MassDispel, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 13):        
+            game.play_single_turn() 
+
+        self.assertEqual(1, len(game.players[0].minions))        
+        self.assertEqual(28, game.players[0].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(5, game.players[0].minions[0].health)
+        
+        game.play_single_turn() #Silences the Baron Geddon on the field
+        game.play_single_turn() #Only the new Baron Geddon triggers
+        
+        self.assertEqual(2, len(game.players[0].minions))        
+        self.assertEqual(26, game.players[0].hero.health)
+        self.assertEqual(26, game.players[1].hero.health)
+        self.assertEqual(5, game.players[0].minions[0].health)        
+        self.assertEqual(3, game.players[0].minions[1].health)     
+
+    def test_AncientBrewmaster(self):
+        game = generate_game_for(AncientBrewmaster, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 8):        
+            game.play_single_turn()         
+            #Summon first panda, nothing to return
+        self.assertEqual(1, len(game.players[0].minions))        
+
+        game.play_single_turn()
+            #Return 1st panda with 2nd panda
+        self.assertEqual(1, len(game.players[0].minions))        
+
+    def test_AngryChicken(self):
+        game = generate_game_for([AngryChicken, PowerWordShield], [ArcaneExplosion, MassDispel], OneSpellTestingAgent, SpellTestingAgent)
+        for turn in range(0, 3):        
+            game.play_single_turn()  
+            
+        self.assertEqual(1, len(game.players[0].minions))        
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(3, game.players[0].minions[0].health)        
+        
+        game.play_single_turn()
+        #Uses Arcane Explosion, enraging the chicken
+        self.assertEqual(1, len(game.players[0].minions))        
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(2, game.players[0].minions[0].health)
+        
+        for turn in range(0, 4):        
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))        
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(1, game.players[0].minions[0].health)            
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())        
+        self.assertEqual(1, game.players[0].minions[1].health)  
+
+    def test_SpitefulSmith(self):
+        game = generate_game_for(LightsJustice, [MortalCoil, AcidicSwampOoze], SpellTestingAgent, SpellTestingAgent)
+        smith = SpitefulSmith()
+        smith.summon(game.players[0], game, 0)
+        for turn in range(0, 2):        
+            game.play_single_turn()
+ 
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+            
+        game.play_single_turn()
+        #Bonus fails to carry across reequips and throws error if no weapon
+        #self.assertEqual(3, game.players[0].hero.weapon.base_attack)      
+
+    def test_BloodKnight(self):
+        game = generate_game_for(BloodKnight, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
+        squire = ArgentSquire()
+        squire.summon(game.players[0], game, 0)
+        for turn in range(0, 5):        
+            game.play_single_turn()         
+
+        self.assertEqual(2, len(game.players[0].minions))        
+        self.assertEqual(2, len(game.players[1].minions))        
+        self.assertEqual(12, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(12, game.players[0].minions[0].health)   
+        self.assertFalse(game.players[0].minions[1].divine_shield)
+        self.assertFalse(game.players[1].minions[0].divine_shield)
+        self.assertFalse(game.players[1].minions[1].divine_shield)
+        
+    def test_FrostwolfWarlord(self):
+        game = generate_game_for(FrostwolfWarlord, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 9):        
+            game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))        
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(4, game.players[0].minions[0].health)
+        
+        game.play_single_turn()
+        game.play_single_turn()
+        
+        self.assertEqual(2, len(game.players[0].minions))        
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())        
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(4, game.players[0].minions[1].calculate_attack())        
+        self.assertEqual(4, game.players[0].minions[1].health)
+        
+    def test_SummonBattlecries(self):
+        game = generate_game_for([MurlocTidehunter, RazorfenHunter, DragonlingMechanic], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 7):        
+            game.play_single_turn() 
+        self.assertEqual(6, len(game.players[0].minions))        
+            

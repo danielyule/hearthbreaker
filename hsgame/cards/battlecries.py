@@ -146,3 +146,10 @@ def two_temp_attack(minion):
 def give_windfury(minion):
     if minion.card.target is not None:
         minion.card.target.wind_fury = True
+
+        
+def return_to_hand(minion):
+    if minion.card.target is not None:
+        minion.card.target.remove_from_board()
+        if len(minion.card.target.player.hand) < 10:
+            minion.card.target.player.hand.append(minion.card)

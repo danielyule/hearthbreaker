@@ -567,7 +567,10 @@ class Card(Bindable):
         calc_mana = self.mana
         for mana_filter in player.mana_filters:
             if mana_filter.filter(self):
+                temp_mana = calc_mana
                 calc_mana -= mana_filter.amount
+                if temp_mana < mana_filter.min: #Extra logic to handle 0 cost creatures with Summoning portal
+                    return temp_mana
                 if calc_mana < mana_filter.min:
                     return mana_filter.min
         return calc_mana
