@@ -5,6 +5,7 @@ from hsgame.cards.battlecries import draw_card, silence, deal_one_damage, \
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
+import copy
 
 
 class BloodfenRaptor(MinionCard):
@@ -901,7 +902,7 @@ class BaronGeddon(MinionCard):
             targets.extend(player.game.current_player.minions)
             targets.append(player.game.other_player.hero)
             targets.append(player.game.current_player.hero)
-            targets.remove(minion)  #Odd implementation, but it shouldn't interfere with anything
+            targets.remove(minion)
             for target in targets:
                 target.damage(2, None)
         def silence():
@@ -1097,3 +1098,26 @@ class RazorfenHunter(MinionCard):
             Boar().summon(player, player.game, m.index)
 
         return Minion(2, 3, battlecry=summon_boar)
+
+
+class KnifeJuggler(MinionCard):
+    def __init__(self):
+        super().__init__("Knife Juggler", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def throw_knife(m):
+            if m.player is not player or m is minion:
+                return
+            if player is player.game.current_player:
+                enemy_player = player.game.other_player
+            else:
+                enemy_player = player.game.current_player
+            targets = copy.copy(enemy_player.minions)
+            targets.append(enemy_player.hero)
+            target = targets[player.game.random(0, len(targets) - 1)]
+            target.damage(1, minion)
+
+        minion = Minion(3, 2)
+        player.game.bind("minion_added", throw_knife)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_added", throw_knife))
+        return minion

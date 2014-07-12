@@ -705,6 +705,10 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.silenced = False
+        self.bind("did_damage", self.__on_did_damage)
+
+    def __on_did_damage(self, amount, target):
+        self.stealth = False
 
     def add_to_board(self, index):
         self.player.minions.insert(index, self)
@@ -780,6 +784,7 @@ class Minion(Character):
             if deathrattle is not None:
                 deathrattle(self)
             self.game.trigger("minion_died", self, by)
+            self.removed = True
 
     def can_be_attacked(self):
         return not self.stealth

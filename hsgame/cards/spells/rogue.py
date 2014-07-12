@@ -69,3 +69,65 @@ class BladeFlurry(Card):
                 minion.damage(attack_power, self)
 
             game.other_player.hero.damage(attack_power, self)
+
+
+class ColdBlood(Card):
+    def __init__(self):
+        super().__init__("Cold Blood", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.cards_played > 0:
+            self.target.change_attack(4)
+        else:
+            self.target.change_attack(2)
+
+
+class Conceal(Card):
+    def __init__(self):
+        super().__init__("Conceal", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        def create_remove_stealth(minion):
+            def remove_stealth():
+                minion.stealth = False
+            return remove_stealth
+
+        super().use(player, game)
+
+        for minion in player.minions:
+            if not minion.stealth:
+                minion.stealth = True
+                remove_stealth = create_remove_stealth(minion)
+                player.bind_once("turn_started", remove_stealth)
+                minion.bind_once("silenced", lambda: player.unbind("turn_started", remove_stealth))
+
+
+class DeadlyPoison(Card):
+    def __init__(self):
+        super().__init__("Deadly Poison", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        player.hero.weapon.base_attack += 2
+        player.hero.change_temp_attack(2)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and player.hero.weapon is not None
+
+
+class Eviscerate(Card):
+    def __init__(self):
+        super().__init__("Eviscerate", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        if player.cards_played > 0:
+            self.target.damage(player.effective_spell_damage(4), self)
+        else:
+            self.target.damage(player.effective_spell_damage(2), self)

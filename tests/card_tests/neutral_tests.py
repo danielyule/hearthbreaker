@@ -680,17 +680,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(6, game.other_player.minions[0].calculate_attack())
         self.assertEqual(2, game.other_player.minions[0].health)
 
-    def test_AcidicSwampOoze(self):
-        game = generate_game_for(AcidicSwampOoze, TruesilverChampion, MinionPlayingAgent, OneSpellTestingAgent)
-        for turn in range(0, 8):        
-            game.play_single_turn()
-        self.assertEqual(2, game.players[1].hero.weapon.durability)
-        self.assertEqual(4, game.players[1].hero.weapon.base_attack)
-        
-        game.play_single_turn()
-
-        self.assertEqual(None, game.players[1].hero.weapon)
-
     def test_BaronGeddon(self):
         game = generate_game_for(BaronGeddon, MassDispel, MinionPlayingAgent, SpellTestingAgent)
         for turn in range(0, 13):        
@@ -796,4 +785,47 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 7):        
             game.play_single_turn() 
         self.assertEqual(6, len(game.players[0].minions))        
-            
+
+    def test_AcidicSwampOoze(self):
+        game = generate_game_for(AcidicSwampOoze, LightsJustice, SpellTestingAgent, SpellTestingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.current_player.hero.weapon is not None)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.hero.weapon is None)
+        
+    def test_AcidicSwampOozeWithNoWeapon(self):
+        game = generate_game_for(AcidicSwampOoze, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.current_player.hero.weapon is None)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.hero.weapon is None)
+
+    def test_KnifeJuggler(self):
+        game = generate_game_for([KnifeJuggler, KnifeJuggler, MasterOfDisguise], [StonetuskBoar, GoldshireFootman],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        # The knife will be thrown into the enemy hero
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(29, game.other_player.hero.health)
+        self.assertEqual(2, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # One knife to the older Boar, one knife to the footman
+        self.assertFalse(game.current_player.minions[1].stealth)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)

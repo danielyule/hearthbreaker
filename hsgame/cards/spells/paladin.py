@@ -213,8 +213,7 @@ class NobleSacrifice(SecretCard):
 
     def _reveal(self, attacker):
         player = attacker.game.other_player
-
-        if len(player.minions) < 7:
+        if len(player.minions) < 7 and not attacker.removed:
             class DefenderMinion(MinionCard):
                 def __init__(self):
                     super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN,
@@ -226,6 +225,7 @@ class NobleSacrifice(SecretCard):
             def choose_defender(targets):
                 defender = DefenderMinion()
                 defender.summon(player, player.game, len(player.minions))
+                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
                 player.game.current_player.agent.choose_target = old_target
                 return player.minions[-1]
 

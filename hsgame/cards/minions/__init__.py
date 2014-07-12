@@ -88,7 +88,8 @@ from hsgame.cards.minions.neutral import (
     RaidLeader,
     DragonlingMechanic,
     MurlocTidehunter,
-    RazorfenHunter
+    RazorfenHunter,
+    KnifeJuggler
 )
 
 from hsgame.cards.minions.druid import (
