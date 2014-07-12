@@ -703,15 +703,15 @@ class TestCommon(unittest.TestCase):
         game = generate_game_for(AncientBrewmaster, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
         for turn in range(0, 8):
             game.play_single_turn()
-            # Summon first panda, nothing to return
+        # Summon first panda, nothing to return
         self.assertEqual(1, len(game.players[0].minions))
 
         game.play_single_turn()
-            # Return 1st panda with 2nd panda
+        # Return 1st panda with 2nd panda
         self.assertEqual(1, len(game.players[0].minions))
 
     def test_AngryChicken(self):
-        game = generate_game_for([AngryChicken, PowerWordShield], [ArcaneExplosion, MassDispel], 
+        game = generate_game_for([AngryChicken, PowerWordShield], [ArcaneExplosion, MassDispel],
                                  OneSpellTestingAgent, SpellTestingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
@@ -782,7 +782,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[1].health)
 
     def test_SummonBattlecries(self):
-        game = generate_game_for([MurlocTidehunter, RazorfenHunter, DragonlingMechanic], StonetuskBoar, 
+        game = generate_game_for([MurlocTidehunter, RazorfenHunter, DragonlingMechanic], StonetuskBoar,
                                  MinionPlayingAgent, DoNothingBot)
         for turn in range(0, 7):
             game.play_single_turn()

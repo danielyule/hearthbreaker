@@ -821,7 +821,7 @@ class Deathwing(MinionCard):
 
 class Alexstrasza(MinionCard):
     def __init__(self):
-        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, 
+        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
                          hsgame.targeting.find_hero_target)
 
     def create_minion(self, player):
@@ -879,7 +879,7 @@ class AcidicSwampOoze(MinionCard):
 
 class AncientBrewmaster(MinionCard):
     def __init__(self):
-        super().__init__("Ancient Brewmaster", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, 
+        super().__init__("Ancient Brewmaster", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
@@ -888,7 +888,7 @@ class AncientBrewmaster(MinionCard):
 
 class YouthfulBrewmaster(MinionCard):
     def __init__(self):
-        super().__init__("Youthful Brewmaster", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, 
+        super().__init__("Youthful Brewmaster", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
