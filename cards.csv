@@ -70,11 +70,11 @@ yes,Chillwind Yeti,,,,4,4,5,Common,Minion,Basic
 yes,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Common,Spell,Expert
 yes,Claw,Give your hero +2 Attack this turn and 2 Armor.,,Druid,1,,,Free,Spell,Basic
 no,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Common,Spell,Basic
-no,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Common,Spell,Expert
+yes,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Common,Spell,Expert
 no,Coldlight Oracle,Battlecry: Each player draws 2 cards.,Murloc,,3,2,2,Rare,Minion,Expert
 no,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Rare,Minion,Expert
 no,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Rare,Spell,Expert
-no,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Common,Spell,Expert
+yes,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Common,Spell,Expert
 yes,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Common,Spell,Expert
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Common,Spell,Basic
 yes,Core Hound,,Beast,,7,9,5,Common,Minion,Basic
@@ -86,7 +86,7 @@ no,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,C
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Common,Minion,Basic
 yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common,Minion,Expert
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
-no,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
+yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
 no,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Common,Spell,Expert
 no,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Legendary,Minion,Expert
 no,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
@@ -115,7 +115,7 @@ yes,Elven Archer,Battlecry: Deal 1 damage.,,,1,1,1,Common,Minion,Basic
 yes,Emperor Cobra,Destroy any minion damaged by this minion.,Beast,,3,2,3,Rare,Minion,Expert
 yes,Equality,Change the Health of ALL minions to 1.,,Paladin,2,,,Rare,Spell,Expert
 yes,Ethereal Arcanist,"If you control a Secret at the end of your turn, gain +2/+2.",,Mage,4,3,3,Rare,Minion,Expert
-no,Eviscerate,Deal 2 damage. Combo: Deal 4 damage instead.,,Rogue,2,,,Common,Spell,Expert
+yes,Eviscerate,Deal 2 damage. Combo: Deal 4 damage instead.,,Rogue,2,,,Common,Spell,Expert
 no,Execute,Destroy a damaged enemy minion.,,Warrior,1,,,Free,Spell,Basic
 no,Explosive Shot,Deal 5 damage to a minion and 2 damage to adjacent ones.,,Hunter,5,,,Rare,Spell,Expert
 yes,Explosive Trap,"Secret: When your hero is attacked, deal 2 damage to all enemies.",,Hunter,2,,,Common,Spell,Expert
@@ -312,7 +312,7 @@ no,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell,Basic
 yes,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Rare,Spell,Expert
 no,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Common,Spell,Expert
 no,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Epic,Spell,Expert
-no,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
+yes,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
 yes,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Common,Minion,Expert
 yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Common,Spell,Expert
 yes,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Common,Spell,Basic

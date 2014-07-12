@@ -71,7 +71,7 @@ class PatientAssassin(MinionCard):
 
     def create_minion(self, player):
         def poisonous(amount, target):
-            if type(target) is Minion and not target.dead:
+            if type(target) is Minion:
                 target.die(self)
 
         minion = Minion(1, 1)

@@ -29,6 +29,7 @@ from hsgame.cards.spells.hunter import (
     ExplosiveTrap,
     FreezingTrap,
     Misdirection,
+    Snipe,
 )
 
 from hsgame.cards.spells.mage import (
@@ -99,7 +100,11 @@ from hsgame.cards.spells.rogue import (
     Assassinate,
     Backstab,
     Betrayal,
-    BladeFlurry
+    BladeFlurry,
+    ColdBlood,
+    Conceal,
+    DeadlyPoison,
+    Eviscerate
 )
 
 from hsgame.cards.spells.shaman import (
