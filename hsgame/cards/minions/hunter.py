@@ -2,6 +2,7 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion
 import hsgame.targeting
 
+
 class TimberWolf(MinionCard):
     def __init__(self):
         super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER,
@@ -39,7 +40,8 @@ class SavannahHighmane(MinionCard):
 class Houndmaster(MinionCard):
     def __init__(self):
         super().__init__("Houndmaster", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE,
-                         hsgame.targeting.find_friendly_minion_battlecry_target, lambda m: m.minion_type is MINION_TYPE.BEAST)
+                         hsgame.targeting.find_friendly_minion_battlecry_target,
+                         lambda m: m.minion_type is MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         def buff_beast(m):

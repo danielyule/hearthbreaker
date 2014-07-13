@@ -1204,13 +1204,15 @@ class SylvanasWindrunner(MinionCard):
 
         return Minion(5, 5, deathrattle=assume_direct_control)
 
+
 class StampedingKodo(MinionCard):
     def __init__(self):
         super().__init__("Stampeding Kodo", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def random_destroy(m):
-            targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: x.calculate_attack() <= 2)
+            targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game,
+                                                                          lambda x: x.calculate_attack() <= 2)
             target = targets[player.game.random(0, len(targets) - 1)]
             target.die(None)
             target.activate_delayed()

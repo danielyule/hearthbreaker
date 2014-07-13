@@ -221,13 +221,16 @@ class ExplosiveShot(Card):
 
 class KillCommand(Card):
     def __init__(self):
-        super().__init__("Kill Command", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+        super().__init__("Kill Command", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
         beast_count = 0
-        if hsgame.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x.minion_type is MINION_TYPE.BEAST) is not None:
-            for target in (0, len(hsgame.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x.minion_type is MINION_TYPE.BEAST))):
+        if hsgame.targeting.find_friendly_minion_battlecry_target(player.game,
+                                                    lambda x: x.minion_type is MINION_TYPE.BEAST)is not None:
+            for target in (0, len(hsgame.targeting.find_friendly_minion_battlecry_target(player.game, 
+                                                    lambda x: x.minion_type is MINION_TYPE.BEAST))):
                 beast_count += 1
         if beast_count >= 1:
             self.target.damage(player.effective_spell_damage(5), self)
@@ -241,7 +244,7 @@ class UnleashTheHounds(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        
+
         class Hound(MinionCard):
             def __init__(self):
                 super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
