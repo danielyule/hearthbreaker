@@ -1,3 +1,4 @@
+import copy
 from hsgame.agents.basic_agents import DoNothingBot
 
 
@@ -80,7 +81,7 @@ class PredictableAgentWithoutHeroPower(DoNothingBot):
 
         while done_something:
             done_something = False
-            for card in player.hand:
+            for card in copy.copy(player.hand):
                 if card.can_use(player, self.game):
                     self.game.play_card(card)
                     done_something = True
