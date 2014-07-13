@@ -3,7 +3,7 @@ import unittest
 import unittest.mock
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
-    PredictableAgentWithoutHeroPower, SelfSpellTestingAgent
+    PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
@@ -87,13 +87,26 @@ class TestHunter(unittest.TestCase):
             self.assertEqual(2, game.other_player.minions[0].temp_attack)
             self.assertTrue(game.other_player.minions[0].immune)
 
-        game = generate_game_for(StonetuskBoar, BestialWrath, MinionPlayingAgent, SpellTestingAgent)
+        def verify_silence():
+            self.assertFalse(game.other_player.minions[0].immune)
+            self.assertEqual(0, game.other_player.minions[0].temp_attack)
+
+        game = generate_game_for(StonetuskBoar, [BestialWrath, BestialWrath, BestialWrath, Silence],
+                                 MinionPlayingAgent, EnemyMinionSpellTestingAgent)
         game.play_single_turn()
-        game.other_player.bind("turn_ended", verify_bwrath)
+        game.other_player.bind_once("turn_ended", verify_bwrath)
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertFalse(game.other_player.minions[0].immune)
         self.assertEqual(0, game.other_player.minions[0].temp_attack)
+
+        game.play_single_turn()
+        game.other_player.bind_once("turn_ended", verify_silence)
+        game.play_single_turn()
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertFalse(game.other_player.minions[0].immune)
+        self.assertEqual(0, game.other_player.minions[0].temp_attack)
+        self.assertEqual(2, len(game.players[1].hand))
 
     def test_Flare(self):
 
@@ -198,14 +211,25 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(27, game.other_player.hero.health)
 
     def test_FreezingTrap(self):
-        game = generate_game_for(FreezingTrap, StonetuskBoar, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+        game = generate_game_for(FreezingTrap, BluegillWarrior, SpellTestingAgent, PredictableAgentWithoutHeroPower)
 
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(2, len(game.current_player.minions))
-        self.assertEqual(4, len(game.current_player.hand))
-        self.assertEqual(3, game.current_player.hand[3].mana_cost(game.current_player))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual(30, game.players[0].hero.health)
+        game.play_single_turn()
+        self.assertEqual(5, len(game.players[0].hand))
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[4].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
 
     def test_FreezingTrap_many_cards(self):
         class FreezingTrapAgent(DoNothingBot):
@@ -242,6 +266,25 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(28, game.other_player.hero.health)
         self.assertEqual(1, len(game.current_player.minions))  # The boar has been misdirected into another boar
         self.assertEqual(30, game.current_player.hero.health)
+
+    def test_FreezingTrapAndMisdirection(self):
+        game = generate_game_for([Misdirection, FreezingTrap], Wolfrider, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+        # Misdirection was played first so it triggers first redirecting the atttack to the enemy hero, but
+        # Freezing Trap triggers, bouncing the charging Wolfrider
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(5, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(30, game.other_player.hero.health)
+        self.assertEqual(30, game.current_player.hero.health)
+        # self.assertEqual(0, len(game.players[0].secrets))
+
+        game.play_single_turn()  # Should be able to play both Misdirection and Freezing Trap again
+
+        # self.assertEqual(3, len(game.players[0].hand))
 
     def test_Snipe(self):
         game = generate_game_for([MagmaRager, OasisSnapjaw, FeralSpirit], Snipe, SpellTestingAgent, SpellTestingAgent)

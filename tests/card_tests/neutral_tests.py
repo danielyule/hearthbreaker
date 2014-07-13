@@ -735,19 +735,60 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())
         self.assertEqual(1, game.players[0].minions[1].health)
 
+    def test_AngryChickenHeal(self):
+        game = generate_game_for([AngryChicken, PowerWordShield], [ArcaneExplosion, CircleOfHealing],
+                                 OneSpellTestingAgent, OneSpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        # Uses Arcane Explosion, enraging the chicken
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # 2nd chicken
+        game.play_single_turn()  # Circle of healing
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+
     def test_SpitefulSmith(self):
-        game = generate_game_for(LightsJustice, [MortalCoil, AcidicSwampOoze], SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(LightsJustice, [MortalCoil, AcidicSwampOoze, CircleOfHealing],
+                                 PredictableAgentWithoutHeroPower, OneSpellTestingAgent)
         smith = SpitefulSmith()
         smith.summon(game.players[0], game, 0)
         for turn in range(0, 2):
             game.play_single_turn()
 
         self.assertEqual(5, game.players[0].minions[0].health)
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(29, game.players[1].hero.health)  # No enrage, only LJ
 
         game.play_single_turn()
-        # Bonus fails to carry across reequips and throws error if no weapon
-        # self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+
+        self.assertEqual(22, game.players[1].hero.health)  # Enrage LJ for 3 + Smith for 4
+
+        game.play_single_turn()  # Ooze
+
+        self.assertEqual(1, len(game.players[1].minions))
+
+        game.play_single_turn()  # New weapon
+
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(27, game.players[0].hero.health)  # Enrage LJ for 3 to kill Ooze
+        self.assertEqual(18, game.players[1].hero.health)  # Smith to face for 4
+
+        game.play_single_turn()  # Circle of Healing
+        game.play_single_turn()  #Unenraged LJ for 1 + Smith for 4
+
+        self.assertEqual(13, game.players[1].hero.health)
 
     def test_BloodKnight(self):
         game = generate_game_for(BloodKnight, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
@@ -885,3 +926,132 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertTrue(game.players[0].hero.frozen)
+
+
+    def test_LeperGnome(self):
+        game = generate_game_for(LeperGnome, MortalCoil, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(28, game.players[0].hero.health)
+
+    def test_ManaAddict(self):
+        game = generate_game_for([ManaAddict, ArcaneIntellect], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        def check_attack(m):
+            self.assertEqual(2, game.players[0].minions[0].temp_attack)
+
+        game.players[0].bind("spell_cast", check_attack)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(0, game.players[0].minions[0].temp_attack)
+        self.assertEqual(6, len(game.players[0].hand))
+
+    def test_RagingWorgen(self):
+        game = generate_game_for(RagingWorgen, [ArcaneExplosion, ArcaneExplosion, CircleOfHealing],
+                                 OneSpellTestingAgent, OneSpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        # Uses Arcane Explosion, enraging the worgen
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].windfury)
+
+        game.play_single_turn()  # 2nd Raging Worgen
+        game.play_single_turn()  # Circle of Healing
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertTrue(not game.players[0].minions[0].windfury)
+        self.assertTrue(not game.players[0].minions[1].windfury)
+
+    def test_TaurenWarrior(self):
+        game = generate_game_for(TaurenWarrior, [ArcaneExplosion, ArcaneExplosion, CircleOfHealing],
+                                 OneSpellTestingAgent, OneSpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        # Uses Arcane Explosion, enraging the Tauren Warrior
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # 2nd Tauren Warrior
+        game.play_single_turn()  # Circle of Healing
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+
+    def test_RaidLeader(self):
+        game = generate_game_for([Wisp, RaidLeader], [ShadowBolt, MortalCoil, MassDispel],
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()  # Coils extra wisp
+        game.play_single_turn()
+        game.play_single_turn()  # Mass Dispel
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+    def test_KnifeJugglerEdgeCase(self):
+        game = generate_game_for(TheBeast, [KnifeJuggler, SiphonSoul],
+                                 MinionPlayingAgent, EnemyMinionSpellTestingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+        # Beast dies to Siphon Soul and summons us a Finkle Einhorn, so Juggler knifes enemy hero
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(29, game.players[0].hero.health)
+
+    def test_VentureCoMercenary(self):
+        game = generate_game_for([VentureCoMercenary, Silence], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertFalse(game.players[0].minions[0].silenced)
+        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(8, game.players[0].hand[1].mana_cost(game.players[0]))
