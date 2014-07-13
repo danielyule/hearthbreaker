@@ -121,6 +121,7 @@ class FreezingTrap(SecretCard):
             card = attacker.card
             attacker.bounce()
             attacker.player.mana_filters.append(Filter())
+            super().reveal()
 
 
 class Misdirection(SecretCard):
@@ -167,3 +168,4 @@ class Snipe(SecretCard):
     def _reveal(self, minion):
         minion.damage(4, None)
         minion.activate_delayed()
+        super().reveal()
