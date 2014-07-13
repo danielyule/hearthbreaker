@@ -268,7 +268,8 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(30, game.current_player.hero.health)
 
     def test_FreezingTrapAndMisdirection(self):
-        game = generate_game_for([Misdirection, FreezingTrap], Wolfrider, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+        game = generate_game_for([Misdirection, FreezingTrap], Wolfrider,
+                                 SpellTestingAgent, PredictableAgentWithoutHeroPower)
 
         for turn in range(0, 6):
             game.play_single_turn()

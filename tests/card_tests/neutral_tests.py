@@ -786,7 +786,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(18, game.players[1].hero.health)  # Smith to face for 4
 
         game.play_single_turn()  # Circle of Healing
-        game.play_single_turn()  #Unenraged LJ for 1 + Smith for 4
+        game.play_single_turn()  # Unenraged LJ for 1 + Smith for 4
 
         self.assertEqual(13, game.players[1].hero.health)
 
@@ -926,7 +926,6 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertTrue(game.players[0].hero.frozen)
-
 
     def test_LeperGnome(self):
         game = generate_game_for(LeperGnome, MortalCoil, MinionPlayingAgent, SpellTestingAgent)
