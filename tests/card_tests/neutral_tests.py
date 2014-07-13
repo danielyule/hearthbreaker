@@ -933,7 +933,7 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(28, game.players[0].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)
 
     def test_ManaAddict(self):
         game = generate_game_for([ManaAddict, ArcaneIntellect], StonetuskBoar, SpellTestingAgent, DoNothingBot)

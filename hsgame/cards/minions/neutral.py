@@ -233,13 +233,19 @@ class LootHoarder(MinionCard):
         return minion
 
 
-class LeperGnome(MinionCard):  # idk, maybe this will work
+class LeperGnome(MinionCard):
     def __init__(self):
         super().__init__("Leper Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def deal_enemy_hero_two_damage(minion):
-            player.game.other_player.hero.damage(2, None)
+            if minion.player is minion.player.game.current_player:
+                player.game.other_player.hero.damage(2, None)
+                player.game.other_player.hero.activate_delayed()
+
+            else:
+                player.game.current_player.hero.damage(2, None)
+                player.game.current_player.hero.activate_delayed()
 
         return Minion(2, 1, deathrattle=deal_enemy_hero_two_damage)
 
