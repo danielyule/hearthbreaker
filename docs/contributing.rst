@@ -278,9 +278,9 @@ agents:
     only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
     hero power)
 
-:class:`SpellTestingAgent <tests.testing_agents.testing_agents.SpellTestingAgent>`
+:class:`PredictableBot <tests.agents.basic_agents.PredictableBot>`
 
-    Predictable bought tries to do everything it can in a very particular order:
+    PredictableBot tries to do everything it can in a very particular order:
      1. Use the hero ability
      2. Play as many cards as it has mana for, in the order they are in the deck.
      3. Attack with the hero if possible (The targeting works similar to spell testing agent above)
