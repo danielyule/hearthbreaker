@@ -89,7 +89,13 @@ from hsgame.cards.minions.neutral import (
     DragonlingMechanic,
     MurlocTidehunter,
     RazorfenHunter,
-    KnifeJuggler
+    KnifeJuggler,
+    CairneBloodhoof,
+    HarvestGolem,
+    TheBeast,
+    SylvanasWindrunner,
+    StampedingKodo,
+    FrostElemental
 )
 
 from hsgame.cards.minions.druid import (
@@ -102,7 +108,10 @@ from hsgame.cards.minions.druid import (
 )
 
 from hsgame.cards.minions.hunter import (
-    TimberWolf
+    TimberWolf,
+    SavannahHighmane,
+    Houndmaster,
+    KingKrush
 )
 
 from hsgame.cards.minions.mage import (
