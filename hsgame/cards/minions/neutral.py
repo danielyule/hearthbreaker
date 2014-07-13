@@ -1126,3 +1126,104 @@ class KnifeJuggler(MinionCard):
         player.game.bind("minion_added", throw_knife)
         minion.bind_once("silenced", lambda: player.game.unbind("minion_added", throw_knife))
         return minion
+
+
+class CairneBloodhoof(MinionCard):
+    def __init__(self):
+        super().__init__("Cairne Bloodhoof", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_baine(m):
+            class BaineBloodhoof(MinionCard):
+                def __init__(self):
+                    super().__init__("Baine Bloodhoof", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(4, 5)
+
+            BaineBloodhoof().summon(player, player.game, m.index)
+
+        return Minion(4, 5, deathrattle=summon_baine)
+
+
+class HarvestGolem(MinionCard):
+    def __init__(self):
+        super().__init__("Harvest Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_damagedgolem(m):
+            class DamagedGolem(MinionCard):
+                def __init__(self):
+                    super().__init__("Damaged Golem", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(2, 1)
+
+            DamagedGolem().summon(player, player.game, m.index)
+
+        return Minion(2, 3, deathrattle=summon_damagedgolem)
+
+
+class TheBeast(MinionCard):
+    def __init__(self):
+        super().__init__("The Beast", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_finkle(m):
+            class FinkleEinhorn(MinionCard):
+                def __init__(self):
+                    super().__init__("Finkle Einhorn", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(3, 3)
+            finkle_owner = []
+            finkle_owner.append(player.game.current_player)
+            finkle_owner.append(player.game.other_player)
+            finkle_owner.remove(m.player)
+            FinkleEinhorn().summon(finkle_owner.pop(), player.game, 0)
+
+        return Minion(9, 7, MINION_TYPE.BEAST, deathrattle=summon_finkle)
+
+
+class SylvanasWindrunner(MinionCard):
+    def __init__(self):
+        super().__init__("Sylvanas Windrunner", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def assume_direct_control(m):
+            enemy = []
+            enemy.append(player.game.current_player)
+            enemy.append(player.game.other_player)
+            enemy.remove(m.player)
+            enemy_player = enemy.pop()
+            targets = enemy_player.minions.copy()
+            target = targets[player.game.random(0, len(targets) - 1)]
+            new_minion = target.copy(player)
+            target.remove_from_board()
+            new_minion.add_to_board(len(player.minions))
+
+        return Minion(5, 5, deathrattle=assume_direct_control)
+
+class StampedingKodo(MinionCard):
+    def __init__(self):
+        super().__init__("Stampeding Kodo", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def random_destroy(m):
+            targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: x.calculate_attack() <= 2)
+            target = targets[player.game.random(0, len(targets) - 1)]
+            target.die(None)
+            target.activate_delayed()
+
+        return Minion(3, 5, MINION_TYPE.BEAST, battlecry=random_destroy)
+
+
+class FrostElemental(MinionCard):
+    def __init__(self):
+        super().__init__("Frost Elemental", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_battlecry_target)
+
+    def create_minion(self, player):
+        def freeze_em(m):
+            self.target.freeze()
+        return Minion(5, 5, battlecry=freeze_em)

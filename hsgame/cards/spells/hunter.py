@@ -1,6 +1,6 @@
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import Card, SecretCard, Minion
+from hsgame.game_objects import Card, SecretCard, Minion, MinionCard
 
 
 class HuntersMark(Card):
@@ -167,3 +167,89 @@ class Snipe(SecretCard):
     def _reveal(self, minion):
         minion.damage(4, None)
         minion.activate_delayed()
+
+
+class DeadlyShot(Card):
+    def __init__(self):
+        super().__init__("Deadly Shot", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
+        target = targets[player.game.random(0, len(targets) - 1)]
+        target.die(None)
+        target.activate_delayed()
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1
+
+
+class MultiShot(Card):
+    def __init__(self):
+        super().__init__("Multi-Shot", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = game.other_player.minions.copy()
+        for i in range(0, 2):
+            target = targets.pop(game.random(0, len(targets) - 1))
+            target.damage(player.effective_spell_damage(3), self)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 2
+
+
+class ExplosiveShot(Card):
+    def __init__(self):
+        super().__init__("Explosive Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(5), self)
+        index = self.target.index
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+        if self.target.index < len(self.target.player.minions) - 1:
+            minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+
+class KillCommand(Card):
+    def __init__(self):
+        super().__init__("Kill Command", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        beast_count = 0
+        if hsgame.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x.minion_type is MINION_TYPE.BEAST) is not None:
+            for target in (0, len(hsgame.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x.minion_type is MINION_TYPE.BEAST))):
+                beast_count += 1
+        if beast_count >= 1:
+            self.target.damage(player.effective_spell_damage(5), self)
+        else:
+            self.target.damage(player.effective_spell_damage(3), self)
+
+
+class UnleashTheHounds(Card):
+    def __init__(self):
+        super().__init__("Unleash the Hounds", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        
+        class Hound(MinionCard):
+            def __init__(self):
+                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                minion = Minion(1, 1, MINION_TYPE.BEAST)
+                minion.charge = True
+                return minion
+        hound = Hound()
+        for target in hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True):
+            hound.summon(player, game, len(player.minions))

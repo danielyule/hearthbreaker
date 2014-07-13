@@ -30,6 +30,11 @@ from hsgame.cards.spells.hunter import (
     FreezingTrap,
     Misdirection,
     Snipe,
+    DeadlyShot,
+    MultiShot,
+    ExplosiveShot,
+    KillCommand,
+    UnleashTheHounds
 )
 
 from hsgame.cards.spells.mage import (

@@ -3,7 +3,7 @@ import unittest
 import unittest.mock
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
-    PredictableAgentWithoutHeroPower
+    PredictableAgentWithoutHeroPower, SelfSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
@@ -264,3 +264,103 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
         self.assertEqual(3, game.current_player.minions[2].health)
+
+    def test_SavannahHighmane(self):
+        game = generate_game_for(SavannahHighmane, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Hyena", game.players[0].minions[0].card.name)
+        self.assertEqual("Hyena", game.players[0].minions[1].card.name)
+
+    def test_Houndmaster(self):
+        game = generate_game_for([Houndmaster, StonetuskBoar], IronfurGrizzly, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertTrue(game.players[0].minions[1].taunt)
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+        self.assertEqual(4, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].health)
+
+    def test_DeadlyShot(self):
+        game = generate_game_for(DeadlyShot, SenjinShieldmasta, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+        # Can't use until a unit is on the field
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_MultiShot(self):
+        game = generate_game_for(MultiShot, SenjinShieldmasta, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+        self.assertEqual(5, game.players[1].minions[1].health)
+        # Can't use until 2 units are on the field
+        game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+
+    def test_ExplosiveShot(self):
+        game = generate_game_for(IronfurGrizzly, ExplosiveShot, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        game.players[1].agent.choose_target = lambda targets: targets[len(targets) - 2]
+        self.assertEqual(3, len(game.players[0].minions))
+
+        game.play_single_turn()
+        # Explosive Shot the middle Grizzly
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+    def test_KillCommand(self):
+        game = generate_game_for([KillCommand, StonetuskBoar], StonetuskBoar, SelfSpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[0].hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(22, game.players[0].hero.health)
+
+    def test_UnleashTheHounds(self):
+        game = generate_game_for(UnleashTheHounds, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual("Hound", game.players[0].minions[0].card.name)
+        self.assertEqual("Hound", game.players[0].minions[1].card.name)

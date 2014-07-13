@@ -831,3 +831,57 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[1].health)
+
+    def test_CairneBloodhoof(self):
+        game = generate_game_for(CairneBloodhoof, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual("Baine Bloodhoof", game.players[0].minions[0].card.name)
+
+    def test_TheBeast(self):
+        game = generate_game_for(TheBeast, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual("Finkle Einhorn", game.players[1].minions[0].card.name)
+
+    def test_HarvestGolem(self):
+        game = generate_game_for(HarvestGolem, ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual("Damaged Golem", game.players[0].minions[0].card.name)
+
+    def test_SylvanasWindrunner(self):
+        game = generate_game_for(SylvanasWindrunner, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
+        imp = FlameImp()
+        imp.summon(game.players[1], game, 0)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Flame Imp", game.players[0].minions[0].card.name)
+
+    def test_StampedingKodo(self):
+        game = generate_game_for(StampedingKodo, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+    def test_FrostElemental(self):
+        game = generate_game_for(FrostElemental, ArgentSquire, SelfSpellTestingAgent, DoNothingBot)
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertTrue(game.players[0].hero.frozen)
