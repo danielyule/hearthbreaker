@@ -226,14 +226,12 @@ class KillCommand(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        beast_count = hsgame.targeting.find_friendly_minion_battlecry_target(player.game,
-                                                                    lambda x: x.minion_type is MINION_TYPE.BEAST)
-        if beast_count is None:
-            beast_count = []
-        if len(beast_count) >= 1:
-            self.target.damage(player.effective_spell_damage(5), self)
-        else:
+        beasts = hsgame.targeting.find_friendly_minion_battlecry_target(player.game,
+                                                                        lambda x: x.minion_type is MINION_TYPE.BEAST)
+        if beasts is None:
             self.target.damage(player.effective_spell_damage(3), self)
+        else:
+            self.target.damage(player.effective_spell_damage(5), self)
 
 
 class UnleashTheHounds(Card):
