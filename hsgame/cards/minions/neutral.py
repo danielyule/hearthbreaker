@@ -1,7 +1,7 @@
 from hsgame.cards.battlecries import draw_card, silence, deal_one_damage, \
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
-    destroy_target, two_temp_attack, nightblade, ssc
+    destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hsgame.game_objects import Minion, MinionCard
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
@@ -685,7 +685,7 @@ class TheBlackKnight(MinionCard):
     def __init__(self):
         super().__init__("The Black Knight", 6, CHARACTER_CLASS.ALL,
                          CARD_RARITY.LEGENDARY,
-                         hsgame.targeting.find_minion_battlecry_target,
+                         hsgame.targeting.find_enemy_minion_battlecry_target,
                          lambda minion: minion.taunt)
 
     def create_minion(self, player):
@@ -811,6 +811,25 @@ class StormwindChampion(MinionCard):
         return minion
 
 
+class Deathwing(MinionCard):
+    def __init__(self):
+        super().__init__("Deathwing", 10, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(12, 12, MINION_TYPE.DRAGON, battlecry=deathwing)
+
+
+class Alexstrasza(MinionCard):
+    def __init__(self):
+        super().__init__("Alexstrasza", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
+                         hsgame.targeting.find_hero_target)
+
+    def create_minion(self, player):
+        def set_hero_health(player):
+            self.target.health = 15
+        return Minion(8, 8, MINION_TYPE.DRAGON, battlecry=set_hero_health)
+
+
 class EmperorCobra(MinionCard):
     def __init__(self):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
@@ -852,10 +871,238 @@ class AcidicSwampOoze(MinionCard):
         super().__init__("Acidic Swamp Ooze", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def destroy_weapon(minion):
+        def destroy_enemy_weapon(player):
             if player.game.other_player.hero.weapon is not None:
                 player.game.other_player.hero.weapon.destroy()
-        return Minion(3, 2, battlecry=destroy_weapon)
+        return Minion(3, 2, battlecry=destroy_enemy_weapon)
+
+
+class AncientBrewmaster(MinionCard):
+    def __init__(self):
+        super().__init__("Ancient Brewmaster", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(5, 4, battlecry=return_to_hand)
+
+
+class YouthfulBrewmaster(MinionCard):
+    def __init__(self):
+        super().__init__("Youthful Brewmaster", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def create_minion(self, player):
+        return Minion(3, 2, battlecry=return_to_hand)
+
+
+class BaronGeddon(MinionCard):
+    def __init__(self):
+        super().__init__("Baron Geddon", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def baron_damage():
+            targets = player.game.other_player.minions.copy()
+            targets.extend(player.game.current_player.minions)
+            targets.append(player.game.other_player.hero)
+            targets.append(player.game.current_player.hero)
+            targets.remove(minion)
+            for target in targets:
+                target.damage(2, None)
+
+        def silence():
+            self.unbind("turn_ended", baron_damage)
+        minion = Minion(7, 5)
+        player.bind("turn_ended", baron_damage)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", baron_damage))
+        return minion
+
+
+class AngryChicken(MinionCard):
+    def __init__(self):
+        super().__init__("Angry Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def increase_attack():
+            minion.change_attack(5)
+
+        def decrease_attack():
+            minion.change_attack(-5)
+
+        def silenced():
+            minion.unbind("enraged", increase_attack)
+            minion.unbind("unenraged", decrease_attack)
+
+        minion = Minion(1, 1, MINION_TYPE.BEAST)
+        minion.bind("enraged", increase_attack)
+        minion.bind("unenraged", decrease_attack)
+        minion.bind("silenced", silenced)
+        return minion
+
+
+class RagingWorgen(MinionCard):
+    def __init__(self):
+        super().__init__("Raging Worgen", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def increase_attack():
+            minion.change_attack(1)
+            minion.windfury = True
+
+        def decrease_attack():
+            minion.change_attack(-1)
+            minion.windfury = False
+
+        def silenced():
+            minion.unbind("enraged", increase_attack)
+            minion.unbind("unenraged", decrease_attack)
+
+        minion = Minion(3, 3)
+        minion.bind("enraged", increase_attack)
+        minion.bind("unenraged", decrease_attack)
+        minion.bind("silenced", silenced)
+        return minion
+
+
+class TaurenWarrior(MinionCard):
+    def __init__(self):
+        super().__init__("Tauren Warrior", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def increase_attack():
+            minion.change_attack(3)
+
+        def decrease_attack():
+            minion.change_attack(-3)
+
+        def silenced():
+            minion.unbind("enraged", increase_attack)
+            minion.unbind("unenraged", decrease_attack)
+
+        minion = Minion(2, 3)
+        minion.taunt = True
+        minion.bind("enraged", increase_attack)
+        minion.bind("unenraged", decrease_attack)
+        minion.bind("silenced", silenced)
+        return minion
+
+
+class SpitefulSmith(MinionCard):
+    def __init__(self):
+        super().__init__("Spiteful Smith", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def increase_weapon_attack():
+            minion.player.hero.weapon.base_attack += 2
+        # Bonus fails to carry across reequips and throws error if no weapon
+
+        def decrease_weapon_attack():
+            minion.player.hero.weapon.base_attack -= 2
+
+        def silenced():
+            minion.unbind("enraged", increase_weapon_attack)
+            minion.unbind("unenraged", decrease_weapon_attack)
+
+        minion = Minion(4, 6)
+        minion.bind("enraged", increase_weapon_attack)
+        minion.bind("unenraged", decrease_weapon_attack)
+        minion.bind("silenced", silenced)
+        return minion
+
+
+class BloodKnight(MinionCard):
+    def __init__(self):
+        super().__init__("Blood Knight", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        def collect_divine_shields(minion):
+            shields_stolen = 0
+            for target in hsgame.targeting.find_minion_spell_target(player.game, lambda m: m.divine_shield):
+                shields_stolen += 1
+                target.divine_shield = False
+            for i in range(0, shields_stolen):
+                minion.increase_health(3)
+                minion.change_attack(3)
+        return Minion(3, 3, battlecry=collect_divine_shields)
+
+
+class FrostwolfWarlord(MinionCard):
+    def __init__(self):
+        super().__init__("Frostwolf Warlord", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def buff_from_allies(minion):
+            for i in range(0, len(minion.player.minions)):
+                minion.increase_health(1)
+                minion.change_attack(1)
+        return Minion(4, 4, battlecry=buff_from_allies)
+
+
+class RaidLeader(MinionCard):
+    def __init__(self):
+        super().__init__("Raid Leader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+
+        def add_effect(m, index):
+            m.add_aura(1, 0, lambda mini: mini is not minion)
+
+        minion = Minion(2, 2)
+        minion.bind("added_to_board", add_effect)
+        return minion
+
+
+class DragonlingMechanic(MinionCard):
+    def __init__(self):
+        super().__init__("Dragonling Mechanic", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_dragonling(m):
+            class MechanicalDragonling(MinionCard):
+                def __init__(self):
+                    super().__init__("Mechanical Dragonling", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(2, 1)
+                # Apparently not a dragon
+            MechanicalDragonling().summon(player, player.game, m.index)
+
+        return Minion(2, 4, battlecry=summon_dragonling)
+
+
+class MurlocTidehunter(MinionCard):
+    def __init__(self):
+        super().__init__("Murloc Tidehunter", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_murlocscout(m):
+            class MurlocScout(MinionCard):
+                def __init__(self):
+                    super().__init__("Murloc Scout", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.MURLOC)
+
+            MurlocScout().summon(player, player.game, m.index)
+
+        return Minion(2, 1, MINION_TYPE.MURLOC, battlecry=summon_murlocscout)
+
+
+class RazorfenHunter(MinionCard):
+    def __init__(self):
+        super().__init__("Razorfen Hunter", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_boar(m):
+            class Boar(MinionCard):
+                def __init__(self):
+                    super().__init__("Boar", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.BEAST)
+
+            Boar().summon(player, player.game, m.index)
+
+        return Minion(2, 3, battlecry=summon_boar)
 
 
 class KnifeJuggler(MinionCard):

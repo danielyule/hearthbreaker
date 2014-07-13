@@ -37,7 +37,7 @@ def flame_imp(minion):
 
 
 def nightblade(minion):
-    minion.other_player.hero.damage(3, None)
+    minion.player.game.other_player.hero.damage(3, None)
 
 
 def pit_lord(minion):
@@ -111,16 +111,20 @@ def discard_two(minion):
     minion.player.discard()
 
 
-def discard_all(minion):
+def deathwing(minion):
+    targets = minion.player.game.other_player.minions.copy()
+    targets.extend(minion.player.game.current_player.minions)
+    for minion in targets:
+        minion.die(None)
     for i in range(len(minion.player.hand)):
-        minion.player.discard()
+        minion.player.game.current_player.discard()
 
 
 def darkscale_healer(minion):
     targets = minion.player.game.current_player.minions.copy()
     targets.append(minion.player.game.current_player.hero)
     for minion in targets:
-        minion.heal(2)
+        minion.heal(2, None)
 
 
 def ssc(minion):
@@ -131,7 +135,7 @@ def ssc(minion):
 
 def destroy_target(minion):
     if minion.card.target is not None:
-        minion.card.target.die()
+        minion.card.target.die(None)
 
 
 def two_temp_attack(minion):
@@ -142,3 +146,10 @@ def two_temp_attack(minion):
 def give_windfury(minion):
     if minion.card.target is not None:
         minion.card.target.wind_fury = True
+
+
+def return_to_hand(minion):
+    if minion.card.target is not None:
+        minion.card.target.remove_from_board()
+        if len(minion.card.target.player.hand) < 10:
+            minion.card.target.player.hand.append(minion.card)
