@@ -928,12 +928,24 @@ class TestCommon(unittest.TestCase):
         self.assertTrue(game.players[0].hero.frozen)
 
     def test_LeperGnome(self):
-        game = generate_game_for(LeperGnome, MortalCoil, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(LeperGnome, [MortalCoil, LeperGnome],
+                                 SpellTestingAgent, PredictableAgentWithoutHeroPower)
         for turn in range(0, 2):
             game.play_single_turn()
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(28, game.players[1].hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(22, game.players[1].hero.health)
+        self.assertEqual(28, game.players[0].hero.health)
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
 
     def test_ManaAddict(self):
         game = generate_game_for([ManaAddict, ArcaneIntellect], StonetuskBoar, SpellTestingAgent, DoNothingBot)
