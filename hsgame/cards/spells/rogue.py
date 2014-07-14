@@ -18,7 +18,7 @@ class Backstab(Card):
     def __init__(self):
         super().__init__("Backstab", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target,
-                         lambda target: target.health == target.calculate_max_health())
+                         lambda target: target.health == target.calculate_max_health() and target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
