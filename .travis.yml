@@ -3,7 +3,6 @@ python:
   - "3.2"
   - "3.3"
   - "3.4"
-  - "pypy"
 install:
   - pip install coveralls
   - pip install flake8
