@@ -18,7 +18,9 @@ The only way to use the system currently is through unit tests.  The tests are l
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
 
-The Hearthstone Simulator is compatible with Python 3.3+
+The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy](http://pypy.org/) 2.3+
+
+For Python 3.2 and PyPy, the unit tests are dependent on the [mock package](https://pypi.python.org/pypi/mock).
 
 Progress
 --------
@@ -48,8 +50,18 @@ To contribute, simply fork the repository, make changes and submit a pull reques
 All pull requests which implement new cards must also include a unit test for those cards.  In the case where the card
  has no side effects aside from playing the minion, tests should include another card's effects on it.
 
-All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
+All pull requests will be automatically verified through 
+[travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through
+ [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
 
-For more specifics about contributing, see the [contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+For more specifics about contributing, see the 
+[contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), 
+or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+
+Related Projects
+----------------
+Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
+with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more
+sophisticated AI.
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
