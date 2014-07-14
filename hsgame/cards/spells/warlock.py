@@ -31,7 +31,7 @@ class Hellfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         targets.extend(game.current_player.minions)
         targets.append(game.other_player.hero)
         targets.append(game.current_player.hero)
@@ -80,7 +80,7 @@ class TwistingNether(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         targets.extend(game.current_player.minions)
         for minion in targets:
             minion.die(self)
@@ -94,7 +94,7 @@ class Demonfire(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        targets = player.game.current_player.minions.copy()
+        targets = copy.copy(player.game.current_player.minions)
         if self.target.minion_type is MINION_TYPE.DEMON and self.target in targets:
             self.target.change_attack(2)
             self.target.increase_health(2)
@@ -196,9 +196,8 @@ class Shadowflame(Card):
     def use(self, player, game):
         super().use(player, game)
         shadowflame_damage = self.target.calculate_attack() + self.target.temp_attack
-        targets = game.other_player.minions.copy()
         self.target.die(self)
-        for minion in targets:
+        for minion in game.other_player.minions:
             minion.damage(player.effective_spell_damage(shadowflame_damage),
                           self)
 

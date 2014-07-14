@@ -1,3 +1,4 @@
+import copy
 import random
 import abc
 
@@ -168,7 +169,7 @@ class Bindable:
         :see: :class:`Bindable`
         """
         if event in self.events:
-            for handler in self.events[event].copy():
+            for handler in copy.copy(self.events[event]):
                 if not handler.active:
                     pass_args = args + handler.args
                     handler.active = True
@@ -834,7 +835,7 @@ class Minion(Character):
         new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
                             self.minion_type, self.battlecry, self.deathrattle)
         new_minion.health = self.health
-        new_minion.events = self.events.copy()
+        new_minion.events = copy.copy(self.events)
         new_minion.stealth = self.stealth
         new_minion.taunt = self.taunt
         new_minion.divine_shield = self.divine_shield

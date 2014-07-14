@@ -65,7 +65,7 @@ class BladeFlurry(Card):
             attack_power = player.effective_spell_damage(player.hero.calculate_attack())
             player.hero.weapon.destroy()
 
-            for minion in game.other_player.minions.copy():
+            for minion in game.other_player.minions:
                 minion.damage(attack_power, self)
 
             game.other_player.hero.damage(attack_power, self)

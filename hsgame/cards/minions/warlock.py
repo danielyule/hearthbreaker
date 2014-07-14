@@ -39,12 +39,6 @@ class DreadInfernal(MinionCard):
                          CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        # targets = game.other_player.minions.copy()
-        #    targets.extend(game.current_player.minions)
-        #   targets.append(game.other_player.hero)
-        #  targets.append(game.current_player.hero)
-        # for minion in targets:
-        #    minion.damage(1, None)
         return Minion(6, 6, MINION_TYPE.DEMON,
                       battlecry=deal_one_damage_all_characters)
 

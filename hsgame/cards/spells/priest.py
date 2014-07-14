@@ -13,7 +13,7 @@ class CircleOfHealing(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         targets.extend(player.minions)
 
         for minion in targets:
@@ -55,7 +55,7 @@ class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions.copy():
+        for minion in game.other_player.minions:
             minion.damage(player.effective_spell_damage(2), self)
 
         for minion in player.minions:
@@ -98,7 +98,7 @@ class MassDispel(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions.copy():
+        for minion in game.other_player.minions:
             minion.silence()
 
         player.draw()

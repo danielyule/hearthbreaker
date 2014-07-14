@@ -281,8 +281,7 @@ class Swipe(Card):
         super().use(player, game)
         self.target.damage(4, self)
 
-        # must be copied or as units die, they'll be removed from the list
-        for minion in game.other_player.minions.copy():
+        for minion in game.other_player.minions:
             if minion is not self.target:
                 minion.damage(player.effective_spell_damage(1), self)
 
@@ -345,7 +344,7 @@ class Starfall(Card):
                                  CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
-                for minion in game.other_player.minions.copy():
+                for minion in game.other_player.minions:
                     minion.damage(player.effective_spell_damage(2), self)
 
         class DamageOne(Card):

@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, SecretCard, Minion, MinionCard
@@ -92,7 +93,7 @@ class ExplosiveTrap(SecretCard):
         player.hero.unbind("attacked", self._reveal)
 
     def _reveal(self, minion):
-        enemies = minion.game.current_player.minions.copy()
+        enemies = copy.copy(minion.game.current_player.minions)
         enemies.append(minion.game.current_player.hero)
         for enemy in enemies:
             enemy.damage(2, None)
@@ -138,7 +139,7 @@ class Misdirection(SecretCard):
         if not character.removed:
 
             def choose_random(targets):
-                possibilities = game.current_player.minions.copy()
+                possibilities = copy.copy(game.current_player.minions)
                 possibilities.extend(game.other_player.minions)
                 possibilities.append(game.current_player.hero)
                 possibilities.append(game.other_player.hero)
@@ -192,7 +193,7 @@ class MultiShot(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         for i in range(0, 2):
             target = targets.pop(game.random(0, len(targets) - 1))
             target.damage(player.effective_spell_damage(3), self)

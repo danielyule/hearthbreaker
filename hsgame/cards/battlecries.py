@@ -1,3 +1,6 @@
+import copy
+
+
 def draw_card(minion):
     minion.player.draw()
 
@@ -85,7 +88,7 @@ def give_three_health(minion):
 
 
 def deal_one_damage_all_characters(minion):
-    targets = minion.player.game.other_player.minions.copy()
+    targets = copy.copy(minion.player.game.other_player.minions)
     targets.extend(minion.player.game.current_player.minions)
     targets.append(minion.player.game.other_player.hero)
     targets.append(minion.player.game.current_player.hero)
@@ -112,7 +115,7 @@ def discard_two(minion):
 
 
 def deathwing(minion):
-    targets = minion.player.game.other_player.minions.copy()
+    targets = copy.copy(minion.player.game.other_player.minions)
     targets.extend(minion.player.game.current_player.minions)
     for minion in targets:
         minion.die(None)
@@ -121,7 +124,7 @@ def deathwing(minion):
 
 
 def darkscale_healer(minion):
-    targets = minion.player.game.current_player.minions.copy()
+    targets = copy.copy(minion.player.game.current_player.minions)
     targets.append(minion.player.game.current_player.hero)
     for minion in targets:
         minion.heal(2, None)

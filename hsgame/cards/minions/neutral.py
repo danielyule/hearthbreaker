@@ -833,7 +833,7 @@ class BaronGeddon(MinionCard):
 
     def create_minion(self, player):
         def baron_damage():
-            targets = player.game.other_player.minions.copy()
+            targets = copy.copy(player.game.other_player.minions)
             targets.extend(player.game.current_player.minions)
             targets.append(player.game.other_player.hero)
             targets.append(player.game.current_player.hero)
@@ -1125,7 +1125,7 @@ class SylvanasWindrunner(MinionCard):
             enemy.append(player.game.other_player)
             enemy.remove(m.player)
             enemy_player = enemy.pop()
-            targets = enemy_player.minions.copy()
+            targets = copy.copy(enemy_player.minions)
             target = targets[player.game.random(0, len(targets) - 1)]
             new_minion = target.copy(player)
             target.remove_from_board()

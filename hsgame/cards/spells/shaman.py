@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard
@@ -112,7 +113,7 @@ class ForkedLightning(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         for i in range(0, 2):
             target = targets.pop(game.random(0, len(targets) - 1))
             target.damage(player.effective_spell_damage(2), self)
@@ -184,7 +185,7 @@ class LightningStorm(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions.copy():
+        for minion in game.other_player.minions:
             minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
 
 
@@ -206,7 +207,7 @@ class TotemicMight(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in player.minions.copy():
+        for minion in player.minions:
             if minion.minion_type == MINION_TYPE.TOTEM:
                 minion.increase_health(2)
 

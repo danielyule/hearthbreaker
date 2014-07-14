@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card, Minion, MinionCard, SecretCard
@@ -11,7 +12,7 @@ class AvengingWrath(Card):
     def use(self, player, game):
         super().use(player, game)
         for i in range(0, player.effective_spell_damage(8)):
-            targets = game.other_player.minions.copy()
+            targets = copy.copy(game.other_player.minions)
             targets.append(game.other_player.hero)
             target = targets[game.random(0, len(targets) - 1)]
             target.damage(1, self)
@@ -79,7 +80,7 @@ class Consecration(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions.copy():
+        for minion in game.other_player.minions:
             minion.damage(player.effective_spell_damage(2), self)
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
 
@@ -103,7 +104,7 @@ class Equality(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = game.other_player.minions.copy()
+        targets = copy.copy(game.other_player.minions)
         targets.extend(player.minions)
 
         for minion in targets:
