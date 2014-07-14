@@ -1,12 +1,10 @@
 from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from tests.testing_agents import SpellTestingAgent
-from tests.testing_utils import generate_game_for
+from tests.testing_utils import generate_game_for, mock
 from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 import random
 import unittest
-from unittest.mock import Mock
-
 from hsgame.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 
@@ -45,8 +43,8 @@ class TestGame(unittest.TestCase):
             def set_game(self, game):
                 pass
 
-        agent1 = unittest.mock.Mock(spec=MockAgent1(), wraps=MockAgent1())
-        agent2 = unittest.mock.Mock(spec=MockAgent2(), wraps=MockAgent2())
+        agent1 = mock.Mock(spec=MockAgent1(), wraps=MockAgent1())
+        agent2 = mock.Mock(spec=MockAgent2(), wraps=MockAgent2())
         game = Game([deck1, deck2], [agent1, agent2])
         game.pre_game()
         self.assertEqual(agent1.method_calls[0][0], "set_game", "Agent not asked to select cards")
@@ -75,8 +73,8 @@ class TestGame(unittest.TestCase):
         deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
 
-        agent1 = unittest.mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
-        agent2 = unittest.mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
+        agent1 = mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
+        agent2 = mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
         game = Game([deck1, deck2], [agent1, agent2])
 
         game.start()
@@ -138,7 +136,7 @@ class TestGame(unittest.TestCase):
 
 class TestBinding(unittest.TestCase):
     def test_bind(self):
-        event = Mock()
+        event = mock.Mock()
         binder = Bindable()
         binder.bind("test", event)
         binder.trigger("test", 1, 5, 6)
@@ -148,8 +146,8 @@ class TestBinding(unittest.TestCase):
         event.assert_called_once_with(1, 5, 6)
 
     def test_bind_once(self):
-        event = Mock()
-        event2 = Mock()
+        event = mock.Mock()
+        event2 = mock.Mock()
         binder = Bindable()
         binder.bind_once("test", event)
         binder.bind("test", event2)
@@ -161,8 +159,8 @@ class TestBinding(unittest.TestCase):
         self.assertEqual(event2.call_count, 2)
 
     def test_bind_with_different_args(self):
-        event = Mock()
-        event2 = Mock()
+        event = mock.Mock()
+        event2 = mock.Mock()
         binder = Bindable()
         binder.bind("test", event, 5)
         binder.bind("test", event2)

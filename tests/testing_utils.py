@@ -1,8 +1,16 @@
 import copy
 import collections
-
+import sys
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
+
+if sys.version_info.major is 3:
+    if sys.version_info.minor <= 2:
+        import mock
+    else:
+        from unittest import mock
+
+__all__ = ["mock", "StackedDeck", "generate_game_for"]
 
 
 class StackedDeck(Deck):

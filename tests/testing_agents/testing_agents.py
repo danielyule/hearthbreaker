@@ -56,7 +56,7 @@ class MinionPlayingAgent(DoNothingBot):
 class MinionAttackingAgent(MinionPlayingAgent):
     def do_turn(self, player):
         super().do_turn(player)
-        for minion in player.minions.copy():
+        for minion in copy.copy(player.minions):
             if minion.can_attack():
                 minion.attack()
 

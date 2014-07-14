@@ -1,10 +1,9 @@
 import random
 import unittest
-import unittest.mock
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
-from tests.testing_utils import generate_game_for
+from tests.testing_utils import generate_game_for, mock
 from hsgame.cards import *
 
 
@@ -244,7 +243,7 @@ class TestHunter(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        death_mock = unittest.mock.Mock()
+        death_mock = mock.Mock()
         game.players[1].minions[0].bind_once("died", death_mock)
 
         game.play_single_turn()

@@ -1,9 +1,8 @@
-from unittest.mock import Mock, call
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game
 from hsgame.replay import SavedGame
 from tests.testing_agents import *
-from tests.testing_utils import generate_game_for, StackedDeck
+from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hsgame.cards import *
 import random
 import unittest
@@ -120,7 +119,7 @@ class TestDruid(unittest.TestCase):
         # This is a test of the "Summon Panther" option of the Power of the Wild Card
 
         agent = MinionPlayingAgent()
-        agent.choose_option = Mock(side_effect=lambda *options: options[1])
+        agent.choose_option = mock.Mock(side_effect=lambda *options: options[1])
 
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -150,7 +149,7 @@ class TestDruid(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(10, game.other_player.max_mana)
-        card_draw_mock = Mock(side_effect=game.other_player.draw)
+        card_draw_mock = mock.Mock(side_effect=game.other_player.draw)
         game.other_player.draw = card_draw_mock
         game.play_single_turn()
         # Each time the player draws, they will draw another wild growth, which will turn into excess mana, which will
@@ -173,7 +172,7 @@ class TestDruid(unittest.TestCase):
 
         random.seed(1857)
         game = generate_game_for(Wrath, MogushanWarden, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
-        game.players[0].agent.choose_option = Mock(side_effect=lambda one, three: three)
+        game.players[0].agent.choose_option = lambda one, three: three
         for turn in range(0, 8):
             game.play_single_turn()
 
@@ -212,13 +211,10 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(5, game.other_player.minions[0].calculate_attack())
 
-        def mock_choose(*options):
-            return options[1]
-
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), MarkOfNature()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
         agent = MinionPlayingAgent()
-        agent.choose_option = Mock(side_effect=mock_choose)
+        agent.choose_option = lambda *options: options[1]
         game = Game([deck1, deck2], [agent, MinionPlayingAgent()])
 
         game.current_player = 1
@@ -244,12 +240,12 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        minion_increase_mock = Mock()
+        minion_increase_mock = mock.Mock()
 
         game.other_player.minions[0].bind("attack_changed", minion_increase_mock)
         game.other_player.minions[1].bind("attack_changed", minion_increase_mock)
 
-        player_increase_mock = Mock()
+        player_increase_mock = mock.Mock()
 
         game.other_player.hero.bind("attack_changed", player_increase_mock)
 
@@ -258,8 +254,8 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, game.current_player.mana)
 
         # Make sure the attack got increased
-        self.assertListEqual([call(2), call(2)], minion_increase_mock.call_args_list)
-        self.assertListEqual([call(2)], player_increase_mock.call_args_list)
+        self.assertListEqual([mock.call(2), mock.call(2)], minion_increase_mock.call_args_list)
+        self.assertListEqual([mock.call(2)], player_increase_mock.call_args_list)
 
         # And make sure that it went down again
         self.assertEqual(0, game.current_player.minions[0].temp_attack)
@@ -306,14 +302,14 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        spell_damage_mock = Mock()
+        spell_damage_mock = mock.Mock()
         game.current_player.minions[0].bind('spell_damaged', spell_damage_mock)
         game.current_player.minions[1].bind('spell_damaged', spell_damage_mock)
         game.current_player.minions[2].bind('spell_damaged', spell_damage_mock)
         swipe_card = game.other_player.hand[0]
         game.play_single_turn()
 
-        self.assertListEqual([call(4, swipe_card), call(1, swipe_card), call(1, swipe_card)],
+        self.assertListEqual([mock.call(4, swipe_card), mock.call(1, swipe_card), mock.call(1, swipe_card)],
                              spell_damage_mock.call_args_list)
 
         # The bloodfen raptor should be left, with one hp
@@ -345,7 +341,7 @@ class TestDruid(unittest.TestCase):
 
         game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
 
-        game.players[0].agent.choose_option = Mock(side_effect=lambda moonfire, dispel: dispel)
+        game.players[0].agent.choose_option = lambda moonfire, dispel: dispel
 
         game.play_single_turn()
         game.play_single_turn()
@@ -416,7 +412,7 @@ class TestDruid(unittest.TestCase):
         # Test drawing three cards
         random.seed(1857)
         game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingBot)
-        game.players[0].agent.choose_option = Mock(side_effect=lambda gain2, draw3: draw3)
+        game.players[0].agent.choose_option = lambda gain2, draw3: draw3
 
         game.play_single_turn()
         game.play_single_turn()
@@ -453,7 +449,7 @@ class TestDruid(unittest.TestCase):
         # Test drawing three cards
         random.seed(1857)
         game = generate_game_for(Starfall, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
-        game.players[0].agent.choose_option = Mock(side_effect=lambda damageAll, damageOne: damageOne)
+        game.players[0].agent.choose_option = lambda damageAll, damageOne: damageOne
 
         game.play_single_turn()
         game.play_single_turn()
@@ -550,7 +546,7 @@ class TestDruid(unittest.TestCase):
 
         game = generate_game_for(AncientOfLore, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
 
-        game.players[0].agent.choose_option = Mock(side_effect=lambda heal, draw: draw)
+        game.players[0].agent.choose_option = lambda heal, draw: draw
 
         game.play_single_turn()
         game.play_single_turn()
@@ -605,7 +601,7 @@ class TestDruid(unittest.TestCase):
 
         random.seed(1857)
         game = generate_game_for(AncientOfWar, IronbeakOwl, MinionPlayingAgent, MinionPlayingAgent)
-        game.players[0].agent.choose_option = Mock(side_effect=lambda health, attack: attack)
+        game.players[0].agent.choose_option = lambda health, attack: attack
 
         game.play_single_turn()
         game.play_single_turn()
@@ -711,7 +707,7 @@ class TestDruid(unittest.TestCase):
             self.assertEqual(9, minion.health)
             self.assertEqual(9, minion.calculate_max_health())
 
-        game.players[1].agent.choose_option = Mock(side_effect=lambda stats, summon: summon)
+        game.players[1].agent.choose_option = lambda stats, summon: summon
 
         game.play_single_turn()
         game.play_single_turn()
