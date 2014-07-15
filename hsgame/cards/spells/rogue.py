@@ -249,3 +249,14 @@ class SinisterStrike(Card):
         super().use(player, game)
 
         game.other_player.hero.damage(player.effective_spell_damage(3), self)
+
+
+class Sprint(Card):
+    def __init__(self):
+        super().__init__("Sprint", 7, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for i in range(0, 4):
+            player.draw()

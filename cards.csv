@@ -321,7 +321,7 @@ no,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,
 yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.",,Mage,3,,,Epic,Spell,Expert
 yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Common,Minion,Expert
 yes,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Common,Minion,Expert
-no,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
+yes,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
 yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Rare,Minion,Expert
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic
