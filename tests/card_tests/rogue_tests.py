@@ -321,10 +321,6 @@ class TestRogue(unittest.TestCase):
         # Headcrack should be played, with combo
         game.play_single_turn()
         self.assertEqual(20, game.players[1].hero.health)
-        self.assertEqual(4, len(game.players[0].hand))
-
-        # The combo should trigger now
-        game.play_single_turn()
         self.assertEqual(5, len(game.players[0].hand))
 
     def test_Preparation(self):

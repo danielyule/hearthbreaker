@@ -152,14 +152,17 @@ class Headcrack(Card):
 
     def use(self, player, game):
         def return_card():
-            player.hand.append(self)
+            if len(player.hand) < 10:
+                player.hand.append(self)
+            else:
+                player.trigger("card_destroyed", self)
 
         super().use(player, game)
 
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
 
         if player.cards_played > 0:
-            game.other_player.bind_once("turn_started", return_card)
+            player.bind_once("turn_ended", return_card)
 
 
 class Preparation(Card):
