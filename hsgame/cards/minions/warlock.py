@@ -2,7 +2,7 @@ from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import MinionCard, Minion
 from hsgame.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
-
+import copy
 
 class FlameImp(MinionCard):
     def __init__(self):
@@ -92,4 +92,23 @@ class SummoningPortal(MinionCard):
         minion.bind_once("silenced",
                          lambda: player.mana_filters.remove(filter))
         player.mana_filters.append(filter)
+        return minion
+
+
+class BloodImp(MinionCard):
+    def __init__(self):
+        super().__init__("Blood Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def buff_ally_health():
+            targets = copy.copy(player.game.current_player.minions)
+            targets.remove(minion)
+            if len(targets) > 0:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                target.increase_health(1)
+
+        minion = Minion(0, 1, MINION_TYPE.DEMON)
+        minion.stealth = True
+        player.bind("turn_ended", buff_ally_health)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
         return minion

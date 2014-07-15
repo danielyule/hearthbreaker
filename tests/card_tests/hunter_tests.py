@@ -407,3 +407,65 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual("Hound", game.players[0].minions[0].card.name)
         self.assertEqual("Hound", game.players[0].minions[1].card.name)
+
+    def test_StarvingBuzzard(self):
+        game = generate_game_for(StarvingBuzzard, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
+
+    def test_TundraRhino(self):
+        game = generate_game_for(TundraRhino, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(28, game.players[1].hero.health)
+
+    def test_AnimalCompanion(self):
+        game = generate_game_for(AnimalCompanion, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Leokk", game.players[0].minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Leokk", game.players[0].minions[0].card.name)
+        self.assertEqual("Misha", game.players[0].minions[1].card.name)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual("Leokk", game.players[0].minions[0].card.name)
+        self.assertEqual("Misha", game.players[0].minions[1].card.name)
+        self.assertEqual("Huffer", game.players[0].minions[2].card.name)

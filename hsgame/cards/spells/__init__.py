@@ -34,7 +34,8 @@ from hsgame.cards.spells.hunter import (
     MultiShot,
     ExplosiveShot,
     KillCommand,
-    UnleashTheHounds
+    UnleashTheHounds,
+    AnimalCompanion
 )
 
 from hsgame.cards.spells.mage import (

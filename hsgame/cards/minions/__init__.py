@@ -95,7 +95,22 @@ from hsgame.cards.minions.neutral import (
     TheBeast,
     SylvanasWindrunner,
     StampedingKodo,
-    FrostElemental
+    FrostElemental,
+    Demolisher,
+    Doomsayer,
+    Gruul,
+    Hogger,
+    ImpMaster,
+    InjuredBlademaster,
+    MasterSwordsmith,
+    NatPagle,
+    Nozdormu,
+    RagnarosTheFirelord,
+    ColdlightOracle,
+    ColdlightSeer,
+    GrimscaleOracle,
+    MurlocWarleader,
+    AncientWatcher
 )
 
 from hsgame.cards.minions.druid import (
@@ -111,7 +126,9 @@ from hsgame.cards.minions.hunter import (
     TimberWolf,
     SavannahHighmane,
     Houndmaster,
-    KingKrush
+    KingKrush,
+    StarvingBuzzard,
+    TundraRhino
 )
 
 from hsgame.cards.minions.mage import (
@@ -168,5 +185,6 @@ from hsgame.cards.minions.warlock import (
     Felguard,
     Doomguard,
     Succubus,
-    SummoningPortal
+    SummoningPortal,
+    BloodImp
 )

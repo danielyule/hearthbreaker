@@ -736,7 +736,7 @@ class StormwindChampion(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 1, lambda mini: mini is not minion)
+            m.add_aura(1, 1, lambda mini: mini is not minion and mini is not player.hero)
 
         minion = Minion(6, 6)
         minion.bind("added_to_board", add_effect)
@@ -973,7 +973,7 @@ class RaidLeader(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 0, lambda mini: mini is not minion)
+            m.add_aura(1, 0, lambda mini: mini is not minion and mini is not player.hero)
 
         minion = Minion(2, 2)
         minion.bind("added_to_board", add_effect)
@@ -1126,10 +1126,11 @@ class SylvanasWindrunner(MinionCard):
             enemy.remove(m.player)
             enemy_player = enemy.pop()
             targets = copy.copy(enemy_player.minions)
-            target = targets[player.game.random(0, len(targets) - 1)]
-            new_minion = target.copy(player)
-            target.remove_from_board()
-            new_minion.add_to_board(len(player.minions))
+            if len(targets) > 0:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                new_minion = target.copy(player)
+                target.remove_from_board()
+                new_minion.add_to_board(len(player.minions))
 
         return Minion(5, 5, deathrattle=assume_direct_control)
 
@@ -1158,3 +1159,240 @@ class FrostElemental(MinionCard):
         def freeze_em(m):
             self.target.freeze()
         return Minion(5, 5, battlecry=freeze_em)
+
+
+class Demolisher(MinionCard):
+    def __init__(self):
+        super().__init__("Demolisher", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def two_random_damage():
+            targets = copy.copy(player.game.other_player.minions)
+            targets.append(player.game.other_player.hero)
+            target = targets[player.game.random(0, len(targets) - 1)]
+            target.damage(2, None)
+
+        minion = Minion(1, 4)
+        player.bind("turn_started", two_random_damage)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", two_random_damage))
+        return minion
+
+
+class Doomsayer(MinionCard):
+    def __init__(self):
+        super().__init__("Doomsayer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        def destroy_all():
+            targets = copy.copy(player.game.other_player.minions)
+            targets.extend(player.game.current_player.minions)
+            for target in targets:
+                target.die(None)
+
+        minion = Minion(0, 7)
+        player.bind("turn_started", destroy_all)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", destroy_all))
+        return minion
+
+
+class Gruul(MinionCard):
+    def __init__(self):
+        super().__init__("Gruul", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def gruul_self_buff():
+            minion.change_attack(1)
+            minion.increase_health(1)
+
+        minion = Minion(7, 7)
+        player.bind("turn_ended", gruul_self_buff)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", gruul_self_buff))
+        return minion
+
+
+class Hogger(MinionCard):
+    def __init__(self):
+        super().__init__("Hogger", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_gnoll():
+            class Gnoll(MinionCard):
+                def __init__(self):
+                    super().__init__("Gnoll", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    minion = Minion(2, 2)
+                    minion.taunt = True
+                    return minion
+
+            Gnoll().summon(player, player.game, minion.index + 1)
+        minion = Minion(4, 4)
+        player.bind("turn_ended", summon_gnoll)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", summon_gnoll))
+        return minion
+
+
+class ImpMaster(MinionCard):
+    def __init__(self):
+        super().__init__("Imp Master", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def summon_imp():
+            class Imp(MinionCard):
+                def __init__(self):
+                    super().__init__("Imp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.DEMON)
+
+            minion.damage(1, None)
+            minion.activate_delayed()
+            Imp().summon(player, player.game, minion.index + 1)
+        minion = Minion(1, 5)
+        player.bind("turn_ended", summon_imp)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", summon_imp))
+        return minion
+
+
+class InjuredBlademaster(MinionCard):
+    def __init__(self):
+        super().__init__("Injured Blademaster", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def self_damage(m):
+            m.damage(4, None)
+        return Minion(4, 7, battlecry=self_damage)
+
+
+class MasterSwordsmith(MinionCard):
+    def __init__(self):
+        super().__init__("Master Swordsmith", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def buff_ally_attack():
+            targets = copy.copy(player.game.current_player.minions)
+            targets.remove(minion)
+            if len(targets) > 0:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                target.change_attack(1)
+
+        minion = Minion(1, 3)
+        player.bind("turn_ended", buff_ally_attack)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_attack))
+        return minion
+
+
+class NatPagle(MinionCard):
+    def __init__(self):
+        super().__init__("Nat Pagle", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def extra_draw():
+            if player.game.random(0, 1) == 1:
+                player.draw()
+
+        minion = Minion(0, 4)
+        player.bind("turn_started", extra_draw)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", extra_draw))
+        return minion
+
+
+class Nozdormu(MinionCard):
+    def __init__(self):
+        super().__init__("Nozdormu", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(8, 8, MINION_TYPE.DRAGON)  # Is the effect even applicable to AI?
+
+
+class RagnarosTheFirelord(MinionCard):
+    def __init__(self):
+        super().__init__("Ragnaros the Firelord", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def eight_random_damage():
+            targets = copy.copy(player.game.other_player.minions)
+            targets.append(player.game.other_player.hero)
+            target = targets[player.game.random(0, len(targets) - 1)]
+            target.damage(8, None)
+
+        def cant_attack():
+            minion.active = False
+
+        minion = Minion(8, 8)
+        player.bind("turn_started", cant_attack)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", cant_attack))
+        player.bind("turn_ended", eight_random_damage)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", eight_random_damage))
+        return minion
+
+
+class AncientWatcher(MinionCard):
+    def __init__(self):
+        super().__init__("Ancient Watcher", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def cant_attack():
+            minion.active = False
+
+        minion = Minion(4, 5)
+        player.bind("turn_started", cant_attack)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", cant_attack))
+        return minion
+
+
+class ColdlightOracle(MinionCard):
+    def __init__(self):
+        super().__init__("Coldlight Oracle", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def both_draw_two(m):
+            player.game.other_player.draw()
+            player.game.other_player.draw()
+            player.game.current_player.draw()
+            player.game.current_player.draw()
+        return Minion(2, 2, MINION_TYPE.MURLOC, battlecry=both_draw_two)
+
+
+class ColdlightSeer(MinionCard):
+    def __init__(self):
+        super().__init__("Coldlight Seer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def buff_murlocs(m):
+            murloc = hsgame.targeting.find_friendly_minion_spell_target(player.game, 
+                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC)
+            for target in murloc:
+                target.increase_health(2)
+
+        return Minion(2, 3, MINION_TYPE.MURLOC, battlecry=buff_murlocs)
+
+
+class GrimscaleOracle(MinionCard):
+    def __init__(self):
+        super().__init__("Grimscale Oracle", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+
+        def add_effect(m, index):
+            m.add_aura(1, 0, lambda mini: mini is not minion and mini is not player.hero 
+                       and mini.minion_type is MINION_TYPE.MURLOC)
+
+        minion = Minion(1, 1, MINION_TYPE.MURLOC)
+        minion.bind("added_to_board", add_effect)
+        return minion
+
+
+class MurlocWarleader(MinionCard):
+    def __init__(self):
+        super().__init__("Murloc Warleader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+
+        def add_effect(m, index):
+            m.add_aura(2, 1, lambda mini: mini is not minion and mini is not player.hero
+                       and mini.minion_type is MINION_TYPE.MURLOC)
+
+        minion = Minion(3, 3, MINION_TYPE.MURLOC)
+        minion.bind("added_to_board", add_effect)
+        return minion
