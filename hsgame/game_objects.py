@@ -907,6 +907,11 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         """
         super().use(player, game)
         weapon = self.create_weapon(player)
+        weapon.card = self
+        weapon.player = player
+        weapon.game = game
+        if weapon.battlecry is not None:
+            weapon.battlecry(weapon)
         weapon.equip(player)
 
     @abc.abstractmethod
