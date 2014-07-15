@@ -9,6 +9,10 @@ from hsgame.cards.weapons.paladin import (
     TruesilverChampion
 )
 
+from hsgame.cards.weapons.rogue import (
+    AssassinsBlade
+)
+
 from hsgame.cards.weapons.shaman import (
     Doomhammer,
     StormforgedAxe

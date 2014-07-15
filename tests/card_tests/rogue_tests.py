@@ -408,3 +408,12 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(8, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(9, len(game.players[1].hand))
+
+    def test_AssassinsBlade(self):
+        game = generate_game_for(AssassinsBlade, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
