@@ -112,7 +112,8 @@ from hsgame.cards.spells.rogue import (
     Eviscerate,
     FanOfKnives,
     Headcrack,
-    Preparation
+    Preparation,
+    Sap
 )
 
 from hsgame.cards.spells.shaman import (

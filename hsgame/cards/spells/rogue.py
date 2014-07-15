@@ -189,3 +189,14 @@ class Preparation(Card):
         player.bind("card_used", card_used)
         player.bind_once("turn_ended", turn_ended)
         player.mana_filters.append(mana_filter)
+
+
+class Sap(Card):
+    def __init__(self):
+        super().__init__("Sap", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.bounce()

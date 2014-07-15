@@ -281,7 +281,7 @@ yes,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 
 yes,River Crocolisk,,Beast,,2,2,3,Free,Minion,Basic
 yes,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell,Basic
 yes,Sacrificial Pact,Destroy a Demon. Restore 5 Health to your hero.,,Warlock,0,,,Common,Spell,Basic
-no,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell,Basic
+yes,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell,Basic
 yes,Savage Roar,Give your characters +2 Attack this turn.,,Druid,3,,,Common,Spell,Basic
 yes,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Rare,Spell,Expert
 yes,Savannah Highmane,Deathrattle: Summon two 2/2 Hyenas.,Beast,Hunter,6,6,5,Rare,Minion,Expert

@@ -334,3 +334,17 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(28, game.players[1].hero.health)
         self.assertEqual(0, len(game.players[0].minions))
+
+    def test_Sap(self):
+        game = generate_game_for(Sap, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Sap should be played, targeting the boar
+        game.play_single_turn()
+        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(0, len(game.players[1].minions))
