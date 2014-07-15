@@ -348,3 +348,13 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Shadowstep(self):
+        game = generate_game_for([StonetuskBoar, Shadowstep], StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 DoNothingBot)
+
+        # The Boar should be played, Shadowstep will follow targeting the Boar, and the cost of Boar should now be 0 so
+        # it should be played again.
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))

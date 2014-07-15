@@ -200,3 +200,28 @@ class Sap(Card):
         super().use(player, game)
 
         self.target.bounce()
+
+
+class Shadowstep(Card):
+    def __init__(self):
+        super().__init__("Shadowstep", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_spell_target)
+
+    def use(self, player, game):
+        class Filter:
+            def __init__(self, card):
+                self.amount = 2
+                self.filter = lambda c: c is card
+                self.min = 0
+
+        def card_used(card):
+            if card is self.target.card:
+                player.unbind("card_used", card_used)
+                player.mana_filters.remove(mana_filter)
+
+        super().use(player, game)
+
+        self.target.bounce()
+        mana_filter = Filter(self.target.card)
+        player.bind("card_used", card_used)
+        player.mana_filters.append(mana_filter)

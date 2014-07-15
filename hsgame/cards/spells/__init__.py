@@ -113,7 +113,8 @@ from hsgame.cards.spells.rogue import (
     FanOfKnives,
     Headcrack,
     Preparation,
-    Sap
+    Sap,
+    Shadowstep
 )
 
 from hsgame.cards.spells.shaman import (
