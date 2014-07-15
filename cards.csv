@@ -264,7 +264,7 @@ yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Free,Spell,Basic
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Common,Spell,Expert
 yes,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Common,Spell,Expert
 yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Free,Spell,Basic
-no,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Epic,Spell,Expert
+yes,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Epic,Spell,Expert
 yes,Priestess of Elune,Battlecry: Restore 4 Health to your hero.,,,6,5,4,Common,Minion,Expert
 yes,Prophet Velen,Double the damage and healing of your spells and Hero Power.,,Priest,7,7,7,Legendary,Minion,Expert
 yes,Pyroblast,Deal 10 damage.,,Mage,10,,,Epic,Spell,Expert

@@ -326,3 +326,11 @@ class TestRogue(unittest.TestCase):
         # The combo should trigger now
         game.play_single_turn()
         self.assertEqual(5, len(game.players[0].hand))
+
+    def test_Preparation(self):
+        game = generate_game_for([Preparation, BloodfenRaptor, Headcrack], StonetuskBoar, PredictableBot, DoNothingBot)
+
+        # Preparation should be played. Bloodfen shouldn't be played, since that isn't a spell, but Headcrack should.
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[0].minions))

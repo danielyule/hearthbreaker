@@ -111,7 +111,8 @@ from hsgame.cards.spells.rogue import (
     DeadlyPoison,
     Eviscerate,
     FanOfKnives,
-    Headcrack
+    Headcrack,
+    Preparation
 )
 
 from hsgame.cards.spells.shaman import (

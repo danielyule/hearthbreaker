@@ -160,3 +160,32 @@ class Headcrack(Card):
 
         if player.cards_played > 0:
             game.other_player.bind_once("turn_started", return_card)
+
+
+class Preparation(Card):
+    def __init__(self):
+        super().__init__("Preparation", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        class Filter:
+            def __init__(self):
+                self.amount = 3
+                self.filter = lambda c: c.is_spell()
+                self.min = 0
+
+        def card_used(card):
+            if card is not self and card.is_spell():
+                player.unbind("card_used", card_used)
+                player.unbind("turn_ended", turn_ended)
+                player.mana_filters.remove(mana_filter)
+
+        def turn_ended():
+            player.unbind("card_used", card_used)
+            player.mana_filters.remove(mana_filter)
+
+        super().use(player, game)
+
+        mana_filter = Filter()
+        player.bind("card_used", card_used)
+        player.bind_once("turn_ended", turn_ended)
+        player.mana_filters.append(mana_filter)
