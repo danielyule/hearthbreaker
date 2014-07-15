@@ -368,3 +368,12 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(29, game.players[1].hero.health)
         self.assertEqual(5, len(game.players[0].hand))
+
+    def test_SinisterStrike(self):
+        game = generate_game_for(SinisterStrike, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        self.assertEqual(30, game.players[1].hero.health)
+
+        # Sinister Strike should be played.
+        game.play_single_turn()
+        self.assertEqual(27, game.players[1].hero.health)

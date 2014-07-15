@@ -115,7 +115,8 @@ from hsgame.cards.spells.rogue import (
     Preparation,
     Sap,
     Shadowstep,
-    Shiv
+    Shiv,
+    SinisterStrike
 )
 
 from hsgame.cards.spells.shaman import (

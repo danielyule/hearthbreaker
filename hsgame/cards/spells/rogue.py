@@ -239,3 +239,13 @@ class Shiv(Card):
 
         self.target.damage(player.effective_spell_damage(1), self)
         player.draw()
+
+
+class SinisterStrike(Card):
+    def __init__(self):
+        super().__init__("Sinister Strike", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        game.other_player.hero.damage(player.effective_spell_damage(3), self)
