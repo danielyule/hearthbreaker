@@ -10,7 +10,8 @@ from hsgame.cards.weapons.paladin import (
 )
 
 from hsgame.cards.weapons.rogue import (
-    AssassinsBlade
+    AssassinsBlade,
+    PerditionsBlade
 )
 
 from hsgame.cards.weapons.shaman import (

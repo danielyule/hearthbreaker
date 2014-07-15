@@ -417,3 +417,24 @@ class TestRogue(unittest.TestCase):
 
         self.assertEqual(3, game.players[0].hero.weapon.base_attack)
         self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+    def test_PerditionsBlade(self):
+        game = generate_game_for(PerditionsBlade, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(29, game.players[1].hero.health)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[1].hero.health)
+
+        # Test Combo (1 + 2 = 3 damage)
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(24, game.players[1].hero.health)
