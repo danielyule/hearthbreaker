@@ -131,3 +131,16 @@ class Eviscerate(Card):
             self.target.damage(player.effective_spell_damage(4), self)
         else:
             self.target.damage(player.effective_spell_damage(2), self)
+
+
+class FanOfKnives(Card):
+    def __init__(self):
+        super().__init__("Fan of Knives", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for minion in game.other_player.minions:
+            minion.damage(player.effective_spell_damage(1), self)
+
+        player.draw()

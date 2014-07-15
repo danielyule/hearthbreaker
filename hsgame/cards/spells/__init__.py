@@ -109,7 +109,8 @@ from hsgame.cards.spells.rogue import (
     ColdBlood,
     Conceal,
     DeadlyPoison,
-    Eviscerate
+    Eviscerate,
+    FanOfKnives
 )
 
 from hsgame.cards.spells.shaman import (

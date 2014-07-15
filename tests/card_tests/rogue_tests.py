@@ -283,3 +283,17 @@ class TestRogue(unittest.TestCase):
         # Two Eviscerate should have been played, the first with no combo and a second with combo, dealing
         # 2 + 4 = 6 damage
         self.assertEqual(20, game.players[1].hero.health)
+
+    def test_FanOfKnives(self):
+        game = generate_game_for(FanOfKnives, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Fan of Knives should be played
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(6, len(game.players[0].hand))
