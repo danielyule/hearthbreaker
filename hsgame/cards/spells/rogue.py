@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
@@ -260,3 +261,19 @@ class Sprint(Card):
 
         for i in range(0, 4):
             player.draw()
+
+
+class Vanish(Card):
+    def __init__(self):
+        super().__init__("Vanish", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(player.minions)
+
+        # Minions are returned to a player's hand in the order in which they were played.
+        # Source: http://www.hearthhead.com/card=196/vanish#comments:id=1908549
+        for minion in sorted(targets, key=lambda m: m.born):
+            minion.bounce()

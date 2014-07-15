@@ -390,3 +390,21 @@ class TestRogue(unittest.TestCase):
         # Sprint should be played.
         game.play_single_turn()
         self.assertEqual(6, len(game.players[0].hand))
+
+    def test_Vanish(self):
+        game = generate_game_for([StonetuskBoar, Vanish], StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[1].hand))
+
+        # Vanish should be played.
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(9, len(game.players[1].hand))

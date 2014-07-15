@@ -707,13 +707,16 @@ class Minion(Character):
         self.deathrattle = deathrattle
         self.silenced = False
         self.exhausted = True
+        self.born = -1
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
         self.stealth = False
 
     def add_to_board(self, index):
+        self.game.minion_counter += 1
         self.player.minions.insert(index, self)
+        self.born = self.game.minion_counter
         self.player.spell_damage += self.spell_damage
         count = 0
         for minion in self.player.minions:
@@ -745,6 +748,8 @@ class Minion(Character):
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
+        self.game.minion_counter += 1
+        new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
 
     def attack(self):
@@ -1116,6 +1121,7 @@ class Game(Bindable):
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.game_ended = False
+        self.minion_counter = 0
         for i in range(0, 3):
             self.players[0].draw()
 
