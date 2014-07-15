@@ -706,6 +706,7 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.silenced = False
+        self.exhausted = True
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -720,8 +721,8 @@ class Minion(Character):
             count += 1
         self.index = index
         if self.charge:
-            self.active = True
-
+            self.exhausted = False
+        self.active = True
         self.health += self.calculate_max_health() - self.base_health
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
@@ -786,6 +787,9 @@ class Minion(Character):
                 deathrattle(self)
             self.game.trigger("minion_died", self, by)
             self.removed = True
+
+    def can_attack(self):
+        return not self.exhausted and super().can_attack()
 
     def can_be_attacked(self):
         return not self.stealth
@@ -1197,6 +1201,7 @@ class Game(Bindable):
 
         for minion in self.current_player.minions:
             minion.active = True
+            minion.exhausted = False
             minion.used_wind_fury = False
             if minion.frozen_this_turn:
                 minion.frozen_this_turn = False
