@@ -114,7 +114,8 @@ from hsgame.cards.spells.rogue import (
     Headcrack,
     Preparation,
     Sap,
-    Shadowstep
+    Shadowstep,
+    Shiv
 )
 
 from hsgame.cards.spells.shaman import (

@@ -228,3 +228,14 @@ class Shadowstep(Card):
         mana_filter = Filter(self.target.card)
         player.bind("card_used", card_used)
         player.mana_filters.append(mana_filter)
+
+
+class Shiv(Card):
+    def __init__(self):
+        super().__init__("Shiv", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(1), self)
+        player.draw()

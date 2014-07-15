@@ -354,3 +354,17 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].hand))
         self.assertEqual(1, len(game.players[0].minions))
+
+    def test_Shiv(self):
+        game = generate_game_for(Shiv, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(4, len(game.players[0].hand))
+
+        # Shiv should be played, targeting enemy hero. A card should be drawn.
+        game.play_single_turn()
+        self.assertEqual(29, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))

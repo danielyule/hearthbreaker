@@ -302,7 +302,7 @@ yes,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Common
 no,Shield Block,Gain 5 Armor. Draw a card.,,Warrior,3,,,Common,Spell,Basic
 no,Shield Slam,Deal 1 damage to a minion for each Armor you have.,,Warrior,1,,,Epic,Spell,Expert
 yes,Shieldbearer,Taunt,,,1,0,4,Common,Minion,Expert
-no,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Common,Spell,Basic
+yes,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Common,Spell,Basic
 yes,SI:7 Agent,Combo: Deal 2 damage.,,Rogue,3,3,3,Rare,Minion,Expert
 yes,Silence,Silence a minion.,,Priest,0,,,Common,Spell,Expert
 yes,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Common,Minion,Expert
