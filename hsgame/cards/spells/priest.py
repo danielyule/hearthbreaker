@@ -269,7 +269,6 @@ class Silence(Card):
         self.target.silence()
 
 
-
 class Thoughtsteal(Card):
     def __init__(self):
         super().__init__("Thoughtsteal", 3, CHARACTER_CLASS.PRIEST,
