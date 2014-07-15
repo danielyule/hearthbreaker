@@ -207,6 +207,7 @@ class ShadowMadness(Card):
 
         minion = self.target.copy(player)
         minion.active = True
+        minion.exhausted = False
         minion.bind_once("silenced", unbind_turn_ended)
         # What happens if there are already 7 minions?
         self.target.remove_from_board()
@@ -266,6 +267,7 @@ class Silence(Card):
         super().use(player, game)
 
         self.target.silence()
+
 
 
 class Thoughtsteal(Card):
