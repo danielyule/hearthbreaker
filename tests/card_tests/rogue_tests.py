@@ -297,3 +297,32 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(6, len(game.players[0].hand))
+
+    def test_Headcrack(self):
+        game = generate_game_for(Headcrack, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, without combo
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, with combo
+        game.play_single_turn()
+        self.assertEqual(20, game.players[1].hero.health)
+        self.assertEqual(4, len(game.players[0].hand))
+
+        # The combo should trigger now
+        game.play_single_turn()
+        self.assertEqual(5, len(game.players[0].hand))

@@ -144,3 +144,19 @@ class FanOfKnives(Card):
             minion.damage(player.effective_spell_damage(1), self)
 
         player.draw()
+
+
+class Headcrack(Card):
+    def __init__(self):
+        super().__init__("Headcrack", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        def return_card():
+            player.hand.append(self)
+
+        super().use(player, game)
+
+        game.other_player.hero.damage(player.effective_spell_damage(2), self)
+
+        if player.cards_played > 0:
+            game.other_player.bind_once("turn_started", return_card)
