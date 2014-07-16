@@ -16,7 +16,7 @@ class TestPowers(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(1, game.players[0].hero.armour)
+        self.assertEqual(1, game.players[0].hero.armor)
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_HunterPower(self):
@@ -112,7 +112,7 @@ class TestPowers(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.armour)
+        self.assertEqual(2, game.players[0].hero.armor)
 
     def test_double_power_use(self):
         testing_env = self

@@ -1014,7 +1014,7 @@ class Hero(Character):
     def __init__(self, character_class, player):
         super().__init__(0, 30)
 
-        self.armour = 0
+        self.armor = 0
         self.weapon = None
         self.character_class = character_class
         self.player = player
@@ -1029,15 +1029,15 @@ class Hero(Character):
                 self.weapon.destroy()
 
     def damage(self, amount, attacker):
-        self.armour -= amount
-        if self.armour < 0:
-            new_amount = -self.armour
-            self.armour = 0
+        self.armor -= amount
+        if self.armor < 0:
+            new_amount = -self.armor
+            self.armor = 0
             super().damage(new_amount, attacker)
 
-    def increase_armour(self, amount):
-        self.trigger("armour_increased", amount)
-        self.armour += amount
+    def increase_armor(self, amount):
+        self.trigger("armor_increased", amount)
+        self.armor += amount
 
     def die(self, by):
         super().die(by)

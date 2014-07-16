@@ -45,7 +45,7 @@ class DruidPower(Power):
     def use(self):
         super().use()
         self.hero.change_temp_attack(1)
-        self.hero.increase_armour(1)
+        self.hero.increase_armor(1)
 
 
 class HunterPower(Power):
@@ -282,4 +282,4 @@ class WarriorPower(Power):
 
     def use(self):
         super().use()
-        self.hero.increase_armour(2)
+        self.hero.increase_armor(2)

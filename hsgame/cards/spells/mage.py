@@ -125,7 +125,7 @@ class IceBarrier(SecretCard):
                          CARD_RARITY.COMMON)
 
     def _reveal(self, attacker, player):
-        player.hero.armour += 8
+        player.hero.armor += 8
         super().reveal()
 
     def activate(self, player):
@@ -216,7 +216,7 @@ class IceBlock(SecretCard):
         if player.hero.health - amount <= 0:
             player.hero.immune = True
             player.hero.health += amount
-            # TODO Check if this spell will also prevent damage to armour.
+            # TODO Check if this spell will also prevent damage to armor.
             super().reveal()
             player.hero.unbind("secret_damaged", self._reveal)
 
