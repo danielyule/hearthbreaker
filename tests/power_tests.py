@@ -2,7 +2,7 @@ import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
-    DefiasRingleader, Doomguard, ArcaneIntellect, Swipe
+    DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith
 from tests.testing_utils import generate_game_for
 
 
@@ -105,6 +105,14 @@ class TestPowers(unittest.TestCase):
 
         self.assertEqual(28, game.players[0].hero.health)
         self.assertEqual(6, len(game.players[0].hand))
+
+    def test_WarriorPower(self):
+        game = generate_game_for(ArathiWeaponsmith, MogushanWarden, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.armour)
 
     def test_double_power_use(self):
         testing_env = self
