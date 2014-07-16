@@ -11,4 +11,8 @@ class TestPrinting(unittest.TestCase):
 
     def test_Minions(self):
         dummy_player = Mock(Player)
-        self.assertEqual(" 1 - 1/1  \n    c     ", minion_to_string(StonetuskBoar().create_minion(dummy_player)))
+        dummy_player.auras = []
+        minion = StonetuskBoar().create_minion(dummy_player)
+        minion.player = dummy_player
+        minion.card = StonetuskBoar()
+        self.assertEqual(" StntskBr \n 1 - 1/1  \n    c     ", minion_to_string(minion))

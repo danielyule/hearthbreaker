@@ -12,6 +12,7 @@ card_abbreviations = {
     'Force of Nature': 'Force of Nat.',
     'Keeper of the Grove': 'Keep. Grove',
     'Druid of the Claw': 'Druid Claw',
+    'Stonetusk Boar': 'StntskBr',
 }
 
 
@@ -40,8 +41,8 @@ def minion_to_string(minion):
         status_array.append("t")
 
     status = ''.join(status_array)
-    power_line = "{0} - {1}/{2}".format(minion.attack_power, minion.defense, minion.max_defense)
-    return "{0:^10}\n{1:^10}".format(power_line, status)
+    power_line = "{0} - {1}/{2}".format(minion.calculate_attack(), minion.health, minion.calculate_max_health())
+    return "{0:^10}\n{1:^10}\n{2:^10}".format(abbreviate(minion.card.name)[:8], power_line, status)
 
 
 def game_to_string(game):
