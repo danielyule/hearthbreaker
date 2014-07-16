@@ -9,12 +9,7 @@ class AlAkirTheWindlord(MinionCard):
         super().__init__("Al'Akir the Windlord", 8, CHARACTER_CLASS.SHAMAN, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        minion = Minion(3, 5)
-        minion.windfury = True
-        minion.charge = True
-        minion.divine_shield = True
-        minion.taunt = True
-        return minion
+        return Minion(3, 5, windfury=True, charge=True, divine_shield=True, taunt=True)
 
 
 class DustDevil(MinionCard):
@@ -22,9 +17,7 @@ class DustDevil(MinionCard):
         super().__init__("Dust Devil", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
 
     def create_minion(self, player):
-        minion = Minion(3, 1)
-        minion.windfury = True
-        return minion
+        return Minion(3, 1, windfury=True)
 
 
 class EarthElemental(MinionCard):
@@ -32,9 +25,7 @@ class EarthElemental(MinionCard):
         super().__init__("Earth Elemental", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC, overload=3)
 
     def create_minion(self, player):
-        minion = Minion(7, 8)
-        minion.taunt = True
-        return minion
+        return Minion(7, 8, taunt=True)
 
 
 class FireElemental(MinionCard):
@@ -43,8 +34,7 @@ class FireElemental(MinionCard):
                          hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(6, 5, battlecry=deal_three_damage)
-        return minion
+        return Minion(6, 5, battlecry=deal_three_damage)
 
 
 class FlametongueTotem(MinionCard):
@@ -96,5 +86,4 @@ class Windspeaker(MinionCard):
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(3, 3, battlecry=give_windfury)
-        return minion
+        return Minion(3, 3, battlecry=give_windfury)

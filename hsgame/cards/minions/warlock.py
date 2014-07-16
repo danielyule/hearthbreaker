@@ -28,9 +28,7 @@ class VoidWalker(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(1, 3, MINION_TYPE.DEMON)
-        minion.taunt = True
-        return minion
+        return Minion(1, 3, MINION_TYPE.DEMON, taunt=True)
 
 
 class DreadInfernal(MinionCard):
@@ -49,9 +47,7 @@ class Felguard(MinionCard):
                          CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(3, 5, MINION_TYPE.DEMON, battlecry=destroy_own_crystal)
-        minion.taunt = True
-        return minion
+        return Minion(3, 5, MINION_TYPE.DEMON, battlecry=destroy_own_crystal, taunt=True)
 
 
 class Doomguard(MinionCard):
@@ -60,38 +56,32 @@ class Doomguard(MinionCard):
                          CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(5, 7, MINION_TYPE.DEMON, battlecry=discard_two)
-        minion.charge = True
-        return minion
+        return Minion(5, 7, MINION_TYPE.DEMON, battlecry=discard_two, charge=True)
 
 
 class Succubus(MinionCard):
     def __init__(self):
-        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK,
-                         CARD_RARITY.FREE)
+        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(4, 3, MINION_TYPE.DEMON, battlecry=discard_one)
-        return minion
+        return Minion(4, 3, MINION_TYPE.DEMON, battlecry=discard_one)
 
 
 class SummoningPortal(MinionCard):
     def __init__(self):
-        super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK,
-                         CARD_RARITY.COMMON)
+        super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         class Filter:
             def __init__(self):
                 self.amount = 2
-                self.filter = lambda c: not c.is_spell()
+                self.filter = lambda c: isinstance(c, MinionCard)
                 self.min = 1
 
-        filter = Filter()
+        mana_filter = Filter()
         minion = Minion(0, 4)
-        minion.bind_once("silenced",
-                         lambda: player.mana_filters.remove(filter))
-        player.mana_filters.append(filter)
+        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
+        player.mana_filters.append(mana_filter)
         return minion
 
 

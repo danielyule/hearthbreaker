@@ -283,3 +283,158 @@ class TestRogue(unittest.TestCase):
         # Two Eviscerate should have been played, the first with no combo and a second with combo, dealing
         # 2 + 4 = 6 damage
         self.assertEqual(20, game.players[1].hero.health)
+
+    def test_FanOfKnives(self):
+        game = generate_game_for(FanOfKnives, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Fan of Knives should be played
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+    def test_Headcrack(self):
+        game = generate_game_for(Headcrack, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, without combo
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, with combo
+        game.play_single_turn()
+        self.assertEqual(20, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+    def test_Preparation(self):
+        game = generate_game_for([Preparation, BloodfenRaptor, Headcrack], StonetuskBoar, PredictableBot, DoNothingBot)
+
+        # Preparation should be played. Bloodfen shouldn't be played, since that isn't a spell, but Headcrack should.
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[0].minions))
+
+    def test_Sap(self):
+        game = generate_game_for(Sap, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Sap should be played, targeting the boar
+        game.play_single_turn()
+        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Shadowstep(self):
+        game = generate_game_for([StonetuskBoar, Shadowstep], StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 DoNothingBot)
+
+        # The Boar should be played, Shadowstep will follow targeting the Boar, and the cost of Boar should now be 0 so
+        # it should be played again.
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))
+
+    def test_Shiv(self):
+        game = generate_game_for(Shiv, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(4, len(game.players[0].hand))
+
+        # Shiv should be played, targeting enemy hero. A card should be drawn.
+        game.play_single_turn()
+        self.assertEqual(29, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+    def test_SinisterStrike(self):
+        game = generate_game_for(SinisterStrike, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        self.assertEqual(30, game.players[1].hero.health)
+
+        # Sinister Strike should be played.
+        game.play_single_turn()
+        self.assertEqual(27, game.players[1].hero.health)
+
+    def test_Sprint(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar,
+                                  StonetuskBoar, StonetuskBoar, Sprint], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].hand))
+
+        # Sprint should be played.
+        game.play_single_turn()
+        self.assertEqual(6, len(game.players[0].hand))
+
+    def test_Vanish(self):
+        game = generate_game_for([StonetuskBoar, Vanish], StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[1].hand))
+
+        # Vanish should be played.
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(9, len(game.players[1].hand))
+
+    def test_AssassinsBlade(self):
+        game = generate_game_for(AssassinsBlade, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+    def test_PerditionsBlade(self):
+        game = generate_game_for(PerditionsBlade, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(29, game.players[1].hero.health)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[1].hero.health)
+
+        # Test Combo (1 + 2 = 3 damage)
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(24, game.players[1].hero.health)

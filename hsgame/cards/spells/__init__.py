@@ -110,7 +110,16 @@ from hsgame.cards.spells.rogue import (
     ColdBlood,
     Conceal,
     DeadlyPoison,
-    Eviscerate
+    Eviscerate,
+    FanOfKnives,
+    Headcrack,
+    Preparation,
+    Sap,
+    Shadowstep,
+    Shiv,
+    SinisterStrike,
+    Sprint,
+    Vanish
 )
 
 from hsgame.cards.spells.shaman import (

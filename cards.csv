@@ -30,7 +30,7 @@ yes,Argent Commander,"Charge, Divine Shield",,,6,4,2,Rare,Minion,Expert
 yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Common,Minion,Expert
 yes,Argent Squire,Divine Shield,,,1,1,1,Common,Minion,Expert
 no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Rare,Minion,Expert
-no,Assassin's Blade,,,Rogue,5,3,4,Common,Weapon,Basic
+yes,Assassin's Blade,,,Rogue,5,3,4,Common,Weapon,Basic
 yes,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Free,Spell,Basic
 yes,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Rare,Minion,Expert
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Epic,Spell,Expert
@@ -122,7 +122,7 @@ yes,Explosive Trap,"Secret: When your hero is attacked, deal 2 damage to all ene
 yes,Eye for an Eye,"Secret: When your hero takes damage, deal that much damage to the enemy hero.",,Paladin,1,,,Common,Spell,Expert
 no,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion,Expert
 yes,Faerie Dragon,Can't be targeted by Spells or Hero Powers.,Dragon,,2,3,2,Common,Minion,Expert
-no,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Common,Spell,Basic
+yes,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Common,Spell,Basic
 yes,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell,Expert
 yes,Felguard,Taunt. Battlecry: Destroy one of your Mana Crystals.,Demon,Warlock,3,3,5,Rare,Minion,Expert
 yes,Fen Creeper,Taunt,,,5,3,6,Common,Minion,Expert
@@ -160,7 +160,7 @@ yes,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Free,Spell,Basic
 yes,Hand of Protection,Give a minion Divine Shield.,,Paladin,1,,,Free,Spell,Basic
 no,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.,,,5,5,4,Legendary,Minion,Expert
 yes,Harvest Golem,Deathrattle: Summon a 2/1 Damaged Golem.,,,3,2,3,Common,Minion,Expert
-no,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.,,Rogue,3,,,Rare,Spell,Expert
+yes,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.,,Rogue,3,,,Rare,Spell,Expert
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Free,Spell,Basic
 yes,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Free,Spell,Basic
 no,Heroic Strike,Give your hero +4 Attack this turn.,,Warrior,2,,,Free,Spell,Basic
@@ -257,14 +257,14 @@ yes,Ogre Magi,Spell Damage +1,,,4,4,4,Common,Minion,Basic
 no,Old Murk-Eye,Charge. Has +1 Attack for each other Murloc on the battlefield.,Murloc,,4,2,4,Legendary,Minion,Reward
 no,Onyxia,Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.,Dragon,,9,8,8,Legendary,Minion,Expert
 yes,Patient Assassin,Stealth. Destroy any minion damaged by this minion.,,Rogue,2,1,1,Epic,Minion,Expert
-no,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,2,2,Rare,Weapon,Expert
+yes,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,2,2,Rare,Weapon,Expert
 no,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Rare,Minion,Expert
 yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Epic,Minion,Expert
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Free,Spell,Basic
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Common,Spell,Expert
 yes,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Common,Spell,Expert
 yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Free,Spell,Basic
-no,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Epic,Spell,Expert
+yes,Preparation,The next spell you cast this turn costs (3) less.,,Rogue,0,,,Epic,Spell,Expert
 yes,Priestess of Elune,Battlecry: Restore 4 Health to your hero.,,,6,5,4,Common,Minion,Expert
 yes,Prophet Velen,Double the damage and healing of your spells and Hero Power.,,Priest,7,7,7,Legendary,Minion,Expert
 yes,Pyroblast,Deal 10 damage.,,Mage,10,,,Epic,Spell,Expert
@@ -281,7 +281,7 @@ yes,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 
 yes,River Crocolisk,,Beast,,2,2,3,Free,Minion,Basic
 yes,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell,Basic
 yes,Sacrificial Pact,Destroy a Demon. Restore 5 Health to your hero.,,Warlock,0,,,Common,Spell,Basic
-no,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell,Basic
+yes,Sap,Return an enemy minion to your opponent's hand.,,Rogue,2,,,Free,Spell,Basic
 yes,Savage Roar,Give your characters +2 Attack this turn.,,Druid,3,,,Common,Spell,Basic
 yes,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Rare,Spell,Expert
 yes,Savannah Highmane,Deathrattle: Summon two 2/2 Hyenas.,Beast,Hunter,6,6,5,Rare,Minion,Expert
@@ -297,18 +297,18 @@ yes,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,
 yes,Shadow Word: Pain,Destroy a minion with 3 or less Attack.,,Priest,2,,,Free,Spell,Basic
 yes,Shadowflame,Destroy a friendly minion and deal its Attack damage to all enemy minions.,,Warlock,4,,,Rare,Spell,Expert
 yes,Shadowform,Your Hero Power becomes 'Deal 2 damage'. If already in Shadowform: 3 damage.,,Priest,3,,,Epic,Spell,Expert
-no,Shadowstep,Return a friendly minion to your hand. It costs (2) less.,,Rogue,0,,,Common,Spell,Expert
+yes,Shadowstep,Return a friendly minion to your hand. It costs (2) less.,,Rogue,0,,,Common,Spell,Expert
 yes,Shattered Sun Cleric,Battlecry: Give a friendly minion +1/+1.,,,3,3,2,Common,Minion,Basic
 no,Shield Block,Gain 5 Armor. Draw a card.,,Warrior,3,,,Common,Spell,Basic
 no,Shield Slam,Deal 1 damage to a minion for each Armor you have.,,Warrior,1,,,Epic,Spell,Expert
 yes,Shieldbearer,Taunt,,,1,0,4,Common,Minion,Expert
-no,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Common,Spell,Basic
+yes,Shiv,Deal 1 damage. Draw a card.,,Rogue,2,,,Common,Spell,Basic
 yes,SI:7 Agent,Combo: Deal 2 damage.,,Rogue,3,3,3,Rare,Minion,Expert
 yes,Silence,Silence a minion.,,Priest,0,,,Common,Spell,Expert
 yes,Silver Hand Knight,Battlecry: Summon a 2/2 Squire.,,,5,4,4,Common,Minion,Expert
 yes,Silverback Patriarch,Taunt,Beast,,3,1,4,Common,Minion,Basic
 yes,Silvermoon Guardian,Divine Shield,,,4,3,3,Common,Minion,Expert
-no,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell,Basic
+yes,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell,Basic
 yes,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Rare,Spell,Expert
 no,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Common,Spell,Expert
 no,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Epic,Spell,Expert
@@ -321,7 +321,7 @@ no,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,
 yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.",,Mage,3,,,Epic,Spell,Expert
 yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Common,Minion,Expert
 yes,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Common,Minion,Expert
-no,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
+yes,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
 yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Rare,Minion,Expert
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic
@@ -357,7 +357,7 @@ yes,Twisting Nether,Destroy all minions.,,Warlock,8,,,Epic,Spell,Expert
 yes,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion,Expert
 yes,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,3,,,Common,Spell,Expert
 no,Upgrade!,"If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.",,Warrior,1,,,Rare,Spell,Expert
-no,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Common,Spell,Basic
+yes,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Common,Spell,Basic
 yes,Vaporize,"Secret: When a minion attacks your hero, destroy it.",,Mage,3,,,Rare,Spell,Expert
 yes,Venture Co. Mercenary,Your minions cost (3) more.,,,5,7,6,Common,Minion,Expert
 no,Violet Teacher,"Whenever you cast a spell, summon a 1/1 Violet Apprentice.",,,4,3,5,Rare,Minion,Expert

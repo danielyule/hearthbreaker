@@ -6,9 +6,9 @@ from hsgame.game_objects import Deck, Game
 
 if sys.version_info.major is 3:
     if sys.version_info.minor <= 2:
-        import mock
+        import mock  # pragma: no cover
     else:
-        from unittest import mock
+        from unittest import mock  # pragma: no cover
 
 __all__ = ["mock", "StackedDeck", "generate_game_for"]
 

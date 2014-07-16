@@ -203,12 +203,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
      This common superclass handles all of the status effects and calculations involved in attacking or being attacked.
     """
 
-    def __init__(self, attack_power, health):
+    def __init__(self, attack_power, health, stealth=False, windfury=False):
         """
         Create a new Character with the given attack power and health
 
         :param int attack_power: the amount of attack this character has at creation
         :param int health: the maximum health of this character
+        :param boolean stealth: (optional) True if this character has stealth, false otherwise.  Default: false
+        :param boolean windfury: (optional) True if this character has windfury, false otherwise.  Default: false
         """
         super().__init__()
 
@@ -223,7 +225,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.windfury = False
+        self.windfury = windfury
         #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
@@ -239,7 +241,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: The list of delayed events
         self.delayed = []
         #: If this character has stealth
-        self.stealth = False
+        self.stealth = stealth
         #: If this character is enraged
         self.enraged = False
         #: If this character has been removed from the board
@@ -693,26 +695,30 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 class Minion(Character):
     def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None,
-                 taunt=False):
-        super().__init__(attack, health)
+                 taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False, windfury=False):
+        super().__init__(attack, health, windfury=windfury, stealth=stealth)
         self.minion_type = minion_type
         self.taunt = taunt
         self.game = None
         self.card = None
         self.index = -1
-        self.charge = False
-        self.spell_damage = 0
-        self.divine_shield = False
+        self.charge = charge
+        self.spell_damage = spell_damage
+        self.divine_shield = divine_shield
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.silenced = False
+        self.exhausted = True
+        self.born = -1
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
         self.stealth = False
 
     def add_to_board(self, index):
+        self.game.minion_counter += 1
         self.player.minions.insert(index, self)
+        self.born = self.game.minion_counter
         self.player.spell_damage += self.spell_damage
         count = 0
         for minion in self.player.minions:
@@ -720,8 +726,8 @@ class Minion(Character):
             count += 1
         self.index = index
         if self.charge:
-            self.active = True
-
+            self.exhausted = False
+        self.active = True
         self.health += self.calculate_max_health() - self.base_health
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
@@ -744,6 +750,8 @@ class Minion(Character):
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
+        self.game.minion_counter += 1
+        new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
 
     def attack(self):
@@ -786,6 +794,9 @@ class Minion(Character):
                 deathrattle(self)
             self.game.trigger("minion_died", self, by)
             self.removed = True
+
+    def can_attack(self):
+        return not self.exhausted and super().can_attack()
 
     def can_be_attacked(self):
         return not self.stealth
@@ -898,6 +909,11 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         """
         super().use(player, game)
         weapon = self.create_weapon(player)
+        weapon.card = self
+        weapon.player = player
+        weapon.game = game
+        if weapon.battlecry is not None:
+            weapon.battlecry(weapon)
         weapon.equip(player)
 
     @abc.abstractmethod
@@ -1112,6 +1128,7 @@ class Game(Bindable):
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.game_ended = False
+        self.minion_counter = 0
         for i in range(0, 3):
             self.players[0].draw()
 
@@ -1197,6 +1214,7 @@ class Game(Bindable):
 
         for minion in self.current_player.minions:
             minion.active = True
+            minion.exhausted = False
             minion.used_wind_fury = False
             if minion.frozen_this_turn:
                 minion.frozen_this_turn = False

@@ -6,21 +6,18 @@ from hsgame.cards.battlecries import silence, deal_two_damage
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
-        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.RARE,
+        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
 
         class Moonfire(Card):
             def __init__(self):
-                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.RARE)
+                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class Dispel(Card):
             def __init__(self):
-                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.RARE)
+                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         moonfire = Moonfire()
         dispell = Dispel()
@@ -36,8 +33,7 @@ class KeeperOfTheGrove(MinionCard):
 
 class DruidOfTheClaw(MinionCard):
     def __init__(self):
-        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON)
+        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
 
@@ -45,35 +41,47 @@ class DruidOfTheClaw(MinionCard):
         # choose
         class CatForm(Card):
             def __init__(self):
-                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class BearForm(Card):
             def __init__(self):
-                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         cat = CatForm()
         bear = BearForm()
         option = player.agent.choose_option(cat, bear)
         if option is cat:
-            minion = Minion(4, 4)
-            minion.charge = True
-        else:
-            minion = Minion(4, 6)
-            minion.taunt = True
+            class CatDruid(MinionCard):
+                def __init__(self):
+                    super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
+                def create_minion(self, p):
+                    return Minion(4, 4, charge=True)
+
+            druid = CatDruid()
+        else:
+            class BearDruid(MinionCard):
+                def __init__(self):
+                    super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, p):
+                    return Minion(4, 6, taunt=True)
+            druid = BearDruid()
+
+        def set_card(m):
+            minion.card = druid
+        minion = druid.create_minion(player)
+        player.bind_once("minion_played", set_card)
         return minion
 
 
 class AncientOfLore(MinionCard):
     def __init__(self):
-        super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.EPIC)
+        super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
         # These are basically placeholders to give the agent something to
-        # choose
+        # choose.  Note the lack of call to super().use()
         class AncientSecrets(Card):
             def __init__(self):
                 super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID,
@@ -84,8 +92,7 @@ class AncientOfLore(MinionCard):
 
         class AncientTeachings(Card):
             def __init__(self):
-                super().__init__("Ancient  Teachings", 0,
-                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Ancient  Teachings", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 player.draw()
@@ -100,8 +107,7 @@ class AncientOfLore(MinionCard):
 
 class AncientOfWar(MinionCard):
     def __init__(self):
-        super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.EPIC)
+        super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
 
@@ -109,13 +115,11 @@ class AncientOfWar(MinionCard):
         # choose
         class Health(Card):
             def __init__(self):
-                super().__init__("+5 Health and Taunt", 0,
-                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class Attack(Card):
             def __init__(self):
-                super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         health = Health()
         attack = Attack()
@@ -136,9 +140,7 @@ class IronbarkProtector(MinionCard):
                          CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(8, 8)
-        minion.taunt = True
-        return minion
+        return Minion(8, 8, taunt=True)
 
 
 class Cenarius(MinionCard):
@@ -157,9 +159,13 @@ class Cenarius(MinionCard):
 
             def use(self, player, game):
                 for minion in player.minions:
-                    minion.change_attack(2)
-                    minion.increase_health(2)
-                    minion.taunt = True
+                    if minion is not cenarius:
+                        minion.change_attack(2)
+                        minion.increase_health(2)
+                        minion.taunt = True
+
+            def invoke(self, minion, index):
+                self.use(minion.player, minion.game)
 
         class SummonTreants(Card):
             def __init__(self):
@@ -176,14 +182,17 @@ class Cenarius(MinionCard):
                         minion = Minion(2, 2, MINION_TYPE.NONE)
                         minion.taunt = True
                         return minion
-
                 # TODO Check if Cenarius summons the minions before or after
                 # himself
-                for i in [0, 1]:
-                    treant = Treant()
-                    treant.summon(player, game, len(player.minions))
+                ltreant = Treant()
+                ltreant.summon(player, game, cenarius.index)
+                rtreant = Treant()
+                rtreant.summon(player, game, cenarius.index + 1)
+
+            def invoke(self, minion, index):
+                self.use(minion.player, minion.game)
 
         option = player.agent.choose_option(IncreaseStats(), SummonTreants())
-        option.use(player, player.game)
-
-        return Minion(5, 8)
+        cenarius = Minion(5, 8)
+        cenarius.bind_once("added_to_board", option.invoke)
+        return cenarius

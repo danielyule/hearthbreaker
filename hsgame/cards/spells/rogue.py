@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
@@ -131,3 +132,148 @@ class Eviscerate(Card):
             self.target.damage(player.effective_spell_damage(4), self)
         else:
             self.target.damage(player.effective_spell_damage(2), self)
+
+
+class FanOfKnives(Card):
+    def __init__(self):
+        super().__init__("Fan of Knives", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for minion in game.other_player.minions:
+            minion.damage(player.effective_spell_damage(1), self)
+
+        player.draw()
+
+
+class Headcrack(Card):
+    def __init__(self):
+        super().__init__("Headcrack", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        def return_card():
+            if len(player.hand) < 10:
+                player.hand.append(self)
+            else:
+                player.trigger("card_destroyed", self)
+
+        super().use(player, game)
+
+        game.other_player.hero.damage(player.effective_spell_damage(2), self)
+
+        if player.cards_played > 0:
+            player.bind_once("turn_ended", return_card)
+
+
+class Preparation(Card):
+    def __init__(self):
+        super().__init__("Preparation", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        class Filter:
+            def __init__(self):
+                self.amount = 3
+                self.filter = lambda c: c.is_spell()
+                self.min = 0
+
+        def card_used(card):
+            if card is not self and card.is_spell():
+                player.unbind("card_used", card_used)
+                player.unbind("turn_ended", turn_ended)
+                player.mana_filters.remove(mana_filter)
+
+        def turn_ended():
+            player.unbind("card_used", card_used)
+            player.mana_filters.remove(mana_filter)
+
+        super().use(player, game)
+
+        mana_filter = Filter()
+        player.bind("card_used", card_used)
+        player.bind_once("turn_ended", turn_ended)
+        player.mana_filters.append(mana_filter)
+
+
+class Sap(Card):
+    def __init__(self):
+        super().__init__("Sap", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.bounce()
+
+
+class Shadowstep(Card):
+    def __init__(self):
+        super().__init__("Shadowstep", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_friendly_minion_spell_target)
+
+    def use(self, player, game):
+        class Filter:
+            def __init__(self, card):
+                self.amount = 2
+                self.filter = lambda c: c is card
+                self.min = 0
+
+        def card_used(card):
+            if card is self.target.card:
+                player.unbind("card_used", card_used)
+                player.mana_filters.remove(mana_filter)
+
+        super().use(player, game)
+
+        self.target.bounce()
+        mana_filter = Filter(self.target.card)
+        player.bind("card_used", card_used)
+        player.mana_filters.append(mana_filter)
+
+
+class Shiv(Card):
+    def __init__(self):
+        super().__init__("Shiv", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(1), self)
+        player.draw()
+
+
+class SinisterStrike(Card):
+    def __init__(self):
+        super().__init__("Sinister Strike", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        game.other_player.hero.damage(player.effective_spell_damage(3), self)
+
+
+class Sprint(Card):
+    def __init__(self):
+        super().__init__("Sprint", 7, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        for i in range(0, 4):
+            player.draw()
+
+
+class Vanish(Card):
+    def __init__(self):
+        super().__init__("Vanish", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(player.minions)
+
+        # Minions are returned to a player's hand in the order in which they were played.
+        # Source: http://www.hearthhead.com/card=196/vanish#comments:id=1908549
+        for minion in sorted(targets, key=lambda m: m.born):
+            minion.bounce()

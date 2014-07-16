@@ -372,14 +372,41 @@ class TestDruid(unittest.TestCase):
         self.assertEqual("Keeper of the Grove", game.current_player.minions[0].card.name)
 
     def test_DruidOfTheClaw(self):
-        game = SavedGame("tests/replays/card_tests/DruidOfTheClaw.rep")
-        game.start()
-        self.assertEqual(0, len(game.current_player.minions))
-        self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(6, game.other_player.minions[0].calculate_max_health())
-        self.assertEqual(2, game.other_player.minions[0].health)
-        self.assertTrue(game.other_player.minions[0].taunt)
+        game = generate_game_for(DruidOfTheClaw, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+        self.assertTrue(game.current_player.minions[0].charge)
+        self.assertFalse(game.current_player.minions[0].taunt)
+
+        test_bear = game.current_player.minions[0].card.create_minion(None)
+        test_bear.player = game.current_player
+        self.assertEqual(4, test_bear.calculate_attack())
+        self.assertEqual(4, test_bear.calculate_max_health())
+        self.assertTrue(test_bear.charge)
+        self.assertFalse(test_bear.taunt)
+
+        game.current_player.agent.choose_option = lambda cat, bear: bear
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
+        self.assertFalse(game.current_player.minions[0].charge)
+        self.assertTrue(game.current_player.minions[0].taunt)
+
+        test_bear = game.current_player.minions[0].card.create_minion(None)
+        test_bear.player = game.current_player
+        self.assertEqual(4, test_bear.calculate_attack())
+        self.assertEqual(6, test_bear.calculate_max_health())
+        self.assertFalse(test_bear.charge)
+        self.assertTrue(test_bear.taunt)
 
     def test_Nourish(self):
 
@@ -714,19 +741,19 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(6, len(game.current_player.minions))
 
-        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(8, game.current_player.minions[0].health)
-        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
-        self.assertEqual("Cenarius", game.current_player.minions[0].card.name)
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(8, game.current_player.minions[1].health)
+        self.assertEqual(8, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual("Cenarius", game.current_player.minions[1].card.name)
 
-        self.assertEqual(2, game.current_player.minions[4].calculate_attack())
-        self.assertEqual(2, game.current_player.minions[4].health)
-        self.assertEqual(2, game.current_player.minions[4].calculate_max_health())
-        self.assertTrue(game.current_player.minions[4].taunt)
-        self.assertEqual("Treant", game.current_player.minions[4].card.name)
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Treant", game.current_player.minions[0].card.name)
 
-        self.assertEqual(2, game.current_player.minions[5].calculate_attack())
-        self.assertEqual(2, game.current_player.minions[5].health)
-        self.assertEqual(2, game.current_player.minions[5].calculate_max_health())
-        self.assertTrue(game.current_player.minions[5].taunt)
-        self.assertEqual("Treant", game.current_player.minions[5].card.name)
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].health)
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
+        self.assertTrue(game.current_player.minions[2].taunt)
+        self.assertEqual("Treant", game.current_player.minions[2].card.name)
