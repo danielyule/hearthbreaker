@@ -1,12 +1,11 @@
 from random import randint
 import re
+
 import hsgame
 import hsgame.constants
 import hsgame.game_objects
 import hsgame.cards
 import hsgame.game_objects
-
-__author__ = 'Daniel'
 
 
 class ReplayException(Exception):
@@ -15,17 +14,16 @@ class ReplayException(Exception):
 
 
 class ProxyCharacter:
-
     def __init__(self, character_ref, game=None):
         if type(character_ref) is str:
             self.character_ref = character_ref
-        elif type(character_ref) is hsgame.game_objects.Player:
-            if character_ref == game.players[0]:
+        elif type(character_ref) is hsgame.game_objects.Hero:
+            if character_ref == game.players[0].hero:
                 self.character_ref = "p1"
             else:
                 self.character_ref = "p2"
         elif type(character_ref) is hsgame.game_objects.Minion:
-            if character_ref.player == game.players[0]:
+            if character_ref.player == game.players[0].hero:
                 self.character_ref = "p1:" + str(character_ref.index)
             else:
                 self.character_ref = "p2:" + str(character_ref.index)
@@ -33,11 +31,14 @@ class ProxyCharacter:
     def resolve(self, game):
         ref = self.character_ref.split(':')
         if ref[0] == "p1":
-            char = game.players[0]
+            char = game.players[0].hero
         else:
-            char = game.players[1]
+            char = game.players[1].hero
         if len(ref) > 1:
-            return char.minions[int(ref[1])]
+            if ref[0] == "p1":
+                char = game.players[0].minions[int(ref[1])]
+            else:
+                char = game.players[1].minions[int(ref[1])]
 
         return char
 
@@ -49,10 +50,9 @@ class ProxyCharacter:
 
 
 class ProxyCard:
-
     def __init__(self, card_reference, game=None):
         self.card_ref = -1
-        if type(card_reference) is str:
+        if isinstance(card_reference, str):
             self.card_ref = card_reference
         else:
             index = 0
@@ -65,7 +65,7 @@ class ProxyCard:
         if self.card_ref is -1:
             raise ReplayException("Could not find card in hand")
 
-        self.targettable = False
+        self.targetable = False
 
     def set_option(self, option):
         self.card_ref = ":" + str(option)
@@ -82,9 +82,10 @@ class ProxyCard:
     def to_output(self):
         return str(self)
 
+
 class ReplayAction:
-        def play(self):
-            pass
+    def play(self, game):
+        pass
 
 
 class SpellAction(ReplayAction):
@@ -121,7 +122,6 @@ class MinionAction(ReplayAction):
             return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
         return 'summon({0},{1})'.format(self.card.to_output(), self.index)
 
-
     def play(self, game):
         if self.target is not None:
             game.current_player.agent.next_target = self.target.resolve(game)
@@ -137,7 +137,7 @@ class AttackAction(ReplayAction):
         self.target = ProxyCharacter(target, game)
 
     def to_output_string(self):
-            return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
+        return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
 
     def play(self, game):
         game.current_player.agent.next_target = self.target.resolve(game)
@@ -162,8 +162,8 @@ class PowerAction(ReplayAction):
 
     def play(self, game):
         if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve()
-        self.character.resolve().attack()
+            game.current_player.agent.next_target = self.target.resolve(game)
+        game.current_player.hero.power.use()
         game.current_player.agent.next_target = None
 
 
@@ -186,11 +186,11 @@ class ConcedeAction(ReplayAction):
         return "concede()"
 
     def play(self, game):
-        game.current_player.die()
+        game.current_player.hero.die(None)
+        game.current_player.hero.activate_delayed()
 
 
 class Replay:
-
     def __init__(self):
         self.actions = []
         self.random_numbers = []
@@ -214,7 +214,7 @@ class Replay:
     def _save_played_card(self, game):
         if self.last_card is not None:
             if issubclass(self.card_class, hsgame.game_objects.MinionCard):
-                if self.last_card.targettable:
+                if self.last_card.targetable:
                     self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target, game))
                     self.last_card = None
                     self.last_index = None
@@ -224,7 +224,7 @@ class Replay:
                     self.last_card = None
                     self.last_index = None
             else:
-                if self.last_card.targettable:
+                if self.last_card.targetable:
                     self.actions.append(SpellAction(self.last_card, self.last_target, game))
                     self.last_card = None
                     self.last_target = None
@@ -235,7 +235,7 @@ class Replay:
     def record_card_played(self, card, game):
         self._save_played_card(game)
         self.last_card = ProxyCard(card, game)
-        self.last_card.targettable = card.targettable
+        self.last_card.targetable = card.targetable
         self.card_class = type(card)
 
     def record_option_chosen(self, option, game):
@@ -267,12 +267,11 @@ class Replay:
             for pattern_length in range(1, 15):
                 matched = True
                 for index in range(pattern_length, 30):
-                    if type(cards[index % pattern_length]) is not type(cards[index]):
+                    if not isinstance(cards[index % pattern_length], type(cards[index])):
                         matched = False
                         break
                 if matched:
                     return cards[0:pattern_length]
-
 
         if 'write' not in dir(file):
             writer = open(file, 'w')
@@ -358,15 +357,14 @@ class Replay:
                 self.actions.append(ConcedeAction())
         replayfile.close()
         if len(self.keeps) is 0:
-            self.keeps = [[0,1,2],[0,1,2,3]]
+            self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
+
 
 class RecordingGame(hsgame.game_objects.Game):
-
     def __init__(self, decks, agents):
         game = self
 
         class RecordingAgent:
-
             __slots__ = ['agent']
 
             def __init__(self, proxied_agent):
@@ -388,7 +386,6 @@ class RecordingGame(hsgame.game_objects.Game):
                 game.replay.record_option_chosen(options.index(option))
                 return option
 
-
             def __getattr__(self, item):
                 return self.agent.__getattribute__(item)
 
@@ -406,7 +403,6 @@ class RecordingGame(hsgame.game_objects.Game):
 
         self.replay.save_decks(*decks)
 
-        self.bind("card_played", self.replay.record_card_played, self)
         self.bind("minion_added", bind_attacks)
 
         self.bind("kept_cards", self.replay.record_kept_index, self)
@@ -414,8 +410,9 @@ class RecordingGame(hsgame.game_objects.Game):
         for player in self.players:
             player.bind("turn_ended", self.replay.record_turn_end, self)
             player.bind("used_power", self.replay.record_power, self)
-            player.bind("found_power_target", self.replay.record_power_target, self)
-            bind_attacks(player)
+            player.hero.bind("found_power_target", self.replay.record_power_target, self)
+            player.bind("card_played", self.replay.record_card_played, self)
+            bind_attacks(player.hero)
 
     def _find_random(self, lower_bound, upper_bound):
         result = randint(lower_bound, upper_bound)
@@ -424,7 +421,6 @@ class RecordingGame(hsgame.game_objects.Game):
 
 
 class SavedGame(hsgame.game_objects.Game):
-
     def __init__(self, replay_file):
 
         replay = Replay()
@@ -460,7 +456,8 @@ class SavedGame(hsgame.game_objects.Game):
 
             def do_turn(self, player):
                 nonlocal action_index
-                while action_index < len(replay.actions) and not player.dead and type(replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
+                while action_index < len(replay.actions) and not player.hero.dead and type(
+                        replay.actions[action_index]) is not hsgame.replay.TurnEndAction:
                     replay.actions[action_index].play(game_ref)
                     action_index += 1
 

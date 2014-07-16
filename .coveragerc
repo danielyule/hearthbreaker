@@ -1,0 +1,9 @@
+[report]
+exclude_lines =
+    pragma: no cover
+    pass$
+
+[run]
+omit =
+    */__init__.py
+    */mock.py

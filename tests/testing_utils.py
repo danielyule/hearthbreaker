@@ -1,10 +1,19 @@
 import copy
+import collections
+import sys
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Deck, Game
 
-__author__ = 'Daniel'
-class StackedDeck(Deck):
+if sys.version_info.major is 3:
+    if sys.version_info.minor <= 2:
+        import mock  # pragma: no cover
+    else:
+        from unittest import mock  # pragma: no cover
 
+__all__ = ["mock", "StackedDeck", "generate_game_for"]
+
+
+class StackedDeck(Deck):
     def __init__(self, card_pattern, character_class):
         cards = []
         while len(cards) + len(card_pattern) < 30:
@@ -13,44 +22,40 @@ class StackedDeck(Deck):
         cards.extend(card_pattern[:30 - len(cards)])
         super().__init__(cards, character_class)
 
-    def draw(self, random):
+    def draw(self, random_func):
         for card_index in range(0, 30):
             if not self.used[card_index]:
                 self.used[card_index] = True
+                self.left -= 1
                 return self.cards[card_index]
-
-        return None
 
 
 def generate_game_for(card1, card2, first_agent_type, second_agent_type):
-
-    card1 = card1()
-    card2 = card2()
-    if card1.character_class == CHARACTER_CLASS.ALL:
-        class1 = CHARACTER_CLASS.MAGE
+    if not isinstance(card1, collections.Sequence):
+        card_set1 = [card1()]
     else:
-        class1 = card1.character_class
+        card_set1 = [card() for card in card1]
+    class1 = CHARACTER_CLASS.MAGE
+    for card in card_set1:
+        if card.character_class != CHARACTER_CLASS.ALL:
+            class1 = card.character_class
+            break
 
-    if card2.character_class == CHARACTER_CLASS.ALL:
-        class2 = CHARACTER_CLASS.MAGE
+    if not isinstance(card2, collections.Sequence):
+        card_set2 = [card2()]
     else:
-        class2 = card2.character_class
+        card_set2 = [card() for card in card2]
 
-    deck1 = StackedDeck([card1], class1)
-    deck2 = StackedDeck([card2], class2)
+    class2 = CHARACTER_CLASS.MAGE
+    for card in card_set2:
+        if card.character_class != CHARACTER_CLASS.ALL:
+            class2 = card.character_class
+            break
+
+    deck1 = StackedDeck(card_set1, class1)
+    deck2 = StackedDeck(card_set2, class2)
     game = Game([deck1, deck2], [first_agent_type(), second_agent_type()])
     game.current_player = game.players[1]
+    game.other_player = game.players[0]
     game.pre_game()
     return game
-
-
-def check_mana_cost(cost):
-    def create_func(func):
-        def run(self):
-            game = func(self)
-            self.assertEqual(game.current_player.mana, game.current_player.max_mana - cost,
-                             "Mana cost was not correct in " + str(func))
-
-        return run
-
-    return create_func

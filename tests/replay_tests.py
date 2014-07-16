@@ -2,22 +2,17 @@ import unittest
 from io import StringIO
 from os import listdir
 import re
+import random
 
 from hsgame.replay import Replay, RecordingGame, SavedGame
 from hsgame.agents.basic_agents import PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.cards import *
-
 import hsgame.game_objects
-import sys
 
-import random
-__author__ = 'Daniel'
 
 class TestReplay(unittest.TestCase):
-
     def test_reading_and_writing(self):
-
         def process_line(line):
             line = re.sub(r'\s*,\s*', ',', line)
             line = re.sub(r'\s*\(\s*', '(', line)
@@ -45,15 +40,14 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(game.current_player.deck.character_class, CHARACTER_CLASS.DRUID)
         self.assertEqual(game.other_player.deck.character_class, CHARACTER_CLASS.MAGE)
 
-        self.assertEqual(game.current_player.health, 29)
-        self.assertTrue(game.current_player.dead)
-
+        self.assertEqual(game.current_player.hero.health, 29)
+        self.assertTrue(game.current_player.hero.dead)
 
     def test_recording_game(self):
         self.maxDiff = None
         random.seed(9876)
         deck1 = hsgame.game_objects.Deck([StonetuskBoar()] * 30, CHARACTER_CLASS.MAGE)
-        deck2 = hsgame.game_objects.Deck([Naturalize()]* 30, CHARACTER_CLASS.DRUID)
+        deck2 = hsgame.game_objects.Deck([Naturalize()] * 30, CHARACTER_CLASS.DRUID)
         agent1 = PredictableBot()
         agent2 = PredictableBot()
         game = RecordingGame([deck1, deck2], [agent1, agent2])
@@ -69,14 +63,6 @@ class TestReplay(unittest.TestCase):
         game.start()
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")
-        self.assertEqual(panther.defense, 3)
-        self.assertEqual(panther.attack_power, 4)
+        self.assertEqual(panther.health, 3)
+        self.assertEqual(panther.calculate_attack(), 4)
         self.assertEqual(panther.index, 0)
-
-if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        card1 = hsgame.game_objects.card_lookup(sys.argv[1])
-        card2 = hsgame.game_objects.card_lookup(sys.argv[2])
-        print(card1, card2)
-
-

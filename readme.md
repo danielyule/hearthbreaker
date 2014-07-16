@@ -7,13 +7,20 @@ is to create a system implementing every card in Hearthstone, then simulate game
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
 The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
 
+ * Documentation (In Progress) [http://danielyule.github.io/hearthstone-simulator/](http://danielyule.github.io/hearthstone-simulator/)
+ * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
+ * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthstone-simulator/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthstone-simulator?branch=master)
+ * Developer Mailing List: [Google Group](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+
 Usage
 -----
 The only way to use the system currently is through unit tests.  The tests are located in the [`tests`](tests) package.
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
 
-The Hearthstone Simulator is compatible with Python 3.3+
+The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy](http://pypy.org/) 2.3+
+
+For Python 3.2 and PyPy, the unit tests are dependent on the [mock package](https://pypi.python.org/pypi/mock).
 
 Progress
 --------
@@ -43,6 +50,18 @@ To contribute, simply fork the repository, make changes and submit a pull reques
 All pull requests which implement new cards must also include a unit test for those cards.  In the case where the card
  has no side effects aside from playing the minion, tests should include another card's effects on it.
 
-All pull requests will be automatically verified through [travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator)
+All pull requests will be automatically verified through 
+[travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through
+ [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
+
+For more specifics about contributing, see the 
+[contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), 
+or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+
+Related Projects
+----------------
+Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
+with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more
+sophisticated AI.
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.

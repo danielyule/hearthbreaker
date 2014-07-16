@@ -1,0 +1,6 @@
+*.pyc
+.project
+.pydevproject
+.coverage
+htmlcov
+_build
