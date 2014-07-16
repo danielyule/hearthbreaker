@@ -1190,6 +1190,8 @@ class Game(Bindable):
 
         for secret in self.other_player.secrets:
             secret.activate(self.other_player)
+        for minion in self.current_player.minions:
+            minion.active = True
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.cards_played = 0
@@ -1219,7 +1221,6 @@ class Game(Bindable):
             minion._turn_complete()
 
         for minion in self.current_player.minions:
-            minion.active = True
             minion.exhausted = False
             minion.used_wind_fury = False
             if minion.frozen_this_turn:
