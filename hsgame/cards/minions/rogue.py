@@ -47,9 +47,7 @@ class Kidnapper(MinionCard):
     def create_minion(self, player):
         def combo(minion):
             if minion.card.target is not None and player.cards_played > 0:
-                minion.card.target.remove_from_board()
-                if len(minion.card.target.player.hand) < 10:
-                    minion.card.target.player.hand.append(minion.card)
+                minion.card.target.bounce()
 
         return Minion(5, 3, battlecry=combo)
 
