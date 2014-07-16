@@ -1221,6 +1221,7 @@ class Game(Bindable):
             minion._turn_complete()
 
         for minion in self.current_player.minions:
+            minion.active = False
             minion.exhausted = False
             minion.used_wind_fury = False
             if minion.frozen_this_turn:
