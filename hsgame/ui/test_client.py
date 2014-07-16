@@ -1,11 +1,10 @@
 from hsgame.cards import StonetuskBoar, RagingWorgen
-from hsgame.replay import SavedGame
 from tests.testing_agents import MinionPlayingAgent
 from tests.testing_utils import generate_game_for
 
-__author__ = 'Daniel'
 import curses
 from hsgame.ui.game_printer import draw_game
+
 
 def render_game(stdscr):
     # Clear screen
@@ -21,7 +20,9 @@ def render_game(stdscr):
     game = generate_game_for(StonetuskBoar, RagingWorgen, MinionPlayingAgent, MinionPlayingAgent)
     for turn in range(0, 6):
         game.play_single_turn()
-    draw_game(stdscr, game)
+
+    game._start_turn()
+    draw_game(stdscr, game, game.players[0])
     stdscr.refresh()
     stdscr.getkey()
 
