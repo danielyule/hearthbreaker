@@ -80,7 +80,7 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        # The player won't have taken damage because of armour, and so shouldn't be frozen
+        # The player won't have taken damage because of armor, and so shouldn't be frozen
         self.assertEqual(30, game.current_player.hero.health)
         self.assertFalse(game.current_player.hero.frozen)
 
@@ -273,9 +273,9 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         # only one minion because PredictableBot will shoot its own minions if there isn't anything else to shoot.
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(7, game.other_player.hero.armour)
+        self.assertEqual(7, game.other_player.hero.armor)
 
-        # Attacked once on the first turn, the fireballed before getting the armour up
+        # Attacked once on the first turn, the fireballed before getting the armor up
         self.assertEqual(28, game.other_player.hero.health)
 
         # Make sure we can't have two identical secrets at the same time

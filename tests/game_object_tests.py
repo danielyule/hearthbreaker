@@ -130,7 +130,7 @@ class TestGame(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(30, game.other_player.hero.health)
-        self.assertEqual(0, game.other_player.hero.armour)
+        self.assertEqual(0, game.other_player.hero.armor)
         self.assertEqual(29, game.current_player.hero.health)
 
 

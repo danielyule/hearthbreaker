@@ -19,6 +19,8 @@ def powers(character_class):
         return ShamanPower
     elif character_class == hsgame.constants.CHARACTER_CLASS.WARLOCK:
         return WarlockPower
+    elif character_class == hsgame.constants.CHARACTER_CLASS.WARRIOR:
+        return WarriorPower
 
 
 class Power:
@@ -43,7 +45,7 @@ class DruidPower(Power):
     def use(self):
         super().use()
         self.hero.change_temp_attack(1)
-        self.hero.increase_armour(1)
+        self.hero.increase_armor(1)
 
 
 class HunterPower(Power):
@@ -272,3 +274,12 @@ class JaraxxusPower(Power):
         infernal_card = Infernal()
         infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
 """
+
+
+class WarriorPower(Power):
+    def __init__(self, hero):
+        super().__init__(hero)
+
+    def use(self):
+        super().use()
+        self.hero.increase_armor(2)

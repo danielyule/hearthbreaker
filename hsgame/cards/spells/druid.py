@@ -34,7 +34,7 @@ class Claw(Card):
     def use(self, player, game):
         super().use(player, game)
         player.hero.change_temp_attack(2)
-        player.hero.increase_armour(2)
+        player.hero.increase_armor(2)
 
 
 class Naturalize(Card):
@@ -239,7 +239,7 @@ class Bite(Card):
     def use(self, player, game):
         super().use(player, game)
         player.hero.change_temp_attack(4)
-        player.hero.increase_armour(4)
+        player.hero.increase_armor(4)
 
 
 class SoulOfTheForest(Card):
