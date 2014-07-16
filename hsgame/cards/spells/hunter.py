@@ -294,5 +294,5 @@ class AnimalCompanion(Card):
                 return minion
 
         beast_list = [Huffer(), Misha(), Leokk()]
-        card = copy.copy(beast_list[player.game.random(0, 2)])
+        card = beast_list[player.game.random(0, 2)]
         card.summon(player, player.game, len(player.minions))

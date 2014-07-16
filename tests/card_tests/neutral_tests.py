@@ -1124,16 +1124,16 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(8, game.players[0].minions[0].health)
+        self.assertEqual(9, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(9, game.players[0].minions[0].health)
 
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(8, game.players[0].minions[0].calculate_attack())
         self.assertEqual(8, game.players[0].minions[0].health)
-        self.assertEqual(9, game.players[0].minions[1].calculate_attack())
-        self.assertEqual(9, game.players[0].minions[1].health)
+        self.assertEqual(10, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(10, game.players[0].minions[1].health)
 
     def test_Hogger(self):
         game = generate_game_for(Hogger, StonetuskBoar, MinionPlayingAgent, DoNothingBot)

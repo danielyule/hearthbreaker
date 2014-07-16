@@ -110,7 +110,20 @@ from hsgame.cards.minions.neutral import (
     ColdlightSeer,
     GrimscaleOracle,
     MurlocWarleader,
-    AncientWatcher
+    AncientWatcher,
+    BigGameHunter,
+    BloodsailCorsair,
+    BloodsailRaider,
+    CaptainGreenskin,
+    HungryCrab,
+    MadBomber,
+    ManaWraith,
+    MindControlTech,
+    MurlocTidecaller,
+    Onyxia,
+    SouthseaCaptain,
+    SouthseaDeckhand,
+    YoungPriestess
 )
 
 from hsgame.cards.minions.druid import (

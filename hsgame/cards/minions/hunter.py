@@ -86,7 +86,7 @@ class TundraRhino(MinionCard):
         def check_beast_charge(m):
             if m.minion_type is MINION_TYPE.BEAST:
                 m.charge = True
-                m.active = True
+                m.exhausted = False
 
         minion = Minion(2, 5, MINION_TYPE.BEAST)
         player.bind("minion_played", check_beast_charge)

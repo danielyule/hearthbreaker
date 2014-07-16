@@ -1205,8 +1205,10 @@ class Gruul(MinionCard):
             minion.increase_health(1)
 
         minion = Minion(7, 7)
-        player.bind("turn_ended", gruul_self_buff)
-        minion.bind_once("silenced", lambda: player.unbind("turn_ended", gruul_self_buff))
+        player.game.current_player.bind("turn_ended", gruul_self_buff)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("turn_ended", gruul_self_buff))
+        player.game.other_player.bind("turn_ended", gruul_self_buff)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("turn_ended", gruul_self_buff))
         return minion
 
 
@@ -1395,4 +1397,202 @@ class MurlocWarleader(MinionCard):
 
         minion = Minion(3, 3, MINION_TYPE.MURLOC)
         minion.bind("added_to_board", add_effect)
+        return minion
+
+
+class BigGameHunter(MinionCard):
+    def __init__(self):
+        super().__init__("Big Game Hunter", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         hsgame.targeting.find_minion_battlecry_target,
+                         lambda minion: minion.calculate_attack() >= 7)
+
+    def create_minion(self, player):
+        return Minion(4, 2, battlecry=destroy_target)
+
+
+class BloodsailCorsair(MinionCard):
+    def __init__(self):
+        super().__init__("Bloodsail Corsair", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def reduce_durability(m):
+            if player.game.other_player.hero.weapon is not None:
+                if player.game.other_player.hero.weapon.durability > 1:
+                    player.game.other_player.hero.weapon.durability -= 1
+                else:
+                    player.game.other_player.hero.weapon.destroy()
+
+        return Minion(1, 2, MINION_TYPE.PIRATE, battlecry=reduce_durability)
+
+
+class BloodsailRaider(MinionCard):
+    def __init__(self):
+        super().__init__("Bloodsail Raider", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def gain_weapon_attack(m):
+            if player.weapon is not None:
+                minion.change_attack(player.weapon.base_attack)
+
+        return Minion(2, 3, MINION_TYPE.PIRATE, battlecry=gain_weapon_attack)
+
+
+class CaptainGreenskin(MinionCard):
+    def __init__(self):
+        super().__init__("Captain Greenskin", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def buff_weapon(m):
+            if player.weapon is not None:
+                player.weapon.base_attack += 1
+                player.weapon.durability += 1
+
+        return Minion(5, 4, MINION_TYPE.PIRATE, battlecry=buff_weapon)
+
+
+class HungryCrab(MinionCard):
+    def __init__(self):
+        super().__init__("Hungry Crab", 1, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         hsgame.targeting.find_minion_battlecry_target,
+                         lambda minion: minion.minion_type is MINION_TYPE.MURLOC)
+
+    def create_minion(self, player):
+        def devour_murloc(m):
+            m.die(None)
+            minion.change_attack(2)
+            minion.increase_health(2)
+
+        return Minion(1, 2, MINION_TYPE.BEAST, battlecry=devour_murloc)
+
+
+class MadBomber(MinionCard):
+    def __init__(self):
+        super().__init__("Mad Bomber", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def three_bombs(m):
+            for i in range(0, 3):
+                targets = copy.copy(game.other_player.minions)
+                targets.extend(game.current_player.minions)
+                targets.append(game.other_player.hero)
+                targets.append(game.current_player.hero)
+                target = targets[game.random(0, len(targets) - 1)]
+                target.damage(1, None)
+
+        return Minion(3, 2, battlecry=three_bombs)
+
+
+class ManaWraith(MinionCard):
+    def __init__(self):
+        super().__init__("Mana Wraith", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        class Filter:
+            def __init__(self):
+                self.amount = -1
+                self.filter = lambda c: isinstance(c, MinionCard)
+                self.min = 0
+
+        filter = Filter()
+        minion = Minion(2, 2)
+        minion.bind_once("silenced", lambda: player.game.current_player.mana_filters.remove(filter))
+        player.game.current_player.mana_filters.append(filter)
+        minion.bind_once("silenced", lambda: player.game.other_player.mana_filters.remove(filter))
+        player.game.other_player.mana_filters.append(filter)
+        return minion
+
+
+class MindControlTech(MinionCard):
+    def __init__(self):
+        super().__init__("Mind Control Tech", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def mind_control(m):
+            if len(player.game.other_player.minions) >= 4:
+                targets = copy.copy(game.other_player.minions)
+                target = targets[game.random(0, len(targets) - 1)]
+                new_minion = target.copy(player)
+                target.remove_from_board()
+                new_minion.add_to_board(len(player.minions))
+
+        return Minion(3, 3, battlecry=mind_control)
+
+
+class MurlocTidecaller(MinionCard):
+    def __init__(self):
+        super().__init__("Murloc Tidecaller", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def check_murloc(m):
+            if m.minion_type is MINION_TYPE.MURLOC:
+                minion.change_attack(1)
+
+        minion = Minion(1, 2, MINION_TYPE.MURLOC)
+        player.bind("minion_played", check_murloc)
+        minion.bind_once("silenced", lambda: player.unbind("minion_played", check_murloc))
+        return minion
+
+
+class Onyxia(MinionCard):
+    def __init__(self):
+        super().__init__("Onyxia", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_whelps(player):
+            class Whelp(MinionCard):
+                def __init__(self):
+                    super().__init__("Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.DRAGON)
+            whelp = Whelp()
+            for i in range(len(player.minions), 6):
+                whelp.summon(player, player.game, i)
+
+        return Minion(8, 8, MINION_TYPE.DRAGON, battlecry=summon_whelps)
+
+
+class SouthseaCaptain(MinionCard):
+    def __init__(self):
+        super().__init__("Southsea Captain", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+
+        def add_effect(m, index):
+            m.add_aura(1, 1, lambda mini: mini is not minion and mini is not player.hero
+                       and mini.minion_type is MINION_TYPE.MURLOC)
+
+        minion = Minion(3, 3, MINION_TYPE.PIRATE)
+        minion.bind("added_to_board", add_effect)
+        return minion
+
+
+class SouthseaDeckhand(MinionCard):
+    def __init__(self):
+        super().__init__("Southsea Deckhand", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def charge_if_weapon(m):
+            if player.weapon is not None:
+                minion.charge = True
+                minion.exhausted = False
+
+        return Minion(2, 1, MINION_TYPE.PIRATE, battlecry=charge_if_weapon)
+
+
+class YoungPriestess(MinionCard):
+    def __init__(self):
+        super().__init__("Young Priestess", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def buff_ally_health():
+            targets = copy.copy(player.game.current_player.minions)
+            targets.remove(minion)
+            if len(targets) > 0:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                target.increase_health(1)
+
+        minion = Minion(2, 1)
+        player.bind("turn_ended", buff_ally_health)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
         return minion
