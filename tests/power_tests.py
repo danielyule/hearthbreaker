@@ -2,13 +2,22 @@ import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
-    DefiasRingleader, Doomguard
+    DefiasRingleader, Doomguard, ArcaneIntellect, Swipe
 from tests.testing_utils import generate_game_for
 
 
 class TestPowers(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
+
+    def test_DruidPower(self):
+        game = generate_game_for(Swipe, MogushanWarden, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].hero.armour)
+        self.assertEqual(29, game.players[1].hero.health)
 
     def test_HunterPower(self):
         game = generate_game_for(HuntersMark, MogushanWarden, PredictableBot, DoNothingBot)
@@ -17,6 +26,14 @@ class TestPowers(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(28, game.other_player.hero.health)
+
+    def test_MagePower(self):
+        game = generate_game_for(ArcaneIntellect, MogushanWarden, PredictableBot, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(29, game.players[1].hero.health)
 
     def test_PaladinPower(self):
         game = generate_game_for(AvengingWrath, MogushanWarden, PredictableBot, DoNothingBot)
