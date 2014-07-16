@@ -48,7 +48,7 @@ Events Triggered in hssim
  * unenraged
  
 ##Minion (Character)
- * added_to_board(minion)
+ * added_to_board(minion, index)
  * silenced
  * copied(new_minion, new_owner)
 
