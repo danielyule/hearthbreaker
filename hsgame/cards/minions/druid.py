@@ -6,21 +6,18 @@ from hsgame.cards.battlecries import silence, deal_two_damage
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
-        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.RARE,
+        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
 
         class Moonfire(Card):
             def __init__(self):
-                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.RARE)
+                super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class Dispel(Card):
             def __init__(self):
-                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.RARE)
+                super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         moonfire = Moonfire()
         dispell = Dispel()
@@ -36,8 +33,7 @@ class KeeperOfTheGrove(MinionCard):
 
 class DruidOfTheClaw(MinionCard):
     def __init__(self):
-        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON)
+        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
 
@@ -45,24 +41,37 @@ class DruidOfTheClaw(MinionCard):
         # choose
         class CatForm(Card):
             def __init__(self):
-                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         class BearForm(Card):
             def __init__(self):
-                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
         cat = CatForm()
         bear = BearForm()
         option = player.agent.choose_option(cat, bear)
         if option is cat:
-            minion = Minion(4, 4)
-            minion.charge = True
-        else:
-            minion = Minion(4, 6)
-            minion.taunt = True
+            class CatDruid(MinionCard):
+                def __init__(self):
+                    super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
+                def create_minion(self, p):
+                    return Minion(4, 4, charge=True)
+
+            druid = CatDruid()
+        else:
+            class BearDruid(MinionCard):
+                def __init__(self):
+                    super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, p):
+                    return Minion(4, 6, taunt=True)
+            druid = BearDruid()
+
+        def set_card(m):
+            minion.card = druid
+        minion = druid.create_minion(player)
+        player.bind_once("minion_played", set_card)
         return minion
 
 
