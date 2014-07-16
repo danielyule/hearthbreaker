@@ -6,8 +6,7 @@ from hsgame.cards.battlecries import take_control_of_minion, give_three_health
 
 class AuchenaiSoulpriest(MinionCard):
     def __init__(self):
-        super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.RARE)
+        super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def silence():
@@ -27,8 +26,7 @@ class AuchenaiSoulpriest(MinionCard):
 
 class CabalShadowPriest(MinionCard):
     def __init__(self):
-        super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.EPIC,
+        super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
                          hsgame.targeting.find_enemy_minion_battlecry_target,
                          lambda target: target.calculate_attack() <= 2)
 
@@ -38,8 +36,7 @@ class CabalShadowPriest(MinionCard):
 
 class Lightspawn(MinionCard):
     def __init__(self):
-        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.COMMON)
+        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST,  CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def attack_equal_to_health():
@@ -57,8 +54,7 @@ class Lightspawn(MinionCard):
 
 class Lightwell(MinionCard):
     def __init__(self):
-        super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.RARE)
+        super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def heal_damaged_friendly_character():
@@ -70,9 +66,7 @@ class Lightwell(MinionCard):
 
         minion = Minion(0, 5)
         player.bind("turn_started", heal_damaged_friendly_character)
-        minion.bind_once("silenced",
-                         lambda: player.unbind("turn_started",
-                                               heal_damaged_friendly_character))
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_damaged_friendly_character))
         return minion
 
 
@@ -87,16 +81,13 @@ class NorthshireCleric(MinionCard):
 
         minion = Minion(1, 3)
         player.game.bind("minion_healed", draw_card)
-        minion.bind_once("silenced",
-                         lambda: player.game.unbind("minion_healed",
-                                                    draw_card))
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", draw_card))
         return minion
 
 
 class ProphetVelen(MinionCard):
     def __init__(self):
-        super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.LEGENDARY)
+        super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
         def silence():
@@ -112,8 +103,7 @@ class ProphetVelen(MinionCard):
 
 class TempleEnforcer(MinionCard):
     def __init__(self):
-        super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.COMMON,
+        super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):

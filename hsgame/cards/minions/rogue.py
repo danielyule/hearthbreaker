@@ -45,14 +45,13 @@ class Kidnapper(MinionCard):
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        def combo(m):
-            if m.card.target is not None and player.cards_played > 0:
-                m.card.target.remove_from_board()
-                if len(m.card.target.player.hand) < 10:
-                    m.card.target.player.hand.append(m.card)
+        def combo(minion):
+            if minion.card.target is not None and player.cards_played > 0:
+                minion.card.target.remove_from_board()
+                if len(minion.card.target.player.hand) < 10:
+                    minion.card.target.player.hand.append(minion.card)
 
-        minion = Minion(5, 3, battlecry=combo)
-        return minion
+        return Minion(5, 3, battlecry=combo)
 
 
 class MasterOfDisguise(MinionCard):
@@ -61,8 +60,7 @@ class MasterOfDisguise(MinionCard):
                          hsgame.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
-        minion = Minion(4, 4, battlecry=give_stealth)
-        return minion
+        return Minion(4, 4, battlecry=give_stealth)
 
 
 class PatientAssassin(MinionCard):
@@ -74,8 +72,7 @@ class PatientAssassin(MinionCard):
             if type(target) is Minion:
                 target.die(self)
 
-        minion = Minion(1, 1)
-        minion.stealth = True
+        minion = Minion(1, 1, stealth=True)
         minion.bind("did_damage", poisonous)
         minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
         return minion
@@ -87,9 +84,8 @@ class SI7Agent(MinionCard):
                          hsgame.targeting.find_battlecry_target)
 
     def create_minion(self, player):
-        def combo(m):
-            if m.card.target is not None and player.cards_played > 0:
-                m.card.target.damage(2, self)
+        def combo(minion):
+            if minion.card.target is not None and player.cards_played > 0:
+                minion.card.target.damage(2, self)
 
-        minion = Minion(3, 3, battlecry=combo)
-        return minion
+        return Minion(3, 3, battlecry=combo)

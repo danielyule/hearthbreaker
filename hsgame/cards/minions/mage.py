@@ -5,8 +5,7 @@ from hsgame.game_objects import MinionCard, Minion, SecretCard
 
 class ManaWyrm(MinionCard):
     def __init__(self):
-        super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def increase_attack(card):
@@ -14,15 +13,13 @@ class ManaWyrm(MinionCard):
 
         minion = Minion(1, 3)
         player.bind("spell_cast", increase_attack)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast",
-                                                           increase_attack))
+        minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
         return minion
 
 
 class SorcerersApprentice(MinionCard):
     def __init__(self):
-        super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         class Filter:
@@ -31,18 +28,16 @@ class SorcerersApprentice(MinionCard):
                 self.filter = lambda c: c.is_spell()
                 self.min = 0
 
-        filter = Filter()
+        mana_filter = Filter()
         minion = Minion(3, 2)
-        minion.bind_once("silenced",
-                         lambda: player.mana_filters.remove(filter))
-        player.mana_filters.append(filter)
+        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
+        player.mana_filters.append(mana_filter)
         return minion
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
-        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.RARE)
+        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def first_secret_cost_zero(m):
@@ -74,8 +69,7 @@ class KirinTorMage(MinionCard):
 
 class EtherealArcanist(MinionCard):
     def __init__(self):
-        super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.RARE)
+        super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def increase_stats():
@@ -94,8 +88,7 @@ class EtherealArcanist(MinionCard):
 
 class WaterElemental(MinionCard):
     def __init__(self):
-        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def did_damage(amount, target):
@@ -117,6 +110,5 @@ class ArchmageAntonidas(MinionCard):
                 player.hand.append(hsgame.cards.Fireball())
 
         player.bind("spell_cast", add_fireball)
-        player.bind_once("silenced", lambda: player.unbind("spell_cast",
-                                                           add_fireball))
+        player.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
         return Minion(5, 7)
