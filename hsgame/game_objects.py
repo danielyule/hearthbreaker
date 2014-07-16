@@ -203,12 +203,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
      This common superclass handles all of the status effects and calculations involved in attacking or being attacked.
     """
 
-    def __init__(self, attack_power, health):
+    def __init__(self, attack_power, health, stealth=False, windfury=False):
         """
         Create a new Character with the given attack power and health
 
         :param int attack_power: the amount of attack this character has at creation
         :param int health: the maximum health of this character
+        :param boolean stealth: (optional) True if this character has stealth, false otherwise.  Default: false
+        :param boolean windfury: (optional) True if this character has windfury, false otherwise.  Default: false
         """
         super().__init__()
 
@@ -223,7 +225,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.windfury = False
+        self.windfury = windfury
         #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
@@ -239,7 +241,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: The list of delayed events
         self.delayed = []
         #: If this character has stealth
-        self.stealth = False
+        self.stealth = stealth
         #: If this character is enraged
         self.enraged = False
         #: If this character has been removed from the board
@@ -693,16 +695,16 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 class Minion(Character):
     def __init__(self, attack, health, minion_type=hsgame.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None,
-                 taunt=False):
-        super().__init__(attack, health)
+                 taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False, windfury=False):
+        super().__init__(attack, health, windfury=windfury, stealth=stealth)
         self.minion_type = minion_type
         self.taunt = taunt
         self.game = None
         self.card = None
         self.index = -1
-        self.charge = False
-        self.spell_damage = 0
-        self.divine_shield = False
+        self.charge = charge
+        self.spell_damage = spell_damage
+        self.divine_shield = divine_shield
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.silenced = False
