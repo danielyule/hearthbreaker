@@ -80,7 +80,8 @@ def draw_hero(hero, window, x, y):
         window.addstr(y, x, "{0:^20}".format(hero.weapon.card.name))
         window.addstr(y + 1, x, "{0:^20}".format(weapon_power))
 
-    hero_power = "({0}) ({1})".format(hero.calculate_attack(), hero.health)
+    hero_power = "({0}) ({1}) -- {2}/{3} mana".format(hero.calculate_attack(), hero.health,
+                                                  hero.player.mana, hero.player.max_mana)
     window.addstr(y, x + 20, "{0:^20}".format(CHARACTER_CLASS.to_str(hero.character_class)))
     window.addstr(y + 1, x + 20, "{0:^20}".format(hero_power))
 
@@ -93,39 +94,57 @@ def game_to_string(game):
     pass
 
 
-def draw_game(window, game, viewing_player):
-    if viewing_player is game.players[0]:
-        top_player = game.players[1]
-        bottom_player = game.players[0]
-    else:
-        top_player = game.players[0]
-        bottom_player = game.players[1]
+class GameRender:
+    def __init__(self, window, game, viewing_player):
+        if viewing_player is game.players[0]:
+            self.top_player = game.players[1]
+            self.bottom_player = game.players[0]
+        else:
+            self.top_player = game.players[0]
+            self.bottom_player = game.players[1]
 
-    def draw_minions(minions, window):
-        l_offset = int((80 - 10 * len(minions)) / 2)
-        index = 0
-        for minion in minions:
-            draw_minion(minion, window, 0, l_offset + index * 10)
-            index += 1
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
-    def draw_cards(cards, player, window, y):
-        l_offset = int((80 - 16 * len(cards)) / 2)
-        index = 0
-        for card in cards:
-            draw_card(card, player, window, y, l_offset + index * 16)
-            index += 1
+        self.top_minion_window = window.derwin(3, 80, 4, 0)
+        self.bottom_minion_window = window.derwin(3, 80, 8, 0)
+        self.card_window = window.derwin(5, 80, 16, 0)
+        self.card_window = window.derwin(5, 80, 16, 0)
+        self.window = window
+        self.game = game
 
-    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-    curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
+    def draw_game(self):
+        self.window.clear()
+        self.bottom_minion_window.clear()
+        self.top_minion_window.clear()
+        self.card_window.clear()
 
-    top_minion_window = window.derwin(3, 80, 4, 0)
-    draw_minions(top_player.minions, top_minion_window)
-    bottom_minion_window = window.derwin(3, 80, 8, 0)
-    draw_minions(bottom_player.minions, bottom_minion_window)
+        def draw_minions(minions, window):
+            l_offset = int((80 - 10 * len(minions)) / 2)
+            index = 0
+            for minion in minions:
+                draw_minion(minion, window, 0, l_offset + index * 10)
+                index += 1
 
-    card_window = window.derwin(5, 80, 16, 0)
-    draw_cards(viewing_player.hand[:5], viewing_player, card_window, 0)
-    draw_cards(viewing_player.hand[5:], viewing_player, card_window, 3)
+        def draw_cards(cards, player, window, y):
+            l_offset = int((80 - 16 * len(cards)) / 2)
+            index = 0
+            for card in cards:
+                draw_card(card, player, window, y, l_offset + index * 16)
+                index += 1
 
-    draw_hero(top_player.hero, window, 10, 0)
-    draw_hero(bottom_player.hero, window, 10, 12)
+        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
+
+        draw_minions(self.top_player.minions, self.top_minion_window)
+        draw_minions(self.bottom_player.minions, self.bottom_minion_window)
+
+        draw_cards(self.bottom_player.hand[:5], self.bottom_player, self.card_window, 0)
+        draw_cards(self.bottom_player.hand[5:], self.bottom_player, self.card_window, 3)
+
+        draw_hero(self.top_player.hero, self.window, 10, 0)
+        draw_hero(self.bottom_player.hero, self.window, 10, 12)
+        self.window.refresh()
+        self.bottom_minion_window.refresh()
+        self.top_minion_window.refresh()
+        self.card_window.refresh()

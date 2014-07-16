@@ -3,7 +3,7 @@ from tests.testing_agents import MinionPlayingAgent
 from tests.testing_utils import generate_game_for
 
 import curses
-from hsgame.ui.game_printer import draw_game
+from hsgame.ui.game_printer import GameRender
 
 
 def render_game(stdscr):
@@ -22,7 +22,8 @@ def render_game(stdscr):
         game.play_single_turn()
 
     game._start_turn()
-    draw_game(stdscr, game, game.players[0])
+    renderer = GameRender(stdscr, game, game.current_player)
+    renderer.draw_game()
     stdscr.refresh()
     stdscr.getkey()
 
