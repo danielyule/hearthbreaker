@@ -48,4 +48,4 @@ class TirionFordring(MinionCard):
             ashbringer = Ashbringer().create_weapon(player)
             ashbringer.equip(player)
 
-        return Minion(6, 6, divine_shield=True, taunt= True, deathrattle=equip_ashbringer)
+        return Minion(6, 6, divine_shield=True, taunt=True, deathrattle=equip_ashbringer)

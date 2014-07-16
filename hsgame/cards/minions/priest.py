@@ -36,7 +36,7 @@ class CabalShadowPriest(MinionCard):
 
 class Lightspawn(MinionCard):
     def __init__(self):
-        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST,  CARD_RARITY.COMMON)
+        super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
         def attack_equal_to_health():
