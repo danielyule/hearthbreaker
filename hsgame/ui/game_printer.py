@@ -1,3 +1,7 @@
+from hsgame.cards import StonetuskBoar, RagingWorgen
+from tests.testing_agents import MinionPlayingAgent
+from tests.testing_utils import generate_game_for
+
 __author__ = 'Daniel'
 import curses
 
@@ -21,7 +25,7 @@ def abbreviate (card_name):
 
 def minion_to_string(minion):
     status_array = []
-    if minion.active:
+    if minion.can_attack():
         status_array.append("*")
     if "attack" in minion.events:
         status_array.append("a")
@@ -29,7 +33,7 @@ def minion_to_string(minion):
         status_array.append("b")
     if minion.charge:
         status_array.append("c")
-    if 'death' in minion.events:
+    if minion.deathrattle is not None:
         status_array.append("d")
     if 'turn_end' in minion.events:
         status_array.append("e")
@@ -48,16 +52,20 @@ def minion_to_string(minion):
 def game_to_string(game):
     pass
 
-def draw_game(game, window):
+def draw_game(window, game):
     def create_minion_strings(minions):
         top_string = ""
+        middle_string = ""
         bottom_string = ""
 
         for minion in minions:
             min_split = minion_to_string(minion).split("\n")
             top_string += min_split[0]
-            bottom_string += min_split[1]
-        return top_string, bottom_string
+            middle_string += min_split[1]
+            bottom_string += min_split[2]
+        return "\n".join([top_string, middle_string, bottom_string])
 
     curses.init_pair(1, curses.COLOR_RED, curses.COLOR_WHITE)
-    window.addstr(2, 3, create_minion_strings(game.current_player.minions), curses.color_pair(1))
+    minion_window = window.derwin(7, 70, 0, 10)
+    minion_window.addstr(0, 0, create_minion_strings(game.players[0].minions), curses.color_pair(1))
+    minion_window.addstr(4, 0, create_minion_strings(game.players[1].minions), curses.color_pair(1))
