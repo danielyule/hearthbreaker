@@ -170,3 +170,7 @@ from hsgame.cards.minions.warlock import (
     Succubus,
     SummoningPortal
 )
+
+from hsgame.cards.minions.warrior import (
+    ArathiWeaponsmith
+)
