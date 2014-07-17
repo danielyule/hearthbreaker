@@ -144,7 +144,7 @@ yes,Frost Shock,Deal 1 damage to an enemy character and Freeze it.,,Shaman,1,,,F
 yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Common,Spell,Basic
 yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion,Basic
 yes,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion,Basic
-no,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
+yes,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
 yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Rare,Minion,Expert
 no,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert

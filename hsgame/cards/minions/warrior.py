@@ -49,3 +49,17 @@ class CruelTaskmaster(MinionCard):
                 minion.card.target.change_attack(2)
 
         return Minion(2, 2, battlecry=deal_one_damage_and_give_two_attack)
+
+
+class FrothingBerserker(MinionCard):
+    def __init__(self):
+        super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def gain_one_attack(m):
+            minion.change_attack(1)
+
+        minion = Minion(2, 4)
+        player.game.bind("minion_damaged", gain_one_attack)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_damaged", gain_one_attack))
+        return minion

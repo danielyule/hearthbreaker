@@ -61,3 +61,23 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].calculate_attack())
         self.assertEqual(3, game.players[1].minions[0].health)
+
+    def test_FrothingBerserker(self):
+        game = generate_game_for(FrothingBerserker, AngryChicken, MinionPlayingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[1].minions))
+
+        # FrothingBerserker should be played
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual("Frothing Berserker", game.players[0].minions[0].card.name)
+
+        # Three chickens should attack, generating a total of +6 attack for the Frothing Berserker
+        game.play_single_turn()
+        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
