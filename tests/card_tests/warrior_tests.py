@@ -23,3 +23,21 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual("Arathi Weaponsmith", game.players[0].minions[0].card.name)
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
+
+    def test_Armorsmith(self):
+        game = generate_game_for(Armorsmith, StonetuskBoar, MinionPlayingAgent, PredictableAgentWithoutHeroPower)
+
+        # Armorsmith should be played
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual("Armorsmith", game.players[0].minions[0].card.name)
+        self.assertEqual(0, game.players[0].hero.armor)
+
+        # Two Stonetusk should attack, generating one armor each
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].hero.armor)

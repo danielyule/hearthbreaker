@@ -29,7 +29,7 @@ no,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into yo
 yes,Argent Commander,"Charge, Divine Shield",,,6,4,2,Rare,Minion,Expert
 yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Common,Minion,Expert
 yes,Argent Squire,Divine Shield,,,1,1,1,Common,Minion,Expert
-no,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Rare,Minion,Expert
+yes,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior,2,1,4,Rare,Minion,Expert
 yes,Assassin's Blade,,,Rogue,5,3,4,Common,Weapon,Basic
 yes,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Free,Spell,Basic
 yes,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Rare,Minion,Expert
