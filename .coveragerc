@@ -7,3 +7,4 @@ exclude_lines =
 omit =
     */__init__.py
     */mock.py
+    ui/*
