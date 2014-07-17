@@ -4,6 +4,7 @@ from hsgame.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
 import copy
 
+
 class FlameImp(MinionCard):
     def __init__(self):
         super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK,

@@ -123,7 +123,17 @@ from hsgame.cards.minions.neutral import (
     Onyxia,
     SouthseaCaptain,
     SouthseaDeckhand,
-    YoungPriestess
+    YoungPriestess,
+    AcolyteOfPain,
+    CultMaster,
+    Secretkeeper,
+    VioletTeacher,
+    GadgetzanAuctioneer,
+    IllidanStormrage,
+    Lightwarden,
+    FlesheatingGhoul,
+    QuestingAdventurer,
+    GurubashiBerserker
 )
 
 from hsgame.cards.minions.druid import (
@@ -141,7 +151,8 @@ from hsgame.cards.minions.hunter import (
     Houndmaster,
     KingKrush,
     StarvingBuzzard,
-    TundraRhino
+    TundraRhino,
+    ScavengingHyena
 )
 
 from hsgame.cards.minions.mage import (

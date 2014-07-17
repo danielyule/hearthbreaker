@@ -92,3 +92,19 @@ class TundraRhino(MinionCard):
         player.bind("minion_played", check_beast_charge)
         minion.bind_once("silenced", lambda: player.unbind("minion_played", check_beast_charge))
         return minion
+
+
+class ScavengingHyena(MinionCard):
+    def __init__(self):
+        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def hyena_grow(m, by):
+            if m is not minion and m.player is minion.player and m.minion_type is MINION_TYPE.BEAST:
+                minion.change_attack(2)
+                minion.increase_health(1)
+
+        minion = Minion(2, 2, MINION_TYPE.BEAST)
+        player.game.bind("minion_died", hyena_grow)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", hyena_grow))
+        return minion

@@ -2,7 +2,7 @@ import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
-    PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
+    PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
 from hsgame.cards import *
 
@@ -469,3 +469,23 @@ class TestHunter(unittest.TestCase):
         self.assertEqual("Leokk", game.players[0].minions[0].card.name)
         self.assertEqual("Misha", game.players[0].minions[1].card.name)
         self.assertEqual("Huffer", game.players[0].minions[2].card.name)
+
+    def test_ScavengingHyena(self):
+        game = generate_game_for([ScavengingHyena, ScavengingHyena, Consecration], [StonetuskBoar, ShadowBolt],
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+
+        game.play_single_turn()  # Kills 1 Hyena, other Hyena grows
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
