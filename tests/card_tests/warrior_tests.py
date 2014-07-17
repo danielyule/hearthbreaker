@@ -206,3 +206,29 @@ class TestWarrior(unittest.TestCase):
         # Battle Rage should be played, 3 damaged characters = 3 cards drawn
         game.play_single_turn()
         self.assertEqual(7, len(game.players[0].hand))
+
+    def test_Brawl(self):
+        game = generate_game_for(Brawl, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.players[0].mana = 100
+
+        shield = Shieldbearer()
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        golem = HarvestGolem()
+        golem.use(game.players[0], game)
+        shield.use(game.players[1], game)
+        shield.use(game.players[1], game)
+        shield.use(game.players[1], game)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+        # Brawl should be played, leaving one minion behind and Damaged Golem should have spawned for first player
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Damaged Golem", game.players[0].minions[0].card.name)
+        self.assertEqual(1, len(game.players[1].minions))

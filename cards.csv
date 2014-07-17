@@ -59,7 +59,7 @@ yes,Bloodsail Raider,Battlecry: Gain Attack equal to the Attack of your weapon.,
 yes,Bluegill Warrior,Charge,Murloc,,2,2,1,Common,Minion,Basic
 yes,Booty Bay Bodyguard,Taunt,,,5,5,4,Common,Minion,Basic
 yes,Boulderfist Ogre,,,,6,6,7,Free,Minion,Basic
-no,Brawl,Destroy all minions except one. (chosen randomly),,Warrior,5,,,Epic,Spell,Expert
+yes,Brawl,Destroy all minions except one. (chosen randomly),,Warrior,5,,,Epic,Spell,Expert
 yes,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or less Attack.,,Priest,6,4,5,Epic,Minion,Expert
 yes,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Legendary,Minion,Expert
 yes,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Legendary,Minion,Expert

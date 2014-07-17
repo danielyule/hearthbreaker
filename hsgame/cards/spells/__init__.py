@@ -158,5 +158,6 @@ from hsgame.cards.spells.warlock import (
 )
 
 from hsgame.cards.spells.warrior import (
-    BattleRage
+    BattleRage,
+    Brawl
 )

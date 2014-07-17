@@ -20,3 +20,18 @@ class BattleRage(Card):
 
         for i in range(0, len(characters)):
             player.draw()
+
+
+class Brawl(Card):
+    def __init__(self):
+        super().__init__("Brawl", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        minions = copy.copy(player.minions)
+        minions.extend(game.other_player.minions)
+
+        while len(minions) != 1:
+            minion = minions.pop(game.random(0, len(minions) - 1))
+            minion.die(self)
