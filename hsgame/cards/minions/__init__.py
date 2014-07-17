@@ -217,5 +217,6 @@ from hsgame.cards.minions.warrior import (
     ArathiWeaponsmith,
     Armorsmith,
     CruelTaskmaster,
-    FrothingBerserker
+    FrothingBerserker,
+    GrommashHellscream
 )
