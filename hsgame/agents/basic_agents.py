@@ -1,3 +1,6 @@
+import copy
+
+
 class DoNothingBot:
     def __init__(self):
         self.game = None
@@ -39,12 +42,12 @@ class PredictableBot:
 
         while done_something:
             done_something = False
-            for card in player.hand:
+            for card in copy.copy(player.hand):
                 if card.can_use(player, self.game):
                     self.game.play_card(card)
                     done_something = True
 
-        for minion in player.minions:
+        for minion in copy.copy(player.minions):
             if minion.can_attack():
                 minion.attack()
 

@@ -386,16 +386,16 @@ class TestPriest(unittest.TestCase):
         # Lightspawn should have taken some hits
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
 
         game.players[0].minions[0].heal(2, None)
-        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
 
         game.players[0].minions[0].increase_health(4)
-        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(8, game.players[0].minions[0].health)
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
 
         game.players[0].minions[0].decrease_health(2)  # max_health goes from 9 to 7
         self.assertEqual(7, game.players[0].minions[0].calculate_attack())

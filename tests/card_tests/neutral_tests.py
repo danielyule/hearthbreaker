@@ -1571,10 +1571,10 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].health)
 
         game.play_single_turn()  # Circle
-        game.play_single_turn()  # Boar into Ghoul
+        game.play_single_turn()  # Two Boars into Ghoul
 
-        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual(30, game.players[0].hero.health)
 
     def test_QuestingAdventurer(self):
