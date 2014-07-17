@@ -209,7 +209,7 @@ yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5
 yes,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Rare,Minion,Expert
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Rare,Minion,Expert
 yes,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Common,Minion,Expert
-no,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Legendary,Minion,Expert
+yes,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Legendary,Minion,Expert
 yes,Lord of the Arena,Taunt,,,6,6,5,Common,Minion,Basic
 no,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Legendary,Minion,Expert
 yes,Mad Bomber,Battlecry: Deal 3 damage randomly split between all other characters.,,,2,3,2,Common,Minion,Expert
