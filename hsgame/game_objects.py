@@ -331,11 +331,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         Calculates the maximum amount of health this :class:`Character` has, including the base health, and any aura
         effects
         """
-        aura_health = 0
-        for aura in self.player.auras:
-            if aura.filter(self):
-                aura_health += aura.health
-        return self.base_health + aura_health
+        return self.base_health
 
     def delayed_trigger(self, event, *args):
         """
@@ -739,6 +735,17 @@ class Minion(Character):
             if aura.filter(self):
                 aura_attack += aura.attack
         return super().calculate_attack() + aura_attack
+
+    def calculate_max_health(self):
+        """
+        Calculates the maximum amount of health this :class:`Character` has, including the base health, and any aura
+        effects
+        """
+        aura_health = 0
+        for aura in self.player.auras:
+            if aura.filter(self):
+                aura_health += aura.health
+        return self.base_health + aura_health
 
     def remove_from_board(self):
         self.silence()  # Neutralize all possible effects
