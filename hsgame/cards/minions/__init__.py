@@ -215,5 +215,6 @@ from hsgame.cards.minions.warlock import (
 
 from hsgame.cards.minions.warrior import (
     ArathiWeaponsmith,
-    Armorsmith
+    Armorsmith,
+    CruelTaskmaster
 )

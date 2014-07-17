@@ -41,3 +41,23 @@ class TestWarrior(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertEqual(2, game.players[0].hero.armor)
+
+    def test_CruelTaskmaster(self):
+        game = generate_game_for(CruelTaskmaster, Shieldbearer, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[1].minions[0].health)
+
+        # Cruel Taskmaster should be played, targeting the Shieldbearer
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual("Cruel Taskmaster", game.players[0].minions[0].card.name)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
