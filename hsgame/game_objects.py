@@ -626,10 +626,10 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.player = player
         minion.game = game
         minion.index = player.agent.choose_index(self)
+        player.trigger("minion_played", minion)
         if minion.battlecry is not None:
             minion.battlecry(minion)
         minion.add_to_board(minion.index)
-        player.trigger("minion_played", minion)
 
     def summon(self, player, game, index):
         """
@@ -648,8 +648,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.player = player
             minion.game = game
             minion.index = index
-            minion.add_to_board(index)
             player.trigger("minion_summoned", minion)
+            minion.add_to_board(index)
 
     @abc.abstractmethod
     def create_minion(self, player):

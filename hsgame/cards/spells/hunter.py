@@ -167,7 +167,6 @@ class Snipe(SecretCard):
 
     def _reveal(self, minion):
         minion.damage(4, None)
-        minion.activate_delayed()
         super().reveal()
 
 
