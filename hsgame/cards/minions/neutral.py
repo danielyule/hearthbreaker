@@ -1121,7 +1121,8 @@ class TheBeast(MinionCard):
             finkle_owner.append(player.game.current_player)
             finkle_owner.append(player.game.other_player)
             finkle_owner.remove(m.player)
-            FinkleEinhorn().summon(finkle_owner.pop(), player.game, 0)
+            owner = finkle_owner.pop()
+            FinkleEinhorn().summon(owner, player.game, len(owner.minions))
 
         return Minion(9, 7, MINION_TYPE.BEAST, deathrattle=summon_finkle)
 

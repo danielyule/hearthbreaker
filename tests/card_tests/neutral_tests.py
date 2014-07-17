@@ -790,6 +790,13 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(13, game.players[1].hero.health)
 
+    def test_ExtraSpitefulSmith(self):
+        game = generate_game_for([LightsJustice, CircleOfHealing], MortalCoil, MinionPlayingAgent, OneSpellTestingAgent)
+        smith = SpitefulSmith()
+        smith.summon(game.players[0], game, 0)
+        for turn in range(0, 3):
+            game.play_single_turn()  # Circle to heal spiteful
+
     def test_BloodKnight(self):
         game = generate_game_for(BloodKnight, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
         squire = ArgentSquire()
@@ -1049,11 +1056,12 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[1].health)
 
     def test_KnifeJugglerEdgeCase(self):
-        game = generate_game_for(TheBeast, [KnifeJuggler, SiphonSoul],
-                                 MinionPlayingAgent, EnemyMinionSpellTestingAgent)
-        for turn in range(0, 12):
+        game = generate_game_for([TheBeast, PowerOverwhelming], [KnifeJuggler, MindControl],
+                                 OneSpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 13):
             game.play_single_turn()
         # Beast dies to Siphon Soul and summons us a Finkle Einhorn, so Juggler knifes enemy hero
+        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(29, game.players[0].hero.health)
@@ -1587,3 +1595,13 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
+
+    def test_MadBomber(self):
+        game = generate_game_for(MadBomber, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))  # 1 hits boar
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(29, game.players[0].hero.health)  # 1 hits us
+        self.assertEqual(29, game.players[1].hero.health)  # 1 hits him
