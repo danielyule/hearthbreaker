@@ -254,3 +254,45 @@ class UnleashTheHounds(Card):
         hound = Hound()
         for target in hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True):
             hound.summon(player, game, len(player.minions))
+
+
+class AnimalCompanion(Card):
+    def __init__(self):
+        super().__init__("Animal Companion", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Huffer(MinionCard):
+            def __init__(self):
+                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                minion = Minion(4, 2, MINION_TYPE.BEAST)
+                minion.charge = True
+                return minion
+
+        class Misha(MinionCard):
+            def __init__(self):
+                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                minion = Minion(4, 4, MINION_TYPE.BEAST)
+                minion.taunt = True
+                return minion
+
+        class Leokk(MinionCard):
+            def __init__(self):
+                super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                def add_effect(m, index):
+                    m.add_aura(1, 0, [player], lambda mini: mini is not minion)
+
+                minion = Minion(2, 4, MINION_TYPE.BEAST)
+                minion.bind("added_to_board", add_effect)
+                return minion
+
+        beast_list = [Huffer(), Misha(), Leokk()]
+        card = beast_list[player.game.random(0, 2)]
+        card.summon(player, player.game, len(player.minions))

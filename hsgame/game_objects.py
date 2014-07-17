@@ -852,7 +852,8 @@ class Minion(Character):
                     minion.trigger("health_changed")
 
         def silenced():
-            self.player.auras.remove(aura)
+            for player in affected_players:
+                player.auras.remove(aura)
             if health > 0:
                 for minion in filter(filter_func, self.player.minions):
                     if minion.health > minion.calculate_max_health():

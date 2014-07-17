@@ -790,6 +790,13 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(13, game.players[1].hero.health)
 
+    def test_ExtraSpitefulSmith(self):
+        game = generate_game_for([LightsJustice, CircleOfHealing], MortalCoil, MinionPlayingAgent, OneSpellTestingAgent)
+        smith = SpitefulSmith()
+        smith.summon(game.players[0], game, 0)
+        for turn in range(0, 3):
+            game.play_single_turn()  # Circle to heal spiteful
+
     def test_BloodKnight(self):
         game = generate_game_for(BloodKnight, ArgentSquire, MinionPlayingAgent, MinionPlayingAgent)
         squire = ArgentSquire()
@@ -1049,11 +1056,12 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[1].health)
 
     def test_KnifeJugglerEdgeCase(self):
-        game = generate_game_for(TheBeast, [KnifeJuggler, SiphonSoul],
-                                 MinionPlayingAgent, EnemyMinionSpellTestingAgent)
-        for turn in range(0, 12):
+        game = generate_game_for([TheBeast, PowerOverwhelming], [KnifeJuggler, MindControl],
+                                 OneSpellTestingAgent, MinionPlayingAgent)
+        for turn in range(0, 13):
             game.play_single_turn()
         # Beast dies to Siphon Soul and summons us a Finkle Einhorn, so Juggler knifes enemy hero
+        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(29, game.players[0].hero.health)
@@ -1066,3 +1074,534 @@ class TestCommon(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].silenced)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(8, game.players[0].hand[1].mana_cost(game.players[0]))
+
+        game.play_single_turn()
+
+        self.assertTrue(game.players[0].minions[0].silenced)
+        self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
+
+    def test_Demolisher(self):
+        game = generate_game_for(Demolisher, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(4, game.players[0].minions[1].health)
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)
+
+    def test_Doomsayer(self):
+        game = generate_game_for(Doomsayer, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_MasterSwordsmith(self):
+        game = generate_game_for(MasterSwordsmith, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+
+    def test_InjuredBlademaster(self):
+        game = generate_game_for([InjuredBlademaster, CircleOfHealing], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, game.players[0].minions[0].health)
+
+    def test_Gruul(self):
+        game = generate_game_for(Gruul, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(9, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(9, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(8, game.players[0].minions[0].health)
+        self.assertEqual(10, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(10, game.players[0].minions[1].health)
+
+    def test_Hogger(self):
+        game = generate_game_for(Hogger, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].health)
+
+    def test_ImpMaster(self):
+        game = generate_game_for([ImpMaster, MindControl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual("Imp", game.players[0].minions[0].card.name)
+
+    def test_NatPagle(self):
+        game = generate_game_for([NatPagle, MindControl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # Draw successful
+        self.assertEqual(6, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # Draw failed
+        self.assertEqual(7, len(game.players[0].hand))
+
+    def test_RagnarosTheFirelord(self):
+        game = generate_game_for(RagnarosTheFirelord, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(22, game.players[1].hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[1].hero.health)
+        # 3 rag balls to the face, but no attacks
+
+    def test_AncientWatcher(self):
+        game = generate_game_for(AncientWatcher, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(30, game.players[1].hero.health)
+
+    def test_ColdlightOracle(self):
+        game = generate_game_for(ColdlightOracle, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[1].hand))
+
+    def test_ColdlightSeer(self):
+        game = generate_game_for(ColdlightSeer, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[1].health)
+
+    def test_GrimscaleOracle(self):
+        game = generate_game_for(GrimscaleOracle, [MurlocRaider, ArcaneExplosion],
+                                 MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+        game.play_single_turn()  # Arcane explosion to check aura removal
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_MurlocWarleader(self):
+        game = generate_game_for(MurlocWarleader, [MurlocRaider, StonetuskBoar], MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[1].health)
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(6, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(6, game.players[1].minions[2].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[2].health)
+
+    def test_BigGameHunter(self):
+        game = generate_game_for(BigGameHunter, [StonetuskBoar, EarthElemental], MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+    def test_BloodsailCorsair(self):
+        game = generate_game_for(BloodsailCorsair, LightsJustice, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[1].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[1].hero.weapon.durability)
+
+    def test_BloodsailRaider(self):
+        game = generate_game_for([BloodsailRaider, LightsJustice], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+
+    def test_CaptainGreenskin(self):
+        game = generate_game_for([CaptainGreenskin, LightsJustice], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(5, game.players[0].hero.weapon.durability)
+
+    def test_HungryCrab(self):
+        game = generate_game_for(HungryCrab, MurlocRaider, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_ManaWraith(self):
+        game = generate_game_for([ManaWraith, Silence], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertFalse(game.players[0].minions[0].silenced)
+        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(2, game.players[1].hand[0].mana_cost(game.players[0]))
+
+        game.play_single_turn()
+
+        self.assertTrue(game.players[0].minions[0].silenced)
+        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(1, game.players[1].hand[0].mana_cost(game.players[0]))
+
+    def test_MindControlTech(self):
+        game = generate_game_for(MindControlTech, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+    def test_MurlocTidecaller(self):
+        game = generate_game_for(MurlocTidecaller, MurlocRaider, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_Onyxia(self):
+        game = generate_game_for(Onyxia, MurlocRaider, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(8, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+    def test_SouthseaCaptain(self):
+        game = generate_game_for(SouthseaCaptain, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(4, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[1].health)
+
+    def test_SouthseaDeckhand(self):
+        game = generate_game_for([SouthseaDeckhand, LightsJustice], StonetuskBoar,
+                                 PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.play_single_turn()
+        # Old minion attacks, equip weapon and attack, new minion gets charge and attacks
+        self.assertEqual(25, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+
+    def test_YoungPriestess(self):
+        game = generate_game_for(YoungPriestess, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+
+    def test_AcolyteOfPain(self):
+        game = generate_game_for(AcolyteOfPain, [MortalCoil, ShadowWordPain], MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+
+        game.play_single_turn()  # Mortal Coils the Acolyte
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+        game.play_single_turn()  # Plays 2nd Acolyte
+        game.play_single_turn()  # Pains 1 Acolyte, no draw
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+    def test_CultMaster(self):
+        game = generate_game_for([CultMaster, CultMaster, HolyNova], [StonetuskBoar, Assassinate],
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+        self.assertEqual(7, len(game.players[1].hand))
+
+        game.play_single_turn()  # Assassinates 1 Cult Master, other Cult Master draws
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(7, len(game.players[1].hand))
+
+    def test_Secretkeeper(self):
+        game = generate_game_for([Secretkeeper, ExplosiveTrap], ExplosiveTrap,
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # I play a secret
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # He plays a secret
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+
+    def test_VioletTeacher(self):
+        game = generate_game_for([VioletTeacher, CircleOfHealing], CircleOfHealing,
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_GadgetzanAuctioneer(self):
+        game = generate_game_for([GadgetzanAuctioneer, CircleOfHealing], CircleOfHealing,
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+
+    def test_IllidanStormrage(self):
+        game = generate_game_for([IllidanStormrage, CircleOfHealing], CircleOfHealing,
+                                 MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Lightwarden(self):
+        game = generate_game_for([Lightwarden, MindControl], StonetuskBoar, PredictableBot, PredictableBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # Heal Lightwarden
+
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+    def test_FlesheatingGhoul(self):
+        game = generate_game_for(CircleOfHealing, StonetuskBoar, OneSpellTestingAgent, PredictableAgentWithoutHeroPower)
+        ghoul = FlesheatingGhoul()
+        ghoul.summon(game.players[0], game, 0)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # Circle
+        game.play_single_turn()  # Boar into Ghoul
+
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
+
+    def test_QuestingAdventurer(self):
+        game = generate_game_for(QuestingAdventurer, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+
+    def test_GurubashiBerserker(self):
+        game = generate_game_for(GurubashiBerserker, MortalCoil, MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+    def test_MadBomber(self):
+        game = generate_game_for(MadBomber, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))  # 1 hits boar
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(29, game.players[0].hero.health)  # 1 hits us
+        self.assertEqual(29, game.players[1].hero.health)  # 1 hits him

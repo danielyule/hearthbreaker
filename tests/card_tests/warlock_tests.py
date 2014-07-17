@@ -407,3 +407,20 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual('Wisp', game.players[0].hand[0].name)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
+
+    def test_BloodImp(self):
+        game = generate_game_for(BloodImp, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].stealth)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].stealth)
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertTrue(game.players[0].minions[1].stealth)

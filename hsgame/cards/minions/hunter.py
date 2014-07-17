@@ -61,3 +61,50 @@ class KingKrush(MinionCard):
         minion = Minion(8, 8, MINION_TYPE.BEAST)
         minion.charge = True
         return minion
+
+
+class StarvingBuzzard(MinionCard):
+    def __init__(self):
+        super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def check_beast_draw(m):
+            if m.minion_type is MINION_TYPE.BEAST and m is not minion:
+                player.draw()
+
+        minion = Minion(2, 1, MINION_TYPE.BEAST)
+        player.bind("minion_played", check_beast_draw)
+        minion.bind_once("silenced", lambda: player.unbind("minion_played", check_beast_draw))
+        return minion
+
+
+class TundraRhino(MinionCard):
+    def __init__(self):
+        super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def check_beast_charge(m):
+            if m.minion_type is MINION_TYPE.BEAST:
+                m.charge = True
+                m.exhausted = False
+
+        minion = Minion(2, 5, MINION_TYPE.BEAST)
+        player.bind("minion_played", check_beast_charge)
+        minion.bind_once("silenced", lambda: player.unbind("minion_played", check_beast_charge))
+        return minion
+
+
+class ScavengingHyena(MinionCard):
+    def __init__(self):
+        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def hyena_grow(m, by):
+            if m is not minion and m.player is minion.player and m.minion_type is MINION_TYPE.BEAST:
+                minion.change_attack(2)
+                minion.increase_health(1)
+
+        minion = Minion(2, 2, MINION_TYPE.BEAST)
+        player.game.bind("minion_died", hyena_grow)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", hyena_grow))
+        return minion
