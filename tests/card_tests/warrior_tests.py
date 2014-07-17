@@ -244,3 +244,21 @@ class TestWarrior(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
         self.assertTrue(game.players[0].minions[0].charge)
+
+    def test_Cleave(self):
+        game = generate_game_for(Cleave, SenjinShieldmasta, OneSpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+        self.assertEqual(5, game.players[1].minions[1].health)
+
+        # 2 enemy minions are now in play, so Cleave should be played
+        game.play_single_turn()
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[1].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[1].health)

@@ -49,3 +49,20 @@ class Charge(Card):
         self.target.change_attack(2)
         self.target.charge = True
         self.target.exhausted = False
+
+
+class Cleave(Card):
+    def __init__(self):
+        super().__init__("Cleave", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        minions = copy.copy(game.other_player.minions)
+
+        for i in range(0, 2):
+            minion = minions.pop(game.random(0, len(minions) - 1))
+            minion.damage(player.effective_spell_damage(2), self)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 2

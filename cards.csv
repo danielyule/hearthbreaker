@@ -69,7 +69,7 @@ yes,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Free,Spell,
 yes,Chillwind Yeti,,,,4,4,5,Common,Minion,Basic
 yes,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Common,Spell,Expert
 yes,Claw,Give your hero +2 Attack this turn and 2 Armor.,,Druid,1,,,Free,Spell,Basic
-no,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Common,Spell,Basic
+yes,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Common,Spell,Basic
 yes,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Common,Spell,Expert
 yes,Coldlight Oracle,Battlecry: Each player draws 2 cards.,Murloc,,3,2,2,Rare,Minion,Expert
 yes,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Rare,Minion,Expert
