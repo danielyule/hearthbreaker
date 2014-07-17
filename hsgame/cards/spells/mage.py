@@ -218,13 +218,13 @@ class IceBlock(SecretCard):
             player.hero.health += amount
             # TODO Check if this spell will also prevent damage to armor.
             super().reveal()
-            player.hero.unbind("secret_damaged", self._reveal)
+            player.hero.unbind("hero_damaged", self._reveal)
 
     def activate(self, player):
-        player.hero.bind("secret_damaged", self._reveal, player)
+        player.hero.bind("hero_damaged", self._reveal, player)
 
     def deactivate(self, player):
-        player.hero.unbind("secret_damaged", self._reveal)
+        player.hero.unbind("hero_damaged", self._reveal)
 
 
 class ConeOfCold(Card):
