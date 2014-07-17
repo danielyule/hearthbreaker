@@ -1,13 +1,42 @@
 import curses
 import curses.textpad
 import sys
+import re
 
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Game
 from hsgame.cards import *
+from hsgame.constants import CHARACTER_CLASS
+from hsgame.game_objects import Game, card_lookup, Deck
 from hsgame.ui.game_printer import GameRender
 from tests.testing_agents import SpellTestingAgent
-from tests.testing_utils import StackedDeck
+
+
+def load_deck(filename):
+    deck_file = open(filename, "r")
+    contents = deck_file.read()
+    items = re.split('\s*,\s*', contents)
+    char_class = CHARACTER_CLASS.from_str(items[0])
+    cards = []
+    for line in items[1:]:
+        line = line.strip(" \n,")
+        card = card_lookup(line)
+        cards.append(card)
+
+    deck_file.close()
+
+    return Deck(cards, char_class)
+
+
+def print_usage():
+    usage = """usage: python text_runner.py deck1 deck2
+
+       deck1 and deck2 are the decks to be used by the players
+       deck1 is for the human player
+       deck2 is for the computer
+
+       The decks are a comma separated list of cards, preceded by the
+       character class associated with the deck
+    """
+    print(usage)
 
 
 def render_game(stdscr):
@@ -17,21 +46,14 @@ def render_game(stdscr):
             self.window = prompt_window
             self.game_window = game_window
             self.text_window = text_window
-            self.text_box = curses.textpad.Textbox(text_window)
             self.game = None
-
-        def prompt(self, message):
-            self.window.addstr(0, 0, message)
-            self.window.refresh()
-            self.text_window.clear()
-            self.text_window.refresh()
-            text = self.text_box.edit()
-            return text.strip().lower()
+            curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_CYAN)
+            curses.init_pair(6, curses.COLOR_BLACK, curses.COLOR_GREEN)
 
         def do_turn(self, player):
             renderer.draw_game()
             index = 0
-            action = self.prompt("What now? (attack, play, power, quit, end)")
+            action = self.choose_action()
             while not (action == "quit" or action == "end"):
                 if action == "play":
                     card = self.choose_card()
@@ -46,9 +68,51 @@ def render_game(stdscr):
                         player.hero.power.use()
                 index += 1
                 renderer.draw_game()
-                action = self.prompt("What now? (attack, play, power, quit, end)")
+                action = self.choose_action()
             if action == "quit":
                 sys.exit(0)
+
+        def choose_action(self):
+            self.window.addstr(0, 0, "Choose action")
+            actions = ["play", "attack", "power", "end", "quit"]
+            index = 0
+            selected = 0
+            for action in actions:
+                if index == selected:
+                    color = curses.color_pair(4)
+                else:
+                    color = curses.color_pair(3)
+
+                self.text_window.addstr(0, index * 10, "{0:^9}".format(action), color)
+                index += 1
+            self.window.refresh()
+            self.text_window.refresh()
+            ch = 0
+            while ch != 10 and ch != 27:
+                ch = self.window.getch()
+                if ch == curses.KEY_LEFT:
+                    selected -= 1
+                    if selected < 0:
+                        selected = len(actions) - 1
+                if ch == curses.KEY_RIGHT:
+                    selected += 1
+                    if selected == len(actions):
+                        selected = 0
+                index = 0
+                for action in actions:
+                    if index == selected:
+                        color = curses.color_pair(4)
+                    else:
+                        color = curses.color_pair(3)
+
+                    self.text_window.addstr(0, index * 10, "{0:^9}".format(action), color)
+                    index += 1
+                self.window.refresh()
+                self.text_window.refresh()
+            if ch == 27:
+                return None
+
+            return actions[selected]
 
         def choose_card(self):
             filtered_cards = [card for card in filter(lambda card: card.can_use(self.game.current_player, self.game),
@@ -119,7 +183,63 @@ def render_game(stdscr):
             return renderer.selected_target
 
         def do_card_check(self, cards):
-            return [True, True, True, True]
+
+            self.window.addstr(0, 0, "Select cards to keep (space selects/deselects a card)")
+            keeping = [True, True, True]
+            if len(cards) > 3:
+                keeping.append(True)
+            index = 0
+            selected = 0
+            for card in cards:
+                if keeping[index]:
+                    if index == selected:
+                        color = curses.color_pair(6)
+                    else:
+                        color = curses.color_pair(5)
+                else:
+                    if index == selected:
+                        color = curses.color_pair(4)
+                    else:
+                        color = curses.color_pair(0)
+
+                self.text_window.addstr(0, index * 20, "{0:^19}".format(card.name[:19]), color)
+                index += 1
+            self.window.refresh()
+            self.text_window.refresh()
+            ch = 0
+            while ch != 10 and ch != 27:
+                ch = self.window.getch()
+                if ch == curses.KEY_LEFT:
+                    selected -= 1
+                    if selected < 0:
+                        selected = len(cards) - 1
+                if ch == curses.KEY_RIGHT:
+                    selected += 1
+                    if selected == len(cards):
+                        selected = 0
+                if ch == 32:
+                    keeping[selected] = not keeping[selected]
+                index = 0
+                for card in cards:
+                    if keeping[index]:
+                        if index == selected:
+                            color = curses.color_pair(6)
+                        else:
+                            color = curses.color_pair(5)
+                    else:
+                        if index == selected:
+                            color = curses.color_pair(4)
+                        else:
+                            color = curses.color_pair(0)
+
+                    self.text_window.addstr(0, index * 20, "{0:^19}".format(card.name[:19]), color)
+                    index += 1
+                self.window.refresh()
+                self.text_window.refresh()
+            if ch == 27:
+                return None
+
+            return keeping
 
         def set_game(self, game):
             self.game = game
@@ -189,7 +309,7 @@ def render_game(stdscr):
                 else:
                     color = curses.color_pair(3)
 
-                self.text_window.addstr(0, index * 20, option.name[:19], color)
+                self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19], color))
                 index += 1
             self.window.refresh()
             self.text_window.refresh()
@@ -211,7 +331,7 @@ def render_game(stdscr):
                     else:
                         color = curses.color_pair(3)
 
-                    self.text_window.addstr(0, index * 20, option.name[:19], color)
+                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19], color))
                     index += 1
                 self.window.refresh()
                 self.text_window.refresh()
@@ -220,21 +340,13 @@ def render_game(stdscr):
 
             return options[selected]
 
-    # Clear screen
     stdscr.clear()
-    #
-    # # This raises ZeroDivisionError when i == 10.
-    # for i in range(0, 10):
-    # v = i-10
-    #     stdscr.addstr(i, 0, '10 divided by {} is {}'.format(v, 10/v))
-    #
-    # stdscr.refresh()
-    # stdscr.getkey()
+
     prompt_window = stdscr.derwin(1, 80, 23, 0)
     text_window = stdscr.derwin(1, 80, 24, 0)
 
-    deck1 = StackedDeck([StonetuskBoar(), BluegillWarrior(), Wolfrider(), KeeperOfTheGrove()], CHARACTER_CLASS.DRUID)
-    deck2 = StackedDeck([FrostwolfGrunt(), GoldshireFootman(), IronfurGrizzly()], CHARACTER_CLASS.MAGE)
+    deck1 = load_deck(sys.argv[1])
+    deck2 = load_deck(sys.argv[2])
     game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), SpellTestingAgent()])
     if isinstance(game.players[0].agent, TextAgent):
         renderer = GameRender(stdscr, game, game.players[0])
@@ -244,4 +356,7 @@ def render_game(stdscr):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 3:
+        print_usage()
+        sys.exit()
     curses.wrapper(render_game)

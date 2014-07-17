@@ -1,6 +1,4 @@
 from hsgame.constants import CHARACTER_CLASS
-
-__author__ = 'Daniel'
 import curses
 
 card_abbreviations = {
@@ -17,9 +15,6 @@ card_abbreviations = {
     'Stonetusk Boar': 'Stntsk Br',
     'Raging Worgen': 'Rgng Wrgn',
 }
-# Color pairs:
-# - 1: Nothing
-# - 2: Active
 
 
 def abbreviate(card_name):
@@ -41,7 +36,7 @@ class GameRender:
 
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
-        curses.init_pair(3, curses.COLOR_BLACK, curses.COLOR_BLUE)
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
         curses.init_pair(4, curses.COLOR_BLACK, curses.COLOR_YELLOW)
 
         self.top_minion_window = window.derwin(3, 80, 4, 0)
@@ -162,9 +157,6 @@ class GameRender:
             for card in cards:
                 self.draw_card(card, player, window, y, l_offset + index * 16)
                 index += 1
-
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
         draw_minions(self.top_player.minions, self.top_minion_window, False)
         draw_minions(self.bottom_player.minions, self.bottom_minion_window, True)
