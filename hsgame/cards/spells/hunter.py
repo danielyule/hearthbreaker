@@ -87,7 +87,7 @@ class ExplosiveTrap(SecretCard):
         super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.hero.bind_once("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
