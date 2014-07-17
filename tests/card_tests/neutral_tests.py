@@ -1743,7 +1743,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
 
     def test_SeaGiant(self):
-        game = generate_game_for(SeaGiant, StonetuskBoar, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([SeaGiant, SummoningPortal], StonetuskBoar, MinionPlayingAgent, SpellTestingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -1756,15 +1756,17 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
-
-        game.play_single_turn()
-        game.play_single_turn()
-        self.assertEqual(1, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(4, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(3, game.current_player.hand[1].mana_cost(game.current_player))
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(0, game.current_player.hand[1].mana_cost(game.current_player))
 
         game.play_single_turn()
         game.play_single_turn()
