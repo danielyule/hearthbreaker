@@ -1,8 +1,8 @@
+import curses
+
 from hsgame.cards import StonetuskBoar, RagingWorgen
 from tests.testing_agents import MinionPlayingAgent
 from tests.testing_utils import generate_game_for
-
-import curses
 from hsgame.ui.game_printer import GameRender
 
 
@@ -12,7 +12,7 @@ def render_game(stdscr):
     #
     # # This raises ZeroDivisionError when i == 10.
     # for i in range(0, 10):
-    #     v = i-10
+    # v = i-10
     #     stdscr.addstr(i, 0, '10 divided by {} is {}'.format(v, 10/v))
     #
     # stdscr.refresh()
@@ -26,6 +26,7 @@ def render_game(stdscr):
     renderer.draw_game()
     stdscr.refresh()
     stdscr.getkey()
+
 
 if __name__ == "__main__":
     curses.wrapper(render_game)

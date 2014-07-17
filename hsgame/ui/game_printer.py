@@ -26,9 +26,6 @@ def abbreviate(card_name):
     return card_abbreviations.get(card_name, card_name)
 
 
-
-
-
 def game_to_string(game):
     pass
 
@@ -55,6 +52,7 @@ class GameRender:
         self.game = game
         self.targets = None
         self.selected_target = None
+        self.selection_index = -1
 
     def draw_minion(self, minion, window, y, x):
         status_array = []
@@ -92,7 +90,6 @@ class GameRender:
                 color = curses.color_pair(4)
             elif minion in self.targets:
                 color = curses.color_pair(3)
-
 
         name = abbreviate(minion.card.name)[:9]
         status = ''.join(status_array)
@@ -148,12 +145,16 @@ class GameRender:
         self.top_minion_window.clear()
         self.card_window.clear()
 
-        def draw_minions(minions, window):
+        def draw_minions(minions, window, main):
             l_offset = int((80 - 10 * len(minions)) / 2)
             index = 0
             for minion in minions:
+                if main and index == self.selection_index:
+                    window.addstr(2, l_offset + index * 10 - 1, "^")
                 self.draw_minion(minion, window, 0, l_offset + index * 10)
                 index += 1
+            if main and len(minions) == self.selection_index:
+                window.addstr(2, l_offset + index * 10 - 1, "^")
 
         def draw_cards(cards, player, window, y):
             l_offset = int((80 - 16 * len(cards)) / 2)
@@ -165,8 +166,8 @@ class GameRender:
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         curses.init_pair(2, curses.COLOR_GREEN, curses.COLOR_WHITE)
 
-        draw_minions(self.top_player.minions, self.top_minion_window)
-        draw_minions(self.bottom_player.minions, self.bottom_minion_window)
+        draw_minions(self.top_player.minions, self.top_minion_window, False)
+        draw_minions(self.bottom_player.minions, self.bottom_minion_window, True)
 
         draw_cards(self.bottom_player.hand[:5], self.bottom_player, self.card_window, 0)
         draw_cards(self.bottom_player.hand[5:], self.bottom_player, self.card_window, 3)

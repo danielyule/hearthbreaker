@@ -1,13 +1,14 @@
-import copy
 import curses
 import curses.textpad
 import sys
+
 from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Deck, Game
+from hsgame.game_objects import Game
 from hsgame.cards import *
 from hsgame.ui.game_printer import GameRender
 from tests.testing_agents import SpellTestingAgent
 from tests.testing_utils import StackedDeck
+
 
 def render_game(stdscr):
     class TextAgent:
@@ -154,7 +155,29 @@ def render_game(stdscr):
             return renderer.selected_target
 
         def choose_index(self, card):
-            return 0
+            renderer.selection_index = 0
+            renderer.draw_game()
+            self.window.addstr(0, 0, "Choose placement location")
+            self.window.refresh()
+            ch = 0
+            while ch != 10 and ch != 27:
+                ch = self.window.getch()
+                if ch == curses.KEY_LEFT:
+                    renderer.selection_index -= 1
+                    if renderer.selection_index < 0:
+                        renderer.selection_index = len(self.game.current_player.minions)
+                if ch == curses.KEY_RIGHT:
+                    renderer.selection_index += 1
+                    if renderer.selection_index > len(self.game.current_player.minions):
+                        renderer.selection_index = 0
+                renderer.draw_game()
+                self.window.refresh()
+            index = renderer.selection_index
+            renderer.selection_index = -1
+            if ch == 27:
+                return -1
+
+            return index
 
         def choose_option(self, *options):
             self.window.addstr(0, 0, "Choose option")
@@ -195,7 +218,6 @@ def render_game(stdscr):
             if ch == 27:
                 return None
 
-
             return options[selected]
 
     # Clear screen
@@ -203,7 +225,7 @@ def render_game(stdscr):
     #
     # # This raises ZeroDivisionError when i == 10.
     # for i in range(0, 10):
-    #     v = i-10
+    # v = i-10
     #     stdscr.addstr(i, 0, '10 divided by {} is {}'.format(v, 10/v))
     #
     # stdscr.refresh()
@@ -219,6 +241,7 @@ def render_game(stdscr):
     else:
         renderer = GameRender(stdscr, game, game.players[1])
     game.start()
+
 
 if __name__ == "__main__":
     curses.wrapper(render_game)
