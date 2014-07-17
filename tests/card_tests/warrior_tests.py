@@ -184,3 +184,25 @@ class TestWarrior(unittest.TestCase):
         # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
         worgen.use(game.players[0], game)
         self.assertFalse(game.players[0].minions[0].charge)
+
+    def test_BattleRage(self):
+        game = generate_game_for(BattleRage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.players[0].mana = 100
+
+        shield = Shieldbearer()
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        game.players[0].minions[0].damage(1, None)
+        game.players[0].minions[1].damage(1, None)
+        game.players[0].hero.damage(1, None)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))
+
+        # Battle Rage should be played, 3 damaged characters = 3 cards drawn
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].hand))

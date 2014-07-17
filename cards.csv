@@ -38,7 +38,7 @@ yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Rare,Mini
 yes,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Free,Spell,Basic
 yes,Bane of Doom,"Deal 2 damage to a character. If that kills it, summon a random Demon.",,Warlock,5,,,Epic,Spell,Expert
 yes,Baron Geddon,"At the end of your turn, deal 2 damage to ALL other characters.",,,7,7,5,Legendary,Minion,Expert
-no,Battle Rage,Draw a card for each damaged friendly character.,,Warrior,2,,,Common,Spell,Expert
+yes,Battle Rage,Draw a card for each damaged friendly character.,,Warrior,2,,,Common,Spell,Expert
 yes,Bestial Wrath,Give a Beast +2 Attack and Immune this turn.,,Hunter,1,,,Epic,Spell,Expert
 yes,Betrayal,Force an enemy minion to deal its damage to the minions next to it.,,Rogue,2,,,Common,Spell,Expert
 yes,Big Game Hunter,Battlecry: Destroy a minion with an Attack of 7 or more.,,,3,4,2,Epic,Minion,Expert
