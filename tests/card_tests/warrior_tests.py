@@ -120,3 +120,67 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(26, game.players[1].hero.health)
+
+    def test_WarsongCommander(self):
+        game = generate_game_for(WarsongCommander, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        # Super special test cases - http://www.hearthhead.com/card=1009/warsong-commander#comments:id=1935295
+        game.players[0].mana = 100
+
+        # Play the Warsong Commander
+        commander = WarsongCommander()
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)  # Should not give charge to itself
+
+        # Test so that enrage doesn't remove the charge
+        worgen = RagingWorgen()
+        worgen.use(game.players[0], game)
+        game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+        # Test so that charge gets applied before a battlecry
+        weapon = TruesilverChampion().create_weapon(game.players[0])  # 4/2 TODO: Change to a warrior weapon
+        weapon.equip(game.players[0])
+        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        bloodsail = BloodsailRaider()
+        bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+        # TODO: Test with Faceless Manipulator here
+
+        # Remove the Warsong Commander
+        game.players[0].minions[-1].die(None)
+        game.players[0].minions[-1].activate_delayed()
+        # The previous charged minions should still have charge
+        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[-1].charge)
+
+        # Test so that a minion played before Warsong doesn't get charge
+        shield = Shieldbearer()
+        shield.summon(game.players[0], game, 0)
+        self.assertFalse(game.players[0].minions[0].charge)
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+        # Remove the Warsong again
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        # Buff a minion to above 3
+        game.players[0].minions[0].change_attack(5)
+        # Play Warsong, the buffed minion should not get charge
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+
+        # Auras!
+        stormwind = StormwindChampion()
+        stormwind.use(game.players[0], game)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[1].health)
+        # Kill the worgen
+        game.players[0].minions[-1].die(None)
+        game.players[0].minions[-1].activate_delayed()
+        # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
+        worgen.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)
