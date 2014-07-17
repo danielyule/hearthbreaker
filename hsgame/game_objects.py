@@ -385,6 +385,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             # The response of a secret to damage must happen immediately
             self.trigger("secret_damaged", amount, attacker)
             self.health -= amount
+            if type(self) is Minion:
+                self.game.trigger("minion_damaged", self)
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", amount, self)
             self.trigger("health_changed")

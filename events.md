@@ -24,6 +24,7 @@ Events Triggered in hssim
  * kept_cards(card_array)
  * minion_removed(minion, player)
  * minion_healed
+ * minion_damaged(minion)
  
 ##Character
  * attack
