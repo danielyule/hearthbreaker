@@ -209,3 +209,7 @@ from hsgame.cards.minions.warrior import (
 from hsgame.cards.minions.warrior import (
     ArathiWeaponsmith
 )
+
+from hsgame.cards.minions.warrior import (
+    ArathiWeaponsmith
+)

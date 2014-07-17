@@ -287,7 +287,7 @@ class AnimalCompanion(Card):
 
             def create_minion(self, player):
                 def add_effect(m, index):
-                    m.add_aura(1, 0, lambda mini: mini is not minion)
+                    m.add_aura(1, 0, [player], lambda mini: mini is not minion)
 
                 minion = Minion(2, 4, MINION_TYPE.BEAST)
                 minion.bind("added_to_board", add_effect)
