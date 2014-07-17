@@ -11,7 +11,7 @@ yes,Amani Berserker,Enrage: +3 Attack,,,2,2,3,Common,Minion,Expert
 yes,Ancestral Healing,Restore a minion to full Health and give it Taunt.,,Shaman,0,,,Free,Spell,Basic
 yes,Ancestral Spirit,"Choose a minion. When that minion is destroyed, return it to the battlefield.",,Shaman,2,,,Rare,Spell,Expert
 yes,Ancient Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,4,5,4,Common,Minion,Expert
-no,Ancient Mage,Battlecry: Give adjacent minions Spell Damage +1.,,,4,2,5,Rare,Minion,Expert
+yes,Ancient Mage,Battlecry: Give adjacent minions Spell Damage +1.,,,4,2,5,Rare,Minion,Expert
 yes,Ancient of Lore,Choose One - Draw 2 cards; or Restore 5 Health.,,Druid,7,5,5,Epic,Minion,Expert
 yes,Ancient of War,Choose One - +5 Attack; or +5 Health and Taunt.,,Druid,7,5,5,Epic,Minion,Expert
 yes,Ancient Watcher,Can't Attack.,,,2,4,5,Rare,Minion,Expert
@@ -89,7 +89,7 @@ yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5
 yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
 yes,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Common,Spell,Expert
 yes,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Legendary,Minion,Expert
-no,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
+yes,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
 yes,Defias Ringleader,Combo: Summon a 2/1 Defias Bandit.,,Rogue,2,2,2,Common,Minion,Expert
 yes,Demolisher,"At the start of your turn, deal 2 damage to a random enemy.",,,3,1,4,Rare,Minion,Expert
 yes,Demonfire,"Deal 2 damage to a minion. If it?s a friendly Demon, give it +2/+2 instead.",,Warlock,2,,,Common,Spell,Expert
@@ -158,7 +158,7 @@ yes,Guardian of Kings,Battlecry: Restore 6 Health to your hero.,,Paladin,7,5,6,C
 yes,Gurubashi Berserker,"Whenever this minion takes damage, gain +3 Attack.",,,5,2,7,Common,Minion,Basic
 yes,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Free,Spell,Basic
 yes,Hand of Protection,Give a minion Divine Shield.,,Paladin,1,,,Free,Spell,Basic
-no,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.,,,5,5,4,Legendary,Minion,Expert
+yes,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.,,,5,5,4,Legendary,Minion,Expert
 yes,Harvest Golem,Deathrattle: Summon a 2/1 Damaged Golem.,,,3,2,3,Common,Minion,Expert
 yes,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.,,Rogue,3,,,Rare,Spell,Expert
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Free,Spell,Basic
@@ -193,14 +193,14 @@ yes,Keeper of the Grove,Choose One - Deal 2 damage; or Silence a minion.,,Druid,
 yes,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Epic,Minion,Expert
 yes,Kill Command,"Deal 3 damage. If you have a Beast, deal 5 damage instead.",,Hunter,3,,,Common,Spell,Basic
 yes,King Krush,Charge,Beast,Hunter,9,8,8,Legendary,Minion,Expert
-no,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Legendary,Minion,Expert
+yes,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Legendary,Minion,Expert
 yes,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mage,3,4,3,Rare,Minion,Expert
 yes,Knife Juggler,"After you summon a minion, deal 1 damage to a random enemy.",,,2,3,2,Rare,Minion,Expert
 yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Common,Minion,Basic
 no,Kor'kron Elite,Charge,,Warrior,4,4,3,Common,Minion,Basic
 yes,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Rare,Spell,Expert
 yes,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Epic,Spell,Expert
-no,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Legendary,Minion,Expert
+yes,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Legendary,Minion,Expert
 yes,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Common,Minion,Expert
 yes,Light's Justice,,,Paladin,1,1,4,Free,Weapon,Basic
 yes,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Common,Spell,Expert

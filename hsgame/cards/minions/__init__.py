@@ -133,7 +133,13 @@ from hsgame.cards.minions.neutral import (
     Lightwarden,
     FlesheatingGhoul,
     QuestingAdventurer,
-    GurubashiBerserker
+    GurubashiBerserker,
+    AncientMage,
+    DefenderOfArgus,
+    SunfuryProtector,
+    HarrisonJones,
+    KingMukla,
+    LeeroyJenkins
 )
 
 from hsgame.cards.minions.druid import (

@@ -1605,3 +1605,102 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertEqual(29, game.players[0].hero.health)  # 1 hits us
         self.assertEqual(29, game.players[1].hero.health)  # 1 hits him
+
+    def test_AncientMage(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, AncientMage], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        def _choose_index(card):
+            return 1
+        game.players[0].agent.choose_index = _choose_index
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[0].spell_damage)
+        self.assertEqual(1, game.players[0].minions[2].spell_damage)
+        self.assertEqual(2, game.players[0].spell_damage)
+
+    def test_DefenderOfArgus(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, DefenderOfArgus], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        def _choose_index(card):
+            return 1
+        game.players[0].agent.choose_index = _choose_index
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertTrue(game.players[0].minions[2].taunt)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[2].health)
+
+    def test_SunfuryProtector(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, SunfuryProtector], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        def _choose_index(card):
+            return 1
+        game.players[0].agent.choose_index = _choose_index
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertTrue(game.players[0].minions[2].taunt)
+
+    def test_HarrisonJones(self):
+        game = generate_game_for(HarrisonJones, LightsJustice, MinionPlayingAgent, SpellTestingAgent)
+        game.players[0].max_mana = 3  # Cheat so player 1 has room to draw 4
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+
+    def test_KingMukla(self):
+        game = generate_game_for([KingMukla, MindControl], LightsJustice, MinionPlayingAgent, OneSpellTestingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual("Bananas", game.players[1].hand[4].name)
+        self.assertEqual("Bananas", game.players[1].hand[5].name)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+    def test_LeeroyJenkins(self):
+        game = generate_game_for(LeeroyJenkins, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
