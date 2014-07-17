@@ -157,7 +157,46 @@ def render_game(stdscr):
             return 0
 
         def choose_option(self, *options):
-            return options[0]
+            self.window.addstr(0, 0, "Choose option")
+            index = 0
+            selected = 0
+            for option in options:
+                if index == selected:
+                    color = curses.color_pair(4)
+                else:
+                    color = curses.color_pair(3)
+
+                self.text_window.addstr(0, index * 20, option.name[:19], color)
+                index += 1
+            self.window.refresh()
+            self.text_window.refresh()
+            ch = 0
+            while ch != 10 and ch != 27:
+                ch = self.window.getch()
+                if ch == curses.KEY_LEFT:
+                    selected -= 1
+                    if selected < 0:
+                        selected = len(options) - 1
+                if ch == curses.KEY_RIGHT:
+                    selected += 1
+                    if selected == len(options):
+                        selected = 0
+                index = 0
+                for option in options:
+                    if index == selected:
+                        color = curses.color_pair(4)
+                    else:
+                        color = curses.color_pair(3)
+
+                    self.text_window.addstr(0, index * 20, option.name[:19], color)
+                    index += 1
+                self.window.refresh()
+                self.text_window.refresh()
+            if ch == 27:
+                return None
+
+
+            return options[selected]
 
     # Clear screen
     stdscr.clear()
@@ -172,7 +211,7 @@ def render_game(stdscr):
     prompt_window = stdscr.derwin(1, 80, 23, 0)
     text_window = stdscr.derwin(1, 80, 24, 0)
 
-    deck1 = StackedDeck([StonetuskBoar(), BluegillWarrior(), Wolfrider()], CHARACTER_CLASS.DRUID)
+    deck1 = StackedDeck([StonetuskBoar(), BluegillWarrior(), Wolfrider(), KeeperOfTheGrove()], CHARACTER_CLASS.DRUID)
     deck2 = StackedDeck([FrostwolfGrunt(), GoldshireFootman(), IronfurGrizzly()], CHARACTER_CLASS.MAGE)
     game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), SpellTestingAgent()])
     if isinstance(game.players[0].agent, TextAgent):
