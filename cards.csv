@@ -234,11 +234,11 @@ yes,Mirror Entity,"Secret: When your opponent plays a minion, summon a copy of i
 yes,Mirror Image,Summon two 0/2 minions with Taunt.,,Mage,1,,,Common,Spell,Basic
 yes,Misdirection,"Secret: When a character attacks your hero, instead he attacks another random character.",,Hunter,2,,,Rare,Spell,Expert
 yes,Mogu'shan Warden,Taunt,,,4,1,7,Common,Minion,Expert
-no,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Epic,Minion,Expert
+yes,Molten Giant,Costs (1) less for each damage your hero has taken.,,,20,8,8,Epic,Minion,Expert
 yes,Moonfire,Deal 1 damage.,,Druid,0,,,Common,Spell,Basic
 yes,Mortal Coil,"Deal 1 damage to a minion. If that kills it, draw a card.",,Warlock,1,,,Common,Spell,Basic
 no,Mortal Strike,"Deal 4 damage. If you have 12 or less Health, deal 6 instead.",,Warrior,4,,,Rare,Spell,Expert
-no,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Epic,Minion,Expert
+yes,Mountain Giant,Costs (1) less for each other card in your hand.,,,12,8,8,Epic,Minion,Expert
 yes,Multi-Shot,Deal 3 damage to two random enemy minions.,,Hunter,4,,,Free,Spell,Basic
 yes,Murloc Raider,,Murloc,,1,2,1,Free,Minion,Basic
 yes,Murloc Tidecaller,"Whenever a Murloc is summoned, gain +1 Attack.",Murloc,,1,1,2,Rare,Minion,Expert
@@ -287,7 +287,7 @@ yes,Savagery,Deal damage equal to your hero's Attack to a minion.,,Druid,1,,,Rar
 yes,Savannah Highmane,Deathrattle: Summon two 2/2 Hyenas.,Beast,Hunter,6,6,5,Rare,Minion,Expert
 yes,Scarlet Crusader,Divine Shield,,,3,3,1,Common,Minion,Expert
 yes,Scavenging Hyena,"Whenever a friendly Beast dies, gain +2/+1.",Beast,Hunter,2,2,2,Common,Minion,Expert
-no,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,Epic,Minion,Expert
+yes,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,Epic,Minion,Expert
 yes,Secretkeeper,"Whenever a Secret is played, gain +1/+1.",,,1,1,2,Rare,Minion,Expert
 yes,Sen'jin Shieldmasta,Taunt,,,4,3,5,Free,Minion,Basic
 yes,Sense Demons,Put 2 random Demons from your deck into your hand.,,Warlock,3,,,Common,Spell,Expert

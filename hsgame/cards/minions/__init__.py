@@ -139,7 +139,10 @@ from hsgame.cards.minions.neutral import (
     SunfuryProtector,
     HarrisonJones,
     KingMukla,
-    LeeroyJenkins
+    LeeroyJenkins,
+    SeaGiant,
+    MoltenGiant,
+    MountainGiant,
 )
 
 from hsgame.cards.minions.druid import (

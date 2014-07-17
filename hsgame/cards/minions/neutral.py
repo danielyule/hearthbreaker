@@ -1884,3 +1884,43 @@ class LeeroyJenkins(MinionCard):
         minion = Minion(6, 2, battlecry=summon_whelps)
         minion.charge = True
         return minion
+
+
+class MountainGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Mountain Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
+
+    def mana_cost(self, player):
+        cost = super().mana_cost(player) - len(player.hand)
+        return cost
+
+
+class MoltenGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Molten Giant", 20, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
+
+    def mana_cost(self, player):
+        cost = super().mana_cost(player) - player.hero.calculate_max_health() + player.hero.health
+        if cost < 0:
+            return 0
+        return cost
+
+
+class SeaGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Sea Giant", 10, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
+
+    def mana_cost(self, player):
+        cost = super().mana_cost(player) - len(player.game.players[0].minions) - len(player.game.players[1].minions)
+        if cost < 0:
+            return 0
+        return cost

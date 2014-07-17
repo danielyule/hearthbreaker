@@ -1704,3 +1704,68 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
+
+    def test_MountainGiant(self):
+        game = generate_game_for(MountainGiant, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        game.play_single_turn()
+
+        self.assertEqual(8, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(7, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(6, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+
+        # Play the mountain giant (it costs 4 mana, then the subsequent ones cost 5)
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(1, len(game.current_player.minions))
+
+    def test_MoltenGiant(self):
+        game = generate_game_for(MoltenGiant, StonetuskBoar, DoNothingBot, DoNothingBot)
+
+        game.play_single_turn()
+        self.assertEqual(20, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.current_player.hero.damage(10, None)
+        self.assertEqual(10, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.current_player.hero.damage(15, None)
+        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+
+    def test_SeaGiant(self):
+        game = generate_game_for(SeaGiant, StonetuskBoar, MinionPlayingAgent, SpellTestingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(9, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(7, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(1, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
