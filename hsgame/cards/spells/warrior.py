@@ -1,4 +1,5 @@
 import copy
+import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Card
 
@@ -35,3 +36,16 @@ class Brawl(Card):
         while len(minions) != 1:
             minion = minions.pop(game.random(0, len(minions) - 1))
             minion.die(self)
+
+
+class Charge(Card):
+    def __init__(self):
+        super().__init__("Charge", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
+                         hsgame.targeting.find_friendly_minion_battlecry_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.change_attack(2)
+        self.target.charge = True
+        self.target.exhausted = False

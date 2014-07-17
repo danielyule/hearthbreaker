@@ -65,7 +65,7 @@ yes,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Legendar
 yes,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Legendary,Minion,Expert
 no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Epic,Minion,Reward
 yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Legendary,Minion,Expert
-no,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Free,Spell,Basic
+yes,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Free,Spell,Basic
 yes,Chillwind Yeti,,,,4,4,5,Common,Minion,Basic
 yes,Circle of Healing,Restore 4 Health to ALL minions.,,Priest,0,,,Common,Spell,Expert
 yes,Claw,Give your hero +2 Attack this turn and 2 Armor.,,Druid,1,,,Free,Spell,Basic

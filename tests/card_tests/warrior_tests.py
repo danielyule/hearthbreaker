@@ -232,3 +232,15 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Damaged Golem", game.players[0].minions[0].card.name)
         self.assertEqual(1, len(game.players[1].minions))
+
+    def test_Charge(self):
+        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.players[0].agent.play_on = 4
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Shieldbearer and Charge should be played
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
