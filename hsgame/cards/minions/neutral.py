@@ -2,7 +2,7 @@ from hsgame.cards.battlecries import draw_card, silence, deal_one_damage, \
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
-from hsgame.game_objects import Minion, MinionCard, SecretCard
+from hsgame.game_objects import Minion, MinionCard, SecretCard, Card
 from hsgame.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hsgame.targeting
 import copy
@@ -1770,4 +1770,117 @@ class GurubashiBerserker(MinionCard):
         minion = Minion(2, 7)
         minion.bind("damaged", gurubashi_grow)
         minion.bind_once("silenced", lambda: minion.unbind("damaged", gurubashi_grow))
+        return minion
+
+
+class AncientMage(MinionCard):
+    def __init__(self):
+        super().__init__("Ancient Mage", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def give_spell_damage(m):
+            if m.index > 0:
+                minion = m.player.minions[m.index - 1]
+                minion.spell_damage += 1
+                m.player.spell_damage += 1
+
+            if m.index < len(m.player.minions):
+                minion = m.player.minions[m.index]
+                minion.spell_damage += 1
+                m.player.spell_damage += 1
+
+        return Minion(2, 5, battlecry=give_spell_damage)
+
+
+class DefenderOfArgus(MinionCard):
+    def __init__(self):
+        super().__init__("Defender of Argus", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def give_argus_buff(m):
+            if m.index > 0:
+                minion = m.player.minions[m.index - 1]
+                minion.taunt = True
+                minion.change_attack(1)
+                minion.increase_health(1)
+
+            if m.index < len(m.player.minions):
+                minion = m.player.minions[m.index]
+                minion.taunt = True
+                minion.change_attack(1)
+                minion.increase_health(1)
+
+        return Minion(2, 3, battlecry=give_argus_buff)
+
+
+class SunfuryProtector(MinionCard):
+    def __init__(self):
+        super().__init__("Sunfury Protector", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def give_argus_buff(m):
+            if m.index > 0:
+                minion = m.player.minions[m.index - 1]
+                minion.taunt = True
+
+            if m.index < len(m.player.minions):
+                minion = m.player.minions[m.index]
+                minion.taunt = True
+
+        return Minion(2, 3, battlecry=give_argus_buff)
+
+
+class HarrisonJones(MinionCard):
+    def __init__(self):
+        super().__init__("Harrison Jones", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def destroy_enemy_weapon(m):
+            if player.game.other_player.hero.weapon is not None:
+                for i in range(0, player.game.other_player.hero.weapon.durability):
+                    m.player.draw()
+                m.player.game.other_player.hero.weapon.destroy()
+
+        return Minion(5, 4, battlecry=destroy_enemy_weapon)
+
+
+class KingMukla(MinionCard):
+    def __init__(self):
+        super().__init__("King Mukla", 3, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def give_bananas(m):
+            class Bananas(Card):
+                def __init__(self):
+                    super().__init__("Bananas", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_minion_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    self.target.change_attack(1)
+                    self.target.increase_health(1)
+            player.game.other_player.hand.append(Bananas())
+            player.game.other_player.hand.append(Bananas())
+
+        return Minion(5, 5, MINION_TYPE.BEAST, battlecry=give_bananas)
+
+
+class LeeroyJenkins(MinionCard):
+    def __init__(self):
+        super().__init__("Leeroy Jenkins", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_whelps(m):
+            class Whelp(MinionCard):
+                def __init__(self):
+                    super().__init__("Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.DRAGON)
+            whelp = Whelp()
+            whelp.summon(player.game.other_player, player.game, len(player.game.other_player.minions))
+            whelp.summon(player.game.other_player, player.game, len(player.game.other_player.minions))
+
+        minion = Minion(6, 2, battlecry=summon_whelps)
+        minion.charge = True
         return minion
