@@ -152,7 +152,7 @@ yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Common,Minion,Basic
 yes,Goldshire Footman,Taunt,,,1,1,2,Common,Minion,Basic
 no,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Epic,Weapon,Expert
 yes,Grimscale Oracle,ALL other Murlocs have +1 Attack.,Murloc,,1,1,1,Common,Minion,Basic
-no,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Legendary,Minion,Expert
+yes,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Legendary,Minion,Expert
 yes,Gruul,"At the end of each turn, gain +1/+1 .",,,8,7,7,Legendary,Minion,Expert
 yes,Guardian of Kings,Battlecry: Restore 6 Health to your hero.,,Paladin,7,5,6,Common,Minion,Basic
 yes,Gurubashi Berserker,"Whenever this minion takes damage, gain +3 Attack.",,,5,2,7,Common,Minion,Basic
@@ -197,7 +197,7 @@ yes,King Mukla,Battlecry: Give your opponent 2 Bananas.,Beast,,3,5,5,Legendary,M
 yes,Kirin Tor Mage,Battlecry: The next Secret you play this turn costs (0).,,Mage,3,4,3,Rare,Minion,Expert
 yes,Knife Juggler,"After you summon a minion, deal 1 damage to a random enemy.",,,2,3,2,Rare,Minion,Expert
 yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Common,Minion,Basic
-no,Kor'kron Elite,Charge,,Warrior,4,4,3,Common,Minion,Basic
+yes,Kor'kron Elite,Charge,,Warrior,4,4,3,Common,Minion,Basic
 yes,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Rare,Spell,Expert
 yes,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Epic,Spell,Expert
 yes,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Legendary,Minion,Expert
@@ -209,7 +209,7 @@ yes,Lightspawn,This minion's Attack is always equal to its Health.,,Priest,4,0,5
 yes,Lightwarden,"Whenever a character is healed, gain +2 Attack.",,,1,1,2,Rare,Minion,Expert
 yes,Lightwell,"At the start of your turn, restore 3 Health to a damaged friendly character.",,Priest,2,0,5,Rare,Minion,Expert
 yes,Loot Hoarder,Deathrattle: Draw a card.,,,2,2,1,Common,Minion,Expert
-no,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Legendary,Minion,Expert
+yes,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxus.,Demon,Warlock,9,3,15,Legendary,Minion,Expert
 yes,Lord of the Arena,Taunt,,,6,6,5,Common,Minion,Basic
 no,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Legendary,Minion,Expert
 yes,Mad Bomber,Battlecry: Deal 3 damage randomly split between all other characters.,,,2,3,2,Common,Minion,Expert

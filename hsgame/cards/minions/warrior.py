@@ -63,3 +63,33 @@ class FrothingBerserker(MinionCard):
         player.game.bind("minion_damaged", gain_one_attack)
         minion.bind_once("silenced", lambda: player.game.unbind("minion_damaged", gain_one_attack))
         return minion
+
+
+class GrommashHellscream(MinionCard):
+    def __init__(self):
+        super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def increase_attack():
+            minion.change_attack(6)
+
+        def decrease_attack():
+            minion.change_attack(-6)
+
+        def silenced():
+            minion.unbind("enraged", increase_attack)
+            minion.unbind("unenraged", decrease_attack)
+
+        minion = Minion(4, 9, charge=True)
+        minion.bind("enraged", increase_attack)
+        minion.bind("unenraged", decrease_attack)
+        minion.bind("silenced", silenced)
+        return minion
+
+
+class KorkronElite(MinionCard):
+    def __init__(self):
+        super().__init__("Kor'kron Elite", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 3, charge=True)

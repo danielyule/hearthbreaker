@@ -1,5 +1,6 @@
 import random
 import unittest
+from hsgame.agents.basic_agents import PredictableBot
 
 from hsgame.constants import MINION_TYPE
 from tests.testing_agents import *
@@ -354,7 +355,7 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
         # Corruption resolves at start of my turn, no targets to use remaining cards on
         self.assertEqual(0, len(game.players[1].minions))
-        # self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[0].hand))
 
     def test_PowerOverwhelming(self):
         game = generate_game_for(PowerOverwhelming, StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -424,3 +425,25 @@ class TestWarlock(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].stealth)
         self.assertEqual(2, game.players[0].minions[1].health)
         self.assertTrue(game.players[0].minions[1].stealth)
+
+    def test_Jaraxxus(self):
+        game = generate_game_for(LordJaraxxus, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(15, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+        self.assertEqual(27, game.other_player.hero.health)
+
+        game.current_player.agent = PredictableBot()
+        game.current_player.agent.set_game(game)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(6, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(8, game.current_player.mana)
+        self.assertEqual(24, game.other_player.hero.health)

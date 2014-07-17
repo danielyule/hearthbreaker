@@ -375,18 +375,19 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         if not self.immune:
             if type(attacker) is Minion:
                 self.trigger("physically_damaged", amount, attacker)
-                self.trigger("minion_damaged", amount, attacker)
+                self.trigger("damaged_by_minion", amount, attacker)
             elif type(attacker) is Player:
                 self.trigger("physically_damaged", amount, attacker)
-                self.trigger("player_damaged", amount, attacker)
+                self.trigger("damaged_by_player", amount, attacker)
             elif issubclass(type(attacker), Card):
-                self.trigger("spell_damaged", amount, attacker)
+                self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
-            # The response of a secret to damage must happen immediately
-            self.trigger("secret_damaged", amount, attacker)
-            self.health -= amount
             if type(self) is Minion:
                 self.game.trigger("minion_damaged", self)
+            elif type(self) is Hero:
+                # The response of a secret to damage must happen immediately
+                self.trigger("hero_damaged", amount, attacker)
+            self.health -= amount
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", amount, self)
             self.trigger("health_changed")

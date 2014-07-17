@@ -303,9 +303,9 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         spell_damage_mock = mock.Mock()
-        game.current_player.minions[0].bind('spell_damaged', spell_damage_mock)
-        game.current_player.minions[1].bind('spell_damaged', spell_damage_mock)
-        game.current_player.minions[2].bind('spell_damaged', spell_damage_mock)
+        game.current_player.minions[0].bind('damaged_by_spell', spell_damage_mock)
+        game.current_player.minions[1].bind('damaged_by_spell', spell_damage_mock)
+        game.current_player.minions[2].bind('damaged_by_spell', spell_damage_mock)
         swipe_card = game.other_player.hand[0]
         game.play_single_turn()
 

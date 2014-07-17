@@ -1,8 +1,9 @@
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import MinionCard, Minion
+from hsgame.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hsgame.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
 import copy
+from hsgame.powers import JaraxxusPower
 
 
 class FlameImp(MinionCard):
@@ -103,3 +104,31 @@ class BloodImp(MinionCard):
         player.bind("turn_ended", buff_ally_health)
         minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
         return minion
+
+
+class LordJaraxxus(MinionCard):
+    def __init__(self):
+        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_jaraxxus(minion):
+            class BloodFury(WeaponCard):
+                def __init__(self):
+                    super().__init__("Blood Fury", 3, CHARACTER_CLASS.LORD_JARAXXUS, CARD_RARITY.SPECIAL)
+
+                def create_weapon(self, player):
+                    return Weapon(3, 8)
+
+            minion.bind("added_to_board", lambda x, y: minion.remove_from_board())
+            player.hero.health = 15
+            player.hero.base_health = 15
+            player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS
+            player.hero.power = JaraxxusPower(player.hero)
+            blood_fury = BloodFury()
+            weapon = blood_fury.create_weapon(player)
+            weapon.card = blood_fury
+            weapon.player = player
+            weapon.game = player.game
+            weapon.equip(player)
+
+        return Minion(3, 15, MINION_TYPE.DEMON, battlecry=summon_jaraxxus)

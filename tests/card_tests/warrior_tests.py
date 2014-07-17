@@ -81,3 +81,42 @@ class TestWarrior(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(8, game.players[0].minions[0].calculate_attack())
         self.assertEqual(1, game.players[0].minions[0].health)
+
+    def test_GrommashHellscream(self):
+        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PredictableAgentWithoutHeroPower, SpellTestingAgent)
+
+        for turn in range(0, 14):
+            game.play_single_turn()
+
+        # Hellscream should be played, attacking (charge) and getting 2 damage by trap that will trigger enrage,
+        # dealing 10 damage as result
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(10, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
+        self.assertEqual(20, game.players[1].hero.health)
+
+        game.players[0].minions[0].heal(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].damage(2, None)
+        self.assertEqual(10, game.players[0].minions[0].calculate_attack())
+
+        game.players[0].minions[0].silence()
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].heal(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].damage(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+
+    def test_KorkronElite(self):
+        game = generate_game_for(KorkronElite, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Kor'kron Elite should be played and attack (charge)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(26, game.players[1].hero.health)

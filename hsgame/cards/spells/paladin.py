@@ -201,10 +201,10 @@ class EyeForAnEye(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("secret_damaged", self._reveal)
+        player.hero.bind_once("hero_damaged", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("secret_damaged", self._reveal)
+        player.hero.unbind("hero_damaged", self._reveal)
 
 
 class NobleSacrifice(SecretCard):
