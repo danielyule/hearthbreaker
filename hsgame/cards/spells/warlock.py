@@ -213,8 +213,9 @@ class Corruption(Card):
 
         def death():
             self.target.die(None)
+            self.target.activate_delayed()
 
-        player.bind_once("turn_started", death)
+        player.bind("turn_started", death)
         self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
 
 

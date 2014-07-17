@@ -31,6 +31,7 @@ class CHARACTER_CLASS:
     PALADIN = 7
     ROGUE = 8
     WARLOCK = 9
+    LORD_JARAXXUS = 10
 
     __classes = {
         "MAGE": MAGE,
@@ -61,6 +62,7 @@ class CHARACTER_CLASS:
             CHARACTER_CLASS.PALADIN: "Paladin",
             CHARACTER_CLASS.ROGUE: "Rogue",
             CHARACTER_CLASS.WARLOCK: "Warlock",
+            CHARACTER_CLASS.LORD_JARAXXUS: "Lord Jaraxxus"
         }
         return classes[class_number]
 

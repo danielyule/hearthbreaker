@@ -255,7 +255,7 @@ class WarlockPower(Power):
         self.hero.player.game.current_player.hero.damage(2, None)
         self.hero.player.game.current_player.draw()
 
-"""
+
 class JaraxxusPower(Power):
     def __init__(self, hero):
         super().__init__(hero)
@@ -263,17 +263,16 @@ class JaraxxusPower(Power):
     def use(self):
         class Infernal(hsgame.game_objects.MinionCard):
             def __init__(self):
-                super().__init__("Infernal", 6, hsgame.constants.CHARACTER_CLASS.WARLOCK,
+                super().__init__("Infernal", 6, hsgame.constants.CHARACTER_CLASS.LORD_JARAXXUS,
                                  hsgame.constants.CARD_RARITY.SPECIAL)
 
             def create_minion(self, player):
-                return hsgame.game_objects.Minion(6, 6)
+                return hsgame.game_objects.Minion(6, 6, hsgame.constants.MINION_TYPE.DEMON)
 
         super().use()
 
         infernal_card = Infernal()
-        infernal_card.create_minion(None).add_to_board(infernal_card, self.hero.player.game, self.hero.player, 0)
-"""
+        infernal_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
 class WarriorPower(Power):
