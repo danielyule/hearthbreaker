@@ -85,3 +85,11 @@ class GrommashHellscream(MinionCard):
         minion.bind("unenraged", decrease_attack)
         minion.bind("silenced", silenced)
         return minion
+
+
+class KorkronElite(MinionCard):
+    def __init__(self):
+        super().__init__("Kor'kron Elite", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 3, charge=True)

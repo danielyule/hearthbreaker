@@ -107,3 +107,16 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         game.players[0].minions[0].damage(2, None)
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+
+    def test_KorkronElite(self):
+        game = generate_game_for(KorkronElite, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Kor'kron Elite should be played and attack (charge)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(26, game.players[1].hero.health)

@@ -218,5 +218,6 @@ from hsgame.cards.minions.warrior import (
     Armorsmith,
     CruelTaskmaster,
     FrothingBerserker,
-    GrommashHellscream
+    GrommashHellscream,
+    KorkronElite
 )
