@@ -201,3 +201,7 @@ from hsgame.cards.minions.warlock import (
     SummoningPortal,
     BloodImp
 )
+
+from hsgame.cards.minions.warrior import (
+    ArathiWeaponsmith
+)

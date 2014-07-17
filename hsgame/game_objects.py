@@ -807,14 +807,17 @@ class Minion(Character):
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
 
-    def add_aura(self, attack, health, filter_func=lambda m: True):
+    def add_aura(self, attack, health, affected_players, filter_func=lambda m: True):
         """
-        Adds an aura effect to the :class:`Player`'s minions.  This aura can increase the attack or health of
+        Adds an aura effect to some minions on the board minions.  This aura can increase the attack or health of
         the minions, or both.  The effect can be limited to only certain minions with the use of a filter
-        function.
+        function, and by specifying which player(s) the aura affects.
 
         :param int attack: The amount to increase minions' attack by
         :param int health: The amount to increase minion's health AND max health by
+        :param list[hsgame.game_objects.Player] affected_players: A :class:`list` of
+                                                                  :class:`hsgame.game_objects.Player` s whose minions
+                                                                  are affected by this aura
         :param function filter_func: A function that selects which minions to apply this effect to. Takes
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
@@ -826,14 +829,16 @@ class Minion(Character):
                 self.health = health
                 self.filter = filter_func
         aura = Aura()
-        self.player.auras.append(aura)
-        if health > 0:
-            for minion in filter(filter_func, self.player.minions):
-                minion.health += health
-                minion.trigger("health_changed")
+        for player in affected_players:
+            player.auras.append(aura)
+            if health > 0:
+                for minion in filter(filter_func, player.minions):
+                    minion.health += health
+                    minion.trigger("health_changed")
 
         def silenced():
-            self.player.auras.remove(aura)
+            for player in affected_players:
+                player.auras.remove(aura)
             if health > 0:
                 for minion in filter(filter_func, self.player.minions):
                     if minion.health > minion.calculate_max_health():
@@ -955,7 +960,8 @@ class Weapon(Bindable):
     def destroy(self):
         self.trigger("destroyed")
         self.player.hero.weapon = None
-        self.player.hero.change_temp_attack(-self.base_attack)
+        if self.player.game.current_player is self.player:
+            self.player.hero.change_temp_attack(-self.base_attack)
         self.player.hero.windfury = False
 
     def equip(self, player):
@@ -965,6 +971,7 @@ class Weapon(Bindable):
         self.player.hero.weapon = self
         if self.player.game.current_player is self.player:
             self.player.hero.change_temp_attack(self.base_attack)
+        self.player.hero.trigger("weapon_equipped")
 
 
 class Deck:
@@ -1008,7 +1015,7 @@ class Hero(Character):
     def __init__(self, character_class, player):
         super().__init__(0, 30)
 
-        self.armour = 0
+        self.armor = 0
         self.weapon = None
         self.character_class = character_class
         self.player = player
@@ -1023,15 +1030,15 @@ class Hero(Character):
                 self.weapon.destroy()
 
     def damage(self, amount, attacker):
-        self.armour -= amount
-        if self.armour < 0:
-            new_amount = -self.armour
-            self.armour = 0
+        self.armor -= amount
+        if self.armor < 0:
+            new_amount = -self.armor
+            self.armor = 0
             super().damage(new_amount, attacker)
 
-    def increase_armour(self, amount):
-        self.trigger("armour_increased", amount)
-        self.armour += amount
+    def increase_armor(self, amount):
+        self.trigger("armor_increased", amount)
+        self.armor += amount
 
     def die(self, by):
         super().die(by)

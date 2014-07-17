@@ -138,7 +138,7 @@ class DireWolfAlpha(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 0, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
+            m.add_aura(1, 0, [player], lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
 
         minion = Minion(2, 2, MINION_TYPE.BEAST)
         minion.bind("added_to_board", add_effect)
@@ -736,7 +736,7 @@ class StormwindChampion(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 1, lambda mini: mini is not minion and mini is not player.hero)
+            m.add_aura(1, 1, [player], lambda mini: mini is not minion)
 
         minion = Minion(6, 6)
         minion.bind("added_to_board", add_effect)
@@ -922,18 +922,30 @@ class SpitefulSmith(MinionCard):
 
     def create_minion(self, player):
         def increase_weapon_attack():
-            minion.add_aura(2, 0, lambda mini: mini is player.hero and mini.weapon is not None)
+            if player.hero.weapon:
+                player.hero.weapon.base_attack += 2
+                if player.game.current_player is player:
+                    player.hero.change_temp_attack(2)
 
-        def decrease_weapon_attack():  # This might stack too many auras, is there a way to remove aura w/o silence?
-            minion.add_aura(-2, 0, lambda mini: mini is player.hero and mini.weapon is not None)
+        def decrease_weapon_attack():
+            if player.hero.weapon:
+                player.hero.weapon.base_attack -= 2
+                if player.game.current_player is player:
+                    player.hero.change_temp_attack(-2)
+
+        def weapon_equipped():
+            if minion.enraged:
+                increase_weapon_attack()
 
         def silenced():
             minion.unbind("enraged", increase_weapon_attack)
             minion.unbind("unenraged", decrease_weapon_attack)
+            player.hero.unbind("weapon_equipped", weapon_equipped)
 
         minion = Minion(4, 6)
         minion.bind("enraged", increase_weapon_attack)
         minion.bind("unenraged", decrease_weapon_attack)
+        player.hero.bind("weapon_equipped", weapon_equipped)
         minion.bind("silenced", silenced)
         return minion
 
@@ -973,7 +985,7 @@ class RaidLeader(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 0, lambda mini: mini is not minion and mini is not player.hero)
+            m.add_aura(1, 0, [player], lambda mini: mini is not minion)
 
         minion = Minion(2, 2)
         minion.bind("added_to_board", add_effect)
@@ -1377,8 +1389,8 @@ class GrimscaleOracle(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 0, lambda mini: mini is not minion and mini is not player.hero 
-                       and mini.minion_type is MINION_TYPE.MURLOC)
+            m.add_aura(1, 0, [player.game.current_player, player.game.other_player],
+                       lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.MURLOC)
 
         minion = Minion(1, 1, MINION_TYPE.MURLOC)
         minion.bind("added_to_board", add_effect)
@@ -1392,8 +1404,8 @@ class MurlocWarleader(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(2, 1, lambda mini: mini is not minion and mini is not player.hero
-                       and mini.minion_type is MINION_TYPE.MURLOC)
+            m.add_aura(2, 1, [player.game.current_player, player.game.other_player],
+                       lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.MURLOC)
 
         minion = Minion(3, 3, MINION_TYPE.MURLOC)
         minion.bind("added_to_board", add_effect)
@@ -1559,8 +1571,7 @@ class SouthseaCaptain(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 1, lambda mini: mini is not minion and mini is not player.hero
-                       and mini.minion_type is MINION_TYPE.MURLOC)
+            m.add_aura(1, 1, [player], lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.PIRATE)
 
         minion = Minion(3, 3, MINION_TYPE.PIRATE)
         minion.bind("added_to_board", add_effect)

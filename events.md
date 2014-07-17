@@ -54,7 +54,7 @@ Events Triggered in hssim
 
  
 ##Hero (Character)
- * armour_increased
+ * armor_increased
  * used_power
  * found_power_target(target)
  * fatigue_damage(fatigue)

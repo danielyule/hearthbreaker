@@ -36,7 +36,7 @@ class TestDruid(unittest.TestCase):
             def do_turn(self, player):
                 super().do_turn(player)
                 testing_env.assertEqual(2, self.game.current_player.hero.temp_attack)
-                testing_env.assertEqual(2, self.game.current_player.hero.armour)
+                testing_env.assertEqual(2, self.game.current_player.hero.armor)
 
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, MinionPlayingAgent)
         game.pre_game()
@@ -270,7 +270,7 @@ class TestDruid(unittest.TestCase):
                 super().do_turn(player)
                 if player.mana == 0:
                     testing_env.assertEqual(4, self.game.current_player.hero.temp_attack)
-                    testing_env.assertEqual(4, self.game.current_player.hero.armour)
+                    testing_env.assertEqual(4, self.game.current_player.hero.armor)
 
         game = generate_game_for(Bite, StonetuskBoar, BiteAgent, DoNothingBot)
         game.play_single_turn()

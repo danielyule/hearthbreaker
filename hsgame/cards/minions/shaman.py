@@ -44,7 +44,7 @@ class FlametongueTotem(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(2, 0, lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
+            m.add_aura(2, 0, [player], lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
 
         minion = Minion(0, 3, MINION_TYPE.TOTEM)
         minion.bind("added_to_board", add_effect)
