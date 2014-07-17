@@ -84,7 +84,7 @@ class TestWarrior(unittest.TestCase):
 
     def test_GrommashHellscream(self):
         game = generate_game_for(GrommashHellscream, ExplosiveTrap, PredictableAgentWithoutHeroPower, SpellTestingAgent)
-        
+
         for turn in range(0, 14):
             game.play_single_turn()
 
