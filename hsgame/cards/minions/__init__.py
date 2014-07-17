@@ -216,11 +216,3 @@ from hsgame.cards.minions.warlock import (
 from hsgame.cards.minions.warrior import (
     ArathiWeaponsmith
 )
-
-from hsgame.cards.minions.warrior import (
-    ArathiWeaponsmith
-)
-
-from hsgame.cards.minions.warrior import (
-    ArathiWeaponsmith
-)
