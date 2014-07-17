@@ -321,13 +321,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
     def calculate_attack(self):
         """
         Calculates the amount of attack this :class:`Character` has, including the base attack, any temporary attack
-        bonuses for this turn and any aura effects
+        bonuses for this turn
         """
-        aura_attack = 0
-        for aura in self.player.auras:
-            if aura.filter(self):
-                aura_attack += aura.attack
-        return self.base_attack + self.temp_attack + aura_attack
+
+        return self.base_attack + self.temp_attack
 
     def calculate_max_health(self):
         """
@@ -731,6 +728,17 @@ class Minion(Character):
         self.health += self.calculate_max_health() - self.base_health
         self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
+
+    def calculate_attack(self):
+        """
+        Calculates the amount of attack this :class:`Minion` has, including the base attack, any temporary attack
+        bonuses for this turn and any aura effects
+        """
+        aura_attack = 0
+        for aura in self.player.auras:
+            if aura.filter(self):
+                aura_attack += aura.attack
+        return super().calculate_attack() + aura_attack
 
     def remove_from_board(self):
         self.silence()  # Neutralize all possible effects
@@ -1191,6 +1199,8 @@ class Game(Bindable):
 
         for secret in self.other_player.secrets:
             secret.activate(self.other_player)
+        for minion in self.current_player.minions:
+            minion.active = True
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.cards_played = 0
@@ -1220,7 +1230,7 @@ class Game(Bindable):
             minion._turn_complete()
 
         for minion in self.current_player.minions:
-            minion.active = True
+            minion.active = False
             minion.exhausted = False
             minion.used_wind_fury = False
             if minion.frozen_this_turn:
