@@ -120,3 +120,145 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(26, game.players[1].hero.health)
+
+    def test_WarsongCommander(self):
+        game = generate_game_for(WarsongCommander, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        # Super special test cases - http://www.hearthhead.com/card=1009/warsong-commander#comments:id=1935295
+        game.players[0].mana = 100
+
+        # Play the Warsong Commander
+        commander = WarsongCommander()
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)  # Should not give charge to itself
+
+        # Test so that enrage doesn't remove the charge
+        worgen = RagingWorgen()
+        worgen.use(game.players[0], game)
+        game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+        # Test so that charge gets applied before a battlecry
+        weapon = TruesilverChampion().create_weapon(game.players[0])  # 4/2 TODO: Change to a warrior weapon
+        weapon.equip(game.players[0])
+        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        bloodsail = BloodsailRaider()
+        bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+        # TODO: Test with Faceless Manipulator here
+
+        # Remove the Warsong Commander
+        game.players[0].minions[-1].die(None)
+        game.players[0].minions[-1].activate_delayed()
+        # The previous charged minions should still have charge
+        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[-1].charge)
+
+        # Test so that a minion played before Warsong doesn't get charge
+        shield = Shieldbearer()
+        shield.summon(game.players[0], game, 0)
+        self.assertFalse(game.players[0].minions[0].charge)
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+        # Remove the Warsong again
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        # Buff a minion to above 3
+        game.players[0].minions[0].change_attack(5)
+        # Play Warsong, the buffed minion should not get charge
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+
+        # Auras!
+        stormwind = StormwindChampion()
+        stormwind.use(game.players[0], game)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[1].health)
+        # Kill the worgen
+        game.players[0].minions[-1].die(None)
+        game.players[0].minions[-1].activate_delayed()
+        # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
+        worgen.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)
+
+    def test_BattleRage(self):
+        game = generate_game_for(BattleRage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.players[0].mana = 100
+
+        shield = Shieldbearer()
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        game.players[0].minions[0].damage(1, None)
+        game.players[0].minions[1].damage(1, None)
+        game.players[0].hero.damage(1, None)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))
+
+        # Battle Rage should be played, 3 damaged characters = 3 cards drawn
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].hand))
+
+    def test_Brawl(self):
+        game = generate_game_for(Brawl, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.players[0].mana = 100
+
+        shield = Shieldbearer()
+        shield.use(game.players[0], game)
+        shield.use(game.players[0], game)
+        golem = HarvestGolem()
+        golem.use(game.players[0], game)
+        shield.use(game.players[1], game)
+        shield.use(game.players[1], game)
+        shield.use(game.players[1], game)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+        # Brawl should be played, leaving one minion behind and Damaged Golem should have spawned for first player
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Damaged Golem", game.players[0].minions[0].card.name)
+        self.assertEqual(1, len(game.players[1].minions))
+
+    def test_Charge(self):
+        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.players[0].agent.play_on = 4
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Shieldbearer and Charge should be played
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+    def test_Cleave(self):
+        game = generate_game_for(Cleave, SenjinShieldmasta, OneSpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+        self.assertEqual(5, game.players[1].minions[1].health)
+
+        # 2 enemy minions are now in play, so Cleave should be played
+        game.play_single_turn()
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[1].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[1].health)

@@ -156,3 +156,10 @@ from hsgame.cards.spells.warlock import (
     Corruption,
     PowerOverwhelming
 )
+
+from hsgame.cards.spells.warrior import (
+    BattleRage,
+    Brawl,
+    Charge,
+    Cleave
+)

@@ -229,5 +229,6 @@ from hsgame.cards.minions.warrior import (
     CruelTaskmaster,
     FrothingBerserker,
     GrommashHellscream,
-    KorkronElite
+    KorkronElite,
+    WarsongCommander
 )

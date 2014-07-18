@@ -93,3 +93,24 @@ class KorkronElite(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 3, charge=True)
+
+
+class WarsongCommander(MinionCard):
+    def __init__(self):
+        super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
+
+    def create_minion(self, player):
+        def give_charge(m):
+            if m is not minion and m.calculate_attack() <= 3:
+                m.charge = True
+                m.exhausted = False
+
+        def silence():
+            player.unbind("minion_summoned", give_charge)
+            player.unbind("minion_played", give_charge)
+
+        minion = Minion(2, 3)
+        player.bind("minion_summoned", give_charge)
+        player.bind("minion_played", give_charge)
+        minion.bind_once("silenced", silence)
+        return minion
