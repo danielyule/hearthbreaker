@@ -143,6 +143,14 @@ from hsgame.cards.minions.neutral import (
     SeaGiant,
     MoltenGiant,
     MountainGiant,
+    DreadCorsair,
+    CaptainsParrot,
+    TinkmasterOverspark,
+    AlarmoBot,
+    EliteTaurenChieftain,
+    MillhouseManastorm,
+    PintSizedSummoner,
+    OldMurkEye,
 )
 
 from hsgame.cards.minions.druid import (

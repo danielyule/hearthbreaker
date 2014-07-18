@@ -4,7 +4,7 @@ yes,Abusive Sergeant,Battlecry: Give a minion +2 Attack this turn.,,,1,2,1,Commo
 yes,Acidic Swamp Ooze,Battlecry: Destroy your opponent's weapon.,,,2,3,2,Common,Minion,Basic
 yes,Acolyte of Pain,"Whenever this minion takes damage, draw a card.",,,3,1,3,Common,Minion,Expert
 yes,Al'Akir the Windlord,"Windfury, Charge, Divine Shield, Taunt",,Shaman,8,3,5,Legendary,Minion,Expert
-no,Alarm-o-Bot,"At the start of your turn, swap this minion with a random one in your hand.",,,3,0,3,Rare,Minion,Expert
+yes,Alarm-o-Bot,"At the start of your turn, swap this minion with a random one in your hand.",,,3,0,3,Rare,Minion,Expert
 yes,Aldor Peacekeeper,Battlecry: Change an enemy minion's Attack to 1.,,Paladin,3,3,3,Rare,Minion,Expert
 yes,Alexstrasza,Battlecry: Set a hero's remaining Health to 15.,Dragon,,9,8,8,Legendary,Minion,Expert
 yes,Amani Berserker,Enrage: +3 Attack,,,2,2,3,Common,Minion,Expert
@@ -25,7 +25,7 @@ yes,Arcane Missiles,Deal 3 damage randomly split among enemy characters.,,Mage,1
 yes,Arcane Shot,Deal 2 damage.,,Hunter,1,,,Free,Spell,Basic
 no,Arcanite Reaper,,,Warrior,5,5,2,Common,Weapon,Basic
 yes,Archmage,Spell Damage +1,,,6,4,7,Common,Minion,Basic
-no,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into your hand.",,Mage,7,5,7,Legendary,Minion,Expert
+yes,Archmage Antonidas,"Whenever you cast a spell, put a 'Fireball' spell into your hand.",,Mage,7,5,7,Legendary,Minion,Expert
 yes,Argent Commander,"Charge, Divine Shield",,,6,4,2,Rare,Minion,Expert
 yes,Argent Protector,Battlecry: Give a friendly minion Divine Shield.,,Paladin,2,2,2,Common,Minion,Expert
 yes,Argent Squire,Divine Shield,,,1,1,1,Common,Minion,Expert
@@ -63,7 +63,7 @@ yes,Brawl,Destroy all minions except one. (chosen randomly),,Warrior,5,,,Epic,Sp
 yes,Cabal Shadow Priest,Battlecry: Take control of an enemy minion that has 2 or less Attack.,,Priest,6,4,5,Epic,Minion,Expert
 yes,Cairne Bloodhoof,Deathrattle: Summon a 4/5 Baine Bloodhoof.,,,6,4,5,Legendary,Minion,Expert
 yes,Captain Greenskin,Battlecry: Give your weapon +1/+1.,Pirate,,5,5,4,Legendary,Minion,Expert
-no,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Epic,Minion,Reward
+yes,Captain's Parrot,Battlecry: Put a random Pirate from your deck into your hand.,Beast,,2,1,1,Epic,Minion,Reward
 yes,Cenarius,Choose One - Give your other minions +2/+2; or Summon two 2/2 Treants with Taunt.,,Druid,9,5,8,Legendary,Minion,Expert
 yes,Charge,Give a friendly minion +2 Attack and Charge.,,Warrior,3,,,Free,Spell,Basic
 yes,Chillwind Yeti,,,,4,4,5,Common,Minion,Basic
@@ -101,7 +101,7 @@ yes,Doomhammer,"Windfury, Overload: (2)",,Shaman,5,2,8,Epic,Weapon,Expert
 yes,Doomsayer,"At the start of your turn, destroy ALL minions.",,,2,0,7,Epic,Minion,Expert
 yes,Dragonling Mechanic,Battlecry: Summon a 2/1 Mechanical Dragonling.,,,4,2,4,Common,Minion,Basic
 yes,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Free,Spell,Basic
-no,Dread Corsair,Taunt. Costs (1) less per Attack of your weapon.,Pirate,,4,3,3,Common,Minion,Expert
+yes,Dread Corsair,Taunt. Costs (1) less per Attack of your weapon.,Pirate,,4,3,3,Common,Minion,Expert
 yes,Dread Infernal,Battlecry: Deal 1 damage to ALL other characters.,Demon,Warlock,6,6,6,Common,Minion,Basic
 yes,Druid of the Claw,Choose One - Charge; or +2 Health and Taunt.,,Druid,5,4,4,Common,Minion,Expert
 yes,Dust Devil,Windfury. Overload: (2),,Shaman,1,3,1,Common,Minion,Expert
@@ -110,7 +110,7 @@ yes,Earth Elemental,Taunt. Overload: (3),,Shaman,5,7,8,Epic,Minion,Expert
 yes,Earth Shock,"Silence a minion, then deal 1 damage to it.",,Shaman,1,,,Common,Spell,Expert
 yes,Earthen Ring Farseer,Battlecry: Restore 3 Health.,,,3,3,3,Common,Minion,Expert
 yes,Edwin VanCleef,Combo: Gain +2/+2 for each card played earlier this turn.,,Rogue,3,2,2,Legendary,Minion,Expert
-no,Elite Tauren Chieftain,Battlecry: Give both players the power to ROCK! (with a Power Chord card),,,5,5,5,Legendary,Minion,Promotion
+yes,Elite Tauren Chieftain,Battlecry: Give both players the power to ROCK! (with a Power Chord card),,,5,5,5,Legendary,Minion,Promotion
 yes,Elven Archer,Battlecry: Deal 1 damage.,,,1,1,1,Common,Minion,Basic
 yes,Emperor Cobra,Destroy any minion damaged by this minion.,Beast,,3,2,3,Rare,Minion,Expert
 yes,Equality,Change the Health of ALL minions to 1.,,Paladin,2,,,Rare,Spell,Expert
@@ -224,7 +224,7 @@ yes,Mark of the Wild,Give a minion Taunt and +2/+2. (+2 Attack/+2 Health),,Druid
 yes,Mass Dispel,Silence all enemy minions. Draw a card.,,Priest,4,,,Rare,Spell,Expert
 yes,Master of Disguise,Battlecry: Give a friendly minion Stealth.,,Rogue,4,4,4,Rare,Minion,Expert
 yes,Master Swordsmith,"At the end of your turn, give another random friendly minion +1 Attack.",,,2,1,3,Rare,Minion,Expert
-no,Millhouse Manastorm,Battlecry: Enemy spells cost (0) next turn.,,,2,4,4,Legendary,Minion,Expert
+yes,Millhouse Manastorm,Battlecry: Enemy spells cost (0) next turn.,,,2,4,4,Legendary,Minion,Expert
 yes,Mind Blast,Deal 5 damage to the enemy hero.,,Priest,2,,,Free,Spell,Basic
 yes,Mind Control,Take control of an enemy minion.,,Priest,10,,,Common,Spell,Basic
 yes,Mind Control Tech,"Battlecry: If your opponent has 4 or more minions, take control of one at random.",,,3,3,3,Rare,Minion,Expert
@@ -254,11 +254,11 @@ yes,Novice Engineer,Battlecry: Draw a card.,,,2,1,1,Free,Minion,Basic
 yes,Nozdormu,Players only have 15 seconds to take their turns.,Dragon,,9,8,8,Legendary,Minion,Expert
 yes,Oasis Snapjaw,,Beast,,4,2,7,Free,Minion,Basic
 yes,Ogre Magi,Spell Damage +1,,,4,4,4,Common,Minion,Basic
-no,Old Murk-Eye,Charge. Has +1 Attack for each other Murloc on the battlefield.,Murloc,,4,2,4,Legendary,Minion,Reward
+yes,Old Murk-Eye,Charge. Has +1 Attack for each other Murloc on the battlefield.,Murloc,,4,2,4,Legendary,Minion,Reward
 yes,Onyxia,Battlecry: Summon 1/1 Whelps until your side of the battlefield is full.,Dragon,,9,8,8,Legendary,Minion,Expert
 yes,Patient Assassin,Stealth. Destroy any minion damaged by this minion.,,Rogue,2,1,1,Epic,Minion,Expert
 yes,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,2,2,Rare,Weapon,Expert
-no,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Rare,Minion,Expert
+yes,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Rare,Minion,Expert
 yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Epic,Minion,Expert
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Free,Spell,Basic
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Common,Spell,Expert
@@ -334,7 +334,7 @@ yes,Stormwind Knight,Charge,,,4,2,5,Common,Minion,Basic
 yes,Stranglethorn Tiger,Stealth,Beast,,5,5,5,Common,Minion,Expert
 yes,Succubus,Battlecry: Discard a random card.,Demon,Warlock,2,4,3,Free,Minion,Basic
 yes,Summoning Portal,"Your minions cost (2) less, but not less than (1).",,Warlock,4,0,4,Common,Minion,Expert
-no,Sunfury Protector,Battlecry: Give adjacent minions Taunt.,,,2,2,3,Rare,Minion,Expert
+yes,Sunfury Protector,Battlecry: Give adjacent minions Taunt.,,,2,2,3,Rare,Minion,Expert
 yes,Sunwalker,Taunt. Divine Shield,,,6,4,5,Rare,Minion,Expert
 yes,Swipe,Deal 4 damage to an enemy and 1 damage to all other enemies.,,Druid,4,,,Common,Spell,Basic
 yes,Sword of Justice,"Whenever you summon a minion, give it +1/+1 and this loses 1 Durability.",,Paladin,3,1,5,Epic,Weapon,Expert
@@ -346,7 +346,7 @@ yes,The Black Knight,Battlecry: Destroy an enemy minion with Taunt.,,,6,4,5,Lege
 yes,Thoughtsteal,Copy 2 cards from your opponent's deck and put them into your hand.,,Priest,3,,,Common,Spell,Expert
 yes,Thrallmar Farseer,Windfury,,,3,2,3,Common,Minion,Expert
 yes,Timber Wolf,Your other Beasts have +1 Attack.,Beast,Hunter,1,1,1,Free,Minion,Basic
-no,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.,,,3,3,3,Legendary,Minion,Expert
+yes,Tinkmaster Overspark,Battlecry: Transform another random minion into a 5/5 Devilsaur or a 1/1 Squirrel.,,,3,3,3,Legendary,Minion,Expert
 yes,Tirion Fordring,Divine Shield. Taunt. Deathrattle: Equip a 5/3 Ashbringer.,,Paladin,8,6,6,Legendary,Minion,Expert
 yes,Totemic Might,Give your Totems +2 Health.,,Shaman,0,,,Common,Spell,Basic
 yes,Tracking,Look at the top three cards of your deck. Draw one and discard the others.,,Hunter,1,,,Free,Spell,Basic

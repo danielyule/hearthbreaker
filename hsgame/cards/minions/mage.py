@@ -101,14 +101,14 @@ class WaterElemental(MinionCard):
 
 class ArchmageAntonidas(MinionCard):
     def __init__(self):
-        super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.LEGENDARY)
+        super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
         def add_fireball(c):
             if len(player.hand) < 10:
                 player.hand.append(hsgame.cards.Fireball())
 
+        minion = Minion(5, 7)
         player.bind("spell_cast", add_fireball)
-        player.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
-        return Minion(5, 7)
+        minion.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
+        return minion
