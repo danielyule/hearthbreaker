@@ -229,6 +229,7 @@ from hsgame.cards.minions.warlock import (
     SummoningPortal,
     BloodImp,
     LordJaraxxus,
+    VoidTerror
 )
 
 from hsgame.cards.minions.warrior import (

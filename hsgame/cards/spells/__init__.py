@@ -161,5 +161,15 @@ from hsgame.cards.spells.warrior import (
     BattleRage,
     Brawl,
     Charge,
-    Cleave
+    Cleave,
+    Execute,
+    HeroicStrike,
+    InnerRage,
+    MortalStrike,
+    Rampage,
+    ShieldBlock,
+    ShieldSlam,
+    Slam,
+    Upgrade,
+    Whirlwind
 )

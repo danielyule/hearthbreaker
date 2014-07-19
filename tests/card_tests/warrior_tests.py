@@ -262,3 +262,101 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(3, game.players[1].minions[0].health)
         self.assertEqual(3, game.players[1].minions[1].health)
+
+    def test_WhirlwindExecute(self):
+        game = generate_game_for(Execute, [GoldshireFootman, Whirlwind], SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_HeroicStrike(self):
+        game = generate_game_for(HeroicStrike, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(26, game.players[1].hero.health)
+
+    def test_InnerRageRampage(self):
+        game = generate_game_for([InnerRage, Rampage], GoldshireFootman, OneSpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(6, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[1].minions[1].health)
+
+    def test_ShieldBlockShieldSlam(self):
+        game = generate_game_for([ShieldBlock, ShieldSlam], Doomsayer, OneSpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].hand))
+        self.assertEqual(5, game.players[0].hero.armor)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].hero.armor)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[1].minions[0].health)
+
+    def test_Slam(self):
+        game = generate_game_for(Slam, [GoldshireFootman, Doomsayer], OneSpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()  # Slam to kill Footman, no draw
+
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        game.play_single_turn()  # Slam and Doomsayer survives
+
+        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+
+    def test_Upgrade(self):
+        game = generate_game_for(Upgrade, StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(3, game.players[0].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
+
+    def test_MortalStrike(self):
+        game = generate_game_for(MortalStrike, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
+        game.players[0].hero.health = 14
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(10, game.players[0].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(4, game.players[0].hero.health)

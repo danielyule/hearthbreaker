@@ -1,7 +1,7 @@
 import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
-from hsgame.game_objects import Card
+from hsgame.game_objects import Card, WeaponCard, Weapon
 
 
 class BattleRage(Card):
@@ -66,3 +66,126 @@ class Cleave(Card):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
+
+
+class Execute(Card):
+    def __init__(self):
+        super().__init__("Execute", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
+                         hsgame.targeting.find_enemy_minion_spell_target,
+                         lambda target: target.health != target.calculate_max_health() and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
+
+
+class HeroicStrike(Card):
+    def __init__(self):
+        super().__init__("Heroic Strike", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.change_temp_attack(4)
+
+
+class InnerRage(Card):
+    def __init__(self):
+        super().__init__("Inner Rage", 0, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(1, self)
+        self.target.change_attack(2)
+
+
+class MortalStrike(Card):
+    def __init__(self):
+        super().__init__("Mortal Strike", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
+                         hsgame.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.hero.health <= 12:
+            self.target.damage(player.effective_spell_damage(6), self)
+        else:
+            self.target.damage(player.effective_spell_damage(4), self)
+
+
+class Rampage(Card):
+    def __init__(self):
+        super().__init__("Rampage", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target,
+                         lambda target: target.health != target.calculate_max_health() and target.spell_targetable())
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.change_attack(3)
+        self.target.increase_health(3)
+
+
+class ShieldBlock(Card):
+    def __init__(self):
+        super().__init__("Shield Block", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.increase_armor(5)
+        player.draw()
+
+
+class ShieldSlam(Card):
+    def __init__(self):
+        super().__init__("Shield Slam", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(player.effective_spell_damage(player.hero.armor), self)
+
+
+class Slam(Card):
+    def __init__(self):
+        super().__init__("Slam", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
+                         hsgame.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if self.target.health > player.effective_spell_damage(2) or self.target.divine_shield:
+            self.target.damage(player.effective_spell_damage(2), self)
+            player.draw()
+        else:
+            self.target.damage(player.effective_spell_damage(2), self)
+
+
+class Upgrade(Card):
+    def __init__(self):
+        super().__init__("Upgrade!", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.hero.weapon:
+            player.hero.weapon.durability += 1
+            player.hero.weapon.base_attack += 1
+        else:
+            class HeavyAxe(WeaponCard):
+                def __init__(self):
+                    super().__init__("Heavy Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.SPECIAL)
+
+                def create_weapon(self, player):
+                    return Weapon(1, 3)
+            heavy_axe = HeavyAxe().create_weapon(player)
+            heavy_axe.equip(player)
+
+
+class Whirlwind(Card):
+    def __init__(self):
+        super().__init__("Whirlwind", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(game.current_player.minions)
+        for minion in targets:
+            minion.damage(player.effective_spell_damage(1), self)

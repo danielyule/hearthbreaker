@@ -132,3 +132,28 @@ class LordJaraxxus(MinionCard):
             weapon.equip(player)
 
         return Minion(3, 15, MINION_TYPE.DEMON, battlecry=summon_jaraxxus)
+
+
+class VoidTerror(MinionCard):
+    def __init__(self):
+        super().__init__("Void Terror", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def consume_adjacent(m):
+            bonus_attack = 0
+            bonus_health = 0
+            if m.index > 0:
+                minion = m.player.minions[m.index - 1]
+                bonus_attack += minion.calculate_attack()
+                bonus_health += minion.health
+                minion.die(None)
+
+            if m.index < len(m.player.minions):
+                minion = m.player.minions[m.index]
+                bonus_attack += minion.calculate_attack()
+                bonus_health += minion.health
+                minion.die(None)
+
+            m.change_attack(bonus_attack)
+            m.increase_health(bonus_health)
+        return Minion(3, 3, MINION_TYPE.DEMON, battlecry=consume_adjacent)
