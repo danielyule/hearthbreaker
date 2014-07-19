@@ -2108,6 +2108,22 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())  # Buffed itself
         self.assertEqual(5, game.players[0].minions[1].health)
+
+    def test_LorewalkerCho(self):
+        game = generate_game_for(FreezingTrap, SinisterStrike, OneSpellTestingAgent, OneSpellTestingAgent)
+        cho = LorewalkerCho()
+        cho.summon(game.players[0], game, 0)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[0].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual("Sinister Strike", game.players[0].hand[4].name)
+
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual("Freezing Trap", game.players[0].hand[4].name)
 """
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,

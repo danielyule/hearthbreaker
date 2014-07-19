@@ -2329,6 +2329,23 @@ class GelbinMekkatorque(MinionCard):
             invention = invention_list[player.game.random(0, 3)]
             invention.summon(player, player.game, m.index + 1)
         return Minion(6, 6, battlecry=awesome_invention)
+
+
+class LorewalkerCho(MinionCard):
+    def __init__(self):
+        super().__init__("Lorewalker Cho", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def pass_spell(card):
+            if len(player.game.other_player.hand) < 10:
+                player.game.other_player.hand.append(card)
+
+        minion = Minion(0, 4)
+        player.game.current_player.bind("spell_cast", pass_spell)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("spell_cast", pass_spell))
+        player.game.other_player.bind("spell_cast", pass_spell)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("spell_cast", pass_spell))
+        return minion
 """
 class WildPyromancer(MinionCard):
     def __init__(self):

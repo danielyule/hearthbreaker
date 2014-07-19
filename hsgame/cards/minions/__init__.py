@@ -153,6 +153,7 @@ from hsgame.cards.minions.neutral import (
     OldMurkEye,
     Ysera,
     GelbinMekkatorque,
+    LorewalkerCho,
 )
 
 from hsgame.cards.minions.druid import (
