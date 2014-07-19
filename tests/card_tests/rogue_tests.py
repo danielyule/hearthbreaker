@@ -189,7 +189,7 @@ class TestRogue(unittest.TestCase):
         game.players[1].agent.choose_target = lambda targets: targets[len(targets) - 2]
 
         game.play_single_turn()  # Middle boar kills 2 edge boars
-        
+
         self.assertEqual(1, len(game.players[0].minions))
 
     def test_BladeFlurry(self):
@@ -341,7 +341,7 @@ class TestRogue(unittest.TestCase):
         game.players[0].max_mana = 10
         miracle = GadgetzanAuctioneer()
         miracle.summon(game.players[0], game, 0)
-        
+
         game.play_single_turn()
 
         self.assertEqual(24, game.players[1].hero.health)  # 3 Headcracks, 2nd 2 combo'd
