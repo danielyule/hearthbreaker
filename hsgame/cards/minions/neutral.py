@@ -2167,6 +2167,84 @@ class OldMurkEye(MinionCard):
         player.game.bind("minion_died", rip_murloc)
         minion.bind_once("silenced", lambda: player.game.unbind("minion_died", rip_murloc))
         return minion
+
+
+class Ysera(MinionCard):
+    def __init__(self):
+        super().__init__("Ysera", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def dream_card():
+            class Dream(Card):
+                def __init__(self):
+                    super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_minion_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    self.target.bounce()
+
+            class YseraAwakens(Card):
+                def __init__(self):
+                    super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    targets = copy.copy(game.other_player.minions)
+                    targets.extend(game.current_player.minions)
+                    targets.append(game.other_player.hero)
+                    targets.append(game.current_player.hero)
+                    for minion in targets:
+                        if isinstance(minion, Minion) and minion.card.name == "Ysera":
+                            targets.remove(minion)
+                    for minion in targets:
+                        minion.damage(player.effective_spell_damage(5), self)
+
+            class Nightmare(Card):
+                def __init__(self):
+                    super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_minion_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    self.target.change_attack(5)
+                    self.target.increase_health(5)
+
+                    def death():
+                        self.target.die(None)
+                        self.target.activate_delayed()
+
+                    player.bind("turn_started", death)
+                    self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
+
+            class PlayfulSister(MinionCard):
+                def __init__(self):
+                    super().__init__("Playful Sister", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def silence():
+                        minion.spell_targettable = lambda: True
+
+                    minion = Minion(3, 5)
+                    minion.spell_targettable = lambda: False
+                    minion.bind("silenced", silence)
+                    return minion
+
+            class EmeraldDrake(MinionCard):
+                def __init__(self):
+                    super().__init__("Emerald Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(7, 6, MINION_TYPE.DRAGON)
+            dream_card_list = [EmeraldDrake(), PlayfulSister(), Nightmare(), YseraAwakens(), Dream()]
+            if len(player.hand) < 10:
+                player.hand.append(dream_card_list[player.game.random(0, 4)])
+            else:
+                self.trigger("card_destroyed", dream_card_list[player.game.random(0, 4)])
+        minion = Minion(4, 12, MINION_TYPE.DRAGON)
+        player.bind("turn_ended", dream_card)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", dream_card))
+        return minion
 """
 class WildPyromancer(MinionCard):
     def __init__(self):

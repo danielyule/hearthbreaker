@@ -151,6 +151,7 @@ from hsgame.cards.minions.neutral import (
     MillhouseManastorm,
     PintSizedSummoner,
     OldMurkEye,
+    Ysera,
 )
 
 from hsgame.cards.minions.druid import (

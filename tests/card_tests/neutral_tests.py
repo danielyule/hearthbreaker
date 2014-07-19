@@ -1965,6 +1965,91 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+    def test_Ysera(self):
+        game = generate_game_for(Innervate, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        ysera = Ysera()
+        ysera.summon(game.players[0], game, 0)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Nightmare", game.players[0].hand[0].name)
+
+        game.play_single_turn()  # Nightmare my own Ysera
+        game.play_single_turn()
+
+        self.assertEqual(9, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(17, game.players[0].minions[0].health)
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        ysera.summon(game.players[0], game, 0)  # Backup Ysera strats
+
+        game.play_single_turn()  # 1st Ysera Dies to Nightmare, RIP
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Dream", game.players[0].hand[0].name)
+
+        game.play_single_turn()  # Bounce and replay Ysera
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Nightmare", game.players[0].hand[0].name)
+        game.players[0].discard()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        game.players[0].discard()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Nightmare", game.players[0].hand[0].name)
+        game.players[0].discard()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Nightmare", game.players[0].hand[0].name)
+        game.players[0].discard()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Ysera Awakens", game.players[0].hand[0].name)  # Finally, just 1 left
+        self.assertEqual(4, len(game.players[0].minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual("Emerald Drake", game.players[0].hand[0].name)  # Oh baby
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(12, game.players[0].minions[0].health)
+        self.assertEqual(25, game.players[0].hero.health)
+        self.assertEqual(25, game.players[1].hero.health)
+
+        game.play_single_turn()  # Play Emerald Drake and we are done
+
 """
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,
