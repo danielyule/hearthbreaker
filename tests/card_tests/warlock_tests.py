@@ -278,6 +278,9 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual('Doomguard', game.players[0].hand[5].name)
         self.assertEqual('Doomguard', game.players[0].hand[6].name)
 
+        for turn in range(0, 4):
+            game.play_single_turn()
+
     def test_SenseDemonsNoDemons(self):
         game = generate_game_for(SenseDemons, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         for turn in range(0, 4):

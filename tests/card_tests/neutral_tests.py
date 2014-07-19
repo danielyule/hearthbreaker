@@ -1290,7 +1290,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
 
     def test_BloodsailCorsair(self):
-        game = generate_game_for(BloodsailCorsair, LightsJustice, MinionPlayingAgent, MinionPlayingAgent)
+        game = generate_game_for(BloodsailCorsair, [LightsJustice, FieryWarAxe], SpellTestingAgent, MinionPlayingAgent)
         for turn in range(0, 2):
             game.play_single_turn()
 
@@ -1299,8 +1299,17 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(3, game.players[1].hero.weapon.durability)
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, game.players[1].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[1].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertIsNone(game.players[1].hero.weapon)
 
     def test_BloodsailRaider(self):
         game = generate_game_for([BloodsailRaider, LightsJustice], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
@@ -2049,6 +2058,14 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(25, game.players[1].hero.health)
 
         game.play_single_turn()  # Play Emerald Drake and we are done
+
+    def test_YseraOverload(self):
+        game = generate_game_for(MindControl, StonetuskBoar, DoNothingBot, DoNothingBot)
+        ysera = Ysera()
+        ysera.summon(game.players[0], game, 0)
+        ysera.summon(game.players[0], game, 1)
+        for turn in range(0, 5):
+            game.play_single_turn()
 
     def test_GelbinMekkaTwerk(self):
         game = generate_game_for([GelbinMekkatorque, TwistingNether], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)

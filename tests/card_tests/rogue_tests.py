@@ -179,6 +179,19 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertFalse(game.players[0].minions[0].immune)
 
+    def test_BetrayalMiddle(self):
+        game = generate_game_for(StonetuskBoar, Betrayal, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        game.players[1].agent.choose_target = lambda targets: targets[len(targets) - 2]
+
+        game.play_single_turn()  # Middle boar kills 2 edge boars
+        
+        self.assertEqual(1, len(game.players[0].minions))
+
     def test_BladeFlurry(self):
         game = generate_game_for(Shieldbearer, BladeFlurry, MinionPlayingAgent, PredictableBot)
 
@@ -322,6 +335,29 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(20, game.players[1].hero.health)
         self.assertEqual(5, len(game.players[0].hand))
+
+    def test_HeadcrackOverload(self):
+        game = generate_game_for(Headcrack, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game.players[0].max_mana = 10
+        miracle = GadgetzanAuctioneer()
+        miracle.summon(game.players[0], game, 0)
+        
+        game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)  # 3 Headcracks, 2nd 2 combo'd
+        self.assertEqual(6, len(game.players[0].hand))  # 6 = 4 - 3 Headcracks + 3 Auctioneer + 2 Headcrack
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(18, game.players[1].hero.health)  # 3 Headcracks, 2nd 2 combo'd
+        self.assertEqual(9, len(game.players[0].hand))  # 9 = 7 - 3 Headcracks + 3 Auctioneer + 2 Headcrack
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(12, game.players[1].hero.health)  # 3 Headcracks, 2nd 2 combo'd
+        self.assertEqual(10, len(game.players[0].hand))  # 12 = 10 - 3 Headcracks + 3 Auctioneer + 2 Headcrack
 
     def test_Preparation(self):
         game = generate_game_for([Preparation, BloodfenRaptor, Headcrack], StonetuskBoar, PredictableBot, DoNothingBot)
