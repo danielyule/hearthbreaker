@@ -146,7 +146,7 @@ yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion,Basic
 yes,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion,Basic
 yes,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
 yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Rare,Minion,Expert
-no,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
+yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
 yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Common,Minion,Basic
 yes,Goldshire Footman,Taunt,,,1,1,2,Common,Minion,Basic

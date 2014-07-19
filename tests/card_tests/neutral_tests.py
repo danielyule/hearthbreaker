@@ -2050,6 +2050,64 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()  # Play Emerald Drake and we are done
 
+    def test_GelbinMekkaTwerk(self):
+        game = generate_game_for([GelbinMekkatorque, TwistingNether], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        game.players[0].hero.health = 14
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Poultryizer", game.players[0].minions[1].card.name)  # Poly's at start of next turn
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Chicken", game.players[0].minions[0].card.name)  # Poly'd our Gelbin
+        self.assertEqual("Poultryizer", game.players[0].minions[1].card.name)
+
+        for turn in range(0, 5):
+            game.play_single_turn()  # Twisting to clear and replay Gelbin
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Homing Chicken", game.players[0].minions[1].card.name)
+        for i in range(0, 8):
+            game.players[0].discard()
+        self.assertEqual("Twisting Nether", game.players[0].hand[0].name)
+
+        game.play_single_turn()  # Homing Chicken explodes and you draw, then nether
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual("Gelbin Mekkatorque", game.players[0].hand[0].name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Repair Bot", game.players[0].minions[1].card.name)
+        self.assertEqual(20, game.players[0].hero.health)  # Healed damaged hero
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Poultryizer", game.players[0].minions[1].card.name)  # Try again
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Homing Chicken", game.players[0].minions[1].card.name)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Emboldener 3000", game.players[0].minions[1].card.name)  # Last one
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())  # Buffed itself
+        self.assertEqual(5, game.players[0].minions[1].health)
 """
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,

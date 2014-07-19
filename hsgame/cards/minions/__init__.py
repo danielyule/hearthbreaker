@@ -152,6 +152,7 @@ from hsgame.cards.minions.neutral import (
     PintSizedSummoner,
     OldMurkEye,
     Ysera,
+    GelbinMekkatorque,
 )
 
 from hsgame.cards.minions.druid import (
