@@ -20,7 +20,7 @@ Events Triggered in hssim
 
 ##Game
  * minion_added(new_minion)
- * minion_died(dead_minion)
+ * minion_died(dead_minion, killer)
  * kept_cards(card_array)
  * minion_removed(minion, player)
  * minion_healed

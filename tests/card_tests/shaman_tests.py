@@ -238,6 +238,22 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
+    def test_AncestralSpiritDeathrattle(self):
+        game = generate_game_for([LootHoarder, AncestralSpirit], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+
+        loot = game.players[0].minions[0]
+        loot.die(None)
+        loot.activate_delayed()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+
     def test_Bloodlust(self):
         game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, Bloodlust], StonetuskBoar,
                                  MinionAttackingAgent, DoNothingBot)

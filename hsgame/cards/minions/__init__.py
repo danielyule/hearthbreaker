@@ -143,6 +143,17 @@ from hsgame.cards.minions.neutral import (
     SeaGiant,
     MoltenGiant,
     MountainGiant,
+    DreadCorsair,
+    CaptainsParrot,
+    TinkmasterOverspark,
+    AlarmoBot,
+    EliteTaurenChieftain,
+    MillhouseManastorm,
+    PintSizedSummoner,
+    OldMurkEye,
+    Ysera,
+    GelbinMekkatorque,
+    LorewalkerCho,
 )
 
 from hsgame.cards.minions.druid import (
@@ -221,6 +232,7 @@ from hsgame.cards.minions.warlock import (
     SummoningPortal,
     BloodImp,
     LordJaraxxus,
+    VoidTerror
 )
 
 from hsgame.cards.minions.warrior import (

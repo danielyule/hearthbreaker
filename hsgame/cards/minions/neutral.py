@@ -655,7 +655,7 @@ class Abomination(MinionCard):
 
     def create_minion(self, player):
         def deal_two_to_all(minion):
-            for target in hsgame.targeting.find_spell_target(player.game, lambda x: True):
+            for target in hsgame.targeting.find_battlecry_target(player.game, lambda x: True):
                 target.damage(2, self)
 
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
@@ -957,7 +957,7 @@ class BloodKnight(MinionCard):
     def create_minion(self, player):
         def collect_divine_shields(minion):
             shields_stolen = 0
-            for target in hsgame.targeting.find_minion_spell_target(player.game, lambda m: m.divine_shield):
+            for target in hsgame.targeting.find_minion_battlecry_target(player.game, lambda m: m.divine_shield):
                 shields_stolen += 1
                 target.divine_shield = False
             for i in range(0, shields_stolen):
@@ -1924,3 +1924,460 @@ class SeaGiant(MinionCard):
         if cost < 0:
             return 0
         return cost
+
+
+class DreadCorsair(MinionCard):
+    def __init__(self):
+        super().__init__("Dread Corsair", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(3, 3, MINION_TYPE.PIRATE, taunt=True)
+
+    def mana_cost(self, player):
+        if player.hero.weapon:
+            cost = super().mana_cost(player) - player.hero.weapon.base_attack
+        else:
+            return 4
+        if cost < 0:
+            return 0
+        return cost
+
+
+class CaptainsParrot(MinionCard):
+    def __init__(self):
+        super().__init__("Captain's Parrot", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        def draw_pirate(m):
+            minions = []
+            pirate_list = ["Bloodsail Corsair", "Bloodsail Raider", "Captain Greenskin",
+                           "Dread Corsair", "Southsea Captain", "Southsea Deckhand"]
+            for i in range(0, 30):
+                if not m.player.deck.used[i] and pirate_list.count(m.player.deck.cards[i].name) == 1:
+                    minions.append(i)
+            if len(minions) > 0:
+                index = minions.pop(player.game.random(0, len(minions) - 1))
+                m.player.deck.used[index] = True
+                m.player.deck.left -= 1
+                m.player.hand.append(m.player.deck.cards[index])
+                self.trigger("card_drawn", m.player.deck.cards[index])
+
+        return Minion(1, 1, MINION_TYPE.BEAST, battlecry=draw_pirate)
+
+
+class TinkmasterOverspark(MinionCard):
+    def __init__(self):
+        super().__init__("Tinkmaster Overspark", 3, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def transform_random(m):
+            class Squirrel(MinionCard):
+                def __init__(self):
+                    super().__init__("Squirrel", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.BEAST)
+
+            class Devilsaur(MinionCard):
+                def __init__(self):
+                    super().__init__("Devilsaur", 5, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(5, 5, MINION_TYPE.BEAST)
+
+            squirrel = Squirrel()
+            devilsaur = Devilsaur()
+            targets = copy.copy(player.game.other_player.minions)
+            targets.extend(player.game.current_player.minions)
+            if len(targets) > 0:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                if player.game.random(0, 1) == 1:
+                    minion = squirrel.create_minion(None)
+                    minion.card = squirrel
+                    target.replace(minion)
+                else:
+                    minion = devilsaur.create_minion(None)
+                    minion.card = devilsaur
+                    target.replace(minion)
+
+        return Minion(3, 3, battlecry=transform_random)
+
+
+class AlarmoBot(MinionCard):
+    def __init__(self):
+        super().__init__("Alarm-o-Bot", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def swap_with_hand():
+            swap_targets = []
+            for i in range(0, len(player.hand)):
+                if isinstance(player.hand[i], MinionCard):
+                    swap_targets.append(player.hand[i])
+            if len(swap_targets) > 0:
+                swap_target = swap_targets[player.game.random(0, len(swap_targets) - 1)]
+                index = minion.index
+                minion.bounce()
+                player.hand.remove(swap_target)
+                swap_target.summon(player, player.game, index)
+
+        minion = Minion(0, 3)
+        player.bind("turn_started", swap_with_hand)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", swap_with_hand))
+        return minion
+
+
+class EliteTaurenChieftain(MinionCard):
+    def __init__(self):
+        super().__init__("Elite Tauren Chieftain", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def both_may_rock(m):
+            class IAmMurloc(Card):
+                def __init__(self):
+                    super().__init__("I Am Murloc", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def use(self, player, game):
+                    super().use(player, game)
+
+                    class Murloc(MinionCard):
+                        def __init__(self):
+                            super().__init__("Murloc", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                        def create_minion(self, p):
+                            return Minion(1, 1, MINION_TYPE.MURLOC)
+
+                    for i in range(0, player.game.random(3, 5)):
+                        Murloc().summon(player, player.game, len(player.minions))
+
+            class PowerOfTheHorde(Card):
+                def __init__(self):
+                    super().__init__("Power of the Horde", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def use(self, player, game):
+                    super().use(player, game)
+
+                    horde_list = [FrostwolfGrunt(), TaurenWarrior(), ThrallmarFarseer(),
+                                  SilvermoonGuardian(), SenjinShieldmasta(), CairneBloodhoof()]
+                    horde_summon = horde_list[player.game.random(0, 5)]
+                    horde_summon.summon(player, player.game, len(player.minions))
+
+            class RoguesDoIt(Card):
+                def __init__(self):
+                    super().__init__("Rogues Do It...", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+
+                    self.target.damage(player.effective_spell_damage(4), self)
+                    player.draw()
+
+            etc_card_list = [IAmMurloc(), PowerOfTheHorde(), RoguesDoIt()]
+            for p in player.game.players:
+                if len(p.hand) < 10:
+                    p.hand.append(etc_card_list[player.game.random(0, 2)])
+                else:
+                    self.trigger("card_destroyed", etc_card_list[player.game.random(0, 2)])
+
+        return Minion(5, 5, battlecry=both_may_rock)
+
+
+class MillhouseManastorm(MinionCard):
+    def __init__(self):
+        super().__init__("Millhouse Manastorm", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def free_spells(m):
+            class Filter:
+                def __init__(self):
+                    self.amount = 10
+                    self.filter = lambda c: c.is_spell()
+                    self.min = 0
+
+            free = Filter()
+
+            def start_free_spells():
+                player.game.other_player.mana_filters.append(free)
+
+            def end_free_spells():
+                player.game.other_player.mana_filters.remove(free)
+
+            player.game.other_player.bind_once("turn_started", start_free_spells)
+            player.game.other_player.bind_once("turn_ended", end_free_spells)
+
+        return Minion(4, 4, battlecry=free_spells)
+
+
+class PintSizedSummoner(MinionCard):
+    def __init__(self):
+        super().__init__("Pint-Sized Summoner", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def lesser_discount(m):
+            class Filter:
+                def __init__(self):
+                    self.amount = 1
+                    self.filter = lambda c: isinstance(c, MinionCard)
+                    self.min = 0
+
+            lesser = Filter()
+
+            def start_discounted_minion():
+                player.mana_filters.append(lesser)
+
+            def end_discounted_minion(m):
+                player.mana_filters.remove(lesser)
+
+            def subbind():
+                player.bind_once("minion_played", end_discounted_minion)
+
+            player.bind("turn_started", start_discounted_minion)
+            player.bind("turn_started", subbind)
+            m.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
+            m.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
+        return Minion(2, 2, battlecry=lesser_discount)
+
+
+class OldMurkEye(MinionCard):
+    def __init__(self):
+        super().__init__("Old Murk-Eye", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def set_base_attack(m):
+            targets = copy.copy(player.game.current_player.minions)
+            targets.extend(player.game.other_player.minions)
+            for target in targets:
+                if target.minion_type is MINION_TYPE.MURLOC:
+                    minion.change_attack(1)
+
+        def check_murloc(m):
+            if m is not minion and m.minion_type is MINION_TYPE.MURLOC:
+                minion.change_attack(1)
+
+        def rip_murloc(m, by):
+            if m is not minion and m.minion_type is MINION_TYPE.MURLOC:
+                minion.change_attack(-1)
+
+        minion = Minion(2, 4, MINION_TYPE.MURLOC, battlecry=set_base_attack)
+        minion.charge = True
+        player.game.current_player.bind("minion_played", check_murloc)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_played", check_murloc))
+        player.game.other_player.bind("minion_played", check_murloc)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_played", check_murloc))
+        player.game.bind("minion_died", rip_murloc)
+        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", rip_murloc))
+        return minion
+
+
+class Ysera(MinionCard):
+    def __init__(self):
+        super().__init__("Ysera", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def dream_card():
+            class Dream(Card):
+                def __init__(self):
+                    super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_minion_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    self.target.bounce()
+
+            class YseraAwakens(Card):
+                def __init__(self):
+                    super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    targets = copy.copy(player.game.other_player.minions)
+                    targets.extend(player.game.current_player.minions)
+                    targets.append(player.game.other_player.hero)
+                    targets.append(player.game.current_player.hero)
+                    for minion in targets:
+                        if isinstance(minion, Minion) and minion.card.name == "Ysera":
+                            targets.remove(minion)
+                    for minion in targets:
+                        minion.damage(player.effective_spell_damage(5), self)
+
+            class Nightmare(Card):
+                def __init__(self):
+                    super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                                     hsgame.targeting.find_minion_spell_target)
+
+                def use(self, player, game):
+                    super().use(player, game)
+                    self.target.change_attack(5)
+                    self.target.increase_health(5)
+
+                    def death():
+                        self.target.die(None)
+                        self.target.activate_delayed()
+
+                    player.bind("turn_started", death)
+                    self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
+
+            class PlayfulSister(MinionCard):
+                def __init__(self):
+                    super().__init__("Playful Sister", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def silence():
+                        minion.spell_targettable = lambda: True
+
+                    minion = Minion(3, 5)
+                    minion.spell_targettable = lambda: False
+                    minion.bind("silenced", silence)
+                    return minion
+
+            class EmeraldDrake(MinionCard):
+                def __init__(self):
+                    super().__init__("Emerald Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(7, 6, MINION_TYPE.DRAGON)
+            dream_card_list = [EmeraldDrake(), PlayfulSister(), Nightmare(), YseraAwakens(), Dream()]
+            if len(player.hand) < 10:
+                player.hand.append(dream_card_list[player.game.random(0, 4)])
+            else:
+                self.trigger("card_destroyed", dream_card_list[player.game.random(0, 4)])
+        minion = Minion(4, 12, MINION_TYPE.DRAGON)
+        player.bind("turn_ended", dream_card)
+        minion.bind_once("silenced", lambda: player.unbind("turn_ended", dream_card))
+        return minion
+
+
+class GelbinMekkatorque(MinionCard):
+    def __init__(self):
+        super().__init__("Gelbin Mekkatorque", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def awesome_invention(m):
+            class Emboldener3000(MinionCard):
+                def __init__(self):
+                    super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def random_buff():
+                        targets = copy.copy(player.game.other_player.minions)
+                        targets.extend(player.game.current_player.minions)
+                        target = targets[player.game.random(0, len(targets) - 1)]
+                        target.change_attack(1)
+                        target.increase_health(1)
+                    minion = Minion(0, 4)
+                    player.bind("turn_ended", random_buff)
+                    minion.bind_once("silenced", lambda: player.unbind("turn_ended", random_buff))
+                    return minion
+
+            class HomingChicken(MinionCard):
+                def __init__(self):
+                    super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def death_draw():
+                        minion.die(None)
+                        for i in range(0, 3):
+                            player.draw()
+                    minion = Minion(0, 1)
+                    player.bind("turn_started", death_draw)
+                    minion.bind_once("silenced", lambda: player.unbind("turn_started", death_draw))
+                    return minion
+
+            class Poultryizer(MinionCard):
+                def __init__(self):
+                    super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def poultrymorph():
+                        targets = copy.copy(player.game.other_player.minions)
+                        targets.extend(player.game.current_player.minions)
+                        target = targets[player.game.random(0, len(targets) - 1)]
+
+                        class Chicken(MinionCard):
+                            def __init__(self):
+                                super().__init__("Chicken", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                            def create_minion(self, p):
+                                return Minion(1, 1, MINION_TYPE.BEAST)
+
+                        chicken = Chicken()
+                        minion = chicken.create_minion(None)
+                        minion.card = chicken
+                        target.replace(minion)
+                    minion = Minion(0, 3)
+                    player.bind("turn_started", poultrymorph)
+                    minion.bind_once("silenced", lambda: player.unbind("turn_started", poultrymorph))
+                    return minion
+
+            class RepairBot(MinionCard):
+                def __init__(self):
+                    super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    def repair():
+                        targets = []
+                        for m in hsgame.targeting.find_spell_target(player.game,
+                                                                    lambda x: x.health != x.calculate_max_health()):
+                            targets.append(m)
+                        repairee = targets[player.game.random(0, len(targets) - 1)]
+                        repairee.heal(6, self)
+                    minion = Minion(0, 3)
+                    player.bind("turn_ended", repair)
+                    minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
+                    return minion
+            invention_list = [Emboldener3000(), HomingChicken(), Poultryizer(), RepairBot()]
+            invention = invention_list[player.game.random(0, 3)]
+            invention.summon(player, player.game, m.index + 1)
+        return Minion(6, 6, battlecry=awesome_invention)
+
+
+class LorewalkerCho(MinionCard):
+    def __init__(self):
+        super().__init__("Lorewalker Cho", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def pass_spell(card):
+            if len(player.game.other_player.hand) < 10:
+                player.game.other_player.hand.append(card)
+
+        minion = Minion(0, 4)
+        player.game.current_player.bind("spell_cast", pass_spell)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("spell_cast", pass_spell))
+        player.game.other_player.bind("spell_cast", pass_spell)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("spell_cast", pass_spell))
+        return minion
+"""
+class WildPyromancer(MinionCard):
+    def __init__(self):
+        super().__init__("Wild Pyromancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def one_damage_to_all_minions(card):
+            targets = copy.copy(player.game.other_player.minions)
+            targets.extend(player.game.current_player.minions)
+            for minion in targets:
+                minion.damage(1, None)
+        minion = Minion(3, 2)
+        player.bind("spell_resolved", one_damage_to_all_minions)  # This activates before the spell, not after
+        minion.bind_once("silenced", lambda: player.unbind("spell_resolved", one_damage_to_all_minions))
+        return minion
+
+
+class FacelessManipulator(MinionCard):
+    def __init__(self):
+        super().__init__("Faceless Manipulator", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         hsgame.targeting.find_minion_battlecry_target)
+
+    def create_minion(self, player):
+        def dummy(m):
+            if m.card.target is None:  # Just debugging things
+                self.taunt = True
+        targets = copy.copy(player.game.current_player.minions)
+        targets.extend(player.game.other_player.minions)
+        if len(targets) > 0:
+            blank = targets.pop()  # This started out a lot more reasonable
+            blank.battlecry = dummy  # and just went downhill as reasonable things didn't work
+            return self.target
+        else:
+            return Minion(3, 3, battlecry=dummy)
+"""
