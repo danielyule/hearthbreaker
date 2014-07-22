@@ -657,6 +657,7 @@ class Abomination(MinionCard):
         def deal_two_to_all(minion):
             for target in hsgame.targeting.find_battlecry_target(player.game, lambda x: True):
                 target.damage(2, self)
+                player.game.check_delayed()
 
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
 
@@ -1164,7 +1165,7 @@ class StampedingKodo(MinionCard):
                                                                           lambda x: x.calculate_attack() <= 2)
             target = targets[player.game.random(0, len(targets) - 1)]
             target.die(None)
-            target.activate_delayed()
+            player.game.check_delayed()
 
         return Minion(3, 5, MINION_TYPE.BEAST, battlecry=random_destroy)
 
@@ -1267,7 +1268,7 @@ class ImpMaster(MinionCard):
                     return Minion(1, 1, MINION_TYPE.DEMON)
 
             minion.damage(1, None)
-            minion.activate_delayed()
+            player.game.check_delayed()
             Imp().summon(player, player.game, minion.index + 1)
         minion = Minion(1, 5)
         player.bind("turn_ended", summon_imp)
@@ -2225,7 +2226,7 @@ class Ysera(MinionCard):
 
                     def death():
                         self.target.die(None)
-                        self.target.activate_delayed()
+                        game.check_delayed()
 
                     player.bind("turn_started", death)
                     self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))

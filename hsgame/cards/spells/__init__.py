@@ -163,6 +163,7 @@ from hsgame.cards.spells.warrior import (
     Brawl,
     Charge,
     Cleave,
+    CommandingShout,
     Execute,
     HeroicStrike,
     InnerRage,

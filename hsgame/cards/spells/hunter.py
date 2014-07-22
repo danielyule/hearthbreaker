@@ -97,8 +97,7 @@ class ExplosiveTrap(SecretCard):
         enemies.append(minion.game.current_player.hero)
         for enemy in enemies:
             enemy.damage(2, None)
-        for enemy in enemies:
-            enemy.activate_delayed()
+        minion.game.check_delayed()
         super().reveal()
 
 
@@ -179,7 +178,7 @@ class DeadlyShot(Card):
         targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
         target = targets[player.game.random(0, len(targets) - 1)]
         target.die(None)
-        target.activate_delayed()
+        game.check_delayed()
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1

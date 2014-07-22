@@ -286,9 +286,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
         self.damage(target.calculate_attack(), target)
         target.damage(my_attack, self)
-        target.activate_delayed()
-
-        self.activate_delayed()
+        self.player.game.check_delayed()
         self.trigger("attack_completed")
         if self.windfury and not self.used_windfury:
             self.used_windfury = True
@@ -881,7 +879,7 @@ class Minion(Character):
             self.player.hand.append(self.card)
         else:
             self.die(None)
-            self.activate_delayed()
+            self.game.check_delayed()
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
@@ -1153,6 +1151,12 @@ class Game(Bindable):
         self.players[0].hero.bind("died", self.game_over)
         self.players[1].hero.bind("died", self.game_over)
 
+    def check_delayed(self):
+        for minion in self.delayed_minions:
+            minion.activate_delayed()
+
+        self.delayed_minions = []
+
     def pre_game(self):
         card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
         self.trigger("kept_cards", self.players[0].hand, card_keep_index)
@@ -1263,8 +1267,7 @@ class Game(Bindable):
             card.use(self.current_player, self)
             self.current_player.trigger("card_used", card)
             self.current_player.cards_played += 1
-            for minion in self.delayed_minions:
-                minion.activate_delayed()
+            self.check_delayed()
 
             self.delayed_minions = []
 

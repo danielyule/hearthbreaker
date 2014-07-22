@@ -73,7 +73,7 @@ yes,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Common,Spell,
 yes,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Common,Spell,Expert
 yes,Coldlight Oracle,Battlecry: Each player draws 2 cards.,Murloc,,3,2,2,Rare,Minion,Expert
 yes,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Rare,Minion,Expert
-no,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Rare,Spell,Expert
+yes,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Rare,Spell,Expert
 yes,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Common,Spell,Expert
 yes,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Common,Spell,Expert
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Common,Spell,Basic

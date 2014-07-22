@@ -360,3 +360,13 @@ class TestWarrior(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(4, game.players[0].hero.health)
+
+    def test_CommandingShout(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar,
+                                  StonetuskBoar, StonetuskBoar, CommandingShout], Abomination,
+                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
