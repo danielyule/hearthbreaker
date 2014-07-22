@@ -2125,29 +2125,30 @@ class PintSizedSummoner(MinionCard):
         super().__init__("Pint-Sized Summoner", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def lesser_discount(m):
-            class Filter:
-                def __init__(self):
-                    self.amount = 1
-                    self.filter = lambda c: isinstance(c, MinionCard)
-                    self.min = 0
+        class Filter:
+            def __init__(self):
+                self.amount = 1
+                self.filter = lambda c: isinstance(c, MinionCard)
+                self.min = 0
 
-            lesser = Filter()
+        lesser = Filter()
 
-            def start_discounted_minion():
-                player.mana_filters.append(lesser)
+        def start_discounted_minion():
+            player.mana_filters.append(lesser)
 
-            def end_discounted_minion(m):
-                player.mana_filters.remove(lesser)
+        def end_discounted_minion(m):
+            player.mana_filters.remove(lesser)
 
-            def subbind():
-                player.bind_once("minion_played", end_discounted_minion)
+        def subbind():
+            player.bind_once("minion_played", end_discounted_minion)
+            minion.bind_once("silenced", lambda: player.unbind("minion_played", end_discounted_minion))
 
-            player.bind("turn_started", start_discounted_minion)
-            player.bind("turn_started", subbind)
-            m.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
-            m.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
-        return Minion(2, 2, battlecry=lesser_discount)
+        minion = Minion(2, 2)
+        player.bind("turn_started", start_discounted_minion)
+        player.bind("turn_started", subbind)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
+        return minion
 
 
 class OldMurkEye(MinionCard):
@@ -2352,7 +2353,8 @@ class LorewalkerCho(MinionCard):
     def create_minion(self, player):
         def pass_spell(card):
             if len(player.game.other_player.hand) < 10:
-                player.game.other_player.hand.append(card)
+                card_type = type(card)
+                player.game.other_player.hand.append(card_type())
 
         minion = Minion(0, 4)
         player.game.current_player.bind("spell_cast", pass_spell)
