@@ -74,6 +74,7 @@ class CommandingShout(Card):
 
     def use(self, player, game):
         super().use(player, game)
+
         def create_effect(minion):
             def keep_above_one():
                 if minion.health < 0:
