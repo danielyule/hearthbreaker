@@ -369,6 +369,19 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
+    def test_RedemptionEnemy(self):
+        game = generate_game_for([Redemption, Whirlwind], StonetuskBoar, SpellTestingAgent, PredictableBot)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].secrets))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].secrets))
+
     def test_Repentance(self):
         game = generate_game_for(Repentance, TwilightDrake, SpellTestingAgent, MinionPlayingAgent)
 
@@ -386,6 +399,14 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
         self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_RepentanceSelf(self):
+        game = generate_game_for([Repentance, BluegillWarrior], TwilightDrake, SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual(1, len(game.players[0].minions))
 
     def test_LightsJustice(self):
         game = generate_game_for(LightsJustice, StonetuskBoar, PredictableBot, DoNothingBot)
@@ -431,7 +452,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
 
     def test_TruesilverChampion(self):
-        game = generate_game_for(TruesilverChampion, StonetuskBoar, PredictableAgentWithoutHeroPower,
+        game = generate_game_for([TruesilverChampion, MindControl], StonetuskBoar, PredictableAgentWithoutHeroPower,
                                  MinionPlayingAgent)
 
         for turn in range(0, 6):
@@ -443,6 +464,9 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.weapon.base_attack)
         self.assertEqual(1, game.players[0].hero.weapon.durability)
         self.assertEqual(21, game.players[0].hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()  # Attacks, breaking the Truesilver
 
     def test_TirionFordring(self):
         game = generate_game_for(TirionFordring, StonetuskBoar, MinionPlayingAgent, DoNothingBot)

@@ -1,8 +1,9 @@
 import random
 import unittest
 from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.testing_agents.testing_agents import SpellTestingAgent
 from hsgame.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
-    DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith
+    DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith, MassDispel
 from tests.testing_utils import generate_game_for
 
 
@@ -67,7 +68,7 @@ class TestPowers(unittest.TestCase):
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_ShamanPower(self):
-        game = generate_game_for(AlAkirTheWindlord, MogushanWarden, PredictableBot, DoNothingBot)
+        game = generate_game_for(AlAkirTheWindlord, MassDispel, PredictableBot, SpellTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()

@@ -295,3 +295,28 @@ class AnimalCompanion(Card):
         beast_list = [Huffer(), Misha(), Leokk()]
         card = beast_list[player.game.random(0, 2)]
         card.summon(player, player.game, len(player.minions))
+
+"""
+class SnakeTrap(SecretCard):
+    def __init__(self):
+        super().__init__("Snake Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
+
+    def activate(self, player):
+        player.bind_once("attacking", self._reveal)
+
+    def deactivate(self, player):
+        player.unbind("attacking", self._reveal)
+
+    def _reveal(self, target):
+        if isinstance(target, Minion):
+            class Snake(MinionCard):
+                def __init__(self):
+                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1, MINION_TYPE.BEAST)
+            snake = Snake()
+            for i in range(0, 3):
+                snake.summon(player, player.game, len(player.minions))
+            super().reveal()
+"""

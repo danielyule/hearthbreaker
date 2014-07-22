@@ -1,6 +1,6 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
+from hsgame.agents.basic_agents import DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
@@ -136,19 +136,20 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.hand))
 
     def test_EaglehornBow(self):
-        game = generate_game_for(EaglehornBow, EyeForAnEye, PredictableBot, SpellTestingAgent)
+        game = generate_game_for([Snipe, EaglehornBow], StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 MinionPlayingAgent)
 
         for turn in range(0, 9):
             game.play_single_turn()
 
-        self.assertEqual(2, game.current_player.hero.weapon.durability)
-        self.assertEqual(3, game.current_player.hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
 
-        game.play_single_turn()
+        # Snipe should trigger, granting our weapon +1 durability
         game.play_single_turn()
 
-        self.assertEqual(2, game.current_player.hero.weapon.durability)
-        self.assertEqual(3, game.current_player.hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
 
     def test_GladiatorsLongbow(self):
         game = generate_game_for(GladiatorsLongbow, WaterElemental, WeaponTestingAgent,
@@ -489,3 +490,21 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
+
+"""
+    def test_SnakeTrap(self):
+        game = generate_game_for([SnakeTrap, IronfurGrizzly], BluegillWarrior,
+                                 SpellTestingAgent, PredictableAgentWithoutHeroPower)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].secrets))
+
+        game.play_single_turn()
+
+        #self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(0, len(game.players[0].secrets))
+"""

@@ -278,6 +278,9 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual('Doomguard', game.players[0].hand[5].name)
         self.assertEqual('Doomguard', game.players[0].hand[6].name)
 
+        for turn in range(0, 4):
+            game.play_single_turn()
+
     def test_SenseDemonsNoDemons(self):
         game = generate_game_for(SenseDemons, StonetuskBoar, SpellTestingAgent, DoNothingBot)
         for turn in range(0, 4):
@@ -447,3 +450,21 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(8, game.current_player.mana)
         self.assertEqual(24, game.other_player.hero.health)
+
+    def test_VoidTerror(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, VoidTerror], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        def _choose_index(card):
+            return 1
+        game.players[0].agent.choose_index = _choose_index
+
+        self.assertEqual(2, len(game.players[0].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)

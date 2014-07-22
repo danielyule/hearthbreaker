@@ -18,3 +18,8 @@ from hsgame.cards.weapons.shaman import (
     Doomhammer,
     StormforgedAxe
 )
+
+from hsgame.cards.weapons.warrior import (
+    FieryWarAxe,
+    ArcaniteReaper,
+)
