@@ -501,7 +501,6 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
 
-
     def test_SnakeTrap(self):
         game = generate_game_for([SnakeTrap, IronfurGrizzly], BluegillWarrior,
                                  SpellTestingAgent, PredictableAgentWithoutHeroPower)
@@ -517,4 +516,3 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(0, len(game.players[0].secrets))
-
