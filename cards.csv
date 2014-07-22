@@ -150,7 +150,7 @@ yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
 yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Common,Minion,Basic
 yes,Goldshire Footman,Taunt,,,1,1,2,Common,Minion,Basic
-no,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Epic,Weapon,Expert
+yes,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Epic,Weapon,Expert
 yes,Grimscale Oracle,ALL other Murlocs have +1 Attack.,Murloc,,1,1,1,Common,Minion,Basic
 yes,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Legendary,Minion,Expert
 yes,Gruul,"At the end of each turn, gain +1/+1 .",,,8,7,7,Legendary,Minion,Expert

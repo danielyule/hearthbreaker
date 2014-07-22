@@ -279,7 +279,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.player.trigger("pre_attack", self)
         target = self.choose_target(targets)
         self.player.trigger("attack", self, target)
-        self.trigger("attack", self)
+        self.trigger("attack", target)
         target.trigger("attacked", self)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
