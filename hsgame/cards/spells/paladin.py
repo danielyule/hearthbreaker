@@ -63,8 +63,9 @@ class BlessingOfWisdom(Card):
             player.draw()
 
         super().use(player, game)
-        self.target.bind("attack", draw, self.target)
-        self.target.bind_once("silenced", lambda minion: minion.unbind("attack", draw), self.target)
+        target = self.target
+        target.bind("attack", draw)
+        target.bind_once("silenced", lambda: target.unbind("attack", draw))
 
 
 class Consecration(Card):
@@ -242,24 +243,22 @@ class Redemption(SecretCard):
         super().__init__("Redemption", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, minion, by, player):
-        if minion.player is player:
-            resurrection = minion.card.create_minion(player)
-            resurrection.index = len(player.minions)
-            resurrection.health = 1
-            resurrection.player = player
-            resurrection.game = player.game
-            player.minions.append(resurrection)
-            player.game.trigger("minion_added", resurrection)
-            super().reveal()
-        else:
-            self.activate(player)
+    def _reveal(self, minion, by):
+        player = minion.player
+        resurrection = minion.card.create_minion(player)
+        resurrection.index = len(player.minions)
+        resurrection.health = 1
+        resurrection.player = player
+        resurrection.game = player.game
+        player.minions.append(resurrection)
+        player.game.trigger("minion_added", resurrection)
+        super().reveal()
 
     def activate(self, player):
-        player.game.bind_once("minion_died", self._reveal, player)
+        player.bind_once("minion_died", self._reveal)
 
     def deactivate(self, player):
-        player.game.unbind("minion_died", self._reveal)
+        player.unbind("minion_died", self._reveal)
 
 
 class Repentance(SecretCard):

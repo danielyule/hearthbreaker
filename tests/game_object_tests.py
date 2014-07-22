@@ -157,13 +157,3 @@ class TestBinding(unittest.TestCase):
         binder.trigger("test")
         event.assert_called_once_with(1, 5, 6)
         self.assertEqual(event2.call_count, 2)
-
-    def test_bind_with_different_args(self):
-        event = mock.Mock()
-        event2 = mock.Mock()
-        binder = Bindable()
-        binder.bind("test", event, 5)
-        binder.bind("test", event2)
-        binder.trigger("test")
-        event.assert_called_with(5)
-        event2.assert_called_with()

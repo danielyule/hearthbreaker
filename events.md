@@ -14,6 +14,7 @@ Events Triggered in hssim
  * minion_played(minion)
  * minion_summoned(minion)
  * after_minion_added(minion)
+ * minion_died(dead_minion, killer)
  * turn_started
  * turn_ended
  * attacking(attacker)
@@ -22,7 +23,6 @@ Events Triggered in hssim
  * attack(attacker, target)
 
 ##Game
- * minion_died(dead_minion, killer)
  * kept_cards(card_array)
  * minion_removed(minion, player)
  * minion_healed

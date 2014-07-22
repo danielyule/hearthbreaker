@@ -105,23 +105,18 @@ class Bindable:
         """
         self.events = {}
 
-    def bind(self, event, function, *args):
+    def bind(self, event, function):
         """
         Bind a function to an event.  Each time the event is triggered, the function will be called.
 
-        Any parameters passed to this method will be appended to the paramters passed to the trigger function
-        and passed to the bound function.
-
-        :param event str: The event to bind a function to
+        :param string event: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param list args: Any other parameters to be called
         :see: :class:`Bindable`
         """
 
         class Handler:
             def __init__(self):
-                self.args = args
                 self.function = function
                 self.remove = False
                 self.active = False
@@ -131,24 +126,19 @@ class Bindable:
 
         self.events[event].append(Handler())
 
-    def bind_once(self, event, function, *args):
+    def bind_once(self, event, function):
         """
         Bind a function to an event.  This function will only be called the next time the event is triggered, and
         then ignored.
 
-        Any parameters passed to this method will be appended to the paramters passed to the trigger function
-        and passed to the bound function.
-
-        :param event str: The event to bind a function to
+        :param string event: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param args: Any other parameters to be called
         :see: :class:`Bindable`
         """
 
         class Handler:
             def __init__(self):
-                self.args = args
                 self.function = function
                 self.remove = True
                 self.active = False
@@ -165,15 +155,14 @@ class Bindable:
         The parameters passed to this function as `args` will be passed along to the bound functions.
 
         :param string event: The name of the event to trigger
-        :param list args: The remaining arguments to pass to the bound function
+        :param list args: The arguments to pass to the bound function
         :see: :class:`Bindable`
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
                 if not handler.active:
-                    pass_args = args + handler.args
                     handler.active = True
-                    handler.function(*pass_args)
+                    handler.function(*args)
                     handler.active = False
                     if handler.remove:
                         self.events[event].remove(handler)
@@ -335,7 +324,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         Set up a delayed trigger for an event.  Any events triggered with this method will not be called until
         :meth:`activate_delayed` is called.
 
-        The purpose of this method is to allow for simeltaneous events.  For example, if a minion is attacked
+        The purpose of this method is to allow for simultaneous events.  For example, if a minion is attacked
         then any damage events should be triggered after the attack, and at the same time as each other.
 
         :param string event: The event to set up a delayed trigger for
@@ -811,7 +800,7 @@ class Minion(Character):
             super().die(by)
             if deathrattle is not None:
                 deathrattle(self)
-            self.game.trigger("minion_died", self, by)
+            self.player.trigger("minion_died", self, by)
             self.removed = True
 
     def can_attack(self):

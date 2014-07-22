@@ -100,11 +100,11 @@ class ScavengingHyena(MinionCard):
 
     def create_minion(self, player):
         def hyena_grow(m, by):
-            if m is not minion and m.player is minion.player and m.minion_type is MINION_TYPE.BEAST:
+            if m is not minion and m.minion_type is MINION_TYPE.BEAST:
                 minion.change_attack(2)
                 minion.increase_health(1)
 
         minion = Minion(2, 2, MINION_TYPE.BEAST)
-        player.game.bind("minion_died", hyena_grow)
+        player.bind("minion_died", hyena_grow)
         minion.bind_once("silenced", lambda: player.game.unbind("minion_died", hyena_grow))
         return minion

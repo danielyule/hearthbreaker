@@ -1640,12 +1640,12 @@ class CultMaster(MinionCard):
 
     def create_minion(self, player):
         def cult_draw(m, by):
-            if m is not minion and m.player is minion.player:
+            if m is not minion:
                 m.player.draw()
 
         minion = Minion(4, 2)
-        player.game.bind("minion_died", cult_draw)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", cult_draw))
+        player.bind("minion_died", cult_draw)
+        minion.bind_once("silenced", lambda: player.unbind("minion_died", cult_draw))
         return minion
 
 
@@ -1733,8 +1733,10 @@ class FlesheatingGhoul(MinionCard):
                 minion.change_attack(1)
 
         minion = Minion(2, 3)
-        player.game.bind("minion_died", ghoul_grow)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", ghoul_grow))
+        player.game.players[0].bind("minion_died", ghoul_grow)
+        minion.bind_once("silenced", lambda: player.game.players[0].unbind("minion_died", ghoul_grow))
+        player.game.players[1].bind("minion_died", ghoul_grow)
+        minion.bind_once("silenced", lambda: player.game.players[1].unbind("minion_died", ghoul_grow))
         return minion
 
 
@@ -2173,8 +2175,10 @@ class OldMurkEye(MinionCard):
         minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_played", check_murloc))
         player.game.other_player.bind("minion_played", check_murloc)
         minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_played", check_murloc))
-        player.game.bind("minion_died", rip_murloc)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", rip_murloc))
+        player.game.current_player.bind("minion_died", rip_murloc)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_died", rip_murloc))
+        player.game.other_player.bind("minion_died", rip_murloc)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_died", rip_murloc))
         return minion
 
 
