@@ -12,10 +12,8 @@ class EaglehornBow(WeaponCard):
             weapon.durability += 1
 
         weapon = Weapon(3, 2)
-        player.game.players[0].bind("secret_revealed", increase_durability)
-        player.game.players[1].bind("secret_revealed", increase_durability)
-        weapon.bind_once("destroyed", lambda: player.game.players[0].unbind("secret_revealed", increase_durability))
-        weapon.bind_once("destroyed", lambda: player.game.players[1].unbind("secret_revealed", increase_durability))
+        player.bind("secret_revealed", increase_durability)
+        weapon.bind_once("destroyed", lambda: player.unbind("secret_revealed", increase_durability))
         return weapon
 
 
