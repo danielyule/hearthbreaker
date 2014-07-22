@@ -273,15 +273,13 @@ class Repentance(SecretCard):
         super().__init__("Repentance", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, minion, player):
-        if minion.player is not player:
-            minion.decrease_health(minion.calculate_max_health() - 1)
-            super().reveal()
-        else:
-            self.activate(player)
+    def _reveal(self, minion):
+
+        minion.decrease_health(minion.calculate_max_health() - 1)
+        super().reveal()
 
     def activate(self, player):
-        player.game.bind_once("minion_added", self._reveal, player)
+        player.game.current_player.bind_once("after_minion_added", self._reveal)
 
     def deactivate(self, player):
-        player.game.unbind("minion_added", self._reveal)
+        player.game.current_player.unbind("after_minion_added", self._reveal)

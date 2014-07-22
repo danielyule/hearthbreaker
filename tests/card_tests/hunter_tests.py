@@ -433,6 +433,16 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(5, len(game.players[0].hand))
         self.assertEqual(4, len(game.players[1].hand))
 
+    def test_BuzzardAndOwl(self):
+        game = generate_game_for([StarvingBuzzard, IronbeakOwl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        # The buzzard should be silenced, but only after drawing a card from the owl
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertTrue(game.current_player.minions[2].silenced)
+
     def test_TundraRhino(self):
         game = generate_game_for(TundraRhino, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
         for turn in range(0, 8):

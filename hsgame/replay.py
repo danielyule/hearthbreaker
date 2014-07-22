@@ -403,11 +403,10 @@ class RecordingGame(hsgame.game_objects.Game):
 
         self.replay.save_decks(*decks)
 
-        self.bind("minion_added", bind_attacks)
-
         self.bind("kept_cards", self.replay.record_kept_index, self)
 
         for player in self.players:
+            player.bind("after_minion_added", bind_attacks)
             player.bind("turn_ended", self.replay.record_turn_end, self)
             player.bind("used_power", self.replay.record_power, self)
             player.hero.bind("found_power_target", self.replay.record_power_target, self)

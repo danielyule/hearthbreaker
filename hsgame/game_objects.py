@@ -626,10 +626,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.player = player
         minion.game = game
         minion.index = player.agent.choose_index(self)
-        player.trigger("minion_played", minion)
+        minion.add_to_board(minion.index)
+        player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
             minion.battlecry(minion)
-        minion.add_to_board(minion.index)
+        player.trigger("minion_played", minion)
+        player.trigger("minion_summoned", minion)
+        player.trigger("after_minion_added", minion)
 
     def summon(self, player, game, index):
         """
@@ -648,8 +651,10 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.player = player
             minion.game = game
             minion.index = index
-            player.trigger("minion_summoned", minion)
             minion.add_to_board(index)
+            player.trigger("minion_placed", minion)
+            player.trigger("minion_summoned", minion)
+            player.trigger("after_minion_added", minion)
 
     @abc.abstractmethod
     def create_minion(self, player):
@@ -725,7 +730,6 @@ class Minion(Character):
             self.exhausted = False
         self.active = True
         self.health += self.calculate_max_health() - self.base_health
-        self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
 
     def calculate_attack(self):

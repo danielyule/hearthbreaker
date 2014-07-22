@@ -724,7 +724,7 @@ class SilverHandKnight(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 2)
 
-            Squire().summon(player, player.game, m.index)
+            Squire().summon(player, player.game, m.index + 1)
 
         return Minion(4, 4, battlecry=summon_squire)
 
@@ -972,7 +972,7 @@ class FrostwolfWarlord(MinionCard):
 
     def create_minion(self, player):
         def buff_from_allies(minion):
-            for i in range(0, len(minion.player.minions)):
+            for i in range(0, len(minion.player.minions) - 1):
                 minion.increase_health(1)
                 minion.change_attack(1)
         return Minion(4, 4, battlecry=buff_from_allies)
@@ -1052,9 +1052,9 @@ class KnifeJuggler(MinionCard):
 
     def create_minion(self, player):
         def throw_knife(m):
-            if m.player is not player or m is minion:
+            if m is minion:
                 return
-            if player is player.game.current_player:
+            if m.player is player.game.current_player:
                 enemy_player = player.game.other_player
             else:
                 enemy_player = player.game.current_player
@@ -1063,9 +1063,15 @@ class KnifeJuggler(MinionCard):
             target = targets[player.game.random(0, len(targets) - 1)]
             target.damage(1, minion)
 
+        def copy_minion(new_minon, new_player):
+            new_player.bind("after_minion_added", throw_knife)
+            new_minon.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
+            new_minon.bind("copied", copy_minion)
+
         minion = Minion(3, 2)
-        player.game.bind("minion_added", throw_knife)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_added", throw_knife))
+        player.bind("after_minion_added", throw_knife)
+        minion.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
+        minion.bind("copied", copy_minion)
         return minion
 
 
@@ -1376,7 +1382,8 @@ class ColdlightSeer(MinionCard):
     def create_minion(self, player):
         def buff_murlocs(m):
             murloc = hsgame.targeting.find_friendly_minion_spell_target(player.game,
-                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC)
+                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC
+                                                                        and x is not m)
             for target in murloc:
                 target.increase_health(2)
 
@@ -1490,6 +1497,7 @@ class MadBomber(MinionCard):
                 targets.extend(player.game.current_player.minions)
                 targets.append(player.game.other_player.hero)
                 targets.append(player.game.current_player.hero)
+                targets.remove(m)
                 target = targets[player.game.random(0, len(targets) - 1)]
                 target.damage(1, None)
 
@@ -1562,7 +1570,7 @@ class Onyxia(MinionCard):
                 def create_minion(self, player):
                     return Minion(1, 1, MINION_TYPE.DRAGON)
             whelp = Whelp()
-            for i in range(len(player.minions), 6):
+            for i in range(len(player.minions), 7):
                 whelp.summon(player, player.game, i)
 
         return Minion(8, 8, MINION_TYPE.DRAGON, battlecry=summon_whelps)
@@ -1784,8 +1792,8 @@ class AncientMage(MinionCard):
                 minion.spell_damage += 1
                 m.player.spell_damage += 1
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.spell_damage += 1
                 m.player.spell_damage += 1
 
@@ -1804,8 +1812,8 @@ class DefenderOfArgus(MinionCard):
                 minion.change_attack(1)
                 minion.increase_health(1)
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.taunt = True
                 minion.change_attack(1)
                 minion.increase_health(1)
@@ -1823,8 +1831,8 @@ class SunfuryProtector(MinionCard):
                 minion = m.player.minions[m.index - 1]
                 minion.taunt = True
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.taunt = True
 
         return Minion(2, 3, battlecry=give_argus_buff)
@@ -1989,6 +1997,7 @@ class TinkmasterOverspark(MinionCard):
             devilsaur = Devilsaur()
             targets = copy.copy(player.game.other_player.minions)
             targets.extend(player.game.current_player.minions)
+            targets.remove(m)
             if len(targets) > 0:
                 target = targets[player.game.random(0, len(targets) - 1)]
                 if player.game.random(0, 1) == 1:
@@ -2147,7 +2156,7 @@ class OldMurkEye(MinionCard):
             targets = copy.copy(player.game.current_player.minions)
             targets.extend(player.game.other_player.minions)
             for target in targets:
-                if target.minion_type is MINION_TYPE.MURLOC:
+                if target is not m and target.minion_type is MINION_TYPE.MURLOC:
                     minion.change_attack(1)
 
         def check_murloc(m):

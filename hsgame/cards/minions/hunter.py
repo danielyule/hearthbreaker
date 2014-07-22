@@ -73,8 +73,8 @@ class StarvingBuzzard(MinionCard):
                 player.draw()
 
         minion = Minion(2, 1, MINION_TYPE.BEAST)
-        player.bind("minion_played", check_beast_draw)
-        minion.bind_once("silenced", lambda: player.unbind("minion_played", check_beast_draw))
+        player.bind("minion_placed", check_beast_draw)
+        minion.bind_once("silenced", lambda: player.unbind("minion_placed", check_beast_draw))
         return minion
 
 

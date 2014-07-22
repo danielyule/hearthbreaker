@@ -880,6 +880,26 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[1].health)
 
+    def test_KnifeJugglerWithOwl(self):
+        game = generate_game_for([KnifeJuggler, IronbeakOwl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        # The owl should silence the knife juggler, and no knives should be thrown
+        self.assertEqual(30, game.other_player.hero.health)
+        self.assertTrue(game.current_player.minions[1].silenced)
+
+    def test_KnifeJugglerandMCT(self):
+        game = generate_game_for(KnifeJuggler, [ChillwindYeti, MindControlTech],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # The MCT should take a knife juggler.  This knife jugger's knife should go off as a consequence of the
+        # MCT being added to the board.  See http://www.hearthhead.com/card=734/mind-control-tech#comments:id=1925580
+        self.assertEqual(29, game.other_player.hero.health)
+
     def test_CairneBloodhoof(self):
         game = generate_game_for(CairneBloodhoof, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
         for turn in range(0, 12):
