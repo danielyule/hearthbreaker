@@ -369,7 +369,7 @@ yes,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give 
 yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Common,Minion,Basic
 yes,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Common,Spell,Basic
 yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell,Basic
-no,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion,Expert
+yes,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion,Expert
 yes,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell,Basic
 yes,Windfury Harpy,Windfury,,,6,4,5,Common,Minion,Expert
 yes,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion,Basic

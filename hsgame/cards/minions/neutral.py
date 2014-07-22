@@ -2355,23 +2355,25 @@ class LorewalkerCho(MinionCard):
         player.game.other_player.bind("spell_cast", pass_spell)
         minion.bind_once("silenced", lambda: player.game.other_player.unbind("spell_cast", pass_spell))
         return minion
-"""
+
+
 class WildPyromancer(MinionCard):
     def __init__(self):
         super().__init__("Wild Pyromancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def one_damage_to_all_minions(card):
-            targets = copy.copy(player.game.other_player.minions)
-            targets.extend(player.game.current_player.minions)
-            for minion in targets:
-                minion.damage(1, None)
+            if card.is_spell():
+                targets = copy.copy(player.game.other_player.minions)
+                targets.extend(player.game.current_player.minions)
+                for target in targets:
+                    target.damage(1, None)
         minion = Minion(3, 2)
-        player.bind("spell_resolved", one_damage_to_all_minions)  # This activates before the spell, not after
-        minion.bind_once("silenced", lambda: player.unbind("spell_resolved", one_damage_to_all_minions))
+        player.bind("card_used", one_damage_to_all_minions)  # This activates before the spell, not after
+        minion.bind_once("silenced", lambda: player.unbind("card_used", one_damage_to_all_minions))
         return minion
 
-
+"""
 class FacelessManipulator(MinionCard):
     def __init__(self):
         super().__init__("Faceless Manipulator", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,

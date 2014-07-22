@@ -2163,7 +2163,7 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual("Freezing Trap", game.players[0].hand[4].name)
-"""
+
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,
                                  SpellTestingAgent, DoNothingBot)
@@ -2176,16 +2176,16 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].health)
         self.assertEqual("Wild Pyromancer", game.players[0].hand[0].name)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].minions[0].health)
-        self.assertEqual(4, game.players[0].minions[1].health)
+        # The two pyros killed each other with the effect after mind blast
+        self.assertEqual(0, len(game.players[0].minions))
 
+"""
     def test_FacelessManipulator(self):
         game = generate_game_for(FacelessManipulator, Abomination, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
         for turn in range(0, 10):
