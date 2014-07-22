@@ -241,9 +241,9 @@ class Replay:
     def record_option_chosen(self, option, game):
         self.last_card.set_option(option)
 
-    def record_attack(self, target, attacker, game):
-        self._save_played_card(game)
-        self.actions.append(AttackAction(attacker, target, game))
+    def record_attack(self, attacker, target):
+        self._save_played_card(target.player.game)
+        self.actions.append(AttackAction(attacker, target, target.player.game))
 
     def record_power(self, game):
         self._save_played_card(game)
@@ -392,10 +392,6 @@ class RecordingGame(hsgame.game_objects.Game):
             def __setattr__(self, key, value):
                 setattr(self.__getattribute__("agent"), key, value)
 
-        def bind_attacks(character):
-            character.bind('attack_minion', self.replay.record_attack, character, self)
-            character.bind('attack_player', self.replay.record_attack, character, self)
-
         self.replay = hsgame.replay.Replay()
         agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
 
@@ -406,12 +402,11 @@ class RecordingGame(hsgame.game_objects.Game):
         self.bind("kept_cards", self.replay.record_kept_index, self)
 
         for player in self.players:
-            player.bind("after_minion_added", bind_attacks)
             player.bind("turn_ended", self.replay.record_turn_end, self)
             player.bind("used_power", self.replay.record_power, self)
             player.hero.bind("found_power_target", self.replay.record_power_target, self)
             player.bind("card_played", self.replay.record_card_played, self)
-            bind_attacks(player.hero)
+            player.bind("attack", self.replay.record_attack)
 
     def _find_random(self, lower_bound, upper_bound):
         result = randint(lower_bound, upper_bound)

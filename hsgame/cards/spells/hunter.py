@@ -107,10 +107,10 @@ class FreezingTrap(SecretCard):
         super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind_once("attacking", self._reveal)
+        player.game.current_player.bind_once("pre_attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("attacking", self._reveal)
+        player.game.current_player.unbind("pre_attack", self._reveal)
 
     def _reveal(self, attacker):
         if isinstance(attacker, Minion) and not attacker.removed:
@@ -296,18 +296,18 @@ class AnimalCompanion(Card):
         card = beast_list[player.game.random(0, 2)]
         card.summon(player, player.game, len(player.minions))
 
-"""
+
 class SnakeTrap(SecretCard):
     def __init__(self):
         super().__init__("Snake Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
 
     def activate(self, player):
-        player.bind_once("attacking", self._reveal)
+        player.game.current_player.bind_once("attack", self._reveal)
 
     def deactivate(self, player):
-        player.unbind("attacking", self._reveal)
+        player.game.current_player.unbind("attack", self._reveal)
 
-    def _reveal(self, target):
+    def _reveal(self, attacker, target):
         if isinstance(target, Minion):
             class Snake(MinionCard):
                 def __init__(self):
@@ -316,7 +316,9 @@ class SnakeTrap(SecretCard):
                 def create_minion(self, player):
                     return Minion(1, 1, MINION_TYPE.BEAST)
             snake = Snake()
+            player = target.player.game.other_player
             for i in range(0, 3):
                 snake.summon(player, player.game, len(player.minions))
             super().reveal()
-"""
+        else:
+            self.activate(target.player.game.current_player)

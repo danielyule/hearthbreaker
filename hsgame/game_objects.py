@@ -287,13 +287,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         else:
             targets.append(self.player.game.other_player.hero)
 
-        self.player.trigger("attacking", self)
+        self.player.trigger("pre_attack", self)
         target = self.choose_target(targets)
-        self.trigger("attack", target)
-        if isinstance(target, Minion):
-            self.trigger("attack_minion", target)
-        else:
-            self.trigger("attack_player", target)
+        self.player.trigger("attack", self, target)
+        self.trigger("attack", self)
         target.trigger("attacked", self)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return

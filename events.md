@@ -19,6 +19,7 @@ Events Triggered in hssim
  * attacking(attacker)
  * secret_revealed (secret)
  * overloaded
+ * attack(attacker, target)
 
 ##Game
  * minion_died(dead_minion, killer)
@@ -29,8 +30,6 @@ Events Triggered in hssim
  
 ##Character
  * attack
- * attack_minion (target)
- * attack_player (target)
  * attack_completed
  * attacked (attacker)
  * damaged(amount, attacker)

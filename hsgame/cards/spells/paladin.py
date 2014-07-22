@@ -63,14 +63,8 @@ class BlessingOfWisdom(Card):
             player.draw()
 
         super().use(player, game)
-        self.target.bind("attack_minion", draw, self.target)
-        self.target.bind("attack_player", draw, self.target)
-        self.target.bind_once("silenced",
-                              lambda minion: minion.unbind("attack_minion",
-                                                           draw), self.target)
-        self.target.bind_once("silenced",
-                              lambda minion: minion.unbind("attack_player",
-                                                           draw), self.target)
+        self.target.bind("attack", draw, self.target)
+        self.target.bind_once("silenced", lambda minion: minion.unbind("attack", draw), self.target)
 
 
 class Consecration(Card):
@@ -237,10 +231,10 @@ class NobleSacrifice(SecretCard):
             self.activate(player)
 
     def activate(self, player):
-        player.game.current_player.bind_once("attacking", self._reveal)
+        player.game.current_player.bind_once("pre_attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("attacking", self._reveal)
+        player.game.current_player.unbind("pre_attack", self._reveal)
 
 
 class Redemption(SecretCard):
