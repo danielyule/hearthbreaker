@@ -28,8 +28,6 @@ on windows, you must download it from
 
 
 ###Unit Tests
-~~~~~~~~~~
-
 The tests are located in the [`tests`](tests) package.
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
@@ -41,7 +39,7 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-Currently, the main engine is mostly implemented, aalong with all the non Naxxrasmus cards.  [cards.csv](cards.csv) is a listing of all cards in the
+Currently, the main engine is mostly implemented, along with all the non Naxxramas cards.  [cards.csv](cards.csv) is a listing of all cards in the
 game along with information on which has been implemented.  Any card which has been implemented also has at least one
 unit test to ensure that it works correctly
 
