@@ -20,7 +20,7 @@ attack you, and will play one card from its hand per turn. (So it is very easy t
 
 Start the console with ``python hsgame/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
 text files with the name of the class followed by a comma, followed by the names of each of the cards in the deck
-in English.
+in English, separated by commas.
 
 The console application requires ncurses, which should be included with python on *nix and mac systems, but if you are 
 on windows, you must download it from 
