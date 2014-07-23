@@ -272,7 +272,7 @@ class Repentance(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("after_minion_added", self._reveal)
+        player.game.current_player.bind_once("minion_played", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("after_minion_added", self._reveal)
+        player.game.current_player.unbind("minion_played", self._reveal)

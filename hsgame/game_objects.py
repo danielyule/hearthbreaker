@@ -528,6 +528,8 @@ class Card(Bindable):
         :return: True if the card can be played, false otherwise.
         :rtype: bool
         """
+        if game.game_ended:
+            return False
         if self.targetable:
             self.targets = self.get_targets(game, self.filter_func)
             if self.targets is not None and len(self.targets) is 0:
@@ -625,6 +627,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
 
         If the player already has 7 minions on the board, this method does nothing
 
+        :param hsgame.game_objects.Player player: The player the summoned minion will belong to
         :param hsgame.game_objects.Player player: The player the summoned minion will belong to
         :param hsgame.game_objects.Game game: The game the minion is being summoned to
         :param int index: The index where the new minion will be added

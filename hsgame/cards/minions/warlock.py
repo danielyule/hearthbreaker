@@ -120,6 +120,7 @@ class LordJaraxxus(MinionCard):
                     return Weapon(3, 8)
 
             minion.remove_from_board()
+            player.trigger("minion_played", minion)
             player.hero.health = minion.health
             player.hero.base_health = 15
             player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS

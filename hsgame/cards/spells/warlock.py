@@ -2,7 +2,7 @@ import copy
 
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hsgame.game_objects import Card, Minion, MinionCard
+from hsgame.game_objects import Card, Minion, MinionCard, Hero
 from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
     Succubus, Felguard
 
@@ -99,8 +99,11 @@ class Demonfire(Card):
 class SacrificialPact(Card):
     def __init__(self):
         super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hsgame.targeting.find_minion_spell_target,
-                         lambda minion: minion.minion_type is MINION_TYPE.DEMON)
+                         hsgame.targeting.find_spell_target,
+                         lambda character: (isinstance(character, Minion)
+                                            and character.minion_type is MINION_TYPE.DEMON)
+                         or (isinstance(character, Hero)
+                             and character.character_class is CHARACTER_CLASS.LORD_JARAXXUS))
 
     def use(self, player, game):
         super().use(player, game)
