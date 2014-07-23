@@ -695,6 +695,7 @@ class Minion(Character):
         self.divine_shield = divine_shield
         self.battlecry = battlecry
         self.deathrattle = deathrattle
+        self.base_deathrattle = deathrattle
         self.silenced = False
         self.exhausted = True
         self.born = -1
@@ -861,7 +862,7 @@ class Minion(Character):
 
     def copy(self, new_owner):
         new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
-                            self.minion_type, self.battlecry, self.deathrattle)
+                            self.minion_type, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
         new_minion.events = copy.copy(self.events)
         new_minion.stealth = self.stealth

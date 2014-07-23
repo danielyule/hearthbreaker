@@ -494,16 +494,8 @@ class TestDruid(unittest.TestCase):
 
     def test_ForceOfNature(self):
         game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingBot)
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
-        game.play_single_turn()
+        for turn in range(0, 10):
+            game.play_single_turn()
 
         def check_minions():
             self.assertEqual(3, len(game.current_player.minions))
