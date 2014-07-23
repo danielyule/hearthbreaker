@@ -60,7 +60,7 @@ class TestGame(unittest.TestCase):
         self.assertTrue(game.players[1].agent == agent2, "Agent not stored in the hsgame")
 
         self.assertListEqual(checked_cards[0][1:], game.players[0].hand[:-1], "Cards not retained after request")
-        self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[:-3], "Cards not retained after request")
+        self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[:-4], "Cards not retained after request")
 
     def test_first_turn(self):
         card_set1 = []
@@ -157,13 +157,3 @@ class TestBinding(unittest.TestCase):
         binder.trigger("test")
         event.assert_called_once_with(1, 5, 6)
         self.assertEqual(event2.call_count, 2)
-
-    def test_bind_with_different_args(self):
-        event = mock.Mock()
-        event2 = mock.Mock()
-        binder = Bindable()
-        binder.bind("test", event, 5)
-        binder.bind("test", event2)
-        binder.trigger("test")
-        event.assert_called_with(5)
-        event2.assert_called_with()

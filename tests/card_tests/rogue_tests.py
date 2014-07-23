@@ -58,7 +58,7 @@ class TestRogue(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(9, len(game.players[1].hand))
+        self.assertEqual(10, len(game.players[1].hand))
 
         # Backstab should be played, targeting the drake who survives. Kidnapper should be played next, returning the
         # drake to the owner's hand with the combo.
@@ -373,23 +373,23 @@ class TestRogue(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual(1, len(game.players[1].minions))
 
         # Sap should be played, targeting the boar
         game.play_single_turn()
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_Shadowstep(self):
         game = generate_game_for([StonetuskBoar, Shadowstep], StonetuskBoar, PredictableAgentWithoutHeroPower,
                                  DoNothingBot)
 
-        # The Boar should be played, Shadowstep will follow targeting the Boar, and the cost of Boar should now be 0 so
-        # it should be played again.
+        # The Boar should be played, Shadowstep will follow targeting the Boar
         game.play_single_turn()
-        self.assertEqual(1, len(game.players[0].hand))
-        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))
 
     def test_Shiv(self):
         game = generate_game_for(Shiv, StonetuskBoar, SpellTestingAgent, DoNothingBot)

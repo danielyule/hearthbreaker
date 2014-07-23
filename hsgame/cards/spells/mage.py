@@ -124,12 +124,12 @@ class IceBarrier(SecretCard):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, attacker, player):
-        player.hero.armor += 8
+    def _reveal(self, attacker):
+        attacker.player.game.other_player.hero.armor += 8
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal, player)
+        player.hero.bind_once("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -138,25 +138,29 @@ class IceBarrier(SecretCard):
 class MirrorEntity(SecretCard):
     def __init__(self):
         super().__init__("Mirror Entity", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        self.player = None
 
-    def _reveal(self, minion, player):
-        mirror = minion.copy(player)
-        mirror.add_to_board(len(player.minions))
+    def _reveal(self, minion):
+        mirror = minion.copy(self.player)
+        mirror.add_to_board(len(self.player.minions))
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal, player)
+        player.game.current_player.bind_once("minion_played", self._reveal)
+        self.player = player
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
+        self.player = None
 
 
 class Spellbender(SecretCard):
     def __init__(self):
         super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.EPIC)
+        self.player = None
 
-    def _reveal(self, card, player):
+    def _reveal(self, card):
         if card.targetable:
             class SpellbenderMinion(MinionCard):
                 def __init__(self):
@@ -169,23 +173,24 @@ class Spellbender(SecretCard):
             def choose_bender(targets):
                 spell_bender = SpellbenderMinion()
                 # TODO test what happens if Spellbender goes off when there are 7 minions down
-                spell_bender.summon(player, player.game, len(player.minions))
+                spell_bender.summon(self.player, self.player.game, len(self.player.minions))
                 old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
-                player.game.current_player.agent.choose_target = old_target
-                return player.minions[-1]
+                self.player.game.current_player.agent.choose_target = old_target
+                return self.player.minions[-1]
 
-            old_target = player.game.current_player.agent.choose_target
-            player.game.current_player.agent.choose_target = choose_bender
+            old_target = self.player.game.current_player.agent.choose_target
+            self.player.game.current_player.agent.choose_target = choose_bender
             super().reveal()
         else:
-            self.activate(player)
+            self.activate(self.player)
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self._reveal,
-                                             player)
+        player.game.current_player.bind_once("spell_cast", self._reveal)
+        self.player = player
 
     def deactivate(self, player):
         player.game.current_player.unbind("spell_cast", self._reveal)
+        self.player = None
 
 
 class Vaporize(SecretCard):
@@ -195,7 +200,7 @@ class Vaporize(SecretCard):
     def _reveal(self, attacker):
         if type(attacker) is Minion and not attacker.removed:
             attacker.die(self)
-            attacker.activate_delayed()
+            attacker.game.check_delayed()
             super().reveal()
         else:
             self.activate(attacker.player.game.other_player)
@@ -211,20 +216,24 @@ class IceBlock(SecretCard):
     def __init__(self):
         super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.EPIC)
+        self.player = None
 
-    def _reveal(self, amount, attacker, player):
-        if player.hero.health - amount <= 0:
-            player.hero.immune = True
-            player.hero.health += amount
+    def _reveal(self, amount, attacker):
+        hero = self.player.hero
+        if hero.health - amount <= 0:
+            hero.immune = True
+            hero.health += amount
             # TODO Check if this spell will also prevent damage to armor.
             super().reveal()
-            player.hero.unbind("hero_damaged", self._reveal)
+            self.deactivate(self.player)
 
     def activate(self, player):
-        player.hero.bind("hero_damaged", self._reveal, player)
+        player.hero.bind("hero_damaged", self._reveal)
+        self.player = player
 
     def deactivate(self, player):
         player.hero.unbind("hero_damaged", self._reveal)
+        self.player = None
 
 
 class ConeOfCold(Card):

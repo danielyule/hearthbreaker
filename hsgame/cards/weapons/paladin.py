@@ -25,10 +25,10 @@ class SwordOfJustice(WeaponCard):
                     weapon.destroy()
 
         def on_destroy():
-            player.game.unbind("minion_added", buff_minion)
+            player.unbind("minion_summoned", buff_minion)
 
         weapon = Weapon(1, 5)
-        player.game.bind("minion_added", buff_minion)
+        player.bind("minion_summoned", buff_minion)
         weapon.bind_once("destroyed", on_destroy)
         return weapon
 

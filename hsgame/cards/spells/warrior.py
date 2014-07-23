@@ -68,6 +68,26 @@ class Cleave(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
 
 
+class CommandingShout(Card):
+    def __init__(self):
+        super().__init__("Commanding Shout", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        def create_effect(minion):
+            def keep_above_one():
+                if minion.health < 0:
+                    minion.health = 1
+            minion.bind("health_changed", keep_above_one)
+            minion.bind("silenced", lambda: minion.unbind("health_changed", keep_above_one))
+
+        for minion in player.minions:
+            create_effect(minion)
+
+        player.draw()
+
+
 class Execute(Card):
     def __init__(self):
         super().__init__("Execute", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,

@@ -105,23 +105,18 @@ class Bindable:
         """
         self.events = {}
 
-    def bind(self, event, function, *args):
+    def bind(self, event, function):
         """
         Bind a function to an event.  Each time the event is triggered, the function will be called.
 
-        Any parameters passed to this method will be appended to the paramters passed to the trigger function
-        and passed to the bound function.
-
-        :param event str: The event to bind a function to
+        :param string event: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param list args: Any other parameters to be called
         :see: :class:`Bindable`
         """
 
         class Handler:
             def __init__(self):
-                self.args = args
                 self.function = function
                 self.remove = False
                 self.active = False
@@ -131,24 +126,19 @@ class Bindable:
 
         self.events[event].append(Handler())
 
-    def bind_once(self, event, function, *args):
+    def bind_once(self, event, function):
         """
         Bind a function to an event.  This function will only be called the next time the event is triggered, and
         then ignored.
 
-        Any parameters passed to this method will be appended to the paramters passed to the trigger function
-        and passed to the bound function.
-
-        :param event str: The event to bind a function to
+        :param string event: The event to bind a function to
         :param function function: The function to bind.  The parameters are not checked until it is called, so
                                   ensure its signature matches the parameters called from :meth:`trigger`
-        :param args: Any other parameters to be called
         :see: :class:`Bindable`
         """
 
         class Handler:
             def __init__(self):
-                self.args = args
                 self.function = function
                 self.remove = True
                 self.active = False
@@ -165,15 +155,14 @@ class Bindable:
         The parameters passed to this function as `args` will be passed along to the bound functions.
 
         :param string event: The name of the event to trigger
-        :param list args: The remaining arguments to pass to the bound function
+        :param list args: The arguments to pass to the bound function
         :see: :class:`Bindable`
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
                 if not handler.active:
-                    pass_args = args + handler.args
                     handler.active = True
-                    handler.function(*pass_args)
+                    handler.function(*args)
                     handler.active = False
                     if handler.remove:
                         self.events[event].remove(handler)
@@ -287,22 +276,17 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         else:
             targets.append(self.player.game.other_player.hero)
 
-        self.player.trigger("attacking", self)
+        self.player.trigger("pre_attack", self)
         target = self.choose_target(targets)
+        self.player.trigger("attack", self, target)
         self.trigger("attack", target)
-        if isinstance(target, Minion):
-            self.trigger("attack_minion", target)
-        else:
-            self.trigger("attack_player", target)
         target.trigger("attacked", self)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
         self.damage(target.calculate_attack(), target)
         target.damage(my_attack, self)
-        target.activate_delayed()
-
-        self.activate_delayed()
+        self.player.game.check_delayed()
         self.trigger("attack_completed")
         if self.windfury and not self.used_windfury:
             self.used_windfury = True
@@ -338,7 +322,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         Set up a delayed trigger for an event.  Any events triggered with this method will not be called until
         :meth:`activate_delayed` is called.
 
-        The purpose of this method is to allow for simeltaneous events.  For example, if a minion is attacked
+        The purpose of this method is to allow for simultaneous events.  For example, if a minion is attacked
         then any damage events should be triggered after the attack, and at the same time as each other.
 
         :param string event: The event to set up a delayed trigger for
@@ -544,6 +528,8 @@ class Card(Bindable):
         :return: True if the card can be played, false otherwise.
         :rtype: bool
         """
+        if game.game_ended:
+            return False
         if self.targetable:
             self.targets = self.get_targets(game, self.filter_func)
             if self.targets is not None and len(self.targets) is 0:
@@ -626,10 +612,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.player = player
         minion.game = game
         minion.index = player.agent.choose_index(self)
-        player.trigger("minion_played", minion)
+        minion.add_to_board(minion.index)
+        player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
             minion.battlecry(minion)
-        minion.add_to_board(minion.index)
+        player.trigger("minion_played", minion)
+        player.trigger("minion_summoned", minion)
+        player.trigger("after_minion_added", minion)
 
     def summon(self, player, game, index):
         """
@@ -638,6 +627,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
 
         If the player already has 7 minions on the board, this method does nothing
 
+        :param hsgame.game_objects.Player player: The player the summoned minion will belong to
         :param hsgame.game_objects.Player player: The player the summoned minion will belong to
         :param hsgame.game_objects.Game game: The game the minion is being summoned to
         :param int index: The index where the new minion will be added
@@ -648,8 +638,10 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.player = player
             minion.game = game
             minion.index = index
-            player.trigger("minion_summoned", minion)
             minion.add_to_board(index)
+            player.trigger("minion_placed", minion)
+            player.trigger("minion_summoned", minion)
+            player.trigger("after_minion_added", minion)
 
     @abc.abstractmethod
     def create_minion(self, player):
@@ -703,6 +695,7 @@ class Minion(Character):
         self.divine_shield = divine_shield
         self.battlecry = battlecry
         self.deathrattle = deathrattle
+        self.base_deathrattle = deathrattle
         self.silenced = False
         self.exhausted = True
         self.born = -1
@@ -725,7 +718,6 @@ class Minion(Character):
             self.exhausted = False
         self.active = True
         self.health += self.calculate_max_health() - self.base_health
-        self.game.trigger("minion_added", self)
         self.trigger("added_to_board", self, index)
 
     def calculate_attack(self):
@@ -771,6 +763,7 @@ class Minion(Character):
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
+        new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
 
     def attack(self):
         super().attack()
@@ -786,6 +779,8 @@ class Minion(Character):
         self.battlecry = None
         self.deathrattle = None
         self.silenced = True
+        if "copied" in self.events:
+            del self.events["copied"]
 
     def damage(self, amount, attacker):
         if self.divine_shield:
@@ -810,7 +805,7 @@ class Minion(Character):
             super().die(by)
             if deathrattle is not None:
                 deathrattle(self)
-            self.game.trigger("minion_died", self, by)
+            self.player.trigger("minion_died", self, by)
             self.removed = True
 
     def can_attack(self):
@@ -867,7 +862,7 @@ class Minion(Character):
 
     def copy(self, new_owner):
         new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
-                            self.minion_type, self.battlecry, self.deathrattle)
+                            self.minion_type, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
         new_minion.events = copy.copy(self.events)
         new_minion.stealth = self.stealth
@@ -883,6 +878,8 @@ class Minion(Character):
         new_minion.player = new_owner
         new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
+        if "copied" in self.events:
+            new_minion.events["copied"] = self.events["copied"]
         return new_minion
 
     def bounce(self):
@@ -891,7 +888,7 @@ class Minion(Character):
             self.player.hand.append(self.card)
         else:
             self.die(None)
-            self.activate_delayed()
+            self.game.check_delayed()
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
@@ -948,6 +945,16 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
     def is_spell(self):
         return False
+
+
+class TheCoin(Card):
+    def __init__(self):
+        super().__init__("The Coin", 0, hsgame.constants.CHARACTER_CLASS.ALL, hsgame.constants.CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.mana < 10:
+            player.mana += 1
 
 
 class Weapon(Bindable):
@@ -1163,6 +1170,12 @@ class Game(Bindable):
         self.players[0].hero.bind("died", self.game_over)
         self.players[1].hero.bind("died", self.game_over)
 
+    def check_delayed(self):
+        for minion in self.delayed_minions:
+            minion.activate_delayed()
+
+        self.delayed_minions = []
+
     def pre_game(self):
         card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
         self.trigger("kept_cards", self.players[0].hand, card_keep_index)
@@ -1185,6 +1198,8 @@ class Game(Bindable):
 
         for card in put_back_cards:
             self.players[1].put_back(card)
+
+        self.players[1].hand.append(TheCoin())
 
     def start(self):
         self.pre_game()
@@ -1273,8 +1288,7 @@ class Game(Bindable):
             card.use(self.current_player, self)
             self.current_player.trigger("card_used", card)
             self.current_player.cards_played += 1
-            for minion in self.delayed_minions:
-                minion.activate_delayed()
+            self.check_delayed()
 
             self.delayed_minions = []
 

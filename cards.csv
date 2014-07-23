@@ -73,7 +73,7 @@ yes,Cleave,Deal 2 damage to two random enemy minions.,,Warrior,2,,,Common,Spell,
 yes,Cold Blood,Give a minion +2 Attack. Combo: +4 Attack instead.,,Rogue,1,,,Common,Spell,Expert
 yes,Coldlight Oracle,Battlecry: Each player draws 2 cards.,Murloc,,3,2,2,Rare,Minion,Expert
 yes,Coldlight Seer,Battlecry: Give ALL other Murlocs +2 Health.,Murloc,,3,2,3,Rare,Minion,Expert
-no,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Rare,Spell,Expert
+yes,Commanding Shout,Your minions can't be reduced below 1 Health this turn. Draw a card.,,Warrior,2,,,Rare,Spell,Expert
 yes,Conceal,Give your minions Stealth until your next turn.,,Rogue,1,,,Common,Spell,Expert
 yes,Cone of Cold,"Freeze a minion and the minions next to it, and deal 1 damage to them.",,Mage,4,,,Common,Spell,Expert
 yes,Consecration,Deal 2 damage to all enemies.,,Paladin,4,,,Common,Spell,Basic
@@ -120,7 +120,7 @@ yes,Execute,Destroy a damaged enemy minion.,,Warrior,1,,,Free,Spell,Basic
 yes,Explosive Shot,Deal 5 damage to a minion and 2 damage to adjacent ones.,,Hunter,5,,,Rare,Spell,Expert
 yes,Explosive Trap,"Secret: When your hero is attacked, deal 2 damage to all enemies.",,Hunter,2,,,Common,Spell,Expert
 yes,Eye for an Eye,"Secret: When your hero takes damage, deal that much damage to the enemy hero.",,Paladin,1,,,Common,Spell,Expert
-no,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion,Expert
+yes,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion,Expert
 yes,Faerie Dragon,Can't be targeted by Spells or Hero Powers.,Dragon,,2,3,2,Common,Minion,Expert
 yes,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Common,Spell,Basic
 yes,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell,Expert
@@ -150,7 +150,7 @@ yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
 yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Common,Minion,Basic
 yes,Goldshire Footman,Taunt,,,1,1,2,Common,Minion,Basic
-no,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Epic,Weapon,Expert
+yes,Gorehowl,Attacking a minion costs 1 Attack instead of 1 Durability.,,Warrior,7,7,1,Epic,Weapon,Expert
 yes,Grimscale Oracle,ALL other Murlocs have +1 Attack.,Murloc,,1,1,1,Common,Minion,Basic
 yes,Grommash Hellscream,Charge. Enrage: +6 Attack,,Warrior,8,4,9,Legendary,Minion,Expert
 yes,Gruul,"At the end of each turn, gain +1/+1 .",,,8,7,7,Legendary,Minion,Expert
@@ -311,7 +311,7 @@ yes,Silvermoon Guardian,Divine Shield,,,4,3,3,Common,Minion,Expert
 yes,Sinister Strike,Deal 3 damage to the enemy hero.,,Rogue,1,,,Free,Spell,Basic
 yes,Siphon Soul,Destroy a minion. Restore 3 Health to your hero.,,Warlock,6,,,Rare,Spell,Expert
 yes,Slam,"Deal 2 damage to a minion. If it survives, draw a card.",,Warrior,2,,,Common,Spell,Expert
-no,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Epic,Spell,Expert
+yes,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 Snakes.",,Hunter,2,,,Epic,Spell,Expert
 yes,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
 yes,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Common,Minion,Expert
 yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Common,Spell,Expert
@@ -369,7 +369,7 @@ yes,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give 
 yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Common,Minion,Basic
 yes,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Common,Spell,Basic
 yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell,Basic
-no,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion,Expert
+yes,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion,Expert
 yes,Windfury,Give a minion Windfury.,,Shaman,2,,,Free,Spell,Basic
 yes,Windfury Harpy,Windfury,,,6,4,5,Common,Minion,Expert
 yes,Windspeaker,Battlecry: Give a friendly minion Windfury.,,Shaman,4,3,3,Common,Minion,Basic

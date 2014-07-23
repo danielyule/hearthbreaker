@@ -164,11 +164,11 @@ class TestPriest(unittest.TestCase):
         game = generate_game_for(MindVision, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
 
         self.assertEqual(3, len(game.players[0].hand))
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
         game.play_single_turn()  # Mind Vision should be played
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual("Mogu'shan Warden", game.players[0].hand[-1].name)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
     def test_Mindgames(self):
         game = generate_game_for(Mindgames, MogushanWarden, SpellTestingAgent, DoNothingBot)
@@ -200,12 +200,11 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(3, game.players[0].minions[0].calculate_max_health())
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
     def test_ShadowMadness(self):
         game = generate_game_for([MagmaRager, MogushanWarden, WarGolem],
-                                 [ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness, ShadowMadness,
-                                  ShadowMadness, ShadowMadness, ShadowMadness, Silence], MinionPlayingAgent,
+                                 [ShadowMadness, ShadowMadness, Silence], MinionPlayingAgent,
                                  PredictableAgentWithoutHeroPower)
 
         # Magma Rager should be played
@@ -214,12 +213,12 @@ class TestPriest(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Magma Rager", game.players[0].minions[0].card.name)
-        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual(7, len(game.players[1].hand))
 
         # Shadow Madness shouldn't be played, since Magma Rager has attack > 3
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(8, len(game.players[1].hand))
 
         # Mogu'shan Warden should be played
         game.play_single_turn()
@@ -407,12 +406,12 @@ class TestPriest(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(29, game.players[0].hero.health)
-        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(28, game.players[0].hero.health)
+        self.assertEqual(2, game.players[0].minions[0].health)
 
         # Lightwell is out, it should heal at the beginning of this turn
         game.play_single_turn()
-        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
         self.assertEqual(30, game.players[0].hero.health)
 
     def test_NorthshireCleric(self):
@@ -421,7 +420,7 @@ class TestPriest(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual(26, game.players[0].deck.left)
 
         # Northshire is damaged, should get a heal and a card should be drawn

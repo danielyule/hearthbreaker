@@ -20,12 +20,12 @@ class TestWarlock(unittest.TestCase):
         # player 0 plays raptor
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
         # mortal coils the 2hp raptor
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
 
@@ -33,7 +33,7 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
         # mortal coils the 1hp raptor and draws
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
     def test_MortalCoilDivineShield(self):
         game = generate_game_for(StonetuskBoar, MortalCoil, DoNothingBot, OneSpellTestingAgent)
@@ -44,7 +44,7 @@ class TestWarlock(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
@@ -52,13 +52,13 @@ class TestWarlock(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].divine_shield)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
         # mortal coils the 1hp scarlet crusader and draws
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
     def test_FlameImp(self):
         game = generate_game_for(FlameImp, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
@@ -450,6 +450,54 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(8, game.current_player.mana)
         self.assertEqual(24, game.other_player.hero.health)
+
+    def test_Jaraxxus_with_secrets(self):
+        class SecretTester(DoNothingBot):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                self.turn += 1
+                if self.turn >= 8:
+                    player.game.play_card(player.hand[0])
+
+        game = generate_game_for(LordJaraxxus, [Repentance, Snipe, MirrorEntity], SpellTestingAgent, SecretTester)
+
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        # Jaraxxus should be played, Repentance should activate, leaving
+        # the hero with one health (but 15 max health)
+        # See http://www.reddit.com/r/hearthstone/comments/218vsu/jaraxxus_and_sword_of_justice_rule_inconsistency_o/
+
+        self.assertEqual(1, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(11, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(15, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Lord Jaraxxus", game.other_player.minions[0].card.name)
+
+    def test_Jaraxxus_with_SacrificialPact(self):
+        game = generate_game_for(LordJaraxxus, SacrificialPact, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 18):
+            game.play_single_turn()
+
+        # Sacrificial pact will target Jaraxxus, killing him instantly
+        # See http://www.hearthhead.com/card=163/sacrificial-pact#comments:id=1889015
+        self.assertTrue(game.other_player.hero.dead)
+        self.assertTrue(game.game_ended)
 
     def test_VoidTerror(self):
         game = generate_game_for([StonetuskBoar, StonetuskBoar, VoidTerror], StonetuskBoar,

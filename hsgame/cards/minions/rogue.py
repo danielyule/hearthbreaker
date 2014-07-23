@@ -19,10 +19,9 @@ class DefiasRingleader(MinionCard):
 
             if m is minion and m.player.cards_played > 0 and len(m.player.minions) < 7:
                 bandit_card = DefiasBandit()
-                bandit_card.summon(m.player, m.game, m.index)
+                bandit_card.summon(m.player, m.game, m.index + 1)
 
-        minion = Minion(2, 2)
-        player.bind_once("minion_played", combo)
+        minion = Minion(2, 2, battlecry=combo)
         return minion
 
 

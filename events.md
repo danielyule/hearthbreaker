@@ -10,17 +10,19 @@ Events Triggered in hssim
  * card_played(card)
  * card_used(card)
  * spell_cast (card)
- * minion_summoned(minion)
+ * minion_placed(minion)
  * minion_played(minion)
+ * minion_summoned(minion)
+ * after_minion_added(minion)
+ * minion_died(dead_minion, killer)
  * turn_started
  * turn_ended
  * attacking(attacker)
  * secret_revealed (secret)
  * overloaded
+ * attack(attacker, target)
 
 ##Game
- * minion_added(new_minion)
- * minion_died(dead_minion, killer)
  * kept_cards(card_array)
  * minion_removed(minion, player)
  * minion_healed
@@ -28,8 +30,6 @@ Events Triggered in hssim
  
 ##Character
  * attack
- * attack_minion (target)
- * attack_player (target)
  * attack_completed
  * attacked (attacker)
  * damaged(amount, attacker)

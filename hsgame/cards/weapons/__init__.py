@@ -22,4 +22,5 @@ from hsgame.cards.weapons.shaman import (
 from hsgame.cards.weapons.warrior import (
     FieryWarAxe,
     ArcaniteReaper,
+    Gorehowl
 )

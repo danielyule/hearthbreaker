@@ -657,6 +657,7 @@ class Abomination(MinionCard):
         def deal_two_to_all(minion):
             for target in hsgame.targeting.find_battlecry_target(player.game, lambda x: True):
                 target.damage(2, self)
+                player.game.check_delayed()
 
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
 
@@ -724,7 +725,7 @@ class SilverHandKnight(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 2)
 
-            Squire().summon(player, player.game, m.index)
+            Squire().summon(player, player.game, m.index + 1)
 
         return Minion(4, 4, battlecry=summon_squire)
 
@@ -736,10 +737,15 @@ class StormwindChampion(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 1, [player], lambda mini: mini is not minion)
+            m.add_aura(1, 1, [player], lambda mini: mini is not m)
+
+        def copied(new_minion, new_owner):
+            new_minion.add_aura(1, 1, [new_owner], lambda mini: mini is not new_minion)
 
         minion = Minion(6, 6)
-        minion.bind("added_to_board", add_effect)
+        minion.bind_once("added_to_board", add_effect)
+        minion.bind("copied", copied)
+
         return minion
 
 
@@ -972,7 +978,7 @@ class FrostwolfWarlord(MinionCard):
 
     def create_minion(self, player):
         def buff_from_allies(minion):
-            for i in range(0, len(minion.player.minions)):
+            for i in range(0, len(minion.player.minions) - 1):
                 minion.increase_health(1)
                 minion.change_attack(1)
         return Minion(4, 4, battlecry=buff_from_allies)
@@ -1052,9 +1058,9 @@ class KnifeJuggler(MinionCard):
 
     def create_minion(self, player):
         def throw_knife(m):
-            if m.player is not player or m is minion:
+            if m is minion:
                 return
-            if player is player.game.current_player:
+            if m.player is player.game.current_player:
                 enemy_player = player.game.other_player
             else:
                 enemy_player = player.game.current_player
@@ -1063,9 +1069,15 @@ class KnifeJuggler(MinionCard):
             target = targets[player.game.random(0, len(targets) - 1)]
             target.damage(1, minion)
 
+        def copy_minion(new_minon, new_player):
+            new_player.bind("after_minion_added", throw_knife)
+            new_minon.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
+            new_minon.bind("copied", copy_minion)
+
         minion = Minion(3, 2)
-        player.game.bind("minion_added", throw_knife)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_added", throw_knife))
+        player.bind("after_minion_added", throw_knife)
+        minion.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
+        minion.bind("copied", copy_minion)
         return minion
 
 
@@ -1158,7 +1170,7 @@ class StampedingKodo(MinionCard):
                                                                           lambda x: x.calculate_attack() <= 2)
             target = targets[player.game.random(0, len(targets) - 1)]
             target.die(None)
-            target.activate_delayed()
+            player.game.check_delayed()
 
         return Minion(3, 5, MINION_TYPE.BEAST, battlecry=random_destroy)
 
@@ -1261,7 +1273,7 @@ class ImpMaster(MinionCard):
                     return Minion(1, 1, MINION_TYPE.DEMON)
 
             minion.damage(1, None)
-            minion.activate_delayed()
+            player.game.check_delayed()
             Imp().summon(player, player.game, minion.index + 1)
         minion = Minion(1, 5)
         player.bind("turn_ended", summon_imp)
@@ -1376,7 +1388,8 @@ class ColdlightSeer(MinionCard):
     def create_minion(self, player):
         def buff_murlocs(m):
             murloc = hsgame.targeting.find_friendly_minion_spell_target(player.game,
-                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC)
+                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC
+                                                                        and x is not m)
             for target in murloc:
                 target.increase_health(2)
 
@@ -1490,6 +1503,7 @@ class MadBomber(MinionCard):
                 targets.extend(player.game.current_player.minions)
                 targets.append(player.game.other_player.hero)
                 targets.append(player.game.current_player.hero)
+                targets.remove(m)
                 target = targets[player.game.random(0, len(targets) - 1)]
                 target.damage(1, None)
 
@@ -1562,7 +1576,7 @@ class Onyxia(MinionCard):
                 def create_minion(self, player):
                     return Minion(1, 1, MINION_TYPE.DRAGON)
             whelp = Whelp()
-            for i in range(len(player.minions), 6):
+            for i in range(len(player.minions), 7):
                 whelp.summon(player, player.game, i)
 
         return Minion(8, 8, MINION_TYPE.DRAGON, battlecry=summon_whelps)
@@ -1632,12 +1646,12 @@ class CultMaster(MinionCard):
 
     def create_minion(self, player):
         def cult_draw(m, by):
-            if m is not minion and m.player is minion.player:
+            if m is not minion:
                 m.player.draw()
 
         minion = Minion(4, 2)
-        player.game.bind("minion_died", cult_draw)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", cult_draw))
+        player.bind("minion_died", cult_draw)
+        minion.bind_once("silenced", lambda: player.unbind("minion_died", cult_draw))
         return minion
 
 
@@ -1725,8 +1739,10 @@ class FlesheatingGhoul(MinionCard):
                 minion.change_attack(1)
 
         minion = Minion(2, 3)
-        player.game.bind("minion_died", ghoul_grow)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", ghoul_grow))
+        player.game.players[0].bind("minion_died", ghoul_grow)
+        minion.bind_once("silenced", lambda: player.game.players[0].unbind("minion_died", ghoul_grow))
+        player.game.players[1].bind("minion_died", ghoul_grow)
+        minion.bind_once("silenced", lambda: player.game.players[1].unbind("minion_died", ghoul_grow))
         return minion
 
 
@@ -1784,8 +1800,8 @@ class AncientMage(MinionCard):
                 minion.spell_damage += 1
                 m.player.spell_damage += 1
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.spell_damage += 1
                 m.player.spell_damage += 1
 
@@ -1804,8 +1820,8 @@ class DefenderOfArgus(MinionCard):
                 minion.change_attack(1)
                 minion.increase_health(1)
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.taunt = True
                 minion.change_attack(1)
                 minion.increase_health(1)
@@ -1823,8 +1839,8 @@ class SunfuryProtector(MinionCard):
                 minion = m.player.minions[m.index - 1]
                 minion.taunt = True
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 minion.taunt = True
 
         return Minion(2, 3, battlecry=give_argus_buff)
@@ -1989,6 +2005,7 @@ class TinkmasterOverspark(MinionCard):
             devilsaur = Devilsaur()
             targets = copy.copy(player.game.other_player.minions)
             targets.extend(player.game.current_player.minions)
+            targets.remove(m)
             if len(targets) > 0:
                 target = targets[player.game.random(0, len(targets) - 1)]
                 if player.game.random(0, 1) == 1:
@@ -2113,29 +2130,30 @@ class PintSizedSummoner(MinionCard):
         super().__init__("Pint-Sized Summoner", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def lesser_discount(m):
-            class Filter:
-                def __init__(self):
-                    self.amount = 1
-                    self.filter = lambda c: isinstance(c, MinionCard)
-                    self.min = 0
+        class Filter:
+            def __init__(self):
+                self.amount = 1
+                self.filter = lambda c: isinstance(c, MinionCard)
+                self.min = 0
 
-            lesser = Filter()
+        lesser = Filter()
 
-            def start_discounted_minion():
-                player.mana_filters.append(lesser)
+        def start_discounted_minion():
+            player.mana_filters.append(lesser)
 
-            def end_discounted_minion(m):
-                player.mana_filters.remove(lesser)
+        def end_discounted_minion(m):
+            player.mana_filters.remove(lesser)
 
-            def subbind():
-                player.bind_once("minion_played", end_discounted_minion)
+        def subbind():
+            player.bind_once("minion_played", end_discounted_minion)
+            minion.bind_once("silenced", lambda: player.unbind("minion_played", end_discounted_minion))
 
-            player.bind("turn_started", start_discounted_minion)
-            player.bind("turn_started", subbind)
-            m.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
-            m.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
-        return Minion(2, 2, battlecry=lesser_discount)
+        minion = Minion(2, 2)
+        player.bind("turn_started", start_discounted_minion)
+        player.bind("turn_started", subbind)
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
+        minion.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
+        return minion
 
 
 class OldMurkEye(MinionCard):
@@ -2147,7 +2165,7 @@ class OldMurkEye(MinionCard):
             targets = copy.copy(player.game.current_player.minions)
             targets.extend(player.game.other_player.minions)
             for target in targets:
-                if target.minion_type is MINION_TYPE.MURLOC:
+                if target is not m and target.minion_type is MINION_TYPE.MURLOC:
                     minion.change_attack(1)
 
         def check_murloc(m):
@@ -2164,8 +2182,10 @@ class OldMurkEye(MinionCard):
         minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_played", check_murloc))
         player.game.other_player.bind("minion_played", check_murloc)
         minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_played", check_murloc))
-        player.game.bind("minion_died", rip_murloc)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", rip_murloc))
+        player.game.current_player.bind("minion_died", rip_murloc)
+        minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_died", rip_murloc))
+        player.game.other_player.bind("minion_died", rip_murloc)
+        minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_died", rip_murloc))
         return minion
 
 
@@ -2212,7 +2232,7 @@ class Ysera(MinionCard):
 
                     def death():
                         self.target.die(None)
-                        self.target.activate_delayed()
+                        game.check_delayed()
 
                     player.bind("turn_started", death)
                     self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
@@ -2338,7 +2358,8 @@ class LorewalkerCho(MinionCard):
     def create_minion(self, player):
         def pass_spell(card):
             if len(player.game.other_player.hand) < 10:
-                player.game.other_player.hand.append(card)
+                card_type = type(card)
+                player.game.other_player.hand.append(card_type())
 
         minion = Minion(0, 4)
         player.game.current_player.bind("spell_cast", pass_spell)
@@ -2346,20 +2367,22 @@ class LorewalkerCho(MinionCard):
         player.game.other_player.bind("spell_cast", pass_spell)
         minion.bind_once("silenced", lambda: player.game.other_player.unbind("spell_cast", pass_spell))
         return minion
-"""
+
+
 class WildPyromancer(MinionCard):
     def __init__(self):
         super().__init__("Wild Pyromancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def one_damage_to_all_minions(card):
-            targets = copy.copy(player.game.other_player.minions)
-            targets.extend(player.game.current_player.minions)
-            for minion in targets:
-                minion.damage(1, None)
+            if card.is_spell():
+                targets = copy.copy(player.game.other_player.minions)
+                targets.extend(player.game.current_player.minions)
+                for target in targets:
+                    target.damage(1, None)
         minion = Minion(3, 2)
-        player.bind("spell_resolved", one_damage_to_all_minions)  # This activates before the spell, not after
-        minion.bind_once("silenced", lambda: player.unbind("spell_resolved", one_damage_to_all_minions))
+        player.bind("card_used", one_damage_to_all_minions)  # This activates before the spell, not after
+        minion.bind_once("silenced", lambda: player.unbind("card_used", one_damage_to_all_minions))
         return minion
 
 
@@ -2369,15 +2392,9 @@ class FacelessManipulator(MinionCard):
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        def dummy(m):
-            if m.card.target is None:  # Just debugging things
-                self.taunt = True
-        targets = copy.copy(player.game.current_player.minions)
-        targets.extend(player.game.other_player.minions)
-        if len(targets) > 0:
-            blank = targets.pop()  # This started out a lot more reasonable
-            blank.battlecry = dummy  # and just went downhill as reasonable things didn't work
-            return self.target
-        else:
-            return Minion(3, 3, battlecry=dummy)
-"""
+        def copy_minion(minion):
+            if self.target:
+                new_minon = self.target.copy(player)
+                minion.replace(new_minon)
+
+        return Minion(3, 3, battlecry=copy_minion)

@@ -6,8 +6,7 @@ from hsgame.cards.battlecries import silence, deal_two_damage
 
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
-        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
-                         hsgame.targeting.find_minion_battlecry_target)
+        super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
     def create_minion(self, player):
 
@@ -25,8 +24,13 @@ class KeeperOfTheGrove(MinionCard):
         minion = Minion(2, 4)
         if option == moonfire:
             minion.battlecry = deal_two_damage
+            targets = hsgame.targeting.find_battlecry_target(player.game, lambda m: not m.stealth)
         else:
             minion.battlecry = silence
+            targets = hsgame.targeting.find_minion_battlecry_target(player.game, lambda m: not m.stealth)
+
+        if targets is not None:
+            self.target = player.agent.choose_target(targets)
 
         return minion
 
@@ -69,7 +73,7 @@ class DruidOfTheClaw(MinionCard):
             druid = BearDruid()
 
         def set_card(m):
-            minion.card = druid
+            m.card = druid
         minion = druid.create_minion(player)
         player.bind_once("minion_played", set_card)
         return minion

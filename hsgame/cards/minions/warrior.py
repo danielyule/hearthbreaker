@@ -106,11 +106,9 @@ class WarsongCommander(MinionCard):
                 m.exhausted = False
 
         def silence():
-            player.unbind("minion_summoned", give_charge)
-            player.unbind("minion_played", give_charge)
+            player.unbind("minion_placed", give_charge)
 
         minion = Minion(2, 3)
-        player.bind("minion_summoned", give_charge)
-        player.bind("minion_played", give_charge)
+        player.bind("minion_placed", give_charge)
         minion.bind_once("silenced", silence)
         return minion

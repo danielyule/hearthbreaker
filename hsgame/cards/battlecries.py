@@ -88,12 +88,14 @@ def give_three_health(minion):
 
 
 def deal_one_damage_all_characters(minion):
-    targets = copy.copy(minion.player.game.other_player.minions)
-    targets.extend(minion.player.game.current_player.minions)
+    targets = copy.copy(minion.player.game.current_player.minions)
+    targets.remove(minion)
+    targets.extend(minion.player.game.other_player.minions)
     targets.append(minion.player.game.other_player.hero)
     targets.append(minion.player.game.current_player.hero)
-    for minion in targets:
-        minion.damage(1, None)
+
+    for target in targets:
+        target.damage(1, None)
 
 
 def destroy_own_crystal(minion):
@@ -117,8 +119,9 @@ def discard_two(minion):
 def deathwing(minion):
     targets = copy.copy(minion.player.game.other_player.minions)
     targets.extend(minion.player.game.current_player.minions)
-    for minion in targets:
-        minion.die(None)
+    for target in targets:
+        if target is not minion:
+            target.die(None)
     for i in range(len(minion.player.hand)):
         minion.player.game.current_player.discard()
 

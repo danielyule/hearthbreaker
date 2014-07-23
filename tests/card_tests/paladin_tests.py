@@ -109,7 +109,7 @@ class TestPaladin(unittest.TestCase):
             game.players[0].draw()
 
         self.assertEqual(10, len(game.players[0].hand))
-        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual(7, len(game.players[1].hand))
         game.play_single_turn()
         self.assertEqual(10, len(game.players[0].hand))
         self.assertEqual(10, len(game.players[1].hand))
@@ -131,13 +131,13 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
         game.play_single_turn()
         # SpellTestingAgent should draw a card, have 2 mana and try to cast Equality,
         # which it shouldn't be able to do (no minions), so hand should be 6
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual(7, len(game.players[1].hand))
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -170,10 +170,10 @@ class TestPaladin(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(30, game.players[0].hero.health)
-        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(8, len(game.players[1].hand))
         game.play_single_turn()  # Hammer of Wrath should be played
         self.assertEqual(27, game.players[0].hero.health)
-        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(9, len(game.players[1].hand))
 
     def test_HandOfProtection(self):
         game = generate_game_for(StonetuskBoar, HandOfProtection, MinionPlayingAgent, SpellTestingAgent)
@@ -237,12 +237,13 @@ class TestPaladin(unittest.TestCase):
 
         game.players[0].hero.health = 20
         # Put back some cards from hand, for testing purpose
-        for putback in range(0, 5):
+        for putback in range(0, 4):
             game.players[1].put_back(game.players[1].hand[0])
+        game.players[1].put_back(game.players[1].hand[1])
         self.assertEqual(5, len(game.players[1].hand))
         game.play_single_turn()  # Lay on Hands should be played
         self.assertEqual(28, game.players[0].hero.health)
-        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(7, len(game.players[1].hand))
         game.play_single_turn()
         game.play_single_turn()  # Lay on Hands should be played, and a card be discarded since we have 8 already
         self.assertEqual(30, game.players[0].hero.health)
@@ -310,9 +311,9 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(30, game.players[1].hero.health)
 
         game.play_single_turn()
-        # Attack with Stonetusk should happen, and the secret should trigger. Making both players take 1 damage.
-        self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(29, game.players[0].hero.health)
+        # Attack with Stonetusk should happen, and the secret should trigger, making both players take 1 damage.
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(28, game.players[0].hero.health)
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_NobleSacrifice(self):
@@ -324,10 +325,11 @@ class TestPaladin(unittest.TestCase):
 
         game.play_single_turn()
         # Attack with Stonetusk should happen, and the secret should trigger. Both minions should die.
+        # One boar is left (after being summoned after the coin)
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(29, game.players[0].hero.health)
 
         # Test with 7 minions
         game = SavedGame("tests/replays/card_tests/NobleSacrifice.rep")
@@ -374,7 +376,7 @@ class TestPaladin(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(1, len(game.players[0].secrets))
 
         game.play_single_turn()

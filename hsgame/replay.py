@@ -198,6 +198,7 @@ class Replay:
         self.card_class = None
         self.last_target = None
         self.last_index = None
+        self.game = None
         self.decks = []
         self.keeps = []
 
@@ -207,52 +208,52 @@ class Replay:
     def record_random(self, result):
         self.random_numbers.append(result)
 
-    def record_turn_end(self, game):
-        self._save_played_card(game)
+    def record_turn_end(self):
+        self._save_played_card()
         self.actions.append(TurnEndAction())
 
-    def _save_played_card(self, game):
+    def _save_played_card(self):
         if self.last_card is not None:
             if issubclass(self.card_class, hsgame.game_objects.MinionCard):
                 if self.last_card.targetable:
-                    self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target, game))
+                    self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target, self.game))
                     self.last_card = None
                     self.last_index = None
                     self.last_target = None
                 else:
-                    self.actions.append(MinionAction(self.last_card, self.last_index, game=game))
+                    self.actions.append(MinionAction(self.last_card, self.last_index, game=self.game))
                     self.last_card = None
                     self.last_index = None
             else:
                 if self.last_card.targetable:
-                    self.actions.append(SpellAction(self.last_card, self.last_target, game))
+                    self.actions.append(SpellAction(self.last_card, self.last_target, self.game))
                     self.last_card = None
                     self.last_target = None
                 else:
-                    self.actions.append(SpellAction(self.last_card, game=game))
+                    self.actions.append(SpellAction(self.last_card, game=self.game))
                     self.last_card = None
 
-    def record_card_played(self, card, game):
-        self._save_played_card(game)
-        self.last_card = ProxyCard(card, game)
+    def record_card_played(self, card):
+        self._save_played_card()
+        self.last_card = ProxyCard(card, self.game)
         self.last_card.targetable = card.targetable
         self.card_class = type(card)
 
-    def record_option_chosen(self, option, game):
+    def record_option_chosen(self, option):
         self.last_card.set_option(option)
 
-    def record_attack(self, target, attacker, game):
-        self._save_played_card(game)
-        self.actions.append(AttackAction(attacker, target, game))
+    def record_attack(self, attacker, target):
+        self._save_played_card()
+        self.actions.append(AttackAction(attacker, target, target.player.game))
 
-    def record_power(self, game):
-        self._save_played_card(game)
-        self.actions.append(PowerAction(game=game))
+    def record_power(self):
+        self._save_played_card()
+        self.actions.append(PowerAction(game=self.game))
 
-    def record_power_target(self, target, game):
-        self.actions[len(self.actions) - 1].target = ProxyCharacter(target, game)
+    def record_power_target(self, target):
+        self.actions[len(self.actions) - 1].target = ProxyCharacter(target, self.game)
 
-    def record_kept_index(self, cards, card_index, game):
+    def record_kept_index(self, cards, card_index):
         k_arr = []
         for index in range(0, len(cards)):
             if card_index[index]:
@@ -392,27 +393,22 @@ class RecordingGame(hsgame.game_objects.Game):
             def __setattr__(self, key, value):
                 setattr(self.__getattribute__("agent"), key, value)
 
-        def bind_attacks(character):
-            character.bind('attack_minion', self.replay.record_attack, character, self)
-            character.bind('attack_player', self.replay.record_attack, character, self)
-
         self.replay = hsgame.replay.Replay()
+        self.replay.game = self
         agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
 
         super().__init__(decks, agents, self._find_random)
 
         self.replay.save_decks(*decks)
 
-        self.bind("minion_added", bind_attacks)
-
-        self.bind("kept_cards", self.replay.record_kept_index, self)
+        self.bind("kept_cards", self.replay.record_kept_index)
 
         for player in self.players:
-            player.bind("turn_ended", self.replay.record_turn_end, self)
-            player.bind("used_power", self.replay.record_power, self)
-            player.hero.bind("found_power_target", self.replay.record_power_target, self)
-            player.bind("card_played", self.replay.record_card_played, self)
-            bind_attacks(player.hero)
+            player.bind("turn_ended", self.replay.record_turn_end,)
+            player.bind("used_power", self.replay.record_power)
+            player.hero.bind("found_power_target", self.replay.record_power_target)
+            player.bind("card_played", self.replay.record_card_played)
+            player.bind("attack", self.replay.record_attack)
 
     def _find_random(self, lower_bound, upper_bound):
         result = randint(lower_bound, upper_bound)

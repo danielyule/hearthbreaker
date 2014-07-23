@@ -119,8 +119,9 @@ class LordJaraxxus(MinionCard):
                 def create_weapon(self, player):
                     return Weapon(3, 8)
 
-            minion.bind("added_to_board", lambda x, y: minion.remove_from_board())
-            player.hero.health = 15
+            minion.remove_from_board()
+            player.trigger("minion_played", minion)
+            player.hero.health = minion.health
             player.hero.base_health = 15
             player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS
             player.hero.power = JaraxxusPower(player.hero)
@@ -148,8 +149,8 @@ class VoidTerror(MinionCard):
                 bonus_health += minion.health
                 minion.die(None)
 
-            if m.index < len(m.player.minions):
-                minion = m.player.minions[m.index]
+            if m.index < len(m.player.minions) - 1:
+                minion = m.player.minions[m.index + 1]
                 bonus_attack += minion.calculate_attack()
                 bonus_health += minion.health
                 minion.die(None)
