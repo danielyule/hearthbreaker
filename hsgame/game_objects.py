@@ -941,6 +941,16 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         return False
 
 
+class TheCoin(Card):
+    def __init__(self):
+        super().__init__("The Coin", 0, hsgame.constants.CHARACTER_CLASS.ALL, hsgame.constants.CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.mana < 10:
+            player.mana += 1
+
+
 class Weapon(Bindable):
     """
     Represents a Hearthstone weapon.  All weapons have been attacked power and durability.  The logic for handling the
@@ -1182,6 +1192,8 @@ class Game(Bindable):
 
         for card in put_back_cards:
             self.players[1].put_back(card)
+
+        self.players[1].hand.append(TheCoin())
 
     def start(self):
         self.pre_game()

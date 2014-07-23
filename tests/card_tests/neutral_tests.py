@@ -318,14 +318,14 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Abomination", game.current_player.minions[0].card.name)
-        self.assertEqual(10, game.current_player.hero.health)
+        self.assertEqual(4, game.current_player.hero.health)
 
         # The fireball should hit the abomination, which will cause it to go off
         # The soul of the forest will then activate, which will create a Treant.
         # The Second fireball will then hit the treant, so the enemy hero will only
         # be damaged by the Abomination deathrattle
         game.play_single_turn()
-        self.assertEqual(8, game.other_player.hero.health)
+        self.assertEqual(2, game.other_player.hero.health)
 
     def test_SpellBreaker(self):
         game = generate_game_for(Spellbreaker, LeperGnome, SpellTestingAgent, MinionPlayingAgent)
@@ -968,10 +968,10 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(22, game.players[1].hero.health)
+        self.assertEqual(20, game.players[1].hero.health)
         self.assertEqual(28, game.players[0].hero.health)
 
-        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
 
     def test_ManaAddict(self):
@@ -1243,7 +1243,7 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(7, len(game.players[0].hand))
-        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(9, len(game.players[1].hand))
 
     def test_ColdlightSeer(self):
         game = generate_game_for(ColdlightSeer, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
@@ -1502,14 +1502,14 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(6, len(game.players[0].hand))
-        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(8, len(game.players[1].hand))
 
         game.play_single_turn()  # Assassinates 1 Cult Master, other Cult Master draws
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(7, len(game.players[0].hand))
-        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(8, len(game.players[1].hand))
 
     def test_Secretkeeper(self):
         game = generate_game_for([Secretkeeper, ExplosiveTrap], ExplosiveTrap,
@@ -1576,7 +1576,9 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_Lightwarden(self):
-        game = generate_game_for([Lightwarden, MindControl], StonetuskBoar, PredictableBot, PredictableBot)
+        game = generate_game_for([Lightwarden, MindControl],
+                                 [StonetuskBoar, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre],
+                                 PredictableBot, PredictableBot)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -1711,16 +1713,16 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(6, len(game.players[1].hand))
-        self.assertEqual("Bananas", game.players[1].hand[4].name)
+        self.assertEqual(7, len(game.players[1].hand))
         self.assertEqual("Bananas", game.players[1].hand[5].name)
+        self.assertEqual("Bananas", game.players[1].hand[6].name)
 
-        for turn in range(0, 9):
+        for turn in range(0, 11):
             game.play_single_turn()
 
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
@@ -1786,7 +1788,7 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(4, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(3, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(2, game.current_player.hand[1].mana_cost(game.current_player))
 
         game.play_single_turn()
         game.play_single_turn()
@@ -1879,7 +1881,7 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -2161,7 +2163,7 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[0].hand))
         self.assertEqual("Freezing Trap", game.players[0].hand[4].name)
 
     def test_WildPyromancer(self):

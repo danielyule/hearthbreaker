@@ -145,7 +145,7 @@ class Misdirection(SecretCard):
                 old_target = old_target_func(targets)
                 possibilities.remove(old_target)
                 game.current_player.agent.choose_target = old_target_func
-                return possibilities[game.random(0, len(possibilities))]
+                return possibilities[game.random(0, len(possibilities) - 1)]
 
             old_target_func = game.current_player.agent.choose_target
             game.current_player.agent.choose_target = choose_random

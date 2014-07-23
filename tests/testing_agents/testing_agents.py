@@ -50,6 +50,8 @@ class MinionPlayingAgent(DoNothingBot):
 
     def do_turn(self, player):
         if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
+            if player.hand[0].name == "The Coin":
+                self.game.play_card(player.hand[0])
             self.game.play_card(player.hand[0])
 
 
@@ -77,14 +79,9 @@ class WeaponTestingAgent(DoNothingBot):
 
 class PredictableAgentWithoutHeroPower(DoNothingBot):
     def do_turn(self, player):
-        done_something = True
 
-        while done_something:
-            done_something = False
-            for card in copy.copy(player.hand):
-                if card.can_use(player, self.game):
-                    self.game.play_card(card)
-                    done_something = True
+        while len(player.hand) > 0 and player.hand[0].can_use(player, self.game):
+            self.game.play_card(player.hand[0])
 
         while player.hero.can_attack():
             player.hero.attack()

@@ -33,9 +33,9 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Mogu'shan Warden", game.current_player.minions[0].card.name)
 
         game.play_single_turn()
-        # The random numbers work so that both arcane missiles hit the Warden twice and the other player once
-        self.assertEqual(10, game.other_player.hero.health)
-        self.assertEqual(3, game.other_player.minions[0].health)
+        # The random numbers work so that the arcane missiles hit thrice on each target
+        self.assertEqual(9, game.other_player.hero.health)
+        self.assertEqual(4, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
         game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
@@ -275,8 +275,8 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(7, game.other_player.hero.armor)
 
-        # Attacked once on the first turn, the fireballed before getting the armor up
-        self.assertEqual(28, game.other_player.hero.health)
+        # Attacked twice on the first turn, then fireballed before getting the armor up
+        self.assertEqual(27, game.other_player.hero.health)
 
         # Make sure we can't have two identical secrets at the same time
         random.seed(1857)

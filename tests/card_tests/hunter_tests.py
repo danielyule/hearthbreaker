@@ -90,7 +90,7 @@ class TestHunter(unittest.TestCase):
             self.assertFalse(game.other_player.minions[0].immune)
             self.assertEqual(0, game.other_player.minions[0].temp_attack)
 
-        game = generate_game_for(StonetuskBoar, [BestialWrath, BestialWrath, BestialWrath, Silence],
+        game = generate_game_for(StonetuskBoar, [BestialWrath, BestialWrath, BestialWrath, Silence, BoulderfistOgre],
                                  MinionPlayingAgent, EnemyMinionSpellTestingAgent)
         game.play_single_turn()
         game.other_player.bind_once("turn_ended", verify_bwrath)
@@ -115,11 +115,12 @@ class TestHunter(unittest.TestCase):
         for turn in range(0, 5):
             game.play_single_turn()
 
+        # Vaporize is in place and two Infiltrators are down
         self.assertEqual(1, len(game.current_player.secrets))
         self.assertEqual(2, len(game.other_player.minions))
         self.assertTrue(game.other_player.minions[0].stealth)
         self.assertTrue(game.other_player.minions[1].stealth)
-        self.assertEqual(3, len(game.other_player.hand))
+        self.assertEqual(4, len(game.other_player.hand))
 
         old_play = game.other_player.agent.do_turn
 
@@ -127,13 +128,14 @@ class TestHunter(unittest.TestCase):
             old_play(player)
             player.minions[2].attack()
 
+        # Flare, The Coin, two Worgens and Arcane shot are played
+        # Arcane shot kills one of the active Worgens, because Flare has removed its stealth
         game.other_player.agent.do_turn = _play_and_attack
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.secrets))
-        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(3, len(game.current_player.minions))
         self.assertFalse(game.current_player.minions[2].stealth)
-        self.assertFalse(game.current_player.minions[3].stealth)
-        self.assertEqual(2, len(game.current_player.hand))
+        self.assertEqual(1, len(game.current_player.hand))
 
     def test_EaglehornBow(self):
         game = generate_game_for([Snipe, EaglehornBow], StonetuskBoar, PredictableAgentWithoutHeroPower,
@@ -218,8 +220,8 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual(6, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
+        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
         self.assertEqual(1, len(game.players[0].secrets))
         self.assertEqual(30, game.players[0].hero.health)
         game.play_single_turn()
@@ -227,9 +229,9 @@ class TestHunter(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(30, game.players[0].hero.health)
-        self.assertEqual(7, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[4].mana_cost(game.players[1]))
-        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[7].mana_cost(game.players[1]))
 
     def test_FreezingTrap_many_cards(self):
         class FreezingTrapAgent(DoNothingBot):
@@ -253,7 +255,8 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(10, len(game.current_player.hand))
         self.assertEqual(0, len(game.current_player.minions))
         for card in game.current_player.hand:
-            self.assertEqual(6, card.mana_cost(game.current_player))
+            if card.name != "The Coin":
+                self.assertEqual(6, card.mana_cost(game.current_player))
         self.assertEqual(30, game.other_player.hero.health)
         death_mock.assert_called_once_with(None)
 
@@ -276,8 +279,8 @@ class TestHunter(unittest.TestCase):
         # Misdirection was played first so it triggers first redirecting the atttack to the enemy hero, but
         # Freezing Trap triggers, bouncing the charging Wolfrider
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(7, len(game.players[1].hand))
-        self.assertEqual(5, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(5, game.players[1].hand[7].mana_cost(game.players[1]))
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(30, game.current_player.hero.health)
@@ -417,21 +420,21 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(5, len(game.players[0].hand))
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
     def test_BuzzardAndOwl(self):
         game = generate_game_for([StarvingBuzzard, IronbeakOwl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)

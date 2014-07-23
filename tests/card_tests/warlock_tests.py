@@ -20,12 +20,12 @@ class TestWarlock(unittest.TestCase):
         # player 0 plays raptor
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
         # mortal coils the 2hp raptor
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
 
@@ -33,7 +33,7 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
         # mortal coils the 1hp raptor and draws
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
     def test_MortalCoilDivineShield(self):
         game = generate_game_for(StonetuskBoar, MortalCoil, DoNothingBot, OneSpellTestingAgent)
@@ -44,7 +44,7 @@ class TestWarlock(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
@@ -52,13 +52,13 @@ class TestWarlock(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].divine_shield)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
-        self.assertEqual(4, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
         game.play_single_turn()
         # mortal coils the 1hp scarlet crusader and draws
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(6, len(game.players[1].hand))
 
     def test_FlameImp(self):
         game = generate_game_for(FlameImp, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
