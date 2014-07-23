@@ -762,6 +762,7 @@ class Minion(Character):
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
+        new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
 
     def attack(self):
         super().attack()
@@ -777,6 +778,8 @@ class Minion(Character):
         self.battlecry = None
         self.deathrattle = None
         self.silenced = True
+        if "copied" in self.events:
+            del self.events["copied"]
 
     def damage(self, amount, attacker):
         if self.divine_shield:
@@ -874,6 +877,8 @@ class Minion(Character):
         new_minion.player = new_owner
         new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
+        if "copied" in self.events:
+            new_minion.events["copied"] = self.events["copied"]
         return new_minion
 
     def bounce(self):

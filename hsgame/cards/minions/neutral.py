@@ -737,10 +737,15 @@ class StormwindChampion(MinionCard):
     def create_minion(self, player):
 
         def add_effect(m, index):
-            m.add_aura(1, 1, [player], lambda mini: mini is not minion)
+            m.add_aura(1, 1, [player], lambda mini: mini is not m)
+
+        def copied(new_minion, new_owner):
+            new_minion.add_aura(1, 1, [new_owner], lambda mini: mini is not new_minion)
 
         minion = Minion(6, 6)
-        minion.bind("added_to_board", add_effect)
+        minion.bind_once("added_to_board", add_effect)
+        minion.bind("copied", copied)
+
         return minion
 
 
@@ -2380,22 +2385,16 @@ class WildPyromancer(MinionCard):
         minion.bind_once("silenced", lambda: player.unbind("card_used", one_damage_to_all_minions))
         return minion
 
-"""
+
 class FacelessManipulator(MinionCard):
     def __init__(self):
         super().__init__("Faceless Manipulator", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
                          hsgame.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        def dummy(m):
-            if m.card.target is None:  # Just debugging things
-                self.taunt = True
-        targets = copy.copy(player.game.current_player.minions)
-        targets.extend(player.game.other_player.minions)
-        if len(targets) > 0:
-            blank = targets.pop()  # This started out a lot more reasonable
-            blank.battlecry = dummy  # and just went downhill as reasonable things didn't work
-            return self.target
-        else:
-            return Minion(3, 3, battlecry=dummy)
-"""
+        def copy_minion(minion):
+            if self.target:
+                new_minon = self.target.copy(player)
+                minion.replace(new_minon)
+
+        return Minion(3, 3, battlecry=copy_minion)

@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
+from hsgame.agents.basic_agents import PredictableBot
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
@@ -2187,7 +2187,6 @@ class TestCommon(unittest.TestCase):
         # The two pyros killed each other with the effect after mind blast
         self.assertEqual(0, len(game.players[0].minions))
 
-"""
     def test_FacelessManipulator(self):
         game = generate_game_for(FacelessManipulator, Abomination, EnemyMinionSpellTestingAgent, MinionPlayingAgent)
         for turn in range(0, 10):
@@ -2201,7 +2200,7 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
-      #  self.assertEqual("Abomination", game.players[0].minions[0].card.name)
-        self.assertEqual("Faceless Manipulator", game.players[0].minions[1].card.name)
-        self.assertTrue(game.players[0].minions[0].taunt)  # Debugging
-"""
+        self.assertEqual("Abomination", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].taunt)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].calculate_max_health())

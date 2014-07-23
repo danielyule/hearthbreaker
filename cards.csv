@@ -120,7 +120,7 @@ yes,Execute,Destroy a damaged enemy minion.,,Warrior,1,,,Free,Spell,Basic
 yes,Explosive Shot,Deal 5 damage to a minion and 2 damage to adjacent ones.,,Hunter,5,,,Rare,Spell,Expert
 yes,Explosive Trap,"Secret: When your hero is attacked, deal 2 damage to all enemies.",,Hunter,2,,,Common,Spell,Expert
 yes,Eye for an Eye,"Secret: When your hero takes damage, deal that much damage to the enemy hero.",,Paladin,1,,,Common,Spell,Expert
-no,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion,Expert
+yes,Faceless Manipulator,Battlecry: Choose a minion and become a copy of it.,,,5,3,3,Epic,Minion,Expert
 yes,Faerie Dragon,Can't be targeted by Spells or Hero Powers.,Dragon,,2,3,2,Common,Minion,Expert
 yes,Fan of Knives,Deal 1 damage to all enemy minions. Draw a card.,,Rogue,3,,,Common,Spell,Basic
 yes,Far Sight,Draw a card. That card costs (3) less.,,Shaman,3,,,Epic,Spell,Expert

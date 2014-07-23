@@ -155,6 +155,7 @@ from hsgame.cards.minions.neutral import (
     GelbinMekkatorque,
     LorewalkerCho,
     WildPyromancer,
+    FacelessManipulator,
 )
 
 from hsgame.cards.minions.druid import (
