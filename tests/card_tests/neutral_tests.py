@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
+from hsgame.agents.basic_agents import DoNothingBot, PredictableBot, RandomBot
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hsgame.cards import *
@@ -2141,6 +2141,130 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(5, len(game.players[1].hand))
         self.assertEqual("Freezing Trap", game.players[0].hand[4].name)
+
+    def test_RandomBot(self):
+        game = generate_game_for(StonetuskBoar, StonetuskBoar, RandomBot, DoNothingBot)
+        game.play_single_turn()  # Now we try to figure what it did
+
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 Boar
+        self.assertEqual(29, game.players[1].hero.health)  # Charge
+        self.assertEqual(30, game.players[0].hero.health)  # Future check for self-ping
+        # Spent 1/1 mana, no passed actions
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))  # Apparently fireblast our boar
+        self.assertEqual(29, game.players[1].hero.health)  # Without attacking
+        self.assertEqual(30, game.players[0].hero.health)
+        # spent 2/2 no passed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))  # Play 1 Boar
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(28, game.players[1].hero.health)  # Charge
+        self.assertEqual(29, game.players[0].hero.health)  # Self-ping
+        # spent 3/3 no passed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].hand))  # Play 2 Boars
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(25, game.players[1].hero.health)  # Charge 3
+        self.assertEqual(28, game.players[0].hero.health)  # Self-ping
+        # spent 4/4 no passed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))  # Play 3 Boars
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(18, game.players[1].hero.health)  # Charge 6 + Ping
+        self.assertEqual(28, game.players[0].hero.health)
+        # spent 5/5 no passed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))  # Play 3 Boars
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(11, game.players[1].hero.health)  # Charge 7
+        self.assertEqual(27, game.players[0].hero.health)  # Self-ping
+
+    def test_RandomBot2(self):
+        game = generate_game_for(StonetuskBoar, StonetuskBoar, RandomBot, DoNothingBot)
+        for i in range(3):
+            game.players[0].discard()
+        game.play_single_turn()  # Now we try to figure what it did
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 Boar
+        self.assertEqual(30, game.players[1].hero.health)  # Don't attack
+        self.assertEqual(30, game.players[0].hero.health)  # Future check for self-ping
+        # Spent 1/1 mana, passed on attacking
+        game.players[0].minions[0].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))  # Play nothing
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(29, game.players[0].hero.health)  # Self-ping
+        # Spent 2/2 mana, no passed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 boar
+        self.assertEqual(29, game.players[1].hero.health)  # 1 charge
+        self.assertEqual(28, game.players[0].hero.health)  # Self-ping
+        # Spent 3/3 mana, no passed
+        game.players[0].minions[0].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(2, len(game.players[0].minions))  # Play 2 boars
+        self.assertEqual(27, game.players[1].hero.health)  # 2 charge
+        self.assertEqual(27, game.players[0].hero.health)  # self-ping
+        # Spent 4/4 mana, no passed
+        game.players[0].minions[0].die(None)  # Try again
+        game.players[0].minions[1].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 boar
+        self.assertEqual(26, game.players[1].hero.health)  # 1 charge
+        self.assertEqual(26, game.players[0].hero.health)  # Self-ping
+        # Spent 3/5 mana, no passed
+        game.players[0].minions[0].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 boar
+        self.assertEqual(24, game.players[1].hero.health)  # 1 charge + ping
+        self.assertEqual(26, game.players[0].hero.health)
+        # Spent 3/6 mana, no passed
+        game.players[0].minions[0].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 boar
+        self.assertEqual(23, game.players[1].hero.health)  # 1 charge
+        self.assertEqual(26, game.players[0].hero.health)  # no ping
+        # Spent 1/7 mana, passed on hero power
+        game.players[0].minions[0].die(None)  # Try again
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))  # Play 1 boar
+        self.assertEqual(21, game.players[1].hero.health)  # 1 charge + ping
+        self.assertEqual(26, game.players[0].hero.health)
+
 """
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,

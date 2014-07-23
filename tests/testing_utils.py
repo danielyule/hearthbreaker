@@ -59,3 +59,30 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     game.other_player = game.players[0]
     game.pre_game()
     return game
+
+def legal_deck(card_list):
+    if len(card_list) > 30 or len(card_list) < 15:
+        return False
+
+    class1 = CHARACTER_CLASS.ALL
+    for card in card_list:
+        if card.character_class != CHARACTER_CLASS.ALL:
+            class1 = card.character_class
+            break
+    for card in card_list:
+        if card.character_class != class1 and card.character_class != CHARACTER_CLASS.ALL:
+            return False
+
+    cards = []
+    while len(cards) + len(card_pattern) < 30:
+        cards.extend(copy.deepcopy(card_list))
+
+    cards.extend(card_list[:30 - len(cards)])
+
+    for card in card_list:
+        if card.RARITY == CARD_RARITY.LEGENDARY and card_list.count(card) > 1:
+            return False
+        if card_list.count(card) > 2:
+            return False
+
+    return True
