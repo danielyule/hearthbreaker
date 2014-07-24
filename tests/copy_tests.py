@@ -114,3 +114,18 @@ class TestCopying(unittest.TestCase):
         self.assertEqual("Treant", game.current_player.minions[0].card.name)
         self.assertEqual(28, game.current_player.hero.health)
         self.assertEqual(28, game.other_player.hero.health)
+
+    def test_NerubianEgg(self):
+        game = generate_game_for(NerubianEgg, FacelessManipulator, MinionPlayingAgent, create_enemy_copying_agent(5))
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.minions[0].calculate_attack())
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())

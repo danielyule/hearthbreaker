@@ -2410,9 +2410,9 @@ class NerubianEgg(MinionCard):
                 def __init__(self):
                     super().__init__("Nerubian", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
-                def create_minion(self, player):
+                def create_minion(self, p):
                     return Minion(4, 4)
 
-            Nerubian().summon(player, player.game, m.index)
+            Nerubian().summon(m.player, m.player.game, m.index)
 
         return Minion(0, 2, deathrattle=summon_nerubian)
