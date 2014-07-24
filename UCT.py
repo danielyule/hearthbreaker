@@ -19,19 +19,17 @@
 from math import *
 import random
 from hsgame.game_objects import *
-import hsgame.targeting
-from hsgame.cards.minions.neutral import RiverCrocolisk
+from hsgame.targeting import *
 from tests.testing_utils import generate_game_for
-from hsgame.agents.basic_agents import DoNothingBot
+from hsgame.agents.basic_agents import DoNothingBot, RandomBot
 from hsgame.constants import CHARACTER_CLASS
-from hsgame.cards.spells.rogue import SinisterStrike
-deck1 = SinisterStrike
-deck2 = RiverCrocolisk
-game = generate_game_for(deck1, deck2, DoNothingBot, DoNothingBot)
-rc = RiverCrocolisk()
-rc.summon(game.players[0], game, 0)
-game.players[0].hero.health = 2
-game.players[1].hero.health = 2
+from hsgame.cards.spells.mage import Pyroblast
+deck1 = Pyroblast  # Breaks if you finish with a spell, returning Game Ended
+deck2 = Pyroblast
+game = generate_game_for(deck1, deck2, RandomBot, RandomBot)
+game.players[0].max_mana = 2  # Starting with 1 mana seems to give it issues with empty movelists
+game.players[0].hero.health = 3
+game.players[1].hero.health = 3
 game._start_turn()
 
 class HearthState:
@@ -56,26 +54,31 @@ class HearthState:
         """ Update a state by carrying out the given move.
             Must update playerJustMoved.
         """
-        if move[0] == "turn_ended":
+        # print(str(self.game.current_player.mana) + "/" + str(self.game.current_player.max_mana))
+        if move[0] == "end_turn":
             self.game._end_turn()
             self.game._start_turn()
             self.playerJustMoved = 1 - self.playerJustMoved
+            # print("Player " + str(self.playerJustMoved) + " ends turn")
         elif move[1] == "summon_minion":
-            self.game.player.agent.choose_index = move[2]
+            self.game.current_player.agent.choose_index = move[2]
             move[1]  # DoNothingBot summons at index 0, that's ok for now, but need to pass index eventually
         elif move[2] is None:
             move[1]
-        elif move[0] == "minion_attack":
-            game.player.agent.choose_target = move[2]
+        elif move[0] == "minion_attack" or move[0] == "hero_attack" or move[0] == "mage_power":
+            self.game.current_player.agent.choose_target = move[2]
             move[1]
+            # print(str(move[0]) + " used with target " + str(move[2]))
         else:
-            raise NameError("DoMove ran into unclassified card")
+            raise NameError("DoMove ran into unclassified card", move)
 
     def GetMoves(self):
         """ Get all possible moves from this state.
             Going to return tuples, untargeted_spell, targetted_spell, equip_weapon, play_secret, mininion_attack, hero_attack, hero_power, end_turn
         """
-        valid_moves = []
+        if self.game.players[1].hero.health <= 0 or self.game.players[0].hero.health <= 0:
+            return []
+        valid_moves = [["end_turn", self.game._end_turn(), None]]
         found_taunt = False
         targets = []
         for enemy in self.game.other_player.minions:
@@ -88,6 +91,7 @@ class HearthState:
             targets = [target for target in targets if target.taunt]
         else:
             targets.append(self.game.other_player.hero)
+
         for minion in copy.copy(self.game.current_player.minions):
             if minion.can_attack():
                 for target in targets:
@@ -95,10 +99,10 @@ class HearthState:
 
         if self.game.current_player.hero.can_attack():
             for target in targets:
-                valid_moves.append(["hero_attack", player.hero.attack(), target])
+                valid_moves.append(["hero_attack", self.game.current_player.hero.attack(), target])
 
         for card in copy.copy(self.game.current_player.hand):
-            if card.can_use(self.game.current_player, self.game) and isinstance(c, MinionCard):
+            if card.can_use(self.game.current_player, self.game) and isinstance(card, MinionCard):
                 valid_moves.append(["summon_minion", self.game.play_card(card), 0])
             elif card.can_use(self.game.current_player, self.game) and isinstance(card, WeaponCard):
                 valid_moves.append(["equip_weapon", self.game.play_card(card), None])
@@ -117,28 +121,27 @@ class HearthState:
             for target in hsgame.targeting.find_friendly_spell_target(game, lambda x: x.health != x.calculate_max_health()):
                 valid_moves.append(["priest_power", self.game.current_player.hero.power.use(), target])
         elif self.game.current_player.hero.power.can_use():
-            valid_moves.append(["hero_power", self.game.current_player.hero.power.use(), target])
-
-        valid_moves.append(["end_turn", self.game._end_turn(), None])
+            valid_moves.append(["hero_power", self.game.current_player.hero.power.use(), None])
+        print(str(valid_moves))
         return valid_moves
 
     def GetResult(self, playerjm):
         """ Get the game result from the viewpoint of playerjm. 
         """
-        assert game.current_player.hero.health <= 0 or game.other_player.hero.health <= 0
-        if game.current_player.hero.health <= 0:
-            return 0.0
-        if game.other_player.hero.health <= 0:
-            return 1.0
+        assert self.game.current_player.hero.health <= 0 or self.game.other_player.hero.health <= 0
+        if self.game.current_player.hero.health <= 0:
+            return 0
+        if self.game.other_player.hero.health <= 0:
+            return 1
 
     def __repr__(self):
-        s = "[" + str(self.game.players[1].hero.health) + " hp:" + str(len(self.game.players[1].hand)) +" cards] "
+        s = "[" + str(self.game.players[1].hero.health) + " hp:" + str(len(self.game.players[1].hand)) + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
         for minion in copy.copy(self.game.players[1].minions):
             s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
-        s += "\n[" + str(self.game.players[0].hero.health) + " hp:" + str(len(self.game.players[0].hand)) +" cards] "
+        s += "\n[" + str(self.game.players[0].hero.health) + " hp:" + str(len(self.game.players[0].hand)) + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
         for minion in copy.copy(self.game.players[0].minions):
             s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
-        s += "\n" + "Current Player:" + str(1 - self.playerJustMoved)
+        s += "\n" + "Current Player: " + str(1 - self.playerJustMoved)
         return s
 
 class NimState:
@@ -149,7 +152,7 @@ class NimState:
         Any initial state of the form 4n is a win for player 2.
     """
     def __init__(self, ch):
-        self.playerJustMoved = 1 # At the root pretend the player just moved is p2 - p1 has the first move
+        self.playerJustMoved = 1 # At the root pretend the player just moved is p1 - p0 has the first move
         self.chips = ch
         
     def Clone(self):
@@ -222,7 +225,7 @@ class Node:
         self.wins += result
 
     def __repr__(self):
-        return "[M:" + str(self.move) + " P:" + str(100 * self.wins // self.visits) + " W/V:" + str(self.wins) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
+        return "[M:" + str(self.move) + " P:" + str(int(100 * self.wins / self.visits)) + "% W/V:" + str(int(self.wins)) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
 
     def TreeToString(self, indent):
         s = self.IndentString(indent) + str(self)
@@ -297,9 +300,9 @@ def UCTPlayGame():
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.playerJustMoved) == 1:
-        print("Player " + str(state.playerJustMoved) + " wins!")
+        print("Player " + str(state.playerJustMoved) + " wins!" + "\n" + str(state))
     elif state.GetResult(state.playerJustMoved) == 0:
-        print("Player " + str(1 - state.playerJustMoved) + " wins!")
+        print("Player " + str(1 - state.playerJustMoved) + " wins!" + "\n" + str(state))
     else: print("Nobody wins!")
     #raw_input("[Close]")
 
