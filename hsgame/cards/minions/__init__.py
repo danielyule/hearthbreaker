@@ -156,6 +156,7 @@ from hsgame.cards.minions.neutral import (
     LorewalkerCho,
     WildPyromancer,
     FacelessManipulator,
+    NerubianEgg
 )
 
 from hsgame.cards.minions.druid import (

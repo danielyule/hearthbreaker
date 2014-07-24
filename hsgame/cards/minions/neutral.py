@@ -2398,3 +2398,21 @@ class FacelessManipulator(MinionCard):
                 minion.replace(new_minon)
 
         return Minion(3, 3, battlecry=copy_minion)
+
+
+class NerubianEgg(MinionCard):
+    def __init__(self):
+        super().__init__("Nerubian Egg", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def summon_nerubian(m):
+            class Nerubian(MinionCard):
+                def __init__(self):
+                    super().__init__("Nerubian", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(4, 4)
+
+            Nerubian().summon(player, player.game, m.index)
+
+        return Minion(0, 2, deathrattle=summon_nerubian)

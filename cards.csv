@@ -246,6 +246,7 @@ yes,Murloc Tidehunter,Battlecry: Summon a 1/1 Murloc Scout.,Murloc,,2,2,1,Common
 yes,Murloc Warleader,ALL other Murlocs have +2/+1.,Murloc,,3,3,3,Epic,Minion,Expert
 yes,Nat Pagle,"At the start of your turn, you have a 50% chance to draw an extra card.",,,2,0,4,Legendary,Minion,Expert
 yes,Naturalize,Destroy a minion. Your opponent draws 2 cards.,,Druid,1,,,Common,Spell,Expert
+yes,Nerubian Egg,Deathrattle: Summon a 4/4 Nerubian.,,,2,0,2,Rare,Minion,Curse of Naxxramas
 yes,Nightblade,Battlecry: Deal 3 damage to the enemy hero.,,,5,4,4,Free,Minion,Basic
 yes,Noble Sacrifice,"Secret: When an enemy attacks, summon a 2/1 Defender as the new target.",,Paladin,1,,,Common,Spell,Expert
 yes,Northshire Cleric,"Whenever a minion is healed, draw a card.",,Priest,1,1,3,Free,Minion,Basic

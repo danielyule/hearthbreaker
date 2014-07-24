@@ -2204,3 +2204,21 @@ class TestCommon(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].taunt)
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(4, game.players[0].minions[0].calculate_max_health())
+
+    def test_NerubianEgg(self):
+        game = generate_game_for(NerubianEgg, ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual("Nerubian Egg", game.players[0].minions[0].card.name)
+        self.assertEqual(0, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].calculate_max_health())
+
+        # Shadow Bolt should be played, killing the egg
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual("Nerubian", game.players[0].minions[0].card.name)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].calculate_max_health())
