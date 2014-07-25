@@ -17,6 +17,7 @@ yes,Ancient of War,Choose One - +5 Attack; or +5 Health and Taunt.,,Druid,7,5,5,
 yes,Ancient Watcher,Can't Attack.,,,2,4,5,Rare,Minion,Expert
 yes,Angry Chicken,Enrage: +5 Attack.,Beast,,1,1,1,Rare,Minion,Expert
 yes,Animal Companion,Summon a random Beast Companion.,,Hunter,3,,,Common,Spell,Basic
+no,Anub'ar Ambusher,Deathrattle: Return a random friendly minion to your hand,,Rogue,4,5,5,Common,Curse of Naxxramas
 yes,Arathi Weaponsmith,Battlecry: Equip a 2/2 weapon.,,Warrior,4,3,3,Common,Minion,Expert
 yes,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Free,Spell,Basic
 yes,Arcane Golem,Charge. Battlecry: Give your opponent a Mana Crystal.,,,3,4,2,Rare,Minion,Expert
@@ -160,6 +161,7 @@ yes,Hammer of Wrath,Deal 3 damage. Draw a card.,,Paladin,4,,,Free,Spell,Basic
 yes,Hand of Protection,Give a minion Divine Shield.,,Paladin,1,,,Free,Spell,Basic
 yes,Harrison Jones,Battlecry: Destroy your opponent's weapon and draw cards equal to its Durability.,,,5,5,4,Legendary,Minion,Expert
 yes,Harvest Golem,Deathrattle: Summon a 2/1 Damaged Golem.,,,3,2,3,Common,Minion,Expert
+no,Haunted Creeper,Deathrattle: Summon two 1/1 Spectral Spiders.,Beast,,1,2,Common,Minion,Curse of Naxxramas
 yes,Headcrack,Deal 2 damage to the enemy hero. Combo: Return this to your hand next turn.,,Rogue,3,,,Rare,Spell,Expert
 yes,Healing Touch,Restore 8 Health.,,Druid,3,,,Free,Spell,Basic
 yes,Hellfire,Deal 3 damage to ALL characters.,,Warlock,4,,,Free,Spell,Basic
@@ -213,6 +215,7 @@ yes,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxu
 yes,Lord of the Arena,Taunt,,,6,6,5,Common,Minion,Basic
 yes,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Legendary,Minion,Expert
 yes,Mad Bomber,Battlecry: Deal 3 damage randomly split between all other characters.,,,2,3,2,Common,Minion,Expert
+no,Maexxna,Destroy any minions damaged by this minion.,Beast,,6,2,8,Legendary,Minion,Curse of Naxxramas
 yes,Magma Rager,,,,3,5,1,Free,Minion,Basic
 yes,Malygos,Spell Damage +5,Dragon,,9,4,12,Legendary,Minion,Expert
 yes,Mana Addict,"Whenever you cast a spell, gain +2 Attack this turn.",,,2,1,3,Rare,Minion,Expert
@@ -246,6 +249,7 @@ yes,Murloc Tidehunter,Battlecry: Summon a 1/1 Murloc Scout.,Murloc,,2,2,1,Common
 yes,Murloc Warleader,ALL other Murlocs have +2/+1.,Murloc,,3,3,3,Epic,Minion,Expert
 yes,Nat Pagle,"At the start of your turn, you have a 50% chance to draw an extra card.",,,2,0,4,Legendary,Minion,Expert
 yes,Naturalize,Destroy a minion. Your opponent draws 2 cards.,,Druid,1,,,Common,Spell,Expert
+no,Nerub'ar Weblord,Minions with Battlecry cost (2) more.,,,2,1,4,Common,Minion,Curse of Naxxramas
 yes,Nerubian Egg,Deathrattle: Summon a 4/4 Nerubian.,,,2,0,2,Rare,Minion,Curse of Naxxramas
 yes,Nightblade,Battlecry: Deal 3 damage to the enemy hero.,,,5,4,4,Free,Minion,Basic
 yes,Noble Sacrifice,"Secret: When an enemy attacks, summon a 2/1 Defender as the new target.",,Paladin,1,,,Common,Spell,Expert
@@ -262,6 +266,7 @@ yes,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,
 yes,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Rare,Minion,Expert
 yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Epic,Minion,Expert
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Free,Spell,Basic
+no,Poison Seeds,Destroy all minions and summon 2/2 Treants to replace them.,,Druid,4,,,Common,Spell,Curse of Naxxramas
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Common,Spell,Expert
 yes,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Common,Spell,Expert
 yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Free,Spell,Basic
