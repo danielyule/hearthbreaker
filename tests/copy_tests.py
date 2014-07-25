@@ -150,3 +150,24 @@ class TestCopying(unittest.TestCase):
 
         self.assertEqual(2, game.other_player.minions[0].calculate_attack())
         self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
+
+    def test_Maexxna_and_EmperorCobra(self):
+        game = generate_game_for([Maexxna,EmperorCobra], FacelessManipulator,
+                                 PredictableAgentWithoutHeroPower, create_enemy_copying_agent(6))
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        # The faceless should have copied Maexxna, then the following turn
+        # Maexxna should attack the copy, resulting in both dying.  All that should
+        # be left is the cobra played this turn
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Emperor Cobra", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Maexxna", game.current_player.minions[0].card.name)
