@@ -10,11 +10,14 @@ class TimberWolf(MinionCard):
 
     def create_minion(self, player):
 
-        def add_effect(m, index):
-            m.add_aura(1, 0, [player], lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.BEAST)
+        def add_effect(m, p):
+            def copy_minion(new_minion, new_owner):
+                add_effect(new_minion, new_owner)
+            m.add_aura(1, 0, [p], lambda mini: mini is not m and mini.minion_type is MINION_TYPE.BEAST)
+            m.bind("copied", copy_minion)
 
         minion = Minion(1, 1, MINION_TYPE.BEAST)
-        minion.bind("added_to_board", add_effect)
+        add_effect(minion, player)
         return minion
 
 
@@ -31,8 +34,8 @@ class SavannahHighmane(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 2, MINION_TYPE.BEAST)
 
-            Hyena().summon(player, player.game, m.index)
-            Hyena().summon(player, player.game, m.index)
+            Hyena().summon(m.player, player.game, m.index)
+            Hyena().summon(m.player, player.game, m.index)
 
         return Minion(6, 5, MINION_TYPE.BEAST, deathrattle=summon_hyenas)
 
@@ -68,13 +71,17 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def check_beast_draw(m):
-            if m.minion_type is MINION_TYPE.BEAST and m is not minion:
-                player.draw()
+        def apply_effect(m, p):
+            def check_beast_draw(new_minion):
+                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not minion:
+                    p.draw()
+
+            p.bind("minion_placed", check_beast_draw)
+            m.bind_once("silenced", lambda: p.unbind("minion_placed", check_beast_draw))
+            m.bind("copied", apply_effect)
 
         minion = Minion(2, 1, MINION_TYPE.BEAST)
-        player.bind("minion_placed", check_beast_draw)
-        minion.bind_once("silenced", lambda: player.unbind("minion_placed", check_beast_draw))
+        apply_effect(minion, player)
         return minion
 
 
@@ -83,14 +90,17 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def check_beast_charge(m):
-            if m.minion_type is MINION_TYPE.BEAST:
-                m.charge = True
-                m.exhausted = False
+        def apply_effect(m, p):
+            def check_beast_charge(played_minion):
+                if played_minion.minion_type is MINION_TYPE.BEAST:
+                    played_minion.charge = True
+                    played_minion.exhausted = False
 
+            p.bind("minion_played", check_beast_charge)
+            m.bind_once("silenced", lambda: p.unbind("minion_played", check_beast_charge))
+            m.bind("copied", apply_effect)
         minion = Minion(2, 5, MINION_TYPE.BEAST)
-        player.bind("minion_played", check_beast_charge)
-        minion.bind_once("silenced", lambda: player.unbind("minion_played", check_beast_charge))
+        apply_effect(minion, player)
         return minion
 
 
@@ -99,12 +109,16 @@ class ScavengingHyena(MinionCard):
         super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def hyena_grow(m, by):
-            if m is not minion and m.minion_type is MINION_TYPE.BEAST:
-                minion.change_attack(2)
-                minion.increase_health(1)
+        def apply_effect(m, p):
+            def hyena_grow(dead_minion, by):
+                if dead_minion is not minion and dead_minion.minion_type is MINION_TYPE.BEAST:
+                    m.change_attack(2)
+                    m.increase_health(1)
+
+            p.bind("minion_died", hyena_grow)
+            m.bind_once("silenced", lambda: p.game.unbind("minion_died", hyena_grow))
+            m.bind("copied", apply_effect)
 
         minion = Minion(2, 2, MINION_TYPE.BEAST)
-        player.bind("minion_died", hyena_grow)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_died", hyena_grow))
+        apply_effect(minion, player)
         return minion

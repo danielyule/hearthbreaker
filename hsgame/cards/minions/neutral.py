@@ -773,13 +773,15 @@ class EmperorCobra(MinionCard):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def poisonous(amount, target):
-            if type(target) is Minion:
-                target.die(self)
-
+        def apply_effect(m, p):
+            def poisonous(amount, target):
+                if type(target) is Minion:
+                    target.die(self)
+            m.bind("did_damage", poisonous)
+            m.bind_once("silenced", lambda: m.unbind("did_damage", poisonous))
+            m.bind("copied", apply_effect)
         minion = Minion(2, 3, MINION_TYPE.BEAST)
-        minion.bind("did_damage", poisonous)
-        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
+        apply_effect(minion, player)
         return minion
 
 
@@ -2416,3 +2418,20 @@ class NerubianEgg(MinionCard):
             Nerubian().summon(m.player, m.player.game, m.index)
 
         return Minion(0, 2, deathrattle=summon_nerubian)
+
+
+class Maexxna(MinionCard):
+    def __init__(self):
+        super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def apply_effect(m, p):
+            def poisonous(amount, target):
+                if type(target) is Minion:
+                    target.die(self)
+            m.bind("did_damage", poisonous)
+            m.bind_once("silenced", lambda: m.unbind("did_damage", poisonous))
+            m.bind("copied", apply_effect)
+        minion = Minion(2, 8, MINION_TYPE.BEAST)
+        apply_effect(minion, player)
+        return minion

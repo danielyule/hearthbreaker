@@ -5,7 +5,7 @@ from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
 
-def create_enemy_copying_agent(turn_to_play):
+def create_enemy_copying_agent(turn_to_play=1):
     class EnemyCopyingAgent(SpellTestingAgent):
         def __init__(self):
             super().__init__()
@@ -25,7 +25,7 @@ def create_enemy_copying_agent(turn_to_play):
     return EnemyCopyingAgent
 
 
-def create_friendly_copying_agent(turn_to_play):
+def create_friendly_copying_agent(turn_to_play=1):
     class FriendlyCopyingAgent(SpellTestingAgent):
         def __init__(self):
             super().__init__()
@@ -129,3 +129,24 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+    def test_ScavangingHyena(self):
+        game = generate_game_for([ChillwindYeti, ScavengingHyena],
+                                 [StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual("Scavenging Hyena", game.current_player.minions[0].card.name)
+        game.current_player.minions[1].die(None)
+        game.current_player.minions[2].die(None)
+        game.current_player.minions[3].die(None)
+        game.current_player.minions[4].die(None)
+        game.check_delayed()
+        self.assertEqual(10, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
+
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())

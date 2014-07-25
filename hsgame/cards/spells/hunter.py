@@ -36,17 +36,23 @@ class BestialWrath(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def remove_immunity():
-            self.target.immune = False
-            self.target.unbind("silenced", silenced)
+        def apply_effect(m, p):
 
-        def silenced():
-            player.unbind("turn_ended", remove_immunity)
+            def remove_immunity():
+                m.immune = False
+                m.unbind("silenced", silenced)
+                m.unbind("copied", apply_effect)
 
+            def silenced():
+                p.unbind("turn_ended", remove_immunity)
+
+            p.bind_once("turn_ended", remove_immunity)
+            m.bind_once("silenced", silenced)
+            m.bind("copied", apply_effect)
         self.target.immune = True
-        self.target.temp_attack += 2
-        player.bind_once("turn_ended", remove_immunity)
-        self.target.bind_once("silenced", silenced)
+        self.target.change_temp_attack(2)
+
+        apply_effect(self.target, player)
 
 
 class Flare(Card):
