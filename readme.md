@@ -57,7 +57,7 @@ when it is time to make a decision, the game will request the decision from the 
 dictating how the game is run.
 
 The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
-(spell/minion/secret/weapon) and by class.  To see which cards have been implemented, simply search for "yes".
+(spell/minion/secret/weapon) and by class.
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).
