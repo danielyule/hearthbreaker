@@ -777,8 +777,12 @@ class EmperorCobra(MinionCard):
             def poisonous(amount, target):
                 if type(target) is Minion:
                     target.die(self)
+
+            def silenced():
+                m.unbind("did_damage", poisonous)
+                m.unbind("copied", apply_effect)
             m.bind("did_damage", poisonous)
-            m.bind_once("silenced", lambda: m.unbind("did_damage", poisonous))
+            m.bind_once("silenced", silenced)
             m.bind("copied", apply_effect)
         minion = Minion(2, 3, MINION_TYPE.BEAST)
         apply_effect(minion, player)
@@ -2429,8 +2433,12 @@ class Maexxna(MinionCard):
             def poisonous(amount, target):
                 if type(target) is Minion:
                     target.die(self)
+
+            def silenced():
+                m.unbind("did_damage", poisonous)
+                m.unbind("copied", apply_effect)
             m.bind("did_damage", poisonous)
-            m.bind_once("silenced", lambda: m.unbind("did_damage", poisonous))
+            m.bind_once("silenced", silenced)
             m.bind("copied", apply_effect)
         minion = Minion(2, 8, MINION_TYPE.BEAST)
         apply_effect(minion, player)

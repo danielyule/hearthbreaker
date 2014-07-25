@@ -14,6 +14,9 @@ The goal is not to create a clone of Hearthstone which players can use to replac
 
 Usage
 -----
+
+The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+
 ###Console Application
 There is a basic console that you can use for playing against a bot.  The bot you are playing against will not
 attack you, and will play one card from its hand per turn. (So it is very easy to beat)
@@ -31,8 +34,6 @@ on windows, you must download it from
 The tests are located in the [`tests`](tests) package.
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
-
-The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](https://pypi.python.org/pypi/mock).
 
