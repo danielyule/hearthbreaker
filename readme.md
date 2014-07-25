@@ -47,10 +47,14 @@ for more details.
 
 Structure
 ---------
-Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on an event based system.
-The events use a bind/trigger mechanism.  For example, a card which has a deathrattle will bind an event to its 'death'
-event that takes the appropriate action.  Parameters can be passed to an event at the time it is bound, or the time it
-is triggered, or both.  For an overview of the events and the parameters they receive, see [events.md](events.md).
+Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on
+an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the parameters they 
+receive, see [events.md](events.md).
+
+The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
+by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
+when it is time to make a decision, the game will request the decision from the agents, rather than the agents
+dictating how the game is run.
 
 The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
 (spell/minion/secret/weapon) and by class.  To see which cards have been implemented, simply search for "yes".

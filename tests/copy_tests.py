@@ -152,7 +152,7 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
 
     def test_Maexxna_and_EmperorCobra(self):
-        game = generate_game_for([Maexxna,EmperorCobra], FacelessManipulator,
+        game = generate_game_for([Maexxna, EmperorCobra], FacelessManipulator,
                                  PredictableAgentWithoutHeroPower, create_enemy_copying_agent(6))
         for turn in range(0, 13):
             game.play_single_turn()
