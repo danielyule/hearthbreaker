@@ -23,13 +23,13 @@ from hsgame.targeting import *
 from tests.testing_utils import generate_game_for
 from hsgame.agents.basic_agents import DoNothingBot, RandomBot
 from hsgame.constants import CHARACTER_CLASS
-from hsgame.cards.spells.mage import Pyroblast
-deck1 = Pyroblast  # Breaks if you finish with a spell, returning Game Ended
-deck2 = Pyroblast
+from hsgame.cards.spells.mage import Pyroblast, Fireball
+deck1 = Fireball  # Breaks if you finish with a spell, returning Game Ended
+deck2 = Fireball
 game = generate_game_for(deck1, deck2, RandomBot, RandomBot)
-game.players[0].max_mana = 2  # Starting with 1 mana seems to give it issues with empty movelists
-game.players[0].hero.health = 3
-game.players[1].hero.health = 3
+# game.players[0].max_mana = 4  # Starting with 1 mana seems to give it issues with empty movelists
+game.players[0].hero.health = 30
+game.players[1].hero.health = 30
 game._start_turn()
 
 class HearthState:
@@ -54,20 +54,32 @@ class HearthState:
         """ Update a state by carrying out the given move.
             Must update playerJustMoved.
         """
+        if self.game.players[1].hero.health <= 0 or self.game.players[0].hero.health <= 0:
+            return
+        def _choose_target(targets):
+            return targets[targets.index(move[2])]
+        def _choose_index(targets):
+            return move[2]
         # print(str(self.game.current_player.mana) + "/" + str(self.game.current_player.max_mana))
         if move[0] == "end_turn":
             self.game._end_turn()
             self.game._start_turn()
             self.playerJustMoved = 1 - self.playerJustMoved
             # print("Player " + str(self.playerJustMoved) + " ends turn")
+        elif move[0] == "hero_power":
+            self.game.current_player.agent.choose_target = _choose_target
+            move[1].power.use()
         elif move[1] == "summon_minion":
-            self.game.current_player.agent.choose_index = move[2]
-            move[1]  # DoNothingBot summons at index 0, that's ok for now, but need to pass index eventually
+            self.game.current_player.agent.choose_index = _choose_index
+            self.game.play_card(move[1])  # DoNothingBot summons at index 0, that's ok for now, but need to pass index eventually
         elif move[2] is None:
-            move[1]
+            self.game.play_card(move[1])
         elif move[0] == "minion_attack" or move[0] == "hero_attack" or move[0] == "mage_power":
-            self.game.current_player.agent.choose_target = move[2]
-            move[1]
+            self.game.current_player.agent.choose_target = _choose_target
+            move[1].attack()
+        elif move[0] == "targeted_spell":
+            self.game.current_player.agent.choose_target = _choose_target
+            self.game.play_card(move[1])
             # print(str(move[0]) + " used with target " + str(move[2]))
         else:
             raise NameError("DoMove ran into unclassified card", move)
@@ -78,7 +90,7 @@ class HearthState:
         """
         if self.game.players[1].hero.health <= 0 or self.game.players[0].hero.health <= 0:
             return []
-        valid_moves = [["end_turn", self.game._end_turn(), None]]
+        valid_moves = [["end_turn", None, None]]
         found_taunt = False
         targets = []
         for enemy in self.game.other_player.minions:
@@ -95,34 +107,66 @@ class HearthState:
         for minion in copy.copy(self.game.current_player.minions):
             if minion.can_attack():
                 for target in targets:
-                    valid_moves.append(["minion_attack", minion.attack(), target])
+                    valid_moves.append(["minion_attack", minion, target])
 
         if self.game.current_player.hero.can_attack():
             for target in targets:
-                valid_moves.append(["hero_attack", self.game.current_player.hero.attack(), target])
+                valid_moves.append(["hero_attack", self.game.current_player.hero, target])
 
         for card in copy.copy(self.game.current_player.hand):
             if card.can_use(self.game.current_player, self.game) and isinstance(card, MinionCard):
-                valid_moves.append(["summon_minion", self.game.play_card(card), 0])
+                valid_moves.append(["summon_minion", card, 0])
             elif card.can_use(self.game.current_player, self.game) and isinstance(card, WeaponCard):
-                valid_moves.append(["equip_weapon", self.game.play_card(card), None])
+                valid_moves.append(["equip_weapon", card, None])
             elif card.can_use(self.game.current_player, self.game) and isinstance(card, SecretCard):
-                valid_moves.append(["played_secret", self.game.play_card(card), None])
+                valid_moves.append(["played_secret", card, None])
             elif card.can_use(self.game.current_player, self.game) and not card.targetable:
-                valid_moves.append(["untargeted_spell", self.game.play_card(card), None])
+                valid_moves.append(["untargeted_spell", card, None])
             elif card.can_use(self.game.current_player, self.game) and card.targetable:
                 for target in card.targets:
-                    valid_moves.append(["targeted_spell", self.game.play_card(card), target])
+                    valid_moves.append(["targeted_spell", card, target])
 
         if self.game.current_player.hero.character_class == CHARACTER_CLASS.MAGE and self.game.current_player.hero.power.can_use():
             for target in hsgame.targeting.find_enemy_spell_target(game, lambda x: True):
-                valid_moves.append(["mage_power", self.game.current_player.hero.power.use(), target])
+                valid_moves.append(["hero_power", self.game.current_player.hero, target])
         elif self.game.current_player.hero.character_class == CHARACTER_CLASS.PRIEST and self.game.current_player.hero.power.can_use():
             for target in hsgame.targeting.find_friendly_spell_target(game, lambda x: x.health != x.calculate_max_health()):
-                valid_moves.append(["priest_power", self.game.current_player.hero.power.use(), target])
+                valid_moves.append(["hero_power", self.game.current_player.hero, target])
         elif self.game.current_player.hero.power.can_use():
-            valid_moves.append(["hero_power", self.game.current_player.hero.power.use(), None])
-        print(str(valid_moves))
+            valid_moves.append(["hero_power", self.game.current_player.hero, None])
+        s = ""
+        for move in valid_moves:
+            if move[0] == "minion_attack":
+                if move[2] == self.game.other_player.hero:
+                    s += "[" + str(move[0]) + ", " + str(move[1].card.name) + ", Enemy Hero] "
+                else:
+                    s += "[" + str(move[0]) + ", " + str(move[1].card.name) + ", " + str(move[2].card.name) + "] "
+            elif move[0] == "hero_attack":
+                if move[2] == self.game.other_player.hero:
+                    s += "[" + str(move[0]) + ", Friendly Hero, Enemy Hero] "
+                else:
+                    s += "[" + str(move[0]) + ", Friendly Hero, " + str(move[2].card.name) + "] "
+            elif move[0] == "hero_power":
+                if move[2] is not None:
+                    if move[2] == self.game.other_player.hero:
+                        s += "[" + str(move[0]) + ", " + str(move[1].character_class) + ", Enemy Hero] "
+                    else:
+                        s += "[" + str(move[0]) + ", " + str(move[1].character_class) + ", " + str(move[2].card.name) + "] "
+                else:
+                    s += "[" + str(move[0]) + ", " + str(move[1].character_class) + ", " + str(move[2]) + "] "
+            elif move[0] == "end_turn":
+                s += "[" + str(move[0]) + ", " + str(move[1]) + ", " + str(move[2]) + "] "
+            elif move[0] == "summon_minion":
+                s += "[" + str(move[0]) + ", " + str(move[1].name) + ", " + str(move[2]) + "] "
+            elif move[2] is None:
+                s += "[" + str(move[0]) + ", " + str(move[1].name) + ", " + str(move[2]) + "] "
+            elif move[0] == "targeted_spell":
+                if move[2] == self.game.other_player.hero:
+                    s += "[" + str(move[0]) + ", " + str(move[1].name) + ", Enemy Hero] "
+                elif move[2] == self.game.current_player.hero:
+                    s += "[" + str(move[0]) + ", " + str(move[1].name) + ", Friendly Hero] "
+                else:
+                    s += "[" + str(move[0]) + ", " + str(move[1].name) + ", " + str(move[2].card.name) + "] "
         return valid_moves
 
     def GetResult(self, playerjm):
