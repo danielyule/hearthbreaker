@@ -879,8 +879,8 @@ class Minion(Character):
         new_minion.charge = self.charge
         new_minion.silenced = self.silenced
         new_minion.spell_damage = self.spell_damage
-        if self.charge and new_owner is self.game.current_player:
-            self.active = True
+        new_minion.temp_attack = self.temp_attack
+        new_minion.immune = self.immune
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner

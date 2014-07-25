@@ -31,7 +31,7 @@ class BestialWrath(Card):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
                          hsgame.targeting.find_minion_spell_target,
-                         lambda minion: minion.minion_type is MINION_TYPE.BEAST)
+                         lambda minion: minion.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)

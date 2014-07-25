@@ -1174,9 +1174,9 @@ class StampedingKodo(MinionCard):
         def random_destroy(m):
             targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game,
                                                                           lambda x: x.calculate_attack() <= 2)
-            target = targets[player.game.random(0, len(targets) - 1)]
-            target.die(None)
-            player.game.check_delayed()
+            if targets is not None:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                target.die(None)
 
         return Minion(3, 5, MINION_TYPE.BEAST, battlecry=random_destroy)
 

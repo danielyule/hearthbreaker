@@ -171,3 +171,23 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual("Maexxna", game.current_player.minions[0].card.name)
+
+    def test_BestialWrath(self):
+        def verify_bwrath():
+            self.assertEqual(2, game.current_player.minions[1].temp_attack)
+            self.assertTrue(game.current_player.minions[1].immune)
+            self.assertEqual(2, game.current_player.minions[0].temp_attack)
+            self.assertTrue(game.current_player.minions[0].immune)
+
+        game = generate_game_for([StampedingKodo, BestialWrath, FacelessManipulator], StonetuskBoar,
+                                 create_friendly_copying_agent(5), DoNothingBot)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # we need to check that there are two immune kodos at the end of the turn
+        game.other_player.bind("turn_ended", verify_bwrath)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
