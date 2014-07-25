@@ -5,7 +5,7 @@ from tests.testing_utils import generate_game_for
 from hsgame.cards import *
 
 
-def create_enemy_copying_agent(turn_to_play):
+def create_enemy_copying_agent(turn_to_play=1):
     class EnemyCopyingAgent(SpellTestingAgent):
         def __init__(self):
             super().__init__()
@@ -25,7 +25,7 @@ def create_enemy_copying_agent(turn_to_play):
     return EnemyCopyingAgent
 
 
-def create_friendly_copying_agent(turn_to_play):
+def create_friendly_copying_agent(turn_to_play=1):
     class FriendlyCopyingAgent(SpellTestingAgent):
         def __init__(self):
             super().__init__()
@@ -114,3 +114,80 @@ class TestCopying(unittest.TestCase):
         self.assertEqual("Treant", game.current_player.minions[0].card.name)
         self.assertEqual(28, game.current_player.hero.health)
         self.assertEqual(28, game.other_player.hero.health)
+
+    def test_NerubianEgg(self):
+        game = generate_game_for(NerubianEgg, FacelessManipulator, MinionPlayingAgent, create_enemy_copying_agent(5))
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.minions[0].calculate_attack())
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+    def test_ScavangingHyena(self):
+        game = generate_game_for([ChillwindYeti, ScavengingHyena],
+                                 [StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual("Scavenging Hyena", game.current_player.minions[0].card.name)
+        game.current_player.minions[1].die(None)
+        game.current_player.minions[2].die(None)
+        game.current_player.minions[3].die(None)
+        game.current_player.minions[4].die(None)
+        game.check_delayed()
+        self.assertEqual(10, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
+
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
+
+    def test_Maexxna_and_EmperorCobra(self):
+        game = generate_game_for([Maexxna, EmperorCobra], FacelessManipulator,
+                                 PredictableAgentWithoutHeroPower, create_enemy_copying_agent(6))
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        # The faceless should have copied Maexxna, then the following turn
+        # Maexxna should attack the copy, resulting in both dying.  All that should
+        # be left is the cobra played this turn
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Emperor Cobra", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Maexxna", game.current_player.minions[0].card.name)
+
+    def test_BestialWrath(self):
+        def verify_bwrath():
+            self.assertEqual(2, game.current_player.minions[1].temp_attack)
+            self.assertTrue(game.current_player.minions[1].immune)
+            self.assertEqual(2, game.current_player.minions[0].temp_attack)
+            self.assertTrue(game.current_player.minions[0].immune)
+
+        game = generate_game_for([StampedingKodo, BestialWrath, FacelessManipulator], StonetuskBoar,
+                                 create_friendly_copying_agent(5), DoNothingBot)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # we need to check that there are two immune kodos at the end of the turn
+        game.other_player.bind("turn_ended", verify_bwrath)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))

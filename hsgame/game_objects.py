@@ -382,12 +382,15 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.die(attacker)
 
     def change_attack(self, amount):
-        def silence():
-            self.base_attack -= amount
+        def apply_silence(minion, player=None):
+            def silence():
+                minion.base_attack -= amount
+            minion.bind_once('silenced', silence)
+            minion.bind("copied", apply_silence)
 
         self.trigger("attack_changed", amount)
         self.base_attack += amount
-        self.bind_once('silenced', silence)
+        apply_silence(self)
 
     def change_temp_attack(self, amount):
 
@@ -395,24 +398,29 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.temp_attack += amount
 
     def increase_health(self, amount):
-        def silence():
-            self.base_health -= amount
-            if self.calculate_max_health() < self.health:
-                self.health = self.calculate_max_health()
-
+        def apply_silence(minion, player=None):
+            def silence():
+                minion.base_health -= amount
+                if minion.calculate_max_health() < minion.health:
+                    minion.health = minion.calculate_max_health()
+            minion.bind_once('silenced', silence)
+            minion.bind("copied", apply_silence)
         self.trigger("health_increased", amount)
         self.base_health += amount
         self.health += amount
         self.trigger("health_changed")
-        self.bind_once('silenced', silence)
+        apply_silence(self)
 
     def decrease_health(self, amount):
-        def silence():
-            if self.calculate_max_health() == self.health:
-                self.base_health += amount
-                self.health += amount
-            else:
-                self.base_health += amount
+        def apply_silence(minion, player=None):
+            def silence():
+                if minion.calculate_max_health() == minion.health:
+                    minion.base_health += amount
+                    minion.health += amount
+                else:
+                    minion.base_health += amount
+            minion.bind_once('silenced', silence)
+            minion.bind("copied", apply_silence)
 
         self.trigger("health_decreased", amount)
         self.base_health -= amount
@@ -423,7 +431,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.enraged = False
             self.trigger("unenraged")
         self.trigger("health_changed")
-        self.bind_once('silenced', silence)
+        apply_silence(self)
 
     def freeze(self):
         self.frozen_this_turn = True
@@ -871,8 +879,8 @@ class Minion(Character):
         new_minion.charge = self.charge
         new_minion.silenced = self.silenced
         new_minion.spell_damage = self.spell_damage
-        if self.charge and new_owner is self.game.current_player:
-            self.active = True
+        new_minion.temp_attack = self.temp_attack
+        new_minion.immune = self.immune
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner

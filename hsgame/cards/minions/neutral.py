@@ -773,13 +773,19 @@ class EmperorCobra(MinionCard):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def poisonous(amount, target):
-            if type(target) is Minion:
-                target.die(self)
+        def apply_effect(m, p):
+            def poisonous(amount, target):
+                if type(target) is Minion:
+                    target.die(self)
 
+            def silenced():
+                m.unbind("did_damage", poisonous)
+                m.unbind("copied", apply_effect)
+            m.bind("did_damage", poisonous)
+            m.bind_once("silenced", silenced)
+            m.bind("copied", apply_effect)
         minion = Minion(2, 3, MINION_TYPE.BEAST)
-        minion.bind("did_damage", poisonous)
-        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
+        apply_effect(minion, player)
         return minion
 
 
@@ -1168,9 +1174,9 @@ class StampedingKodo(MinionCard):
         def random_destroy(m):
             targets = hsgame.targeting.find_enemy_minion_battlecry_target(player.game,
                                                                           lambda x: x.calculate_attack() <= 2)
-            target = targets[player.game.random(0, len(targets) - 1)]
-            target.die(None)
-            player.game.check_delayed()
+            if targets is not None:
+                target = targets[player.game.random(0, len(targets) - 1)]
+                target.die(None)
 
         return Minion(3, 5, MINION_TYPE.BEAST, battlecry=random_destroy)
 
@@ -2398,3 +2404,42 @@ class FacelessManipulator(MinionCard):
                 minion.replace(new_minon)
 
         return Minion(3, 3, battlecry=copy_minion)
+
+
+class NerubianEgg(MinionCard):
+    def __init__(self):
+        super().__init__("Nerubian Egg", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def summon_nerubian(m):
+            class Nerubian(MinionCard):
+                def __init__(self):
+                    super().__init__("Nerubian", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, p):
+                    return Minion(4, 4)
+
+            Nerubian().summon(m.player, m.player.game, m.index)
+
+        return Minion(0, 2, deathrattle=summon_nerubian)
+
+
+class Maexxna(MinionCard):
+    def __init__(self):
+        super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def apply_effect(m, p):
+            def poisonous(amount, target):
+                if type(target) is Minion:
+                    target.die(self)
+
+            def silenced():
+                m.unbind("did_damage", poisonous)
+                m.unbind("copied", apply_effect)
+            m.bind("did_damage", poisonous)
+            m.bind_once("silenced", silenced)
+            m.bind("copied", apply_effect)
+        minion = Minion(2, 8, MINION_TYPE.BEAST)
+        apply_effect(minion, player)
+        return minion

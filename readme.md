@@ -14,6 +14,9 @@ The goal is not to create a clone of Hearthstone which players can use to replac
 
 Usage
 -----
+
+The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+
 ###Console Application
 There is a basic console that you can use for playing against a bot.  The bot you are playing against will not
 attack you, and will play one card from its hand per turn. (So it is very easy to beat)
@@ -32,26 +35,29 @@ The tests are located in the [`tests`](tests) package.
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
 
-The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
-
 For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](https://pypi.python.org/pypi/mock).
 
 Progress
 --------
 
-Currently, the main engine is mostly implemented, along with all the non Naxxramas cards.  [cards.csv](cards.csv) is a listing of all cards in the
-game along with information on which has been implemented.  Any card which has been implemented also has at least one
-unit test to ensure that it works correctly
+All cards currently released by Blizzard are implemented.  Curse of Naxxramas cards will be implemented as they are
+released.  The engine is complete, and nearly ready for use in machine learning.  See the 
+[developer mailing list](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
+for more details.
 
 Structure
 ---------
-Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on an event based system.
-The events use a bind/trigger mechanism.  For example, a card which has a deathrattle will bind an event to its 'death'
-event that takes the appropriate action.  Parameters can be passed to an event at the time it is bound, or the time it
-is triggered, or both.  For an overview of the events and the parameters they receive, see [events.md](events.md).
+Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on
+an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the parameters they 
+receive, see [events.md](events.md).
+
+The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
+by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
+when it is time to make a decision, the game will request the decision from the agents, rather than the agents
+dictating how the game is run.
 
 The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
-(spell/minion/secret/weapon) and by class.  To see which cards have been implemented, simply search for "yes".
+(spell/minion/secret/weapon) and by class.
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).
