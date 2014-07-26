@@ -47,11 +47,9 @@ class TestGame(unittest.TestCase):
         agent2 = mock.Mock(spec=MockAgent2(), wraps=MockAgent2())
         game = Game([deck1, deck2], [agent1, agent2])
         game.pre_game()
-        self.assertEqual(agent1.method_calls[0][0], "set_game", "Agent not asked to select cards")
-        self.assertEqual(agent2.method_calls[0][0], "set_game", "Agent not asked to select cards")
 
-        self.assertEqual(agent1.method_calls[1][0], "do_card_check", "Agent not asked to select cards")
-        self.assertEqual(agent2.method_calls[1][0], "do_card_check", "Agent not asked to select cards")
+        self.assertEqual(agent1.method_calls[0][0], "do_card_check", "Agent not asked to select cards")
+        self.assertEqual(agent2.method_calls[0][0], "do_card_check", "Agent not asked to select cards")
 
         self.assertTrue(game.players[0].deck == deck1, "Deck not assigned to player")
         self.assertTrue(game.players[1].deck == deck2, "Deck not assigned to player")

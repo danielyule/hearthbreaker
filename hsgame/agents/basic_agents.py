@@ -11,9 +11,6 @@ class DoNothingBot:
     def do_turn(self, player):
         pass
 
-    def set_game(self, game):
-        self.game = game
-
     def choose_target(self, targets):
         return targets[0]
 
@@ -43,16 +40,13 @@ class PredictableBot:
         while done_something:
             done_something = False
             for card in copy.copy(player.hand):
-                if card.can_use(player, self.game):
-                    self.game.play_card(card)
+                if card.can_use(player, player.game):
+                    player.game.play_card(card)
                     done_something = True
 
         for minion in copy.copy(player.minions):
             if minion.can_attack():
                 minion.attack()
-
-    def set_game(self, game):
-        self.game = game
 
     def choose_target(self, targets):
         return targets[0]

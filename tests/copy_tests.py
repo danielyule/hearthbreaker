@@ -45,7 +45,27 @@ def create_friendly_copying_agent(turn_to_play=1):
     return FriendlyCopyingAgent
 
 
-class TestCopying(unittest.TestCase):
+class TestGameCopying(unittest.TestCase):
+    def setUp(self):
+        random.seed(1857)
+
+    def test_base_game_copying(self):
+        game = generate_game_for(StonetuskBoar, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        new_game = game.copy()
+
+        self.assertEqual(0, new_game.current_player.mana)
+
+        for turn in range(0, 10):
+            new_game.play_single_turn()
+
+        self.assertEqual(5, len(new_game.current_player.minions))
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+
+class TestMinionCopying(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 

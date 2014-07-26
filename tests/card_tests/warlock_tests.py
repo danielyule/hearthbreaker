@@ -440,7 +440,6 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(27, game.other_player.hero.health)
 
         game.current_player.agent = PredictableBot()
-        game.current_player.agent.set_game(game)
 
         game.play_single_turn()
         game.play_single_turn()
