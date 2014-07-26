@@ -749,3 +749,36 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
         self.assertTrue(game.current_player.minions[2].taunt)
         self.assertEqual("Treant", game.current_player.minions[2].card.name)
+
+    def test_PoisonSeeds(self):
+        game = generate_game_for([StonetuskBoar, BloodfenRaptor, IronfurGrizzly, PoisionSeeds],
+                                 HauntedCreeper, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(6, len(game.other_player.minions))
+
+        for minion in game.current_player.minions:
+            self.assertEqual("Treant", minion.card.name)
+            self.assertEqual(2, minion.calculate_attack())
+            self.assertEqual(2, minion.calculate_max_health())
+
+        for index in range(0, 4):
+            self.assertEqual("Spectral Spider", game.other_player.minions[index].card.name)
+            self.assertEqual(1, game.other_player.minions[index].calculate_attack())
+            self.assertEqual(1, game.other_player.minions[index].calculate_max_health())
+
+        self.assertEqual("Treant", game.other_player.minions[4].card.name)
+        self.assertEqual(2, game.other_player.minions[4].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[4].calculate_max_health())
+
+        self.assertEqual("Treant", game.other_player.minions[5].card.name)
+        self.assertEqual(2, game.other_player.minions[5].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[5].calculate_max_health())

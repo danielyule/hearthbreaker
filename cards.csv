@@ -266,7 +266,7 @@ yes,Perdition's Blade,Battlecry: Deal 1 damage. Combo: Deal 2 instead.,,Rogue,3,
 yes,Pint-Sized Summoner,The first minion you play each turn costs (1) less.,,,2,2,2,Rare,Minion,Expert
 yes,Pit Lord,Battlecry: Deal 5 damage to your hero.,Demon,Warlock,4,5,6,Epic,Minion,Expert
 yes,Polymorph,Transform a minion into a 1/1 Sheep.,,Mage,4,,,Free,Spell,Basic
-no,Poison Seeds,Destroy all minions and summon 2/2 Treants to replace them.,,Druid,4,,,Common,Spell,Curse of Naxxramas
+yes,Poison Seeds,Destroy all minions and summon 2/2 Treants to replace them.,,Druid,4,,,Common,Spell,Curse of Naxxramas
 yes,Power of the Wild,Choose One - Give your minions +1/+1; or Summon a 3/2 Panther.,,Druid,2,,,Common,Spell,Expert
 yes,Power Overwhelming,"Give a friendly minion +4/+4 until end of turn. Then, it dies. Horribly.",,Warlock,1,,,Common,Spell,Expert
 yes,Power Word: Shield,Give a minion +2 Health. Draw a card.,,Priest,1,,,Free,Spell,Basic
