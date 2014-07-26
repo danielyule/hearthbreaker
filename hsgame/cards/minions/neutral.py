@@ -1128,7 +1128,7 @@ class TheBeast(MinionCard):
         super().__init__("The Beast", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def summon_finkle(m):
+        def summon_finkle(minion):
             class FinkleEinhorn(MinionCard):
                 def __init__(self):
                     super().__init__("Finkle Einhorn", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
@@ -1138,9 +1138,9 @@ class TheBeast(MinionCard):
             finkle_owner = []
             finkle_owner.append(player.game.current_player)
             finkle_owner.append(player.game.other_player)
-            finkle_owner.remove(m.player)
+            finkle_owner.remove(minion.player)
             owner = finkle_owner.pop()
-            FinkleEinhorn().summon(owner, player.game, len(owner.minions))
+            FinkleEinhorn().summon(owner, minion.game, len(owner.minions))
 
         return Minion(9, 7, MINION_TYPE.BEAST, deathrattle=summon_finkle)
 

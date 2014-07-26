@@ -213,3 +213,15 @@ class TestCopying(unittest.TestCase):
         game.check_delayed()
 
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_TheBeast(self):
+        game = generate_game_for(TheBeast, FacelessManipulator, MinionPlayingAgent, create_enemy_copying_agent(6))
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(2, len(game.other_player.minions))
