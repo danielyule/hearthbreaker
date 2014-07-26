@@ -722,8 +722,6 @@ class Minion(Character):
             minion.index = count
             count += 1
         self.index = index
-        if self.charge:
-            self.exhausted = False
         self.active = True
         self.health += self.calculate_max_health() - self.base_health
         self.trigger("added_to_board", self, index)
@@ -818,7 +816,7 @@ class Minion(Character):
             self.removed = True
 
     def can_attack(self):
-        return not self.exhausted and super().can_attack()
+        return (self.charge or not self.exhausted) and super().can_attack()
 
     def can_be_attacked(self):
         return not self.stealth

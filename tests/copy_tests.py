@@ -244,3 +244,14 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(3, len(game.current_player.minions))
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(5, len(game.current_player.hand))
+
+    def test_TundraRhino(self):
+        game = generate_game_for(TundraRhino, [OasisSnapjaw, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].charge)
+        self.assertTrue(game.current_player.minions[1].charge)

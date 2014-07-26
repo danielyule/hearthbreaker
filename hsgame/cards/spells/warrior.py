@@ -48,7 +48,6 @@ class Charge(Card):
 
         self.target.change_attack(2)
         self.target.charge = True
-        self.target.exhausted = False
 
 
 class Cleave(Card):

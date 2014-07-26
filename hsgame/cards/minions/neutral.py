@@ -1613,7 +1613,6 @@ class SouthseaDeckhand(MinionCard):
         def charge_if_weapon(m):
             if player.hero.weapon is not None:
                 m.charge = True
-                m.exhausted = False
 
         return Minion(2, 1, MINION_TYPE.PIRATE, battlecry=charge_if_weapon)
 
