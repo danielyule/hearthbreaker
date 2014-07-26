@@ -488,3 +488,45 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, len(game.players[0].hand))
+
+    def test_AnubarAmbusher_no_targets(self):
+        game = generate_game_for(AnubarAmbusher, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+    def test_AnubarAmbusher_many_targets(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, AnubarAmbusher], StonetuskBoar,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(7, len(game.other_player.minions))
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(6, len(game.current_player.minions))
+        self.assertEqual(7, len(game.other_player.minions))

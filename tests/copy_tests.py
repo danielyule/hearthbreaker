@@ -227,17 +227,20 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(2, len(game.other_player.minions))
 
     def test_AnubarAmbusher(self):
-        game = generate_game_for(AnubarAmbusher, [StonetuskBoar, FacelessManipulator], MinionPlayingAgent,
-                                 MinionPlayingAgent)
+        game = generate_game_for(AnubarAmbusher,
+                                 [StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
 
-        for turn in range(0, 12):
+        for turn in range(0, 10):
             game.play_single_turn()
 
-        self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(3, len(game.players[1].minions))
-        self.assertEqual(8, len(game.players[1].hand))
-        game.players[1].minions[1].die(None)
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(4, len(game.current_player.hand))
+
+        game.current_player.minions[0].die(None)
         game.check_delayed()
-        self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(9, len(game.players[1].hand))
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(5, len(game.current_player.hand))

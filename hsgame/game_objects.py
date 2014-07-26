@@ -869,7 +869,7 @@ class Minion(Character):
 
         self.bind_once("silenced", silenced)
 
-    def copy(self, new_owner):
+    def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
                             self.minion_type, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
@@ -885,7 +885,10 @@ class Minion(Character):
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner
-        new_minion.game = new_owner.game
+        if new_game:
+            new_minion.game = new_game
+        else:
+            new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
         return new_minion
 
