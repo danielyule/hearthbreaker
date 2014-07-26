@@ -2263,3 +2263,18 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(7, len(game.other_player.minions))
         for minion in game.other_player.minions:
             self.assertEqual("Spectral Spider", minion.card.name)
+
+    def test_NerubarWeblord(self):
+        game = generate_game_for([NerubarWeblord, EarthenRingFarseer], [NoviceEngineer, IronfurGrizzly],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        game.current_player.minions[0].silence()
+        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))

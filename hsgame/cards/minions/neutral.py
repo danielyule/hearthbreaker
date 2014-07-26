@@ -677,16 +677,19 @@ class VentureCoMercenary(MinionCard):
         super().__init__("Venture Co. Mercenary", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = -3
-                self.filter = lambda c: isinstance(c, MinionCard)
-                self.min = 0
+        def apply_effect(m, p):
+            class Filter:
+                def __init__(self):
+                    self.amount = -3
+                    self.filter = lambda c: isinstance(c, MinionCard)
+                    self.min = 0
 
-        filter = Filter()
+            filter = Filter()
+            minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
+            player.mana_filters.append(filter)
+            minion.bind("copied", apply_effect)
         minion = Minion(7, 6)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
-        player.mana_filters.append(filter)
+        apply_effect(minion, player)
         return minion
 
 
@@ -2462,3 +2465,30 @@ class HauntedCreeper(MinionCard):
             SpectralSpider().summon(minion.player, minion.game, minion.index)
 
         return Minion(1, 2, MINION_TYPE.BEAST, deathrattle=summon_spiders)
+
+
+class NerubarWeblord(MinionCard):
+    def __init__(self):
+        super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def apply_effect(m, p):
+            class Filter:
+                def __init__(self):
+                    self.amount = -2
+                    self.filter = lambda c: isinstance(c, MinionCard) and c.create_minion(p).battlecry is not None
+                    self.min = 0
+
+            mana_filter = Filter()
+
+            def silence():
+                p.game.current_player.mana_filters.remove(mana_filter)
+                p.game.other_player.mana_filters.remove(mana_filter)
+
+            minion.bind_once("silenced", silence)
+            p.game.current_player.mana_filters.append(mana_filter)
+            p.game.other_player.mana_filters.append(mana_filter)
+            minion.bind("copied", apply_effect)
+        minion = Minion(1, 4)
+        apply_effect(minion, player)
+        return minion

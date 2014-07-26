@@ -159,6 +159,7 @@ from hsgame.cards.minions.neutral import (
     NerubianEgg,
     Maexxna,
     HauntedCreeper,
+    NerubarWeblord,
 )
 
 from hsgame.cards.minions.druid import (
