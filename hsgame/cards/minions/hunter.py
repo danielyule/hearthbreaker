@@ -73,7 +73,7 @@ class StarvingBuzzard(MinionCard):
     def create_minion(self, player):
         def apply_effect(m, p):
             def check_beast_draw(new_minion):
-                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not minion:
+                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not m:
                     p.draw()
 
             p.bind("minion_placed", check_beast_draw)

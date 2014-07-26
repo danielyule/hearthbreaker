@@ -255,3 +255,25 @@ class TestCopying(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertTrue(game.current_player.minions[0].charge)
         self.assertTrue(game.current_player.minions[1].charge)
+
+    def test_StarvingBuzzard(self):
+        game = generate_game_for(StarvingBuzzard, [StonetuskBoar, FacelessManipulator, Maexxna, CoreHound],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(8, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(9, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(9, len(game.current_player.hand))
