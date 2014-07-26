@@ -474,3 +474,17 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
         self.assertEqual(24, game.players[1].hero.health)
+
+    def test_AnubarAmbusher(self):
+        game = generate_game_for(AnubarAmbusher, SiphonSoul, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+        # Siphon Soul should be played
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))

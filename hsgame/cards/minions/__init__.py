@@ -213,7 +213,8 @@ from hsgame.cards.minions.rogue import (
     Kidnapper,
     MasterOfDisguise,
     PatientAssassin,
-    SI7Agent
+    SI7Agent,
+    AnubarAmbusher
 )
 
 from hsgame.cards.minions.shaman import (

@@ -1,3 +1,4 @@
+import copy
 import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import MinionCard, Minion
@@ -86,3 +87,17 @@ class SI7Agent(MinionCard):
                 minion.card.target.damage(2, self)
 
         return Minion(3, 3, battlecry=combo)
+
+
+class AnubarAmbusher(MinionCard):
+    def __init__(self):
+        super().__init__("Anub'ar Ambusher", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def return_random_friendly_minion(minion):
+            targets = copy.copy(minion.player.minions)
+
+            if len(targets) > 0:
+                targets[minion.game.random(0, len(targets) - 1)].bounce()
+
+        return Minion(5, 5, deathrattle=return_random_friendly_minion)

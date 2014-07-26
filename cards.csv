@@ -17,7 +17,7 @@ yes,Ancient of War,Choose One - +5 Attack; or +5 Health and Taunt.,,Druid,7,5,5,
 yes,Ancient Watcher,Can't Attack.,,,2,4,5,Rare,Minion,Expert
 yes,Angry Chicken,Enrage: +5 Attack.,Beast,,1,1,1,Rare,Minion,Expert
 yes,Animal Companion,Summon a random Beast Companion.,,Hunter,3,,,Common,Spell,Basic
-no,Anub'ar Ambusher,Deathrattle: Return a random friendly minion to your hand,,Rogue,4,5,5,Common,Minion,Curse of Naxxramas
+yes,Anub'ar Ambusher,Deathrattle: Return a random friendly minion to your hand,,Rogue,4,5,5,Common,Minion,Curse of Naxxramas
 yes,Arathi Weaponsmith,Battlecry: Equip a 2/2 weapon.,,Warrior,4,3,3,Common,Minion,Expert
 yes,Arcane Explosion,Deal 1 damage to all enemy minions.,,Mage,2,,,Free,Spell,Basic
 yes,Arcane Golem,Charge. Battlecry: Give your opponent a Mana Crystal.,,,3,4,2,Rare,Minion,Expert
