@@ -809,10 +809,11 @@ class Minion(Character):
             def delayed_death(c):
                 self.silence()
                 self.remove_from_board()
+                if deathrattle is not None:
+                    deathrattle(self)
             self.bind_once("died", delayed_death)
             super().die(by)
-            if deathrattle is not None:
-                deathrattle(self)
+
             self.player.trigger("minion_died", self, by)
             self.removed = True
 
@@ -886,8 +887,6 @@ class Minion(Character):
         new_minion.player = new_owner
         new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
-        if "copied" in self.events:
-            new_minion.events["copied"] = self.events["copied"]
         return new_minion
 
     def bounce(self):

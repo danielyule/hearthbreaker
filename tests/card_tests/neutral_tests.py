@@ -2244,3 +2244,22 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_HauntedCreeper(self):
+        game = generate_game_for(HauntedCreeper, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual("Spectral Spider", game.players[0].minions[0].card.name)
+        self.assertEqual("Spectral Spider", game.players[0].minions[1].card.name)
+
+    def test_HauntedCreeper_overfill(self):
+        game = generate_game_for(Blizzard, HauntedCreeper, SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        # The blizzard should kill 4 haunted creepers, but only 7 spiders should be left
+        self.assertEqual(7, len(game.other_player.minions))
+        for minion in game.other_player.minions:
+            self.assertEqual("Spectral Spider", minion.card.name)

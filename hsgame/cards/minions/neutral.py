@@ -1110,7 +1110,7 @@ class HarvestGolem(MinionCard):
         super().__init__("Harvest Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def summon_damagedgolem(m):
+        def summon_damaged_golem(minion):
             class DamagedGolem(MinionCard):
                 def __init__(self):
                     super().__init__("Damaged Golem", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
@@ -1118,9 +1118,9 @@ class HarvestGolem(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 1)
 
-            DamagedGolem().summon(player, player.game, m.index)
+            DamagedGolem().summon(minion.player, minion.game, minion.index)
 
-        return Minion(2, 3, deathrattle=summon_damagedgolem)
+        return Minion(2, 3, deathrattle=summon_damaged_golem)
 
 
 class TheBeast(MinionCard):
@@ -2443,3 +2443,22 @@ class Maexxna(MinionCard):
         minion = Minion(2, 8, MINION_TYPE.BEAST)
         apply_effect(minion, player)
         return minion
+
+
+class HauntedCreeper(MinionCard):
+    def __init__(self):
+        super().__init__("Haunted Creeper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_spiders(minion):
+            class SpectralSpider(MinionCard):
+                def __init__(self):
+                    super().__init__("Spectral Spider", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1)
+
+            SpectralSpider().summon(minion.player, minion.game, minion.index)
+            SpectralSpider().summon(minion.player, minion.game, minion.index)
+
+        return Minion(1, 2, MINION_TYPE.BEAST, deathrattle=summon_spiders)

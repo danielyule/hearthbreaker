@@ -191,3 +191,25 @@ class TestCopying(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_HarvestGolem(self):
+        game = generate_game_for(FacelessManipulator, HarvestGolem, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+    def test_HauntedCreeper(self):
+        game = generate_game_for(FacelessManipulator, HauntedCreeper, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(2, len(game.current_player.minions))

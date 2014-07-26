@@ -158,6 +158,7 @@ from hsgame.cards.minions.neutral import (
     FacelessManipulator,
     NerubianEgg,
     Maexxna,
+    HauntedCreeper,
 )
 
 from hsgame.cards.minions.druid import (
