@@ -156,6 +156,4 @@ def give_windfury(minion):
 
 def return_to_hand(minion):
     if minion.card.target is not None:
-        minion.card.target.remove_from_board()
-        if len(minion.card.target.player.hand) < 10:
-            minion.card.target.player.hand.append(minion.card)
+        minion.card.target.bounce()
