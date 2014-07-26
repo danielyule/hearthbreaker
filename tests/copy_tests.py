@@ -277,3 +277,40 @@ class TestCopying(unittest.TestCase):
 
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(9, len(game.current_player.hand))
+
+    def test_SavannahHighmane(self):
+        game = generate_game_for([SavannahHighmane, SiphonSoul], FacelessManipulator,
+                                 MinionPlayingAgent, create_enemy_copying_agent(6))
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual("Hyena", game.players[1].minions[0].card.name)
+        self.assertEqual("Hyena", game.players[1].minions[1].card.name)
+
+    def test_TimberWolf(self):
+        game = generate_game_for(TimberWolf,
+                                 [StonetuskBoar, BloodfenRaptor, IronfurGrizzly,
+                                  OasisSnapjaw, FacelessManipulator, Maexxna],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[4].calculate_attack())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[5].calculate_attack())

@@ -868,7 +868,7 @@ class Minion(Character):
         self.bind_once("silenced", silenced)
 
     def copy(self, new_owner, new_game=None):
-        new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
+        new_minion = Minion(self.base_attack, self.base_health,
                             self.minion_type, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
         new_minion.events = copy.copy(self.events)

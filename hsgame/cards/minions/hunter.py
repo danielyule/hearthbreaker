@@ -34,8 +34,8 @@ class SavannahHighmane(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 2, MINION_TYPE.BEAST)
 
-            Hyena().summon(m.player, player.game, m.index)
-            Hyena().summon(m.player, player.game, m.index)
+            Hyena().summon(m.player, m.game, m.index)
+            Hyena().summon(m.player, m.game, m.index)
 
         return Minion(6, 5, MINION_TYPE.BEAST, deathrattle=summon_hyenas)
 
