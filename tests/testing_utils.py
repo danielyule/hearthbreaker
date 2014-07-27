@@ -1,7 +1,7 @@
 import copy
 import collections
 import sys
-from hsgame.constants import CHARACTER_CLASS
+from hsgame.constants import CHARACTER_CLASS, CARD_RARITY
 from hsgame.game_objects import Deck, Game
 
 if sys.version_info.major is 3:
@@ -60,6 +60,7 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     game.pre_game()
     return game
 
+
 def legal_deck(card_list):
     if len(card_list) > 30 or len(card_list) < 15:
         return False
@@ -74,7 +75,7 @@ def legal_deck(card_list):
             return False
 
     cards = []
-    while len(cards) + len(card_pattern) < 30:
+    while len(cards) + len(card_list) < 30:
         cards.extend(copy.deepcopy(card_list))
 
     cards.extend(card_list[:30 - len(cards)])
