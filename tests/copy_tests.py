@@ -45,7 +45,27 @@ def create_friendly_copying_agent(turn_to_play=1):
     return FriendlyCopyingAgent
 
 
-class TestCopying(unittest.TestCase):
+class TestGameCopying(unittest.TestCase):
+    def setUp(self):
+        random.seed(1857)
+
+    def test_base_game_copying(self):
+        game = generate_game_for(StonetuskBoar, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
+
+        new_game = game.copy()
+
+        self.assertEqual(0, new_game.current_player.mana)
+
+        for turn in range(0, 10):
+            new_game.play_single_turn()
+
+        self.assertEqual(5, len(new_game.current_player.minions))
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+
+class TestMinionCopying(unittest.TestCase):
     def setUp(self):
         random.seed(1857)
 
@@ -191,3 +211,126 @@ class TestCopying(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_HarvestGolem(self):
+        game = generate_game_for(FacelessManipulator, HarvestGolem, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+    def test_HauntedCreeper(self):
+        game = generate_game_for(FacelessManipulator, HauntedCreeper, MinionPlayingAgent, MinionPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_TheBeast(self):
+        game = generate_game_for(TheBeast, FacelessManipulator, MinionPlayingAgent, create_enemy_copying_agent(6))
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(2, len(game.other_player.minions))
+
+    def test_AnubarAmbusher(self):
+        game = generate_game_for(AnubarAmbusher,
+                                 [StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(4, len(game.current_player.hand))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(5, len(game.current_player.hand))
+
+    def test_TundraRhino(self):
+        game = generate_game_for(TundraRhino, [OasisSnapjaw, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].charge)
+        self.assertTrue(game.current_player.minions[1].charge)
+
+    def test_StarvingBuzzard(self):
+        game = generate_game_for(StarvingBuzzard, [StonetuskBoar, FacelessManipulator, Maexxna, CoreHound],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(8, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(9, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(9, len(game.current_player.hand))
+
+    def test_SavannahHighmane(self):
+        game = generate_game_for([SavannahHighmane, SiphonSoul], FacelessManipulator,
+                                 MinionPlayingAgent, create_enemy_copying_agent(6))
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual("Hyena", game.players[1].minions[0].card.name)
+        self.assertEqual("Hyena", game.players[1].minions[1].card.name)
+
+    def test_TimberWolf(self):
+        game = generate_game_for(TimberWolf,
+                                 [StonetuskBoar, BloodfenRaptor, IronfurGrizzly,
+                                  OasisSnapjaw, FacelessManipulator, Maexxna],
+                                 MinionPlayingAgent, create_enemy_copying_agent())
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[4].calculate_attack())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[5].calculate_attack())

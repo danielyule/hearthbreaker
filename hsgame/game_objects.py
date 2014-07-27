@@ -236,15 +236,6 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: If this character has been removed from the board
         self.removed = False
 
-    def _turn_complete(self):
-        """
-        Called at the end of the turn.  Takes care of any end of turn cleanup that should happen
-        outside of any specifically bound handlers
-        """
-        if self.temp_attack > 0:
-            self.trigger("attack_decreased", self.temp_attack)
-            self.temp_attack = 0
-
     def attack(self):
         """
         Causes this :class:`Character` to attack.
@@ -722,8 +713,6 @@ class Minion(Character):
             minion.index = count
             count += 1
         self.index = index
-        if self.charge:
-            self.exhausted = False
         self.active = True
         self.health += self.calculate_max_health() - self.base_health
         self.trigger("added_to_board", self, index)
@@ -809,15 +798,16 @@ class Minion(Character):
             def delayed_death(c):
                 self.silence()
                 self.remove_from_board()
+                if deathrattle is not None:
+                    deathrattle(self)
             self.bind_once("died", delayed_death)
             super().die(by)
-            if deathrattle is not None:
-                deathrattle(self)
+
             self.player.trigger("minion_died", self, by)
             self.removed = True
 
     def can_attack(self):
-        return not self.exhausted and super().can_attack()
+        return (self.charge or not self.exhausted) and super().can_attack()
 
     def can_be_attacked(self):
         return not self.stealth
@@ -868,8 +858,8 @@ class Minion(Character):
 
         self.bind_once("silenced", silenced)
 
-    def copy(self, new_owner):
-        new_minion = Minion(self.calculate_attack(), self.calculate_max_health(),
+    def copy(self, new_owner, new_game=None):
+        new_minion = Minion(self.base_attack, self.base_health,
                             self.minion_type, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
         new_minion.events = copy.copy(self.events)
@@ -881,13 +871,15 @@ class Minion(Character):
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
+        new_minion.index = self.index
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner
-        new_minion.game = new_owner.game
+        if new_game:
+            new_minion.game = new_game
+        else:
+            new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
-        if "copied" in self.events:
-            new_minion.events["copied"] = self.events["copied"]
         return new_minion
 
     def bounce(self):
@@ -990,6 +982,12 @@ class Weapon(Bindable):
         #: The :class:`WeaponCard` that created this weapon
         self.card = None
 
+    def copy(self, new_owner):
+        new_weapon = copy.copy(self)
+        new_weapon.events = copy.copy(self.events)
+        new_weapon.player = new_owner
+        self.trigger("copied", new_weapon, new_owner)
+
     def destroy(self):
         self.trigger("destroyed")
         self.player.hero.weapon = None
@@ -1013,6 +1011,9 @@ class Deck:
         self.character_class = character_class
         self.used = [False] * 30
         self.left = 30
+
+    def copy(self):
+        return copy.deepcopy(self)
 
     def can_draw(self):
         return self.left > 0
@@ -1053,7 +1054,15 @@ class Hero(Character):
         self.character_class = character_class
         self.player = player
         self.power = hsgame.powers.powers(self.character_class)(self)
-        self.weapon = None
+
+    def copy(self, new_owner, new_game):
+        new_hero = copy.copy(self)
+        new_hero.events = copy.copy(self.events)
+        if self.weapon:
+            new_hero.weapon = self.weapon.copy(new_owner, new_game)
+        new_hero.player = new_owner
+        new_hero.power = copy.copy(self.power)
+        return new_hero
 
     def attack(self):
         super().attack()
@@ -1110,6 +1119,19 @@ class Player(Bindable):
     def __str__(self):  # pragma: no cover
         return "Player: " + self.name
 
+    def copy(self, new_game):
+        copied_player = copy.copy(self)
+        copied_player.events = copy.copy(self.events)
+        copied_player.auras = []
+        copied_player.mana_filters = []
+        copied_player.hero = self.hero.copy(copied_player, new_game)
+        copied_player.deck = self.deck.copy()
+        copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
+        copied_player.hand = [type(card)() for card in self.hand]
+        copied_player.game = new_game
+        copied_player.secrets = [type(secret)() for secret in self.secrets]
+        return copied_player
+
     def draw(self):
         if self.can_draw():
             card = self.deck.draw(self.random)
@@ -1163,8 +1185,6 @@ class Game(Bindable):
             play_order = [1, 0]
         self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self, random_func),
                         Player("two", decks[play_order[1]], agents[play_order[1]], self, random_func)]
-        agents[0].set_game(self)
-        agents[1].set_game(self)
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.game_ended = False
@@ -1249,8 +1269,8 @@ class Game(Bindable):
 
     def _end_turn(self):
         self.current_player.trigger("turn_ended")
-        self.current_player.hero._turn_complete()
-        self.other_player.hero._turn_complete()
+        self.current_player.hero.temp_attack = 0
+        self.other_player.hero.temp_attack = 0
 
         if self.current_player.hero.frozen_this_turn:
             self.current_player.hero.frozen_this_turn = False
@@ -1260,20 +1280,34 @@ class Game(Bindable):
         self.other_player.hero.frozen_this_turn = False
         for minion in self.other_player.minions:
             minion.frozen_this_turn = False
-            minion._turn_complete()
+            minion.temp_attack = 0
 
         for minion in self.current_player.minions:
             minion.active = False
             minion.exhausted = False
             minion.used_wind_fury = False
+            minion.temp_attack = 0
             if minion.frozen_this_turn:
                 minion.frozen_this_turn = False
             else:
                 minion.frozen = False
-                minion._turn_complete()
 
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)
+
+    def copy(self):
+        copied_game = copy.copy(self)
+        copied_game.players = [player.copy(copied_game) for player in self.players]
+        if self.current_player is self.players[0]:
+            copied_game.current_player = copied_game.players[0]
+            copied_game.other_player = copied_game.players[1]
+        else:
+            copied_game.current_player = copied_game.players[1]
+            copied_game.other_player = copied_game.players[0]
+
+        for secret in copied_game.current_player.secrets:
+            secret.activate(copied_game.current_player)
+        return copied_game
 
     def play_card(self, card):
         if self.game_ended:

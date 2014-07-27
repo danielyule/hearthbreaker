@@ -8,12 +8,15 @@ class EaglehornBow(WeaponCard):
                          CARD_RARITY.RARE)
 
     def create_weapon(self, player):
-        def increase_durability(s):
-            weapon.durability += 1
+        def apply_effect(w, p):
+            def increase_durability(s):
+                w.durability += 1
 
+            p.bind("secret_revealed", increase_durability)
+            w.bind_once("destroyed", lambda: p.unbind("secret_revealed", increase_durability))
+            w.bind("copied", apply_effect)
         weapon = Weapon(3, 2)
-        player.bind("secret_revealed", increase_durability)
-        weapon.bind_once("destroyed", lambda: player.unbind("secret_revealed", increase_durability))
+        apply_effect(weapon, player)
         return weapon
 
 
@@ -23,18 +26,21 @@ class GladiatorsLongbow(WeaponCard):
                          CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
-        def make_immune(ignored_target):
-            player.hero.immune = True
+        def add_effect(w, p):
+            def make_immune(ignored_target):
+                p.hero.immune = True
 
-        def end_immune():
-            player.hero.immune = False
+            def end_immune():
+                p.hero.immune = False
 
-        def on_destroy():
-            player.hero.unbind("attack", make_immune)
-            player.hero.unbind("attack_completed", end_immune)
+            def on_destroy():
+                p.hero.unbind("attack", make_immune)
+                p.hero.unbind("attack_completed", end_immune)
+            p.hero.bind("attack", make_immune)
+            p.hero.bind("attack_completed", end_immune)
+            w.bind_once("destroyed", on_destroy)
+            w.bind("copied", add_effect)
 
         weapon = Weapon(5, 2)
-        player.hero.bind("attack", make_immune)
-        player.hero.bind("attack_completed", end_immune)
-        weapon.bind_once("destroyed", on_destroy)
+        add_effect(weapon, player)
         return weapon

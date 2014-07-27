@@ -677,16 +677,19 @@ class VentureCoMercenary(MinionCard):
         super().__init__("Venture Co. Mercenary", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = -3
-                self.filter = lambda c: isinstance(c, MinionCard)
-                self.min = 0
+        def apply_effect(m, p):
+            class Filter:
+                def __init__(self):
+                    self.amount = -3
+                    self.filter = lambda c: isinstance(c, MinionCard)
+                    self.min = 0
 
-        filter = Filter()
+            filter = Filter()
+            minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
+            player.mana_filters.append(filter)
+            minion.bind("copied", apply_effect)
         minion = Minion(7, 6)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(filter))
-        player.mana_filters.append(filter)
+        apply_effect(minion, player)
         return minion
 
 
@@ -1110,7 +1113,7 @@ class HarvestGolem(MinionCard):
         super().__init__("Harvest Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def summon_damagedgolem(m):
+        def summon_damaged_golem(minion):
             class DamagedGolem(MinionCard):
                 def __init__(self):
                     super().__init__("Damaged Golem", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
@@ -1118,9 +1121,9 @@ class HarvestGolem(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 1)
 
-            DamagedGolem().summon(player, player.game, m.index)
+            DamagedGolem().summon(minion.player, minion.game, minion.index)
 
-        return Minion(2, 3, deathrattle=summon_damagedgolem)
+        return Minion(2, 3, deathrattle=summon_damaged_golem)
 
 
 class TheBeast(MinionCard):
@@ -1128,7 +1131,7 @@ class TheBeast(MinionCard):
         super().__init__("The Beast", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def summon_finkle(m):
+        def summon_finkle(minion):
             class FinkleEinhorn(MinionCard):
                 def __init__(self):
                     super().__init__("Finkle Einhorn", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
@@ -1138,9 +1141,9 @@ class TheBeast(MinionCard):
             finkle_owner = []
             finkle_owner.append(player.game.current_player)
             finkle_owner.append(player.game.other_player)
-            finkle_owner.remove(m.player)
+            finkle_owner.remove(minion.player)
             owner = finkle_owner.pop()
-            FinkleEinhorn().summon(owner, player.game, len(owner.minions))
+            FinkleEinhorn().summon(owner, minion.game, len(owner.minions))
 
         return Minion(9, 7, MINION_TYPE.BEAST, deathrattle=summon_finkle)
 
@@ -1610,7 +1613,6 @@ class SouthseaDeckhand(MinionCard):
         def charge_if_weapon(m):
             if player.hero.weapon is not None:
                 m.charge = True
-                m.exhausted = False
 
         return Minion(2, 1, MINION_TYPE.PIRATE, battlecry=charge_if_weapon)
 
@@ -2441,5 +2443,51 @@ class Maexxna(MinionCard):
             m.bind_once("silenced", silenced)
             m.bind("copied", apply_effect)
         minion = Minion(2, 8, MINION_TYPE.BEAST)
+        apply_effect(minion, player)
+        return minion
+
+
+class HauntedCreeper(MinionCard):
+    def __init__(self):
+        super().__init__("Haunted Creeper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_spiders(minion):
+            class SpectralSpider(MinionCard):
+                def __init__(self):
+                    super().__init__("Spectral Spider", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, player):
+                    return Minion(1, 1)
+
+            SpectralSpider().summon(minion.player, minion.game, minion.index)
+            SpectralSpider().summon(minion.player, minion.game, minion.index)
+
+        return Minion(1, 2, MINION_TYPE.BEAST, deathrattle=summon_spiders)
+
+
+class NerubarWeblord(MinionCard):
+    def __init__(self):
+        super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def apply_effect(m, p):
+            class Filter:
+                def __init__(self):
+                    self.amount = -2
+                    self.filter = lambda c: isinstance(c, MinionCard) and c.create_minion(p).battlecry is not None
+                    self.min = 0
+
+            mana_filter = Filter()
+
+            def silence():
+                p.game.current_player.mana_filters.remove(mana_filter)
+                p.game.other_player.mana_filters.remove(mana_filter)
+
+            minion.bind_once("silenced", silence)
+            p.game.current_player.mana_filters.append(mana_filter)
+            p.game.other_player.mana_filters.append(mana_filter)
+            minion.bind("copied", apply_effect)
+        minion = Minion(1, 4)
         apply_effect(minion, player)
         return minion

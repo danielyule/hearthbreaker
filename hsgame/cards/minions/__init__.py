@@ -158,6 +158,8 @@ from hsgame.cards.minions.neutral import (
     FacelessManipulator,
     NerubianEgg,
     Maexxna,
+    HauntedCreeper,
+    NerubarWeblord,
 )
 
 from hsgame.cards.minions.druid import (
@@ -206,12 +208,13 @@ from hsgame.cards.minions.priest import (
 )
 
 from hsgame.cards.minions.rogue import (
+    AnubarAmbusher,
     DefiasRingleader,
     EdwinVanCleef,
     Kidnapper,
     MasterOfDisguise,
     PatientAssassin,
-    SI7Agent
+    SI7Agent,
 )
 
 from hsgame.cards.minions.shaman import (

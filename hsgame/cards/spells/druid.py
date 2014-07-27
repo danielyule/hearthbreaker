@@ -408,11 +408,33 @@ class ForceOfNature(Card):
 
 class Starfire(Card):
     def __init__(self):
-        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON,
-                         hsgame.targeting.find_spell_target)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(5), self)
         player.draw()
+
+
+class PoisionSeeds(Card):
+    def __init__(self):
+        super().__init__("Poison Seeds", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Treant(MinionCard):
+            def __init__(self):
+                super().__init__("Treant", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+            def create_minion(self, player):
+                return Minion(2, 2)
+
+        targets = hsgame.targeting.find_minion_spell_target(game, lambda m: True)
+        for target in targets:
+            target.die(None)
+
+        game.check_delayed()
+
+        for target in targets:
+            Treant().summon(target.player, target.game, len(target.player.minions))

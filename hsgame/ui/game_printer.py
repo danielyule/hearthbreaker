@@ -77,7 +77,7 @@ class GameRender:
             status_array.append("s")
         if minion.taunt:
             status_array.append("t")
-        if minion.exhausted:
+        if minion.exhausted and not minion.charge:
             status_array.append("z")
 
         if self.targets:

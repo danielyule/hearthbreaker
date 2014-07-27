@@ -447,16 +447,31 @@ class TestHunter(unittest.TestCase):
         self.assertTrue(game.current_player.minions[2].silenced)
 
     def test_TundraRhino(self):
-        game = generate_game_for(TundraRhino, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        game = generate_game_for([OasisSnapjaw, TundraRhino], StonetuskBoar,
+                                 PredictableAgentWithoutHeroPower, DoNothingBot)
         for turn in range(0, 8):
             game.play_single_turn()
 
-        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
 
         game.play_single_turn()
 
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(26, game.players[1].hero.health)
+
+    def test_TundraRhino_with_silence(self):
+        game = generate_game_for([OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
+                                 PredictableAgentWithoutHeroPower, DoNothingBot)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
         self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(28, game.players[1].hero.health)
 
     def test_AnimalCompanion(self):

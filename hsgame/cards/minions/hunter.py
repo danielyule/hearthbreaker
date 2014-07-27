@@ -34,8 +34,8 @@ class SavannahHighmane(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 2, MINION_TYPE.BEAST)
 
-            Hyena().summon(m.player, player.game, m.index)
-            Hyena().summon(m.player, player.game, m.index)
+            Hyena().summon(m.player, m.game, m.index)
+            Hyena().summon(m.player, m.game, m.index)
 
         return Minion(6, 5, MINION_TYPE.BEAST, deathrattle=summon_hyenas)
 
@@ -73,7 +73,7 @@ class StarvingBuzzard(MinionCard):
     def create_minion(self, player):
         def apply_effect(m, p):
             def check_beast_draw(new_minion):
-                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not minion:
+                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not m:
                     p.draw()
 
             p.bind("minion_placed", check_beast_draw)
@@ -91,13 +91,27 @@ class TundraRhino(MinionCard):
 
     def create_minion(self, player):
         def apply_effect(m, p):
-            def check_beast_charge(played_minion):
-                if played_minion.minion_type is MINION_TYPE.BEAST:
-                    played_minion.charge = True
-                    played_minion.exhausted = False
+            affected_minions = []
 
-            p.bind("minion_played", check_beast_charge)
-            m.bind_once("silenced", lambda: p.unbind("minion_played", check_beast_charge))
+            def give_charge_if_beast(played_minion):
+                def beast_silenced():
+                    affected_minions.remove(played_minion)
+
+                if played_minion.minion_type is MINION_TYPE.BEAST and not played_minion.charge:
+                    played_minion.charge = True
+                    affected_minions.append(played_minion)
+                    played_minion.bind_once("silenced", beast_silenced)
+
+            def silenced():
+                p.unbind("minion_played", give_charge_if_beast)
+                for charge_minion in affected_minions:
+                    charge_minion.charge = False
+
+            for charge_minion in p.minions:
+                give_charge_if_beast(charge_minion)
+
+            p.bind("minion_played", give_charge_if_beast)
+            m.bind_once("silenced", silenced)
             m.bind("copied", apply_effect)
         minion = Minion(2, 5, MINION_TYPE.BEAST)
         apply_effect(minion, player)

@@ -17,7 +17,8 @@ from hsgame.cards.spells.druid import (
     Nourish,
     Starfall,
     ForceOfNature,
-    Starfire
+    Starfire,
+    PoisionSeeds,
 )
 
 from hsgame.cards.spells.hunter import (
