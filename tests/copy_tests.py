@@ -334,3 +334,19 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[3].calculate_attack())
         self.assertEqual(4, game.current_player.minions[3].calculate_attack())
         self.assertEqual(2, game.current_player.minions[5].calculate_attack())
+
+    def test_UnstableGhoul(self):
+        game = generate_game_for([StonetuskBoar, FaerieDragon, MagmaRager,
+                                  SenjinShieldmasta, UnstableGhoul, Frostbolt], FacelessManipulator,
+                                 MinionPlayingAgent, create_enemy_copying_agent(5))
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[1].health)
+        self.assertEqual(1, game.current_player.minions[2].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)

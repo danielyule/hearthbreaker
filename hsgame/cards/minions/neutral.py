@@ -2491,3 +2491,16 @@ class NerubarWeblord(MinionCard):
         minion = Minion(1, 4)
         apply_effect(minion, player)
         return minion
+
+
+class UnstableGhoul(MinionCard):
+    def __init__(self):
+        super().__init__("Unstable Ghoul", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def deal_one_to_minions(minion):
+            for target in hsgame.targeting.find_minion_battlecry_target(player.game, lambda x: True):
+                target.damage(1, self)
+                player.game.check_delayed()
+
+        return Minion(1, 3, deathrattle=deal_one_to_minions, taunt=True)

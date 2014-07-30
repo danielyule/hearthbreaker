@@ -160,6 +160,7 @@ from hsgame.cards.minions.neutral import (
     Maexxna,
     HauntedCreeper,
     NerubarWeblord,
+    UnstableGhoul,
 )
 
 from hsgame.cards.minions.druid import (
