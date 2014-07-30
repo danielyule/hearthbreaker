@@ -362,3 +362,22 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(8, len(game.other_player.hand))
         self.assertEqual(ScavengingHyena, type(game.other_player.hand[7]))
+
+    def test_Duplicate(self):
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        new_game = game.copy()
+
+        # because copying is supposed to happen mid-turn, we have to deactivate the secrets that are
+        # automatically activated.  Don't worry though, they'll be re-activated when the turn starts.
+        for secret in new_game.other_player.secrets:
+            secret.deactivate(new_game.other_player)
+        new_game.play_single_turn()
+
+        self.assertEqual(6, len(new_game.other_player.hand))
+        self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[4].name)
+        self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[5].name)
+        self.assertEqual(0, len(new_game.other_player.secrets))

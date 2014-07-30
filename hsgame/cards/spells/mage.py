@@ -322,3 +322,23 @@ class Pyroblast(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(10), self)
+
+
+class Duplicate(SecretCard):
+    def __init__(self):
+        super().__init__("Duplicate", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+        self.player = None
+
+    def activate(self, player):
+        player.bind_once("minion_died", self._reveal)
+        self.player = player
+
+    def deactivate(self, player):
+        player.unbind("minion_died", self._reveal)
+        self.player = None
+
+    def _reveal(self, minion, by):
+        for c in range(0, 2):
+            if len(self.player.hand) < 10:
+                self.player.hand.append(type(minion.card)())
+        super().reveal()

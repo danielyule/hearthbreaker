@@ -59,7 +59,8 @@ from hsgame.cards.spells.mage import (
     Polymorph,
     Blizzard,
     Flamestrike,
-    Pyroblast
+    Pyroblast,
+    Duplicate,
 )
 
 from hsgame.cards.spells.paladin import (

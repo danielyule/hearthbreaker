@@ -105,7 +105,7 @@ yes,Drain Life,Deal 2 damage. Restore 2 Health to your hero.,,Warlock,3,,,Free,S
 yes,Dread Corsair,Taunt. Costs (1) less per Attack of your weapon.,Pirate,,4,3,3,Common,Minion,Expert
 yes,Dread Infernal,Battlecry: Deal 1 damage to ALL other characters.,Demon,Warlock,6,6,6,Common,Minion,Basic
 yes,Druid of the Claw,Choose One - Charge; or +2 Health and Taunt.,,Druid,5,4,4,Common,Minion,Expert
-no,Duplicate,Secret: when a friendly minion dies, put two copies of it into your hand.,,Mage,3,,,Common,Spell,Curse of Naxxramas
+yes,Duplicate,"Secret: when a friendly minion dies, put two copies of it into your hand.",,Mage,3,,,Common,Spell,Curse of Naxxramas
 yes,Dust Devil,Windfury. Overload: (2),,Shaman,1,3,1,Common,Minion,Expert
 yes,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3,3,2,Rare,Weapon,Expert
 yes,Earth Elemental,Taunt. Overload: (3),,Shaman,5,7,8,Epic,Minion,Expert

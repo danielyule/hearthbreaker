@@ -546,3 +546,14 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual("Fireball", game.current_player.hand[9].name)
+
+    def test_Duplicate(self):
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.other_player.hand))
+        self.assertEqual("Bloodfen Raptor", game.other_player.hand[4].name)
+        self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
+        self.assertEqual(0, len(game.other_player.secrets))
