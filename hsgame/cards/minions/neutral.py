@@ -1974,10 +1974,9 @@ class CaptainsParrot(MinionCard):
     def create_minion(self, player):
         def draw_pirate(m):
             minions = []
-            pirate_list = ["Bloodsail Corsair", "Bloodsail Raider", "Captain Greenskin",
-                           "Dread Corsair", "Southsea Captain", "Southsea Deckhand"]
             for i in range(0, 30):
-                if not m.player.deck.used[i] and pirate_list.count(m.player.deck.cards[i].name) == 1:
+                if not m.player.deck.used[i] and isinstance(m.player.deck.cards[i], MinionCard) and \
+                        m.player.deck.cards[i].create_minion(m.player).minion_type == MINION_TYPE.PIRATE:
                     minions.append(i)
             if len(minions) > 0:
                 index = minions.pop(player.game.random(0, len(minions) - 1))
