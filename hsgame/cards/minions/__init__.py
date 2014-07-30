@@ -161,6 +161,7 @@ from hsgame.cards.minions.neutral import (
     HauntedCreeper,
     NerubarWeblord,
     UnstableGhoul,
+    Loatheb,
 )
 
 from hsgame.cards.minions.druid import (

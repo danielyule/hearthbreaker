@@ -2292,3 +2292,17 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[1].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Loatheb(self):
+        game = generate_game_for(Loatheb, [Assassinate, BoulderfistOgre], MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(10, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(6, game.other_player.hand[1].mana_cost(game.other_player))
+
+        game.play_single_turn()
+
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(6, game.current_player.hand[1].mana_cost(game.current_player))

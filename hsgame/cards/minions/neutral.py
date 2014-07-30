@@ -2503,3 +2503,22 @@ class UnstableGhoul(MinionCard):
                 player.game.check_delayed()
 
         return Minion(1, 3, deathrattle=deal_one_to_minions, taunt=True)
+
+
+class Loatheb(MinionCard):
+    def __init__(self):
+        super().__init__("Loatheb", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def increase_card_cost(minion):
+            class ManaFilter:
+                def __init__(self):
+                    self.amount = -5
+                    self.filter = lambda c: c.is_spell()
+                    self.min = 0
+
+            mana_filter = ManaFilter()
+            minion.game.other_player.mana_filters.append(mana_filter)
+            minion.game.other_player.bind("turn_ended", lambda: minion.game.current_player.mana_filters.remove(mana_filter))
+
+        return Minion(5, 5, battlecry=increase_card_cost)
