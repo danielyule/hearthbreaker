@@ -2519,6 +2519,7 @@ class Loatheb(MinionCard):
 
             mana_filter = ManaFilter()
             minion.game.other_player.mana_filters.append(mana_filter)
-            minion.game.other_player.bind("turn_ended", lambda: minion.game.current_player.mana_filters.remove(mana_filter))
+            minion.game.other_player.bind("turn_ended",
+                                          lambda: minion.game.current_player.mana_filters.remove(mana_filter))
 
         return Minion(5, 5, battlecry=increase_card_cost)
