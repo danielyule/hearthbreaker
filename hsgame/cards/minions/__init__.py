@@ -179,7 +179,8 @@ from hsgame.cards.minions.hunter import (
     KingKrush,
     StarvingBuzzard,
     TundraRhino,
-    ScavengingHyena
+    ScavengingHyena,
+    Webspinner,
 )
 
 from hsgame.cards.minions.mage import (

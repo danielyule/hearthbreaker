@@ -350,3 +350,15 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, game.current_player.minions[2].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Webspinner(self):
+        game = generate_game_for([OasisSnapjaw, Webspinner, MortalCoil],
+                                 [GoldshireFootman, GoldshireFootman, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent(1))
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(8, len(game.other_player.hand))
+        self.assertEqual(ScavengingHyena, type(game.other_player.hand[7]))

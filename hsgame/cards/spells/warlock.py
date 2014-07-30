@@ -4,7 +4,7 @@ import hsgame.targeting
 from hsgame.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hsgame.game_objects import Card, Minion, MinionCard, Hero
 from hsgame.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
-    Succubus, Felguard
+    Succubus, Felguard, BloodImp
 
 
 class MortalCoil(Card):
@@ -137,10 +137,10 @@ class SenseDemons(Card):
                 return Minion(1, 1, MINION_TYPE.DEMON)
 
         minions = []
-        demon_list = ["Blood Imp", "Doomguard", "Dread Infernal", "Felguard", "Flame Imp", "Illidan Stormrage",
-                      "Lord Jaraxxus", "Pit Lord", "Succubus", "Void Terror", "Voidwalker"]
         for i in range(0, 30):
-            if not game.current_player.deck.used[i] and demon_list.count(game.current_player.deck.cards[i].name) == 1:
+            if (not game.current_player.deck.used[i] and isinstance(game.current_player.deck.cards[i], MinionCard) and
+                    game.current_player.deck.cards[i].create_minion(game.current_player).minion_type
+                    == MINION_TYPE.DEMON):
                 minions.append(i)
 
         for i in range(0, 2):
@@ -166,12 +166,11 @@ class BaneOfDoom(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        demon_list = [VoidWalker(), FlameImp(), DreadInfernal(), Succubus(),
-                      Felguard()]
+        demon_list = [BloodImp, VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard]
         card = demon_list[game.random(0, len(demon_list) - 1)]
         if self.target.health <= player.effective_spell_damage(2) and not self.target.divine_shield:
             self.target.damage(player.effective_spell_damage(2), self)
-            card.summon(player, game, len(player.minions))
+            card().summon(player, game, len(player.minions))
         else:
             self.target.damage(player.effective_spell_damage(2), self)
 

@@ -378,7 +378,7 @@ yes,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Free,Minion,Basic
 yes,War Golem,,,,7,7,7,Common,Minion,Basic
 yes,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Free,Minion,Basic
 yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Common,Minion,Basic
-no,Webspinner,Deathrattle: Add a random Beast card to your hand.,Beast,Hunter,1,1,1,Common,Minion,Curse of Naxxramas
+yes,Webspinner,Deathrattle: Add a random Beast card to your hand.,Beast,Hunter,1,1,1,Common,Minion,Curse of Naxxramas
 yes,Whirlwind,Deal 1 damage to ALL minions.,,Warrior,1,,,Common,Spell,Basic
 yes,Wild Growth,Gain an empty Mana Crystal.,,Druid,2,,,Free,Spell,Basic
 yes,Wild Pyromancer,"After you cast a spell, deal 1 damage to ALL minions.",,,2,3,2,Rare,Minion,Expert
