@@ -335,7 +335,7 @@ yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Atta
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic
 yes,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Common,Minion,Basic
-no,Stoneskin Gargoyle,"At the start of your turn, restore this minion to full Health.",,,3,1,4,Common,Minion,Curse of Naxxramas
+yes,Stoneskin Gargoyle,"At the start of your turn, restore this minion to full Health.",,,3,1,4,Common,Minion,Curse of Naxxramas
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Free,Minion,Basic
 yes,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon,Expert
 yes,Stormpike Commando,Battlecry: Deal 2 damage.,,,5,4,2,Common,Minion,Basic

@@ -2306,3 +2306,31 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
         self.assertEqual(6, game.current_player.hand[1].mana_cost(game.current_player))
+
+    def test_StoneskinGargoyle(self):
+        game = generate_game_for(Frostbolt, StoneskinGargoyle, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[1].health)
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(4, game.other_player.minions[1].health)
+
+        game.other_player.minions[0].silence()
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].health)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(4, game.current_player.minions[2].health)

@@ -162,6 +162,7 @@ from hsgame.cards.minions.neutral import (
     NerubarWeblord,
     UnstableGhoul,
     Loatheb,
+    StoneskinGargoyle,
 )
 
 from hsgame.cards.minions.druid import (

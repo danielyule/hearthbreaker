@@ -2523,3 +2523,19 @@ class Loatheb(MinionCard):
                                           lambda: minion.game.current_player.mana_filters.remove(mana_filter))
 
         return Minion(5, 5, battlecry=increase_card_cost)
+
+
+class StoneskinGargoyle(MinionCard):
+    def __init__(self):
+        super().__init__("Stoneskin Gargoyle", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def apply_effect(m, p):
+            def restore_health():
+                m.health = m.calculate_max_health()
+            p.bind("turn_started", restore_health)
+            m.bind_once("silenced", lambda: p.unbind("turn_started", restore_health))
+            m.bind("copied", apply_effect)
+        minion = Minion(1, 4)
+        apply_effect(minion, player)
+        return minion

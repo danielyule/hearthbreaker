@@ -381,3 +381,33 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[4].name)
         self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[5].name)
         self.assertEqual(0, len(new_game.other_player.secrets))
+
+    def test_StoneskinGargoyle(self):
+        game = generate_game_for(Frostbolt, StoneskinGargoyle, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        new_game = game.copy()
+
+        new_game.play_single_turn()
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(4, new_game.current_player.minions[0].health)
+        self.assertEqual(4, new_game.current_player.minions[1].health)
+        new_game.play_single_turn()
+
+        self.assertEqual(2, len(new_game.other_player.minions))
+        self.assertEqual(1, new_game.other_player.minions[0].health)
+        self.assertEqual(4, new_game.other_player.minions[1].health)
+
+        new_game.other_player.minions[0].silence()
+
+        new_game.play_single_turn()
+
+        self.assertEqual(3, len(new_game.current_player.minions))
+        self.assertEqual(4, new_game.current_player.minions[0].health)
+        self.assertEqual(1, new_game.current_player.minions[1].health)
+        self.assertEqual(4, new_game.current_player.minions[2].health)
