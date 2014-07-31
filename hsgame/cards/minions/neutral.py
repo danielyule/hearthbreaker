@@ -2532,7 +2532,8 @@ class StoneskinGargoyle(MinionCard):
     def create_minion(self, player):
         def apply_effect(m, p):
             def restore_health():
-                m.health = m.calculate_max_health()
+                # The restoration counts as a heal.  See https://twitter.com/bdbrode/status/491263252434014208
+                m.heal(m.calculate_max_health() - m.health, None)
             p.bind("turn_started", restore_health)
             m.bind_once("silenced", lambda: p.unbind("turn_started", restore_health))
             m.bind("copied", apply_effect)
