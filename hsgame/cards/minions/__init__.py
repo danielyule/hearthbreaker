@@ -163,6 +163,7 @@ from hsgame.cards.minions.neutral import (
     UnstableGhoul,
     Loatheb,
     StoneskinGargoyle,
+    SludgeBelcher,
 )
 
 from hsgame.cards.minions.druid import (

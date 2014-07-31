@@ -2539,3 +2539,21 @@ class StoneskinGargoyle(MinionCard):
         minion = Minion(1, 4)
         apply_effect(minion, player)
         return minion
+
+
+class SludgeBelcher(MinionCard):
+    def __init__(self):
+        super().__init__("Sludge Belcher", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def summon_slime(minion):
+            class Slime(MinionCard):
+                def __init__(self):
+                    super().__init__("Slime", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+                def create_minion(self, p):
+                    return Minion(1, 2, taunt=True)
+
+            Slime().summon(minion.player, minion.game, minion.index)
+
+        return Minion(3, 5, taunt=True, deathrattle=summon_slime)

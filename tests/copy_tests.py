@@ -411,3 +411,19 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, new_game.current_player.minions[0].health)
         self.assertEqual(1, new_game.current_player.minions[1].health)
         self.assertEqual(4, new_game.current_player.minions[2].health)
+
+    def test_SludgeBelcher(self):
+        game = generate_game_for([SludgeBelcher, Fireball], FacelessManipulator, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual(5, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].taunt)
+        self.assertEqual(2, game.other_player.minions[0].health)
