@@ -88,8 +88,6 @@ class RandomAgent(DoNothingBot):
             else:
                 return
 
-
-
     def choose_target(self, targets):
         return targets[random.randint(0, len(targets) - 1)]
 

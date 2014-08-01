@@ -1,8 +1,8 @@
 import re
-from hsgame.agents.basic_agents import RandomAgent, PredictableBot
+from hsgame.agents.basic_agents import RandomAgent
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game, card_lookup, Deck
-import hsgame.cards
+from hsgame.cards import *
 import timeit
 
 
@@ -20,6 +20,7 @@ def load_deck(filename):
     deck_file.close()
 
     return Deck(cards, char_class)
+
 
 def do_stuff():
     def play_game():
