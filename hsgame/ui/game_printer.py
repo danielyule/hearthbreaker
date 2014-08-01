@@ -126,7 +126,7 @@ class GameRender:
             window.addstr(y + 1, x, "{0:^20}".format(weapon_power))
 
         hero_power = "({0}) ({1}+{4}) -- {2}/{3}".format(hero.calculate_attack(), hero.health,
-                                                         hero.player.mana, hero.player.max_mana, hero.armour)
+                                                         hero.player.mana, hero.player.max_mana, hero.armor)
         window.addstr(y, x + 20, "{0:^20}".format(CHARACTER_CLASS.to_str(hero.character_class)), color)
         window.addstr(y + 1, x + 20, "{0:^20}".format(hero_power), color)
 

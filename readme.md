@@ -18,12 +18,29 @@ Usage
 The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
-There is a basic console that you can use for playing against a bot.  The bot you are playing against will not
-attack you, and will play one card from its hand per turn. (So it is very easy to beat)
+There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
+at random.
 
 Start the console with ``python hsgame/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
-text files with the name of the class followed by a comma, followed by the names of each of the cards in the deck
-in English, separated by commas.
+in cockatrice format, with a card name in English on each line, preceded by a number to specify how many.  For example:
+
+    2 Goldshire Footman
+    2 Murloc Raider
+    2 Bloodfen Raptor
+    2 Frostwolf Grunt
+    2 River Crocolisk
+    2 Ironfur Grizzly
+    2 Magma Rager
+    2 Silverback Patriarch
+    2 Chillwind Yeti
+    2 Oasis Snapjaw
+    2 Sen'jin Shieldmasta
+    2 Booty Bay Bodyguard
+    2 Fen Creeper
+    2 Boulderfist Ogre
+    2 War Golem
+    
+The character class is inferred from the cards present, or defaults to mage.
 
 The console application requires ncurses, which should be included with python on *nix and mac systems, but if you are 
 on windows, you must download it from 

@@ -9,17 +9,22 @@ import timeit
 def load_deck(filename):
     deck_file = open(filename, "r")
     contents = deck_file.read()
-    items = re.split('\s*,\s*', contents)
-    char_class = CHARACTER_CLASS.from_str(items[0])
+    items = re.split('\n', contents)
     cards = []
-    for line in items[1:]:
-        line = line.strip(" \n,")
-        card = card_lookup(line)
-        cards.append(card)
+    character_class = CHARACTER_CLASS.MAGE
+    for line in items[0:]:
+        line = line.strip(" \n\t\r")
+        parts = line.split(" ", 1)
+        count = int(parts[0])
+        for i in range(0, count):
+            card = card_lookup(parts[1])
+            if card.character_class != CHARACTER_CLASS.ALL:
+                character_class = card.character_class
+            cards.append(card)
 
     deck_file.close()
 
-    return Deck(cards, char_class)
+    return Deck(cards, character_class)
 
 
 def do_stuff():
@@ -32,7 +37,7 @@ def do_stuff():
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
     game.start()
 
-    print(timeit.timeit(play_game, 'gc.enable()', number=100000))
+    print(timeit.timeit(play_game, 'gc.enable()', number=1000))
 
 if __name__ == "__main__":
     do_stuff()

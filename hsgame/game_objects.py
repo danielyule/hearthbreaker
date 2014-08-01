@@ -1010,6 +1010,8 @@ class Weapon(Bindable):
 
 class Deck:
     def __init__(self, cards, character_class):
+        if len(cards) != 30:
+            raise GameException("Deck must have exactly 30 cards in it")
         self.cards = cards
         self.character_class = character_class
         self.used = [False] * 30
