@@ -872,6 +872,9 @@ class Minion(Character):
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
         new_minion.index = self.index
+        new_minion.active = self.active
+        new_minion.exhausted = self.exhausted
+        new_minion.born = self.born
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner
@@ -1164,10 +1167,11 @@ class Player(Bindable):
         self.trigger("card_put_back", card)
 
     def discard(self):
-        targets = self.hand
-        target = targets[self.random(0, len(targets) - 1)]
-        self.hand.remove(target)
-        self.trigger("card_discarded", target)
+        if len(self.hand) > 0:
+            targets = self.hand
+            target = targets[self.random(0, len(targets) - 1)]
+            self.hand.remove(target)
+            self.trigger("card_discarded", target)
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
@@ -1285,7 +1289,7 @@ class Game(Bindable):
         for minion in self.current_player.minions:
             minion.active = False
             minion.exhausted = False
-            minion.used_wind_fury = False
+            minion.used_windfury = False
             minion.temp_attack = 0
             if minion.frozen_this_turn:
                 minion.frozen_this_turn = False
