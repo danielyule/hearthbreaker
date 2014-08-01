@@ -1285,7 +1285,7 @@ class Game(Bindable):
         for minion in self.current_player.minions:
             minion.active = False
             minion.exhausted = False
-            minion.used_wind_fury = False
+            minion.used_windfury = False
             minion.temp_attack = 0
             if minion.frozen_this_turn:
                 minion.frozen_this_turn = False
