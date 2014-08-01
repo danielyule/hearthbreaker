@@ -1,8 +1,9 @@
 import re
-from hsgame.agents.basic_agents import RandomAgent
+from hsgame.agents.basic_agents import RandomAgent, PredictableBot
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game, card_lookup, Deck
 import hsgame.cards
+import timeit
 
 
 def load_deck(filename):
@@ -20,13 +21,17 @@ def load_deck(filename):
 
     return Deck(cards, char_class)
 
-if __name__ == "__main__":
+def do_stuff():
+    def play_game():
+        new_game = game.copy()
+        new_game.start()
+
     deck1 = load_deck("example.hsdeck")
     deck2 = load_deck("example.hsdeck")
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
-    for i in range(0, 100):
-        print("Copying Game")
-        new_game = game.copy()
-        print("Starting Game")
-        new_game.start()
-        print("Game Complete")
+    game.start()
+
+    print(timeit.timeit(play_game, 'gc.enable()', number=100000))
+
+if __name__ == "__main__":
+    do_stuff()

@@ -53,7 +53,7 @@ class PredictableBot:
     def choose_target(self, targets):
         return targets[0]
 
-    def choose_index(self, card):
+    def choose_index(self, card, player):
         return 0
 
     def choose_option(self, *options):
