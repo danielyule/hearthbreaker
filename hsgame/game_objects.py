@@ -610,7 +610,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.card = self
         minion.player = player
         minion.game = game
-        minion.index = player.agent.choose_index(self)
+        minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
         player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
