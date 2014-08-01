@@ -872,6 +872,9 @@ class Minion(Character):
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
         new_minion.index = self.index
+        new_minion.active = self.active
+        new_minion.exhausted = self.exhausted
+        new_minion.born = self.born
         card_type = type(self.card)
         new_minion.card = card_type()
         new_minion.player = new_owner
