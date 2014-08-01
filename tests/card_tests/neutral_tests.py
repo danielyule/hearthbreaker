@@ -405,7 +405,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual("Silver Hand Knight", game.current_player.minions[0].card.name)
         self.assertEqual("Squire", game.current_player.minions[1].card.name)
 
-        def choose_1(max):
+        def choose_1(max, player):
             return 1
 
         game.players[0].agent.choose_index = choose_1
@@ -1643,7 +1643,7 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 6):
             game.play_single_turn()
 
-        def _choose_index(card):
+        def _choose_index(card, player):
             return 1
         game.players[0].agent.choose_index = _choose_index
 
@@ -1661,7 +1661,7 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 6):
             game.play_single_turn()
 
-        def _choose_index(card):
+        def _choose_index(card, player):
             return 1
         game.players[0].agent.choose_index = _choose_index
 
@@ -1683,7 +1683,7 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        def _choose_index(card):
+        def _choose_index(card, player):
             return 1
         game.players[0].agent.choose_index = _choose_index
 

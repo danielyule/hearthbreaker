@@ -371,8 +371,8 @@ class RecordingGame(hsgame.game_objects.Game):
             def __init__(self, proxied_agent):
                 object.__setattr__(self, "agent", proxied_agent)
 
-            def choose_index(self, card):
-                index = self.agent.choose_index(card)
+            def choose_index(self, card, player):
+                index = self.agent.choose_index(card, player)
                 game.replay.last_index = index
                 return index
 
@@ -465,7 +465,7 @@ class SavedGame(hsgame.game_objects.Game):
             def choose_target(self, targets):
                 return self.next_target
 
-            def choose_index(self, card):
+            def choose_index(self, card, player):
                 return self.next_index
 
             def choose_option(self, *options):
