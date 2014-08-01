@@ -1167,10 +1167,11 @@ class Player(Bindable):
         self.trigger("card_put_back", card)
 
     def discard(self):
-        targets = self.hand
-        target = targets[self.random(0, len(targets) - 1)]
-        self.hand.remove(target)
-        self.trigger("card_discarded", target)
+        if len(self.hand) > 0:
+            targets = self.hand
+            target = targets[self.random(0, len(targets) - 1)]
+            self.hand.remove(target)
+            self.trigger("card_discarded", target)
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
