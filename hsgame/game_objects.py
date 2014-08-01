@@ -1087,6 +1087,7 @@ class Hero(Character):
 
     def die(self, by):
         super().die(by)
+        self.player.game.game_over()
 
     def find_power_target(self):
         targets = hsgame.targeting.find_spell_target(self.player.game, lambda t: t.spell_targetable())
@@ -1199,9 +1200,6 @@ class Game(Bindable):
         for i in range(0, 4):
             self.players[1].draw()
 
-        self.players[0].hero.bind("died", self.game_over)
-        self.players[1].hero.bind("died", self.game_over)
-
     def check_delayed(self):
         for minion in self.delayed_minions:
             minion.activate_delayed()
@@ -1268,7 +1266,7 @@ class Game(Bindable):
         self.current_player.hero.active = True
         self.current_player.draw()
 
-    def game_over(self, attacker):
+    def game_over(self):
         self.game_ended = True
 
     def _end_turn(self):
