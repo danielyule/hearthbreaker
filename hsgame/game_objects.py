@@ -342,6 +342,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         (hero ability or battlecry).  This method will also trigger the various events associated with taking damage
         or dying.
 
+        If the character has a divine shield, it will be removed, and the character will take no damage.  If the
+        character's health is below the max_health, then the character is considered enraged.
+
         :param int amount: The amount of damage done (should be positive)
         :param Object attacker: The :class:`Character`or :class:`SpellCard that did the damage or ``None``.
         """
@@ -449,10 +452,19 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         apply_silence(self)
 
     def freeze(self):
+        """
+        Causes this :class:`Character` to be frozen.  If this character is frozen on its opponent's turn, it
+        will not be able to attack on the next turn.  If frozen on its owner's turn, it will not be able
+        to attack this turn or its owner's next turn.
+        """
         self.frozen_this_turn = True
         self.frozen = True
 
     def silence(self):
+        """
+        Silence this :class:`Character`.  This will trigger the silence event, and undo any status effects that have been given to
+        this character (immune, attack & health increases, frozen, windfury)
+        """
         self.trigger("silenced")
         self.temp_attack = 0
         self.immune = False
@@ -460,9 +472,18 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.frozen = False
         self.frozen_this_turn = False
 
-    def heal(self, amount, card):
+    def heal(self, amount, source):
+        """
+        Heals the :class:`Character`.  The health cannot exceed the character's max health.  If the amount
+        being healed is less than 0, then the character is damaged instead.
+
+        If the character's health is brought back to its maximum, then it is no longer enraged.
+
+        :param int amount: The amount this character is being healed by.  Can be negative
+        :param source: The source of this healing.  Could be a :class:`Minion`, a :class:`spell card <Card>` or None
+        """
         if amount < 0:
-            self.damage(-amount, card)
+            self.damage(-amount, source)
         if amount > 0:
             self.trigger("healed", amount)
             self.health += amount
@@ -474,13 +495,29 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.trigger("health_changed")
 
     def die(self, by):
+        """
+        Kills this :class:`Character`.  The death event will not be processed until :meth:`activate_delayed` is called.
+
+        :param by: The object that killed this character.  Could be a :class:`Character`, a :class:`spell card <Card>`
+                   or None
+        """
         self.delayed_trigger("died", by)
         self.dead = True
 
     def can_attack(self):
+        """
+        Checks if this :class:`Character` can attack.  Evaluates whether or not is has already attacked, if its frozen and if
+        it has an attack value
+
+        :rtype boolean:
+        """
         return self.calculate_attack() > 0 and self.active and not self.frozen
 
     def spell_targetable(self):
+        """
+        Checks if a :class:`Character` can be targeted by a spell.  Minions with stealth or whose text say they can't be
+        targeted by spells cannot be targeted, but any other character can.
+        """
         return True
 
 
@@ -809,8 +846,8 @@ class Minion(Character):
         else:
             super().damage(amount, attacker)
 
-    def heal(self, amount, card):
-        super().heal(amount, card)
+    def heal(self, amount, source):
+        super().heal(amount, source)
         if amount > 0:
             self.game.trigger("minion_healed")
 
