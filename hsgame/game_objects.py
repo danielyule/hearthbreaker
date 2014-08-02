@@ -28,8 +28,8 @@ def card_lookup(card_name):
             card_lookup_rec(sub_type)
 
     if len(card_table) == 0:
-        for card_type in Card.__subclasses__():
-            card_lookup_rec(card_type)
+        for card_class in Card.__subclasses__():
+            card_lookup_rec(card_class)
 
     card = card_table[card_name]
     if card is not None:
@@ -357,9 +357,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             elif issubclass(type(attacker), Card):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
-            if type(self) is Minion:
+            if isinstance(self, Minion):
                 self.game.trigger("minion_damaged", self)
-            elif type(self) is Hero:
+            elif isinstance(self, Hero):
                 # The response of a secret to damage must happen immediately
                 self.trigger("hero_damaged", amount, attacker)
             self.health -= amount
@@ -373,6 +373,12 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.die(attacker)
 
     def change_attack(self, amount):
+        """
+        Change the amount of attack this :class:`Character` has.  The amount can be either positive or negative.
+        This method will automatically undo its effect when silenced, and re-apply its effect when copied
+
+        :param int amount: The amount to change the attack by
+        """
         def apply_silence(minion, player=None):
             def silence():
                 minion.base_attack -= amount
@@ -384,11 +390,22 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         apply_silence(self)
 
     def change_temp_attack(self, amount):
+        """
+        Change the amount of attack this :class:`Character` has on this turn only.  The amount can be either positive
+        or negative. This method will automatically undo its effect when silenced, and re-apply its effect when copied
 
+        :param int amount: The amount to change the temporary attack by
+        """
         self.trigger("attack_changed", amount)
         self.temp_attack += amount
 
     def increase_health(self, amount):
+        """
+        Increase the amount of  total health this :class:`Character` has.  This is a permanent effect (unless the
+        Character is silenced).  This effect will increase both the player's current health and maximum health
+
+        :param int amount: the amount to increase health by
+        """
         def apply_silence(minion, player=None):
             def silence():
                 minion.base_health -= amount
@@ -403,6 +420,13 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         apply_silence(self)
 
     def decrease_health(self, amount):
+        """
+        Decrease the amount of  total health this :class:`Character` has.  This is a permanent effect (unless the
+        Character is silenced).  This effect will decrease the player's maximum health, but will only decrease
+        the player's health if it is above the new value for maximum health
+
+        :param int amount: the amount to decrease health by
+        """
         def apply_silence(minion, player=None):
             def silence():
                 if minion.calculate_max_health() == minion.health:
@@ -848,13 +872,13 @@ class Minion(Character):
                     minion.trigger("health_changed")
 
         def silenced():
-            for player in affected_players:
-                player.auras.remove(aura)
+            for affected_player in affected_players:
+                affected_player.auras.remove(aura)
             if health > 0:
-                for minion in filter(filter_func, self.player.minions):
-                    if minion.health > minion.calculate_max_health():
-                        minion.health = minion.calculate_max_health()
-                        minion.trigger("health_changed")
+                for filtered_minion in filter(filter_func, self.player.minions):
+                    if filtered_minion.health > filtered_minion.calculate_max_health():
+                        filtered_minion.health = filtered_minion.calculate_max_health()
+                        filtered_minion.trigger("health_changed")
 
         self.bind_once("silenced", silenced)
 
