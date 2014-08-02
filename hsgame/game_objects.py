@@ -962,7 +962,7 @@ class TheCoin(Card):
 
 class Weapon(Bindable):
     """
-    Represents a Hearthstone weapon.  All weapons have been attacked power and durability.  The logic for handling the
+    Represents a Hearthstone weapon.  All weapons have attack power and durability.  The logic for handling the
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
     """
 
