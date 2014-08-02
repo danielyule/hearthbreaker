@@ -2,28 +2,33 @@ import curses
 import curses.textpad
 import sys
 import re
+from hsgame.agents.basic_agents import RandomAgent
 
 from hsgame.cards import *
 from hsgame.constants import CHARACTER_CLASS
 from hsgame.game_objects import Game, card_lookup, Deck
 from hsgame.ui.game_printer import GameRender
-from tests.testing_agents import SpellTestingAgent
 
 
 def load_deck(filename):
     deck_file = open(filename, "r")
     contents = deck_file.read()
-    items = re.split('\s*,\s*', contents)
-    char_class = CHARACTER_CLASS.from_str(items[0])
+    items = re.split('\n', contents)
     cards = []
-    for line in items[1:]:
-        line = line.strip(" \n,")
-        card = card_lookup(line)
-        cards.append(card)
+    character_class = CHARACTER_CLASS.MAGE
+    for line in items[0:]:
+        line = line.strip(" \n\t\r")
+        parts = line.split(" ", 1)
+        count = int(parts[0])
+        for i in range(0, count):
+            card = card_lookup(parts[1])
+            if card.character_class != CHARACTER_CLASS.ALL:
+                character_class = card.character_class
+            cards.append(card)
 
     deck_file.close()
 
-    return Deck(cards, char_class)
+    return Deck(cards, character_class)
 
 
 def print_usage():
@@ -46,7 +51,6 @@ def render_game(stdscr):
             self.window = prompt_window
             self.game_window = game_window
             self.text_window = text_window
-            self.game = None
             curses.init_pair(5, curses.COLOR_WHITE, curses.COLOR_CYAN)
             curses.init_pair(6, curses.COLOR_BLACK, curses.COLOR_GREEN)
 
@@ -56,11 +60,11 @@ def render_game(stdscr):
             action = self.choose_action()
             while not (action == "quit" or action == "end"):
                 if action == "play":
-                    card = self.choose_card()
+                    card = self.choose_card(player)
                     if card is not None:
-                        self.game.play_card(card)
+                        player.game.play_card(card)
                 elif action == "attack":
-                    attacker = self.choose_attacker()
+                    attacker = self.choose_attacker(player)
                     if attacker is not None:
                         attacker.attack()
                 elif action == "power":
@@ -114,9 +118,8 @@ def render_game(stdscr):
 
             return actions[selected]
 
-        def choose_card(self):
-            filtered_cards = [card for card in filter(lambda card: card.can_use(self.game.current_player, self.game),
-                                                      self.game.current_player.hand)]
+        def choose_card(self, player):
+            filtered_cards = [card for card in filter(lambda card: card.can_use(player, player.game), player.hand)]
             if len(filtered_cards) is 0:
                 return None
             renderer.targets = filtered_cards
@@ -147,11 +150,10 @@ def render_game(stdscr):
 
             return renderer.selected_target
 
-        def choose_attacker(self):
-            filtered_attackers = [minion for minion in filter(lambda minion: minion.can_attack(),
-                                                              self.game.current_player.minions)]
-            if self.game.current_player.hero.can_attack():
-                filtered_attackers.append(self.game.current_player.hero)
+        def choose_attacker(self, player):
+            filtered_attackers = [minion for minion in filter(lambda minion: minion.can_attack(), player.minions)]
+            if player.hero.can_attack():
+                filtered_attackers.append(player.hero)
             if len(filtered_attackers) is 0:
                 return None
             renderer.targets = filtered_attackers
@@ -241,9 +243,6 @@ def render_game(stdscr):
 
             return keeping
 
-        def set_game(self, game):
-            self.game = game
-
         def choose_target(self, targets):
 
             if len(targets) is 0:
@@ -274,7 +273,7 @@ def render_game(stdscr):
 
             return renderer.selected_target
 
-        def choose_index(self, card):
+        def choose_index(self, card, player):
             renderer.selection_index = 0
             renderer.draw_game()
             self.window.addstr(0, 0, "Choose placement location")
@@ -285,10 +284,10 @@ def render_game(stdscr):
                 if ch == curses.KEY_LEFT:
                     renderer.selection_index -= 1
                     if renderer.selection_index < 0:
-                        renderer.selection_index = len(self.game.current_player.minions)
+                        renderer.selection_index = len(player.minions)
                 if ch == curses.KEY_RIGHT:
                     renderer.selection_index += 1
-                    if renderer.selection_index > len(self.game.current_player.minions):
+                    if renderer.selection_index > len(player.minions):
                         renderer.selection_index = 0
                 renderer.draw_game()
                 self.window.refresh()
@@ -347,7 +346,7 @@ def render_game(stdscr):
 
     deck1 = load_deck(sys.argv[1])
     deck2 = load_deck(sys.argv[2])
-    game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), SpellTestingAgent()])
+    game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), RandomAgent()])
     if isinstance(game.players[0].agent, TextAgent):
         renderer = GameRender(stdscr, game, game.players[0])
     else:

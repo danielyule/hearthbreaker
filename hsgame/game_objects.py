@@ -610,7 +610,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.card = self
         minion.player = player
         minion.game = game
-        minion.index = player.agent.choose_index(self)
+        minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
         player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
@@ -1010,6 +1010,8 @@ class Weapon(Bindable):
 
 class Deck:
     def __init__(self, cards, character_class):
+        if len(cards) != 30:
+            raise GameException("Deck must have exactly 30 cards in it")
         self.cards = cards
         self.character_class = character_class
         self.used = [False] * 30
@@ -1087,6 +1089,7 @@ class Hero(Character):
 
     def die(self, by):
         super().die(by)
+        self.player.game.game_over()
 
     def find_power_target(self):
         targets = hsgame.targeting.find_spell_target(self.player.game, lambda t: t.spell_targetable())
@@ -1199,9 +1202,6 @@ class Game(Bindable):
         for i in range(0, 4):
             self.players[1].draw()
 
-        self.players[0].hero.bind("died", self.game_over)
-        self.players[1].hero.bind("died", self.game_over)
-
     def check_delayed(self):
         for minion in self.delayed_minions:
             minion.activate_delayed()
@@ -1268,7 +1268,7 @@ class Game(Bindable):
         self.current_player.hero.active = True
         self.current_player.draw()
 
-    def game_over(self, attacker):
+    def game_over(self):
         self.game_ended = True
 
     def _end_turn(self):

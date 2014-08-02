@@ -504,7 +504,7 @@ class TestWarlock(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        def _choose_index(card):
+        def _choose_index(card, player):
             return 1
         game.players[0].agent.choose_index = _choose_index
 
