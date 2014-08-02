@@ -6,8 +6,7 @@ import hsgame.targeting
 
 class ArcaneMissiles(Card):
     def __init__(self):
-        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.FREE)
+        super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -20,9 +19,7 @@ class ArcaneMissiles(Card):
 
 class IceLance(Card):
     def __init__(self):
-        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON,
-                         hsgame.targeting.find_spell_target)
+        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -34,16 +31,14 @@ class IceLance(Card):
 
 class MirrorImage(Card):
     def __init__(self):
-        super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
         class MirrorImageMinion(MinionCard):
             def __init__(self):
-                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
 
             def create_minion(self, p):
                 minion = Minion(0, 2)
@@ -57,8 +52,7 @@ class MirrorImage(Card):
 
 class ArcaneExplosion(Card):
     def __init__(self):
-        super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.FREE)
+        super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -68,9 +62,7 @@ class ArcaneExplosion(Card):
 
 class Frostbolt(Card):
     def __init__(self):
-        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON,
-                         hsgame.targeting.find_spell_target)
+        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -80,8 +72,7 @@ class Frostbolt(Card):
 
 class ArcaneIntellect(Card):
     def __init__(self):
-        super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.FREE)
+        super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -102,8 +93,7 @@ class FrostNova(Card):
 
 class Counterspell(SecretCard):
     def __init__(self):
-        super().__init__("Counterspell", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.RARE)
+        super().__init__("Counterspell", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -161,18 +151,18 @@ class Spellbender(SecretCard):
         self.player = None
 
     def _reveal(self, card):
-        if card.targetable:
+        if len(self.player.minions) < 7 and card.targetable:
             class SpellbenderMinion(MinionCard):
                 def __init__(self):
-                    super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE,
-                                     CARD_RARITY.SPECIAL)
+                    super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
 
                 def create_minion(self, p):
                     return Minion(1, 3)
 
             def choose_bender(targets):
                 spell_bender = SpellbenderMinion()
-                # TODO test what happens if Spellbender goes off when there are 7 minions down
+                # Seems according to http://us.battle.net/hearthstone/en/forum/topic/10070927066, spellbender
+                # will not activate if there are too many minions
                 spell_bender.summon(self.player, self.player.game, len(self.player.minions))
                 old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
                 self.player.game.current_player.agent.choose_target = old_target
@@ -214,8 +204,7 @@ class Vaporize(SecretCard):
 
 class IceBlock(SecretCard):
     def __init__(self):
-        super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.EPIC)
+        super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
         self.player = None
 
     def _reveal(self, amount, attacker):
@@ -238,8 +227,7 @@ class IceBlock(SecretCard):
 
 class ConeOfCold(Card):
     def __init__(self):
-        super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON,
+        super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -261,8 +249,7 @@ class ConeOfCold(Card):
 
 class Fireball(Card):
     def __init__(self):
-        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         hsgame.targeting.find_spell_target)
+        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -271,8 +258,7 @@ class Fireball(Card):
 
 class Polymorph(Card):
     def __init__(self):
-        super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.FREE,
+        super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
                          hsgame.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -280,8 +266,7 @@ class Polymorph(Card):
 
         class Sheep(MinionCard):
             def __init__(self):
-                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
             def create_minion(self, p):
                 return Minion(1, 1, MINION_TYPE.BEAST)
@@ -305,8 +290,7 @@ class Blizzard(Card):
 
 class Flamestrike(Card):
     def __init__(self):
-        super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.COMMON)
+        super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -316,8 +300,7 @@ class Flamestrike(Card):
 
 class Pyroblast(Card):
     def __init__(self):
-        super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
+        super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC, hsgame.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
