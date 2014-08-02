@@ -385,3 +385,14 @@ class TestWarrior(unittest.TestCase):
 
         self.assertEqual(23, game.other_player.hero.health)
         self.assertIsNone(game.current_player.hero.weapon)
+
+    def test_FieryWarAxe(self):
+        game = generate_game_for(FieryWarAxe, BoulderfistOgre,
+                                 PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.current_player.hero.weapon.durability)
+        self.assertEqual(3, game.current_player.hero.weapon.base_attack)
+        self.assertEqual(27, game.other_player.hero.health)
