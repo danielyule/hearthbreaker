@@ -2,8 +2,8 @@ import random
 import unittest
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
-from hsgame.agents.basic_agents import PredictableBot
+from hearthbreaker.cards import *
+from hearthbreaker.agents.basic_agents import PredictableBot
 
 
 class TestRogue(unittest.TestCase):

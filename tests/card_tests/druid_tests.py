@@ -1,9 +1,9 @@
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Game
-from hsgame.replay import SavedGame
+from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.game_objects import Game
+from hearthbreaker.replay import SavedGame
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for, StackedDeck, mock
-from hsgame.cards import *
+from hearthbreaker.cards import *
 import random
 import unittest
 

@@ -1,5 +1,5 @@
 import copy
-from hsgame.agents.basic_agents import DoNothingBot
+from hearthbreaker.agents.basic_agents import DoNothingBot
 
 
 class SpellTestingAgent(DoNothingBot):

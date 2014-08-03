@@ -1,5 +1,7 @@
-Hearthstone Simulator
-=====================
+HearthBreaker
+=============
+A Hearthstone Simulator
+-----------------------
 
 The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  The end goal
@@ -15,13 +17,13 @@ The goal is not to create a clone of Hearthstone which players can use to replac
 Usage
 -----
 
-The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+The Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
 There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
 at random.
 
-Start the console with ``python hsgame/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
+Start the console with ``python hearthbreaker/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
 in cockatrice format, with a card name in English on each line, preceded by a number to specify how many.  For example:
 
     2 Goldshire Footman
@@ -64,17 +66,17 @@ for more details.
 
 Structure
 ---------
-Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on
-an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the parameters they 
-receive, see [events.md](events.md).
+Almost all of the game logic is found in [hearthbreaker.game_objects](hearthbreker/game_objects.py).  The game functions
+largely on an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the 
+parameters they  receive, see [events.md](events.md).
 
 The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
 by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
 when it is time to make a decision, the game will request the decision from the agents, rather than the agents
 dictating how the game is run.
 
-The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
-(spell/minion/secret/weapon) and by class.
+The cards themselves are each a class, and can be found in the [hearthbreaker/cards](hearthbreaker/cards) directory, 
+organized by type (spell/minion/secret/weapon) and by class.
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).

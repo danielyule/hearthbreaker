@@ -1,11 +1,11 @@
-from hsgame.agents.basic_agents import DoNothingBot, PredictableBot
-from hsgame.constants import CHARACTER_CLASS
+from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
+from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_agents import SpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
-from hsgame.cards import StonetuskBoar, ArcaneIntellect, Naturalize
+from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 import random
 import unittest
-from hsgame.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
+from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 
 class TestGame(unittest.TestCase):
@@ -54,8 +54,8 @@ class TestGame(unittest.TestCase):
         self.assertTrue(game.players[0].deck == deck1, "Deck not assigned to player")
         self.assertTrue(game.players[1].deck == deck2, "Deck not assigned to player")
 
-        self.assertTrue(game.players[0].agent == agent1, "Agent not stored in the hsgame")
-        self.assertTrue(game.players[1].agent == agent2, "Agent not stored in the hsgame")
+        self.assertTrue(game.players[0].agent == agent1, "Agent not stored in the hearthbreaker")
+        self.assertTrue(game.players[1].agent == agent2, "Agent not stored in the hearthbreaker")
 
         self.assertListEqual(checked_cards[0][1:], game.players[0].hand[:-1], "Cards not retained after request")
         self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[:-4], "Cards not retained after request")

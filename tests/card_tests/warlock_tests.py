@@ -1,11 +1,11 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import PredictableBot
+from hearthbreaker.agents.basic_agents import PredictableBot
 
-from hsgame.constants import MINION_TYPE
+from hearthbreaker.constants import MINION_TYPE
 from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class TestWarlock(unittest.TestCase):

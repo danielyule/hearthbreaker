@@ -1,8 +1,8 @@
 import re
-from hsgame.agents.basic_agents import RandomAgent
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Game, card_lookup, Deck
-from hsgame.cards import *
+from hearthbreaker.agents.basic_agents import RandomAgent
+from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.game_objects import Game, card_lookup, Deck
+from hearthbreaker.cards import *
 import timeit
 
 

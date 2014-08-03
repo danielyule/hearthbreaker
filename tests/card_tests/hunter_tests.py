@@ -1,10 +1,10 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import DoNothingBot
+from hearthbreaker.agents.basic_agents import DoNothingBot
 from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class TestHunter(unittest.TestCase):
