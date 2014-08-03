@@ -1,10 +1,11 @@
-from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
-from hearthbreaker.constants import CHARACTER_CLASS
-from tests.testing_agents import SpellTestingAgent
-from tests.testing_utils import generate_game_for, mock
-from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 import random
 import unittest
+
+from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
+from tests.agents.testing_agents import SpellTestingAgent
+from hearthbreaker.constants import CHARACTER_CLASS
+from tests.testing_utils import generate_game_for, mock
+from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize
 from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 

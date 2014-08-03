@@ -5,7 +5,7 @@ from hearthbreaker.cards import GoldshireFootman, MurlocRaider, BloodfenRaptor, 
     IronfurGrizzly, MagmaRager, SilverbackPatriarch, ChillwindYeti, OasisSnapjaw, SenjinShieldmasta, BootyBayBodyguard, \
     FenCreeper, BoulderfistOgre, WarGolem, Shieldbearer, FlameImp, YoungPriestess, DarkIronDwarf, DireWolfAlpha, \
     VoidWalker, HarvestGolem, KnifeJuggler, ShatteredSunCleric, ArgentSquire, Doomguard, Soulfire, DefenderOfArgus, \
-    AbusiveSergeant, NerubianEgg
+    AbusiveSergeant, NerubianEgg, KeeperOfTheGrove
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Deck, Game
 
@@ -35,8 +35,8 @@ class TestAgents(unittest.TestCase):
             SilverbackPatriarch(),
             ChillwindYeti(),
             ChillwindYeti(),
-            OasisSnapjaw(),
-            OasisSnapjaw(),
+            KeeperOfTheGrove(),
+            KeeperOfTheGrove(),
             SenjinShieldmasta(),
             SenjinShieldmasta(),
             BootyBayBodyguard(),

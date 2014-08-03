@@ -1,7 +1,8 @@
 import random
 import unittest
+
 from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
-from tests.testing_agents.testing_agents import SpellTestingAgent
+from tests.agents.testing_agents import SpellTestingAgent
 from hearthbreaker.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
     DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith, MassDispel
 from tests.testing_utils import generate_game_for

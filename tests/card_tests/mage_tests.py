@@ -5,8 +5,8 @@ from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.game_objects import Game
 from hearthbreaker.replay import SavedGame
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent, \
-    EnemySpellTestingAgent
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent,\
+    OneSpellTestingAgent, EnemySpellTestingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.cards import *
 

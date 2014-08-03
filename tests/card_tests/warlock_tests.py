@@ -1,9 +1,10 @@
 import random
 import unittest
-from hearthbreaker.agents.basic_agents import PredictableBot
 
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.agents.testing_agents import OneSpellTestingAgent, MinionPlayingAgent, EnemySpellTestingAgent, \
+    SpellTestingAgent, EnemyMinionSpellTestingAgent, PredictableAgentWithoutHeroPower
 from hearthbreaker.constants import MINION_TYPE
-from tests.testing_agents import *
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 

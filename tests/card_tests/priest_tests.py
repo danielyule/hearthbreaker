@@ -1,10 +1,10 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import PredictableBot
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.agents.testing_agents import MinionPlayingAgent, SpellTestingAgent, PredictableAgentWithoutHeroPower
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game
-from tests.testing_agents import *
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.replay import SavedGame
 from hearthbreaker.cards import *
