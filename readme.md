@@ -7,17 +7,17 @@ The purpose of this project is to create an open source Hearthstone simulator fo
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  The end goal
 is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
-The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
+The goal is not to create a clone of Hearthstone with which players can replace the game.
 
- * Documentation (In Progress) [http://danielyule.github.io/hearthstone-simulator/](http://danielyule.github.io/hearthstone-simulator/)
- * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
- * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthstone-simulator/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthstone-simulator?branch=master)
+ * Documentation (In Progress) [http://danielyule.github.io/hearthbreaker/](http://danielyule.github.io/hearthstone-simulator/)
+ * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthbreaker.svg?branch=master)](https://travis-ci.org/danielyule/hearthbreaker)
+ * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthbreaker/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthbreaker?branch=master)
  * Developer Mailing List: [Google Group](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 
 Usage
 -----
 
-The Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
 There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
@@ -90,11 +90,11 @@ All pull requests which implement new cards must also include a unit test for th
  has no side effects aside from playing the minion, tests should include another card's effects on it.
 
 All pull requests will be automatically verified through 
-[travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through
- [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
+[travis-ci.org](https://travis-ci.org/danielyule/hearthbreaker), and a coverage report generated through
+ [coveralls.io](https://coveralls.io/r/danielyule/hearthbreaker)
 
 For more specifics about contributing, see the 
-[contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), 
+[contributing page](http://danielyule.github.io/hearthbreaker/contributing.html), 
 or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 
 Related Projects

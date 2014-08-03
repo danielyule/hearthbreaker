@@ -378,4 +378,4 @@ def linkcode_resolve(domain, info):
         (lines, line_no) = inspect.getsourcelines(cls)
     except TypeError:
         return None
-    return "http://github.com/danielyule/hearthstone-simulator/blob/master/{:s}.py#L{:d}".format(filename, line_no)
+    return "http://github.com/danielyule/hearthbreaker/blob/master/{:s}.py#L{:d}".format(filename, line_no)
