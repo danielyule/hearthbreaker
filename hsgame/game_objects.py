@@ -462,8 +462,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def silence(self):
         """
-        Silence this :class:`Character`.  This will trigger the silence event, and undo any status effects that have been given to
-        this character (immune, attack & health increases, frozen, windfury)
+        Silence this :class:`Character`.  This will trigger the silence event, and undo any status effects that have
+        affected this character (immune, attack & health increases, frozen, windfury)
         """
         self.trigger("silenced")
         self.temp_attack = 0
@@ -506,8 +506,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
     def can_attack(self):
         """
-        Checks if this :class:`Character` can attack.  Evaluates whether or not is has already attacked, if its frozen and if
-        it has an attack value
+        Checks if this :class:`Character` can attack.  Evaluates whether or not is has already attacked, if its frozen
+        and if it has an attack value
 
         :rtype boolean:
         """
