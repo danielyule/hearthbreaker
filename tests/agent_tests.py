@@ -80,7 +80,7 @@ class TestAgents(unittest.TestCase):
             AbusiveSergeant(),
             NerubianEgg(),
             NerubianEgg(),
-    ], CHARACTER_CLASS.WARLOCK)
+        ], CHARACTER_CLASS.WARLOCK)
 
         game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
         game.pre_game()
