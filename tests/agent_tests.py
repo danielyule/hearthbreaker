@@ -2,7 +2,7 @@ import random
 import unittest
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.cards import GoldshireFootman, MurlocRaider, BloodfenRaptor, FrostwolfGrunt, RiverCrocolisk, \
-    IronfurGrizzly, MagmaRager, SilverbackPatriarch, ChillwindYeti, OasisSnapjaw, SenjinShieldmasta, BootyBayBodyguard, \
+    IronfurGrizzly, MagmaRager, SilverbackPatriarch, ChillwindYeti, SenjinShieldmasta, BootyBayBodyguard, \
     FenCreeper, BoulderfistOgre, WarGolem, Shieldbearer, FlameImp, YoungPriestess, DarkIronDwarf, DireWolfAlpha, \
     VoidWalker, HarvestGolem, KnifeJuggler, ShatteredSunCleric, ArgentSquire, Doomguard, Soulfire, DefenderOfArgus, \
     AbusiveSergeant, NerubianEgg, KeeperOfTheGrove
