@@ -1,5 +1,5 @@
-hsgame package
-==============
+hearthbreaker package
+=====================
 
 Subpackages
 -----------

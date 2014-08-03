@@ -657,6 +657,16 @@ class Card(Bindable):
 
 
 class MinionCard(Card, metaclass=abc.ABCMeta):
+    """
+    Describes a :class:`Card` for summoning a minion.  This is distinct from the :class:`Minion` that represents the
+    minion after it has been played.  This class represents the card aspects (mana cost, character class and rarity)
+    as well as being responsible for creating the minion that will be added to the table.
+
+    :param string name: The name of this card in English
+    :param int mana: The base mana cost of this card
+    :param int character_class: The character class that this card belongs to.  Should be a member of
+                                :class:`hearthbreaker.constants.CHARACTER_CLASS`
+    """
     def __init__(self, name, mana, character_class, rarity, targeting_func=None,
                  filter_func=lambda target: not target.stealth, overload=0):
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
