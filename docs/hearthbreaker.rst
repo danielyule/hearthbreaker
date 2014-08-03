@@ -26,9 +26,7 @@ hearthbreaker.powers module
 ---------------------------
 
 .. automodule:: hearthbreaker.powers
-    :members:
-    :undoc-members:
-    :show-inheritance:
+
 
 hearthbreaker.replay module
 ---------------------------
@@ -42,9 +40,6 @@ hearthbreaker.targeting module
 ------------------------------
 
 .. automodule:: hearthbreaker.targeting
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 hearthbreaker.constants module
 ------------------------------

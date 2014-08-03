@@ -662,19 +662,60 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     minion after it has been played.  This class represents the card aspects (mana cost, character class and rarity)
     as well as being responsible for creating the minion that will be added to the table.
 
-    :param string name: The name of this card in English
-    :param int mana: The base mana cost of this card
-    :param int character_class: The character class that this card belongs to.  Should be a member of
-                                :class:`hearthbreaker.constants.CHARACTER_CLASS`
+    :see: :class:`Card`
+    :see: :meth:`create_minion`
     """
     def __init__(self, name, mana, character_class, rarity, targeting_func=None,
                  filter_func=lambda target: not target.stealth, overload=0):
+        """
+        All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
+
+        :param string name: The name of this card in English
+        :param int mana: The base mana cost of this card
+        :param int character_class: The character class that this card belongs to.  Should be a member of
+                                    :class:`hearthbreaker.constants.CHARACTER_CLASS`
+        :param function targeting_func: The function used to select a list of targets for this minion's battlecry, if it
+                                        has one.  If it does not, then None.  This function should be taken from
+                                        :mod:`hearthbreaker.targeting`, and should return `None` if there are no
+                                        feasible targets.
+        :param function filter_func: Used to filter targets returned from the targeting function for appropriateness.
+                                     Typically used for ensuring that stealthed minions aren't targeted
+        """
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
 
     def can_use(self, player, game):
+        """
+        Checks if this minion can be played.  The card must be able to play AND the board must not be full.
+
+        :param hearthbreaker.game_objects.Player player: The player who wants to play this card
+        :param hearthbreaker.game_objects.Game game: The game this card might be played in.
+        """
         return len(player.minions) < 7 and super().can_use(player, game)
 
     def use(self, player, game):
+        """
+        Adds this minion to the board for the given player, if the card is able to be played.  The agent for the
+        given player will be consulted about the location on the board of the played minion, about the target
+        for the battlecry if necessary, and to choose an option for cards with choose.
+
+        This method operates in the following order:
+
+         1. Battlecry target chosen (if needed)
+         2. Board placement chosen
+         3. Minion is placed on the board
+         4. minion_placed event
+         5. Battlecry activated (if needed)
+         6. minion_played event
+         7. minion_summoned_event
+         8. after_minion_added event
+
+        The precise ordering of events is necessary so that various effects (Sword of Justice, Knife Juggler, etc)
+        trigger in the correct order, and to distinguish from :meth:`summon`, which is called when a minion is
+        played as a side effect of of card (e.g. Feral Spirit)
+
+        :param hearthbreaker.game_objects.Player player: The player who wants to play this card
+        :param hearthbreaker.game_objects.Game game: The game this card will be played in.
+        """
         if len(player.minions) >= 7:
             raise GameException("Only 7 minions allowed on the field at a time")
         super().use(player, game)
@@ -696,7 +737,18 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         Summons the minion associated with this card onto the board.  This is to be used when a spell
         created a minion, instead of being played from the hand.
 
-        If the player already has 7 minions on the board, this method does nothing
+        If the player already has 7 minions on the board, this method does nothing.
+
+        This method operates in the following order:
+
+         1. Minion is placed on the board
+         2. minion_placed event
+         3. minion_summoned_event
+         4. after_minion_added event
+
+        The ordering is important so that efects trigger in the correct order.
+
+        :see: :meth:`use`
 
         :param hearthbreaker.game_objects.Player player: The player the summoned minion will belong to
         :param hearthbreaker.game_objects.Player player: The player the summoned minion will belong to
@@ -716,9 +768,27 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def create_minion(self, player):
+        """
+        Creates the minion associated with this card.  This method is responsible for creating the :class:`Minion` object
+        and adding any necessary effects.  This method must be overridden by a subclass's implementation.  For more
+        details, see :doc:`contributing`.
+
+        This method is only responsible for creating the minion and attaching events.  It is not responsible for setting
+        the minion's player or game attributes, or correctly setting its index.  That is handled within :meth:`play`
+        and :meth:`summon`
+
+        :param hearthbreaker.game_objects.Player player: The player who the newly created minion will belong to.
+
+        :rtype: hearthbreaker.game_objects.Minion
+        """
         pass
 
     def is_spell(self):
+        """
+        Checks if this card is a spell card.  Always returns false
+
+        :rtype: boolean
+        """
         return False
 
 
