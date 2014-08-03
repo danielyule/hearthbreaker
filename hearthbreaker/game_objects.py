@@ -769,9 +769,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def create_minion(self, player):
         """
-        Creates the minion associated with this card.  This method is responsible for creating the :class:`Minion` object
-        and adding any necessary effects.  This method must be overridden by a subclass's implementation.  For more
-        details, see :doc:`contributing`.
+        Creates the minion associated with this card.  This method is responsible for creating the :class:`Minion`
+        object and adding any necessary effects.  This method must be overridden by a subclass's implementation.  For
+        more details, see :doc:`contributing`.
 
         This method is only responsible for creating the minion and attaching events.  It is not responsible for setting
         the minion's player or game attributes, or correctly setting its index.  That is handled within :meth:`play`
