@@ -19,7 +19,8 @@ class ArcaneMissiles(Card):
 
 class IceLance(Card):
     def __init__(self):
-        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -62,7 +63,8 @@ class ArcaneExplosion(Card):
 
 class Frostbolt(Card):
     def __init__(self):
-        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -249,7 +251,8 @@ class ConeOfCold(Card):
 
 class Fireball(Card):
     def __init__(self):
-        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -300,7 +303,8 @@ class Flamestrike(Card):
 
 class Pyroblast(Card):
     def __init__(self):
-        super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

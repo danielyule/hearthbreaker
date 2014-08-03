@@ -551,7 +551,8 @@ class Card(Bindable):
             :param int character_class: A constant from :class:`hearthbreaker.constants.CHARACTER_CLASS` denoting
                                         which character this card belongs to or
                                         :const:`hearthbreaker.constants.CHARACTER_CLASS.ALL` if neutral
-            :param int rarity: A constant from :class:`hearthbreaker.constants.CARD_RARITY` denoting the rarity of the card.
+            :param int rarity: A constant from :class:`hearthbreaker.constants.CARD_RARITY` denoting the rarity of the
+                               card.
             :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
                                          the card is assumed not to require a target.  If `target_func` returns
                                          an empty list, then the card cannot be played.  If it returns None, then the
@@ -560,8 +561,8 @@ class Card(Bindable):
 
                                          See :mod:`hearthbreaker.targeting` for more details.
             :param function filter_func: A boolean function which can be used to filter the list of targets. An example
-                                         for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a function which
-                                         returns true if the target's attack is less than 3.
+                                         for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a
+                                         function which returns true if the target's attack is less than 3.
             :param int overload: The amount of overload on the card
         """
         super().__init__()
@@ -742,8 +743,9 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 
 class Minion(Character):
-    def __init__(self, attack, health, minion_type=hearthbreaker.constants.MINION_TYPE.NONE, battlecry=None, deathrattle=None,
-                 taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False, windfury=False):
+    def __init__(self, attack, health, minion_type=hearthbreaker.constants.MINION_TYPE.NONE, battlecry=None,
+                 deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
+                 windfury=False):
         super().__init__(attack, health, windfury=windfury, stealth=stealth)
         self.minion_type = minion_type
         self.taunt = taunt
@@ -888,8 +890,8 @@ class Minion(Character):
         :param int attack: The amount to increase minions' attack by
         :param int health: The amount to increase minion's health AND max health by
         :param list[hearthbreaker.game_objects.Player] affected_players: A :class:`list` of
-                                                                  :class:`hearthbreaker.game_objects.Player` s whose minions
-                                                                  are affected by this aura
+                                                                  :class:`hearthbreaker.game_objects.Player` s whose
+                                                                  minions are affected by this aura
         :param function filter_func: A function that selects which minions to apply this effect to. Takes
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
@@ -977,9 +979,9 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                                      battlecry which has no valid target will not stop the weapon from being played).
                                      See :mod:`hearthbreaker.targeting` for more details.
         :param function filter_func: A boolean function which can be used to filter the list of targets. An example
-                                     for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a function which
-                                     returns true if the target's attack is less than 3.  Currently no weapons require
-                                     anything but the default
+                                     for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a function
+                                     which returns true if the target's attack is less than 3.  Currently no weapons
+                                     require anything but the default
         :param int overload: The amount of overload on the card
         """
         super().__init__(name, mana, character_class, rarity, target_func, filter_func, overload)
@@ -1013,7 +1015,8 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
 class TheCoin(Card):
     def __init__(self):
-        super().__init__("The Coin", 0, hearthbreaker.constants.CHARACTER_CLASS.ALL, hearthbreaker.constants.CARD_RARITY.SPECIAL)
+        super().__init__("The Coin", 0, hearthbreaker.constants.CHARACTER_CLASS.ALL,
+                         hearthbreaker.constants.CARD_RARITY.SPECIAL)
 
     def use(self, player, game):
         super().use(player, game)

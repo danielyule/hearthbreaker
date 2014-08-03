@@ -61,8 +61,7 @@ class Flare(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in hearthbreaker.targeting.find_minion_spell_target(game,
-                                                                lambda m: m.stealth):
+        for minion in hearthbreaker.targeting.find_minion_spell_target(game, lambda m: m.stealth):
             minion.stealth = False
 
         for secret in game.other_player.secrets:
@@ -232,8 +231,8 @@ class KillCommand(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        beasts = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game,
-                                                                        lambda x: x.minion_type is MINION_TYPE.BEAST)
+        beasts = hearthbreaker.targeting.find_friendly_minion_battlecry_target(
+            player.game, lambda x: x.minion_type is MINION_TYPE.BEAST)
         if beasts is None:
             self.target.damage(player.effective_spell_damage(3), self)
         else:

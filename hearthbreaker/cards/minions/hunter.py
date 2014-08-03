@@ -2,10 +2,10 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
-                                          DireWolfAlpha, HauntedCreeper, IronbeakOwl, IronfurGrizzly, JunglePanther,
-                                          SilverbackPatriarch, StranglethornTiger, YoungDragonhawk, AngryChicken,
-                                          EmperorCobra, StampedingKodo, CaptainsParrot, HungryCrab, KingMukla, Maexxna,
-                                          TheBeast)
+                                                 DireWolfAlpha, HauntedCreeper, IronbeakOwl, IronfurGrizzly,
+                                                 JunglePanther, SilverbackPatriarch, StranglethornTiger,
+                                                 YoungDragonhawk, AngryChicken, EmperorCobra, StampedingKodo,
+                                                 CaptainsParrot, HungryCrab, KingMukla, Maexxna, TheBeast)
 
 
 class TimberWolf(MinionCard):

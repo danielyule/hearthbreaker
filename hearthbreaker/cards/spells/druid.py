@@ -359,8 +359,7 @@ class Starfall(Card):
                                  CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
-                targets = hearthbreaker.targeting.find_minion_spell_target(game,
-                                                                    lambda t: t.spell_targetable())
+                targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
                 target = player.agent.choose_target(targets)
                 target.damage(player.effective_spell_damage(5), self)
 
@@ -408,7 +407,8 @@ class ForceOfNature(Card):
 
 class Starfire(Card):
     def __init__(self):
-        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

@@ -233,7 +233,8 @@ class Shadowstep(Card):
 
 class Shiv(Card):
     def __init__(self):
-        super().__init__("Shiv", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, hearthbreaker.targeting.find_spell_target)
+        super().__init__("Shiv", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

@@ -58,9 +58,8 @@ class Lightwell(MinionCard):
 
     def create_minion(self, player):
         def heal_damaged_friendly_character():
-            targets = hearthbreaker.targeting.find_friendly_spell_target(player.game,
-                                                                  lambda character:
-                                                                  character.health != character.calculate_max_health())
+            targets = hearthbreaker.targeting.find_friendly_spell_target(
+                player.game, lambda character: character.health != character.calculate_max_health())
             if len(targets) != 0:
                 targets[player.game.random(0, len(targets) - 1)].heal(player.effective_heal_power(3), minion)
 

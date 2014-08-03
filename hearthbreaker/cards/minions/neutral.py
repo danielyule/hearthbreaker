@@ -1176,7 +1176,7 @@ class StampedingKodo(MinionCard):
     def create_minion(self, player):
         def random_destroy(m):
             targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game,
-                                                                          lambda x: x.calculate_attack() <= 2)
+                                                                                 lambda x: x.calculate_attack() <= 2)
             if targets is not None:
                 target = targets[player.game.random(0, len(targets) - 1)]
                 target.die(None)
@@ -1396,9 +1396,8 @@ class ColdlightSeer(MinionCard):
 
     def create_minion(self, player):
         def buff_murlocs(m):
-            murloc = hearthbreaker.targeting.find_friendly_minion_spell_target(player.game,
-                                                                        lambda x: x.minion_type is MINION_TYPE.MURLOC
-                                                                        and x is not m)
+            murloc = hearthbreaker.targeting.find_friendly_minion_spell_target(
+                player.game, lambda x: x.minion_type is MINION_TYPE.MURLOC and x is not m)
             for target in murloc:
                 target.increase_health(2)
 
@@ -2343,8 +2342,8 @@ class GelbinMekkatorque(MinionCard):
                 def create_minion(self, player):
                     def repair():
                         targets = []
-                        for m in hearthbreaker.targeting.find_spell_target(player.game,
-                                                                    lambda x: x.health != x.calculate_max_health()):
+                        for m in hearthbreaker.targeting.find_spell_target(
+                                player.game, lambda x: x.health != x.calculate_max_health()):
                             targets.append(m)
                         repairee = targets[player.game.random(0, len(targets) - 1)]
                         repairee.heal(6, self)

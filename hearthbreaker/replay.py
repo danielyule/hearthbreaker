@@ -346,8 +346,9 @@ class Replay:
                 if len(self.decks) > 1:
                     raise ReplayException("Maximum of two decks per file")
                 deck_size = len(args) - 1
-                cards = [hearthbreaker.game_objects.card_lookup(args[1 + index % (deck_size)]) for index in range(0, 30)]
-                self.decks.append(hearthbreaker.game_objects.Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
+                cards = [hearthbreaker.game_objects.card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
+                self.decks.append(
+                    hearthbreaker.game_objects.Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
 
             elif action == 'keep':
                 if len(self.keeps) > 1:

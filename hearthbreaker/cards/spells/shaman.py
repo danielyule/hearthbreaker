@@ -136,7 +136,8 @@ class FrostShock(Card):
 
 class Hex(Card):
     def __init__(self):
-        super().__init__("Hex", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Hex", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
+                         hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -158,8 +159,8 @@ class Hex(Card):
 
 class LavaBurst(Card):
     def __init__(self):
-        super().__init__("Lava Burst", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, hearthbreaker.targeting.find_spell_target,
-                         overload=2)
+        super().__init__("Lava Burst", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
+                         hearthbreaker.targeting.find_spell_target, overload=2)
 
     def use(self, player, game):
         super().use(player, game)
