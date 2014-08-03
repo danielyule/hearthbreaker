@@ -47,23 +47,23 @@ Contributions should follow the standard `GitHub workflow <https://guides.github
 
 Adding new cards
 ````````````````
-Every card added to the game is implemented as a subclass of :class:`Card <hsgame.game_objects.Card>` (for spells) or its
-subclasses :class:`MinionCard <hsgame.game_objects.MinionCard>` (for minions),
-:class:`SecretCard <hsgame.game_objects.SecretCard>` (for secrets) or
-:class:`WeaponCard <hsgame.game_objects.WeaponCard>` (for Weapons).
+Every card added to the game is implemented as a subclass of :class:`Card <hearthbreaker.game_objects.Card>` (for spells) or its
+subclasses :class:`MinionCard <hearthbreaker.game_objects.MinionCard>` (for minions),
+:class:`SecretCard <hearthbreaker.game_objects.SecretCard>` (for secrets) or
+:class:`WeaponCard <hearthbreaker.game_objects.WeaponCard>` (for Weapons).
 
 Cards are organized first by type, then by class.  So, for example, ``Corruption`` would be found in
-``hsgame/cards/spells/warlock.py``, whereas ``EaglehornBow`` would be found in ``hsgame/cards/weapons/hunter.py``.
+``hearthbreaker/cards/spells/warlock.py``, whereas ``EaglehornBow`` would be found in ``hearthbreaker/cards/weapons/hunter.py``.
 All cards are imported by the ``__init__.py`` in their card type folder.  So, for example, ``GuardianOfKings`` is
-imported in ``hsgame/cards/minions/__init__.py``.  These are then imported by ``hsgame/cards/__init__.py`` so that
-simply writing ``from hsgame.cards import *`` will import all cards and nothing else.
+imported in ``hearthbreaker/cards/minions/__init__.py``.  These are then imported by ``hearthbreaker/cards/__init__.py`` so that
+simply writing ``from hearthbreaker.cards import *`` will import all cards and nothing else.
 
 So, when implementing a new card, follow these steps:
  1. Write at least one test for the new card
  2. Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)
  3. Create a constructor for that class which calls the super's constructor with the needed attributes
- 4. Add the method which performs the action of the card (:meth:`use <hsgame.game_objects.Card.use>` for spells, :meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hsgame.game_objects.WeaponCard.create_weapon>` for
-    weapons, and :meth:`activate <hsgame.game_objects.SecretCard.activate>`, :meth:`deactivate <hsgame.game_objects.SecretCard.deactivate>` and :meth:`_reveal <hsgame.game_objects.SecretCard._reveal>` for secrets -- see the section for each type of card)
+ 4. Add the method which performs the action of the card (:meth:`use <hearthbreaker.game_objects.Card.use>` for spells, :meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hearthbreaker.game_objects.WeaponCard.create_weapon>` for
+    weapons, and :meth:`activate <hearthbreaker.game_objects.SecretCard.activate>`, :meth:`deactivate <hearthbreaker.game_objects.SecretCard.deactivate>` and :meth:`_reveal <hearthbreaker.game_objects.SecretCard._reveal>` for secrets -- see the section for each type of card)
  5. Add an entry to the appropriate ``__init__.py``
  6. Change the card's entry in ``cards.csv`` to 'yes' in the first column
  7. Run ``flake8`` in the project's root folder to ensure proper formatting.
@@ -72,7 +72,7 @@ Creating a Constructor
 ''''''''''''''''''''''
 All cards must have a constructor that takes zero arguments.  This constructor must invoke the super instructor
 with information about the card.  Details can be found in the documentation for
-:meth:`Card.__init__ <hsgame.game_objects.Card.__init__>`, but essentially the following properties must be set:
+:meth:`Card.__init__ <hearthbreaker.game_objects.Card.__init__>`, but essentially the following properties must be set:
 
  - Card name in English
  - The card's basic mana cost
@@ -94,7 +94,7 @@ For example, here is the implementation of Cabal Shadow Priest, with comments fo
                              6,                                                   # The card's mana cost
                              CHARACTER_CLASS.PRIEST,                              # The card can only be included in a Priest deck
                              CARD_RARITY.EPIC,                                    # The card's rarity is epic (has a purple gem)
-                             hsgame.targeting.find_enemy_minion_battlecry_target, # The card targets enemy minions only
+                             hearthbreaker.targeting.find_enemy_minion_battlecry_target, # The card targets enemy minions only
                              lambda target: target.attack_power <= 2)             # Among enemy minions, only those with 2 or less attack
 
         def create_minion(self, player):
@@ -105,8 +105,8 @@ Specific Instructions for Card Types
 
 Creating a new spell
 ....................
-Spells are direct subclasses of :class:`hsgame.game_objects.Card`.  In addition to creating a constructor, you must also
-override the :meth:`use <hsgame.game_objects.Card.use>` method.  This method takes two parameters, player and game.
+Spells are direct subclasses of :class:`hearthbreaker.game_objects.Card`.  In addition to creating a constructor, you must also
+override the :meth:`use <hearthbreaker.game_objects.Card.use>` method.  This method takes two parameters, player and game.
 The player is the player who played the card, and game is the game that the card was played in.  It is essential that
 implementations include a call to super. This call reduces the players mana by the cost of the card, and uses the
 targeting function to generate a list of targets.  This list of available as ``self.target``.  For example when
@@ -120,7 +120,7 @@ implementing `Barrel Toss <http://hearthstone.gamepedia.com/Barrel_Toss>`_ the c
                              1,                                         # The card's mana cost
                              CHARACTER_CLASS.MUKLA,                     # Which character can use this card
                              CARD_RARITY.COMMON,                        # How rare the card is
-                             hsgame.targeting.find_spell_target         # This spell can target any character
+                             hearthbreaker.targeting.find_spell_target         # This spell can target any character
                              )
 
         def use(self, player, game):
@@ -134,16 +134,16 @@ Creating a new secret
 
 Secrets are more complicated than normal spells, because they are activated on the enemy player's term and deactivated
 on the player's turn.  As such they make heavy use of the game's
-:class:`event binding system<hsgame.game_objects.Bindable>`.  Secrets require three methods:
+:class:`event binding system<hearthbreaker.game_objects.Bindable>`.  Secrets require three methods:
 
-:meth:`activate <hsgame.game_objects.SecretCard.activate>`
+:meth:`activate <hearthbreaker.game_objects.SecretCard.activate>`
     Fires at the beginning of the enemy player's turn.  Should be used to bind any event listeners needed for the secret.
 
-:meth:`deactivate <hsgame.game_objects.SecretCard.deactivate>`
+:meth:`deactivate <hearthbreaker.game_objects.SecretCard.deactivate>`
     Fires at the end of the enemy player's turn.  Should be used to unbind any event listeners that the secret set up in
     ``activate``.
 
-:meth:`_reveal <hsgame.game_objects.SecretCard._reveal>`
+:meth:`_reveal <hearthbreaker.game_objects.SecretCard._reveal>`
     Should be called by the event listeners set up in ``activate``.  This method does whatever the action of the secret
     is.  Make sure to call super().reveal (no underscore) somewhere in the body of this method.
 
@@ -178,9 +178,9 @@ played.
 Creating a new minion
 .....................
 
-Minions are created through the :meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` method of
-:class:`MinionCard <hsgame.game_objects.MinionCard>`.  This method should create the
-:class:`Minion <hsgame.game_objects.Minion>` object, attach any handlers that are needed, and return the created minion.
+Minions are created through the :meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` method of
+:class:`MinionCard <hearthbreaker.game_objects.MinionCard>`.  This method should create the
+:class:`Minion <hearthbreaker.game_objects.Minion>` object, attach any handlers that are needed, and return the created minion.
 
 The Minion object only requires two parameters in its constructor: ``attack`` and ``health``, but can optionally include
 the minion's race (Murloc, Giant, Dragon, etc) or its battlecry or deathrattle if necessary.
@@ -204,11 +204,11 @@ implement it as follows:
                           2,                        # The minion has 2 health
                           battlecry=throw_bananas)  # The battlecry is to throw bananas. This
                                                     # assumes that throw_bananas is defined somewhere
-                                                    # else, most likely in hsgame/cards/battlecries.py
+                                                    # else, most likely in hearthbreaker/cards/battlecries.py
 
 
 
-In ``hsgame/cards/battlecries.py`` meanwhile, ``throw_bananas`` might be defined like
+In ``hearthbreaker/cards/battlecries.py`` meanwhile, ``throw_bananas`` might be defined like
 
 ::
 
@@ -224,8 +224,8 @@ Creating a new weapon
 .....................
 
 Weapons are created in a similar manner to minions, although they use a
-:meth:`create_weapon <hsgame.game_objects.MinionCard.create_weapon>` method rather than a
-:meth:`create_minion <hsgame.game_objects.MinionCard.create_minion>` method.  Just like minions, weapons can have
+:meth:`create_weapon <hearthbreaker.game_objects.MinionCard.create_weapon>` method rather than a
+:meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` method.  Just like minions, weapons can have
 battlecries and deathrattles, although their basic attributes are attack and durability rather than attack and health.
 
 For example, implementing the `Warglaive of Azzinoth <http://hearthstone.gamepedia.com/Warglaive_of_Azzinoth>`_ might
@@ -264,7 +264,7 @@ Mage if none of the cards are class specific.
 The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:
 
-:class:`DoNothingBot <hsgame.agents.basic_agents.DoNothingBot>`
+:class:`DoNothingBot <hearthbreaker.agents.basic_agents.DoNothingBot>`
 
     As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
     the enemy player doesn't need to do anything.
