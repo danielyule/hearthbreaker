@@ -100,23 +100,23 @@ written in lowercase with underscores separating the words.  PEP8 Validation can
 </div></blockquote>
 <div class="section" id="adding-new-cards">
 <h2>Adding new cards<a class="headerlink" href="#adding-new-cards" title="Permalink to this headline">¶</a></h2>
-<p>Every card added to the game is implemented as a subclass of <tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt> (for spells) or its
-subclasses <tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt> (for minions),
-<tt class="xref py py-class docutils literal"><span class="pre">SecretCard</span></tt> (for secrets) or
-<tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt> (for Weapons).</p>
+<p>Every card added to the game is implemented as a subclass of <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> (for spells) or its
+subclasses <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.MinionCard" title="hearthbreaker.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a> (for minions),
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.SecretCard" title="hearthbreaker.game_objects.SecretCard"><tt class="xref py py-class docutils literal"><span class="pre">SecretCard</span></tt></a> (for secrets) or
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.WeaponCard" title="hearthbreaker.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a> (for Weapons).</p>
 <p>Cards are organized first by type, then by class.  So, for example, <tt class="docutils literal"><span class="pre">Corruption</span></tt> would be found in
-<tt class="docutils literal"><span class="pre">hsgame/cards/spells/warlock.py</span></tt>, whereas <tt class="docutils literal"><span class="pre">EaglehornBow</span></tt> would be found in <tt class="docutils literal"><span class="pre">hsgame/cards/weapons/hunter.py</span></tt>.
+<tt class="docutils literal"><span class="pre">hearthbreaker/cards/spells/warlock.py</span></tt>, whereas <tt class="docutils literal"><span class="pre">EaglehornBow</span></tt> would be found in <tt class="docutils literal"><span class="pre">hearthbreaker/cards/weapons/hunter.py</span></tt>.
 All cards are imported by the <tt class="docutils literal"><span class="pre">__init__.py</span></tt> in their card type folder.  So, for example, <tt class="docutils literal"><span class="pre">GuardianOfKings</span></tt> is
-imported in <tt class="docutils literal"><span class="pre">hsgame/cards/minions/__init__.py</span></tt>.  These are then imported by <tt class="docutils literal"><span class="pre">hsgame/cards/__init__.py</span></tt> so that
-simply writing <tt class="docutils literal"><span class="pre">from</span> <span class="pre">hsgame.cards</span> <span class="pre">import</span> <span class="pre">*</span></tt> will import all cards and nothing else.</p>
+imported in <tt class="docutils literal"><span class="pre">hearthbreaker/cards/minions/__init__.py</span></tt>.  These are then imported by <tt class="docutils literal"><span class="pre">hearthbreaker/cards/__init__.py</span></tt> so that
+simply writing <tt class="docutils literal"><span class="pre">from</span> <span class="pre">hearthbreaker.cards</span> <span class="pre">import</span> <span class="pre">*</span></tt> will import all cards and nothing else.</p>
 <dl class="docutils">
 <dt>So, when implementing a new card, follow these steps:</dt>
 <dd><ol class="first last arabic simple">
 <li>Write at least one test for the new card</li>
 <li>Create a new class in the appropriate folder, using CamelCase for the class name (removing spaces and apostrophes)</li>
 <li>Create a constructor for that class which calls the super&#8217;s constructor with the needed attributes</li>
-<li>Add the method which performs the action of the card (<tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt> for spells, <tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt> for minions, <tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt> for
-weapons, and <tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt>, <tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt> and <tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt> for secrets &#8211; see the section for each type of card)</li>
+<li>Add the method which performs the action of the card (<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Card.use" title="hearthbreaker.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> for spells, <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.MinionCard.create_minion" title="hearthbreaker.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> for minions, <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.WeaponCard.create_weapon" title="hearthbreaker.game_objects.WeaponCard.create_weapon"><tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt></a> for
+weapons, and <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.SecretCard.activate" title="hearthbreaker.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a>, <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.SecretCard.deactivate" title="hearthbreaker.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a> and <tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt> for secrets &#8211; see the section for each type of card)</li>
 <li>Add an entry to the appropriate <tt class="docutils literal"><span class="pre">__init__.py</span></tt></li>
 <li>Change the card&#8217;s entry in <tt class="docutils literal"><span class="pre">cards.csv</span></tt> to &#8216;yes&#8217; in the first column</li>
 <li>Run <tt class="docutils literal"><span class="pre">flake8</span></tt> in the project&#8217;s root folder to ensure proper formatting.</li>
@@ -127,7 +127,7 @@ weapons, and <tt class="xref py py-meth docutils literal"><span class="pre">acti
 <h3>Creating a Constructor<a class="headerlink" href="#creating-a-constructor" title="Permalink to this headline">¶</a></h3>
 <p>All cards must have a constructor that takes zero arguments.  This constructor must invoke the super instructor
 with information about the card.  Details can be found in the documentation for
-<tt class="xref py py-meth docutils literal"><span class="pre">Card.__init__</span></tt>, but essentially the following properties must be set:</p>
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Card.__init__" title="hearthbreaker.game_objects.Card.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">Card.__init__</span></tt></a>, but essentially the following properties must be set:</p>
 <blockquote>
 <div><ul>
 <li><p class="first">Card name in English</p>
@@ -160,7 +160,7 @@ with information about the card.  Details can be found in the documentation for
                          <span class="mi">6</span><span class="p">,</span>                                                   <span class="c"># The card&#39;s mana cost</span>
                          <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">PRIEST</span><span class="p">,</span>                              <span class="c"># The card can only be included in a Priest deck</span>
                          <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">EPIC</span><span class="p">,</span>                                    <span class="c"># The card&#39;s rarity is epic (has a purple gem)</span>
-                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_enemy_minion_battlecry_target</span><span class="p">,</span> <span class="c"># The card targets enemy minions only</span>
+                         <span class="n">hearthbreaker</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_enemy_minion_battlecry_target</span><span class="p">,</span> <span class="c"># The card targets enemy minions only</span>
                          <span class="k">lambda</span> <span class="n">target</span><span class="p">:</span> <span class="n">target</span><span class="o">.</span><span class="n">attack_power</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>             <span class="c"># Among enemy minions, only those with 2 or less attack</span>
 
     <span class="k">def</span> <span class="nf">create_minion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">):</span>
@@ -172,8 +172,8 @@ with information about the card.  Details can be found in the documentation for
 <h3>Specific Instructions for Card Types<a class="headerlink" href="#specific-instructions-for-card-types" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="creating-a-new-spell">
 <h4>Creating a new spell<a class="headerlink" href="#creating-a-new-spell" title="Permalink to this headline">¶</a></h4>
-<p>Spells are direct subclasses of <tt class="xref py py-class docutils literal"><span class="pre">hsgame.game_objects.Card</span></tt>.  In addition to creating a constructor, you must also
-override the <tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt> method.  This method takes two parameters, player and game.
+<p>Spells are direct subclasses of <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Card</span></tt></a>.  In addition to creating a constructor, you must also
+override the <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Card.use" title="hearthbreaker.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> method.  This method takes two parameters, player and game.
 The player is the player who played the card, and game is the game that the card was played in.  It is essential that
 implementations include a call to super. This call reduces the players mana by the cost of the card, and uses the
 targeting function to generate a list of targets.  This list of available as <tt class="docutils literal"><span class="pre">self.target</span></tt>.  For example when
@@ -184,7 +184,7 @@ implementing <a class="reference external" href="http://hearthstone.gamepedia.co
                          <span class="mi">1</span><span class="p">,</span>                                         <span class="c"># The card&#39;s mana cost</span>
                          <span class="n">CHARACTER_CLASS</span><span class="o">.</span><span class="n">MUKLA</span><span class="p">,</span>                     <span class="c"># Which character can use this card</span>
                          <span class="n">CARD_RARITY</span><span class="o">.</span><span class="n">COMMON</span><span class="p">,</span>                        <span class="c"># How rare the card is</span>
-                         <span class="n">hsgame</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span>         <span class="c"># This spell can target any character</span>
+                         <span class="n">hearthbreaker</span><span class="o">.</span><span class="n">targeting</span><span class="o">.</span><span class="n">find_spell_target</span>         <span class="c"># This spell can target any character</span>
                          <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">use</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
@@ -198,11 +198,11 @@ implementing <a class="reference external" href="http://hearthstone.gamepedia.co
 <h4>Creating a new secret<a class="headerlink" href="#creating-a-new-secret" title="Permalink to this headline">¶</a></h4>
 <p>Secrets are more complicated than normal spells, because they are activated on the enemy player&#8217;s term and deactivated
 on the player&#8217;s turn.  As such they make heavy use of the game&#8217;s
-<tt class="xref py py-class docutils literal"><span class="pre">event</span> <span class="pre">binding</span> <span class="pre">system</span></tt>.  Secrets require three methods:</p>
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Bindable" title="hearthbreaker.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">event</span> <span class="pre">binding</span> <span class="pre">system</span></tt></a>.  Secrets require three methods:</p>
 <dl class="docutils">
-<dt><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></dt>
+<dt><a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.SecretCard.activate" title="hearthbreaker.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a></dt>
 <dd>Fires at the beginning of the enemy player&#8217;s turn.  Should be used to bind any event listeners needed for the secret.</dd>
-<dt><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></dt>
+<dt><a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.SecretCard.deactivate" title="hearthbreaker.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a></dt>
 <dd>Fires at the end of the enemy player&#8217;s turn.  Should be used to unbind any event listeners that the secret set up in
 <tt class="docutils literal"><span class="pre">activate</span></tt>.</dd>
 <dt><tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt></dt>
@@ -237,9 +237,9 @@ played.</p>
 </div>
 <div class="section" id="creating-a-new-minion">
 <h4>Creating a new minion<a class="headerlink" href="#creating-a-new-minion" title="Permalink to this headline">¶</a></h4>
-<p>Minions are created through the <tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt> method of
-<tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt>.  This method should create the
-<tt class="xref py py-class docutils literal"><span class="pre">Minion</span></tt> object, attach any handlers that are needed, and return the created minion.</p>
+<p>Minions are created through the <a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.MinionCard.create_minion" title="hearthbreaker.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> method of
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.MinionCard" title="hearthbreaker.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a>.  This method should create the
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.Minion" title="hearthbreaker.game_objects.Minion"><tt class="xref py py-class docutils literal"><span class="pre">Minion</span></tt></a> object, attach any handlers that are needed, and return the created minion.</p>
 <p>The Minion object only requires two parameters in its constructor: <tt class="docutils literal"><span class="pre">attack</span></tt> and <tt class="docutils literal"><span class="pre">health</span></tt>, but can optionally include
 the minion&#8217;s race (Murloc, Giant, Dragon, etc) or its battlecry or deathrattle if necessary.</p>
 <p>If the battlecry requires targeting, then the function used for selecting targets should be included in the call
@@ -257,10 +257,10 @@ implement it as follows:</p>
                       <span class="mi">2</span><span class="p">,</span>                        <span class="c"># The minion has 2 health</span>
                       <span class="n">battlecry</span><span class="o">=</span><span class="n">throw_bananas</span><span class="p">)</span>  <span class="c"># The battlecry is to throw bananas. This</span>
                                                 <span class="c"># assumes that throw_bananas is defined somewhere</span>
-                                                <span class="c"># else, most likely in hsgame/cards/battlecries.py</span>
+                                                <span class="c"># else, most likely in hearthbreaker/cards/battlecries.py</span>
 </pre></div>
 </div>
-<p>In <tt class="docutils literal"><span class="pre">hsgame/cards/battlecries.py</span></tt> meanwhile, <tt class="docutils literal"><span class="pre">throw_bananas</span></tt> might be defined like</p>
+<p>In <tt class="docutils literal"><span class="pre">hearthbreaker/cards/battlecries.py</span></tt> meanwhile, <tt class="docutils literal"><span class="pre">throw_bananas</span></tt> might be defined like</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">throw_bananas</span><span class="p">(</span><span class="n">minion</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">banana</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span>                  <span class="c"># We need to give the other player two bananas</span>
         <span class="p">(</span><span class="n">minion</span><span class="o">.</span><span class="n">player</span>                          <span class="c"># Get the player associated with this minion</span>
@@ -275,7 +275,7 @@ implement it as follows:</p>
 <h4>Creating a new weapon<a class="headerlink" href="#creating-a-new-weapon" title="Permalink to this headline">¶</a></h4>
 <p>Weapons are created in a similar manner to minions, although they use a
 <tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt> method rather than a
-<tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt> method.  Just like minions, weapons can have
+<a class="reference internal" href="hearthbreaker.html#hearthbreaker.game_objects.MinionCard.create_minion" title="hearthbreaker.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> method.  Just like minions, weapons can have
 battlecries and deathrattles, although their basic attributes are attack and durability rather than attack and health.</p>
 <p>For example, implementing the <a class="reference external" href="http://hearthstone.gamepedia.com/Warglaive_of_Azzinoth">Warglaive of Azzinoth</a> might
 look like this:</p>
@@ -308,7 +308,7 @@ copies of that card.  The method will choose a character class based on the make
 Mage if none of the cards are class specific.</p>
 <p>The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:</p>
-<p><tt class="xref py py-class docutils literal"><span class="pre">DoNothingBot</span></tt></p>
+<p><a class="reference internal" href="hearthbreaker.agents.html#hearthbreaker.agents.basic_agents.DoNothingBot" title="hearthbreaker.agents.basic_agents.DoNothingBot"><tt class="xref py py-class docutils literal"><span class="pre">DoNothingBot</span></tt></a></p>
 <blockquote>
 <div>As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
 the enemy player doesn&#8217;t need to do anything.</div></blockquote>
