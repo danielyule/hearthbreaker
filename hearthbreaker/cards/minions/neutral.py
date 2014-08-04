@@ -1373,7 +1373,7 @@ class GrimscaleOracle(MinionCard):
     def create_minion(self, player):
         minion = Minion(1, 1, MINION_TYPE.MURLOC)
         minion.add_aura(1, 0, [player.game.current_player, player.game.other_player],
-                        lambda mini:  mini.minion_type is MINION_TYPE.MURLOC)
+                        lambda mini: mini.minion_type is MINION_TYPE.MURLOC)
         return minion
 
 
@@ -1384,7 +1384,7 @@ class MurlocWarleader(MinionCard):
     def create_minion(self, player):
         minion = Minion(3, 3, MINION_TYPE.MURLOC)
         minion.add_aura(2, 1, [player.game.current_player, player.game.other_player],
-                        lambda mini:  mini.minion_type is MINION_TYPE.MURLOC)
+                        lambda mini: mini.minion_type is MINION_TYPE.MURLOC)
         return minion
 
 

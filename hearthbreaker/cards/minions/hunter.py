@@ -14,8 +14,6 @@ class TimberWolf(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-
-
         minion = Minion(1, 1, MINION_TYPE.BEAST)
         minion.add_aura(1, 0, [player], lambda mini: mini.minion_type is MINION_TYPE.BEAST)
         return minion

@@ -2378,4 +2378,3 @@ class TestCommon(unittest.TestCase):
         game.other_player.agent.choose_target = check_dragon
         game.current_player.minions[0].silence()
         game.play_single_turn()
-
