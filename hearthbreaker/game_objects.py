@@ -852,7 +852,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 class Minion(Character):
     def __init__(self, attack, health, minion_type=hearthbreaker.constants.MINION_TYPE.NONE, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
-                 windfury=False):
+                 windfury=False, spell_targetable=True):
         super().__init__(attack, health, windfury=windfury, stealth=stealth)
         self.minion_type = minion_type
         self.taunt = taunt
@@ -862,6 +862,7 @@ class Minion(Character):
         self.charge = charge
         self.spell_damage = spell_damage
         self.divine_shield = divine_shield
+        self.can_be_targeted_by_spells = spell_targetable
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.base_deathrattle = deathrattle
@@ -947,6 +948,7 @@ class Minion(Character):
         self.divine_shield = False
         self.battlecry = None
         self.deathrattle = None
+        self.can_be_targeted_by_spells = True
         self.silenced = True
         if "copied" in self.events:
             del self.events["copied"]
@@ -985,7 +987,7 @@ class Minion(Character):
         return not self.stealth
 
     def spell_targetable(self):
-        return not self.stealth
+        return not self.stealth and self.can_be_targeted_by_spells
 
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
@@ -998,37 +1000,76 @@ class Minion(Character):
 
         :param int attack: The amount to increase minions' attack by
         :param int health: The amount to increase minion's health AND max health by
-        :param list[hearthbreaker.game_objects.Player] affected_players: A :class:`list` of
-                                                                  :class:`hearthbreaker.game_objects.Player` s whose
-                                                                  minions are affected by this aura
+        :param boolean affect_friendly: True if this aura should affect friendly minions
+        :param boolean affect_enemy: True if thus aura should affect enemy minions.
         :param function filter_func: A function that selects which minions to apply this effect to. Takes
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
         """
 
+        complete_filter_func = lambda m: m is not self and filter_func(m)
+
         class Aura:
             def __init__(self):
                 self.attack = attack
                 self.health = health
-                self.filter = filter_func
+                self.filter = complete_filter_func
         aura = Aura()
         for player in affected_players:
             player.auras.append(aura)
             if health > 0:
-                for minion in filter(filter_func, player.minions):
+                for minion in filter(complete_filter_func, player.minions):
                     minion.health += health
                     minion.trigger("health_changed")
 
         def silenced():
-            for affected_player in affected_players:
-                affected_player.auras.remove(aura)
+            for player in affected_players:
+                player.auras.remove(aura)
+                if health > 0:
+                    for filtered_minion in filter(complete_filter_func, player.minions):
+                        if filtered_minion.health > filtered_minion.calculate_max_health():
+                            filtered_minion.health = filtered_minion.calculate_max_health()
+                            filtered_minion.trigger("health_changed")
+
+        def copied(new_minion, new_owner):
+            if len(affected_players) == 2:
+                new_minion.add_aura(attack, health, [new_owner, new_owner.opponent], filter_func)
+            elif affected_players[0] == self.player:
+                new_minion.add_aura(attack, health, [new_owner], filter_func)
+            else:
+                new_minion.add_aura(attack, health, [new_owner.opponent], filter_func)
+
+        self.bind_once("silenced", silenced)
+        self.bind("copied", copied)
+
+    def add_adjacency_aura(self, attack, health, player):
+        me = self
+
+        class Aura:
+            def __init__(self):
+                self.attack = attack
+                self.health = health
+                self.filter = lambda mini: mini.index is me.index - 1 or mini.index is me.index + 1
+        aura = Aura()
+        player.auras.append(aura)
+        if health > 0:
+            for minion in filter(aura.filter, player.minions):
+                minion.health += health
+                minion.trigger("health_changed")
+
+        def silenced():
+            player.auras.remove(aura)
             if health > 0:
-                for filtered_minion in filter(filter_func, self.player.minions):
+                for filtered_minion in filter(aura.filter, player.minions):
                     if filtered_minion.health > filtered_minion.calculate_max_health():
                         filtered_minion.health = filtered_minion.calculate_max_health()
                         filtered_minion.trigger("health_changed")
 
+        def copied(new_minion, new_owner):
+            new_minion.add_adjacency_aura(attack, health, new_owner)
+
         self.bind_once("silenced", silenced)
+        self.bind("copied", copied)
 
     def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.base_attack, self.base_health,
@@ -1039,6 +1080,7 @@ class Minion(Character):
         new_minion.taunt = self.taunt
         new_minion.divine_shield = self.divine_shield
         new_minion.charge = self.charge
+        new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.silenced = self.silenced
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
@@ -1295,6 +1337,7 @@ class Player(Bindable):
         self.heal_does_damage = False
         self.mana_filters = []
         self.overload = 0
+        self.opponent = None
         self.cards_played = 0
 
     def __str__(self):  # pragma: no cover
@@ -1369,6 +1412,8 @@ class Game(Bindable):
                         Player("two", decks[play_order[1]], agents[play_order[1]], self, random_func)]
         self.current_player = self.players[0]
         self.other_player = self.players[1]
+        self.current_player.opponent = self.other_player
+        self.other_player.opponent = self.current_player
         self.game_ended = False
         self.minion_counter = 0
         for i in range(0, 3):

@@ -15,14 +15,9 @@ class TimberWolf(MinionCard):
 
     def create_minion(self, player):
 
-        def add_effect(m, p):
-            def copy_minion(new_minion, new_owner):
-                add_effect(new_minion, new_owner)
-            m.add_aura(1, 0, [p], lambda mini: mini is not m and mini.minion_type is MINION_TYPE.BEAST)
-            m.bind("copied", copy_minion)
 
         minion = Minion(1, 1, MINION_TYPE.BEAST)
-        add_effect(minion, player)
+        minion.add_aura(1, 0, [player], lambda mini: mini.minion_type is MINION_TYPE.BEAST)
         return minion
 
 

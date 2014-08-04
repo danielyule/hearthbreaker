@@ -38,9 +38,7 @@ class StonetuskBoar(MinionCard):
         super().__init__("Stonetusk Boar", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(1, 1, MINION_TYPE.BEAST)
-        minion.charge = True
-        return minion
+        return Minion(1, 1, MINION_TYPE.BEAST, charge=True)
 
 
 class IronbeakOwl(MinionCard):
@@ -65,9 +63,7 @@ class MogushanWarden(MinionCard):
         super().__init__("Mogu'shan Warden", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(1, 7)
-        minion.taunt = True
-        return minion
+        return Minion(1, 7, taunt=True)
 
 
 class FaerieDragon(MinionCard):
@@ -75,13 +71,7 @@ class FaerieDragon(MinionCard):
         super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def silence():
-            minion.spell_targettable = lambda: True
-
-        minion = Minion(3, 2, MINION_TYPE.DRAGON)
-        minion.spell_targettable = lambda: False
-        minion.bind("silenced", silence)
-        return minion
+        return Minion(3, 2, MINION_TYPE.DRAGON, spell_targetable=False)
 
 
 class KoboldGeomancer(MinionCard):
@@ -89,9 +79,7 @@ class KoboldGeomancer(MinionCard):
         super().__init__("Kobold Geomancer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        minion.spell_damage = 1
-        return minion
+        return Minion(2, 2, spell_damage=1)
 
 
 class ArgentSquire(MinionCard):
@@ -99,9 +87,7 @@ class ArgentSquire(MinionCard):
         super().__init__("Argent Squire", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(1, 1)
-        minion.divine_shield = True
-        return minion
+        return Minion(1, 1, divine_shield=True)
 
 
 class SilvermoonGuardian(MinionCard):
@@ -109,9 +95,7 @@ class SilvermoonGuardian(MinionCard):
         super().__init__("Silvermoon Guardian", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(3, 3)
-        minion.divine_shield = True
-        return minion
+        return Minion(3, 3, divine_shield=True)
 
 
 class TwilightDrake(MinionCard):
@@ -119,8 +103,7 @@ class TwilightDrake(MinionCard):
         super().__init__("Twilight Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(4, 1, MINION_TYPE.DRAGON,
-                      battlecry=gain_one_health_for_each_card_in_hand)
+        return Minion(4, 1, MINION_TYPE.DRAGON, battlecry=gain_one_health_for_each_card_in_hand)
 
 
 class MagmaRager(MinionCard):
@@ -136,12 +119,8 @@ class DireWolfAlpha(MinionCard):
         super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(1, 0, [player], lambda mini: mini.index is m.index - 1 or mini.index is m.index + 1)
-
         minion = Minion(2, 2, MINION_TYPE.BEAST)
-        minion.bind("added_to_board", add_effect)
+        minion.add_adjacency_aura(1, 0, player)
         return minion
 
 
@@ -150,9 +129,7 @@ class WorgenInfiltrator(MinionCard):
         super().__init__("Worgen Infiltrator", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(2, 1)
-        minion.stealth = True
-        return minion
+        return Minion(2, 1, stealth=True)
 
 
 class Archmage(MinionCard):
@@ -160,9 +137,7 @@ class Archmage(MinionCard):
         super().__init__("Archmage", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(4, 7)
-        minion.spell_damage = 1
-        return minion
+        return Minion(4, 7, spell_damage=1)
 
 
 class DalaranMage(MinionCard):
@@ -738,17 +713,8 @@ class StormwindChampion(MinionCard):
         super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(1, 1, [player], lambda mini: mini is not m)
-
-        def copied(new_minion, new_owner):
-            new_minion.add_aura(1, 1, [new_owner], lambda mini: mini is not new_minion)
-
         minion = Minion(6, 6)
-        minion.bind_once("added_to_board", add_effect)
-        minion.bind("copied", copied)
-
+        minion.add_aura(1, 1, [player])
         return minion
 
 
@@ -998,12 +964,8 @@ class RaidLeader(MinionCard):
         super().__init__("Raid Leader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(1, 0, [player], lambda mini: mini is not minion)
-
         minion = Minion(2, 2)
-        minion.bind("added_to_board", add_effect)
+        minion.add_aura(1, 0, [player])
         return minion
 
 
@@ -1409,13 +1371,9 @@ class GrimscaleOracle(MinionCard):
         super().__init__("Grimscale Oracle", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(1, 0, [player.game.current_player, player.game.other_player],
-                       lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.MURLOC)
-
         minion = Minion(1, 1, MINION_TYPE.MURLOC)
-        minion.bind("added_to_board", add_effect)
+        minion.add_aura(1, 0, [player.game.current_player, player.game.other_player],
+                        lambda mini:  mini.minion_type is MINION_TYPE.MURLOC)
         return minion
 
 
@@ -1424,13 +1382,9 @@ class MurlocWarleader(MinionCard):
         super().__init__("Murloc Warleader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(2, 1, [player.game.current_player, player.game.other_player],
-                       lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.MURLOC)
-
         minion = Minion(3, 3, MINION_TYPE.MURLOC)
-        minion.bind("added_to_board", add_effect)
+        minion.add_aura(2, 1, [player.game.current_player, player.game.other_player],
+                        lambda mini:  mini.minion_type is MINION_TYPE.MURLOC)
         return minion
 
 
@@ -1595,12 +1549,8 @@ class SouthseaCaptain(MinionCard):
         super().__init__("Southsea Captain", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-
-        def add_effect(m, index):
-            m.add_aura(1, 1, [player], lambda mini: mini is not minion and mini.minion_type is MINION_TYPE.PIRATE)
-
         minion = Minion(3, 3, MINION_TYPE.PIRATE)
-        minion.bind("added_to_board", add_effect)
+        minion.add_aura(1, 1, [player], lambda mini: mini.minion_type is MINION_TYPE.PIRATE)
         return minion
 
 

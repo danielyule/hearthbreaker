@@ -429,3 +429,28 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertTrue(game.other_player.minions[0].taunt)
         self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_FaerieDragon(self):
+        game = generate_game_for(FaerieDragon, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        new_game = game.copy()
+        self.assertEqual(1, len(new_game.current_player.minions))
+
+        def check_no_dragon(targets):
+            self.assertNotIn(new_game.other_player.minions[0], targets)
+            return targets[0]
+
+        def check_dragon(targets):
+            self.assertIn(new_game.other_player.minions[0], targets)
+            return targets[0]
+
+        new_game.other_player.agent.choose_target = check_no_dragon
+
+        new_game.play_single_turn()
+        new_game.play_single_turn()
+
+        new_game.other_player.agent.choose_target = check_dragon
+        new_game.current_player.minions[0].silence()
+        new_game.play_single_turn()
