@@ -185,15 +185,16 @@ class Bindable:
                 del (self.events[event])
 
 
-class Effect:
-    def __init__(self, name, target, game):
-        self.name = name
+class Effect (metaclass=abc.ABCMeta):
+    def __init__(self, target, game):
         self.target = target
         self.game = game
 
+    @abc.abstractmethod
     def apply(self):
         pass
 
+    @abc.abstractmethod
     def unapply(self):
         pass
 
