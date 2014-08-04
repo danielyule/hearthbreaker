@@ -1,5 +1,47 @@
-from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect
+from hearthbreaker.constants import MINION_TYPE, CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.game_objects import Effect, MinionCard, Minion
+
+
+class DieAtEndOfTurn(Effect):
+    name = "Die at End of Turn"
+
+    def apply(self):
+        self.target.game.current_player.bind("turn_ended", self.die)
+
+    def unapply(self):
+        self.target.game.current_player.unbind("turn_ended", self.die)
+
+    def die(self):
+        self.target.die(None)
+
+
+class SummonTreantOnDeath(Effect):
+    name = "Summon Treant on Death"
+
+    def __init__(self, target):
+        super().__init__(target)
+        self.old_death_rattle = None
+
+    def apply(self):
+        self.old_death_rattle = self.target.deathrattle
+        self.target.deathrattle = self.summon_treant
+
+    def unapply(self):
+        pass
+
+    def summon_treant(self, m):
+        if self.old_death_rattle is not None:
+            self.old_death_rattle(m)
+
+        class Treant(MinionCard):
+            def __init__(self):
+                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+            def create_minion(self, _):
+                return Minion(2, 2)
+
+        treant = Treant()
+        treant.summon(self.target.player, self.target.game, len(self.target.player.minions))
 
 
 class ImmuneThisTurn(Effect):

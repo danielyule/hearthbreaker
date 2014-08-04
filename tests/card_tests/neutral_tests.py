@@ -1082,7 +1082,6 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 13):
             game.play_single_turn()
         # Beast dies to Siphon Soul and summons us a Finkle Einhorn, so Juggler knifes enemy hero
-        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(29, game.players[0].hero.health)

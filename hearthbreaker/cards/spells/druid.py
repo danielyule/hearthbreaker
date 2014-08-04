@@ -1,3 +1,4 @@
+from hearthbreaker.effects import DieAtEndOfTurn, SummonTreantOnDeath
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -248,34 +249,11 @@ class SoulOfTheForest(Card):
                          CARD_RARITY.COMMON)
 
     def use(self, player, game):
-        def apply_deathrattle(minion, p):
-            def summon_treant(*args):
-                if old_death_rattle is not None:
-                    old_death_rattle(*args)
-
-                class Treant(MinionCard):
-                    def __init__(self):
-                        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID,
-                                         CARD_RARITY.COMMON)
-
-                    def create_minion(self, _):
-                        return Minion(2, 2)
-
-                treant = Treant()
-                treant.summon(p, game, len(p.minions))
-
-            def copied(new_minion, new_owner):
-                apply_deathrattle(new_minion, new_owner)
-
-            old_death_rattle = minion.deathrattle
-            minion.deathrattle = summon_treant
-            minion.bind("copied", copied)
-
         super().use(player, game)
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
-            apply_deathrattle(minion, player)
+            minion.add_effect(SummonTreantOnDeath)
 
 
 class Swipe(Card):
@@ -380,25 +358,7 @@ class ForceOfNature(Card):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                def do_bindings(m, p):
-                    def silenced():
-                        p.unbind("turn_ended", remove_minion)
-
-                    def copied(new_minion, new_owner):
-                        do_bindings(new_minion, new_owner)
-
-                    def remove_minion():
-                        game.remove_minion(m, p)
-
-                    p.bind_once("turn_ended", remove_minion)
-                    m.bind("copied", copied)
-                    m.bind_once("silenced", silenced)
-
-                minion = Minion(2, 2)
-                minion.charge = True
-                do_bindings(minion, player)
-
-                return minion
+                return Minion(2, 2, charge=True, effects=[DieAtEndOfTurn])
 
         for i in [0, 1, 2]:
             treant_card = Treant()

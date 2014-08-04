@@ -1538,6 +1538,8 @@ class Game(Bindable):
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)
 
+        self.check_delayed()
+
     def copy(self):
         copied_game = copy.copy(self)
         copied_game.players = [player.copy(copied_game) for player in self.players]
