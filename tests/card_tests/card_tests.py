@@ -2,11 +2,11 @@ import unittest
 import csv
 import re
 
-from hsgame.agents.basic_agents import DoNothingBot
-from hsgame.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
-from hsgame.game_objects import card_lookup
+from hearthbreaker.agents.basic_agents import DoNothingBot
+from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
+from hearthbreaker.game_objects import card_lookup
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class CardTest(unittest.TestCase):

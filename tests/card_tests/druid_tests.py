@@ -1,11 +1,14 @@
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Game
-from hsgame.replay import SavedGame
-from tests.testing_agents import *
-from tests.testing_utils import generate_game_for, StackedDeck, mock
-from hsgame.cards import *
 import random
 import unittest
+
+from hearthbreaker.agents.basic_agents import DoNothingBot
+from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, MinionPlayingAgent, \
+    EnemyMinionSpellTestingAgent, SpellTestingAgent
+from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.game_objects import Game
+from hearthbreaker.replay import SavedGame
+from tests.testing_utils import generate_game_for, StackedDeck, mock
+from hearthbreaker.cards import *
 
 
 class TestDruid(unittest.TestCase):

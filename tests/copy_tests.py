@@ -1,8 +1,10 @@
 import random
 import unittest
-from tests.testing_agents import *
+
+from hearthbreaker.agents.basic_agents import DoNothingBot
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 def create_enemy_copying_agent(turn_to_play=1):
