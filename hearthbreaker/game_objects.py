@@ -185,6 +185,19 @@ class Bindable:
                 del (self.events[event])
 
 
+class Effect:
+    def __init__(self, name, target, game):
+        self.name = name
+        self.target = target
+        self.game = game
+
+    def apply(self):
+        pass
+
+    def unapply(self):
+        pass
+
+
 class Character(Bindable, metaclass=abc.ABCMeta):
     """
     A Character in Hearthstone is something that can attack, i.e. a :class:`Hero` or :class:`Minion`.
@@ -235,6 +248,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.enraged = False
         #: If this character has been removed from the board
         self.removed = False
+        #: A list of effects that have been applied to this character
+        self.effects = []
 
     def attack(self):
         """
@@ -471,6 +486,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.windfury = False
         self.frozen = False
         self.frozen_this_turn = False
+        for effect in self.effects:
+            effect(self, self.game).unapply()
+        self.effects = []
 
     def heal(self, amount, source):
         """
@@ -519,6 +537,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         targeted by spells cannot be targeted, but any other character can.
         """
         return True
+
+    def add_effect(self, effect):
+        """
+        Applies the the given effect to the :class:`Character`.  The effect will be unapplied in the case of silence,
+        and will be applied to any copies that are made.
+        """
+        effect(self, self.game).apply()
+        self.effects.append(effect)
 
 
 def _is_spell_targetable(target):
@@ -841,6 +867,8 @@ class Minion(Character):
         self.silenced = False
         self.exhausted = True
         self.born = -1
+        #: A list of :class:`Effect`s that have been applied to this minion.
+        self.effects = []
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -1026,6 +1054,8 @@ class Minion(Character):
         else:
             new_minion.game = new_owner.game
         self.trigger("copied", new_minion, new_owner)
+        for effect in self.effects:
+            new_minion.add_effect(effect)
         return new_minion
 
     def bounce(self):

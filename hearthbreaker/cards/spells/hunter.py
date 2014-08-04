@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects import ImmuneThisTurn
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -36,23 +37,8 @@ class BestialWrath(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def apply_effect(m, p):
-
-            def remove_immunity():
-                m.immune = False
-                m.unbind("silenced", silenced)
-                m.unbind("copied", apply_effect)
-
-            def silenced():
-                p.unbind("turn_ended", remove_immunity)
-
-            p.bind_once("turn_ended", remove_immunity)
-            m.bind_once("silenced", silenced)
-            m.bind("copied", apply_effect)
-        self.target.immune = True
+        self.target.add_effect(ImmuneThisTurn)
         self.target.change_temp_attack(2)
-
-        apply_effect(self.target, player)
 
 
 class Flare(Card):
