@@ -1,4 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.effects import DrawOnBeast, GrowOnBeastDeath, GiveChargeToBeasts
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -69,18 +70,7 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            def check_beast_draw(new_minion):
-                if new_minion.minion_type is MINION_TYPE.BEAST and new_minion is not m:
-                    p.draw()
-
-            p.bind("minion_placed", check_beast_draw)
-            m.bind_once("silenced", lambda: p.unbind("minion_placed", check_beast_draw))
-            m.bind("copied", apply_effect)
-
-        minion = Minion(2, 1, MINION_TYPE.BEAST)
-        apply_effect(minion, player)
-        return minion
+        return Minion(2, 1, MINION_TYPE.BEAST, effects=[DrawOnBeast])
 
 
 class TundraRhino(MinionCard):
@@ -88,31 +78,8 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            affected_minions = []
 
-            def give_charge_if_beast(played_minion):
-                def beast_silenced():
-                    affected_minions.remove(played_minion)
-
-                if played_minion.minion_type is MINION_TYPE.BEAST and not played_minion.charge:
-                    played_minion.charge = True
-                    affected_minions.append(played_minion)
-                    played_minion.bind_once("silenced", beast_silenced)
-
-            def silenced():
-                p.unbind("minion_played", give_charge_if_beast)
-                for charge_minion in affected_minions:
-                    charge_minion.charge = False
-
-            for charge_minion in p.minions:
-                give_charge_if_beast(charge_minion)
-
-            p.bind("minion_played", give_charge_if_beast)
-            m.bind_once("silenced", silenced)
-            m.bind("copied", apply_effect)
-        minion = Minion(2, 5, MINION_TYPE.BEAST)
-        apply_effect(minion, player)
+        minion = Minion(2, 5, MINION_TYPE.BEAST, effects=[GiveChargeToBeasts])
         return minion
 
 
@@ -121,19 +88,7 @@ class ScavengingHyena(MinionCard):
         super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            def hyena_grow(dead_minion, by):
-                if dead_minion is not minion and dead_minion.minion_type is MINION_TYPE.BEAST:
-                    m.change_attack(2)
-                    m.increase_health(1)
-
-            p.bind("minion_died", hyena_grow)
-            m.bind_once("silenced", lambda: p.game.unbind("minion_died", hyena_grow))
-            m.bind("copied", apply_effect)
-
-        minion = Minion(2, 2, MINION_TYPE.BEAST)
-        apply_effect(minion, player)
-        return minion
+        return Minion(2, 2, MINION_TYPE.BEAST, effects=[GrowOnBeastDeath])
 
 
 class Webspinner(MinionCard):

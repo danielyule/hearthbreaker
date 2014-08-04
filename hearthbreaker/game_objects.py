@@ -186,9 +186,8 @@ class Bindable:
 
 
 class Effect (metaclass=abc.ABCMeta):
-    def __init__(self, target, game):
+    def __init__(self, target):
         self.target = target
-        self.game = game
 
     @abc.abstractmethod
     def apply(self):
@@ -476,21 +475,6 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.frozen_this_turn = True
         self.frozen = True
 
-    def silence(self):
-        """
-        Silence this :class:`Character`.  This will trigger the silence event, and undo any status effects that have
-        affected this character (immune, attack & health increases, frozen, windfury)
-        """
-        self.trigger("silenced")
-        self.temp_attack = 0
-        self.immune = False
-        self.windfury = False
-        self.frozen = False
-        self.frozen_this_turn = False
-        for effect in self.effects:
-            effect(self, self.game).unapply()
-        self.effects = []
-
     def heal(self, amount, source):
         """
         Heals the :class:`Character`.  The health cannot exceed the character's max health.  If the amount
@@ -539,12 +523,15 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         """
         return True
 
-    def add_effect(self, effect):
+    def add_effect(self, effect_type):
         """
         Applies the the given effect to the :class:`Character`.  The effect will be unapplied in the case of silence,
         and will be applied to any copies that are made.
+
+        :param class effect_type: A subclass type of :class:`Effect`
         """
-        effect(self, self.game).apply()
+        effect = effect_type(self)
+        effect.apply()
         self.effects.append(effect)
 
 
@@ -852,7 +839,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 class Minion(Character):
     def __init__(self, attack, health, minion_type=hearthbreaker.constants.MINION_TYPE.NONE, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
-                 windfury=False, spell_targetable=True):
+                 windfury=False, spell_targetable=True, effects=None):
         super().__init__(attack, health, windfury=windfury, stealth=stealth)
         self.minion_type = minion_type
         self.taunt = taunt
@@ -869,8 +856,10 @@ class Minion(Character):
         self.silenced = False
         self.exhausted = True
         self.born = -1
-        #: A list of :class:`Effect`s that have been applied to this minion.
-        self.effects = []
+        if effects:
+            self._effects_to_add = effects
+        else:
+            self._effects_to_add = []
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -888,6 +877,8 @@ class Minion(Character):
         self.index = index
         self.active = True
         self.health += self.calculate_max_health() - self.base_health
+        for effect in self._effects_to_add:
+            self.add_effect(effect)
         self.trigger("added_to_board", self, index)
 
     def calculate_attack(self):
@@ -933,13 +924,26 @@ class Minion(Character):
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
+        for effect in new_minion._effects_to_add:
+            new_minion.add_effect(effect)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
 
     def attack(self):
         super().attack()
 
     def silence(self):
-        super().silence()
+        """
+        Silence this :class:`Character`.  This will trigger the silence event, and undo any status effects that have
+        affected this character (immune, attack & health increases, frozen, windfury)
+        """
+        self.temp_attack = 0
+        self.immune = False
+        self.windfury = False
+        self.frozen = False
+        self.frozen_this_turn = False
+        for effect in self.effects:
+            effect.unapply()
+        self.effects = []
         self.taunt = False
         self.stealth = False
         self.charge = False
@@ -950,6 +954,7 @@ class Minion(Character):
         self.deathrattle = None
         self.can_be_targeted_by_spells = True
         self.silenced = True
+        self.trigger("silenced")
         if "copied" in self.events:
             del self.events["copied"]
 
@@ -998,10 +1003,12 @@ class Minion(Character):
         the minions, or both.  The effect can be limited to only certain minions with the use of a filter
         function, and by specifying which player(s) the aura affects.
 
+        This aura is automatically unapplied in case of silence, and applied to any copies of this minion
+
         :param int attack: The amount to increase minions' attack by
         :param int health: The amount to increase minion's health AND max health by
-        :param boolean affect_friendly: True if this aura should affect friendly minions
-        :param boolean affect_enemy: True if thus aura should affect enemy minions.
+        :param list[hearthbreaker.game_objects.Player] affected_players: A list of players whose minions should be
+                                                                         affected by this aura
         :param function filter_func: A function that selects which minions to apply this effect to. Takes
                                      one paramter: the minion to test and returns true if the minion should be
                                      affected, and false otherwise.
@@ -1043,6 +1050,16 @@ class Minion(Character):
         self.bind("copied", copied)
 
     def add_adjacency_aura(self, attack, health, player):
+        """
+        Adds an aura to this minion that only affects adjacent minions.  This aura can affect the attack or health of
+        adjacent minions or both.
+
+        This aura is automatically unapplied in case of silence, and applied to any copied minions.
+
+        :param int attack: The amount to increase the attack power of the adjacent minions
+        :param int health: The amount to increase the health of the adjacent minions
+        :param hearthbreaker.game_objects.Player player: The player who the adjacent minions belong to.
+        """
         me = self
 
         class Aura:
@@ -1096,9 +1113,8 @@ class Minion(Character):
             new_minion.game = new_game
         else:
             new_minion.game = new_owner.game
+        new_minion._effects_to_add = [type(effect) for effect in self.effects]
         self.trigger("copied", new_minion, new_owner)
-        for effect in self.effects:
-            new_minion.add_effect(effect)
         return new_minion
 
     def bounce(self):
@@ -1354,6 +1370,9 @@ class Player(Bindable):
         copied_player.hand = [type(card)() for card in self.hand]
         copied_player.game = new_game
         copied_player.secrets = [type(secret)() for secret in self.secrets]
+        for minion in copied_player.minions:
+            for effect in minion._effects_to_add:
+                minion.add_effect(effect)
         return copied_player
 
     def draw(self):

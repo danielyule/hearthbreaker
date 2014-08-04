@@ -448,32 +448,49 @@ class TestHunter(unittest.TestCase):
         self.assertTrue(game.current_player.minions[2].silenced)
 
     def test_TundraRhino(self):
-        game = generate_game_for([OasisSnapjaw, TundraRhino], StonetuskBoar,
+        game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino], StonetuskBoar,
                                  PredictableAgentWithoutHeroPower, DoNothingBot)
-        for turn in range(0, 8):
+        for turn in range(0, 6):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)
 
+        game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(26, game.players[1].hero.health)
 
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(21, game.players[1].hero.health)
+        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[1].charge)
+        self.assertTrue(game.players[0].minions[2].charge)
+
+        game.players[0].minions[2].silence()
+        self.assertTrue(game.players[0].minions[2].charge)
+
     def test_TundraRhino_with_silence(self):
-        game = generate_game_for([OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
+        game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
                                  PredictableAgentWithoutHeroPower, DoNothingBot)
         for turn in range(0, 8):
             game.play_single_turn()
 
-        self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(26, game.players[1].hero.health)
 
         game.play_single_turn()
 
-        self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(23, game.players[1].hero.health)
+
+        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertTrue(game.players[0].minions[2].charge)
 
     def test_AnimalCompanion(self):
         game = generate_game_for(AnimalCompanion, StonetuskBoar, SpellTestingAgent, DoNothingBot)
