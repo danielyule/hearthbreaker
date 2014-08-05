@@ -1,4 +1,4 @@
-from hearthbreaker.effects import DieAtEndOfTurn, SummonTreantOnDeath
+from hearthbreaker.effects import KillMinion, SummonOnDeath
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -250,10 +250,17 @@ class SoulOfTheForest(Card):
 
     def use(self, player, game):
         super().use(player, game)
+
+        class Treant(MinionCard):
+            def __init__(self):
+                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+            def create_minion(self, _):
+                return Minion(2, 2)
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
-            minion.add_effect(SummonTreantOnDeath)
+            minion.add_effect(SummonOnDeath(Treant))
 
 
 class Swipe(Card):
@@ -358,7 +365,7 @@ class ForceOfNature(Card):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[DieAtEndOfTurn])
+                return Minion(2, 2, charge=True, effects=[KillMinion("turn_ended")])
 
         for i in [0, 1, 2]:
             treant_card = Treant()

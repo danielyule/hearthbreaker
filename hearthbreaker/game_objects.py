@@ -186,7 +186,11 @@ class Bindable:
 
 
 class Effect (metaclass=abc.ABCMeta):
-    def __init__(self, target):
+
+    def __init__(self):
+        self.target = None
+
+    def set_target(self, target):
         self.target = target
 
     @abc.abstractmethod
@@ -195,6 +199,10 @@ class Effect (metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def unapply(self):
+        pass
+
+    @abc.abstractmethod
+    def __str__(self):
         pass
 
 
@@ -523,14 +531,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         """
         return True
 
-    def add_effect(self, effect_type):
+    def add_effect(self, effect):
         """
         Applies the the given effect to the :class:`Character`.  The effect will be unapplied in the case of silence,
         and will be applied to any copies that are made.
 
-        :param class effect_type: A subclass type of :class:`Effect`
+        :param Effect effect: The effect to apply to this :class:`Character
         """
-        effect = effect_type(self)
+        effect.set_target(self)
         effect.apply()
         self.effects.append(effect)
 
@@ -1104,7 +1112,8 @@ class Minion(Character):
             new_minion.game = new_game
         else:
             new_minion.game = new_owner.game
-        new_minion._effects_to_add = [type(effect) for effect in self.effects]
+        new_minion.effects = []
+        new_minion._effects_to_add = [copy.copy(effect) for effect in self.effects]
         self.trigger("copied", new_minion, new_owner)
         return new_minion
 

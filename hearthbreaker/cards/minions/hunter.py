@@ -1,5 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects import DrawOnBeast, GrowOnBeastDeath, GiveChargeToBeasts, GiveBeastsPlusOneAttack
+from hearthbreaker.effects import DrawOnMinion, GrowOnDeath, ChargeAura, StatsAura
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -15,7 +15,7 @@ class TimberWolf(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(1, 1, MINION_TYPE.BEAST, effects=[GiveBeastsPlusOneAttack])
+        return Minion(1, 1, MINION_TYPE.BEAST, effects=[StatsAura(attack=1, minion_type=MINION_TYPE.BEAST)])
 
 
 class SavannahHighmane(MinionCard):
@@ -66,7 +66,7 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 1, MINION_TYPE.BEAST, effects=[DrawOnBeast])
+        return Minion(2, 1, MINION_TYPE.BEAST, effects=[DrawOnMinion(MINION_TYPE.BEAST)])
 
 
 class TundraRhino(MinionCard):
@@ -74,7 +74,7 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 5, MINION_TYPE.BEAST, effects=[GiveChargeToBeasts])
+        return Minion(2, 5, MINION_TYPE.BEAST, effects=[ChargeAura(players="friendly", minion_type=MINION_TYPE.BEAST)])
 
 
 class ScavengingHyena(MinionCard):
@@ -82,7 +82,7 @@ class ScavengingHyena(MinionCard):
         super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 2, MINION_TYPE.BEAST, effects=[GrowOnBeastDeath])
+        return Minion(2, 2, MINION_TYPE.BEAST, effects=[GrowOnDeath(attack=2, health=1, minion_type=MINION_TYPE.BEAST)])
 
 
 class Webspinner(MinionCard):

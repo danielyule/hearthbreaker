@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import ImmuneThisTurn
+from hearthbreaker.effects import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -37,7 +37,7 @@ class BestialWrath(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_effect(ImmuneThisTurn)
+        self.target.add_effect(Immune())
         self.target.change_temp_attack(2)
 
 
