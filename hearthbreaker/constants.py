@@ -52,22 +52,12 @@ class CHARACTER_CLASS:
 
     @staticmethod
     def to_str(class_number):
-        classes = {
-            CHARACTER_CLASS.MAGE: "Mage",
-            CHARACTER_CLASS.HUNTER: "Hunter",
-            CHARACTER_CLASS.SHAMAN: "Shaman",
-            CHARACTER_CLASS.WARRIOR: "Warrior",
-            CHARACTER_CLASS.DRUID: "Druid",
-            CHARACTER_CLASS.PRIEST: "Priest",
-            CHARACTER_CLASS.PALADIN: "Paladin",
-            CHARACTER_CLASS.ROGUE: "Rogue",
-            CHARACTER_CLASS.WARLOCK: "Warlock",
-            CHARACTER_CLASS.LORD_JARAXXUS: "Lord Jaraxxus"
-        }
-        return classes[class_number]
+        classes = dict(zip(CHARACTER_CLASS.__classes.values(), CHARACTER_CLASS.__classes.keys()))
+        return classes[class_number].capitalize()
 
 
 class MINION_TYPE:
+    ALL = -1
     NONE = 0
     BEAST = 1
     MURLOC = 2
@@ -77,16 +67,23 @@ class MINION_TYPE:
     PIRATE = 6
     TOTEM = 7
 
+    __types = {
+        "": NONE,
+        "BEAST": BEAST,
+        "MURLOC": MURLOC,
+        "DRAGON": DRAGON,
+        "GIANT": GIANT,
+        "DEMON": DEMON,
+        "PIRATE": PIRATE,
+        "TOTEM": TOTEM,
+    }
+
     @staticmethod
     def from_str(type_name):
-        TYPES = {
-            "": MINION_TYPE.NONE,
-            "BEAST": MINION_TYPE.BEAST,
-            "MURLOC": MINION_TYPE.MURLOC,
-            "DRAGON": MINION_TYPE.DRAGON,
-            "GIANT": MINION_TYPE.GIANT,
-            "DEMON": MINION_TYPE.DEMON,
-            "PIRATE": MINION_TYPE.PIRATE,
-            "TOTEM": MINION_TYPE.TOTEM,
-        }
-        return TYPES[type_name.upper()]
+
+        return MINION_TYPE.__types[type_name.upper()]
+
+    @staticmethod
+    def to_str(minion_number):
+        types = dict(zip(MINION_TYPE.__types.values(), MINION_TYPE.__types.keys()))
+        return types[minion_number].capitalize()

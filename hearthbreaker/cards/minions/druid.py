@@ -186,8 +186,6 @@ class Cenarius(MinionCard):
                         minion = Minion(2, 2, MINION_TYPE.NONE)
                         minion.taunt = True
                         return minion
-                # TODO Check if Cenarius summons the minions before or after
-                # himself
                 ltreant = Treant()
                 ltreant.summon(player, game, cenarius.index)
                 rtreant = Treant()

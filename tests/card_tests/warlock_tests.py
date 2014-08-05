@@ -374,7 +374,6 @@ class TestWarlock(unittest.TestCase):
         game.players[0].minions[0].bind("health_changed", verify_poweroverwhelming)
         game.play_single_turn()
 
-        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(3, len(game.players[0].hand))
 

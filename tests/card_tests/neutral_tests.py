@@ -1082,7 +1082,6 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 13):
             game.play_single_turn()
         # Beast dies to Siphon Soul and summons us a Finkle Einhorn, so Juggler knifes enemy hero
-        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(29, game.players[0].hero.health)
@@ -2354,3 +2353,27 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertTrue(game.other_player.minions[0].taunt)
         self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_FaerieDragon(self):
+        game = generate_game_for(FaerieDragon, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        def check_no_dragon(targets):
+            self.assertNotIn(game.other_player.minions[0], targets)
+            return targets[0]
+
+        def check_dragon(targets):
+            self.assertIn(game.other_player.minions[0], targets)
+            return targets[0]
+
+        game.other_player.agent.choose_target = check_no_dragon
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        game.other_player.agent.choose_target = check_dragon
+        game.current_player.minions[0].silence()
+        game.play_single_turn()
