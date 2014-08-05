@@ -1038,16 +1038,16 @@ class Minion(Character):
                             filtered_minion.health = filtered_minion.calculate_max_health()
                             filtered_minion.trigger("health_changed")
 
-        def copied(new_minion, new_owner):
-            if len(affected_players) == 2:
-                new_minion.add_aura(attack, health, [new_owner, new_owner.opponent], filter_func)
-            elif affected_players[0] == self.player:
-                new_minion.add_aura(attack, health, [new_owner], filter_func)
-            else:
-                new_minion.add_aura(attack, health, [new_owner.opponent], filter_func)
+        # def copied(new_minion, new_owner):
+        #     if len(affected_players) == 2:
+        #         new_minion.add_aura(attack, health, [new_owner, new_owner.opponent], filter_func)
+        #     elif affected_players[0] == self.player:
+        #         new_minion.add_aura(attack, health, [new_owner], filter_func)
+        #     else:
+        #         new_minion.add_aura(attack, health, [new_owner.opponent], filter_func)
 
         self.bind_once("silenced", silenced)
-        self.bind("copied", copied)
+        #self.bind("copied", copied)
 
     def add_adjacency_aura(self, attack, health, player):
         """

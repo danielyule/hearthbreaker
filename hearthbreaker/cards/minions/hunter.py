@@ -1,5 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects import DrawOnBeast, GrowOnBeastDeath, GiveChargeToBeasts
+from hearthbreaker.effects import DrawOnBeast, GrowOnBeastDeath, GiveChargeToBeasts, GiveBeastsPlusOneAttack
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -15,9 +15,7 @@ class TimberWolf(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(1, 1, MINION_TYPE.BEAST)
-        minion.add_aura(1, 0, [player], lambda mini: mini.minion_type is MINION_TYPE.BEAST)
-        return minion
+        return Minion(1, 1, MINION_TYPE.BEAST, effects=[GiveBeastsPlusOneAttack])
 
 
 class SavannahHighmane(MinionCard):
@@ -60,9 +58,7 @@ class KingKrush(MinionCard):
         super().__init__("King Krush", 9, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        minion = Minion(8, 8, MINION_TYPE.BEAST)
-        minion.charge = True
-        return minion
+        return Minion(8, 8, MINION_TYPE.BEAST, charge=True)
 
 
 class StarvingBuzzard(MinionCard):
@@ -78,9 +74,7 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-
-        minion = Minion(2, 5, MINION_TYPE.BEAST, effects=[GiveChargeToBeasts])
-        return minion
+        return Minion(2, 5, MINION_TYPE.BEAST, effects=[GiveChargeToBeasts])
 
 
 class ScavengingHyena(MinionCard):

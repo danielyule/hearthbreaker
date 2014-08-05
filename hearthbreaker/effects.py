@@ -137,3 +137,23 @@ class GiveChargeToBeasts(Effect):
             give_permacharge_effect(played_minion)
         elif played_minion.minion_type is MINION_TYPE.BEAST:
             watch_for_silence(played_minion)
+
+
+class GiveBeastsPlusOneAttack(Effect):
+    name="Give Beasts Plus One Attack"
+
+    def apply(self):
+        self.target.add_aura(1, 0, [self.target.player], lambda mini: mini.minion_type is MINION_TYPE.BEAST)
+
+    def unapply(self):
+        pass
+
+
+class GiveFriendlyMinionsPlusOnePlusOne(Effect):
+    name = "Give FriendlyMinionsPlusOnePlusOne"
+
+    def apply(self):
+        self.target.add_aura(1, 1, [self.target.player])
+
+    def unapply(self):
+        pass

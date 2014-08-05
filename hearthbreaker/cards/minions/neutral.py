@@ -2,6 +2,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
+from hearthbreaker.effects import GiveFriendlyMinionsPlusOnePlusOne
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -713,8 +714,7 @@ class StormwindChampion(MinionCard):
         super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(6, 6)
-        minion.add_aura(1, 1, [player])
+        minion = Minion(6, 6,effects=[GiveFriendlyMinionsPlusOnePlusOne])
         return minion
 
 
