@@ -1,13 +1,13 @@
 import random
 import unittest
 
-from hsgame.agents.basic_agents import PredictableBot
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.game_objects import Game
-from tests.testing_agents import *
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.agents.testing_agents import MinionPlayingAgent, SpellTestingAgent, PredictableAgentWithoutHeroPower
+from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.game_objects import Game
 from tests.testing_utils import generate_game_for, StackedDeck
-from hsgame.replay import SavedGame
-from hsgame.cards import *
+from hearthbreaker.replay import SavedGame
+from hearthbreaker.cards import *
 
 
 class TestPriest(unittest.TestCase):

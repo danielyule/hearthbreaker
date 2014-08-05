@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to hsgame's documentation!
-==================================
+Hearthbreaker Documentation
+===========================
 
 The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's .  The end goal
@@ -20,7 +20,7 @@ Contents:
 .. toctree::
    :titlesonly:
 
-   hsgame
+   hearthbreaker
    cards
    contributing
 

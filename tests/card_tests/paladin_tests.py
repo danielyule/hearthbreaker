@@ -1,11 +1,12 @@
 import random
 import unittest
 
-from hsgame.agents.basic_agents import PredictableBot
-from tests.testing_agents import *
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.agents.testing_agents import MinionPlayingAgent, SpellTestingAgent, EnemyMinionSpellTestingAgent, \
+    PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
-from hsgame.replay import SavedGame
-from hsgame.cards import *
+from hearthbreaker.replay import SavedGame
+from hearthbreaker.cards import *
 
 
 class TestPaladin(unittest.TestCase):

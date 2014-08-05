@@ -1,10 +1,12 @@
 import random
 import unittest
-from tests.testing_agents import *
+
+from tests.agents.testing_agents import MinionPlayingAgent, MinionAttackingAgent, SpellTestingAgent, \
+    PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
-from hsgame.constants import MINION_TYPE
-from hsgame.agents.basic_agents import PredictableBot
+from hearthbreaker.cards import *
+from hearthbreaker.constants import MINION_TYPE
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
 
 
 class TestShaman(unittest.TestCase):

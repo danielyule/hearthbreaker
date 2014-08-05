@@ -4,11 +4,11 @@ from os import listdir
 import re
 import random
 
-from hsgame.replay import Replay, RecordingGame, SavedGame
-from hsgame.agents.basic_agents import PredictableBot
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.cards import *
-import hsgame.game_objects
+from hearthbreaker.replay import Replay, RecordingGame, SavedGame
+from hearthbreaker.agents.basic_agents import PredictableBot
+from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.cards import *
+import hearthbreaker.game_objects
 
 
 class TestReplay(unittest.TestCase):
@@ -46,8 +46,8 @@ class TestReplay(unittest.TestCase):
     def test_recording_game(self):
         self.maxDiff = None
         random.seed(9876)
-        deck1 = hsgame.game_objects.Deck([StonetuskBoar()] * 30, CHARACTER_CLASS.MAGE)
-        deck2 = hsgame.game_objects.Deck([Naturalize()] * 30, CHARACTER_CLASS.DRUID)
+        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar()] * 30, CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([Naturalize()] * 30, CHARACTER_CLASS.DRUID)
         agent1 = PredictableBot()
         agent2 = PredictableBot()
         game = RecordingGame([deck1, deck2], [agent1, agent2])

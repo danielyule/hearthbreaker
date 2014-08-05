@@ -1,14 +1,14 @@
 import random
 import unittest
 
-from hsgame.agents.basic_agents import PredictableBot, DoNothingBot
-from hsgame.constants import CHARACTER_CLASS, MINION_TYPE
-from hsgame.game_objects import Game
-from hsgame.replay import SavedGame
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent, OneSpellTestingAgent, \
-    EnemySpellTestingAgent
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
+from hearthbreaker.game_objects import Game
+from hearthbreaker.replay import SavedGame
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent,\
+    OneSpellTestingAgent, EnemySpellTestingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class TestMage(unittest.TestCase):
@@ -546,3 +546,14 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual("Fireball", game.current_player.hand[9].name)
+
+    def test_Duplicate(self):
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.other_player.hand))
+        self.assertEqual("Bloodfen Raptor", game.other_player.hand[4].name)
+        self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
+        self.assertEqual(0, len(game.other_player.secrets))

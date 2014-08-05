@@ -1,29 +1,48 @@
-Hearthstone Simulator
-=====================
+HearthBreaker
+=============
+A Hearthstone Simulator
+-----------------------
 
 The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  The end goal
 is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
 them.  The results from these games can be used to determine cards which work well together and cards which do not.
-The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
+The goal is not to create a clone of Hearthstone with which players can replace the game.
 
- * Documentation (In Progress) [http://danielyule.github.io/hearthstone-simulator/](http://danielyule.github.io/hearthstone-simulator/)
- * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthstone-simulator.svg?branch=master)](https://travis-ci.org/danielyule/hearthstone-simulator)
- * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthstone-simulator/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthstone-simulator?branch=master)
+ * Documentation (In Progress) [http://danielyule.github.io/hearthbreaker/](http://danielyule.github.io/hearthbreaker/)
+ * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthbreaker.svg?branch=master)](https://travis-ci.org/danielyule/hearthbreaker)
+ * Coveralls Code Coverage: [![Coverage Status](https://coveralls.io/repos/danielyule/hearthbreaker/badge.png?branch=master)](https://coveralls.io/r/danielyule/hearthbreaker?branch=master)
  * Developer Mailing List: [Google Group](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 
 Usage
 -----
 
-The Hearthstone Simulator is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
-There is a basic console that you can use for playing against a bot.  The bot you are playing against will not
-attack you, and will play one card from its hand per turn. (So it is very easy to beat)
+There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
+at random.
 
-Start the console with ``python hsgame/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
-text files with the name of the class followed by a comma, followed by the names of each of the cards in the deck
-in English, separated by commas.
+Start the console with ``python hearthbreaker/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
+in cockatrice format, with a card name in English on each line, preceded by a number to specify how many.  For example:
+
+    2 Goldshire Footman
+    2 Murloc Raider
+    2 Bloodfen Raptor
+    2 Frostwolf Grunt
+    2 River Crocolisk
+    2 Ironfur Grizzly
+    2 Magma Rager
+    2 Silverback Patriarch
+    2 Chillwind Yeti
+    2 Oasis Snapjaw
+    2 Sen'jin Shieldmasta
+    2 Booty Bay Bodyguard
+    2 Fen Creeper
+    2 Boulderfist Ogre
+    2 War Golem
+    
+The character class is inferred from the cards present, or defaults to mage.
 
 The console application requires ncurses, which should be included with python on *nix and mac systems, but if you are 
 on windows, you must download it from 
@@ -47,17 +66,17 @@ for more details.
 
 Structure
 ---------
-Almost all of the game logic is found in [hsgame.game_objects](hsgame/game_objects.py).  The game functions largely on
-an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the parameters they 
-receive, see [events.md](events.md).
+Almost all of the game logic is found in [hearthbreaker.game_objects](hearthbreker/game_objects.py).  The game functions
+largely on an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the 
+parameters they  receive, see [events.md](events.md).
 
 The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
 by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
 when it is time to make a decision, the game will request the decision from the agents, rather than the agents
 dictating how the game is run.
 
-The cards themselves are each a class, and can be found in the [hsgame/cards](hsgame/cards) directory, organized by type
-(spell/minion/secret/weapon) and by class.
+The cards themselves are each a class, and can be found in the [hearthbreaker/cards](hearthbreaker/cards) directory, 
+organized by type (spell/minion/secret/weapon) and by class.
 
 This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
 the replay syntax is documented in [replay_format.md](replay_format.md).
@@ -71,11 +90,11 @@ All pull requests which implement new cards must also include a unit test for th
  has no side effects aside from playing the minion, tests should include another card's effects on it.
 
 All pull requests will be automatically verified through 
-[travis-ci.org](https://travis-ci.org/danielyule/hearthstone-simulator), and a coverage report generated through
- [coveralls.io](https://coveralls.io/r/danielyule/hearthstone-simulator)
+[travis-ci.org](https://travis-ci.org/danielyule/hearthbreaker), and a coverage report generated through
+ [coveralls.io](https://coveralls.io/r/danielyule/hearthbreaker)
 
 For more specifics about contributing, see the 
-[contributing page](http://danielyule.github.io/hearthstone-simulator/contributing.html), 
+[contributing page](http://danielyule.github.io/hearthbreaker/contributing.html), 
 or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 
 Related Projects

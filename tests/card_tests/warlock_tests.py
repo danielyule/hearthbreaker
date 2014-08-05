@@ -1,11 +1,12 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import PredictableBot
 
-from hsgame.constants import MINION_TYPE
-from tests.testing_agents import *
+from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from tests.agents.testing_agents import OneSpellTestingAgent, MinionPlayingAgent, EnemySpellTestingAgent, \
+    SpellTestingAgent, EnemyMinionSpellTestingAgent, PredictableAgentWithoutHeroPower
+from hearthbreaker.constants import MINION_TYPE
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class TestWarlock(unittest.TestCase):
@@ -326,7 +327,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(MINION_TYPE.DEMON, game.players[0].minions[0].minion_type)
-        self.assertEqual("Dread Infernal", game.players[0].minions[0].card.name)
+        self.assertEqual("Felguard", game.players[0].minions[0].card.name)
         # Apparently this seed always rolls Dread Infernal
         mogu = MogushanWarden()
         mogu.summon(game.players[1], game, 0)
@@ -373,7 +374,6 @@ class TestWarlock(unittest.TestCase):
         game.players[0].minions[0].bind("health_changed", verify_poweroverwhelming)
         game.play_single_turn()
 
-        game.players[0].minions[0].activate_delayed()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(3, len(game.players[0].hand))
 
@@ -504,7 +504,7 @@ class TestWarlock(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        def _choose_index(card):
+        def _choose_index(card, player):
             return 1
         game.players[0].agent.choose_index = _choose_index
 

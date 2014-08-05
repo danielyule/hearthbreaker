@@ -1,10 +1,11 @@
 import random
 import unittest
-from hsgame.agents.basic_agents import DoNothingBot
-from tests.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
+
+from hearthbreaker.agents.basic_agents import DoNothingBot
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, WeaponTestingAgent, \
     PredictableAgentWithoutHeroPower, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 class TestHunter(unittest.TestCase):
@@ -447,32 +448,49 @@ class TestHunter(unittest.TestCase):
         self.assertTrue(game.current_player.minions[2].silenced)
 
     def test_TundraRhino(self):
-        game = generate_game_for([OasisSnapjaw, TundraRhino], StonetuskBoar,
+        game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino], StonetuskBoar,
                                  PredictableAgentWithoutHeroPower, DoNothingBot)
-        for turn in range(0, 8):
+        for turn in range(0, 6):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)
 
+        game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(26, game.players[1].hero.health)
 
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(21, game.players[1].hero.health)
+        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[1].charge)
+        self.assertTrue(game.players[0].minions[2].charge)
+
+        game.players[0].minions[2].silence()
+        self.assertTrue(game.players[0].minions[2].charge)
+
     def test_TundraRhino_with_silence(self):
-        game = generate_game_for([OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
+        game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
                                  PredictableAgentWithoutHeroPower, DoNothingBot)
         for turn in range(0, 8):
             game.play_single_turn()
 
-        self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(26, game.players[1].hero.health)
 
         game.play_single_turn()
 
-        self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(23, game.players[1].hero.health)
+
+        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertTrue(game.players[0].minions[2].charge)
 
     def test_AnimalCompanion(self):
         game = generate_game_for(AnimalCompanion, StonetuskBoar, SpellTestingAgent, DoNothingBot)
@@ -534,3 +552,66 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(0, len(game.players[0].secrets))
+
+    def test_Webspinner(self):
+        game = generate_game_for(Webspinner, MortalCoil, MinionPlayingAgent, SpellTestingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(4, len(game.other_player.hand))
+        self.assertEqual(ScavengingHyena, type(game.other_player.hand[3]))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, len(game.other_player.hand))
+        self.assertEqual(SilverbackPatriarch, type(game.other_player.hand[4]))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(6, len(game.other_player.hand))
+        self.assertEqual(IronbeakOwl, type(game.other_player.hand[5]))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+        self.assertEqual(DireWolfAlpha, type(game.other_player.hand[6]))
+
+        # Skip over the hyena
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(8, len(game.other_player.hand))
+        self.assertEqual(IronbeakOwl, type(game.other_player.hand[7]))
+
+        # Skip over the Patriarch
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(9, len(game.other_player.hand))
+        self.assertEqual(KingMukla, type(game.other_player.hand[8]))
+
+        # Skip over the Ironbeak Owl
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(10, len(game.other_player.hand))
+        self.assertEqual(ScavengingHyena, type(game.other_player.hand[9]))
+
+        # Skip over the Wolf
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(10, len(game.other_player.hand))
+        self.assertEqual(IronfurGrizzly, type(game.other_player.hand[9]))

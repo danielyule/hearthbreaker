@@ -8,3 +8,4 @@ omit =
     */__init__.py
     */mock.py
     ui/*
+    /opt/*

@@ -1,8 +1,10 @@
 import random
 import unittest
-from tests.testing_agents import *
+
+from hearthbreaker.agents.basic_agents import DoNothingBot
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
-from hsgame.cards import *
+from hearthbreaker.cards import *
 
 
 def create_enemy_copying_agent(turn_to_play=1):
@@ -334,3 +336,121 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[3].calculate_attack())
         self.assertEqual(4, game.current_player.minions[3].calculate_attack())
         self.assertEqual(2, game.current_player.minions[5].calculate_attack())
+
+    def test_UnstableGhoul(self):
+        game = generate_game_for([StonetuskBoar, FaerieDragon, MagmaRager,
+                                  SenjinShieldmasta, UnstableGhoul, Frostbolt], FacelessManipulator,
+                                 MinionPlayingAgent, create_enemy_copying_agent(5))
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[1].health)
+        self.assertEqual(1, game.current_player.minions[2].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Webspinner(self):
+        game = generate_game_for([OasisSnapjaw, Webspinner, MortalCoil],
+                                 [GoldshireFootman, GoldshireFootman, FacelessManipulator],
+                                 MinionPlayingAgent, create_enemy_copying_agent(1))
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(8, len(game.other_player.hand))
+        self.assertEqual(ScavengingHyena, type(game.other_player.hand[7]))
+
+    def test_Duplicate(self):
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        new_game = game.copy()
+
+        # because copying is supposed to happen mid-turn, we have to deactivate the secrets that are
+        # automatically activated.  Don't worry though, they'll be re-activated when the turn starts.
+        for secret in new_game.other_player.secrets:
+            secret.deactivate(new_game.other_player)
+        new_game.play_single_turn()
+
+        self.assertEqual(6, len(new_game.other_player.hand))
+        self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[4].name)
+        self.assertEqual("Bloodfen Raptor", new_game.other_player.hand[5].name)
+        self.assertEqual(0, len(new_game.other_player.secrets))
+
+    def test_StoneskinGargoyle(self):
+        game = generate_game_for(Frostbolt, StoneskinGargoyle, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        new_game = game.copy()
+
+        new_game.play_single_turn()
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(4, new_game.current_player.minions[0].health)
+        self.assertEqual(4, new_game.current_player.minions[1].health)
+        new_game.play_single_turn()
+
+        self.assertEqual(2, len(new_game.other_player.minions))
+        self.assertEqual(1, new_game.other_player.minions[0].health)
+        self.assertEqual(4, new_game.other_player.minions[1].health)
+
+        new_game.other_player.minions[0].silence()
+
+        new_game.play_single_turn()
+
+        self.assertEqual(3, len(new_game.current_player.minions))
+        self.assertEqual(4, new_game.current_player.minions[0].health)
+        self.assertEqual(1, new_game.current_player.minions[1].health)
+        self.assertEqual(4, new_game.current_player.minions[2].health)
+
+    def test_SludgeBelcher(self):
+        game = generate_game_for([SludgeBelcher, Fireball], FacelessManipulator, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual(5, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].taunt)
+        self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_FaerieDragon(self):
+        game = generate_game_for(FaerieDragon, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        new_game = game.copy()
+        self.assertEqual(1, len(new_game.current_player.minions))
+
+        def check_no_dragon(targets):
+            self.assertNotIn(new_game.other_player.minions[0], targets)
+            return targets[0]
+
+        def check_dragon(targets):
+            self.assertIn(new_game.other_player.minions[0], targets)
+            return targets[0]
+
+        new_game.other_player.agent.choose_target = check_no_dragon
+
+        new_game.play_single_turn()
+        new_game.play_single_turn()
+
+        new_game.other_player.agent.choose_target = check_dragon
+        new_game.current_player.minions[0].silence()
+        new_game.play_single_turn()
