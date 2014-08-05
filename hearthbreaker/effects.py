@@ -140,7 +140,7 @@ class GiveChargeToBeasts(Effect):
 
 
 class GiveBeastsPlusOneAttack(Effect):
-    name="Give Beasts Plus One Attack"
+    name = "Give Beasts Plus One Attack"
 
     def apply(self):
         self.target.add_aura(1, 0, [self.target.player], lambda mini: mini.minion_type is MINION_TYPE.BEAST)

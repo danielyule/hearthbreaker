@@ -714,7 +714,7 @@ class StormwindChampion(MinionCard):
         super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(6, 6,effects=[GiveFriendlyMinionsPlusOnePlusOne])
+        minion = Minion(6, 6, effects=[GiveFriendlyMinionsPlusOnePlusOne])
         return minion
 
 
