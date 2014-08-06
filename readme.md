@@ -99,8 +99,15 @@ or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hea
 
 Related Projects
 ----------------
+
+###HearthSim
 Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
 with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more
 sophisticated AI.
+
+###Focus
+Raffy is working towards a Domain Specific Language (DSL) for Hearthstone Cards, written in JSON.  The cards are
+completely defined, but the engine (called [Focus](http://fluiddruid.net/forum/viewtopic.php?f=24&t=4808)) is still in
+progress.  These will allow for anyone to define new cards, by simply writing a JSON object to represent the card.
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
