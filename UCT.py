@@ -18,19 +18,19 @@
 
 from math import *
 import random
-from hsgame.game_objects import *
-from hsgame.targeting import *
-from hsgame.constants import *
+from hearthbreaker.game_objects import *
+from hearthbreaker.targeting import *
+from hearthbreaker.constants import *
 from tests.testing_utils import generate_game_for
-from hsgame.agents.basic_agents import DoNothingBot, RandomBot
-from hsgame.constants import CHARACTER_CLASS
-from hsgame.cards.spells.mage import Pyroblast, Fireball, Frostbolt
-from hsgame.cards.minions.neutral import RiverCrocolisk
-deck1 = RiverCrocolisk
-deck2 = RiverCrocolisk
-game = generate_game_for(deck1, deck2, RandomBot, RandomBot)
-game.players[0].hero.health = 30
-game.players[1].hero.health = 30
+from hearthbreaker.agents.basic_agents import DoNothingBot
+# from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.cards.spells.mage import Fireball
+# from hearthbreaker.cards.minions.neutral import CairneBloodhoof
+deck1 = Fireball
+deck2 = Fireball
+game = generate_game_for(deck1, deck2, DoNothingBot, DoNothingBot)
+game.players[0].hero.health = 7
+game.players[1].hero.health = 7
 game._start_turn()
 """ Currently have some issues with both AIs convinced that they are winning
     so one AI will always pass his turn and the other will just kill him
@@ -65,7 +65,7 @@ class HearthState:
         def _choose_target(targets):
             return targets[move[4]]
 
-        def _choose_index(targets):
+        def _choose_index(targets, player):
             return move[4]
 
         # print(str(self.game.current_player.mana) + "/" + str(self.game.current_player.max_mana))
@@ -77,7 +77,7 @@ class HearthState:
         elif move[0] == "hero_power":
             self.game.current_player.agent.choose_target = _choose_target
             self.game.current_player.hero.power.use()
-        elif move[1] == "summon_minion":
+        elif move[0] == "summon_minion":
             self.game.current_player.agent.choose_index = _choose_index
             self.game.play_card(self.game.current_player.hand[move[3]])
         elif move[2] is None:  # Passing index rather than object, hopefully the game copy fix will help with this
@@ -118,7 +118,8 @@ class HearthState:
                     valid_moves.append(["untargeted_spell", card, None, self.game.current_player.hand.index(card), 0])
                 elif card.can_use(self.game.current_player, self.game) and card.targetable:
                     for i in range(len(card.targets)):
-                        valid_moves.append(["targeted_spell", card, card.targets[i], self.game.current_player.hand.index(card), i])
+                        valid_moves.append(["targeted_spell", card, card.targets[i],
+                                           self.game.current_player.hand.index(card), i])
 
         found_taunt = False
         targets = []
@@ -136,18 +137,27 @@ class HearthState:
         for minion in copy.copy(self.game.current_player.minions):
             if minion.can_attack():
                 for i in range(len(targets)):
-                    valid_moves.append(["minion_attack", minion, targets[i], self.game.current_player.minions.index(minion), i])
+                    valid_moves.append(["minion_attack", minion, targets[i],
+                                       self.game.current_player.minions.index(minion), i])
 
         if self.game.current_player.hero.can_attack():
             for i in range(len(targets)):
-                valid_moves.append(["hero_attack", self.game.current_player.hero, targets[i], self.game.current_player.hand.index(card), i])
+                valid_moves.append(["hero_attack", self.game.current_player.hero, targets[i],
+                                   self.game.current_player.hand.index(card), i])
         """
-        if self.game.current_player.hero.character_class == CHARACTER_CLASS.MAGE and self.game.current_player.hero.power.can_use():  # some issues with indexes not matching between games
-            for target in hsgame.targeting.find_enemy_spell_target(game, lambda x: True):
-                valid_moves.append(["hero_power", self.game.current_player.hero, target, 0, hsgame.targeting.find_spell_target(self.game, lambda t: t.spell_targetable()).index(target)])  # need to get index things
-        elif self.game.current_player.hero.character_class == CHARACTER_CLASS.PRIEST and self.game.current_player.hero.power.can_use():
-            for target in hsgame.targeting.find_friendly_spell_target(game, lambda x: x.health != x.calculate_max_health()):
-                valid_moves.append(["hero_power", self.game.current_player.hero, target, 0, hsgame.targeting.find_spell_target(self.game, lambda t: t.spell_targetable()).index(target)])
+        if self.game.current_player.hero.character_class == CHARACTER_CLASS.MAGE and \
+           self.game.current_player.hero.power.can_use():  # some issues with indexes not matching between games
+            for target in hearthbreaker.targeting.find_enemy_spell_target(game, lambda x: True):
+                valid_moves.append(["hero_power", self.game.current_player.hero, target, 0, \
+                                   hearthbreaker.targeting.find_spell_target(self.game, lambda t: \
+                                   t.spell_targetable()).index(target)])  # need to get index things
+        elif self.game.current_player.hero.character_class == CHARACTER_CLASS.PRIEST and \
+             self.game.current_player.hero.power.can_use():
+            for target in hearthbreaker.targeting.find_friendly_spell_target(game, lambda x: \
+                                                                             x.health != x.calculate_max_health()):
+                valid_moves.append(["hero_power", self.game.current_player.hero, target, 0, \
+                                   hearthbreaker.targeting.find_spell_target(self.game, lambda t: \
+                                                                             t.spell_targetable()).index(target)])
         elif self.game.current_player.hero.power.can_use():
             valid_moves.append(["hero_power", self.game.current_player.hero, None])
         """
@@ -169,11 +179,14 @@ class HearthState:
             elif move[0] == "hero_power":
                 if move[2] is not None:
                     if move[2] == self.game.other_player.hero:
-                        s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) + ", Enemy Hero] "
+                        s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) \
+                             + ", Enemy Hero] "
                     else:
-                        s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) + ", " + str(move[2].card.name) + "] "
+                        s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) \
+                             + ", " + str(move[2].card.name) + "] "
                 else:
-                    s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) + ", " + str(move[2]) + "] "
+                    s += "[" + str(move[0]) + ", " + CHARACTER_CLASS.to_str(move[1].character_class) + ", " \
+                         + str(move[2]) + "] "
             elif move[0] == "end_turn":
                 s += "[" + str(move[0]) + ", " + str(move[1]) + ", " + str(move[2]) + "] "
             elif move[0] == "summon_minion":
@@ -202,10 +215,12 @@ class HearthState:
             return 1
 
     def __repr__(self):
-        s = "[" + str(self.game.players[1].hero.health) + " hp:" + str(len(self.game.players[1].hand)) + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
+        s = "[" + str(self.game.players[1].hero.health) + " hp:" + str(len(self.game.players[1].hand)) \
+            + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
         for minion in copy.copy(self.game.players[1].minions):
             s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
-        s += "\n[" + str(self.game.players[0].hero.health) + " hp:" + str(len(self.game.players[0].hand)) + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
+        s += "\n[" + str(self.game.players[0].hero.health) + " hp:" + str(len(self.game.players[0].hand)) \
+             + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
         for minion in copy.copy(self.game.players[0].minions):
             s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
         s += "\n" + "Current Player: " + str(self.activePlayer)
@@ -261,7 +276,7 @@ class Node:
     """ A node in the game tree. Note wins is always from the viewpoint of activePlayer.
         Crashes if state not specified.
     """
-    def __init__(self, move = None, parent = None, state = None):
+    def __init__(self, move=None, parent=None, state=None):
         self.move = move  # the move that got us to this node - "None" for the root node
         self.parentNode = parent  # "None" for the root node
         self.childNodes = []
@@ -275,14 +290,14 @@ class Node:
             lambda c: c.wins/c.visits + UCTK * sqrt(2*log(self.visits)/c.visits to vary the amount of
             exploration versus exploitation.
         """
-        s = sorted(self.childNodes, key = lambda c: c.wins/c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
+        s = sorted(self.childNodes, key=lambda c: c.wins / c.visits + sqrt(2 * log(self.visits) / c.visits))[-1]
         return s
 
     def AddChild(self, m, s):
         """ Remove m from untriedMoves and add a new child node for this move.
             Return the added child node
         """
-        n = Node(move = m, parent = self, state = s)
+        n = Node(move=m, parent=self, state=s)
         self.untriedMoves = [x for x in self.untriedMoves if x != m]
         self.childNodes.append(n)
         return n
@@ -295,7 +310,8 @@ class Node:
         self.wins += result
 
     def __repr__(self):
-        return "[M:" + str(self.move) + " P:" + str(int(100 * self.wins / self.visits)) + "% W/V:" + str(int(self.wins)) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
+        return "[M:" + str(self.move) + " P:" + str(int(100 * self.wins / self.visits)) + "% W/V:" \
+               + str(int(self.wins)) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
 
     def TreeToString(self, indent):
         s = self.IndentString(indent) + str(self)
@@ -316,13 +332,13 @@ class Node:
         return s
 
 
-def UCT(rootstate, itermax, verbose = False):
+def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
         Return the best move from the rootstate.
         Assumes 2 alternating players (player 1 starts), with game results in the range [0.0, 1.0].
     """
 
-    rootnode = Node(state = rootstate)
+    rootnode = Node(state=rootstate)
 
     for i in range(itermax):
         node = rootnode
@@ -345,7 +361,8 @@ def UCT(rootstate, itermax, verbose = False):
 
         # Backpropagate
         while node is not None:  # backpropagate from the expanded node and work back to the root node
-            node.Update(state.GetResult(node.activePlayer))  # state is terminal. Update node with result from POV of node.activePlayer
+            node.Update(state.GetResult(node.activePlayer))
+            # state is terminal. Update node with result from POV of node.activePlayer
             node = node.parentNode
 
     # Output some information about the tree - can be omitted
@@ -354,7 +371,7 @@ def UCT(rootstate, itermax, verbose = False):
     else:
         print(rootnode.ChildrenToString())
 
-    return sorted(rootnode.childNodes, key = lambda c: c.visits)[-1].move  # return the move that was most visited
+    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
 
 
 def UCTPlayGame():
@@ -366,9 +383,9 @@ def UCTPlayGame():
     while (state.GetMoves() != []):
         print(str(state))
         if state.activePlayer == 1:
-            m = UCT(rootstate = state, itermax = 50, verbose = False)  # play with values for itermax and verbose = True
+            m = UCT(rootstate=state, itermax=50, verbose=False)  # play with values for itermax and verbose = True
         else:
-            m = UCT(rootstate = state, itermax = 50, verbose = False)
+            m = UCT(rootstate=state, itermax=50, verbose=False)
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.activePlayer) == 1:

@@ -142,4 +142,4 @@ class RandomBot:
         return 0
 
     def choose_option(self, *options):
-        return options[random.randint(0, len(targets) - 1)]
+        return options[random.randint(0, len(options) - 1)]
