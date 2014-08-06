@@ -142,20 +142,20 @@ class TestWarrior(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].charge)
 
         # Test so that charge gets applied before a battlecry
-        weapon = TruesilverChampion().create_weapon(game.players[0])  # 4/2 TODO: Change to a warrior weapon
+        weapon = FieryWarAxe().create_weapon(game.players[0])
         weapon.equip(game.players[0])
-        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
         bloodsail = BloodsailRaider()
         bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
-        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertTrue(game.players[0].minions[0].charge)
 
         # TODO: Test with Faceless Manipulator here
 
         # Remove the Warsong Commander
         game.players[0].minions[-1].die(None)
-        game.players[0].minions[-1].activate_delayed()
+        game.check_delayed()
         # The previous charged minions should still have charge
         self.assertTrue(game.players[0].minions[0].charge)
         self.assertTrue(game.players[0].minions[-1].charge)

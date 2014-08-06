@@ -2,10 +2,10 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
-from tests.agents.testing_agents import SpellTestingAgent
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
-from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize
+from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
 from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 
@@ -131,6 +131,24 @@ class TestGame(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(0, game.other_player.hero.armor)
         self.assertEqual(29, game.current_player.hero.health)
+
+    def test_deathrattle_ordering(self):
+        game = generate_game_for(SylvanasWindrunner, [Abomination, NerubianEgg], MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        game.other_player.minions[0].health = 2
+
+        game.current_player.minions[1].die(None)
+        game.check_delayed()
+
+        # Everything should die at once, but Sylvanas shouldn't get the Nerubian because its Deathrattle will not have
+        # gone yet
+
+        self.assertEqual(1, len(game.current_player.minions))
 
 
 class TestBinding(unittest.TestCase):

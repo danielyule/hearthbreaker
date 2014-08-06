@@ -70,12 +70,11 @@ class BlessingOfWisdom(Card):
 
 class Consecration(Card):
     def __init__(self):
-        super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN,
-                         CARD_RARITY.COMMON)
+        super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
 

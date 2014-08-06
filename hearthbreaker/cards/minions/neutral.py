@@ -587,7 +587,7 @@ class Abomination(MinionCard):
         def deal_two_to_all(minion):
             for target in hearthbreaker.targeting.find_battlecry_target(player.game, lambda x: True):
                 target.damage(2, self)
-                player.game.check_delayed()
+            player.game.check_delayed()
 
         return Minion(4, 4, deathrattle=deal_two_to_all, taunt=True)
 

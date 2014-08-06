@@ -184,7 +184,7 @@ class LightningStorm(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
 
 

@@ -875,11 +875,10 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        # One knife to the older Boar, one knife to the footman
+        # One knife to each of the boars
         self.assertFalse(game.current_player.minions[1].stealth)
-        self.assertEqual(2, len(game.other_player.minions))
-        self.assertEqual(1, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].health)
 
     def test_KnifeJugglerWithOwl(self):
         game = generate_game_for([KnifeJuggler, IronbeakOwl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)

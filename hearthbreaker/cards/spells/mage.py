@@ -57,7 +57,7 @@ class ArcaneExplosion(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(1), self)
 
 
@@ -235,16 +235,18 @@ class ConeOfCold(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.damage(player.effective_spell_damage(1), self)
         self.target.freeze()
         index = self.target.index
-        if self.target.index > 0:
-            minion = self.target.player.minions[index - 1]
-            minion.damage(player.effective_spell_damage(1), self)
-            minion.freeze()
 
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(1), self)
+            minion.freeze()
+
+        self.target.damage(player.effective_spell_damage(1), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(1), self)
             minion.freeze()
 
@@ -286,7 +288,7 @@ class Blizzard(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
             minion.freeze()
 
@@ -297,7 +299,7 @@ class Flamestrike(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(4), self)
 
 

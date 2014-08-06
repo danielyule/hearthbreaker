@@ -55,7 +55,7 @@ class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
 
         for minion in player.minions:

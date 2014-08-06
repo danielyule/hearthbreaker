@@ -199,14 +199,15 @@ class ExplosiveShot(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.damage(player.effective_spell_damage(5), self)
         index = self.target.index
-        if self.target.index > 0:
-            minion = self.target.player.minions[index - 1]
-            minion.damage(player.effective_spell_damage(2), self)
-
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+        self.target.damage(player.effective_spell_damage(5), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(2), self)
 
 

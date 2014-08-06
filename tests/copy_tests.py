@@ -162,10 +162,10 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual("Scavenging Hyena", game.current_player.minions[0].card.name)
-        game.current_player.minions[1].die(None)
-        game.current_player.minions[2].die(None)
-        game.current_player.minions[3].die(None)
         game.current_player.minions[4].die(None)
+        game.current_player.minions[3].die(None)
+        game.current_player.minions[2].die(None)
+        game.current_player.minions[1].die(None)
         game.check_delayed()
         self.assertEqual(10, game.current_player.minions[0].calculate_attack())
         self.assertEqual(6, game.current_player.minions[0].calculate_max_health())

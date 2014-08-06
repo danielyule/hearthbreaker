@@ -258,6 +258,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.removed = False
         #: A list of effects that have been applied to this character
         self.effects = []
+        #: An integer describing when this character was created.  The lower, the earlier it was created
+        self.born = -1
 
     def attack(self):
         """
@@ -344,7 +346,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         :see: :class:`Bindable`
         """
         self.delayed.append({'event': event, 'args': args})
-        self.player.game.delayed_minions.append(self)
+        self.player.game.delayed_minions.add(self)
 
     def activate_delayed(self):
         """
@@ -866,7 +868,7 @@ class Minion(Character):
         self.base_deathrattle = deathrattle
         self.silenced = False
         self.exhausted = True
-        self.born = -1
+        self.removed = False
         if effects:
             self._effects_to_add = effects
         else:
@@ -915,7 +917,6 @@ class Minion(Character):
         return self.base_health + aura_health
 
     def remove_from_board(self):
-        self.silence()  # Neutralize all possible effects
         for minion in self.player.minions:
             if minion.index > self.index:
                 minion.index -= 1
@@ -982,19 +983,18 @@ class Minion(Character):
 
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
-        if not self.dead:
+        if not self.dead and not self.removed:
             deathrattle = self.deathrattle
 
             def delayed_death(c):
                 self.silence()
-                self.remove_from_board()
                 if deathrattle is not None:
                     deathrattle(self)
             self.bind_once("died", delayed_death)
             super().die(by)
 
             self.player.trigger("minion_died", self, by)
-            self.removed = True
+            self.remove_from_board()
 
     def can_attack(self):
         return (self.charge or not self.exhausted) and super().can_attack()
@@ -1121,6 +1121,7 @@ class Minion(Character):
 
     def bounce(self):
         if len(self.player.hand) < 10:
+            self.silence()
             self.remove_from_board()
             self.player.hand.append(self.card)
         else:
@@ -1422,7 +1423,7 @@ class Player(Bindable):
 class Game(Bindable):
     def __init__(self, decks, agents, random_func=random.randint):
         super().__init__()
-        self.delayed_minions = []
+        self.delayed_minions = set()
         self.random = random_func
         first_player = random_func(0, 1)
         if first_player is 0:
@@ -1444,10 +1445,10 @@ class Game(Bindable):
             self.players[1].draw()
 
     def check_delayed(self):
-        for minion in self.delayed_minions:
+        sorted_minions = sorted(self.delayed_minions, key=lambda m: m.born)
+        self.delayed_minions = set()
+        for minion in sorted_minions:
             minion.activate_delayed()
-
-        self.delayed_minions = []
 
     def pre_game(self):
         card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
@@ -1578,8 +1579,6 @@ class Game(Bindable):
             self.current_player.trigger("card_used", card)
             self.current_player.cards_played += 1
             self.check_delayed()
-
-            self.delayed_minions = []
 
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
