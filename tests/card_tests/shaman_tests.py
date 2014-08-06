@@ -362,7 +362,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(0, game.players[0].minions[0].calculate_attack())
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual("Frog", game.players[0].minions[0].card.name)
-        self.assertEqual(MINION_TYPE.BEAST, game.players[0].minions[0].minion_type)
+        self.assertEqual(MINION_TYPE.BEAST, game.players[0].minions[0].card.minion_type)
 
     def test_LavaBurst(self):
         game = generate_game_for(LavaBurst, StonetuskBoar, SpellTestingAgent, DoNothingBot)

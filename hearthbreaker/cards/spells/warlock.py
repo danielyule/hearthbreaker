@@ -89,7 +89,7 @@ class Demonfire(Card):
     def use(self, player, game):
         super().use(player, game)
         targets = copy.copy(player.game.current_player.minions)
-        if self.target.minion_type is MINION_TYPE.DEMON and self.target in targets:
+        if self.target.card.minion_type is MINION_TYPE.DEMON and self.target in targets:
             self.target.change_attack(2)
             self.target.increase_health(2)
         else:
@@ -101,7 +101,7 @@ class SacrificialPact(Card):
         super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target,
                          lambda character: (isinstance(character, Minion)
-                                            and character.minion_type is MINION_TYPE.DEMON)
+                                            and character.card.minion_type is MINION_TYPE.DEMON)
                          or (isinstance(character, Hero)
                              and character.character_class is CHARACTER_CLASS.LORD_JARAXXUS))
 
@@ -131,16 +131,15 @@ class SenseDemons(Card):
 
         class WorthlessImp(MinionCard):
             def __init__(self):
-                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL)
+                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
 
             def create_minion(self, p):
-                return Minion(1, 1, MINION_TYPE.DEMON)
+                return Minion(1, 1)
 
         minions = []
         for i in range(0, 30):
             if (not game.current_player.deck.used[i] and isinstance(game.current_player.deck.cards[i], MinionCard) and
-                    game.current_player.deck.cards[i].create_minion(game.current_player).minion_type
-                    == MINION_TYPE.DEMON):
+                    game.current_player.deck.cards[i].minion_type == MINION_TYPE.DEMON):
                 minions.append(i)
 
         for i in range(0, 2):

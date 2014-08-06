@@ -31,7 +31,7 @@ class EarthElemental(MinionCard):
 class FireElemental(MinionCard):
     def __init__(self):
         super().__init__("Fire Elemental", 6, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         return Minion(6, 5, battlecry=deal_three_damage)
@@ -39,23 +39,23 @@ class FireElemental(MinionCard):
 
 class FlametongueTotem(MinionCard):
     def __init__(self):
-        super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
+        super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        minion = Minion(0, 3, MINION_TYPE.TOTEM)
+        minion = Minion(0, 3)
         minion.add_adjacency_aura(2, 0, player)
         return minion
 
 
 class ManaTideTotem(MinionCard):
     def __init__(self):
-        super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE)
+        super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         def draw_card():
             player.draw()
 
-        minion = Minion(0, 3, MINION_TYPE.TOTEM)
+        minion = Minion(0, 3)
         player.bind("turn_ended", draw_card)
         minion.bind_once("silenced", lambda: player.unbind("turn_ended", draw_card))
         return minion
@@ -79,7 +79,7 @@ class UnboundElemental(MinionCard):
 class Windspeaker(MinionCard):
     def __init__(self):
         super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(3, 3, battlecry=give_windfury)

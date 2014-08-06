@@ -40,7 +40,7 @@ class Armorsmith(MinionCard):
 class CruelTaskmaster(MinionCard):
     def __init__(self):
         super().__init__("Cruel Taskmaster", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
         def deal_one_damage_and_give_two_attack(minion):

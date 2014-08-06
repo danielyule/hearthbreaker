@@ -7,7 +7,7 @@ from hearthbreaker.cards.battlecries import change_attack_to_one, give_divine_sh
 class AldorPeacekeeper(MinionCard):
     def __init__(self):
         super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_enemy_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_enemy_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(3, 3, battlecry=change_attack_to_one)
@@ -16,7 +16,7 @@ class AldorPeacekeeper(MinionCard):
 class ArgentProtector(MinionCard):
     def __init__(self):
         super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(2, 2, battlecry=give_divine_shield)

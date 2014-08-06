@@ -326,7 +326,7 @@ class TestWarlock(unittest.TestCase):
         # Kills enemy Imp with Bane of Doom and summons random demon
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(MINION_TYPE.DEMON, game.players[0].minions[0].minion_type)
+        self.assertEqual(MINION_TYPE.DEMON, game.players[0].minions[0].card.minion_type)
         self.assertEqual("Felguard", game.players[0].minions[0].card.name)
         # Apparently this seed always rolls Dread Infernal
         mogu = MogushanWarden()

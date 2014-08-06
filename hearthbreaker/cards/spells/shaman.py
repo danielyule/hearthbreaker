@@ -144,12 +144,10 @@ class Hex(Card):
 
         class Frog(MinionCard):
             def __init__(self):
-                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
             def create_minion(self, p):
-                minion = Minion(0, 1, MINION_TYPE.BEAST)
-                minion.taunt = True
-                return minion
+                return Minion(0, 1, taunt=True)
 
         frog = Frog()
         minion = frog.create_minion(None)
@@ -209,7 +207,7 @@ class TotemicMight(Card):
         super().use(player, game)
 
         for minion in player.minions:
-            if minion.minion_type == MINION_TYPE.TOTEM:
+            if minion.card.minion_type == MINION_TYPE.TOTEM:
                 minion.increase_health(2)
 
 

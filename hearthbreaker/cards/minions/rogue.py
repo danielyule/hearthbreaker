@@ -42,7 +42,7 @@ class EdwinVanCleef(MinionCard):
 class Kidnapper(MinionCard):
     def __init__(self):
         super().__init__("Kidnapper", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
         def combo(minion):
@@ -55,7 +55,7 @@ class Kidnapper(MinionCard):
 class MasterOfDisguise(MinionCard):
     def __init__(self):
         super().__init__("Master of Disguise", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(4, 4, battlecry=give_stealth)
@@ -79,7 +79,7 @@ class PatientAssassin(MinionCard):
 class SI7Agent(MinionCard):
     def __init__(self):
         super().__init__("SI:7 Agent", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_battlecry_target)
 
     def create_minion(self, player):
         def combo(minion):

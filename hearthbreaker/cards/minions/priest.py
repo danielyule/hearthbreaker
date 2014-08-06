@@ -27,8 +27,8 @@ class AuchenaiSoulpriest(MinionCard):
 class CabalShadowPriest(MinionCard):
     def __init__(self):
         super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_enemy_minion_battlecry_target,
-                         lambda target: target.calculate_attack() <= 2)
+                         targeting_func=hearthbreaker.targeting.find_enemy_minion_battlecry_target,
+                         filter_func=lambda target: target.calculate_attack() <= 2)
 
     def create_minion(self, player):
         return Minion(4, 5, battlecry=take_control_of_minion)
@@ -103,7 +103,7 @@ class ProphetVelen(MinionCard):
 class TempleEnforcer(MinionCard):
     def __init__(self):
         super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(6, 6, battlecry=give_three_health)

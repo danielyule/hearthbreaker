@@ -67,7 +67,7 @@ class CardTest(unittest.TestCase):
                     minion.silence()
                     self.assertEqual(int(row["Attack"]), minion.calculate_attack(), row["Name"])
                     self.assertEqual(int(row["Health"]), minion.health, row["Name"])
-                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.minion_type, row["Name"])
+                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), card.minion_type, row["Name"])
                 elif row["Type"] == "Weapon":
                     weapon = card.create_weapon(fake_game.current_player)
                     self.assertEqual(int(row["Attack"]), weapon.base_attack, row["Name"])
