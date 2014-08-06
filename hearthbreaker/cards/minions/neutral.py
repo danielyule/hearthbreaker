@@ -272,7 +272,7 @@ class LordOfTheArena(MinionCard):
         super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-          return Minion(6, 5, taunt=True)
+        return Minion(6, 5, taunt=True)
 
 
 class MurlocRaider(MinionCard):
