@@ -32,7 +32,7 @@ class BestialWrath(Card):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_minion_spell_target,
-                         lambda minion: minion.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
+                         lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -218,7 +218,7 @@ class KillCommand(Card):
     def use(self, player, game):
         super().use(player, game)
         beasts = hearthbreaker.targeting.find_friendly_minion_battlecry_target(
-            player.game, lambda x: x.minion_type is MINION_TYPE.BEAST)
+            player.game, lambda x: x.card.minion_type is MINION_TYPE.BEAST)
         if beasts is None:
             self.target.damage(player.effective_spell_damage(3), self)
         else:
@@ -301,10 +301,10 @@ class SnakeTrap(SecretCard):
         if isinstance(target, Minion):
             class Snake(MinionCard):
                 def __init__(self):
-                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
                 def create_minion(self, player):
-                    return Minion(1, 1, MINION_TYPE.BEAST)
+                    return Minion(1, 1)
             snake = Snake()
             player = target.player.game.other_player
             for i in range(0, 3):

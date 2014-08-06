@@ -104,7 +104,7 @@ class DrawOnMinion(Effect):
         self.target.player.bind("minion_placed", self.check_minion_draw)
 
     def check_minion_draw(self, new_minion):
-        if (self.minion_type != MINION_TYPE.ALL and new_minion.minion_type is self.minion_type) \
+        if (self.minion_type != MINION_TYPE.ALL and new_minion.card.minion_type is self.minion_type) \
                 and new_minion is not self.target:
             self.target.player.draw()
 
@@ -153,7 +153,7 @@ class GrowOnDeath(Effect):
 
     def minion_grow(self, dead_minion, by):
         if dead_minion is not self.target and \
-                (self.minion_type == MINION_TYPE.ALL or dead_minion.minion_type is self.minion_type):
+                (self.minion_type == MINION_TYPE.ALL or dead_minion.card.minion_type is self.minion_type):
             self.target.change_attack(self.attack)
             self.target.increase_health(self.health)
 
@@ -206,7 +206,7 @@ class ChargeAura(Effect):
 
     def give_charge_if_beast(self, played_minion):
         if played_minion is self.target and \
-                (self.minion_type == MINION_TYPE.ALL or played_minion.minion_type == self.minion_type):
+                (self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type == self.minion_type):
             self.target.charge = True
         else:
             def give_permacharge_effect(minion):
@@ -235,7 +235,7 @@ class ChargeAura(Effect):
                 self.target.bind_once("silenced", lambda: minion.unbind("silenced", silenced))
                 self.charged_minions.append(minion)
 
-            if self.minion_type == MINION_TYPE.ALL or played_minion.minion_type is self.minion_type:
+            if self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type is self.minion_type:
                 if not played_minion.charge:
                     give_permacharge_effect(played_minion)
                 else:
@@ -278,7 +278,7 @@ class StatsAura(Effect):
             self.target.add_aura(self.attack, self.health, players)
         else:
             self.target.add_aura(self.attack, self.health, players,
-                                 lambda minion: minion.minion_type == self.minion_type)
+                                 lambda minion: minion.card.minion_type == self.minion_type)
 
     def unapply(self):
         pass

@@ -269,10 +269,10 @@ class Polymorph(Card):
 
         class Sheep(MinionCard):
             def __init__(self):
-                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
             def create_minion(self, p):
-                return Minion(1, 1, MINION_TYPE.BEAST)
+                return Minion(1, 1)
 
         sheep = Sheep()
         minion = sheep.create_minion(None)

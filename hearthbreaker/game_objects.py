@@ -687,8 +687,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :class:`Card`
     :see: :meth:`create_minion`
     """
-    def __init__(self, name, mana, character_class, rarity, targeting_func=None,
-                 filter_func=lambda target: not target.stealth, overload=0):
+    def __init__(self, name, mana, character_class, rarity,  minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
+                 targeting_func=None, filter_func=lambda target: not target.stealth, overload=0):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -696,6 +696,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param int mana: The base mana cost of this card
         :param int character_class: The character class that this card belongs to.  Should be a member of
                                     :class:`hearthbreaker.constants.CHARACTER_CLASS`
+        :param int rarity: How rare the card is.  Should be a member of :class:`hearthbreaker.constants.CARD_RARITY`
+        :param int minion_type: The type that the summoned minion will have.  Should be a member of
+                                :class:`hearthbreaker.constants.MINION_TYPE`
         :param function targeting_func: The function used to select a list of targets for this minion's battlecry, if it
                                         has one.  If it does not, then None.  This function should be taken from
                                         :mod:`hearthbreaker.targeting`, and should return `None` if there are no
@@ -704,6 +707,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
                                      Typically used for ensuring that stealthed minions aren't targeted
         """
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
+        self.minion_type = minion_type
 
     def can_use(self, player, game):
         """
@@ -845,11 +849,10 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 
 
 class Minion(Character):
-    def __init__(self, attack, health, minion_type=hearthbreaker.constants.MINION_TYPE.NONE, battlecry=None,
+    def __init__(self, attack, health, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None):
         super().__init__(attack, health, windfury=windfury, stealth=stealth)
-        self.minion_type = minion_type
         self.taunt = taunt
         self.game = None
         self.card = None
@@ -1088,8 +1091,7 @@ class Minion(Character):
         self.bind("copied", copied)
 
     def copy(self, new_owner, new_game=None):
-        new_minion = Minion(self.base_attack, self.base_health,
-                            self.minion_type, self.battlecry, self.base_deathrattle)
+        new_minion = Minion(self.base_attack, self.base_health, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
         new_minion.events = copy.copy(self.events)
         new_minion.stealth = self.stealth

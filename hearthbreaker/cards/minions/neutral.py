@@ -11,10 +11,10 @@ import copy
 
 class BloodfenRaptor(MinionCard):
     def __init__(self):
-        super().__init__("Bloodfen Raptor", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Bloodfen Raptor", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(3, 2, MINION_TYPE.BEAST)
+        return Minion(3, 2)
 
 
 class ElvenArcher(MinionCard):
@@ -36,19 +36,19 @@ class NoviceEngineer(MinionCard):
 
 class StonetuskBoar(MinionCard):
     def __init__(self):
-        super().__init__("Stonetusk Boar", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Stonetusk Boar", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, MINION_TYPE.BEAST, charge=True)
+        return Minion(1, 1, charge=True)
 
 
 class IronbeakOwl(MinionCard):
     def __init__(self):
-        super().__init__("Ironbeak Owl", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+        super().__init__("Ironbeak Owl", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST,
                          hearthbreaker.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
-        return Minion(2, 1, MINION_TYPE.BEAST, battlecry=silence)
+        return Minion(2, 1, battlecry=silence)
 
 
 class WarGolem(MinionCard):
@@ -69,10 +69,10 @@ class MogushanWarden(MinionCard):
 
 class FaerieDragon(MinionCard):
     def __init__(self):
-        super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Faerie Dragon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.DRAGON)
 
     def create_minion(self, player):
-        return Minion(3, 2, MINION_TYPE.DRAGON, spell_targetable=False)
+        return Minion(3, 2, spell_targetable=False)
 
 
 class KoboldGeomancer(MinionCard):
@@ -101,10 +101,10 @@ class SilvermoonGuardian(MinionCard):
 
 class TwilightDrake(MinionCard):
     def __init__(self):
-        super().__init__("Twilight Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+        super().__init__("Twilight Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.DRAGON)
 
     def create_minion(self, player):
-        return Minion(4, 1, MINION_TYPE.DRAGON, battlecry=gain_one_health_for_each_card_in_hand)
+        return Minion(4, 1, battlecry=gain_one_health_for_each_card_in_hand)
 
 
 class MagmaRager(MinionCard):
@@ -117,10 +117,10 @@ class MagmaRager(MinionCard):
 
 class DireWolfAlpha(MinionCard):
     def __init__(self):
-        super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        minion = Minion(2, 2, MINION_TYPE.BEAST)
+        minion = Minion(2, 2)
         minion.add_adjacency_aura(1, 0, player)
         return minion
 
@@ -153,20 +153,20 @@ class DalaranMage(MinionCard):
 
 class Malygos(MinionCard):
     def __init__(self):
-        super().__init__("Malygos", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+        super().__init__("Malygos", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        minion = Minion(4, 12, MINION_TYPE.DRAGON)
+        minion = Minion(4, 12)
         minion.spell_damage = 5
         return minion
 
 
 class AzureDrake(MinionCard):
     def __init__(self):
-        super().__init__("Azure Drake", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+        super().__init__("Azure Drake", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.DRAGON)
 
     def create_minion(self, player):
-        minion = Minion(4, 4, MINION_TYPE.DRAGON, battlecry=draw_card)
+        minion = Minion(4, 4, battlecry=draw_card)
         minion.spell_damage = 1
         return minion
 
@@ -183,7 +183,7 @@ class OgreMagi(MinionCard):
 
 class Spellbreaker(MinionCard):
     def __init__(self):
-        super().__init__("Spellbreaker", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+        super().__init__("Spellbreaker", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.NONE,
                          hearthbreaker.targeting.find_minion_battlecry_target)
 
     def create_minion(self, player):
@@ -228,7 +228,7 @@ class LeperGnome(MinionCard):
 
 class IronforgeRifleman(MinionCard):
     def __init__(self):
-        super().__init__("Ironforge Rifleman", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+        super().__init__("Ironforge Rifleman", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.NONE,
                          hearthbreaker.targeting.find_battlecry_target)
 
     def create_minion(self, player):
@@ -248,9 +248,7 @@ class GoldshireFootman(MinionCard):
         super().__init__("Goldshire Footman", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(1, 2)
-        minion.taunt = True
-        return minion
+        return Minion(1, 2, taunt=True)
 
 
 class FrostwolfGrunt(MinionCard):
@@ -258,19 +256,15 @@ class FrostwolfGrunt(MinionCard):
         super().__init__("Frostwolf Grunt", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        minion.taunt = True
-        return minion
+        return Minion(2, 2, taunt=True)
 
 
 class IronfurGrizzly(MinionCard):
     def __init__(self):
-        super().__init__("Ironfur Grizzly", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Ironfur Grizzly", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        minion = Minion(3, 3, MINION_TYPE.BEAST)
-        minion.taunt = True
-        return minion
+        return Minion(3, 3, taunt=True)
 
 
 class LordOfTheArena(MinionCard):
@@ -278,17 +272,15 @@ class LordOfTheArena(MinionCard):
         super().__init__("Lord of the Arena", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(6, 5)
-        minion.taunt = True
-        return minion
+         return Minion(6, 5, taunt=True)
 
 
 class MurlocRaider(MinionCard):
     def __init__(self):
-        super().__init__("Murloc Raider", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Murloc Raider", 1, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        return Minion(2, 1, MINION_TYPE.MURLOC)
+        return Minion(2, 1)
 
 
 class ManaAddict(MinionCard):
@@ -307,10 +299,10 @@ class ManaAddict(MinionCard):
 
 class OasisSnapjaw(MinionCard):
     def __init__(self):
-        super().__init__("Oasis Snapjaw", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Oasis Snapjaw", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 7, MINION_TYPE.BEAST)
+        return Minion(2, 7)
 
 
 class RecklessRocketeer(MinionCard):
@@ -318,17 +310,15 @@ class RecklessRocketeer(MinionCard):
         super().__init__("Reckless Rocketeer", 6, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(5, 2)
-        minion.charge = True
-        return minion
+        return Minion(5, 2, charge=True)
 
 
 class RiverCrocolisk(MinionCard):
     def __init__(self):
-        super().__init__("River Crocolisk", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("River Crocolisk", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 3, MINION_TYPE.BEAST)
+        return Minion(2, 3)
 
 
 class SenjinShieldmasta(MinionCard):
@@ -336,9 +326,7 @@ class SenjinShieldmasta(MinionCard):
         super().__init__("Sen'jin Shieldmasta", 4, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(3, 5)
-        minion.taunt = True
-        return minion
+        return Minion(3, 5, taunt=True)
 
 
 class ScarletCrusader(MinionCard):
@@ -346,9 +334,7 @@ class ScarletCrusader(MinionCard):
         super().__init__("Scarlet Crusader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(3, 1)
-        minion.divine_shield = True
-        return minion
+        return Minion(3, 1, divine_shield=True)
 
 
 class Shieldbearer(MinionCard):
@@ -356,19 +342,15 @@ class Shieldbearer(MinionCard):
         super().__init__("Shieldbearer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(0, 4)
-        minion.taunt = True
-        return minion
+        return Minion(0, 4, taunt=True)
 
 
 class SilverbackPatriarch(MinionCard):
     def __init__(self):
-        super().__init__("Silverback Patriarch", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Silverback Patriarch", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        minion = Minion(1, 4, MINION_TYPE.BEAST)
-        minion.taunt = True
-        return minion
+        return Minion(1, 4, taunt=True)
 
 
 class JunglePanther(MinionCard):
@@ -2376,7 +2358,7 @@ class NerubianEgg(MinionCard):
 
 class Maexxna(MinionCard):
     def __init__(self):
-        super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+        super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         def apply_effect(m, p):
@@ -2390,14 +2372,14 @@ class Maexxna(MinionCard):
             m.bind("did_damage", poisonous)
             m.bind_once("silenced", silenced)
             m.bind("copied", apply_effect)
-        minion = Minion(2, 8, MINION_TYPE.BEAST)
+        minion = Minion(2, 8)
         apply_effect(minion, player)
         return minion
 
 
 class HauntedCreeper(MinionCard):
     def __init__(self):
-        super().__init__("Haunted Creeper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Haunted Creeper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         def summon_spiders(minion):
@@ -2411,7 +2393,7 @@ class HauntedCreeper(MinionCard):
             SpectralSpider().summon(minion.player, minion.game, minion.index)
             SpectralSpider().summon(minion.player, minion.game, minion.index)
 
-        return Minion(1, 2, MINION_TYPE.BEAST, deathrattle=summon_spiders)
+        return Minion(1, 2, deathrattle=summon_spiders)
 
 
 class NerubarWeblord(MinionCard):
