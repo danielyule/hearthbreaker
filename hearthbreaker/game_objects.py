@@ -687,7 +687,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :class:`Card`
     :see: :meth:`create_minion`
     """
-    def __init__(self, name, mana, character_class, rarity,  minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
+    def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
                  targeting_func=None, filter_func=lambda target: not target.stealth, overload=0):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
