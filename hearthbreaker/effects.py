@@ -1,5 +1,5 @@
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect
+from hearthbreaker.game_objects import Effect, MinionCard
 
 
 class KillMinion(Effect):
@@ -288,3 +288,33 @@ class StatsAura(Effect):
             return "StatsAura({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
         return "StatsAura({0}, {1}, {2}, {3})".format(
             self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
+
+
+class IncreaseBattlecryMinionCost(Effect):
+
+    def __init__(self, amount):
+        super().__init__()
+        self.amount = amount
+        self.mana_filter = None
+
+    def apply(self):
+        amount = self.amount
+        target = self.target
+
+        class Filter:
+            def __init__(self):
+                self.amount = -amount
+                self.filter = lambda c: isinstance(c, MinionCard) and \
+                    c.create_minion(target.player).battlecry is not None
+                self.min = 0
+
+        self.mana_filter = Filter()
+        self.target.game.current_player.mana_filters.append(self.mana_filter)
+        self.target.game.other_player.mana_filters.append(self.mana_filter)
+
+    def unapply(self):
+        self.target.game.current_player.mana_filters.remove(self.mana_filter)
+        self.target.game.other_player.mana_filters.remove(self.mana_filter)
+
+    def __str__(self):
+        return "IncreaseBattleCryMinionCost({0})".format(self.amount)

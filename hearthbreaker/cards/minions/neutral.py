@@ -2,7 +2,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
-from hearthbreaker.effects import StatsAura
+from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2373,25 +2373,9 @@ class NerubarWeblord(MinionCard):
         super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            class Filter:
-                def __init__(self):
-                    self.amount = -2
-                    self.filter = lambda c: isinstance(c, MinionCard) and c.create_minion(p).battlecry is not None
-                    self.min = 0
 
-            mana_filter = Filter()
-
-            def silence():
-                p.game.current_player.mana_filters.remove(mana_filter)
-                p.game.other_player.mana_filters.remove(mana_filter)
-
-            minion.bind_once("silenced", silence)
-            p.game.current_player.mana_filters.append(mana_filter)
-            p.game.other_player.mana_filters.append(mana_filter)
-            minion.bind("copied", apply_effect)
         minion = Minion(1, 4)
-        apply_effect(minion, player)
+        minion._effects_to_add.append(IncreaseBattlecryMinionCost(2))
         return minion
 
 

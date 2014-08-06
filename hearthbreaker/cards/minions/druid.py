@@ -23,14 +23,18 @@ class KeeperOfTheGrove(MinionCard):
         option = player.agent.choose_option(moonfire, dispell)
         minion = Minion(2, 4)
         if option == moonfire:
-            minion.battlecry = deal_two_damage
+            action = deal_two_damage
             targets = hearthbreaker.targeting.find_battlecry_target(player.game, lambda m: not m.stealth)
         else:
-            minion.battlecry = silence
+            action = silence
             targets = hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda m: not m.stealth)
 
         if targets is not None:
             self.target = player.agent.choose_target(targets)
+
+        # here we have to set these things up to mimic a battlecry, although it is not a battlecry
+        minion.card = self
+        action(minion)
 
         return minion
 

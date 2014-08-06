@@ -2278,6 +2278,21 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
         self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
 
+    def test_NerubarWeblord_with_combo_and_choose(self):
+        game = generate_game_for(NerubarWeblord,
+                                 [KeeperOfTheGrove, AncientOfWar, Kidnapper, DefiasRingleader, SI7Agent],
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(7, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(6, game.other_player.hand[2].mana_cost(game.other_player))
+        self.assertEqual(2, game.other_player.hand[3].mana_cost(game.other_player))
+        # Skip the coin
+        self.assertEqual(3, game.other_player.hand[5].mana_cost(game.other_player))
+
     def test_UnstableGhoul(self):
         game = generate_game_for([StonetuskBoar, FaerieDragon, GoldshireFootman, Frostbolt], UnstableGhoul,
                                  SpellTestingAgent, MinionPlayingAgent)
