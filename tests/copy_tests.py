@@ -478,6 +478,19 @@ class TestMinionCopying(unittest.TestCase):
         game.check_delayed()
         self.assertEqual(5, len(game.current_player.hand))
 
+    def test_BaronRivendareFaceless(self):
+        game = generate_game_for([HarvestGolem, FacelessManipulator], BaronRivendare,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        game.current_player.minions[1].die(None)
+        game.check_delayed()
+
+        self.assertEqual(3, len(game.current_player.minions))
+
     def test_DancingSwords(self):
         game = generate_game_for(DancingSwords, ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
 

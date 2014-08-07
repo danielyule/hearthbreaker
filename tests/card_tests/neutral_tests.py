@@ -2415,6 +2415,19 @@ class TestCommon(unittest.TestCase):
         game.check_delayed()
         self.assertEqual(5, len(game.current_player.hand))
 
+    def test_BaronRivendareFaceless(self):
+        game = generate_game_for([HarvestGolem, BaronRivendare, FacelessManipulator], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        # According to http://youtu.be/Psq83bosG60?t=12m, multiple Rivendares will not stack the effect
+        game.current_player.minions[2].die(None)
+        game.check_delayed()
+        self.assertEqual(4, len(game.current_player.minions))
+
     def test_DancingSwords(self):
         game = generate_game_for(DancingSwords, ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
 

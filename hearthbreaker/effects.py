@@ -323,10 +323,12 @@ class IncreaseBattlecryMinionCost(Effect):
 class DoubleDeathrattle(Effect):
 
     def apply(self):
-        self.target.player.bind("minion_died", self.trigger_deathrattle)
+        if self.target.player.effect_count[DoubleDeathrattle] == 1:
+            self.target.player.bind("minion_died", self.trigger_deathrattle)
 
     def unapply(self):
-        self.target.player.unbind("minion_died", self.trigger_deathrattle)
+        if self.target.player.effect_count[DoubleDeathrattle] == 0:
+            self.target.player.unbind("minion_died", self.trigger_deathrattle)
 
     def trigger_deathrattle(self, minion, killed_by):
         minion.deathrattle(minion)
