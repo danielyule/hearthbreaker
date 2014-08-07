@@ -91,7 +91,7 @@ yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
 yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
 yes,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Common,Spell,Expert
-no,Deathlord,Taunt, Deathrattle: Your opponent puts a minion from their deck into the battlefield,,,3,2,8,Common,Minion,Curse of Naxxramas
+no,Deathlord,Deathrattle: Your opponent puts a minion from their deck into the battlefield,,,3,2,8,Common,Minion,Curse of Naxxramas
 yes,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Legendary,Minion,Expert
 yes,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
 yes,Defias Ringleader,Combo: Summon a 2/1 Defias Bandit.,,Rogue,2,2,2,Common,Minion,Expert
