@@ -1,3 +1,4 @@
+from hearthbreaker.effects import HealAsDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -9,19 +10,7 @@ class AuchenaiSoulpriest(MinionCard):
         super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def silence():
-            player.heal_does_damage = False
-
-            # If another Auchenai Soulpriest is alive and not silenced, keep
-            # heal_does_damage as True
-            for m in player.minions:
-                if m.card.name == "Auchenai Soulpriest" and not m.silenced and m is not minion:
-                    player.heal_does_damage = True
-
-        minion = Minion(3, 5)
-        minion.bind_once("silenced", silence)
-        player.heal_does_damage = True
-        return minion
+        return Minion(3, 5, effects=[HealAsDamage()])
 
 
 class CabalShadowPriest(MinionCard):

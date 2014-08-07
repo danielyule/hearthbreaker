@@ -333,7 +333,7 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 7):
             game.play_single_turn()
 
-        self.assertTrue(game.other_player.minions[0].silenced)
+        self.assertEqual(0, len(game.other_player.minions[0].effects))
         game.other_player.minions[0].die(None)
         game.other_player.minions[0].activate_delayed()
 
@@ -888,7 +888,7 @@ class TestCommon(unittest.TestCase):
 
         # The owl should silence the knife juggler, and no knives should be thrown
         self.assertEqual(30, game.other_player.hero.health)
-        self.assertTrue(game.current_player.minions[1].silenced)
+        self.assertEqual(0, len(game.current_player.minions[1].effects))
 
     def test_KnifeJugglerandMCT(self):
         game = generate_game_for(KnifeJuggler, [ChillwindYeti, MindControlTech],
@@ -1090,13 +1090,11 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 10):
             game.play_single_turn()
 
-        self.assertFalse(game.players[0].minions[0].silenced)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(8, game.players[0].hand[1].mana_cost(game.players[0]))
 
         game.play_single_turn()
 
-        self.assertTrue(game.players[0].minions[0].silenced)
         self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
 
@@ -1375,14 +1373,12 @@ class TestCommon(unittest.TestCase):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertFalse(game.players[0].minions[0].silenced)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
         self.assertEqual(2, game.players[1].hand[0].mana_cost(game.players[0]))
 
         game.play_single_turn()
 
-        self.assertTrue(game.players[0].minions[0].silenced)
         self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
         self.assertEqual(1, game.players[1].hand[0].mana_cost(game.players[0]))

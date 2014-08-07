@@ -335,3 +335,17 @@ class DoubleDeathrattle(Effect):
 
     def __str__(self):
         return "DoubleDeathrattle()"
+
+
+class HealAsDamage(Effect):
+
+    def apply(self):
+        if self.target.player.effect_count[HealAsDamage] == 1:
+            self.target.player.heal_does_damage = True
+
+    def unapply(self):
+        if self.target.player.effect_count[HealAsDamage] == 0:
+            self.target.player.heal_does_damage = False
+
+    def __str__(self):
+        return "HealAsDamage()"

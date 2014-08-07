@@ -445,7 +445,7 @@ class TestHunter(unittest.TestCase):
 
         # The buzzard should be silenced, but only after drawing a card from the owl
         self.assertEqual(5, len(game.current_player.hand))
-        self.assertTrue(game.current_player.minions[2].silenced)
+        self.assertEqual(0, len(game.current_player.minions[1].effects))
 
     def test_TundraRhino(self):
         game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino], StonetuskBoar,

@@ -870,7 +870,6 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.base_deathrattle = deathrattle
-        self.silenced = False
         self.exhausted = True
         self.removed = False
         if effects:
@@ -970,7 +969,6 @@ class Minion(Character):
         self.battlecry = None
         self.deathrattle = None
         self.can_be_targeted_by_spells = True
-        self.silenced = True
         self.trigger("silenced")
         if "copied" in self.events:
             del self.events["copied"]
@@ -1104,7 +1102,6 @@ class Minion(Character):
         new_minion.divine_shield = self.divine_shield
         new_minion.charge = self.charge
         new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
-        new_minion.silenced = self.silenced
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
