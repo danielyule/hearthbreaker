@@ -2461,3 +2461,11 @@ class DancingSwords(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 4, deathrattle=opponent_draw_two)
+
+
+class SpectralKnight(MinionCard):
+    def __init__(self):
+        super().__init__("Spectral Knight", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 6, spell_targetable=False)

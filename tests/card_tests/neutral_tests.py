@@ -2435,3 +2435,27 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(9, len(game.current_player.hand))
+
+    def test_SpectralKnight(self):
+        game = generate_game_for(SpectralKnight, Fireball, MinionPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        def check_no_knight(targets):
+            self.assertNotIn(game.other_player.minions[0], targets)
+            return targets[0]
+
+        def check_knight(targets):
+            self.assertIn(game.other_player.minions[0], targets)
+            return targets[0]
+
+        game.other_player.agent.choose_target = check_no_knight
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        game.other_player.agent.choose_target = check_knight
+        game.current_player.minions[0].silence()
+        game.play_single_turn()
