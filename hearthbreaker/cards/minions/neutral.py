@@ -1,7 +1,7 @@
 from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage, \
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
-    destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
+    destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two
 from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -2453,3 +2453,11 @@ class BaronRivendare(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 7, effects=[DoubleDeathrattle()])
+
+
+class DancingSwords(MinionCard):
+    def __init__(self):
+        super().__init__("Dancing Swords", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 4, deathrattle=opponent_draw_two)

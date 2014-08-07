@@ -2414,3 +2414,15 @@ class TestCommon(unittest.TestCase):
         game.current_player.minions[3].die(None)
         game.check_delayed()
         self.assertEqual(5, len(game.current_player.hand))
+
+    def test_DancingSwords(self):
+        game = generate_game_for(DancingSwords, ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(9, len(game.current_player.hand))

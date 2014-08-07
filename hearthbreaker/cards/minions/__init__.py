@@ -165,6 +165,7 @@ from hearthbreaker.cards.minions.neutral import (
     StoneskinGargoyle,
     SludgeBelcher,
     BaronRivendare,
+    DancingSwords,
 )
 
 from hearthbreaker.cards.minions.druid import (

@@ -39,7 +39,7 @@ yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Rare,Mini
 yes,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Free,Spell,Basic
 yes,Bane of Doom,"Deal 2 damage to a character. If that kills it, summon a random Demon.",,Warlock,5,,,Epic,Spell,Expert
 yes,Baron Geddon,"At the end of your turn, deal 2 damage to ALL other characters.",,,7,7,5,Legendary,Minion,Expert
-no,Baron Rivendare,Your minions trigger their Deathrattles twice.,,,4,1,7,Legendary,Minion,Curse of Naxxramas
+yes,Baron Rivendare,Your minions trigger their Deathrattles twice.,,,4,1,7,Legendary,Minion,Curse of Naxxramas
 yes,Battle Rage,Draw a card for each damaged friendly character.,,Warrior,2,,,Common,Spell,Expert
 yes,Bestial Wrath,Give a Beast +2 Attack and Immune this turn.,,Hunter,1,,,Epic,Spell,Expert
 yes,Betrayal,Force an enemy minion to deal its damage to the minions next to it.,,Rogue,2,,,Common,Spell,Expert
@@ -86,7 +86,7 @@ yes,Crazed Alchemist,Battlecry: Swap the Attack and Health of a minion.,,,2,2,2,
 yes,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.,,Warrior,2,2,2,Common,Minion,Expert
 yes,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Common,Minion,Expert
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Common,Minion,Basic
-no, Dancing Swords,Deathrattle: Your opponent draws a card.,,,3,4,4,Common,Minion,Curse of Naxxramas
+yes,Dancing Swords,Deathrattle: Your opponent draws a card.,,,3,4,4,Common,Minion,Curse of Naxxramas
 yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common,Minion,Expert
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
 yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic

@@ -1553,6 +1553,9 @@ class Game(Bindable):
             copied_game.current_player = copied_game.players[1]
             copied_game.other_player = copied_game.players[0]
 
+        copied_game.current_player.opponent = copied_game.other_player
+        copied_game.other_player.opponent = copied_game.current_player
+
         for secret in copied_game.other_player.secrets:
             secret.activate(copied_game.other_player)
         return copied_game

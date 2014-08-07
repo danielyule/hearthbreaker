@@ -5,6 +5,11 @@ def draw_card(minion):
     minion.player.draw()
 
 
+def opponent_draw_two(minion):
+    minion.player.opponent.draw()
+    minion.player.opponent.draw()
+
+
 def silence(minion):
     if minion.card.target is not None:
         minion.card.target.silence()
