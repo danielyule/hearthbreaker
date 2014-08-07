@@ -2,7 +2,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
-from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost
+from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2445,3 +2445,11 @@ class SludgeBelcher(MinionCard):
             Slime().summon(minion.player, minion.game, minion.index)
 
         return Minion(3, 5, taunt=True, deathrattle=summon_slime)
+
+
+class BaronRivendare(MinionCard):
+    def __init__(self):
+        super().__init__("Baron Rivendare", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(1, 7, effects=[DoubleDeathrattle()])

@@ -317,4 +317,19 @@ class IncreaseBattlecryMinionCost(Effect):
         self.target.game.other_player.mana_filters.remove(self.mana_filter)
 
     def __str__(self):
-        return "IncreaseBattleCryMinionCost({0})".format(self.amount)
+        return "IncreaseMinionCost(battlecry, {0})".format(self.amount)
+
+
+class DoubleDeathrattle(Effect):
+
+    def apply(self):
+        self.target.player.bind("minion_died", self.trigger_deathrattle)
+
+    def unapply(self):
+        self.target.player.unbind("minion_died", self.trigger_deathrattle)
+
+    def trigger_deathrattle(self, minion, killed_by):
+        minion.deathrattle(minion)
+
+    def __str__(self):
+        return "DoubleDeathrattle()"

@@ -2391,3 +2391,26 @@ class TestCommon(unittest.TestCase):
         game.other_player.agent.choose_target = check_dragon
         game.current_player.minions[0].silence()
         game.play_single_turn()
+
+    def test_BaronRivendare(self):
+        game = generate_game_for([BloodmageThalnos, HarvestGolem, BaronRivendare], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        game.current_player.minions[1].die(None)
+        game.check_delayed()
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual("Baron Rivendare", game.current_player.minions[0].card.name)
+        self.assertEqual("Damaged Golem", game.current_player.minions[1].card.name)
+        self.assertEqual("Damaged Golem", game.current_player.minions[2].card.name)
+        self.assertEqual("Bloodmage Thalnos", game.current_player.minions[3].card.name)
+
+        # Check silence on the Baron
+        self.assertEqual(4, len(game.current_player.hand))
+        game.current_player.minions[0].silence()
+        game.current_player.minions[3].die(None)
+        game.check_delayed()
+        self.assertEqual(5, len(game.current_player.hand))

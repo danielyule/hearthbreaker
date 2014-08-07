@@ -1364,7 +1364,7 @@ class Player(Bindable):
 
     def copy(self, new_game):
         copied_player = copy.copy(self)
-        copied_player.events = copy.copy(self.events)
+        copied_player.events = dict()
         copied_player.auras = []
         copied_player.mana_filters = []
         copied_player.hero = self.hero.copy(copied_player, new_game)

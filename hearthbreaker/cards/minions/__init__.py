@@ -164,6 +164,7 @@ from hearthbreaker.cards.minions.neutral import (
     Loatheb,
     StoneskinGargoyle,
     SludgeBelcher,
+    BaronRivendare,
 )
 
 from hearthbreaker.cards.minions.druid import (
