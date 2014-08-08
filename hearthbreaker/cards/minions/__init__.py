@@ -166,6 +166,7 @@ from hearthbreaker.cards.minions.neutral import (
     SludgeBelcher,
     BaronRivendare,
     DancingSwords,
+    Deathlord,
 )
 
 from hearthbreaker.cards.minions.druid import (

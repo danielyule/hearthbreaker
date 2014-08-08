@@ -2435,3 +2435,57 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(9, len(game.current_player.hand))
+
+    def test_Deathlord(self):
+        game = generate_game_for(Deathlord, [HauntedCreeper, OasisSnapjaw, Frostbolt, WaterElemental, Pyroblast],
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        self.assertEqual("Water Elemental", game.other_player.minions[0].card.name)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+
+        self.assertEqual("Oasis Snapjaw", game.other_player.minions[1].card.name)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        self.assertEqual("Water Elemental", game.other_player.minions[2].card.name)
+
+        used_count = 0
+
+        for u in game.other_player.deck.used:
+            if u:
+                used_count += 1
+
+        self.assertEqual(11, used_count)
