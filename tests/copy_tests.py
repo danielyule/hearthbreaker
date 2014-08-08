@@ -551,3 +551,17 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, len(game.other_player.minions))
 
         self.assertEqual("Water Elemental", game.other_player.minions[2].card.name)
+
+    def test_Reincarnate(self):
+        game = generate_game_for([SylvanasWindrunner, Reincarnate], FacelessManipulator,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        # Sylvanas will die to the reincarnate, steal the Ogre, then be reborn.
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual("Faceless Manipulator", game.other_player.minions[0].card.name)
+        self.assertEqual("Sylvanas Windrunner", game.other_player.minions[1].card.name)
+        self.assertEqual("Sylvanas Windrunner", game.other_player.minions[2].card.name)

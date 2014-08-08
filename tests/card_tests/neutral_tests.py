@@ -2513,3 +2513,16 @@ class TestCommon(unittest.TestCase):
         game.other_player.agent.choose_target = check_knight
         game.current_player.minions[0].silence()
         game.play_single_turn()
+
+    def test_Reincarnate(self):
+        game = generate_game_for([BoulderfistOgre, Reincarnate], SylvanasWindrunner,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        # Sylvanas will die to the reincarnate, steal the Ogre, then be reborn.
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual("Boulderfist Ogre", game.other_player.minions[0].card.name)
+        self.assertEqual("Sylvanas Windrunner", game.other_player.minions[1].card.name)

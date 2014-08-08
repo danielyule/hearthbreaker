@@ -140,7 +140,8 @@ from hearthbreaker.cards.spells.shaman import (
     LightningStorm,
     RockbiterWeapon,
     TotemicMight,
-    Windfury
+    Windfury,
+    Reincarnate,
 )
 
 from hearthbreaker.cards.spells.warlock import (

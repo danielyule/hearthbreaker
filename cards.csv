@@ -288,7 +288,7 @@ yes,Ravenholdt Assassin,Stealth,,,7,7,5,Rare,Minion,Expert
 yes,Razorfen Hunter,Battlecry: Summon a 1/1 Boar.,,,3,2,3,Common,Minion,Basic
 yes,Reckless Rocketeer,Charge,,,6,5,2,Free,Minion,Basic
 yes,Redemption,"Secret: When one of your minions dies, return it to life with 1 Health.",,Paladin,1,,,Common,Spell,Expert
-no,Reincarnate,"Destroy one of your minions, then return it to life with full Health",,Shaman,2,,,Common,Spell,Curse of Naxxramas
+yes,Reincarnate,"Destroy one of your minions, then return it to life with full Health",,Shaman,2,,,Common,Spell,Curse of Naxxramas
 yes,Repentance,"Secret: When your opponent plays a minion, reduce its Health to 1.",,Paladin,1,,,Common,Spell,Expert
 yes,River Crocolisk,,Beast,,2,2,3,Free,Minion,Basic
 yes,Rockbiter Weapon,Give a friendly character +3 Attack this turn.,,Shaman,1,,,Free,Spell,Basic

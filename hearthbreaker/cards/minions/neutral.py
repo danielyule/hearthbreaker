@@ -1071,17 +1071,13 @@ class SylvanasWindrunner(MinionCard):
 
     def create_minion(self, player):
         def assume_direct_control(m):
-            enemy = []
-            enemy.append(player.game.current_player)
-            enemy.append(player.game.other_player)
-            enemy.remove(m.player)
-            enemy_player = enemy.pop()
-            targets = copy.copy(enemy_player.minions)
+
+            targets = copy.copy(m.player.opponent.minions)
             if len(targets) > 0:
                 target = targets[player.game.random(0, len(targets) - 1)]
-                new_minion = target.copy(player)
+                new_minion = target.copy(m.player)
                 target.remove_from_board()
-                new_minion.add_to_board(len(player.minions))
+                new_minion.add_to_board(len(m.player.minions))
 
         return Minion(5, 5, deathrattle=assume_direct_control)
 
