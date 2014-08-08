@@ -331,7 +331,7 @@ yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant."""
 yes,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Common,Spell,Basic
 yes,Southsea Captain,Your other Pirates have +1/+1.,Pirate,,3,3,3,Epic,Minion,Expert
 yes,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,Common,Minion,Expert
-no,Spectral Knight,Can't be targeted by spells or hero powers.,,,5,4,6,Common,Minion,Expert
+yes,Spectral Knight,Can't be targeted by spells or hero powers.,,,5,4,6,Common,Minion,Expert
 yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 as the new target.",,Mage,3,,,Epic,Spell,Expert
 yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Common,Minion,Expert
 yes,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Common,Minion,Expert

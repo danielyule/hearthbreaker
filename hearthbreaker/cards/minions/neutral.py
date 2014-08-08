@@ -2470,3 +2470,11 @@ class Deathlord(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 8, taunt=True, deathrattle=put_minion_on_battlefield)
+
+
+class SpectralKnight(MinionCard):
+    def __init__(self):
+        super().__init__("Spectral Knight", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(4, 6, spell_targetable=False)
