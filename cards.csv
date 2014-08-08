@@ -377,7 +377,7 @@ yes,Vanish,Return all minions to their owner's hand.,,Rogue,6,,,Common,Spell,Bas
 yes,Vaporize,"Secret: When a minion attacks your hero, destroy it.",,Mage,3,,,Rare,Spell,Expert
 yes,Venture Co. Mercenary,Your minions cost (3) more.,,,5,7,6,Common,Minion,Expert
 yes,Violet Teacher,"Whenever you cast a spell, summon a 1/1 Violet Apprentice.",,,4,3,5,Rare,Minion,Expert
-no,Void Caller,Deathrattle: Put a random demon from your hand into the battlefield.,Demon,,4,3,4,Common,Minion,Curse of Naxxramas
+yes,Voidcaller,Deathrattle: Put a random demon from your hand into the battlefield.,Demon,Warlock,4,3,4,Common,Minion,Curse of Naxxramas
 yes,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Rare,Minion,Expert
 yes,Voidwalker,Taunt,Demon,Warlock,1,1,3,Free,Minion,Basic
 yes,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Free,Minion,Basic

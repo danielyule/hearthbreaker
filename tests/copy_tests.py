@@ -565,3 +565,17 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual("Faceless Manipulator", game.other_player.minions[0].card.name)
         self.assertEqual("Sylvanas Windrunner", game.other_player.minions[1].card.name)
         self.assertEqual("Sylvanas Windrunner", game.other_player.minions[2].card.name)
+
+    def test_Voidcaller(self):
+        game = generate_game_for(Assassinate, [Voidcaller, FlameImp, ArgentSquire, BoulderfistOgre, StonetuskBoar],
+                                 SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Voidcaller", game.current_player.minions[0].card.name)
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Flame Imp", game.other_player.minions[0].card.name)

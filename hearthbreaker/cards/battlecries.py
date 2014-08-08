@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.constants import MINION_TYPE
 import hearthbreaker.game_objects
 
 
@@ -165,7 +166,7 @@ def return_to_hand(minion):
         minion.card.target.bounce()
 
 
-def put_minion_on_battlefield(minion):
+def put_friendly_minion_on_board_from_enemy_deck(minion):
     player = minion.player.opponent
     index_list = []
     index = 0
@@ -177,3 +178,17 @@ def put_minion_on_battlefield(minion):
         chosen_index = player.game.random(0, len(index_list) - 1)
         player.deck.used[index_list[chosen_index]] = True
         player.deck.cards[index_list[chosen_index]].summon(player, player.game, len(player.minions))
+
+
+def put_minion_on_board_from_hand(minion):
+    player = minion.player
+    index_list = []
+    index = 0
+    for card in player.hand:
+        if isinstance(card, hearthbreaker.game_objects.MinionCard) and card.minion_type == MINION_TYPE.DEMON:
+            index_list.append(index)
+        index += 1
+    if len(index_list) > 0:
+        chosen_index = player.game.random(0, len(index_list) - 1)
+        player.hand[index_list[chosen_index]].summon(player, player.game, len(player.minions))
+        player.hand.remove(player.hand[index_list[chosen_index]])

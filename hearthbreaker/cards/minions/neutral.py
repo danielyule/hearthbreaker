@@ -2,7 +2,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
-    put_minion_on_battlefield
+    put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -2465,7 +2465,7 @@ class Deathlord(MinionCard):
         super().__init__("Deathlord", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 8, taunt=True, deathrattle=put_minion_on_battlefield)
+        return Minion(2, 8, taunt=True, deathrattle=put_friendly_minion_on_board_from_enemy_deck)
 
 
 class SpectralKnight(MinionCard):

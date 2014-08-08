@@ -248,7 +248,8 @@ from hearthbreaker.cards.minions.warlock import (
     SummoningPortal,
     BloodImp,
     LordJaraxxus,
-    VoidTerror
+    VoidTerror,
+    Voidcaller,
 )
 
 from hearthbreaker.cards.minions.warrior import (

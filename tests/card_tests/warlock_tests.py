@@ -352,10 +352,6 @@ class TestWarlock(unittest.TestCase):
         # Enemy minion still alive until start of my turn
         self.assertEqual(1, len(game.players[1].minions))
 
-        # def just_die():
-        #    game.players[0].minions[0].activate_delayed()
-        # game.players[0].bind("turn_started", just_die)
-
         game.play_single_turn()
         # Corruption resolves at start of my turn, no targets to use remaining cards on
         self.assertEqual(0, len(game.players[1].minions))
@@ -515,3 +511,17 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(5, game.players[0].minions[0].health)
+
+    def test_Voidcaller(self):
+        game = generate_game_for(Assassinate, [Voidcaller, FlameImp, ArgentSquire, BoulderfistOgre, StonetuskBoar],
+                                 SpellTestingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Voidcaller", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Flame Imp", game.other_player.minions[0].card.name)
