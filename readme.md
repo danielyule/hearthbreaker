@@ -1,13 +1,14 @@
-HearthBreaker
+Hearthbreaker
 =============
 A Hearthstone Simulator
 -----------------------
 
-The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
-data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  The end goal
-is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
-them.  The results from these games can be used to determine cards which work well together and cards which do not.
-The goal is not to create a clone of Hearthstone with which players can replace the game.
+Heahrtbreaker is an open source Hearthstone simulator for the purposes of machine learning and
+data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  It implements every 
+collectible card in the game, and can be used for AIs to play games against each other.   The results from these 
+games can be used to determine cards which work well together and cards which do not.  Hearthbreaker is not designed
+to allow player to play Hearthstone against each other, nor is it designed to play against human opponents within
+Hearthstone itself.
 
  * Documentation (In Progress) [http://danielyule.github.io/hearthbreaker/](http://danielyule.github.io/hearthbreaker/)
  * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthbreaker.svg?branch=master)](https://travis-ci.org/danielyule/hearthbreaker)
