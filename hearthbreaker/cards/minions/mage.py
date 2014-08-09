@@ -1,5 +1,6 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.effects import GrowOnSpell
 from hearthbreaker.game_objects import MinionCard, Minion, SecretCard
 
 
@@ -8,13 +9,7 @@ class ManaWyrm(MinionCard):
         super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def increase_attack(card):
-            minion.change_attack(1)
-
-        minion = Minion(1, 3)
-        player.bind("spell_cast", increase_attack)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
-        return minion
+        return Minion(1, 3, effects=[GrowOnSpell(1, 0)])
 
 
 class SorcerersApprentice(MinionCard):

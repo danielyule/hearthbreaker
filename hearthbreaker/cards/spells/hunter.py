@@ -241,8 +241,8 @@ class UnleashTheHounds(Card):
                 minion = Minion(1, 1, MINION_TYPE.BEAST)
                 minion.charge = True
                 return minion
-        hound = Hound()
-        for target in hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True):
+        for target in hearthbreaker.targeting.find_enemy_minion_spell_target(player.game, lambda x: True):
+            hound = Hound()
             hound.summon(player, game, len(player.minions))
 
 

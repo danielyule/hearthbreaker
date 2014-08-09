@@ -349,3 +349,36 @@ class HealAsDamage(Effect):
 
     def __str__(self):
         return "HealAsDamage()"
+
+
+class GrowOnSpell(Effect):
+    """
+    Grows each time a spell is played.  The type of how much attack
+    and health should be increased can be specified
+    """
+
+    def __init__(self, attack, health):
+        """
+        Create a new GrowOnSpell
+
+        :param int attack: How much to increase attack when a spell is played
+        :param int health: How much to increase health when a spell is played
+        """
+        super().__init__()
+        self.attack = attack
+        self.health = health
+
+    def apply(self):
+        self.target.player.bind("spell_cast", self.increase_stats)
+
+    def unapply(self):
+        self.target.player.unbind("spell_cast", self.increase_stats)
+
+    def increase_stats(self, card):
+        if self.attack > 0:
+            self.target.change_attack(self.attack)
+        if self.health > 0:
+            self.target.increase_health(self.health)
+
+    def __str__(self):
+        return "GrowOn(spell, {0}, {1})".format(self.attack, self.health)

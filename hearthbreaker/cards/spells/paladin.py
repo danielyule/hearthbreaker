@@ -86,7 +86,8 @@ class DivineFavor(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        while len(game.other_player.hand) > len(player.hand):
+        difference = len(game.other_player.hand) - len(player.hand)
+        for i in range(0, difference):
             player.draw()
 
 

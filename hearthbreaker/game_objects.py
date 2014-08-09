@@ -160,7 +160,7 @@ class Bindable:
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
-                if not handler.active:
+                if not handler.active and handler in self.events[event]:
                     handler.active = True
                     handler.function(*args)
                     handler.active = False
@@ -936,6 +936,7 @@ class Minion(Character):
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
+        self.removed = True
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         self.player.minions[self.index] = new_minion
@@ -1570,7 +1571,6 @@ class Game(Bindable):
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.current_player.trigger("card_played", card)
-        self.current_player.hand.remove(card)
         if card.can_use(self.current_player, self):
             self.current_player.mana -= card.mana_cost(self.current_player)
             if card.overload != 0:
@@ -1578,6 +1578,7 @@ class Game(Bindable):
         else:
             raise GameException("Tried to play card that could not be played")
 
+        self.current_player.hand.remove(card)
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)
 

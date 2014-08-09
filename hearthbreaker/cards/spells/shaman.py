@@ -82,7 +82,8 @@ class FarSight(Card):
         filter = None
         player.bind("card_drawn", reduce_cost)
         player.draw()
-        player.mana_filters.append(filter)
+        if filter is not None:
+            player.mana_filters.append(filter)
 
 
 class FeralSpirit(Card):

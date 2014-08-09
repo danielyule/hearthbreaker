@@ -33,7 +33,7 @@ class Brawl(Card):
         minions = copy.copy(player.minions)
         minions.extend(game.other_player.minions)
 
-        while len(minions) != 1:
+        while len(minions) > 1:
             minion = minions.pop(game.random(0, len(minions) - 1))
             minion.die(self)
 
@@ -41,7 +41,7 @@ class Brawl(Card):
 class Charge(Card):
     def __init__(self):
         super().__init__("Charge", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

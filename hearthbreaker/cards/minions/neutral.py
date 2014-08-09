@@ -893,12 +893,14 @@ class BloodKnight(MinionCard):
     def create_minion(self, player):
         def collect_divine_shields(minion):
             shields_stolen = 0
-            for target in hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda m: m.divine_shield):
-                shields_stolen += 1
-                target.divine_shield = False
-            for i in range(0, shields_stolen):
-                minion.increase_health(3)
-                minion.change_attack(3)
+            targets = hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda m: m.divine_shield)
+            if targets is not None:
+                for target in targets:
+                    shields_stolen += 1
+                    target.divine_shield = False
+                for i in range(0, shields_stolen):
+                    minion.increase_health(3)
+                    minion.change_attack(3)
         return Minion(3, 3, battlecry=collect_divine_shields)
 
 
@@ -1628,11 +1630,12 @@ class IllidanStormrage(MinionCard):
 
                 def create_minion(self, player):
                     return Minion(2, 1)
-            flame = FlameOfAzzinoth()
-            flame.summon(minion.player, minion.player.game, minion.index + 1)
+            if card is not self:
+                flame = FlameOfAzzinoth()
+                flame.summon(minion.player, minion.player.game, minion.index + 1)
 
         minion = Minion(7, 5)
-        player.bind("card_played", summon_flame)
+        player.bind("card_used", summon_flame)
         minion.bind_once("silenced", lambda: player.unbind("card_played", summon_flame))
         return minion
 
@@ -2205,7 +2208,7 @@ class GelbinMekkatorque(MinionCard):
                         for i in range(0, 3):
                             player.draw()
                     minion = Minion(0, 1)
-                    player.bind("turn_started", death_draw)
+                    player.bind_once("turn_started", death_draw)
                     minion.bind_once("silenced", lambda: player.unbind("turn_started", death_draw))
                     return minion
 
@@ -2246,8 +2249,9 @@ class GelbinMekkatorque(MinionCard):
                         for m in hearthbreaker.targeting.find_spell_target(
                                 player.game, lambda x: x.health != x.calculate_max_health()):
                             targets.append(m)
-                        repairee = targets[player.game.random(0, len(targets) - 1)]
-                        repairee.heal(6, self)
+                        if len(targets) > 0:
+                            repairee = targets[player.game.random(0, len(targets) - 1)]
+                            repairee.heal(6, self)
                     minion = Minion(0, 3)
                     player.bind("turn_ended", repair)
                     minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
@@ -2403,8 +2407,8 @@ class Loatheb(MinionCard):
 
             mana_filter = ManaFilter()
             minion.game.other_player.mana_filters.append(mana_filter)
-            minion.game.other_player.bind("turn_ended",
-                                          lambda: minion.game.current_player.mana_filters.remove(mana_filter))
+            minion.game.other_player.bind_once("turn_ended",
+                                               lambda: minion.game.current_player.mana_filters.remove(mana_filter))
 
         return Minion(5, 5, battlecry=increase_card_cost)
 

@@ -167,7 +167,8 @@ class BaneOfDoom(Card):
         super().use(player, game)
         demon_list = [BloodImp, VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard]
         card = demon_list[game.random(0, len(demon_list) - 1)]
-        if self.target.health <= player.effective_spell_damage(2) and not self.target.divine_shield:
+        if self.target.health <= player.effective_spell_damage(2) and \
+                (isinstance(self.target, Minion) and not self.target.divine_shield):
             self.target.damage(player.effective_spell_damage(2), self)
             card().summon(player, game, len(player.minions))
         else:
