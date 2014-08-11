@@ -511,3 +511,37 @@ class KillOnDamage(Effect):
 
     def __str__(self):
         return "OnDamage(kill)"
+
+
+class DrawOnAttack(Effect):
+    """
+    Draw some number of cards when this character attacks.  This effect will always affect a given player, regardless
+    of who owns the minion
+    """
+    def __init__(self, amount=1, first_player=True):
+        """
+        Creates a new DrawOnAttack effect
+
+        :param int amount: The number of cards to draw when attacking
+        :param boolean first_player: True if this will draw cards for the first player, false to draw for the second
+        """
+        super().__init__()
+        self.amount = amount
+        self.first_player = first_player
+
+    def apply(self):
+        self.target.bind("attack", self.draw)
+
+    def unapply(self):
+        self.target.unbind("attack", self.draw)
+
+    def draw(self, attack_target):
+        if self.first_player:
+            player = self.target.game.players[0]
+        else:
+            player = self.target.game.players[1]
+        for i in range(0, self.amount):
+            player.draw()
+
+    def __str__(self):
+        return("DrawOn(attack, {0})").format(self.amount)

@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects import DrawOnAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard
@@ -59,13 +60,8 @@ class BlessingOfWisdom(Card):
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        def draw(*args):
-            player.draw()
-
         super().use(player, game)
-        target = self.target
-        target.bind("attack", draw)
-        target.bind_once("silenced", lambda: target.unbind("attack", draw))
+        self.target.add_effect(DrawOnAttack(amount=1, first_player=player is game.players[0]))
 
 
 class Consecration(Card):

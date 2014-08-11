@@ -1097,7 +1097,8 @@ class Minion(Character):
     def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.base_attack, self.base_health, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
-        new_minion.events = copy.copy(self.events)
+        new_minion.events = dict()
+        new_minion.bind("did_damage", self.__on_did_damage)
         new_minion.stealth = self.stealth
         new_minion.taunt = self.taunt
         new_minion.divine_shield = self.divine_shield
