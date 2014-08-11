@@ -162,17 +162,22 @@ class Spellbender(SecretCard):
                     return Minion(1, 3)
 
             def choose_bender(targets):
-                spell_bender = SpellbenderMinion()
-                # Seems according to http://us.battle.net/hearthstone/en/forum/topic/10070927066, spellbender
-                # will not activate if there are too many minions
-                spell_bender.summon(self.player, self.player.game, len(self.player.minions))
-                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
-                self.player.game.current_player.agent.choose_target = old_target
-                return self.player.minions[-1]
+                target = old_target(targets)
+                if isinstance(target, Minion):
+                    spell_bender = SpellbenderMinion()
+                    # Seems according to http://us.battle.net/hearthstone/en/forum/topic/10070927066, spellbender
+                    # will not activate if there are too many minions
+                    spell_bender.summon(self.player, self.player.game, len(self.player.minions))
+                    self.player.game.current_player.agent.choose_target = old_target
+                    super(Spellbender, self).reveal()
+                    return self.player.minions[-1]
+                else:
+                    self.activate(self.player)
+                    return target
 
             old_target = self.player.game.current_player.agent.choose_target
             self.player.game.current_player.agent.choose_target = choose_bender
-            super().reveal()
+
         else:
             self.activate(self.player)
 

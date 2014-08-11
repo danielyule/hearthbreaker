@@ -316,16 +316,27 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[1].index)
 
     def test_Spellbender(self):
-        game = generate_game_for(Spellbender, Moonfire, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for([Spellbender, Wisp], Moonfire, SpellTestingAgent, SpellTestingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
 
         # The moonfire should have been re-directed to the Spellbender, which should have taken one damage
-        self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual(2, game.other_player.minions[0].health)
-        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
-        self.assertEqual("Spellbender", game.other_player.minions[0].card.name)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[1].health)
+        self.assertEqual(1, game.other_player.minions[1].calculate_attack())
+        self.assertEqual("Spellbender", game.other_player.minions[1].card.name)
+
+        # Now make sure it won't work when the hero is targeted
+        random.seed(1857)
+        game = generate_game_for(Spellbender, Moonfire, SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertEqual(23, game.other_player.hero.health)
 
         # Now make sure it doesn't activate when a non-targeted spell is used
         random.seed(1857)
