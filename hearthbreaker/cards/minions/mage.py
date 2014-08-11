@@ -1,6 +1,6 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects import GrowOnSpell
+from hearthbreaker.effects import GrowOnSpell, ManaFilter, GrowIfSecret, AddCardOnSpell
 from hearthbreaker.game_objects import MinionCard, Minion, SecretCard
 
 
@@ -17,17 +17,7 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = 1
-                self.filter = lambda c: c.is_spell()
-                self.min = 0
-
-        mana_filter = Filter()
-        minion = Minion(3, 2)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
-        player.mana_filters.append(mana_filter)
-        return minion
+        return Minion(3, 2, effects=[ManaFilter(1, "spell")])
 
 
 class KirinTorMage(MinionCard):
@@ -38,8 +28,7 @@ class KirinTorMage(MinionCard):
         def first_secret_cost_zero(m):
             class Filter:
                 def __init__(self):
-                    # To make sure that no matter what the cost of a secret, it
-                    # will be 0
+                    # To make sure that no matter what the cost of a secret, it will be 0
                     self.amount = 100
                     self.filter = lambda c: type(c) in SecretCard.__subclasses__()
                     self.min = 0
@@ -67,18 +56,7 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def increase_stats():
-            if len(player.secrets) > 0:
-                minion.change_attack(2)
-                minion.increase_health(2)
-
-        def silence():
-            player.unbind("turn_ended", increase_stats)
-
-        minion = Minion(3, 3)
-        player.bind("turn_ended", increase_stats)
-        minion.bind_once("silenced", silence)
-        return minion
+        return Minion(3, 3, effects=[GrowIfSecret(2, 2)])
 
 
 class WaterElemental(MinionCard):
@@ -99,11 +77,4 @@ class ArchmageAntonidas(MinionCard):
         super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def add_fireball(c):
-            if len(player.hand) < 10:
-                player.hand.append(hearthbreaker.cards.Fireball())
-
-        minion = Minion(5, 7)
-        player.bind("spell_cast", add_fireball)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
-        return minion
+        return Minion(5, 7, effects=[AddCardOnSpell(hearthbreaker.cards.Fireball)])

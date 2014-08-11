@@ -198,12 +198,8 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.other_player.minions[0].frozen)
 
     def test_SorcerersApprentice(self):
-        deck1 = StackedDeck([SorcerersApprentice(), ArcaneMissiles(), SorcerersApprentice(), Frostbolt(), Frostbolt(),
-                             Frostbolt()], CHARACTER_CLASS.MAGE)
-        deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.PRIEST)
-        game = Game([deck1, deck2], [SpellTestingAgent(), DoNothingBot()])
-        game.pre_game()
-        game.current_player = game.players[1]
+        game = generate_game_for([SorcerersApprentice, ArcaneMissiles, SorcerersApprentice, Frostbolt, Frostbolt,
+                                  Frostbolt], StonetuskBoar, SpellTestingAgent, DoNothingBot)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -228,7 +224,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
 
         # Make sure that the cards in hand are no longer reduced
-        self.assertEqual(2, game.current_player.hand[0].mana)
+        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
 
     def test_ArcaneIntellect(self):
         game = generate_game_for(ArcaneIntellect, StonetuskBoar, SpellTestingAgent, DoNothingBot)

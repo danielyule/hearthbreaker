@@ -384,9 +384,7 @@ class StormwindKnight(MinionCard):
         super().__init__("Stormwind Knight", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(2, 5)
-        minion.charge = True
-        return minion
+        return Minion(2, 5, charge=True)
 
 
 class StranglethornTiger(MinionCard):
@@ -2374,10 +2372,7 @@ class NerubarWeblord(MinionCard):
         super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-
-        minion = Minion(1, 4)
-        minion._effects_to_add.append(IncreaseBattlecryMinionCost(2))
-        return minion
+        return Minion(1, 4, effects=[IncreaseBattlecryMinionCost(2)])
 
 
 class UnstableGhoul(MinionCard):
@@ -2386,9 +2381,9 @@ class UnstableGhoul(MinionCard):
 
     def create_minion(self, player):
         def deal_one_to_minions(minion):
-            for target in hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda x: True):
+            for target in hearthbreaker.targeting.find_minion_battlecry_target(minion.game, lambda x: True):
                 target.damage(1, self)
-                player.game.check_delayed()
+                minion.game.check_delayed()
 
         return Minion(1, 3, deathrattle=deal_one_to_minions, taunt=True)
 
@@ -2399,16 +2394,7 @@ class Loatheb(MinionCard):
 
     def create_minion(self, player):
         def increase_card_cost(minion):
-            class ManaFilter:
-                def __init__(self):
-                    self.amount = -5
-                    self.filter = lambda c: c.is_spell()
-                    self.min = 0
-
-            mana_filter = ManaFilter()
-            minion.game.other_player.mana_filters.append(mana_filter)
-            minion.game.other_player.bind_once("turn_ended",
-                                               lambda: minion.game.current_player.mana_filters.remove(mana_filter))
+            minion.player.opponent.add_card_filter(-5, "spell", "turn_ended")
 
         return Minion(5, 5, battlecry=increase_card_cost)
 

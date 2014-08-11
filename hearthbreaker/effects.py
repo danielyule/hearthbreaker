@@ -1,5 +1,5 @@
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect, MinionCard
+from hearthbreaker.game_objects import Effect, MinionCard, SecretCard
 
 
 class KillMinion(Effect):
@@ -382,3 +382,97 @@ class GrowOnSpell(Effect):
 
     def __str__(self):
         return "GrowOn(spell, {0}, {1})".format(self.attack, self.health)
+
+
+class ManaFilter(Effect):
+    """
+    Associates a mana filter with this minion.  A mana filter affects a player by making cards of a certain type
+    cost more or less.  The amount to change, player affected, and cards changed can all be customized
+    """
+    def __init__(self, amount, filter_type="card", minimum=0, player="friendly"):
+        """
+        Creates a new mana filter
+
+        :param int amount: The amount to reduce mana by (can be negative)
+        :param string filter_type: A filter to determine which cards can be affected.  Should be one of "card",
+                                   "spell", "secret" or "minion"
+        :param int minimum: The least amount that this filter can adjust the card to
+
+        """
+        super().__init__()
+        self.amount = amount
+        self.minimum = minimum
+        self.filter_type = filter_type
+        self.filter_object = None
+        self.player = player
+
+    def apply(self):
+        if self.filter_type == "minion":
+            my_filter = lambda c: isinstance(c, MinionCard)
+        elif self.filter_type == "spell":
+            my_filter = lambda c: c.is_spell()
+        elif self.filter_type == "secret":
+            my_filter = lambda c: isinstance(c, SecretCard)
+        else:
+            my_filter = lambda c: True
+
+        class Filter:
+            def __init__(self, amount, minimum, filter):
+                self.amount = amount
+                self.min = minimum
+                self.filter = filter
+
+        self.filter_object = Filter(self.amount, self.minimum, my_filter)
+        if self.player == "friendly" or self.player == "both":
+            self.target.player.mana_filters.append(self.filter_object)
+        if self.player == "enemy" or self.player == "both":
+            self.target.player.opponent.mana_filters.append(self.filter_object)
+
+    def unapply(self):
+        if self.player == "friendly" or self.player == "both":
+            self.target.player.mana_filters.remove(self.filter_object)
+        if self.player == "enemy" or self.player == "both":
+            self.target.player.opponent.mana_filters.remove(self.filter_object)
+
+    def __str__(self):
+        return "ManaFilter({0}, {1}, {2}, {3})".format(self.amount, self.minimum, self.filter_type, self.player)
+
+
+class GrowIfSecret(Effect):
+    def __init__(self, attack, health):
+        super().__init__()
+        self.attack = attack
+        self.health = health
+
+    def apply(self):
+        self.target.player.bind("turn_ended", self.increase_stats)
+
+    def unapply(self):
+        self.target.player.unbind("turn_ended", self.increase_stats)
+
+    def increase_stats(self):
+        if len(self.target.player.secrets) > 0:
+            self.target.change_attack(self.attack)
+            self.target.increase_health(self.health)
+
+    def __str__(self):
+        return "GrowIf(Secret, {0}, {1})".format(self.attack, self.health)
+
+
+class AddCardOnSpell(Effect):
+    def __init__(self, card):
+        super().__init__()
+        self.card = card
+
+    def apply(self):
+        self.target.player.bind("spell_cast", self.add_card)
+
+    def unapply(self):
+        self.target.player.unbind("spell_cast", self.add_card)
+
+    def add_card(self, spell_card):
+        if len(self.target.player.hand) < 10:
+            self.target.player.hand.append(self.card())
+
+    def __str__(self):
+        return "AddOnSpell({0})".format(self.card().name)

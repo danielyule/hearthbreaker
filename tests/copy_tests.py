@@ -579,3 +579,49 @@ class TestMinionCopying(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Flame Imp", game.other_player.minions[0].card.name)
+
+    def test_SorcerersApprentice(self):
+        game = generate_game_for([SorcerersApprentice, ArcaneMissiles, SorcerersApprentice, Frostbolt, Frostbolt,
+                                  Frostbolt], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual("Sorcerer's Apprentice", game.current_player.minions[0].card.name)
+
+        # Arcane missiles should also have been played, since it is now free
+        self.assertEqual(27, game.other_player.hero.health)
+
+        game = game.copy()
+        # Make sure the other frostbolts have been properly reduced
+        self.assertEqual(1, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(1, game.current_player.hand[2].mana_cost(game.current_player))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Both Sorcer's Apprentices are killed by friendly Frostbolts.
+        self.assertEqual(0, len(game.current_player.minions))
+
+        # Make sure that the cards in hand are no longer reduced
+        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
+
+    def test_Loatheb(self):
+        game = generate_game_for(Loatheb, [Assassinate, BoulderfistOgre], MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        game = game.copy()
+
+        self.assertEqual(10, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(6, game.other_player.hand[1].mana_cost(game.other_player))
+
+        game.play_single_turn()
+
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(6, game.current_player.hand[1].mana_cost(game.current_player))
