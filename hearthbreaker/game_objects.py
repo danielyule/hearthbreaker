@@ -1306,6 +1306,7 @@ class Hero(Character):
             new_hero.weapon = self.weapon.copy(new_owner, new_game)
         new_hero.player = new_owner
         new_hero.power = copy.copy(self.power)
+        new_hero.power.hero = new_hero
         return new_hero
 
     def attack(self):
@@ -1374,7 +1375,8 @@ class Player(Bindable):
         copied_player.mana_filters = []
         copied_player.card_filters = []
         for card_filter in self.card_filters:
-            copied_player.add_card_filter(card_filter.amount, card_filter.filter, card_filter.until)
+            copied_player.add_card_filter(card_filter.amount, card_filter.filter, card_filter.until,
+                                          card_filter.only_first)
         copied_player.hero = self.hero.copy(copied_player, new_game)
         copied_player.deck = self.deck.copy()
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
@@ -1425,23 +1427,28 @@ class Player(Bindable):
             self.hand.remove(target)
             self.trigger("card_discarded", target)
 
-    def add_card_filter(self, amount, card_filter="card", until="turn_started"):
+    def add_card_filter(self, amount, card_filter="card", until="turn_started", only_first=False):
         """
         Adds a mana filter to the cards that this player has.  Unlike the
         :class:`ManaFilter effect <hearthbreaker.effects.ManaFilter`, this filter is not tied to any minion, but
-        instead will remain until an event.
+        instead will remain until an event occurs or, if `only_first` is True a card which matches the filter is played,
+        whichever comes first.
 
         :param int amount: The amount to decrease the mana cost of effected cards
         :param string card_filter: The type of cards to affect.  Possible values are "minion", "spell", "secret" and
                                    "card"
         :param string until: The event to remove this mana filter.  Suggestions are "turn_started" for the start of the
-                             next turn and "turn_ended" for the end of the current turn
+                             next turn and "turn_ended" for the end of the current turn.  The filter will be removed
+                             regardless of the `only_first` parameter.
+        :param boolean only_first: True if this card filter should be removed the first time a player plays a card which
+                                   matches the filter
         """
         class CardEffect:
             def __init__(self):
                 self.amount = amount
                 self.filter = card_filter
                 self.until = until
+                self.only_first = only_first
 
         if card_filter == "minion":
             my_filter = lambda c: isinstance(c, MinionCard)
@@ -1466,8 +1473,17 @@ class Player(Bindable):
         def remove():
             self.card_filters.remove(card_effect)
             self.mana_filters.remove(mana_filter)
+            if only_first:
+                self.unbind("card_played", card_played)
+
+        def card_played(card):
+            if my_filter(card):
+                remove()
+                self.unbind(until, remove)
 
         self.bind_once(until, remove)
+        if only_first:
+            self.bind("card_played", card_played)
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
@@ -1619,12 +1635,9 @@ class Game(Bindable):
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
         self.current_player.trigger("card_played", card)
-        if card.can_use(self.current_player, self):
-            self.current_player.mana -= card.mana_cost(self.current_player)
-            if card.overload != 0:
-                self.current_player.trigger("overloaded")
-        else:
-            raise GameException("Tried to play card that could not be played")
+        self.current_player.mana -= card.mana_cost(self.current_player)
+        if card.overload != 0:
+            self.current_player.trigger("overloaded")
 
         self.current_player.hand.remove(card)
         if card.is_spell():

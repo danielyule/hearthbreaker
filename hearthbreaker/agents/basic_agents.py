@@ -24,9 +24,6 @@ class DoNothingBot:
 
 
 class PredictableBot:
-    def __init__(self):
-        self.game = None
-
     def do_card_check(self, cards):
         return [True, True, True, True]
 

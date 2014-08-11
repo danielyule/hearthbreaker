@@ -476,3 +476,38 @@ class AddCardOnSpell(Effect):
 
     def __str__(self):
         return "AddOnSpell({0})".format(self.card().name)
+
+
+class FreezeOnDamage(Effect):
+    def __init__(self):
+        super().__init__()
+
+    def did_damage(self, amount, damaged_minion):
+        damaged_minion.freeze()
+
+    def apply(self):
+        self.target.bind("did_damage", self.did_damage)
+
+    def unapply(self):
+        self.target.unbind("did_damage", self.did_damage)
+
+    def __str__(self):
+        return "OnDamage(freeze)"
+
+
+class KillOnDamage(Effect):
+    def __init__(self):
+        super().__init__()
+
+    def did_damage(self, amount, damaged_minion):
+        damaged_minion.die()
+        self.target.game.check_delayed()
+
+    def apply(self):
+        self.target.bind("did_damage", self.did_damage)
+
+    def unapply(self):
+        self.target.unbind("did_damage", self.did_damage)
+
+    def __str__(self):
+        return "OnDamage(kill)"
