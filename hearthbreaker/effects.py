@@ -1,5 +1,5 @@
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect, MinionCard, SecretCard
+from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion
 
 
 class KillMinion(Effect):
@@ -500,8 +500,9 @@ class KillOnDamage(Effect):
         super().__init__()
 
     def did_damage(self, amount, damaged_minion):
-        damaged_minion.die()
-        self.target.game.check_delayed()
+        if isinstance(damaged_minion, Minion):
+            damaged_minion.die(None)
+            self.target.game.check_delayed()
 
     def apply(self):
         self.target.bind("did_damage", self.did_damage)

@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects import KillOnDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -71,14 +72,7 @@ class PatientAssassin(MinionCard):
         super().__init__("Patient Assassin", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        def poisonous(amount, target):
-            if type(target) is Minion:
-                target.die(self)
-
-        minion = Minion(1, 1, stealth=True)
-        minion.bind("did_damage", poisonous)
-        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
-        return minion
+        return Minion(1, 1, stealth=True, effects=[KillOnDamage()])
 
 
 class SI7Agent(MinionCard):
