@@ -87,12 +87,14 @@ yes,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.
 yes,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Common,Minion,Expert
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Common,Minion,Basic
 yes,Dancing Swords,Deathrattle: Your opponent draws a card.,,,3,4,4,Common,Minion,Curse of Naxxramas
+no,Dark Cultist,Deahrattle: Give a random friendly minion +3 Health.,,Priest,3,3,4,Common,Minion,Curse of Naxxramas
 yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common,Minion,Expert
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
 yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic
 yes,Deadly Shot,Destroy a random enemy minion.,,Hunter,3,,,Common,Spell,Expert
 yes,Deathlord,Taunt. Deathrattle: Your opponent puts a minion from their deck into the battlefield,,,3,2,8,Rare,Minion,Curse of Naxxramas
 yes,Deathwing,Battlecry: Destroy all other minions and discard your hand.,Dragon,,10,12,12,Legendary,Minion,Expert
+no,Death's Bite,Deathrattle: Deal 1 damage to all minions.,,Warrior,4,4,2,Common,Weapon,Curse of Naxxramas
 yes,Defender of Argus,Battlecry: Give adjacent minions +1/+1 and Taunt.,,,4,2,3,Rare,Minion,Expert
 yes,Defias Ringleader,Combo: Summon a 2/1 Defias Bandit.,,Rogue,2,2,2,Common,Minion,Expert
 yes,Demolisher,"At the start of your turn, deal 2 damage to a random enemy.",,,3,1,4,Rare,Minion,Expert
@@ -150,6 +152,7 @@ yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Common,Spell
 yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion,Basic
 yes,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion,Basic
 yes,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
+no,Feugen,"Deathrattle: If Stalagg also died this game, summon Thadius.",,,5,4,7,Legendary,Minion,Curse of Naxxramas
 yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Rare,Minion,Expert
 yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
@@ -220,6 +223,7 @@ yes,Lord Jaraxxus,Battlecry: Destroy your hero and replace him with Lord Jaraxxu
 yes,Lord of the Arena,Taunt,,,6,6,5,Common,Minion,Basic
 yes,Lorewalker Cho,"Whenever a player casts a spell, put a copy into the other player?s hand.",,,2,0,4,Legendary,Minion,Expert
 yes,Mad Bomber,Battlecry: Deal 3 damage randomly split between all other characters.,,,2,3,2,Common,Minion,Expert
+no,Mad Scientist,Deathrattle: Put a Secret from your deck onto the battlefield.,,,2,2,2,Common,Minion,Curse of Naxxramas
 yes,Maexxna,Destroy any minions damaged by this minion.,Beast,,6,2,8,Legendary,Minion,Curse of Naxxramas
 yes,Magma Rager,,,,3,5,1,Free,Minion,Basic
 yes,Malygos,Spell Damage +5,Dragon,,9,4,12,Legendary,Minion,Expert
@@ -336,6 +340,7 @@ yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 a
 yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Common,Minion,Expert
 yes,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Common,Minion,Expert
 yes,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
+no,Stallag,"Deathrattle: If Feugen also died this game, summon Thadius.",,,5,7,4,Legendary,Minion,Curse of Naxxramas
 yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Rare,Minion,Expert
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic
@@ -370,6 +375,7 @@ yes,Tundra Rhino,Your Beasts have Charge.,Beast,Hunter,5,2,5,Common,Minion,Basic
 yes,Twilight Drake,Battlecry: Gain +1 Health for each card in your hand.,Dragon,,4,4,1,Rare,Minion,Expert
 yes,Twisting Nether,Destroy all minions.,,Warlock,8,,,Epic,Spell,Expert
 yes,Unbound Elemental,"Whenever you play a card with Overload, gain +1/+1.",,Shaman,3,2,4,Common,Minion,Expert
+no,Undertaker,"Whenever you summon a minion with Deathrattle, gain +1/+1.",,,1,1,2,Common,Minion,Curse of Naxxramas
 yes,Unleash the Hounds,"For each enemy minion, summon a 1/1 Hound with Charge.",,Hunter,3,,,Common,Spell,Expert
 yes,Unstable Ghoul,Taunt. Deathrattle: Deal 1 damage to all minions.,,,2,1,3,Common,Minion,Curse of Naxxramas
 yes,Upgrade!,"If you have a weapon, give it +1/+1. Otherwise equip a 1/3 weapon.",,Warrior,1,,,Rare,Spell,Expert
@@ -381,6 +387,7 @@ yes,Voidcaller,Deathrattle: Put a random demon from your hand into the battlefie
 yes,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Rare,Minion,Expert
 yes,Voidwalker,Taunt,Demon,Warlock,1,1,3,Free,Minion,Basic
 yes,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Free,Minion,Basic
+no,Wailing Soul,Battlecry: Silence your other minions.,,,4,3,5,Rare,Minion,Curse of Naxxramas
 yes,War Golem,,,,7,7,7,Common,Minion,Basic
 yes,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Free,Minion,Basic
 yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Common,Minion,Basic
@@ -399,3 +406,4 @@ yes,Young Dragonhawk,Windfury,Beast,,1,1,1,Common,Minion,Expert
 yes,Young Priestess,"At the end of your turn, give another random friendly minion +1 Health.",,,1,2,1,Rare,Minion,Expert
 yes,Youthful Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,2,3,2,Common,Minion,Expert
 yes,Ysera,"At the end of your turn, draw a Dream Card.",Dragon,,9,4,12,Legendary,Minion,Expert
+no,Zombie Chow,Deathrattle: Restore 5 Health to teh enemy hero.,,,1,2,3,Common,Minion,Curse of Naxxramas

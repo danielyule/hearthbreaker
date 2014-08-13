@@ -81,8 +81,9 @@ class CardTest(unittest.TestCase):
             file = open("cards.csv", "r")
             reader = csv.DictReader(file)
             for row in reader:
-                card = card_lookup(row["Name"])
-                game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+                if row["Implemented?"] == "yes":
+                    card = card_lookup(row["Name"])
+                    game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
 
-                while not game.game_ended:
-                    game.play_single_turn()
+                    while not game.game_ended:
+                        game.play_single_turn()
