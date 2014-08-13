@@ -1,7 +1,7 @@
 import copy
 import random
 import abc
-
+import itertools
 import hearthbreaker.powers
 import hearthbreaker.targeting
 import hearthbreaker.constants
@@ -1132,6 +1132,28 @@ class Minion(Character):
             self.die(None)
             self.game.check_delayed()
 
+    def __json__(self):
+        if self.frozen_this_turn and self.player is self.player.game.current_player:
+            frozen_for = 3
+        elif self.frozen_this_turn:
+            frozen_for = 2
+        elif self.frozen:
+            frozen_for = 1
+        else:
+            frozen_for = 0
+        return {
+            'name': self.card.name,
+            'sequence_id': self.born,
+            'position': self.index,
+            'health': self.health,
+            'max_health': self.base_health,
+            'attack': self.base_attack,
+            'exhausted': self.exhausted,
+            'already_attacked': not self.active,
+            'frozen_for': frozen_for,
+            'effects': []
+        }
+
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
     """
@@ -1247,6 +1269,13 @@ class Weapon(Bindable):
             self.player.hero.change_temp_attack(self.base_attack)
         self.player.hero.trigger("weapon_equipped")
 
+    def __json__(self):
+        return {
+            'name': self.card.name,
+            'attack': self.base_attack,
+            'durability': self.durability,
+        }
+
 
 class Deck:
     def __init__(self, cards, character_class):
@@ -1288,6 +1317,33 @@ class Deck:
                 self.left += 1
                 return
         raise GameException("Tried to put back a card that didn't come from this deck")
+
+    def __json__(self):
+        card_list = []
+        for index in range(0, 30):
+            card_list.append({
+                'name': self.cards[index].name,
+                'used': self.used[index]
+            })
+        return card_list
+
+    @classmethod
+    def __from__json__(cls, dd, character_class):
+        cards = []
+        used = []
+        left = 0
+        for entry in dd:
+            cards.append(card_lookup(entry["name"]))
+            used.append(entry["used"])
+            if entry["used"]:
+                left += 1
+        deck = Deck.__new__(Deck)
+        deck.cards = cards
+        deck.used = used
+        deck.left = left
+        deck.character_class = character_class
+        return deck
+
 
 
 class Hero(Character):
@@ -1337,6 +1393,44 @@ class Hero(Character):
         target = self.choose_target(targets)
         self.trigger("found_power_target", target)
         return target
+
+    def __json__(self):
+        if self.frozen_this_turn and self.player is self.player.game.current_player:
+            frozen_for = 3
+        elif self.frozen_this_turn:
+            frozen_for = 2
+        elif self.frozen:
+            frozen_for = 1
+        else:
+            frozen_for = 0
+        return {
+            'character': hearthbreaker.constants.CHARACTER_CLASS.to_str(self.character_class),
+            'weapon': self.weapon,
+            'health': self.health,
+            'attack': self.base_attack,
+            'immune': self.immune,
+            'frozen_for': frozen_for,
+            'windfury': self.windfury,
+            'used_windfury': self.used_windfury,
+            'already_attacked': not self.active
+        }
+
+    @classmethod
+    def __from_json__(cls, hd):
+        hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), None)
+        if hd["frozen_for"] == 3 or hd["frozen_for"] == 2:
+            hero.frozen_this_turn = True
+        elif hd["frozen_for"] > 0:
+            hero.frozen = True
+        hero.health = hd["health"]
+        hero.base_attack = hd["attack"]
+        hero.immune = hd["immune"]
+        hero.windfury = hd["windfury"]
+        hero.used_windfury = hd["used_windfury"]
+        hero.active = not hd["already_attacked"]
+        return hero
+
+
 
 
 class Player(Bindable):
@@ -1435,7 +1529,7 @@ class Player(Bindable):
         instead will remain until an event occurs or, if `only_first` is True a card which matches the filter is played,
         whichever comes first.
 
-        :param int amount: The amount to decrease the mana cost of effected cards
+        :param int amount: The amount to decrease the mana cost of affected cards
         :param string card_filter: The type of cards to affect.  Possible values are "minion", "spell", "secret" and
                                    "card"
         :param string until: The event to remove this mana filter.  Suggestions are "turn_started" for the start of the
@@ -1444,12 +1538,20 @@ class Player(Bindable):
         :param boolean only_first: True if this card filter should be removed the first time a player plays a card which
                                    matches the filter
         """
-        class CardEffect:
+        class CardFilter:
             def __init__(self):
                 self.amount = amount
                 self.filter = card_filter
                 self.until = until
                 self.only_first = only_first
+
+            def __json__(self):
+                return {
+                    'amount': self.amount,
+                    'card_filter': self.filter,
+                    'until': self.until,
+                    'only_first': self.only_first,
+                }
 
         if card_filter == "minion":
             my_filter = lambda c: isinstance(c, MinionCard)
@@ -1466,7 +1568,7 @@ class Player(Bindable):
                 self.min = 0
                 self.filter = my_filter
 
-        card_effect = CardEffect()
+        card_effect = CardFilter()
         mana_filter = Filter()
         self.card_filters.append(card_effect)
         self.mana_filters.append(mana_filter)
@@ -1488,6 +1590,41 @@ class Player(Bindable):
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
+
+    def __json__(self):
+        json_deck = []
+        json_graveyard = []
+
+        for index in range(0, 30):
+            if self.deck.cards[index] not in self.hand:
+                if self.deck.used[index]:
+                    json_graveyard.append(self.deck.cards[index].name)
+                else:
+                    json_deck.append(self.deck.cards[index].name)
+
+        return {
+            'hero': self.hero,
+            'deck': self.deck,
+            'graveyard': json_graveyard,
+            'hand': [card.name for card in self.hand],
+            'secrets': [secret.name for secret in self.secrets],
+            'card_filters': self.card_filters,
+            'minions': self.minions,
+            'mana': self.mana,
+            'max_mana': self.max_mana,
+        }
+
+    @classmethod
+    def __from_json__(cls, pd, game, agent):
+        hero = Hero.__from_json__(pd["hero"])
+        deck = Deck.__from__json__(pd["deck"], hero.character_class)
+        player = Player("whatever", deck, agent, game, game.random)
+        hero.player = player
+        player.mana = pd["mana"]
+        player.max_mana = pd["max_mana"]
+        player.hand = [card_lookup(name) for name in pd["hand"]]
+        player.secrets = [card_lookup(name) for name in pd["secrets"]]
+        return player
 
 
 class Game(Bindable):
@@ -1653,3 +1790,35 @@ class Game(Bindable):
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
         self.trigger("minion_removed", minion, player)
+
+    def __json__(self):
+        if self.current_player == self.players[0]:
+            active_player = 1
+        else:
+            active_player = 2
+        return {
+            'players' : self.players,
+            'active_player': active_player,
+            'current_sequence_id': self.minion_counter,
+        }
+
+    @classmethod
+    def __from_json__(cls, d):
+        new_game = Game.__new__(Game)
+        new_game.minion_counter = d["current_sequence_id"]
+        new_game.delayed_minions = set()
+        new_game.game_ended = False
+        new_game.random = random.randint
+        new_game.events = {}
+        new_game.players = [Player.__from_json__(pd, new_game, None) for pd in d["players"]]
+        if d["active_player"] == 1:
+            new_game.current_player = new_game.players[0]
+            new_game.other_player = new_game.players[1]
+            new_game.current_player.opponent = new_game.players[1]
+            new_game.other_player.opponent = new_game.players[0]
+        else:
+            new_game.current_player = new_game.players[1]
+            new_game.other_player = new_game.players[0]
+            new_game.current_player.opponent = new_game.players[0]
+            new_game.other_player.opponent = new_game.players[1]
+        return new_game
