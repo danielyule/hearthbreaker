@@ -724,3 +724,51 @@ class TestMinionCopying(unittest.TestCase):
         tirion.activate_delayed()
         self.assertEqual(5, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
+
+    def test_Undertaker(self):
+        game = generate_game_for([Undertaker, GoldshireFootman, HarvestGolem, AnubarAmbusher], HauntedCreeper,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Goldshire Footman", game.current_player.minions[0].card.name)
+        self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        new_game = game.copy()
+
+        new_game.play_single_turn()
+
+        self.assertEqual(1, new_game.other_player.minions[1].calculate_attack())
+        self.assertEqual(2, new_game.other_player.minions[1].calculate_max_health())
+
+        new_game.play_single_turn()
+
+        self.assertEqual(3, len(new_game.current_player.minions))
+        self.assertEqual("Harvest Golem", new_game.current_player.minions[0].card.name)
+        self.assertEqual("Goldshire Footman", new_game.current_player.minions[1].card.name)
+        self.assertEqual("Undertaker", new_game.current_player.minions[2].card.name)
+        self.assertEqual(2, new_game.current_player.minions[2].calculate_attack())
+        self.assertEqual(3, new_game.current_player.minions[2].calculate_max_health())
+
+        self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        new_game.current_player.minions[2].silence()
+
+        new_game.play_single_turn()
+        new_game.play_single_turn()
+
+        self.assertEqual(1, new_game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[3].calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_max_health())

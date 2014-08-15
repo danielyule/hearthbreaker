@@ -3,7 +3,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
-from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle
+from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, GrowOnDeathrattleSummon
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2464,3 +2464,11 @@ class SpectralKnight(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 6, spell_targetable=False)
+
+
+class Undertaker(MinionCard):
+    def __init__(self):
+        super().__init__("Undertaker", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 2, effects=[GrowOnDeathrattleSummon(1, 1)])

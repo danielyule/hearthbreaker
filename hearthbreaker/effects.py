@@ -546,3 +546,42 @@ class DrawOnAttack(Effect):
 
     def __str__(self):
         return("DrawOn(attack, {0})").format(self.amount)
+
+
+class GrowOnDeathrattleSummon(Effect):
+    """
+    Minions with this effect will grow whenever a minion with deathrattle is summoned
+
+    The amount increased, as well as which players own the minions can be customized
+    """
+
+    def __init__(self, attack, health, players="friendly"):
+        """
+        :param int attack: The amount to increase this minion's attack by
+        :param int health: The amount to increase this minion's health by
+        :param string players: Whose minions should be watched.  Possible values are "friendly", "enemy" and "both"
+        """
+        super().__init__()
+        self.attack = attack
+        self.health = health
+        self.players = players
+
+    def apply(self):
+        if self.players == "friendly" or self.players == "both":
+            self.target.player.bind("minion_summoned", self.minion_grow)
+        if self.players == "enemy" or self.players == "both":
+            self.target.player.opponent.bind("minion_summoned", self.minion_grow)
+
+    def unapply(self):
+        if self.players == "friendly" or self.players == "both":
+            self.target.player.unbind("minion_summoned", self.minion_grow)
+        if self.players == "enemy" or self.players == "both":
+            self.target.player.opponent.unbind("minion_summoned", self.minion_grow)
+
+    def minion_grow(self, new_minion):
+        if new_minion is not self.target and new_minion.deathrattle is not None:
+            self.target.change_attack(self.attack)
+            self.target.increase_health(self.health)
+
+    def __str__(self):
+        return "GrowOnDeathrattleSummon({0}, {1}, {2})".format(self.attack, self.health, self.players)

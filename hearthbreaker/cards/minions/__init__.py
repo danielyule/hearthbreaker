@@ -167,7 +167,8 @@ from hearthbreaker.cards.minions.neutral import (
     BaronRivendare,
     DancingSwords,
     Deathlord,
-    SpectralKnight
+    SpectralKnight,
+    Undertaker,
 )
 
 from hearthbreaker.cards.minions.druid import (

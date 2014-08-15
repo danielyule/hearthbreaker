@@ -2526,3 +2526,38 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual("Boulderfist Ogre", game.other_player.minions[0].card.name)
         self.assertEqual("Sylvanas Windrunner", game.other_player.minions[1].card.name)
+
+    def test_Undertaker(self):
+        game = generate_game_for([Undertaker, GoldshireFootman, HarvestGolem, AnubarAmbusher], HauntedCreeper,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Goldshire Footman", game.current_player.minions[0].card.name)
+        self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        game.play_single_turn()
+
+        self.assertEqual(1, game.other_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[1].calculate_max_health())
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual("Harvest Golem", game.current_player.minions[0].card.name)
+        self.assertEqual("Goldshire Footman", game.current_player.minions[1].card.name)
+        self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_max_health())
+
+        game.current_player.minions[2].silence()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[3].calculate_max_health())
