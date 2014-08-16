@@ -1,3 +1,4 @@
+import copy
 from hearthbreaker.effects import HealAsDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -96,3 +97,15 @@ class TempleEnforcer(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 6, battlecry=give_three_health)
+
+
+class DarkCultist(MinionCard):
+    def __init__(self):
+        super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def give_3_health(minion):
+            targets = copy.copy(minion.player.minions)
+            if len(targets) > 0:
+                targets[minion.game.random(0, len(targets) - 1)].increase_health(3)
+        return Minion(3, 4, deathrattle=give_3_health)

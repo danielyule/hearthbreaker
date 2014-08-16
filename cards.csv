@@ -87,7 +87,7 @@ yes,Cruel Taskmaster,Battlecry: Deal 1 damage to a minion and give it +2 Attack.
 yes,Cult Master,"Whenever one of your other minions dies, draw a card.",,,4,4,2,Common,Minion,Expert
 yes,Dalaran Mage,Spell Damage +1,,,3,1,4,Common,Minion,Basic
 yes,Dancing Swords,Deathrattle: Your opponent draws a card.,,,3,4,4,Common,Minion,Curse of Naxxramas
-no,Dark Cultist,Deahrattle: Give a random friendly minion +3 Health.,,Priest,3,3,4,Common,Minion,Curse of Naxxramas
+yes,Dark Cultist,Deathrattle: Give a random friendly minion +3 Health.,,Priest,3,3,4,Common,Minion,Curse of Naxxramas
 yes,Dark Iron Dwarf,Battlecry: Give a minion +2 Attack this turn.,,,4,4,4,Common,Minion,Expert
 yes,Darkscale Healer,Battlecry: Restore 2 Health to all friendly characters.,,,5,4,5,Common,Minion,Basic
 yes,Deadly Poison,Give your weapon +2 Attack.,,Rogue,1,,,Free,Spell,Basic

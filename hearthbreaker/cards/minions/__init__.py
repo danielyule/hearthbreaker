@@ -216,7 +216,8 @@ from hearthbreaker.cards.minions.priest import (
     Lightwell,
     NorthshireCleric,
     ProphetVelen,
-    TempleEnforcer
+    TempleEnforcer,
+    DarkCultist,
 )
 
 from hearthbreaker.cards.minions.rogue import (

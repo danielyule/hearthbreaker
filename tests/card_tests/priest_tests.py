@@ -549,3 +549,32 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertEqual(4, game.players[0].minions[1].health)
         self.assertEqual(4, game.players[0].minions[1].calculate_max_health())
+
+    def test_DarkCultist(self):
+        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Dark Cultist", game.current_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(4, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual("Dark Cultist", game.current_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[1].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[2].card.name)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(4, game.current_player.minions[2].health)
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(1, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[1].health)
