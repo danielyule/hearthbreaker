@@ -171,6 +171,8 @@ from hearthbreaker.cards.minions.neutral import (
     Undertaker,
     WailingSoul,
     ZombieChow,
+    Feugen,
+    Stalagg,
 )
 
 from hearthbreaker.cards.minions.druid import (

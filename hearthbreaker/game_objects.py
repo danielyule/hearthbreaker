@@ -994,6 +994,7 @@ class Minion(Character):
                 self.silence()
                 if deathrattle is not None:
                     deathrattle(self)
+                self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
 
@@ -1349,6 +1350,7 @@ class Player(Bindable):
         self.deck = deck
         self.spell_damage = 0
         self.minions = []
+        self.graveyard = set()
         self.random = random_func
         self.hand = []
         self.auras = []
@@ -1380,6 +1382,7 @@ class Player(Bindable):
                                           card_filter.only_first)
         copied_player.hero = self.hero.copy(copied_player, new_game)
         copied_player.deck = self.deck.copy()
+        copied_player.graveyard = copy.copy(self.graveyard)
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
         copied_player.hand = [type(card)() for card in self.hand]
         copied_player.game = new_game

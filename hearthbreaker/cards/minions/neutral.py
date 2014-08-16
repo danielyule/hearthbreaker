@@ -2497,3 +2497,35 @@ class ZombieChow(MinionCard):
             minion.player.opponent.hero.heal(minion.player.effective_heal_power(5), minion)
 
         return Minion(2, 3, deathrattle=restore_5_health)
+
+
+class Thaddius(MinionCard):
+    def __init__(self):
+        super().__init__("Thaddius", 10, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, player):
+        return Minion(11, 11)
+
+
+class Feugen(MinionCard):
+    def __init__(self):
+        super().__init__("Feugen", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_thaddius(minion):
+            if "Stalagg" in minion.player.graveyard:
+                Thaddius().summon(minion.player, minion.game, minion.index)
+
+        return Minion(4, 7, deathrattle=summon_thaddius)
+
+
+class Stalagg(MinionCard):
+    def __init__(self):
+        super().__init__("Stalagg", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_thaddius(minion):
+            if "Feugen" in minion.player.graveyard:
+                Thaddius().summon(minion.player, minion.game, minion.index)
+
+        return Minion(7, 4, deathrattle=summon_thaddius)

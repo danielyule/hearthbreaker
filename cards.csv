@@ -152,7 +152,7 @@ yes,Frostbolt,Deal 3 damage to a character and Freeze it.,,Mage,2,,,Common,Spell
 yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion,Basic
 yes,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion,Basic
 yes,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
-no,Feugen,"Deathrattle: If Stalagg also died this game, summon Thadius.",,,5,4,7,Legendary,Minion,Curse of Naxxramas
+yes,Feugen,"Deathrattle: If Stalagg also died this game, summon Thaddius.",,,5,4,7,Legendary,Minion,Curse of Naxxramas
 yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Rare,Minion,Expert
 yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
@@ -340,7 +340,7 @@ yes,Spellbender,"Secret: When an enemy casts a spell on a minion, summon a 1/3 a
 yes,Spellbreaker,Battlecry: Silence a minion.,,,4,4,3,Common,Minion,Expert
 yes,Spiteful Smith,Enrage: Your weapon has +2 Attack.,,,5,4,6,Common,Minion,Expert
 yes,Sprint,Draw 4 cards.,,Rogue,7,,,Common,Spell,Basic
-no,Stallag,"Deathrattle: If Feugen also died this game, summon Thadius.",,,5,7,4,Legendary,Minion,Curse of Naxxramas
+yes,Stalagg,"Deathrattle: If Feugen also died this game, summon Thaddius.",,,5,7,4,Legendary,Minion,Curse of Naxxramas
 yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Rare,Minion,Expert
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic

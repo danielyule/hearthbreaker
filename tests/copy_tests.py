@@ -802,3 +802,46 @@ class TestMinionCopying(unittest.TestCase):
         game.current_player.minions[0].die(None)
         game.check_delayed()
         self.assertEqual(4, game.current_player.minions[0].health)
+
+    def test_Feugen(self):
+        game = generate_game_for([Stalagg, Feugen], Assassinate, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # Stalagg should have been played and assassinated, leaving no minions behind
+
+        self.assertEqual(0, len(game.other_player.minions))
+        game = game.copy()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Feugen is assassinated, which should summon Thaddius
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Thaddius", game.other_player.minions[0].card.name)
+
+    def test_Stalagg(self):
+        game = generate_game_for([Feugen, Stalagg], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        # Feugen should have been played we will silence and kill him, which should still summon Thaddius so long as
+        # Stalagg isn't also silenced
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(0, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Stalagg is played,  We will kill him, which should summon Thaddius
+        self.assertEqual(1, len(game.current_player.minions))
+        game = game.copy()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual("Thaddius", game.current_player.minions[0].card.name)
