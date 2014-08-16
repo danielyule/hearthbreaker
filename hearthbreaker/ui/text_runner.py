@@ -93,7 +93,7 @@ def render_game(stdscr):
             self.text_window.refresh()
             ch = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
                     selected -= 1
                     if selected < 0:
@@ -130,7 +130,7 @@ def render_game(stdscr):
             ch = 0
             index = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
 
                 if ch == curses.KEY_LEFT:
                     index -= 1
@@ -164,7 +164,7 @@ def render_game(stdscr):
             ch = 0
             index = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 self.window.addstr(0, 0, "{0}".format(ch))
                 self.window.refresh()
                 if ch == curses.KEY_LEFT:
@@ -210,7 +210,7 @@ def render_game(stdscr):
             self.text_window.refresh()
             ch = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
                     selected -= 1
                     if selected < 0:
@@ -255,7 +255,7 @@ def render_game(stdscr):
             ch = 0
             index = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
                     index -= 1
                     if index < 0:
@@ -280,7 +280,7 @@ def render_game(stdscr):
             self.window.refresh()
             ch = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
                     renderer.selection_index -= 1
                     if renderer.selection_index < 0:
@@ -314,7 +314,7 @@ def render_game(stdscr):
             self.text_window.refresh()
             ch = 0
             while ch != 10 and ch != 27:
-                ch = self.window.getch()
+                ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
                     selected -= 1
                     if selected < 0:
