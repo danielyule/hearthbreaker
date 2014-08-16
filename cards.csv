@@ -387,7 +387,7 @@ yes,Voidcaller,Deathrattle: Put a random demon from your hand into the battlefie
 yes,Void Terror,Battlecry: Destroy the minions on either side of this minion and gain their Attack and Health.,Demon,Warlock,3,3,3,Rare,Minion,Expert
 yes,Voidwalker,Taunt,Demon,Warlock,1,1,3,Free,Minion,Basic
 yes,Voodoo Doctor,Battlecry: Restore 2 Health.,,,1,2,1,Free,Minion,Basic
-no,Wailing Soul,Battlecry: Silence your other minions.,,,4,3,5,Rare,Minion,Curse of Naxxramas
+yes,Wailing Soul,Battlecry: Silence your other minions.,,,4,3,5,Rare,Minion,Curse of Naxxramas
 yes,War Golem,,,,7,7,7,Common,Minion,Basic
 yes,Warsong Commander,"Whenever you summon a minion with 3 or less Attack, give it Charge.",,Warrior,3,2,3,Free,Minion,Basic
 yes,Water Elemental,Freeze any character damaged by this minion.,,Mage,4,3,6,Common,Minion,Basic

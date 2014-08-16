@@ -2561,3 +2561,16 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, game.current_player.minions[3].calculate_attack())
         self.assertEqual(2, game.current_player.minions[3].calculate_max_health())
+
+    def test_WailingSoul(self):
+        game = generate_game_for([StonetuskBoar, HauntedCreeper, IronfurGrizzly, WailingSoul], ScarletCrusader,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertFalse(game.current_player.minions[3].charge)
+        self.assertIsNone(game.current_player.minions[2].deathrattle)
+        self.assertFalse(game.current_player.minions[1].taunt)
+        self.assertTrue(game.other_player.minions[0].divine_shield)

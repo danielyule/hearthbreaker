@@ -2472,3 +2472,15 @@ class Undertaker(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 2, effects=[GrowOnDeathrattleSummon(1, 1)])
+
+
+class WailingSoul(MinionCard):
+    def __init__(self):
+        super().__init__("Wailing Soul", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def silence_other_minions(minion):
+            for mini in player.minions:
+                if mini is not minion:
+                    mini.silence()
+        return Minion(3, 5, battlecry=silence_other_minions)
