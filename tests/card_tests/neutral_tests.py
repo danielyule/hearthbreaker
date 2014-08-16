@@ -2663,3 +2663,36 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Thaddius", game.other_player.minions[0].card.name)
+
+    def test_MadScientist(self):
+        game = generate_game_for([MadScientist, EyeForAnEye, Repentance], BluegillWarrior,
+                                 SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Mad Scientist", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.secrets))
+
+        game.play_single_turn()
+
+        # Bluegill should cause both secrets to go off
+        self.assertEqual(0, len(game.other_player.secrets))
+
+        game.play_single_turn()
+
+        # both secrets and the mad scientist should be down
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Mad Scientist", game.current_player.minions[0].card.name)
+        self.assertEqual(2, len(game.current_player.secrets))
+
+        # Because both secrets are already up, no new secrets should be added
+        game.current_player.minions[0].die(None)
+        self.assertEqual(2, len(game.current_player.secrets))

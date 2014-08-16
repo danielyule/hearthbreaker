@@ -173,6 +173,7 @@ from hearthbreaker.cards.minions.neutral import (
     ZombieChow,
     Feugen,
     Stalagg,
+    MadScientist,
 )
 
 from hearthbreaker.cards.minions.druid import (

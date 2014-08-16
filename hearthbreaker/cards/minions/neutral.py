@@ -2529,3 +2529,27 @@ class Stalagg(MinionCard):
                 Thaddius().summon(minion.player, minion.game, minion.index)
 
         return Minion(7, 4, deathrattle=summon_thaddius)
+
+
+class MadScientist(MinionCard):
+    def __init__(self):
+        super().__init__("Mad Scientist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def play_secret(minion):
+            secret_indices = []
+            for index in range(0, 30):
+                if not minion.player.deck.used[index] and \
+                        isinstance(minion.player.deck.cards[index], SecretCard) and \
+                        minion.player.deck.cards[index].name not in [secret.name for secret in minion.player.secrets]:
+                    secret_indices.append(index)
+            if len(secret_indices) > 0:
+                secret_index = secret_indices[minion.game.random(0, len(secret_indices) - 1)]
+                secret = minion.player.deck.cards[secret_index]
+                minion.player.secrets.append(secret)
+                minion.player.deck.used[secret_index] = True
+                if minion.player is minion.game.other_player:
+                    secret.player = minion.player
+                    secret.activate(minion.player)
+
+        return Minion(2, 2, deathrattle=play_secret)
