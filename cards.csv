@@ -406,4 +406,4 @@ yes,Young Dragonhawk,Windfury,Beast,,1,1,1,Common,Minion,Expert
 yes,Young Priestess,"At the end of your turn, give another random friendly minion +1 Health.",,,1,2,1,Rare,Minion,Expert
 yes,Youthful Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,2,3,2,Common,Minion,Expert
 yes,Ysera,"At the end of your turn, draw a Dream Card.",Dragon,,9,4,12,Legendary,Minion,Expert
-no,Zombie Chow,Deathrattle: Restore 5 Health to teh enemy hero.,,,1,2,3,Common,Minion,Curse of Naxxramas
+yes,Zombie Chow,Deathrattle: Restore 5 Health to the enemy hero.,,,1,2,3,Common,Minion,Curse of Naxxramas

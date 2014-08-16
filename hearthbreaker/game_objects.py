@@ -1412,7 +1412,7 @@ class Player(Bindable):
 
     def effective_heal_power(self, base_heal):
         if self.heal_does_damage:
-            return (base_heal + self.spell_damage) * self.spell_multiplier
+            return -(base_heal + self.spell_damage) * self.spell_multiplier
         else:
             return base_heal * self.heal_multiplier
 

@@ -772,3 +772,18 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
         self.assertEqual(3, game.current_player.minions[2].calculate_max_health())
+
+    def test_ZombieChow(self):
+        game = generate_game_for([ZombieChow, ZombieChow, ZombieChow, AuchenaiSoulpriest], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        game.play_single_turn()
+
+        game = game.copy()
+
+        game.other_player.hero.health = 10
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Zombie Chow", game.current_player.minions[0].card.name)
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(15, game.other_player.hero.health)

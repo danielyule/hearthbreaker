@@ -12,7 +12,8 @@ class AncestralHealing(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.heal(self.target.calculate_max_health() - self.target.health, self)
+        # Uses the max health of the minion, so as to combo with Auchenai Soulpriest
+        self.target.heal(player.effective_heal_power(self.target.calculate_max_health()), self)
         self.target.taunt = True
 
 

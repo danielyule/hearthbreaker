@@ -170,6 +170,7 @@ from hearthbreaker.cards.minions.neutral import (
     SpectralKnight,
     Undertaker,
     WailingSoul,
+    ZombieChow,
 )
 
 from hearthbreaker.cards.minions.druid import (

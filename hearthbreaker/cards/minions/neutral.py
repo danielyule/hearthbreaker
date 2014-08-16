@@ -2249,7 +2249,7 @@ class GelbinMekkatorque(MinionCard):
                             targets.append(m)
                         if len(targets) > 0:
                             repairee = targets[player.game.random(0, len(targets) - 1)]
-                            repairee.heal(6, self)
+                            repairee.heal(player.effective_heal_power(6), self)
                     minion = Minion(0, 3)
                     player.bind("turn_ended", repair)
                     minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
@@ -2407,7 +2407,9 @@ class StoneskinGargoyle(MinionCard):
         def apply_effect(m, p):
             def restore_health():
                 # The restoration counts as a heal.  See https://twitter.com/bdbrode/status/491263252434014208
-                m.heal(m.calculate_max_health() - m.health, None)
+                # Will damage itself with a soulpriest down:
+                # http://www.hearthhead.com/card=237/auchenai-soulpriest#comments:id=1908263
+                m.heal(p.effective_heal_power(m.calculate_max_health() - m.health), None)
             p.bind("turn_started", restore_health)
             m.bind_once("silenced", lambda: p.unbind("turn_started", restore_health))
             m.bind("copied", apply_effect)
@@ -2484,3 +2486,14 @@ class WailingSoul(MinionCard):
                 if mini is not minion:
                     mini.silence()
         return Minion(3, 5, battlecry=silence_other_minions)
+
+
+class ZombieChow(MinionCard):
+    def __init__(self):
+        super().__init__("Zombie Chow", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def restore_5_health(minion):
+            minion.player.opponent.hero.heal(minion.player.effective_heal_power(5), minion)
+
+        return Minion(2, 3, deathrattle=restore_5_health)

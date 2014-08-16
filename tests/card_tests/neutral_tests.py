@@ -2574,3 +2574,37 @@ class TestCommon(unittest.TestCase):
         self.assertIsNone(game.current_player.minions[2].deathrattle)
         self.assertFalse(game.current_player.minions[1].taunt)
         self.assertTrue(game.other_player.minions[0].divine_shield)
+
+    def test_ZombieChow(self):
+        game = generate_game_for([ZombieChow, ZombieChow, ZombieChow, AuchenaiSoulpriest], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        game.play_single_turn()
+
+        game.other_player.hero.health = 10
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Zombie Chow", game.current_player.minions[0].card.name)
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(15, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Zombie Chow", game.current_player.minions[0].card.name)
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(15, game.other_player.hero.health)
+
+        # Auchenai Soulpriest causes the zombie chow to damage the opponent hero
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Zombie Chow", game.current_player.minions[1].card.name)
+        game.current_player.minions[1].die(None)
+        game.check_delayed()
+        self.assertEqual(10, game.other_player.hero.health)
