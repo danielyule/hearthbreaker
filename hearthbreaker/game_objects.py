@@ -1305,7 +1305,7 @@ class Hero(Character):
         new_hero = copy.copy(self)
         new_hero.events = copy.copy(self.events)
         if self.weapon:
-            new_hero.weapon = self.weapon.copy(new_owner, new_game)
+            new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.player = new_owner
         new_hero.power = copy.copy(self.power)
         new_hero.power.hero = new_hero
