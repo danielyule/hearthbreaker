@@ -1207,20 +1207,24 @@ class Weapon(Bindable):
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
     """
 
-    def __init__(self, attack_power, durability, battlecry=None):
+    def __init__(self, attack_power, durability, battlecry=None, deathrattle=None):
         """
-        Creates a new weapon with the given attack power and durability.  A battlecry can also optionally be set.
+        Creates a new weapon with the given attack power and durability.  A battlecry and deathrattle can also
+        optionally be set.
         :param int attack_power: The amount of attack this weapon gives the hero
         :param int durability: The number of times this weapon can be used to attack before being discarded
-        :param function battlecry: Called when this weapon is first placed
+        :param function battlecry: Called when this weapon is equipped
+        :param function deathrattle: Called when the weapon is destroyed
         """
         super().__init__()
         # : The amount of attack this weapon gives the hero
         self.base_attack = attack_power
         # : The number of times this weapon can be used to attack before being discarded
         self.durability = durability
-        #: Called when this weapon is first placed
+        #: Called when this weapon is equipped
         self.battlecry = battlecry
+        #: Called when the weapon is destroyed
+        self.deathrattle = deathrattle
         #: The :class:`Player` associated with this weapon
         self.player = None
         #: The :class:`WeaponCard` that created this weapon
@@ -1231,9 +1235,14 @@ class Weapon(Bindable):
         new_weapon.events = copy.copy(self.events)
         new_weapon.player = new_owner
         self.trigger("copied", new_weapon, new_owner)
+        return new_weapon
 
     def destroy(self):
         self.trigger("destroyed")
+        # Deathrattle is triggered no matter how the weapon is destroyed, see
+        # http://www.hearthhead.com/card=1805/deaths-bite#comments:id=1983510
+        if self.deathrattle is not None:
+            self.deathrattle(self)
         self.player.hero.weapon = None
         if self.player.game.current_player is self.player:
             self.player.hero.change_temp_attack(-self.base_attack)
@@ -1303,7 +1312,7 @@ class Hero(Character):
 
     def copy(self, new_owner, new_game):
         new_hero = copy.copy(self)
-        new_hero.events = copy.copy(self.events)
+        new_hero.events = dict()
         if self.weapon:
             new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.player = new_owner

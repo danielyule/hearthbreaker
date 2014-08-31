@@ -1,3 +1,4 @@
+import copy
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import WeaponCard, Weapon, Minion
 
@@ -31,3 +32,17 @@ class Gorehowl(WeaponCard):
         weapon = Weapon(7, 1)
         player.hero.bind("attack", maybe_increase_durability)
         return weapon
+
+
+class DeathsBite(WeaponCard):
+    def __init__(self):
+        super().__init__("Death's Bite", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def create_weapon(self, player):
+        def deal_one_to_all(weapon):
+            targets = copy.copy(weapon.player.minions)
+            targets.extend(weapon.player.opponent.minions)
+            for minion in targets:
+                minion.damage(1, None)
+
+        return Weapon(4, 2, deathrattle=deal_one_to_all)
