@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import HealAsDamage
+from hearthbreaker.effects.minion import HealAsDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion

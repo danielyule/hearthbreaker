@@ -1,5 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects import DrawOnMinion, GrowOnDeath, ChargeAura, StatsAura
+from hearthbreaker.effects.minion import DrawOnMinion, GrowOnDeath, ChargeAura, StatsAura
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,

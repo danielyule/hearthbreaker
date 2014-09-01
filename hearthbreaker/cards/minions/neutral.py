@@ -3,7 +3,9 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
-from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, GrowOnDeathrattleSummon
+from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, \
+    GrowOnDeathrattleSummon
+from hearthbreaker.effects.player import ManaChangeEffect
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2394,7 +2396,7 @@ class Loatheb(MinionCard):
 
     def create_minion(self, player):
         def increase_card_cost(minion):
-            minion.player.opponent.add_card_filter(-5, "spell", "turn_ended")
+            minion.player.opponent.add_effect(ManaChangeEffect(-5, "spell", "turn_ended"))
 
         return Minion(5, 5, battlecry=increase_card_cost)
 

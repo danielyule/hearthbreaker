@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import DrawOnAttack
+from hearthbreaker.effects.minion import DrawOnAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard

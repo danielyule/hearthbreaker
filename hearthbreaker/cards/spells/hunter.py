@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import Immune
+from hearthbreaker.effects.minion import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
