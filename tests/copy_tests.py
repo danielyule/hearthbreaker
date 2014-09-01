@@ -869,3 +869,32 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
+
+    def test_EchoingOoze(self):
+        new_game = None
+
+        class OozeAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                if self.turn == 2:
+                    super().do_turn(player)
+                    new_game = player.game.copy()
+
+        game = generate_game_for(EchoingOoze, StoneskinGargoyle, OozeAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # new_game is still in the middle of a turn, as it was copied in the middle of a turn.  We have to
+        # manually end it.
+        new_game._end_turn()
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(1, new_game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, new_game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[1].calculate_max_health())

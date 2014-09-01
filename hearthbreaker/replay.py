@@ -14,16 +14,16 @@ class ReplayException(Exception):
 
 
 class ProxyCharacter:
-    def __init__(self, character_ref, game=None):
+    def __init__(self, character_ref):
         if type(character_ref) is str:
             self.character_ref = character_ref
         elif type(character_ref) is hearthbreaker.game_objects.Hero:
-            if character_ref == game.players[0].hero:
+            if character_ref == character_ref.game.players[0].hero:
                 self.character_ref = "p1"
             else:
                 self.character_ref = "p2"
         elif type(character_ref) is hearthbreaker.game_objects.Minion:
-            if character_ref.player == game.players[0].hero:
+            if character_ref.player == character_ref.game.players[0]:
                 self.character_ref = "p1:" + str(character_ref.index)
             else:
                 self.character_ref = "p2:" + str(character_ref.index)

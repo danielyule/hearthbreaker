@@ -174,6 +174,7 @@ from hearthbreaker.cards.minions.neutral import (
     Feugen,
     Stalagg,
     MadScientist,
+    EchoingOoze,
 )
 
 from hearthbreaker.cards.minions.druid import (

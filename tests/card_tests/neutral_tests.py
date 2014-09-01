@@ -2696,3 +2696,81 @@ class TestCommon(unittest.TestCase):
         # Because both secrets are already up, no new secrets should be added
         game.current_player.minions[0].die(None)
         self.assertEqual(2, len(game.current_player.secrets))
+
+    def test_EchoingOoze(self):
+        game = generate_game_for(EchoingOoze, StoneskinGargoyle, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[3].calculate_max_health())
+
+    def test_EchoingOoze_buff(self):
+        game = generate_game_for([BloodfenRaptor, EchoingOoze, BlessingOfMight], StonetuskBoar,
+                                 SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(4, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+    def testEchoingOoze_silence(self):
+        game = generate_game_for([EchoingOoze, Silence], StoneskinGargoyle, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # Even if the Ooze is silenced, it should be copied, since the effect is a battlecry
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+    def test_EchoingOoze_removal(self):
+        game = generate_game_for([IronfurGrizzly, EchoingOoze, Frostbolt], StonetuskBoar,
+                                 SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        # When the Ooze is removed, it should not be duplicated at turn end
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Ironfur Grizzly", game.current_player.minions[0].card.name)
+
+    def test_EchoingOoze_Faceless(self):
+        game = generate_game_for([BoulderfistOgre, EchoingOoze, FacelessManipulator], StonetuskBoar,
+                                 SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        # Faceless Manipulator should not also be copied.
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())

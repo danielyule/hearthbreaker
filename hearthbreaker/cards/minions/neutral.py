@@ -5,7 +5,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, \
     GrowOnDeathrattleSummon
-from hearthbreaker.effects.player import ManaChangeEffect
+from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2305,8 +2305,8 @@ class FacelessManipulator(MinionCard):
     def create_minion(self, player):
         def copy_minion(minion):
             if self.target:
-                new_minon = self.target.copy(player)
-                minion.replace(new_minon)
+                new_minion = self.target.copy(player)
+                minion.replace(new_minion)
 
         return Minion(3, 3, battlecry=copy_minion)
 
@@ -2555,3 +2555,13 @@ class MadScientist(MinionCard):
                     secret.activate(minion.player)
 
         return Minion(2, 2, deathrattle=play_secret)
+
+
+class EchoingOoze(MinionCard):
+    def __init__(self):
+        super().__init__("Echoing Ooze", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        def duplicate_at_end(minion):
+            player.add_effect(DuplicateMinion(minion))
+        return Minion(1, 2, battlecry=duplicate_at_end)
