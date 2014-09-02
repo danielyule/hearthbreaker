@@ -386,7 +386,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
             if isinstance(self, Minion):
-                self.game.trigger("minion_damaged", self)
+                self.player.trigger("minion_damaged", self)
             elif isinstance(self, Hero):
                 # The response of a secret to damage must happen immediately
                 self.trigger("hero_damaged", amount, attacker)

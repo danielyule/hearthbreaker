@@ -117,7 +117,7 @@ yes,Eaglehorn Bow,"Whenever a Secret is revealed, gain +1 Durability.",,Hunter,3
 yes,Earth Elemental,Taunt. Overload: (3),,Shaman,5,7,8,Epic,Minion,Expert
 yes,Earth Shock,"Silence a minion, then deal 1 damage to it.",,Shaman,1,,,Common,Spell,Expert
 yes,Earthen Ring Farseer,Battlecry: Restore 3 Health.,,,3,3,3,Common,Minion,Expert
-no,Echoing Ooze,Battlecry: Summon an exact copy of this minion at the end of the turn,,,2,1,2,Rare,Minion,Curse of Naxxramas
+yes,Echoing Ooze,Battlecry: Summon an exact copy of this minion at the end of the turn,,,2,1,2,Epic,Minion,Curse of Naxxramas
 yes,Edwin VanCleef,Combo: Gain +2/+2 for each card played earlier this turn.,,Rogue,3,2,2,Legendary,Minion,Expert
 yes,Elite Tauren Chieftain,Battlecry: Give both players the power to ROCK! (with a Power Chord card),,,5,5,5,Legendary,Minion,Promotion
 yes,Elven Archer,Battlecry: Deal 1 damage.,,,1,1,1,Common,Minion,Basic
