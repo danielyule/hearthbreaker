@@ -1609,4 +1609,4 @@ class Game(Bindable):
 
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
-        self.trigger("minion_removed", minion, player)
+        player.trigger("minion_removed", minion)

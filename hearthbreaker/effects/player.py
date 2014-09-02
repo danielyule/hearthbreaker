@@ -1,6 +1,6 @@
 import abc
 from hearthbreaker.game_objects import MinionCard, SecretCard
-from hearthbreaker.replay import ProxyCharacter
+import hearthbreaker.replay
 
 
 class PlayerEffect(metaclass=abc.ABCMeta):
@@ -87,13 +87,13 @@ class ManaChangeEffect(PlayerEffect):
 class DuplicateMinion(PlayerEffect):
     def __init__(self, minion_to_duplicate):
         super().__init__()
-        self.minion = ProxyCharacter(minion_to_duplicate)
+        self.minion = hearthbreaker.replay.TrackingProxyCharacter(minion_to_duplicate, minion_to_duplicate.game)
 
     def apply(self, player):
 
         def duplicate():
             minion = self.minion.resolve(player.game)
-            if not minion.removed:
+            if minion:
                 dup = minion.copy(minion.player)
                 dup.add_to_board(minion.index + 1)
             player.effects.remove(self)
