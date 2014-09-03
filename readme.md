@@ -8,7 +8,7 @@ data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/he
 collectible card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs
 The results of playing simulated games can be used to determine cards which work well together and cards which do not.  
 Hearthbreaker is not designed to allow player to play Hearthstone against each other, nor is it designed to play against
-human opponents within Hearthstone itself.
+human opponents within Hearthstone itself.  It is designed to be used as a library for analysis.
 
  * Documentation (In Progress) [http://danielyule.github.io/hearthbreaker/](http://danielyule.github.io/hearthbreaker/)
  * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthbreaker.svg?branch=master)](https://travis-ci.org/danielyule/hearthbreaker)
@@ -112,3 +112,12 @@ completely defined, but the engine (called [Focus](http://fluiddruid.net/forum/v
 progress.  These will allow for anyone to define new cards, by simply writing a JSON object to represent the card.
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
+
+###Fireplace
+Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
+an engine based on that.  His work can be found on [Fireplace GutHub page](https://github.com/jleclanche/fireplace)
+
+###Soot
+[Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
+implementations work.  It is interesting for its functional implementation of the cards.
+
