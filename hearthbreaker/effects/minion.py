@@ -510,6 +510,9 @@ class Buff(Effect):
         elif self.when == "turn_ended":
             for player in players:
                 player.bind("turn_ended", self._do_action)
+        elif self.when == "turn_started":
+            for player in players:
+                player.bind("turn_started", self._do_action)
 
     def unapply(self):
         if self.players == "friendly":
@@ -540,6 +543,9 @@ class Buff(Effect):
         elif self.when == "turn_ended":
             for player in players:
                 player.unbind("turn_ended", self._do_action)
+        elif self.when == "turn_started":
+            for player in players:
+                player.unbind("turn_started", self._do_action)
 
     def _check_minion_filter(self, minion, *args):
         if self.minion_filter == "self":

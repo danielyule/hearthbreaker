@@ -310,7 +310,7 @@ yes,Sea Giant,Costs (1) less for each other minion on the battlefield.,,,10,8,8,
 yes,Secretkeeper,"Whenever a Secret is played, gain +1/+1.",,,1,1,2,Rare,Minion,Expert
 yes,Sen'jin Shieldmasta,Taunt,,,4,3,5,Free,Minion,Basic
 yes,Sense Demons,Put 2 random Demons from your deck into your hand.,,Warlock,3,,,Common,Spell,Expert
-no,Shade of Naxxramas,"Stealth. At the start of your turn, gain +1/+1.",,,3,2,2,Epic,Minion,Curse of Naxxramas
+yes,Shade of Naxxramas,"Stealth. At the start of your turn, gain +1/+1.",,,3,2,2,Epic,Minion,Curse of Naxxramas
 yes,Shadow Bolt,Deal 4 damage to a minion.,,Warlock,3,,,Free,Spell,Basic
 yes,Shadow Madness,Gain control of an enemy minion with 3 or less Attack until end of turn.,,Priest,4,,,Rare,Spell,Expert
 yes,Shadow Word: Death,Destroy a minion with an Attack of 5 or more.,,Priest,3,,,Common,Spell,Basic

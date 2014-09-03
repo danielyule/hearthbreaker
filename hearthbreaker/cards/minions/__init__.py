@@ -175,6 +175,7 @@ from hearthbreaker.cards.minions.neutral import (
     Stalagg,
     MadScientist,
     EchoingOoze,
+    ShadeOfNaxxramas,
 )
 
 from hearthbreaker.cards.minions.druid import (

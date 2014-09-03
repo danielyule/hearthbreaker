@@ -2774,3 +2774,35 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
         self.assertEqual(1, game.current_player.minions[2].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
+
+    def test_ShadeOfNaxxramas(self):
+        game = generate_game_for(ShadeOfNaxxramas, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_max_health())
+
+        game.current_player.minions[0].silence()
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(4, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[2].calculate_max_health())

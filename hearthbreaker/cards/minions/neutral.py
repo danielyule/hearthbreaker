@@ -2564,3 +2564,11 @@ class EchoingOoze(MinionCard):
         def duplicate_at_end(minion):
             player.add_effect(DuplicateMinion(minion))
         return Minion(1, 2, battlecry=duplicate_at_end)
+
+
+class ShadeOfNaxxramas(MinionCard):
+    def __init__(self):
+        super().__init__("Shade of Naxxramas", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(2, 2, stealth=True, effects=[Buff("turn_started", attack=1, health=1, players="friendly")])
