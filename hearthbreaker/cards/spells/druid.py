@@ -1,4 +1,5 @@
-from hearthbreaker.effects import KillMinion, SummonOnDeath
+import copy
+from hearthbreaker.effects.minion import KillMinion, SummonOnDeath
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -272,7 +273,7 @@ class Swipe(Card):
         super().use(player, game)
         self.target.damage(4, self)
 
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             if minion is not self.target:
                 minion.damage(player.effective_spell_damage(1), self)
 
@@ -335,7 +336,7 @@ class Starfall(Card):
                                  CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
-                for minion in game.other_player.minions:
+                for minion in copy.copy(game.other_player.minions):
                     minion.damage(player.effective_spell_damage(2), self)
 
         class DamageOne(Card):

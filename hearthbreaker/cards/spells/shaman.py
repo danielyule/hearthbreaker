@@ -12,7 +12,8 @@ class AncestralHealing(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.heal(self.target.calculate_max_health() - self.target.health, self)
+        # Uses the max health of the minion, so as to combo with Auchenai Soulpriest
+        self.target.heal(player.effective_heal_power(self.target.calculate_max_health()), self)
         self.target.taunt = True
 
 
@@ -82,7 +83,8 @@ class FarSight(Card):
         filter = None
         player.bind("card_drawn", reduce_cost)
         player.draw()
-        player.mana_filters.append(filter)
+        if filter is not None:
+            player.mana_filters.append(filter)
 
 
 class FeralSpirit(Card):
@@ -144,12 +146,10 @@ class Hex(Card):
 
         class Frog(MinionCard):
             def __init__(self):
-                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
             def create_minion(self, p):
-                minion = Minion(0, 1, MINION_TYPE.BEAST)
-                minion.taunt = True
-                return minion
+                return Minion(0, 1, taunt=True)
 
         frog = Frog()
         minion = frog.create_minion(None)
@@ -186,7 +186,7 @@ class LightningStorm(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
 
 
@@ -209,7 +209,7 @@ class TotemicMight(Card):
         super().use(player, game)
 
         for minion in player.minions:
-            if minion.minion_type == MINION_TYPE.TOTEM:
+            if minion.card.minion_type == MINION_TYPE.TOTEM:
                 minion.increase_health(2)
 
 
@@ -222,3 +222,16 @@ class Windfury(Card):
         super().use(player, game)
 
         self.target.windfury = True
+
+
+class Reincarnate(Card):
+
+    def __init__(self):
+        super().__init__("Reincarnate", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.die(self)
+        game.check_delayed()
+        self.target.card.summon(self.target.player, game, len(self.target.player.minions))

@@ -81,7 +81,8 @@ from hearthbreaker.cards.spells.paladin import (
     EyeForAnEye,
     NobleSacrifice,
     Redemption,
-    Repentance
+    Repentance,
+    Avenge,
 )
 
 from hearthbreaker.cards.spells.priest import (
@@ -140,7 +141,8 @@ from hearthbreaker.cards.spells.shaman import (
     LightningStorm,
     RockbiterWeapon,
     TotemicMight,
-    Windfury
+    Windfury,
+    Reincarnate,
 )
 
 from hearthbreaker.cards.spells.warlock import (

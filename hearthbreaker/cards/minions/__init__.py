@@ -164,6 +164,18 @@ from hearthbreaker.cards.minions.neutral import (
     Loatheb,
     StoneskinGargoyle,
     SludgeBelcher,
+    BaronRivendare,
+    DancingSwords,
+    Deathlord,
+    SpectralKnight,
+    Undertaker,
+    WailingSoul,
+    ZombieChow,
+    Feugen,
+    Stalagg,
+    MadScientist,
+    EchoingOoze,
+    ShadeOfNaxxramas,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -209,7 +221,8 @@ from hearthbreaker.cards.minions.priest import (
     Lightwell,
     NorthshireCleric,
     ProphetVelen,
-    TempleEnforcer
+    TempleEnforcer,
+    DarkCultist,
 )
 
 from hearthbreaker.cards.minions.rogue import (
@@ -244,7 +257,8 @@ from hearthbreaker.cards.minions.warlock import (
     SummoningPortal,
     BloodImp,
     LordJaraxxus,
-    VoidTerror
+    VoidTerror,
+    Voidcaller,
 )
 
 from hearthbreaker.cards.minions.warrior import (

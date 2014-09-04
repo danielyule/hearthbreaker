@@ -1,8 +1,15 @@
 import copy
+from hearthbreaker.constants import MINION_TYPE
+import hearthbreaker.game_objects
 
 
 def draw_card(minion):
     minion.player.draw()
+
+
+def opponent_draw_two(minion):
+    minion.player.opponent.draw()
+    minion.player.opponent.draw()
 
 
 def silence(minion):
@@ -12,12 +19,12 @@ def silence(minion):
 
 def heal_two(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(2, None)
+        minion.card.target.heal(minion.player.effective_heal_power(2), None)
 
 
 def heal_three(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(3, None)
+        minion.card.target.heal(minion.player.effective_heal_power(3), None)
 
 
 def deal_one_damage(minion):
@@ -48,11 +55,11 @@ def pit_lord(minion):
 
 
 def priestess_of_elune(minion):
-    minion.player.hero.heal(4, None)
+    minion.player.hero.heal(minion.player.effective_heal_power(4), None)
 
 
 def guardian_of_kings(minion):
-    minion.player.hero.heal(6, None)
+    minion.player.hero.heal(minion.player.effective_heal_power(6), None)
 
 
 def change_attack_to_one(minion):
@@ -130,7 +137,7 @@ def darkscale_healer(minion):
     targets = copy.copy(minion.player.game.current_player.minions)
     targets.append(minion.player.game.current_player.hero)
     for minion in targets:
-        minion.heal(2, None)
+        minion.heal(minion.player.effective_heal_power(2), None)
 
 
 def ssc(minion):
@@ -157,3 +164,31 @@ def give_windfury(minion):
 def return_to_hand(minion):
     if minion.card.target is not None:
         minion.card.target.bounce()
+
+
+def put_friendly_minion_on_board_from_enemy_deck(minion):
+    player = minion.player.opponent
+    index_list = []
+    index = 0
+    for card in player.deck.cards:
+        if not player.deck.used[index] and isinstance(card, hearthbreaker.game_objects.MinionCard):
+            index_list.append(index)
+        index += 1
+    if len(index_list) > 0:
+        chosen_index = player.game.random(0, len(index_list) - 1)
+        player.deck.used[index_list[chosen_index]] = True
+        player.deck.cards[index_list[chosen_index]].summon(player, player.game, len(player.minions))
+
+
+def put_minion_on_board_from_hand(minion):
+    player = minion.player
+    index_list = []
+    index = 0
+    for card in player.hand:
+        if isinstance(card, hearthbreaker.game_objects.MinionCard) and card.minion_type == MINION_TYPE.DEMON:
+            index_list.append(index)
+        index += 1
+    if len(index_list) > 0:
+        chosen_index = player.game.random(0, len(index_list) - 1)
+        player.hand[index_list[chosen_index]].summon(player, player.game, len(player.minions))
+        player.hand.remove(player.hand[index_list[chosen_index]])

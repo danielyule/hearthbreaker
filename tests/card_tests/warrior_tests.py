@@ -142,20 +142,20 @@ class TestWarrior(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].charge)
 
         # Test so that charge gets applied before a battlecry
-        weapon = TruesilverChampion().create_weapon(game.players[0])  # 4/2 TODO: Change to a warrior weapon
+        weapon = FieryWarAxe().create_weapon(game.players[0])
         weapon.equip(game.players[0])
-        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
         bloodsail = BloodsailRaider()
         bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
-        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertTrue(game.players[0].minions[0].charge)
 
         # TODO: Test with Faceless Manipulator here
 
         # Remove the Warsong Commander
         game.players[0].minions[-1].die(None)
-        game.players[0].minions[-1].activate_delayed()
+        game.check_delayed()
         # The previous charged minions should still have charge
         self.assertTrue(game.players[0].minions[0].charge)
         self.assertTrue(game.players[0].minions[-1].charge)
@@ -398,3 +398,26 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, game.current_player.hero.weapon.durability)
         self.assertEqual(3, game.current_player.hero.weapon.base_attack)
         self.assertEqual(27, game.other_player.hero.health)
+
+    def test_DeathsBite(self):
+        game = generate_game_for([IronfurGrizzly, DeathsBite], Deathlord,
+                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Death's Bite attacks the new Deathlord, triggering the weapon's deathrattle
+        # This finishes off the other deathlord and the first friendly Grizzly
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+>>>>>>> e1d6ab2e88ff40d9e5bc6cd9c2572cce5d0d0003

@@ -1,3 +1,5 @@
+import copy
+from hearthbreaker.effects.minion import HealAsDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -9,26 +11,14 @@ class AuchenaiSoulpriest(MinionCard):
         super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def silence():
-            player.heal_does_damage = False
-
-            # If another Auchenai Soulpriest is alive and not silenced, keep
-            # heal_does_damage as True
-            for m in player.minions:
-                if m.card.name == "Auchenai Soulpriest" and not m.silenced and m is not minion:
-                    player.heal_does_damage = True
-
-        minion = Minion(3, 5)
-        minion.bind_once("silenced", silence)
-        player.heal_does_damage = True
-        return minion
+        return Minion(3, 5, effects=[HealAsDamage()])
 
 
 class CabalShadowPriest(MinionCard):
     def __init__(self):
         super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_enemy_minion_battlecry_target,
-                         lambda target: target.calculate_attack() <= 2)
+                         targeting_func=hearthbreaker.targeting.find_enemy_minion_battlecry_target,
+                         filter_func=lambda target: target.calculate_attack() <= 2)
 
     def create_minion(self, player):
         return Minion(4, 5, battlecry=take_control_of_minion)
@@ -103,7 +93,19 @@ class ProphetVelen(MinionCard):
 class TempleEnforcer(MinionCard):
     def __init__(self):
         super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(6, 6, battlecry=give_three_health)
+
+
+class DarkCultist(MinionCard):
+    def __init__(self):
+        super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def give_3_health(minion):
+            targets = copy.copy(minion.player.minions)
+            if len(targets) > 0:
+                targets[minion.game.random(0, len(targets) - 1)].increase_health(3)
+        return Minion(3, 4, deathrattle=give_3_health)

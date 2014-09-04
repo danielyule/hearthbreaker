@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects.minion import KillOnDamage
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -18,12 +19,12 @@ class DefiasRingleader(MinionCard):
                 def create_minion(self, player):
                     return Minion(2, 1)
 
-            if m is minion and m.player.cards_played > 0 and len(m.player.minions) < 7:
+            if m.player.cards_played > 0:
                 bandit_card = DefiasBandit()
                 bandit_card.summon(m.player, m.game, m.index + 1)
 
-        minion = Minion(2, 2, battlecry=combo)
-        return minion
+        player.bind_once("minion_placed", combo)
+        return Minion(2, 2)
 
 
 class EdwinVanCleef(MinionCard):
@@ -41,21 +42,26 @@ class EdwinVanCleef(MinionCard):
 
 class Kidnapper(MinionCard):
     def __init__(self):
-        super().__init__("Kidnapper", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_minion_battlecry_target)
+        super().__init__("Kidnapper", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
         def combo(minion):
-            if minion.card.target is not None and player.cards_played > 0:
-                minion.card.target.bounce()
+            if player.cards_played > 0:
+                if targets is not None:
+                    target = player.agent.choose_target(targets)
+                    if target is not None:
+                        target.bounce()
 
-        return Minion(5, 3, battlecry=combo)
+        targets = hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda m: m.player is player
+                                                                       or not m.stealth)
+        player.bind_once("minion_placed", combo)
+        return Minion(5, 3)
 
 
 class MasterOfDisguise(MinionCard):
     def __init__(self):
         super().__init__("Master of Disguise", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
 
     def create_minion(self, player):
         return Minion(4, 4, battlecry=give_stealth)
@@ -66,27 +72,25 @@ class PatientAssassin(MinionCard):
         super().__init__("Patient Assassin", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        def poisonous(amount, target):
-            if type(target) is Minion:
-                target.die(self)
-
-        minion = Minion(1, 1, stealth=True)
-        minion.bind("did_damage", poisonous)
-        minion.bind_once("silenced", lambda: minion.unbind("did_damage", poisonous))
-        return minion
+        return Minion(1, 1, stealth=True, effects=[KillOnDamage()])
 
 
 class SI7Agent(MinionCard):
     def __init__(self):
-        super().__init__("SI:7 Agent", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_battlecry_target)
+        super().__init__("SI:7 Agent", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         def combo(minion):
-            if minion.card.target is not None and player.cards_played > 0:
-                minion.card.target.damage(2, self)
+            if player.cards_played > 0:
+                if targets is not None:
+                    target = player.agent.choose_target(targets)
+                    if target is not None:
+                        target.damage(2, self)
 
-        return Minion(3, 3, battlecry=combo)
+        targets = hearthbreaker.targeting.find_battlecry_target(player.game, lambda c: c.player is player
+                                                                or not c.stealth)
+        player.bind_once("minion_placed", combo)
+        return Minion(3, 3)
 
 
 class AnubarAmbusher(MinionCard):

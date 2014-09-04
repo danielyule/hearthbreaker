@@ -57,7 +57,7 @@ class ArcaneExplosion(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(1), self)
 
 
@@ -105,7 +105,7 @@ class Counterspell(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self._reveal)
+        player.game.current_player.bind("spell_cast", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("spell_cast", self._reveal)
@@ -121,7 +121,7 @@ class IceBarrier(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -138,7 +138,7 @@ class MirrorEntity(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal)
+        player.game.current_player.bind("minion_played", self._reveal)
         self.player = player
 
     def deactivate(self, player):
@@ -162,22 +162,24 @@ class Spellbender(SecretCard):
                     return Minion(1, 3)
 
             def choose_bender(targets):
-                spell_bender = SpellbenderMinion()
-                # Seems according to http://us.battle.net/hearthstone/en/forum/topic/10070927066, spellbender
-                # will not activate if there are too many minions
-                spell_bender.summon(self.player, self.player.game, len(self.player.minions))
-                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
-                self.player.game.current_player.agent.choose_target = old_target
-                return self.player.minions[-1]
+                target = old_target(targets)
+                if isinstance(target, Minion):
+                    spell_bender = SpellbenderMinion()
+                    # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
+                    # will not activate if there are too many minions
+                    spell_bender.summon(self.player, self.player.game, len(self.player.minions))
+                    self.player.game.current_player.agent.choose_target = old_target
+                    bender = self.player.minions[-1]
+                    super(Spellbender, self).reveal()
+                    return bender
+                else:
+                    return target
 
             old_target = self.player.game.current_player.agent.choose_target
             self.player.game.current_player.agent.choose_target = choose_bender
-            super().reveal()
-        else:
-            self.activate(self.player)
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self._reveal)
+        player.game.current_player.bind("spell_cast", self._reveal)
         self.player = player
 
     def deactivate(self, player):
@@ -194,11 +196,9 @@ class Vaporize(SecretCard):
             attacker.die(self)
             attacker.game.check_delayed()
             super().reveal()
-        else:
-            self.activate(attacker.player.game.other_player)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -216,7 +216,6 @@ class IceBlock(SecretCard):
             hero.health += amount
             # TODO Check if this spell will also prevent damage to armor.
             super().reveal()
-            self.deactivate(self.player)
 
     def activate(self, player):
         player.hero.bind("hero_damaged", self._reveal)
@@ -235,16 +234,18 @@ class ConeOfCold(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.damage(player.effective_spell_damage(1), self)
         self.target.freeze()
         index = self.target.index
-        if self.target.index > 0:
-            minion = self.target.player.minions[index - 1]
-            minion.damage(player.effective_spell_damage(1), self)
-            minion.freeze()
 
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(1), self)
+            minion.freeze()
+
+        self.target.damage(player.effective_spell_damage(1), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(1), self)
             minion.freeze()
 
@@ -269,10 +270,10 @@ class Polymorph(Card):
 
         class Sheep(MinionCard):
             def __init__(self):
-                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
             def create_minion(self, p):
-                return Minion(1, 1, MINION_TYPE.BEAST)
+                return Minion(1, 1)
 
         sheep = Sheep()
         minion = sheep.create_minion(None)
@@ -286,7 +287,7 @@ class Blizzard(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
             minion.freeze()
 
@@ -297,7 +298,7 @@ class Flamestrike(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        for minion in game.other_player.minions:
+        for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(4), self)
 
 
@@ -317,7 +318,7 @@ class Duplicate(SecretCard):
         self.player = None
 
     def activate(self, player):
-        player.bind_once("minion_died", self._reveal)
+        player.bind("minion_died", self._reveal)
         self.player = player
 
     def deactivate(self, player):

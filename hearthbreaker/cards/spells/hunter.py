@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import Immune
+from hearthbreaker.effects.minion import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -32,7 +32,7 @@ class BestialWrath(Card):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_minion_spell_target,
-                         lambda minion: minion.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
+                         lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -78,7 +78,7 @@ class ExplosiveTrap(SecretCard):
         super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -97,7 +97,7 @@ class FreezingTrap(SecretCard):
         super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind_once("pre_attack", self._reveal)
+        player.game.current_player.bind("pre_attack", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("pre_attack", self._reveal)
@@ -112,6 +112,7 @@ class FreezingTrap(SecretCard):
             card = attacker.card
             attacker.bounce()
             attacker.player.mana_filters.append(Filter())
+            super().reveal()
 
 
 class Misdirection(SecretCard):
@@ -119,7 +120,7 @@ class Misdirection(SecretCard):
         super().__init__("Misdirection", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -141,8 +142,6 @@ class Misdirection(SecretCard):
             old_target_func = game.current_player.agent.choose_target
             game.current_player.agent.choose_target = choose_random
             super().reveal()
-        else:
-            self.activate(game.other_player)
 
 
 class Snipe(SecretCard):
@@ -150,7 +149,7 @@ class Snipe(SecretCard):
         super().__init__("Snipe", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal)
+        player.game.current_player.bind("minion_played", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
@@ -199,14 +198,15 @@ class ExplosiveShot(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.damage(player.effective_spell_damage(5), self)
         index = self.target.index
-        if self.target.index > 0:
-            minion = self.target.player.minions[index - 1]
-            minion.damage(player.effective_spell_damage(2), self)
-
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+        self.target.damage(player.effective_spell_damage(5), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(2), self)
 
 
@@ -218,7 +218,7 @@ class KillCommand(Card):
     def use(self, player, game):
         super().use(player, game)
         beasts = hearthbreaker.targeting.find_friendly_minion_battlecry_target(
-            player.game, lambda x: x.minion_type is MINION_TYPE.BEAST)
+            player.game, lambda x: x.card.minion_type is MINION_TYPE.BEAST)
         if beasts is None:
             self.target.damage(player.effective_spell_damage(3), self)
         else:
@@ -240,8 +240,8 @@ class UnleashTheHounds(Card):
                 minion = Minion(1, 1, MINION_TYPE.BEAST)
                 minion.charge = True
                 return minion
-        hound = Hound()
-        for target in hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True):
+        for target in hearthbreaker.targeting.find_enemy_minion_spell_target(player.game, lambda x: True):
+            hound = Hound()
             hound.summon(player, game, len(player.minions))
 
 
@@ -292,7 +292,7 @@ class SnakeTrap(SecretCard):
         super().__init__("Snake Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
 
     def activate(self, player):
-        player.game.current_player.bind_once("attack", self._reveal)
+        player.game.current_player.bind("attack", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("attack", self._reveal)
@@ -301,14 +301,12 @@ class SnakeTrap(SecretCard):
         if isinstance(target, Minion):
             class Snake(MinionCard):
                 def __init__(self):
-                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
                 def create_minion(self, player):
-                    return Minion(1, 1, MINION_TYPE.BEAST)
+                    return Minion(1, 1)
             snake = Snake()
             player = target.player.game.other_player
             for i in range(0, 3):
                 snake.summon(player, player.game, len(player.minions))
             super().reveal()
-        else:
-            self.activate(target.player.game.current_player)

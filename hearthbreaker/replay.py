@@ -14,39 +14,73 @@ class ReplayException(Exception):
 
 
 class ProxyCharacter:
-    def __init__(self, character_ref, game=None):
+    def __init__(self, character_ref):
         if type(character_ref) is str:
-            self.character_ref = character_ref
+            if character_ref.find(":") > -1:
+                [self.player_ref, self.minion_ref] = character_ref.split(':')
+                self.minion_ref = int(self.minion_ref)
+            else:
+                self.player_ref = character_ref
+                self.minion_ref = None
         elif type(character_ref) is hearthbreaker.game_objects.Hero:
-            if character_ref == game.players[0].hero:
-                self.character_ref = "p1"
+            if character_ref == character_ref.player.game.players[0].hero:
+                self.player_ref = "p1"
             else:
-                self.character_ref = "p2"
+                self.player_ref = "p2"
+            self.minion_ref = None
         elif type(character_ref) is hearthbreaker.game_objects.Minion:
-            if character_ref.player == game.players[0].hero:
-                self.character_ref = "p1:" + str(character_ref.index)
+            if character_ref.player == character_ref.game.players[0]:
+                self.player_ref = "p1"
             else:
-                self.character_ref = "p2:" + str(character_ref.index)
+                self.player_ref = "p2"
+            self.minion_ref = character_ref.index
 
     def resolve(self, game):
-        ref = self.character_ref.split(':')
-        if ref[0] == "p1":
+        if self.player_ref == "p1":
             char = game.players[0].hero
         else:
             char = game.players[1].hero
-        if len(ref) > 1:
-            if ref[0] == "p1":
-                char = game.players[0].minions[int(ref[1])]
+        if self.minion_ref is not None:
+            if self.minion_ref == -1:
+                return None
+            if self.player_ref == "p1":
+                char = game.players[0].minions[self.minion_ref]
             else:
-                char = game.players[1].minions[int(ref[1])]
+                char = game.players[1].minions[self.minion_ref]
 
         return char
 
     def __str__(self):
-        return self.character_ref
+        if self.minion_ref is not None:
+            return "{0}:{1}".format(self.player_ref, self.minion_ref)
+        return self.player_ref
 
     def to_output(self):
         return str(self)
+
+
+class TrackingProxyCharacter(ProxyCharacter):
+    def __init__(self, character_ref, game):
+        super().__init__(character_ref)
+        if self.minion_ref is not None:
+            if self.player_ref == "p1":
+                player = game.players[0]
+            else:
+                player = game.players[1]
+            player.bind("minion_played", self.__minion_added)
+            player.bind("minion_removed", self.__minion_removed)
+
+    def __minion_added(self, minion):
+        if minion.index < self.minion_ref:
+            self.minion_ref += 1
+
+    def __minion_removed(self, minion):
+        if minion.index == self.minion_ref:
+            self.minion_ref = -1
+            minion.player.unbind("minion_played", self.__minion_added)
+            minion.player.unbind("minion_removed", self.__minion_removed)
+        elif minion.index < self.minion_ref:
+            self.minion_ref -= 1
 
 
 class ProxyCard:
@@ -92,7 +126,7 @@ class SpellAction(ReplayAction):
     def __init__(self, card, target=None, game=None):
         self.card = card
         if target is not None:
-            self.target = ProxyCharacter(target, game)
+            self.target = ProxyCharacter(target)
         else:
             self.target = None
 
@@ -113,7 +147,7 @@ class MinionAction(ReplayAction):
         self.card = card
         self.index = index
         if target is not None:
-            self.target = ProxyCharacter(target, game)
+            self.target = ProxyCharacter(target)
         else:
             self.target = None
 
@@ -133,8 +167,8 @@ class MinionAction(ReplayAction):
 
 class AttackAction(ReplayAction):
     def __init__(self, character, target, game=None):
-        self.character = ProxyCharacter(character, game)
-        self.target = ProxyCharacter(target, game)
+        self.character = ProxyCharacter(character)
+        self.target = ProxyCharacter(target)
 
     def to_output_string(self):
         return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
@@ -149,7 +183,7 @@ class PowerAction(ReplayAction):
     def __init__(self, target=None, game=None):
         self.target = target
         if target is not None:
-            self.target = ProxyCharacter(target, game)
+            self.target = ProxyCharacter(target)
         else:
             self.target = None
         self.game = game
@@ -251,7 +285,7 @@ class Replay:
         self.actions.append(PowerAction(game=self.game))
 
     def record_power_target(self, target):
-        self.actions[len(self.actions) - 1].target = ProxyCharacter(target, self.game)
+        self.actions[len(self.actions) - 1].target = ProxyCharacter(target)
 
     def record_kept_index(self, cards, card_index):
         k_arr = []

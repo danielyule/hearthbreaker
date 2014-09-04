@@ -1,13 +1,14 @@
-HearthBreaker
+Hearthbreaker
 =============
 A Hearthstone Simulator
 -----------------------
 
-The purpose of this project is to create an open source Hearthstone simulator for the purposes of machine learning and
-data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  The end goal
-is to create a system implementing every card in Hearthstone, then simulate games of bots against bots to train
-them.  The results from these games can be used to determine cards which work well together and cards which do not.
-The goal is not to create a clone of Hearthstone with which players can replace the game.
+Hearthbreaker is an open source Hearthstone simulator for the purposes of machine learning and
+data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  It implements every 
+collectible card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs
+The results of playing simulated games can be used to determine cards which work well together and cards which do not.  
+Hearthbreaker is not designed to allow player to play Hearthstone against each other, nor is it designed to play against
+human opponents within Hearthstone itself.  It is designed to be used as a library for analysis.
 
  * Documentation (In Progress) [http://danielyule.github.io/hearthbreaker/](http://danielyule.github.io/hearthbreaker/)
  * Travis CI Build Status: [![Build Status](https://travis-ci.org/danielyule/hearthbreaker.svg?branch=master)](https://travis-ci.org/danielyule/hearthbreaker)
@@ -20,6 +21,9 @@ Usage
 Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
+
+![Console Screenshot](http://danielyule.github.io/hearthbreaker/_static/console_screenshot.png)
+
 There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
 at random.
 
@@ -99,8 +103,24 @@ or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hea
 
 Related Projects
 ----------------
+
+###HearthSim
 Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
 with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more
 sophisticated AI.
 
+###Focus
+Raffy is working towards a Domain Specific Language (DSL) for Hearthstone Cards, written in JSON.  The cards are
+completely defined, but the engine (called [Focus](http://fluiddruid.net/forum/viewtopic.php?f=24&t=4808)) is still in
+progress.  These will allow for anyone to define new cards, by simply writing a JSON object to represent the card.
+
+###Fireplace
+Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
+an engine based on that.  His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
+
+###Soot
+[Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
+implementations work.  It is interesting for its functional implementation of the cards.
+
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
+

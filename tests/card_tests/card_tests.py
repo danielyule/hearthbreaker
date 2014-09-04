@@ -5,6 +5,7 @@ import re
 from hearthbreaker.agents.basic_agents import DoNothingBot
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
 from hearthbreaker.game_objects import card_lookup
+from tests.agents.testing_agents import PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -67,7 +68,7 @@ class CardTest(unittest.TestCase):
                     minion.silence()
                     self.assertEqual(int(row["Attack"]), minion.calculate_attack(), row["Name"])
                     self.assertEqual(int(row["Health"]), minion.health, row["Name"])
-                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), minion.minion_type, row["Name"])
+                    self.assertEqual(MINION_TYPE.from_str(row["Race"]), card.minion_type, row["Name"])
                 elif row["Type"] == "Weapon":
                     weapon = card.create_weapon(fake_game.current_player)
                     self.assertEqual(int(row["Attack"]), weapon.base_attack, row["Name"])
@@ -75,3 +76,14 @@ class CardTest(unittest.TestCase):
 
         file.close()
         print("Implemented {0} cards, with {1} cards left".format(implemented_count, total_count - implemented_count))
+
+    def test_play_with_one_card(self):
+            file = open("cards.csv", "r")
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row["Implemented?"] == "yes":
+                    card = card_lookup(row["Name"])
+                    game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+                    while not game.game_ended:
+                        game.play_single_turn()

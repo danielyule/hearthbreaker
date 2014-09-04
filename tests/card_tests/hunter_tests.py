@@ -223,10 +223,10 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(7, len(game.players[1].hand))
         self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
-        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(30, game.players[0].hero.health)
         game.play_single_turn()
-        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[0].hand))
         game.play_single_turn()
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(30, game.players[0].hero.health)
@@ -445,7 +445,7 @@ class TestHunter(unittest.TestCase):
 
         # The buzzard should be silenced, but only after drawing a card from the owl
         self.assertEqual(5, len(game.current_player.hand))
-        self.assertTrue(game.current_player.minions[2].silenced)
+        self.assertEqual(0, len(game.current_player.minions[1].effects))
 
     def test_TundraRhino(self):
         game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino], StonetuskBoar,
