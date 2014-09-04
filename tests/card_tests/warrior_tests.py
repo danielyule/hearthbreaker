@@ -420,4 +420,3 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
->>>>>>> e1d6ab2e88ff40d9e5bc6cd9c2572cce5d0d0003

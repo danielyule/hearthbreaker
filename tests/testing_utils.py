@@ -1,7 +1,7 @@
 import copy
 import collections
 import sys
-from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Deck, Game
 
 if sys.version_info.major is 3:
