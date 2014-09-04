@@ -21,6 +21,9 @@ Usage
 Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
 
 ###Console Application
+
+![Console Screenshot](http://danielyule.github.io/hearthbreaker/_static/console_screenshot.png)
+
 There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
 at random.
 
@@ -111,8 +114,6 @@ Raffy is working towards a Domain Specific Language (DSL) for Hearthstone Cards,
 completely defined, but the engine (called [Focus](http://fluiddruid.net/forum/viewtopic.php?f=24&t=4808)) is still in
 progress.  These will allow for anyone to define new cards, by simply writing a JSON object to represent the card.
 
-_Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
-
 ###Fireplace
 Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
 an engine based on that.  His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
@@ -120,4 +121,6 @@ an engine based on that.  His work can be found on [Fireplace GitHub page](https
 ###Soot
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
 implementations work.  It is interesting for its functional implementation of the cards.
+
+_Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
 
