@@ -5,7 +5,7 @@ A Hearthstone Simulator
 
 Hearthbreaker is an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  It implements every 
-collectible card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs
+card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs.
 The results of playing simulated games can be used to determine cards which work well together and cards which do not.  
 Hearthbreaker is not designed to allow player to play Hearthstone against each other, nor is it designed to play against
 human opponents within Hearthstone itself.  It is designed to be used as a library for analysis.
@@ -63,8 +63,8 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-All cards currently released by Blizzard are implemented.  Curse of Naxxramas cards will be implemented as they are
-released.  The engine is complete, and nearly ready for use in machine learning.  See the 
+All cards currently released by Blizzard are implemented.  The engine is complete, and nearly ready for use in machine
+learning.  Work is now being done to make the game copyable and serializable in any state.  See the
 [developer mailing list](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 for more details.
 

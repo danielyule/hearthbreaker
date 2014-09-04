@@ -1396,9 +1396,6 @@ class Player(Bindable):
         copied_player.game = new_game
         copied_player.secrets = [type(secret)() for secret in self.secrets]
         copied_player.effect_count = dict()
-        for minion in copied_player.minions:
-            for effect in minion._effects_to_add:
-                minion.add_effect(effect)
         return copied_player
 
     def draw(self):
@@ -1582,6 +1579,12 @@ class Game(Bindable):
 
         copied_game.current_player.opponent = copied_game.other_player
         copied_game.other_player.opponent = copied_game.current_player
+
+        for player in copied_game.players:
+            for minion in player.minions:
+                for effect in minion._effects_to_add:
+                    minion.add_effect(effect)
+                minion._effects_to_add = []
 
         for secret in copied_game.other_player.secrets:
             secret.activate(copied_game.other_player)

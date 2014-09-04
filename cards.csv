@@ -201,7 +201,7 @@ yes,Ironforge Rifleman,Battlecry: Deal 1 damage.,,,3,2,2,Common,Minion,Basic
 yes,Ironfur Grizzly,Taunt,Beast,,3,3,3,Common,Minion,Basic
 yes,Jungle Panther,Stealth,Beast,,3,4,2,Common,Minion,Expert
 yes,Keeper of the Grove,Choose One - Deal 2 damage; or Silence a minion.,,Druid,4,2,4,Rare,Minion,Expert
-no,Kel'Thuzad,"At the end of each turn, summon all friendly minions that died this turn",,,8,6,8,Legendary,Minion,Curse of Naxxramas
+yes,Kel'Thuzad,"At the end of each turn, summon all friendly minions that died this turn",,,8,6,8,Legendary,Minion,Curse of Naxxramas
 yes,Kidnapper,Combo: Return a minion to its owner's hand.,,Rogue,6,5,3,Epic,Minion,Expert
 yes,Kill Command,"Deal 3 damage. If you have a Beast, deal 5 damage instead.",,Hunter,3,,,Common,Spell,Basic
 yes,King Krush,Charge,Beast,Hunter,9,8,8,Legendary,Minion,Expert

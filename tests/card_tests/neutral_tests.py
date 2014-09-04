@@ -2806,3 +2806,53 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
         self.assertEqual(4, game.current_player.minions[2].calculate_attack())
         self.assertEqual(4, game.current_player.minions[2].calculate_max_health())
+
+    def test_KelThuzad(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad], [WarGolem, Flamestrike],
+                                 MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        # All but Kel'Thuzad should have died and then come back to life
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+
+    def test_KelThuzad_with_silence(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad], [WarGolem, Flamestrike],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        game.current_player.minions[0].silence()
+
+        game.play_single_turn()
+
+        # The minions should not be brought back
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+
+    def test_KelThuzad_on_friendly_turn(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad, Hellfire], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        # All but Kel'Thuzad should have died and then come back to life, but not the Boars
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(0, len(game.other_player.minions))

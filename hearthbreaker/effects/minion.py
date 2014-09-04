@@ -603,3 +603,30 @@ class Buff(Effect):
             "health": self.health,
             "players": self.players,
         })
+
+
+class ResurrectFriendlyMinionsAtEndOfTurn(Effect):
+    def __init__(self):
+        super().__init__()
+        self.dead_minions = []
+
+    def apply(self):
+        self.target.player.bind("minion_died", self._minion_died)
+        self.target.player.bind("turn_ended", self._turn_ended)
+        self.target.player.opponent.bind("turn_ended", self._turn_ended)
+
+    def unapply(self):
+        self.target.player.unbind("minion_died", self._minion_died)
+        self.target.player.unbind("turn_ended", self._turn_ended)
+        self.target.player.opponent.unbind("turn_ended", self._turn_ended)
+        self.dead_minions = []
+
+    def _minion_died(self, dead_minion, attacker):
+        self.dead_minions.append(dead_minion.card)
+
+    def _turn_ended(self):
+        for minion in self.dead_minions:
+            minion.summon(self.target.player, self.target.game, len(self.target.player.minions))
+
+    def __str__(self):
+        return "ResurrectFriendlyMinionsAtEndOfTurn({0})".format([card.name for card in self.dead_minions])

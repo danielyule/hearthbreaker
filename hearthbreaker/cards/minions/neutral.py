@@ -3,7 +3,8 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
-from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff
+from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
+    ResurrectFriendlyMinionsAtEndOfTurn
 from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -2572,3 +2573,11 @@ class ShadeOfNaxxramas(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2, stealth=True, effects=[Buff("turn_started", attack=1, health=1, players="friendly")])
+
+
+class KelThuzad(MinionCard):
+    def __init__(self):
+        super().__init__("Kel'Thuzad", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(6, 8, effects=[ResurrectFriendlyMinionsAtEndOfTurn()])
