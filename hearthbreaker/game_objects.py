@@ -840,6 +840,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
     def reveal(self):
         self.player.trigger("secret_revealed", self)
         self.player.secrets.remove(self)
+        self.deactivate(self.player)
 
     @abc.abstractmethod
     def _reveal(self, *args):
@@ -991,14 +992,13 @@ class Minion(Character):
             deathrattle = self.deathrattle
 
             def delayed_death(c):
+                self.player.trigger("minion_died", self, by)
                 self.silence()
                 if deathrattle is not None:
                     deathrattle(self)
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
-
-            self.player.trigger("minion_died", self, by)
             self.remove_from_board()
 
     def can_attack(self):

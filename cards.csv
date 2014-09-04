@@ -34,7 +34,7 @@ yes,Armorsmith,"Whenever a friendly minion takes damage, gain 1 Armor.",,Warrior
 yes,Assassin's Blade,,,Rogue,5,3,4,Common,Weapon,Basic
 yes,Assassinate,Destroy an enemy minion.,,Rogue,5,,,Free,Spell,Basic
 yes,Auchenai Soulpriest,Your cards and powers that restore Health now deal damage instead.,,Priest,4,3,5,Rare,Minion,Expert
-no,Avenge,"Secret: When one of your minions dies, give a random friendly minion +3/+2.",,Paladin,1,,,Common,Spell,Curse of Naxxramas
+yes,Avenge,"Secret: When one of your minions dies, give a random friendly minion +3/+2.",,Paladin,1,,,Common,Spell,Curse of Naxxramas
 yes,Avenging Wrath,Deal 8 damage randomly split among enemy characters.,,Paladin,6,,,Epic,Spell,Expert
 yes,Azure Drake,Spell Damage +1. Battlecry: Draw a card.,Dragon,,5,4,4,Rare,Minion,Expert
 yes,Backstab,Deal 2 damage to an undamaged minion.,,Rogue,0,,,Free,Spell,Basic

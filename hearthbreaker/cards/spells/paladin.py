@@ -182,6 +182,24 @@ class LayOnHands(Card):
         player.draw()
 
 
+class Avenge(SecretCard):
+    def __init__(self):
+        super().__init__("Avenge", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def _reveal(self, dead_minion, attacker):
+        if len(self.player.minions) > 0:
+            target = self.player.minions[self.player.game.random(0, len(self.player.minions) - 1)]
+            target.change_attack(3)
+            target.increase_health(2)
+            super().reveal()
+
+    def activate(self, player):
+        player.bind("minion_died", self._reveal)
+
+    def deactivate(self, player):
+        player.unbind("minion_died", self._reveal)
+
+
 class EyeForAnEye(SecretCard):
     def __init__(self):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN,
@@ -192,7 +210,7 @@ class EyeForAnEye(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("hero_damaged", self._reveal)
+        player.hero.bind("hero_damaged", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("hero_damaged", self._reveal)
@@ -224,11 +242,9 @@ class NobleSacrifice(SecretCard):
             old_target = player.game.current_player.agent.choose_target
             player.game.current_player.agent.choose_target = choose_defender
             super().reveal()
-        else:
-            self.activate(player)
 
     def activate(self, player):
-        player.game.current_player.bind_once("pre_attack", self._reveal)
+        player.game.current_player.bind("pre_attack", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("pre_attack", self._reveal)
@@ -251,7 +267,7 @@ class Redemption(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.bind_once("minion_died", self._reveal)
+        player.bind("minion_died", self._reveal)
 
     def deactivate(self, player):
         player.unbind("minion_died", self._reveal)
@@ -268,7 +284,7 @@ class Repentance(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal)
+        player.game.current_player.bind("minion_played", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)

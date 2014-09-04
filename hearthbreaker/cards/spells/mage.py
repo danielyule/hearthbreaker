@@ -105,7 +105,7 @@ class Counterspell(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self._reveal)
+        player.game.current_player.bind("spell_cast", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("spell_cast", self._reveal)
@@ -121,7 +121,7 @@ class IceBarrier(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -138,7 +138,7 @@ class MirrorEntity(SecretCard):
         super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal)
+        player.game.current_player.bind("minion_played", self._reveal)
         self.player = player
 
     def deactivate(self, player):
@@ -165,24 +165,21 @@ class Spellbender(SecretCard):
                 target = old_target(targets)
                 if isinstance(target, Minion):
                     spell_bender = SpellbenderMinion()
-                    # Seems according to http://us.battle.net/hearthstone/en/forum/topic/10070927066, spellbender
+                    # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
                     # will not activate if there are too many minions
                     spell_bender.summon(self.player, self.player.game, len(self.player.minions))
                     self.player.game.current_player.agent.choose_target = old_target
+                    bender = self.player.minions[-1]
                     super(Spellbender, self).reveal()
-                    return self.player.minions[-1]
+                    return bender
                 else:
-                    self.activate(self.player)
                     return target
 
             old_target = self.player.game.current_player.agent.choose_target
             self.player.game.current_player.agent.choose_target = choose_bender
 
-        else:
-            self.activate(self.player)
-
     def activate(self, player):
-        player.game.current_player.bind_once("spell_cast", self._reveal)
+        player.game.current_player.bind("spell_cast", self._reveal)
         self.player = player
 
     def deactivate(self, player):
@@ -199,11 +196,9 @@ class Vaporize(SecretCard):
             attacker.die(self)
             attacker.game.check_delayed()
             super().reveal()
-        else:
-            self.activate(attacker.player.game.other_player)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -221,7 +216,6 @@ class IceBlock(SecretCard):
             hero.health += amount
             # TODO Check if this spell will also prevent damage to armor.
             super().reveal()
-            self.deactivate(self.player)
 
     def activate(self, player):
         player.hero.bind("hero_damaged", self._reveal)
@@ -324,7 +318,7 @@ class Duplicate(SecretCard):
         self.player = None
 
     def activate(self, player):
-        player.bind_once("minion_died", self._reveal)
+        player.bind("minion_died", self._reveal)
         self.player = player
 
     def deactivate(self, player):

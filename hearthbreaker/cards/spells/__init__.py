@@ -81,7 +81,8 @@ from hearthbreaker.cards.spells.paladin import (
     EyeForAnEye,
     NobleSacrifice,
     Redemption,
-    Repentance
+    Repentance,
+    Avenge,
 )
 
 from hearthbreaker.cards.spells.priest import (
