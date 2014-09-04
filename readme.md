@@ -115,7 +115,7 @@ _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Ente
 
 ###Fireplace
 Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
-an engine based on that.  His work can be found on [Fireplace GutHub page](https://github.com/jleclanche/fireplace)
+an engine based on that.  His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
 
 ###Soot
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
