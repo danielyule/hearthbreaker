@@ -9,12 +9,21 @@ class PlayerEffect(metaclass=abc.ABCMeta):
     action is.  Each type of action has a set of parameters that determine how it applies.  Each action type has a
     specific subclass to represent it.
     """
-    def __new__(cls, action, *args, **kwargs):
+    @staticmethod
+    def from_json(game, action, *args, **kwargs):
+        __class_mappings = {
+            "mana_change": ManaChangeEffect,
+            "duplicate_minion": DuplicateMinion,
+            "remove_stealth": RemoveStealth,
+            "return_card": ReturnCard,
+        }
+        if action in __class_mappings:
+            clazz = __class_mappings[action]
+            obj = clazz.__new__()
 
-        if action == "mana_change":
-            return ManaChangeEffect(*args, **kwargs)
+            return clazz.__from_json__(obj, game, *args, **kwargs)
         else:
-            return super(PlayerEffect, cls).__new__(cls)
+            return None
 
     @abc.abstractmethod
     def apply(self, player):
@@ -83,6 +92,21 @@ class ManaChangeEffect(PlayerEffect):
         if self.only_first:
             player.bind("card_played", card_played)
 
+    def __to_json(self):
+        return {
+            "action": "mana_change",
+            "amount": self.amount,
+            "card_filter": self.card_filter,
+            "only_first": self.only_first,
+            "until": self.until,
+        }
+
+    def __from_json__(self, game, amount, card_filter, until, only_first):
+        self.amount = amount
+        self.until = until
+        self.card_filter = card_filter
+        self.only_first = only_first
+
 
 class DuplicateMinion(PlayerEffect):
     def __init__(self, minion_to_duplicate, when):
@@ -100,6 +124,17 @@ class DuplicateMinion(PlayerEffect):
             player.effects.remove(self)
 
         player.bind_once(self.when, duplicate)
+
+    def __to_json(self):
+        return {
+            "action": "duplicate_minion",
+            "when": self.when,
+            "minion_to_duplicate": str(self.minion)
+        }
+
+    def __from_json__(self, game, minion_to_duplicate, when):
+        self.minion = hearthbreaker.replay.TrackingProxyCharacter(minion_to_duplicate, game)
+        self.when = when
 
 
 class RemoveStealth(PlayerEffect):
@@ -119,6 +154,17 @@ class RemoveStealth(PlayerEffect):
 
         player.bind_once(self.when, duplicate)
 
+    def __to_json(self):
+        return {
+            "action": "remove_stealth",
+            "when": self.when,
+            "stealthed_minions": [str(m) for m in self.minions],
+        }
+
+    def __from_json__(self, game, stealthed_minions, when):
+        self.minions = [hearthbreaker.replay.TrackingProxyCharacter(m, game) for m in stealthed_minions]
+        self.when = when
+
 
 class ReturnCard(PlayerEffect):
     def __init__(self, card, when):
@@ -136,3 +182,14 @@ class ReturnCard(PlayerEffect):
             player.effects.remove(self)
 
         player.bind_once(self.when, return_card)
+
+    def __to_json(self):
+        return {
+            "action": "return_card",
+            "card": self.card.name,
+            "when": self.when,
+        }
+
+    def __from_json__(self, game, card, when):
+        self.card = card
+        self.when = when
