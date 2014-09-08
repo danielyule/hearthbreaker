@@ -37,8 +37,8 @@ class ManaChangeEffect(PlayerEffect):
         :param string card_filter: The type of cards to affect.  Possible values are "minion", "spell", "secret" and
                                    "card"
         :param string until: The event to remove this mana filter.  Suggestions are "turn_started" for the start of the
-                             next turn and "turn_ended" for the end of the current turn.  The filter will be removed
-                             regardless of the `only_first` parameter.
+                             next turn, "turn_ended" for the end of the current turn and "forever" if the filter should
+                             never be removed.  The filter will be removed regardless of the `only_first` parameter.
         :param boolean only_first: True if this card filter should be removed the first time a player plays a card which
                                    matches the filter
         """
@@ -78,16 +78,17 @@ class ManaChangeEffect(PlayerEffect):
             if my_filter(card):
                 remove()
                 player.unbind(self.until, remove)
-
-        player.bind_once(self.until, remove)
+        if self.until != "forever":
+            player.bind_once(self.until, remove)
         if self.only_first:
             player.bind("card_played", card_played)
 
 
 class DuplicateMinion(PlayerEffect):
-    def __init__(self, minion_to_duplicate):
+    def __init__(self, minion_to_duplicate, when):
         super().__init__()
         self.minion = hearthbreaker.replay.TrackingProxyCharacter(minion_to_duplicate, minion_to_duplicate.game)
+        self.when = when
 
     def apply(self, player):
 
@@ -98,4 +99,40 @@ class DuplicateMinion(PlayerEffect):
                 dup.add_to_board(minion.index + 1)
             player.effects.remove(self)
 
-        player.bind_once("turn_ended", duplicate)
+        player.bind_once(self.when, duplicate)
+
+
+class RemoveStealth(PlayerEffect):
+    def __init__(self, stealthed_minions, when):
+        super().__init__()
+        self.minions = [hearthbreaker.replay.TrackingProxyCharacter(m, m.game) for m in stealthed_minions]
+        self.when = when
+
+    def apply(self, player):
+
+        def duplicate():
+            for ref in self.minions:
+                minion = ref.resolve(player.game)
+                if minion:
+                    minion.stealth = False
+            player.effects.remove(self)
+
+        player.bind_once(self.when, duplicate)
+
+
+class ReturnCard(PlayerEffect):
+    def __init__(self, card, when):
+        super().__init__()
+        self.card = card
+        self.when = when
+
+    def apply(self, player):
+
+        def return_card():
+            if len(player.hand) < 10:
+                player.hand.append(self.card)
+            else:
+                player.trigger("card_destroyed", self.card)
+            player.effects.remove(self)
+
+        player.bind_once(self.when, return_card)

@@ -1,3 +1,4 @@
+import copy
 import random
 import unittest
 
@@ -988,3 +989,100 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(0, len(game.other_player.minions))
+
+    def test_Preparation(self):
+        new_game = None
+
+        class PrepAgent(PredictableBot):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                done_something = True
+                player.game.play_card(player.hand[0])
+                new_game = player.game.copy()
+                while done_something:
+                    done_something = False
+                    for card in copy.copy(new_game.current_player.hand):
+                        if card.can_use(new_game.current_player, new_game):
+                            new_game.play_card(card)
+                            done_something = True
+
+        game = generate_game_for([Preparation, BloodfenRaptor, Headcrack], StoneskinGargoyle, PrepAgent, DoNothingBot)
+
+        # Preparation should be played. Bloodfen shouldn't be played, since that isn't a spell, but Headcrack should.
+        game.play_single_turn()
+        self.assertEqual(28, new_game.players[1].hero.health)
+        self.assertEqual(0, len(new_game.players[0].minions))
+
+    def test_Conceal(self):
+        new_game = None
+
+        class ConcealAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                super().do_turn(player)
+                if self.turn == 2:
+                    new_game = player.game.copy()
+
+        game = generate_game_for([StonetuskBoar, Conceal, MogushanWarden], StonetuskBoar, ConcealAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # Stonetusk and Conceal should have been played
+        self.assertEqual(1, len(new_game.players[0].minions))
+        self.assertTrue(new_game.players[0].minions[0].stealth)
+
+        new_game.play_single_turn()
+        # Conceal should fade off
+        new_game.play_single_turn()
+        self.assertEqual(1, len(new_game.players[0].minions))
+        self.assertFalse(new_game.players[0].minions[0].stealth)
+
+    def test_Headcrack(self):
+        new_game = None
+
+        class HCAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                super().do_turn(player)
+                if self.turn == 6:
+                    new_game = player.game.copy()
+        game = generate_game_for(Headcrack, StonetuskBoar, HCAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, without combo
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, with combo
+        game.play_single_turn()
+        new_game._end_turn()
+        self.assertEqual(20, new_game.players[1].hero.health)
+        self.assertEqual(5, len(new_game.players[0].hand))
+        self.assertEqual("Headcrack", new_game.players[0].hand[0].name)

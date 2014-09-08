@@ -59,9 +59,6 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def gain_one_attack(m):
-            minion.change_attack(1)
-
         minion = Minion(2, 4, effects=[Buff("damaged", "minion", "self", 1, 0, "both")])
         return minion
 

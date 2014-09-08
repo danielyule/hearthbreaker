@@ -5,14 +5,13 @@ from hearthbreaker.agents.basic_agents import DoNothingBot
 class SpellTestingAgent(DoNothingBot):
     def __init__(self, play_on=1):
         super().__init__()
-        self.play_on = play_on
-        self.turn = 0
+
         self.player = None
 
     def do_turn(self, player):
-        self.turn += 1
+
         self.player = player
-        while self.turn >= self.play_on and len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
+        while len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
             player.game.play_card(player.hand[0])
 
 

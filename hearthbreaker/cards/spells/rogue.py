@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects.player import RemoveStealth, ReturnCard, ManaChangeEffect
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -91,19 +92,15 @@ class Conceal(Card):
         super().__init__("Conceal", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
-        def create_remove_stealth(minion):
-            def remove_stealth():
-                minion.stealth = False
-            return remove_stealth
-
         super().use(player, game)
-
+        stealthed_minions = []
         for minion in player.minions:
             if not minion.stealth:
                 minion.stealth = True
-                remove_stealth = create_remove_stealth(minion)
-                player.bind_once("turn_started", remove_stealth)
-                minion.bind_once("silenced", lambda: player.unbind("turn_started", remove_stealth))
+                stealthed_minions.append(minion)
+
+        if len(stealthed_minions) > 0:
+            player.add_effect(RemoveStealth(stealthed_minions, "turn_started"))
 
 
 class DeadlyPoison(Card):
@@ -152,18 +149,10 @@ class Headcrack(Card):
         super().__init__("Headcrack", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
 
     def use(self, player, game):
-        def return_card():
-            if len(player.hand) < 10:
-                player.hand.append(self)
-            else:
-                player.trigger("card_destroyed", self)
-
         super().use(player, game)
-
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
-
         if player.cards_played > 0:
-            player.bind_once("turn_ended", return_card)
+            player.add_effect(ReturnCard(self, "turn_ended"))
 
 
 class Preparation(Card):
@@ -171,28 +160,8 @@ class Preparation(Card):
         super().__init__("Preparation", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self):
-                self.amount = 3
-                self.filter = lambda c: c.is_spell()
-                self.min = 0
-
-        def card_used(card):
-            if card is not self and card.is_spell():
-                player.unbind("card_used", card_used)
-                player.unbind("turn_ended", turn_ended)
-                player.mana_filters.remove(mana_filter)
-
-        def turn_ended():
-            player.unbind("card_used", card_used)
-            player.mana_filters.remove(mana_filter)
-
         super().use(player, game)
-
-        mana_filter = Filter()
-        player.bind("card_used", card_used)
-        player.bind_once("turn_ended", turn_ended)
-        player.mana_filters.append(mana_filter)
+        player.add_effect(ManaChangeEffect(100, "spell", "turn_ended", True))
 
 
 class Sap(Card):

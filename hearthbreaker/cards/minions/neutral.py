@@ -2563,7 +2563,7 @@ class EchoingOoze(MinionCard):
 
     def create_minion(self, player):
         def duplicate_at_end(minion):
-            player.add_effect(DuplicateMinion(minion))
+            player.add_effect(DuplicateMinion(minion, "turn_ended"))
         return Minion(1, 2, battlecry=duplicate_at_end)
 
 
