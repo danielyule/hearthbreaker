@@ -190,7 +190,7 @@ class ShamanPower(Power):
             def create_minion(self, player):
                 def heal_friendly_minions():
                     for m in player.minions:
-                        m.heal(1, self)
+                        m.heal(player.effective_heal_power(1), self)
 
                 def silence():
                     player.unbind("turn_ended", heal_friendly_minions)

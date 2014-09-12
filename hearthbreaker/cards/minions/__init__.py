@@ -167,7 +167,16 @@ from hearthbreaker.cards.minions.neutral import (
     BaronRivendare,
     DancingSwords,
     Deathlord,
-    SpectralKnight
+    SpectralKnight,
+    Undertaker,
+    WailingSoul,
+    ZombieChow,
+    Feugen,
+    Stalagg,
+    MadScientist,
+    EchoingOoze,
+    ShadeOfNaxxramas,
+    KelThuzad,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -176,7 +185,7 @@ from hearthbreaker.cards.minions.druid import (
     AncientOfLore,
     AncientOfWar,
     IronbarkProtector,
-    Cenarius
+    Cenarius,
 )
 
 from hearthbreaker.cards.minions.hunter import (
@@ -196,14 +205,14 @@ from hearthbreaker.cards.minions.mage import (
     KirinTorMage,
     EtherealArcanist,
     WaterElemental,
-    ArchmageAntonidas
+    ArchmageAntonidas,
 )
 
 from hearthbreaker.cards.minions.paladin import (
     AldorPeacekeeper,
     ArgentProtector,
     GuardianOfKings,
-    TirionFordring
+    TirionFordring,
 )
 
 from hearthbreaker.cards.minions.priest import (
@@ -213,7 +222,8 @@ from hearthbreaker.cards.minions.priest import (
     Lightwell,
     NorthshireCleric,
     ProphetVelen,
-    TempleEnforcer
+    TempleEnforcer,
+    DarkCultist,
 )
 
 from hearthbreaker.cards.minions.rogue import (
@@ -234,7 +244,7 @@ from hearthbreaker.cards.minions.shaman import (
     FlametongueTotem,
     ManaTideTotem,
     UnboundElemental,
-    Windspeaker
+    Windspeaker,
 )
 
 from hearthbreaker.cards.minions.warlock import (
@@ -259,5 +269,5 @@ from hearthbreaker.cards.minions.warrior import (
     FrothingBerserker,
     GrommashHellscream,
     KorkronElite,
-    WarsongCommander
+    WarsongCommander,
 )

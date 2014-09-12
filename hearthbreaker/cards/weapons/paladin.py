@@ -39,7 +39,7 @@ class TruesilverChampion(WeaponCard):
 
     def create_weapon(self, player):
         def heal(attacker):
-            player.hero.heal(2, self)
+            player.hero.heal(player.effective_heal_power(2), self)
 
         def on_destroy():
             player.hero.unbind("attack", heal)

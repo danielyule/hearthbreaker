@@ -1,3 +1,5 @@
+import copy
+import json
 from hearthbreaker.constants import MINION_TYPE
 from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion
 
@@ -115,52 +117,6 @@ class DrawOnMinion(Effect):
         if self.minion_type == MINION_TYPE.ALL:
             return "DrawOnMinion(All)"
         return "DrawOnMinion({0})".format(MINION_TYPE.to_str(self.minion_type))
-
-
-class GrowOnDeath(Effect):
-    """
-    Minions with this effect will grow every time another minion dies.
-
-    The amount increased, as well as which players own the minions and what type o
-    minions to monitor can all be customized
-    """
-
-    def __init__(self, attack, health, players="friendly", minion_type=MINION_TYPE.ALL):
-        """
-        :param int attack: The amount to increase this minion's attack by
-        :param int health: The amount to increase this minion's health by
-        :param string players: Whose minions should be watched.  Possible values are "friendly", "enemy" and "both"
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion whose death will cause an increase, or `MINION_TYPE.ALL` for any minion
-        """
-        super().__init__()
-        self.attack = attack
-        self.health = health
-        self.players = players
-        self.minion_type = minion_type
-
-    def apply(self):
-        if self.players == "friendly" or self.players == "both":
-            self.target.player.bind("minion_died", self.minion_grow)
-        if self.players == "enemy" or self.players == "both":
-            self.target.player.opponent.bind("minion_died", self.minion_grow)
-
-    def unapply(self):
-        if self.players == "friendly" or self.players == "both":
-            self.target.player.unbind("minion_died", self.minion_grow)
-        if self.players == "enemy" or self.players == "both":
-            self.target.player.opponent.unbind("minion_died", self.minion_grow)
-
-    def minion_grow(self, dead_minion, by):
-        if dead_minion is not self.target and \
-                (self.minion_type == MINION_TYPE.ALL or dead_minion.card.minion_type is self.minion_type):
-            self.target.change_attack(self.attack)
-            self.target.increase_health(self.health)
-
-    def __str__(self):
-        if self.minion_type == MINION_TYPE.ALL:
-            return "GrowOnDeath({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
-        return "GrowOnDeath({0}, {1}, {2}, {3})".format(self.attack, self.health, self.players, self.minion_type)
 
 
 class ChargeAura(Effect):
@@ -351,39 +307,6 @@ class HealAsDamage(Effect):
         return "HealAsDamage()"
 
 
-class GrowOnSpell(Effect):
-    """
-    Grows each time a spell is played.  The type of how much attack
-    and health should be increased can be specified
-    """
-
-    def __init__(self, attack, health):
-        """
-        Create a new GrowOnSpell
-
-        :param int attack: How much to increase attack when a spell is played
-        :param int health: How much to increase health when a spell is played
-        """
-        super().__init__()
-        self.attack = attack
-        self.health = health
-
-    def apply(self):
-        self.target.player.bind("spell_cast", self.increase_stats)
-
-    def unapply(self):
-        self.target.player.unbind("spell_cast", self.increase_stats)
-
-    def increase_stats(self, card):
-        if self.attack > 0:
-            self.target.change_attack(self.attack)
-        if self.health > 0:
-            self.target.increase_health(self.health)
-
-    def __str__(self):
-        return "GrowOn(spell, {0}, {1})".format(self.attack, self.health)
-
-
 class ManaFilter(Effect):
     """
     Associates a mana filter with this minion.  A mana filter affects a player by making cards of a certain type
@@ -546,3 +469,164 @@ class DrawOnAttack(Effect):
 
     def __str__(self):
         return("DrawOn(attack, {0})").format(self.amount)
+
+
+class Buff(Effect):
+    def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly"):
+        super().__init__()
+        self.when = when
+        self.minion_filter = minion_filter
+        self.buff_target = target
+        self.attack = attack
+        self.health = health
+        self.players = players
+
+    def apply(self):
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+        else:
+            raise RuntimeError("Required players to be 'friendly', 'enemy', or 'both', got '{0}".format(self.players))
+
+        if self.when == "death":
+            for player in players:
+                player.bind("minion_died", self._check_minion_filter)
+        elif self.when == "damaged":
+            for player in players:
+                player.bind("minion_damaged", self._check_minion_filter)
+        elif self.when == "summoned":
+            for player in players:
+                player.bind("minion_summoned", self._check_minion_filter)
+        elif self.when == "played":
+            if self.minion_filter == "spell" or self.minion_filter == "secret" or self.minion_filter == "card":
+                for player in players:
+                    player.bind("card_played", self._check_card_filter)
+            else:
+                for player in players:
+                    player.bind("minion_played", self._check_minion_filter)
+        elif self.when == "turn_ended":
+            for player in players:
+                player.bind("turn_ended", self._do_action)
+        elif self.when == "turn_started":
+            for player in players:
+                player.bind("turn_started", self._do_action)
+
+    def unapply(self):
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+        else:
+            raise RuntimeError("Required players to be 'friendly', 'enemy', or 'both', got '{0}".format(self.players))
+
+        if self.when == "death":
+            for player in players:
+                player.unbind("minion_died", self._check_minion_filter)
+        elif self.when == "damaged":
+            for player in players:
+                player.unbind("minion_damaged", self._check_minion_filter)
+        elif self.when == "summoned":
+            for player in players:
+                player.unbind("minion_summoned", self._check_minion_filter)
+        elif self.when == "played":
+            if self.minion_filter == "spell" or self.minion_filter == "secret" or self.minion_filter == "card":
+                for player in players:
+                    player.unbind("card_played", self._check_card_filter)
+            else:
+                for player in players:
+                    player.unbind("minion_played", self._check_minion_filter)
+        elif self.when == "turn_ended":
+            for player in players:
+                player.unbind("turn_ended", self._do_action)
+        elif self.when == "turn_started":
+            for player in players:
+                player.unbind("turn_started", self._do_action)
+
+    def _check_minion_filter(self, minion, *args):
+        if self.minion_filter == "self":
+            if minion == self.target:
+                self._do_action()
+        elif self.minion_filter == "minion":
+            self._do_action()
+        elif self.minion_filter == "deathrattle" and minion.deathrattle is not None:
+            self._do_action()
+        else:
+            try:
+                type_id = MINION_TYPE.from_str(self.minion_filter)
+                if minion.card.minion_type == type_id:
+                    self._do_action()
+            except KeyError:
+                pass
+
+    def _check_card_filter(self, card):
+        if self.minion_filter == "spell" and card.is_spell():
+            self._do_action()
+        elif self.minion_filter == "secret" and isinstance(card, SecretCard):
+            self._do_action()
+
+    def _do_action(self):
+        if self.buff_target == "self":
+            target = self.target
+        else:
+            if self.buff_target == "random":
+                targets = copy.copy(self.target.player.minions)
+                targets.extend(self.target.player.opponent.minions)
+                targets.remove(self.target)
+            elif self.buff_target == "random_friendly":
+                targets = copy.copy(self.target.player.minions)
+                targets.remove(self.target)
+            elif self.buff_target == "random_enemy":
+                targets = copy.copy(self.target.player.opponent.minions)
+            else:
+                raise RuntimeError("Expected 'target' to be one of 'self', 'random', " +
+                                   "'random_friendly' or 'random_enemy'.  Got '{0}'".format(self.buff_target))
+            target = targets[self.target.game.random(0, len(targets) - 1)]
+        if self.health > 0:
+            target.increase_health(self.health)
+        elif self.health < 0:
+            target.decrease_health(-self.health)
+        if self.attack != 0:
+            target.change_attack(self.attack)
+
+    def __str__(self):
+        return json.dumps({
+            "action": "buff",
+            "when": self.when,
+            "filter": self.minion_filter,
+            "target": self.buff_target,
+            "attack": self.attack,
+            "health": self.health,
+            "players": self.players,
+        })
+
+
+class ResurrectFriendlyMinionsAtEndOfTurn(Effect):
+    def __init__(self):
+        super().__init__()
+        self.dead_minions = []
+
+    def apply(self):
+        self.target.player.bind("minion_died", self._minion_died)
+        self.target.player.bind("turn_ended", self._turn_ended)
+        self.target.player.opponent.bind("turn_ended", self._turn_ended)
+
+    def unapply(self):
+        self.target.player.unbind("minion_died", self._minion_died)
+        self.target.player.unbind("turn_ended", self._turn_ended)
+        self.target.player.opponent.unbind("turn_ended", self._turn_ended)
+        self.dead_minions = []
+
+    def _minion_died(self, dead_minion, attacker):
+        self.dead_minions.append(dead_minion.card)
+
+    def _turn_ended(self):
+        for minion in self.dead_minions:
+            minion.summon(self.target.player, self.target.game, len(self.target.player.minions))
+
+    def __str__(self):
+        return "ResurrectFriendlyMinionsAtEndOfTurn({0})".format([card.name for card in self.dead_minions])

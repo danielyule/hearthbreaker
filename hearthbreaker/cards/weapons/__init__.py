@@ -1,26 +1,27 @@
 from hearthbreaker.cards.weapons.hunter import (
     EaglehornBow,
-    GladiatorsLongbow
+    GladiatorsLongbow,
 )
 
 from hearthbreaker.cards.weapons.paladin import (
     LightsJustice,
     SwordOfJustice,
-    TruesilverChampion
+    TruesilverChampion,
 )
 
 from hearthbreaker.cards.weapons.rogue import (
     AssassinsBlade,
-    PerditionsBlade
+    PerditionsBlade,
 )
 
 from hearthbreaker.cards.weapons.shaman import (
     Doomhammer,
-    StormforgedAxe
+    StormforgedAxe,
 )
 
 from hearthbreaker.cards.weapons.warrior import (
     FieryWarAxe,
     ArcaniteReaper,
-    Gorehowl
+    Gorehowl,
+    DeathsBite,
 )

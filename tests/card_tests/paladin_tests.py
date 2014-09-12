@@ -490,3 +490,40 @@ class TestPaladin(unittest.TestCase):
         tirion.activate_delayed()
         self.assertEqual(5, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
+
+    def test_Avenge(self):
+        game = generate_game_for([Avenge, StonetuskBoar, StonetuskBoar], Frostbolt,
+                                 SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[1].calculate_max_health())
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(0, len(game.other_player.secrets))
+
+    def test_AvengewithAoE(self):
+        game = generate_game_for(Flamestrike, [Avenge, Shieldbearer, IronfurGrizzly, Deathwing],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        # The Flamestrike should kill both minions.  If one dies, then the other should not be buffed.  If one is
+        # buffed before Flamestroke completes, then it will survive, which should not happen.
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))

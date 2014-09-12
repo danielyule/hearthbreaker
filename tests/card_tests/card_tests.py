@@ -21,12 +21,8 @@ class CardTest(unittest.TestCase):
         split_re = re.compile("\\s*\\.\\s*")
         file = open("cards.csv", "r")
         reader = csv.DictReader(file)
-        implemented_count = 0
-        total_count = 0
         for row in reader:
-            total_count += 1
             if row['Implemented?'] == "yes":
-                implemented_count += 1
                 card = card_lookup(row["Name"])
                 self.assertEqual(int(row["Cost"]), card.mana, row["Name"])
                 self.assertEqual(CHARACTER_CLASS.from_str(row["Class"]), card.character_class, row["Name"])
@@ -75,14 +71,14 @@ class CardTest(unittest.TestCase):
                     self.assertEqual(int(row["Health"]), weapon.durability, row["Name"])
 
         file.close()
-        print("Implemented {0} cards, with {1} cards left".format(implemented_count, total_count - implemented_count))
 
     def test_play_with_one_card(self):
             file = open("cards.csv", "r")
             reader = csv.DictReader(file)
             for row in reader:
-                card = card_lookup(row["Name"])
-                game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+                if row["Implemented?"] == "yes":
+                    card = card_lookup(row["Name"])
+                    game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
 
-                while not game.game_ended:
-                    game.play_single_turn()
+                    while not game.game_ended:
+                        game.play_single_turn()

@@ -440,6 +440,45 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(20, game.players[0].deck.left)
 
     def test_AuchenaiSoulpriest(self):
+        game = generate_game_for([AuchenaiSoulpriest, EarthenRingFarseer], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        # Auchenai Soulpriest should be played
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Auchenai Soulpriest", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].heal_does_damage)
+
+        # ERF will damage the Soulpriest with its battlecry
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Earthen Ring Farseer", game.players[0].minions[0].card.name)
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        game.players[0].minions[2].silence()
+        self.assertTrue(game.players[0].heal_does_damage)
+        soulpriest = game.players[0].minions[0]
+        soulpriest.die(None)
+        game.check_delayed()
+        self.assertFalse(game.players[0].heal_does_damage)
+
+        game.play_single_turn()
+        # ERF should heal again
+        game.play_single_turn()
+
+        # This minion should not have taken damage and received heal instead
+        self.assertEqual(3, game.players[0].minions[1].health)
+
+    def test_AuchenaiSoulpriest_with_hero_power(self):
         game = generate_game_for(AuchenaiSoulpriest, StonetuskBoar, PredictableBot, DoNothingBot)
 
         # Auchenai Soulpriest should be played
@@ -455,19 +494,6 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(3, game.players[0].minions[1].health)
-        game.players[0].minions[1].silence()
-        self.assertTrue(game.players[0].heal_does_damage)
-        soulpriest = game.players[0].minions[0]
-        soulpriest.die(None)
-        soulpriest.activate_delayed()
-        self.assertFalse(game.players[0].heal_does_damage)
-
-        game.play_single_turn()
-        # Hero power should heal again
-        game.play_single_turn()
-
-        # This minion should not have taken damage and received heal instead
-        self.assertEqual(5, game.players[0].minions[1].health)
 
     def test_ProphetVelen(self):
         game = generate_game_for([ProphetVelen, ProphetVelen, MindBlast], StonetuskBoar, MinionPlayingAgent,
@@ -523,3 +549,32 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertEqual(4, game.players[0].minions[1].health)
         self.assertEqual(4, game.players[0].minions[1].calculate_max_health())
+
+    def test_DarkCultist(self):
+        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Dark Cultist", game.current_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(4, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual("Dark Cultist", game.current_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[1].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[2].card.name)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(4, game.current_player.minions[2].health)
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(1, game.current_player.minions[0].health)
+        self.assertEqual(4, game.current_player.minions[1].health)

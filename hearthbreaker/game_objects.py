@@ -1,7 +1,7 @@
 import copy
 import random
 import abc
-import itertools
+
 import hearthbreaker.powers
 import hearthbreaker.targeting
 import hearthbreaker.constants
@@ -386,7 +386,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
             if isinstance(self, Minion):
-                self.game.trigger("minion_damaged", self)
+                self.player.trigger("minion_damaged", self)
             elif isinstance(self, Hero):
                 # The response of a secret to damage must happen immediately
                 self.trigger("hero_damaged", amount, attacker)
@@ -840,6 +840,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
     def reveal(self):
         self.player.trigger("secret_revealed", self)
         self.player.secrets.remove(self)
+        self.deactivate(self.player)
 
     @abc.abstractmethod
     def _reveal(self, *args):
@@ -991,13 +992,13 @@ class Minion(Character):
             deathrattle = self.deathrattle
 
             def delayed_death(c):
+                self.player.trigger("minion_died", self, by)
                 self.silence()
                 if deathrattle is not None:
                     deathrattle(self)
+                self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
-
-            self.player.trigger("minion_died", self, by)
             self.remove_from_board()
 
     def can_attack(self):
@@ -1228,20 +1229,24 @@ class Weapon(Bindable):
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
     """
 
-    def __init__(self, attack_power, durability, battlecry=None):
+    def __init__(self, attack_power, durability, battlecry=None, deathrattle=None):
         """
-        Creates a new weapon with the given attack power and durability.  A battlecry can also optionally be set.
+        Creates a new weapon with the given attack power and durability.  A battlecry and deathrattle can also
+        optionally be set.
         :param int attack_power: The amount of attack this weapon gives the hero
         :param int durability: The number of times this weapon can be used to attack before being discarded
-        :param function battlecry: Called when this weapon is first placed
+        :param function battlecry: Called when this weapon is equipped
+        :param function deathrattle: Called when the weapon is destroyed
         """
         super().__init__()
         # : The amount of attack this weapon gives the hero
         self.base_attack = attack_power
         # : The number of times this weapon can be used to attack before being discarded
         self.durability = durability
-        #: Called when this weapon is first placed
+        #: Called when this weapon is equipped
         self.battlecry = battlecry
+        #: Called when the weapon is destroyed
+        self.deathrattle = deathrattle
         #: The :class:`Player` associated with this weapon
         self.player = None
         #: The :class:`WeaponCard` that created this weapon
@@ -1252,9 +1257,14 @@ class Weapon(Bindable):
         new_weapon.events = copy.copy(self.events)
         new_weapon.player = new_owner
         self.trigger("copied", new_weapon, new_owner)
+        return new_weapon
 
     def destroy(self):
         self.trigger("destroyed")
+        # Deathrattle is triggered no matter how the weapon is destroyed, see
+        # http://www.hearthhead.com/card=1805/deaths-bite#comments:id=1983510
+        if self.deathrattle is not None:
+            self.deathrattle(self)
         self.player.hero.weapon = None
         if self.player.game.current_player is self.player:
             self.player.hero.change_temp_attack(-self.base_attack)
@@ -1358,9 +1368,9 @@ class Hero(Character):
 
     def copy(self, new_owner, new_game):
         new_hero = copy.copy(self)
-        new_hero.events = copy.copy(self.events)
+        new_hero.events = dict()
         if self.weapon:
-            new_hero.weapon = self.weapon.copy(new_owner, new_game)
+            new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.player = new_owner
         new_hero.power = copy.copy(self.power)
         new_hero.power.hero = new_hero
@@ -1443,13 +1453,14 @@ class Player(Bindable):
         self.deck = deck
         self.spell_damage = 0
         self.minions = []
+        self.graveyard = set()
         self.random = random_func
         self.hand = []
         self.auras = []
         self.fatigue = 0
         self.agent = agent
         self.game = game
-        self.card_filters = []
+        self.effects = []
         self.secrets = []
         self.spell_multiplier = 1
         self.heal_multiplier = 1
@@ -1468,20 +1479,17 @@ class Player(Bindable):
         copied_player.events = dict()
         copied_player.auras = []
         copied_player.mana_filters = []
-        copied_player.card_filters = []
-        for card_filter in self.card_filters:
-            copied_player.add_card_filter(card_filter.amount, card_filter.filter, card_filter.until,
-                                          card_filter.only_first)
+        copied_player.effects = []
+        for effect in self.effects:
+            copied_player.add_effect(effect)
         copied_player.hero = self.hero.copy(copied_player, new_game)
         copied_player.deck = self.deck.copy()
+        copied_player.graveyard = copy.copy(self.graveyard)
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
         copied_player.hand = [type(card)() for card in self.hand]
         copied_player.game = new_game
         copied_player.secrets = [type(secret)() for secret in self.secrets]
         copied_player.effect_count = dict()
-        for minion in copied_player.minions:
-            for effect in minion._effects_to_add:
-                minion.add_effect(effect)
         return copied_player
 
     def draw(self):
@@ -1506,7 +1514,7 @@ class Player(Bindable):
 
     def effective_heal_power(self, base_heal):
         if self.heal_does_damage:
-            return (base_heal + self.spell_damage) * self.spell_multiplier
+            return -(base_heal + self.spell_damage) * self.spell_multiplier
         else:
             return base_heal * self.heal_multiplier
 
@@ -1522,71 +1530,9 @@ class Player(Bindable):
             self.hand.remove(target)
             self.trigger("card_discarded", target)
 
-    def add_card_filter(self, amount, card_filter="card", until="turn_started", only_first=False):
-        """
-        Adds a mana filter to the cards that this player has.  Unlike the
-        :class:`ManaFilter effect <hearthbreaker.effects.ManaFilter`, this filter is not tied to any minion, but
-        instead will remain until an event occurs or, if `only_first` is True a card which matches the filter is played,
-        whichever comes first.
-
-        :param int amount: The amount to decrease the mana cost of affected cards
-        :param string card_filter: The type of cards to affect.  Possible values are "minion", "spell", "secret" and
-                                   "card"
-        :param string until: The event to remove this mana filter.  Suggestions are "turn_started" for the start of the
-                             next turn and "turn_ended" for the end of the current turn.  The filter will be removed
-                             regardless of the `only_first` parameter.
-        :param boolean only_first: True if this card filter should be removed the first time a player plays a card which
-                                   matches the filter
-        """
-        class CardFilter:
-            def __init__(self):
-                self.amount = amount
-                self.filter = card_filter
-                self.until = until
-                self.only_first = only_first
-
-            def __json__(self):
-                return {
-                    'amount': self.amount,
-                    'card_filter': self.filter,
-                    'until': self.until,
-                    'only_first': self.only_first,
-                }
-
-        if card_filter == "minion":
-            my_filter = lambda c: isinstance(c, MinionCard)
-        elif card_filter == "spell":
-            my_filter = lambda c: c.is_spell()
-        elif card_filter == "secret":
-            my_filter = lambda c: isinstance(c, SecretCard)
-        else:
-            my_filter = lambda c: True
-
-        class Filter:
-            def __init__(self):
-                self.amount = amount
-                self.min = 0
-                self.filter = my_filter
-
-        card_effect = CardFilter()
-        mana_filter = Filter()
-        self.card_filters.append(card_effect)
-        self.mana_filters.append(mana_filter)
-
-        def remove():
-            self.card_filters.remove(card_effect)
-            self.mana_filters.remove(mana_filter)
-            if only_first:
-                self.unbind("card_played", card_played)
-
-        def card_played(card):
-            if my_filter(card):
-                remove()
-                self.unbind(until, remove)
-
-        self.bind_once(until, remove)
-        if only_first:
-            self.bind("card_played", card_played)
+    def add_effect(self, effect):
+        self.effects.append(effect)
+        effect.apply(self)
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
@@ -1763,6 +1709,12 @@ class Game(Bindable):
         copied_game.current_player.opponent = copied_game.other_player
         copied_game.other_player.opponent = copied_game.current_player
 
+        for player in copied_game.players:
+            for minion in player.minions:
+                for effect in minion._effects_to_add:
+                    minion.add_effect(effect)
+                minion._effects_to_add = []
+
         for secret in copied_game.other_player.secrets:
             secret.activate(copied_game.other_player)
         return copied_game
@@ -1789,7 +1741,7 @@ class Game(Bindable):
 
     def remove_minion(self, minion, player):
         player.minions.remove(minion)
-        self.trigger("minion_removed", minion, player)
+        player.trigger("minion_removed", minion)
 
     def __json__(self):
         if self.current_player == self.players[0]:

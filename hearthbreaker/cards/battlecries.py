@@ -19,12 +19,12 @@ def silence(minion):
 
 def heal_two(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(2, None)
+        minion.card.target.heal(minion.player.effective_heal_power(2), None)
 
 
 def heal_three(minion):
     if minion.card.target is not None:
-        minion.card.target.heal(3, None)
+        minion.card.target.heal(minion.player.effective_heal_power(3), None)
 
 
 def deal_one_damage(minion):
@@ -55,11 +55,11 @@ def pit_lord(minion):
 
 
 def priestess_of_elune(minion):
-    minion.player.hero.heal(4, None)
+    minion.player.hero.heal(minion.player.effective_heal_power(4), None)
 
 
 def guardian_of_kings(minion):
-    minion.player.hero.heal(6, None)
+    minion.player.hero.heal(minion.player.effective_heal_power(6), None)
 
 
 def change_attack_to_one(minion):
@@ -137,7 +137,7 @@ def darkscale_healer(minion):
     targets = copy.copy(minion.player.game.current_player.minions)
     targets.append(minion.player.game.current_player.hero)
     for minion in targets:
-        minion.heal(2, None)
+        minion.heal(minion.player.effective_heal_power(2), None)
 
 
 def ssc(minion):

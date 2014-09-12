@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects import Immune
+from hearthbreaker.effects.minion import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -78,7 +78,7 @@ class ExplosiveTrap(SecretCard):
         super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -97,7 +97,7 @@ class FreezingTrap(SecretCard):
         super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind_once("pre_attack", self._reveal)
+        player.game.current_player.bind("pre_attack", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("pre_attack", self._reveal)
@@ -112,6 +112,7 @@ class FreezingTrap(SecretCard):
             card = attacker.card
             attacker.bounce()
             attacker.player.mana_filters.append(Filter())
+            super().reveal()
 
 
 class Misdirection(SecretCard):
@@ -119,7 +120,7 @@ class Misdirection(SecretCard):
         super().__init__("Misdirection", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
     def activate(self, player):
-        player.hero.bind_once("attacked", self._reveal)
+        player.hero.bind("attacked", self._reveal)
 
     def deactivate(self, player):
         player.hero.unbind("attacked", self._reveal)
@@ -141,8 +142,6 @@ class Misdirection(SecretCard):
             old_target_func = game.current_player.agent.choose_target
             game.current_player.agent.choose_target = choose_random
             super().reveal()
-        else:
-            self.activate(game.other_player)
 
 
 class Snipe(SecretCard):
@@ -150,7 +149,7 @@ class Snipe(SecretCard):
         super().__init__("Snipe", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind_once("minion_played", self._reveal)
+        player.game.current_player.bind("minion_played", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
@@ -293,7 +292,7 @@ class SnakeTrap(SecretCard):
         super().__init__("Snake Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
 
     def activate(self, player):
-        player.game.current_player.bind_once("attack", self._reveal)
+        player.game.current_player.bind("attack", self._reveal)
 
     def deactivate(self, player):
         player.game.current_player.unbind("attack", self._reveal)
@@ -311,5 +310,3 @@ class SnakeTrap(SecretCard):
             for i in range(0, 3):
                 snake.summon(player, player.game, len(player.minions))
             super().reveal()
-        else:
-            self.activate(target.player.game.current_player)

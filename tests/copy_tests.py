@@ -1,3 +1,4 @@
+import copy
 import random
 import unittest
 
@@ -724,3 +725,364 @@ class TestMinionCopying(unittest.TestCase):
         tirion.activate_delayed()
         self.assertEqual(5, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
+
+    def test_Undertaker(self):
+        game = generate_game_for([Undertaker, GoldshireFootman, HarvestGolem, AnubarAmbusher], HauntedCreeper,
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Goldshire Footman", game.current_player.minions[0].card.name)
+        self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        new_game = game.copy()
+
+        new_game.play_single_turn()
+
+        self.assertEqual(1, new_game.other_player.minions[1].calculate_attack())
+        self.assertEqual(2, new_game.other_player.minions[1].calculate_max_health())
+
+        new_game.play_single_turn()
+
+        self.assertEqual(3, len(new_game.current_player.minions))
+        self.assertEqual("Harvest Golem", new_game.current_player.minions[0].card.name)
+        self.assertEqual("Goldshire Footman", new_game.current_player.minions[1].card.name)
+        self.assertEqual("Undertaker", new_game.current_player.minions[2].card.name)
+        self.assertEqual(2, new_game.current_player.minions[2].calculate_attack())
+        self.assertEqual(3, new_game.current_player.minions[2].calculate_max_health())
+
+        self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+
+        new_game.current_player.minions[2].silence()
+
+        new_game.play_single_turn()
+        new_game.play_single_turn()
+
+        self.assertEqual(1, new_game.current_player.minions[3].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[3].calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_max_health())
+
+    def test_ZombieChow(self):
+        game = generate_game_for([ZombieChow, ZombieChow, ZombieChow, AuchenaiSoulpriest], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        game.play_single_turn()
+
+        game = game.copy()
+
+        game.other_player.hero.health = 10
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Zombie Chow", game.current_player.minions[0].card.name)
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(15, game.other_player.hero.health)
+
+    def test_DarkCultist(self):
+        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Dark Cultist", game.current_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[1].card.name)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        game = game.copy()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(4, game.current_player.minions[0].health)
+
+    def test_Feugen(self):
+        game = generate_game_for([Stalagg, Feugen], Assassinate, MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # Stalagg should have been played and assassinated, leaving no minions behind
+
+        self.assertEqual(0, len(game.other_player.minions))
+        game = game.copy()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Feugen is assassinated, which should summon Thaddius
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Thaddius", game.other_player.minions[0].card.name)
+
+    def test_Stalagg(self):
+        game = generate_game_for([Feugen, Stalagg], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        # Feugen should have been played we will silence and kill him, which should still summon Thaddius so long as
+        # Stalagg isn't also silenced
+
+        self.assertEqual(1, len(game.current_player.minions))
+        game.current_player.minions[0].silence()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual(0, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Stalagg is played,  We will kill him, which should summon Thaddius
+        self.assertEqual(1, len(game.current_player.minions))
+        game = game.copy()
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+        self.assertEqual("Thaddius", game.current_player.minions[0].card.name)
+
+    def test_DeathsBite(self):
+        game = generate_game_for([IronfurGrizzly, DeathsBite], Deathlord,
+                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        game = game.copy()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Death's Bite attacks the new Deathlord, triggering the weapon's deathrattle
+        # This finishes off the other Deathlord and the first friendly Grizzly
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+
+    def test_EchoingOoze(self):
+        new_game = None
+
+        class OozeAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                if self.turn == 2:
+                    super().do_turn(player)
+                    new_game = player.game.copy()
+
+        game = generate_game_for(EchoingOoze, StoneskinGargoyle, OozeAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # new_game is still in the middle of a turn, as it was copied in the middle of a turn.  We have to
+        # manually end it.
+        new_game._end_turn()
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(1, new_game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(1, new_game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, new_game.current_player.minions[1].calculate_max_health())
+
+    def test_ShadeOfNaxxramas(self):
+        game = generate_game_for(ShadeOfNaxxramas, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_max_health())
+
+        game = game.copy()
+        game.current_player.minions[0].silence()
+        game = game.copy()
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(4, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[2].calculate_max_health())
+
+    def test_KelThuzad(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad], [WarGolem, Flamestrike],
+                                 MinionPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+
+        game = game.copy()
+
+        game.play_single_turn()
+
+        # All but Kel'Thuzad should have died and then come back to life
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+
+    def test_KelThuzad_with_silence(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad], [WarGolem, Flamestrike],
+                                 MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        game = game.copy()
+        game.current_player.minions[0].silence()
+        game = game.copy()
+
+        game.play_single_turn()
+
+        # The minions should not be brought back
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+
+    def test_KelThuzad_on_friendly_turn(self):
+        game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad, Hellfire], StonetuskBoar,
+                                 MinionPlayingAgent, DoNothingBot)
+
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+
+        game = game.copy()
+
+        game.play_single_turn()
+
+        # All but Kel'Thuzad should have died and then come back to life, but not the Boars
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(0, len(game.other_player.minions))
+
+    def test_Preparation(self):
+        new_game = None
+
+        class PrepAgent(PredictableBot):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                done_something = True
+                player.game.play_card(player.hand[0])
+                new_game = player.game.copy()
+                while done_something:
+                    done_something = False
+                    for card in copy.copy(new_game.current_player.hand):
+                        if card.can_use(new_game.current_player, new_game):
+                            new_game.play_card(card)
+                            done_something = True
+
+        game = generate_game_for([Preparation, BloodfenRaptor, Headcrack], StoneskinGargoyle, PrepAgent, DoNothingBot)
+
+        # Preparation should be played. Bloodfen shouldn't be played, since that isn't a spell, but Headcrack should.
+        game.play_single_turn()
+        self.assertEqual(28, new_game.players[1].hero.health)
+        self.assertEqual(0, len(new_game.players[0].minions))
+
+    def test_Conceal(self):
+        new_game = None
+
+        class ConcealAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                super().do_turn(player)
+                if self.turn == 2:
+                    new_game = player.game.copy()
+
+        game = generate_game_for([StonetuskBoar, Conceal, MogushanWarden], StonetuskBoar, ConcealAgent, DoNothingBot)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        # Stonetusk and Conceal should have been played
+        self.assertEqual(1, len(new_game.players[0].minions))
+        self.assertTrue(new_game.players[0].minions[0].stealth)
+
+        new_game.play_single_turn()
+        # Conceal should fade off
+        new_game.play_single_turn()
+        self.assertEqual(1, len(new_game.players[0].minions))
+        self.assertFalse(new_game.players[0].minions[0].stealth)
+
+    def test_Headcrack(self):
+        new_game = None
+
+        class HCAgent(SpellTestingAgent):
+            def __init__(self):
+                super().__init__()
+                self.turn = 0
+
+            def do_turn(self, player):
+                nonlocal new_game
+                self.turn += 1
+                super().do_turn(player)
+                if self.turn == 6:
+                    new_game = player.game.copy()
+        game = generate_game_for(Headcrack, StonetuskBoar, HCAgent, DoNothingBot)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, without combo
+        game.play_single_turn()
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Headcrack should be played, with combo
+        game.play_single_turn()
+        new_game._end_turn()
+        self.assertEqual(20, new_game.players[1].hero.health)
+        self.assertEqual(5, len(new_game.players[0].hand))
+        self.assertEqual("Headcrack", new_game.players[0].hand[0].name)

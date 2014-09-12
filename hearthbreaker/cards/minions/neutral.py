@@ -3,7 +3,9 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
-from hearthbreaker.effects import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle
+from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
+    ResurrectFriendlyMinionsAtEndOfTurn
+from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -2249,7 +2251,7 @@ class GelbinMekkatorque(MinionCard):
                             targets.append(m)
                         if len(targets) > 0:
                             repairee = targets[player.game.random(0, len(targets) - 1)]
-                            repairee.heal(6, self)
+                            repairee.heal(player.effective_heal_power(6), self)
                     minion = Minion(0, 3)
                     player.bind("turn_ended", repair)
                     minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
@@ -2303,8 +2305,8 @@ class FacelessManipulator(MinionCard):
     def create_minion(self, player):
         def copy_minion(minion):
             if self.target:
-                new_minon = self.target.copy(player)
-                minion.replace(new_minon)
+                new_minion = self.target.copy(player)
+                minion.replace(new_minion)
 
         return Minion(3, 3, battlecry=copy_minion)
 
@@ -2394,7 +2396,7 @@ class Loatheb(MinionCard):
 
     def create_minion(self, player):
         def increase_card_cost(minion):
-            minion.player.opponent.add_card_filter(-5, "spell", "turn_ended")
+            minion.player.opponent.add_effect(ManaChangeEffect(-5, "spell", "turn_ended"))
 
         return Minion(5, 5, battlecry=increase_card_cost)
 
@@ -2407,7 +2409,9 @@ class StoneskinGargoyle(MinionCard):
         def apply_effect(m, p):
             def restore_health():
                 # The restoration counts as a heal.  See https://twitter.com/bdbrode/status/491263252434014208
-                m.heal(m.calculate_max_health() - m.health, None)
+                # Will damage itself with a soulpriest down:
+                # http://www.hearthhead.com/card=237/auchenai-soulpriest#comments:id=1908263
+                m.heal(p.effective_heal_power(m.calculate_max_health() - m.health), None)
             p.bind("turn_started", restore_health)
             m.bind_once("silenced", lambda: p.unbind("turn_started", restore_health))
             m.bind("copied", apply_effect)
@@ -2464,3 +2468,116 @@ class SpectralKnight(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 6, spell_targetable=False)
+
+
+class Undertaker(MinionCard):
+    def __init__(self):
+        super().__init__("Undertaker", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 2, effects=[Buff("summoned", "deathrattle", "self", 1, 1, "friendly")])
+
+
+class WailingSoul(MinionCard):
+    def __init__(self):
+        super().__init__("Wailing Soul", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        def silence_other_minions(minion):
+            for mini in player.minions:
+                if mini is not minion:
+                    mini.silence()
+        return Minion(3, 5, battlecry=silence_other_minions)
+
+
+class ZombieChow(MinionCard):
+    def __init__(self):
+        super().__init__("Zombie Chow", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def restore_5_health(minion):
+            minion.player.opponent.hero.heal(minion.player.effective_heal_power(5), minion)
+
+        return Minion(2, 3, deathrattle=restore_5_health)
+
+
+class Thaddius(MinionCard):
+    def __init__(self):
+        super().__init__("Thaddius", 10, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, player):
+        return Minion(11, 11)
+
+
+class Feugen(MinionCard):
+    def __init__(self):
+        super().__init__("Feugen", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_thaddius(minion):
+            if "Stalagg" in minion.player.graveyard:
+                Thaddius().summon(minion.player, minion.game, minion.index)
+
+        return Minion(4, 7, deathrattle=summon_thaddius)
+
+
+class Stalagg(MinionCard):
+    def __init__(self):
+        super().__init__("Stalagg", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        def summon_thaddius(minion):
+            if "Feugen" in minion.player.graveyard:
+                Thaddius().summon(minion.player, minion.game, minion.index)
+
+        return Minion(7, 4, deathrattle=summon_thaddius)
+
+
+class MadScientist(MinionCard):
+    def __init__(self):
+        super().__init__("Mad Scientist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        def play_secret(minion):
+            secret_indices = []
+            for index in range(0, 30):
+                if not minion.player.deck.used[index] and \
+                        isinstance(minion.player.deck.cards[index], SecretCard) and \
+                        minion.player.deck.cards[index].name not in [secret.name for secret in minion.player.secrets]:
+                    secret_indices.append(index)
+            if len(secret_indices) > 0:
+                secret_index = secret_indices[minion.game.random(0, len(secret_indices) - 1)]
+                secret = minion.player.deck.cards[secret_index]
+                minion.player.secrets.append(secret)
+                minion.player.deck.used[secret_index] = True
+                if minion.player is minion.game.other_player:
+                    secret.player = minion.player
+                    secret.activate(minion.player)
+
+        return Minion(2, 2, deathrattle=play_secret)
+
+
+class EchoingOoze(MinionCard):
+    def __init__(self):
+        super().__init__("Echoing Ooze", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        def duplicate_at_end(minion):
+            player.add_effect(DuplicateMinion(minion, "turn_ended"))
+        return Minion(1, 2, battlecry=duplicate_at_end)
+
+
+class ShadeOfNaxxramas(MinionCard):
+    def __init__(self):
+        super().__init__("Shade of Naxxramas", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(2, 2, stealth=True, effects=[Buff("turn_started", attack=1, health=1, players="friendly")])
+
+
+class KelThuzad(MinionCard):
+    def __init__(self):
+        super().__init__("Kel'Thuzad", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(6, 8, effects=[ResurrectFriendlyMinionsAtEndOfTurn()])

@@ -1,6 +1,7 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects import GrowOnSpell, ManaFilter, GrowIfSecret, AddCardOnSpell, FreezeOnDamage
+from hearthbreaker.effects.minion import ManaFilter, GrowIfSecret, AddCardOnSpell, FreezeOnDamage, Buff
+from hearthbreaker.effects.player import ManaChangeEffect
 from hearthbreaker.game_objects import MinionCard, Minion
 
 
@@ -9,7 +10,7 @@ class ManaWyrm(MinionCard):
         super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[GrowOnSpell(1, 0)])
+        return Minion(1, 3, effects=[Buff("played", "spell", "self", 1, 0, "friendly")])
 
 
 class SorcerersApprentice(MinionCard):
@@ -26,7 +27,7 @@ class KirinTorMage(MinionCard):
 
     def create_minion(self, player):
         def first_secret_cost_zero(m):
-            m.player.add_card_filter(100, "secret", "turn_ended", True)
+            m.player.add_effect(ManaChangeEffect(100, "secret", "turn_ended", True))
 
         return Minion(4, 3, battlecry=first_secret_cost_zero)
 

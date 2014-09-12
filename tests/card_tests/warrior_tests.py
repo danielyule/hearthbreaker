@@ -398,3 +398,25 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, game.current_player.hero.weapon.durability)
         self.assertEqual(3, game.current_player.hero.weapon.base_attack)
         self.assertEqual(27, game.other_player.hero.health)
+
+    def test_DeathsBite(self):
+        game = generate_game_for([IronfurGrizzly, DeathsBite], Deathlord,
+                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Death's Bite attacks the new Deathlord, triggering the weapon's deathrattle
+        # This finishes off the other deathlord and the first friendly Grizzly
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
