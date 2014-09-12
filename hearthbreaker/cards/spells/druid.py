@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects.minion import KillMinion, SummonOnDeath
+from hearthbreaker.effects.minion import Kill, SummonOnDeath
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -366,7 +366,7 @@ class ForceOfNature(Card):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[KillMinion("turn_ended")])
+                return Minion(2, 2, charge=True, effects=[Kill("turn_ended", target="self", players="friendly")])
 
         for i in [0, 1, 2]:
             treant_card = Treant()

@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
-    ResurrectFriendlyMinionsAtEndOfTurn
+    ResurrectFriendlyMinionsAtEndOfTurn, Kill
 from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -697,20 +697,7 @@ class EmperorCobra(MinionCard):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            def poisonous(amount, target):
-                if type(target) is Minion:
-                    target.die(self)
-
-            def silenced():
-                m.unbind("did_damage", poisonous)
-                m.unbind("copied", apply_effect)
-            m.bind("did_damage", poisonous)
-            m.bind_once("silenced", silenced)
-            m.bind("copied", apply_effect)
-        minion = Minion(2, 3)
-        apply_effect(minion, player)
-        return minion
+        return Minion(2, 3, effects=[Kill("did_damage", "minion", "other")])
 
 
 class CrazedAlchemist(MinionCard):
@@ -2334,20 +2321,7 @@ class Maexxna(MinionCard):
         super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            def poisonous(amount, target):
-                if type(target) is Minion:
-                    target.die(self)
-
-            def silenced():
-                m.unbind("did_damage", poisonous)
-                m.unbind("copied", apply_effect)
-            m.bind("did_damage", poisonous)
-            m.bind_once("silenced", silenced)
-            m.bind("copied", apply_effect)
-        minion = Minion(2, 8)
-        apply_effect(minion, player)
-        return minion
+            return Minion(2, 8, effects=[Kill("did_damage", "minion", "other")])
 
 
 class HauntedCreeper(MinionCard):

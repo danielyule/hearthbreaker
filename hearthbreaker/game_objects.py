@@ -205,6 +205,10 @@ class Effect (metaclass=abc.ABCMeta):
     def __str__(self):
         pass
 
+    # @abc.abstractmethod
+    def __to_json__(self):
+        pass
+
 
 class Character(Bindable, metaclass=abc.ABCMeta):
     """
@@ -386,13 +390,13 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
             if isinstance(self, Minion):
-                self.player.trigger("minion_damaged", self)
+                self.player.trigger("minion_damaged", self, attacker)
             elif isinstance(self, Hero):
                 # The response of a secret to damage must happen immediately
                 self.trigger("hero_damaged", amount, attacker)
             self.health -= amount
             if issubclass(type(attacker), Character):
-                attacker.trigger("did_damage", amount, self)
+                attacker.trigger("did_damage", self, amount)
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True

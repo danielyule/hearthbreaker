@@ -1,6 +1,6 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects.minion import ManaFilter, GrowIfSecret, AddCardOnSpell, FreezeOnDamage, Buff
+from hearthbreaker.effects.minion import ManaFilter, GrowIfSecret, AddCardOnSpell, Buff, Freeze
 from hearthbreaker.effects.player import ManaChangeEffect
 from hearthbreaker.game_objects import MinionCard, Minion
 
@@ -45,7 +45,7 @@ class WaterElemental(MinionCard):
         super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 6, effects=[FreezeOnDamage()])
+        return Minion(3, 6, effects=[Freeze("did_damage", "minion", "other")])
 
 
 class ArchmageAntonidas(MinionCard):
