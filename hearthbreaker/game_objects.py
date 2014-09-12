@@ -1,6 +1,7 @@
 import copy
 import random
 import abc
+import hearthbreaker.effects.player
 
 import hearthbreaker.powers
 import hearthbreaker.targeting
@@ -183,27 +184,6 @@ class Bindable:
             self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
             if len(self.events[event]) is 0:
                 del (self.events[event])
-
-
-class Effect (metaclass=abc.ABCMeta):
-
-    def __init__(self):
-        self.target = None
-
-    def set_target(self, target):
-        self.target = target
-
-    @abc.abstractmethod
-    def apply(self):
-        pass
-
-    @abc.abstractmethod
-    def unapply(self):
-        pass
-
-    @abc.abstractmethod
-    def __str__(self):
-        pass
 
 
 class Character(Bindable, metaclass=abc.ABCMeta):
@@ -538,7 +518,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         Applies the the given effect to the :class:`Character`.  The effect will be unapplied in the case of silence,
         and will be applied to any copies that are made.
 
-        :param Effect effect: The effect to apply to this :class:`Character
+        :param MinionEffect effect: The effect to apply to this :class:`Character
         """
         if type(effect) not in self.player.effect_count:
             self.player.effect_count[type(effect)] = 0
@@ -1124,6 +1104,22 @@ class Minion(Character):
         self.trigger("copied", new_minion, new_owner)
         return new_minion
 
+    @staticmethod
+    def __from_json__(md, player, game):
+        minion = Minion(md['attack'], md['max_health'])
+        minion.health = md['health']
+        minion.stealth = md['stealth']
+        minion.taunt = md['taunt']
+        minion.charge = md['charge']
+        minion.windfury = md['windfury']
+        minion.divine_shield = md['divine_shield']
+        minion.exhausted = md['exhausted']
+        minion.active = not md['already_attacked']
+        minion.card = card_lookup(md["name"])
+        minion.game = game
+        minion.player = player
+        return minion
+
     def bounce(self):
         if len(self.player.hand) < 10:
             self.silence()
@@ -1149,8 +1145,13 @@ class Minion(Character):
             'health': self.health,
             'max_health': self.base_health,
             'attack': self.base_attack,
-            'exhausted': self.exhausted,
-            'already_attacked': not self.active,
+            "stealth": self.stealth,
+            "taunt": self.taunt,
+            "charge": self.charge,
+            "windfury": self.windfury,
+            "divine_shield": self.divine_shield,
+            "exhausted": self.exhausted,
+            "already_attacked": not self.active,
             'frozen_for': frozen_for,
             'effects': []
         }
@@ -1285,6 +1286,12 @@ class Weapon(Bindable):
             'attack': self.base_attack,
             'durability': self.durability,
         }
+
+    @staticmethod
+    def __from_json__(wd):
+        weapon = Weapon(wd['attack'], wd['durability'])
+        weapon.card = card_lookup(wd['name'])
+        return weapon
 
 
 class Deck:
@@ -1438,6 +1445,8 @@ class Hero(Character):
         hero.windfury = hd["windfury"]
         hero.used_windfury = hd["used_windfury"]
         hero.active = not hd["already_attacked"]
+        if hd['weapon']:
+            hero.weapon = Weapon.__from_json__(hd["weapon"])
         return hero
 
 
@@ -1554,7 +1563,7 @@ class Player(Bindable):
             'graveyard': json_graveyard,
             'hand': [card.name for card in self.hand],
             'secrets': [secret.name for secret in self.secrets],
-            'card_filters': self.card_filters,
+            'effects': [effect.__to_json__() for effect in self.effects],
             'minions': self.minions,
             'mana': self.mana,
             'max_mana': self.max_mana,
@@ -1565,11 +1574,15 @@ class Player(Bindable):
         hero = Hero.__from_json__(pd["hero"])
         deck = Deck.__from__json__(pd["deck"], hero.character_class)
         player = Player("whatever", deck, agent, game, game.random)
+        player.hero = hero
         hero.player = player
+        if hero.weapon:
+            hero.weapon.player = player
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
         player.hand = [card_lookup(name) for name in pd["hand"]]
         player.secrets = [card_lookup(name) for name in pd["secrets"]]
+        player.minions = [Minion.__from_json__(md, player, game) for md in pd["minions"]]
         return player
 
 
@@ -1754,8 +1767,8 @@ class Game(Bindable):
             'current_sequence_id': self.minion_counter,
         }
 
-    @classmethod
-    def __from_json__(cls, d):
+    @staticmethod
+    def __from_json__(d, agents):
         new_game = Game.__new__(Game)
         new_game.minion_counter = d["current_sequence_id"]
         new_game.delayed_minions = set()
@@ -1773,4 +1786,12 @@ class Game(Bindable):
             new_game.other_player = new_game.players[0]
             new_game.current_player.opponent = new_game.players[0]
             new_game.other_player.opponent = new_game.players[1]
+
+        index = 0
+        for player in new_game.players:
+            player.agent = agents[index]
+            player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(new_game, **effect) for effect in d['players'][index]['effects']]
+            for effect in player.effects:
+                effect.apply(player)
+            index += 1
         return new_game

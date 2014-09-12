@@ -1,10 +1,32 @@
 import copy
 import json
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion
+import abc
 
 
-class KillMinion(Effect):
+
+class MinionEffect (metaclass=abc.ABCMeta):
+
+    def __init__(self):
+        self.target = None
+
+    def set_target(self, target):
+        self.target = target
+
+    @abc.abstractmethod
+    def apply(self):
+        pass
+
+    @abc.abstractmethod
+    def unapply(self):
+        pass
+
+    @abc.abstractmethod
+    def __str__(self):
+        pass
+
+
+class KillMinion(MinionEffect):
     """
     Kills a minion.  The minion can be killed at the end of the turn, or at the start of the
     casting player's next turn.
@@ -33,7 +55,7 @@ class KillMinion(Effect):
         return "KillMinion({0})".format(self.when)
 
 
-class SummonOnDeath(Effect):
+class SummonOnDeath(MinionEffect):
     """
     Causes a minion to summon another minion when it dies
     """
@@ -67,7 +89,7 @@ class SummonOnDeath(Effect):
         return "SummonOnDeath({0})".format(self.replacement().name)
 
 
-class Immune(Effect):
+class Immune(MinionEffect):
     """
     Gives a character immunity.  This immunity will last until the end of the player' turn
     """
@@ -86,7 +108,7 @@ class Immune(Effect):
         return "Immune"
 
 
-class DrawOnMinion(Effect):
+class DrawOnMinion(MinionEffect):
     """
     Causes a card to be drawn every time a minion is played.  Can be given a specific type
     of minion to draw for.
@@ -119,7 +141,7 @@ class DrawOnMinion(Effect):
         return "DrawOnMinion({0})".format(MINION_TYPE.to_str(self.minion_type))
 
 
-class ChargeAura(Effect):
+class ChargeAura(MinionEffect):
     """
     A Charge Aura gives affected minions charge.  Unlike other Auras, a ChargeAura can affect the minion giving the
     effect.  Whether the minions are friendly or not as well as what
@@ -201,7 +223,7 @@ class ChargeAura(Effect):
         return "ChargeAura({0}, {1})".format(self.players, MINION_TYPE.to_str(self.minion_type))
 
 
-class StatsAura(Effect):
+class StatsAura(MinionEffect):
     """
     A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
     as what type of minions are affected can be customized.
@@ -246,7 +268,7 @@ class StatsAura(Effect):
             self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
 
 
-class IncreaseBattlecryMinionCost(Effect):
+class IncreaseBattlecryMinionCost(MinionEffect):
 
     def __init__(self, amount):
         super().__init__()
@@ -276,7 +298,7 @@ class IncreaseBattlecryMinionCost(Effect):
         return "IncreaseMinionCost(battlecry, {0})".format(self.amount)
 
 
-class DoubleDeathrattle(Effect):
+class DoubleDeathrattle(MinionEffect):
 
     def apply(self):
         if self.target.player.effect_count[DoubleDeathrattle] == 1:
@@ -293,7 +315,7 @@ class DoubleDeathrattle(Effect):
         return "DoubleDeathrattle()"
 
 
-class HealAsDamage(Effect):
+class HealAsDamage(MinionEffect):
 
     def apply(self):
         if self.target.player.effect_count[HealAsDamage] == 1:
@@ -307,7 +329,7 @@ class HealAsDamage(Effect):
         return "HealAsDamage()"
 
 
-class ManaFilter(Effect):
+class ManaFilter(MinionEffect):
     """
     Associates a mana filter with this minion.  A mana filter affects a player by making cards of a certain type
     cost more or less.  The amount to change, player affected, and cards changed can all be customized
@@ -361,7 +383,7 @@ class ManaFilter(Effect):
         return "ManaFilter({0}, {1}, {2}, {3})".format(self.amount, self.minimum, self.filter_type, self.player)
 
 
-class GrowIfSecret(Effect):
+class GrowIfSecret(MinionEffect):
     def __init__(self, attack, health):
         super().__init__()
         self.attack = attack
@@ -382,7 +404,7 @@ class GrowIfSecret(Effect):
         return "GrowIf(Secret, {0}, {1})".format(self.attack, self.health)
 
 
-class AddCardOnSpell(Effect):
+class AddCardOnSpell(MinionEffect):
     def __init__(self, card):
         super().__init__()
         self.card = card
@@ -401,7 +423,7 @@ class AddCardOnSpell(Effect):
         return "AddOnSpell({0})".format(self.card().name)
 
 
-class FreezeOnDamage(Effect):
+class FreezeOnDamage(MinionEffect):
     def __init__(self):
         super().__init__()
 
@@ -418,7 +440,7 @@ class FreezeOnDamage(Effect):
         return "OnDamage(freeze)"
 
 
-class KillOnDamage(Effect):
+class KillOnDamage(MinionEffect):
     def __init__(self):
         super().__init__()
 
@@ -437,7 +459,7 @@ class KillOnDamage(Effect):
         return "OnDamage(kill)"
 
 
-class DrawOnAttack(Effect):
+class DrawOnAttack(MinionEffect):
     """
     Draw some number of cards when this character attacks.  This effect will always affect a given player, regardless
     of who owns the minion
@@ -471,7 +493,7 @@ class DrawOnAttack(Effect):
         return("DrawOn(attack, {0})").format(self.amount)
 
 
-class Buff(Effect):
+class Buff(MinionEffect):
     def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly"):
         super().__init__()
         self.when = when
@@ -605,7 +627,7 @@ class Buff(Effect):
         })
 
 
-class ResurrectFriendlyMinionsAtEndOfTurn(Effect):
+class ResurrectFriendlyMinionsAtEndOfTurn(MinionEffect):
     def __init__(self):
         super().__init__()
         self.dead_minions = []

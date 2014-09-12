@@ -1,6 +1,6 @@
 import abc
-from hearthbreaker.game_objects import MinionCard, SecretCard
-import hearthbreaker.replay
+import hearthbreaker.game_objects
+import hearthbreaker.proxies
 
 
 class PlayerEffect(metaclass=abc.ABCMeta):
@@ -19,9 +19,9 @@ class PlayerEffect(metaclass=abc.ABCMeta):
         }
         if action in __class_mappings:
             clazz = __class_mappings[action]
-            obj = clazz.__new__()
-
-            return clazz.__from_json__(obj, game, *args, **kwargs)
+            obj = clazz.__new__(clazz)
+            obj.__from_json__(game, *args, **kwargs)
+            return obj
         else:
             return None
 
@@ -60,11 +60,11 @@ class ManaChangeEffect(PlayerEffect):
     def apply(self, player):
         this = self
         if self.card_filter == "minion":
-            my_filter = lambda c: isinstance(c, MinionCard)
+            my_filter = lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard)
         elif self.card_filter == "spell":
             my_filter = lambda c: c.is_spell()
         elif self.card_filter == "secret":
-            my_filter = lambda c: isinstance(c, SecretCard)
+            my_filter = lambda c: isinstance(c, hearthbreaker.game_objects.SecretCard)
         else:
             my_filter = lambda c: True
 
@@ -92,7 +92,7 @@ class ManaChangeEffect(PlayerEffect):
         if self.only_first:
             player.bind("card_played", card_played)
 
-    def __to_json(self):
+    def __to_json__(self):
         return {
             "action": "mana_change",
             "amount": self.amount,
@@ -111,7 +111,7 @@ class ManaChangeEffect(PlayerEffect):
 class DuplicateMinion(PlayerEffect):
     def __init__(self, minion_to_duplicate, when):
         super().__init__()
-        self.minion = hearthbreaker.replay.TrackingProxyCharacter(minion_to_duplicate, minion_to_duplicate.game)
+        self.minion = hearthbreaker.proxies.TrackingProxyCharacter(minion_to_duplicate, minion_to_duplicate.game)
         self.when = when
 
     def apply(self, player):
@@ -125,7 +125,7 @@ class DuplicateMinion(PlayerEffect):
 
         player.bind_once(self.when, duplicate)
 
-    def __to_json(self):
+    def __to_json__(self):
         return {
             "action": "duplicate_minion",
             "when": self.when,
@@ -133,14 +133,14 @@ class DuplicateMinion(PlayerEffect):
         }
 
     def __from_json__(self, game, minion_to_duplicate, when):
-        self.minion = hearthbreaker.replay.TrackingProxyCharacter(minion_to_duplicate, game)
+        self.minion = hearthbreaker.proxies.TrackingProxyCharacter(minion_to_duplicate, game)
         self.when = when
 
 
 class RemoveStealth(PlayerEffect):
     def __init__(self, stealthed_minions, when):
         super().__init__()
-        self.minions = [hearthbreaker.replay.TrackingProxyCharacter(m, m.game) for m in stealthed_minions]
+        self.minions = [hearthbreaker.proxies.TrackingProxyCharacter(m, m.game) for m in stealthed_minions]
         self.when = when
 
     def apply(self, player):
@@ -154,7 +154,7 @@ class RemoveStealth(PlayerEffect):
 
         player.bind_once(self.when, duplicate)
 
-    def __to_json(self):
+    def __to_json__(self):
         return {
             "action": "remove_stealth",
             "when": self.when,
@@ -162,7 +162,7 @@ class RemoveStealth(PlayerEffect):
         }
 
     def __from_json__(self, game, stealthed_minions, when):
-        self.minions = [hearthbreaker.replay.TrackingProxyCharacter(m, game) for m in stealthed_minions]
+        self.minions = [hearthbreaker.proxies.TrackingProxyCharacter(m, game) for m in stealthed_minions]
         self.when = when
 
 
@@ -183,7 +183,7 @@ class ReturnCard(PlayerEffect):
 
         player.bind_once(self.when, return_card)
 
-    def __to_json(self):
+    def __to_json__(self):
         return {
             "action": "return_card",
             "card": self.card.name,
@@ -191,5 +191,5 @@ class ReturnCard(PlayerEffect):
         }
 
     def __from_json__(self, game, card, when):
-        self.card = card
+        self.card = hearthbreaker.game_objects.card_lookup(card)
         self.when = when

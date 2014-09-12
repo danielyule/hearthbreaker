@@ -22,7 +22,7 @@ def serialize(game):
 
     return json.dumps(game, default=_save_object, indent=2)
 
-def deserialize(json_string):
+def deserialize(json_string, agents):
     """
     Decode the given game instance from a JSON formatted string.
 
@@ -30,7 +30,7 @@ def deserialize(json_string):
     :rtype: :class:`hearthbreaker.game_objects.Game`
     """
     d = json.loads(json_string)
-    return Game.__from_json__(d)
+    return Game.__from_json__(d, agents)
 
 
 if __name__ == "__main__":
@@ -39,5 +39,5 @@ if __name__ == "__main__":
         game.play_single_turn()
 
     print(serialize(game))
-    game2 = deserialize(serialize(game))
+    game2 = deserialize(serialize(game), [player.agent for player in game.players])
     game2.start()
