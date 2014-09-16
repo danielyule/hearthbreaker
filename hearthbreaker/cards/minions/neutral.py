@@ -1663,14 +1663,7 @@ class QuestingAdventurer(MinionCard):
         super().__init__("Questing Adventurer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def questing_grow(card):
-            minion.change_attack(1)
-            minion.increase_health(1)
-
-        minion = Minion(2, 2)
-        player.bind("card_played", questing_grow)
-        minion.bind_once("silenced", lambda: player.unbind("card_played", questing_grow))
-        return minion
+        return Minion(2, 2, effects=[Buff("played", "card", "self", attack=1, health=1)])
 
 
 class GurubashiBerserker(MinionCard):

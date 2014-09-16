@@ -89,15 +89,7 @@ class ProxyCard:
         if isinstance(card_reference, str):
             self.card_ref = card_reference
         else:
-            index = 0
-            for card in game.current_player.hand:
-                if card is card_reference:
-                    self.card_ref = index
-                    break
-                index += 1
-
-        if self.card_ref is -1:
-            raise ReplayException("Could not find card in hand")
+            self.card_ref = str(card_reference)
 
         self.targetable = False
 
@@ -267,9 +259,9 @@ class Replay:
                     self.actions.append(SpellAction(self.last_card, game=self.game))
                     self.last_card = None
 
-    def record_card_played(self, card):
+    def record_card_played(self, card, index):
         self._save_played_card()
-        self.last_card = ProxyCard(card, self.game)
+        self.last_card = ProxyCard(index, self.game)
         self.last_card.targetable = card.targetable
         self.card_class = type(card)
 

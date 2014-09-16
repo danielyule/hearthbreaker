@@ -1,5 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects.minion import DrawOnMinion, ChargeAura, StatsAura, Buff
+from hearthbreaker.effects.minion import ChargeAura, StatsAura, Buff, Draw
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -65,7 +65,7 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 1, effects=[DrawOnMinion(MINION_TYPE.BEAST)])
+        return Minion(2, 1, effects=[Draw("placed", "beast", "owner")])
 
 
 class TundraRhino(MinionCard):

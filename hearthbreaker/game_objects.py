@@ -1003,6 +1003,7 @@ class Minion(Character):
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
+            self.player.dead_this_turn.append(self)
             self.remove_from_board()
 
     def can_attack(self):
@@ -1380,6 +1381,7 @@ class Player(Bindable):
         self.effect_count = dict()
         self.opponent = None
         self.cards_played = 0
+        self.dead_this_turn = []
 
     def __str__(self):  # pragma: no cover
         return "Player: " + self.name
@@ -1531,6 +1533,7 @@ class Game(Bindable):
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.cards_played = 0
+        self.current_player.dead_this_turn = []
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.base_attack)
@@ -1599,12 +1602,13 @@ class Game(Bindable):
             raise GameException("The game has ended")
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
-        self.current_player.trigger("card_played", card)
+        card_index = self.current_player.hand.index(card)
+        self.current_player.hand.pop(card_index)
+        self.current_player.trigger("card_played", card, card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
         if card.overload != 0:
             self.current_player.trigger("overloaded")
 
-        self.current_player.hand.remove(card)
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)
 

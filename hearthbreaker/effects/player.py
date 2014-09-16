@@ -74,7 +74,7 @@ class ManaChangeEffect(PlayerEffect):
             if self.only_first:
                 player.unbind("card_played", card_played)
 
-        def card_played(card):
+        def card_played(card, index):
             if my_filter(card):
                 remove()
                 player.unbind(self.until, remove)
