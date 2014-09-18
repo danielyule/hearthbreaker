@@ -67,21 +67,28 @@ class Aura():
 
 
 class AuraEffect(Effect):
-    def __init__(self, apply_aura, unapply_aura, minion_filter="minion", players="friendly"):
+    def __init__(self, apply_aura, unapply_aura, minion_filter="minion", players="friendly", include_self=False):
         self.apply_aura = apply_aura
         self.unapply_aura = unapply_aura
         self.minion_filter = minion_filter
         self.players = players
         self.aura = None
+        self.include_self = include_self
 
     def apply(self):
         if self.minion_filter == "minion":
-            filter_func = lambda m: m is not self.target
+            if self.include_self:
+                filter_func = lambda m: True
+            else:
+                filter_func = lambda m: m is not self.target
         elif self.minion_filter == "adjacent":
             filter_func = lambda m: m.index == self.target.index + 1 or m.index == self.target.index - 1
         else:
             type_id = MINION_TYPE.from_str(self.minion_filter)
-            filter_func = lambda m: m is not self.target and m.card.minion_type == type_id
+            if self.include_self:
+                filter_func = lambda m: m.card.minion_type == type_id
+            else:
+                filter_func = lambda m: m is not self.target and m.card.minion_type == type_id
 
         if self.players == "friendly":
             players = [self.target.player]
@@ -110,120 +117,48 @@ class AuraEffect(Effect):
                     self.unapply_aura(minion)
             player.new_auras.remove(self.aura)
 
-
     def __str__(self):
-        return "Aura"
+        return json.dumps(self.__to_json__())
 
-
-
-
-class ChargeAura(Effect):
-    """
-    A Charge Aura gives affected minions charge.  Unlike other Auras, a ChargeAura can affect the minion giving the
-    effect.  Whether the minions are friendly or not as well as what
-    type of minions are affected can be customized
-    """
-
-    def __init__(self, players="friendly", minion_type=MINION_TYPE.ALL):
-        """
-        Create a new ChargeAura
-
-        :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion who will be given charge or `MINION_TYPE.ALL` for any minion
-        """
-        super().__init__()
-        self.affected_minions = []
-        self.charged_minions = []
-        self.players = players
-        self.minion_type = minion_type
-
-    def apply(self):
-        if self.players == "friendly" or self.players == "both":
-            for charge_minion in self.target.player.minions:
-                self.give_charge_if_beast(charge_minion)
-
-            self.target.player.bind("minion_played", self.give_charge_if_beast)
-
-        if self.players == "enemy" or self.players == "both":
-            for charge_minion in self.target.player.opponent.minions:
-                self.give_charge_if_beast(charge_minion)
-
-            self.target.player.opponent.bind("minion_played", self.give_charge_if_beast)
-
-    def unapply(self):
-        if self.players == "friendly" or self.players == "both":
-            self.target.player.unbind("minion_played", self.give_charge_if_beast)
-
-        if self.players == "enemy" or self.players == "both":
-            self.target.player.opponent.unbind("minion_played", self.give_charge_if_beast)
-
-    def give_charge_if_beast(self, played_minion):
-        if played_minion is self.target and \
-                (self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type == self.minion_type):
-            self.target.charge = True
-        else:
-            def give_permacharge_effect(minion):
-                def silenced():
-                    minion.charge = True
-
-                def target_silenced():
-                    minion.unbind("silenced", silenced)
-                    minion.unbind("copied", copied)
-                    minion.charge = False
-
-                def copied(new_minion, new_owner):
-                    new_minion.charge = False
-
-                minion.charge = True
-                self.affected_minions.append(minion)
-                minion.bind("silenced", silenced)
-                minion.bind("copied", copied)
-                self.target.bind_once("silenced", target_silenced)
-
-            def watch_for_silence(minion):
-                def silenced():
-                    self.charged_minions.remove(minion)
-                    give_permacharge_effect(minion)
-
-                minion.bind_once("silenced", silenced)
-                self.target.bind_once("silenced", lambda: minion.unbind("silenced", silenced))
-                self.charged_minions.append(minion)
-
-            if self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type is self.minion_type:
-                if not played_minion.charge:
-                    give_permacharge_effect(played_minion)
-                else:
-                    watch_for_silence(played_minion)
-
-    def __str__(self):
-        return "ChargeAura({0}, {1})".format(self.players, MINION_TYPE.to_str(self.minion_type))
+    def __to_json__(self):
+        return {
+            "filter": self.minion_filter,
+            "players": self.players,
+            "include_self": self.include_self
+        }
 
 
 class ChargeAura(AuraEffect):
     """
-    A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
-    as what type of minions are affected can be customized.
+     A Charge Aura gives affected minions charge.   Whether the minions are friendly or not as well as what
+     type of minions are affected can be customized
     """
 
-    def __init__(self, players="friendly", minion_filter="minion"):
+    def __init__(self, players="friendly", minion_filter="minion", include_self=False):
         """
         Create a new ChargeAura
-
-        :param int attack: The amount to increase this minion's attack by
-        :param int health: The amount to increase this minion's health by
         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
         :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
                                      for any type of minion
+        :param boolean include_self: Whether or not this aura should also affect the minion that created it.
         """
-        super().__init__(self.give_charge, self.take_charge, minion_filter, players)
-
+        super().__init__(self.give_charge, self.take_charge, minion_filter, players, include_self)
+        self.affected_minions = set()
 
     def give_charge(self, minion):
-        minion.charge = True
+        if not minion.charge:
+            minion.charge = True
+            self.affected_minions.add(minion)
 
     def take_charge(self, minion):
-        minion.charge = False
+        if minion in self.affected_minions:
+            minion.charge = False
+            self.affected_minions.remove(minion)
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "type": "charge"
+        })
 
 
 class StatsAura(AuraEffect):
@@ -246,7 +181,6 @@ class StatsAura(AuraEffect):
         self.attack = attack
         self.health = health
 
-
     def increase_stats(self, minion):
         minion.aura_attack += self.attack
         minion.aura_health += self.health
@@ -258,52 +192,12 @@ class StatsAura(AuraEffect):
         if minion.health > minion.calculate_max_health():
             minion.health = minion.calculate_max_health()
 
-
-
-
-# class StatsAura(Effect):
-#     """
-#     A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
-#     as what type of minions are affected can be customized.
-#     """
-#
-#     def __init__(self, attack=0, health=0, players="friendly", minion_type=MINION_TYPE.ALL):
-#         """
-#         Create a new StatsAura
-#
-#         :param int attack: The amount to increase this minion's attack by
-#         :param int health: The amount to increase this minion's health by
-#         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-#         :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-#                                 minion who will be given charge or `MINION_TYPE.ALL` for any minion
-#         """
-#         super().__init__()
-#         self.attack = attack
-#         self.health = health
-#         self.players = players
-#         self.minion_type = minion_type
-#
-#     def apply(self):
-#         if self.players == "friendly":
-#             players = [self.target.player]
-#         elif self.players == "enemy":
-#             players = [self.target.player.opponent]
-#         else:
-#             players = [self.target.player, self.target.player.opponent]
-#         if self.minion_type == MINION_TYPE.ALL:
-#             self.target.add_aura(self.attack, self.health, players)
-#         else:
-#             self.target.add_aura(self.attack, self.health, players,
-#                                  lambda minion: minion.card.minion_type == self.minion_type)
-#
-#     def unapply(self):
-#         pass
-#
-#     def __str__(self):
-#         if self.minion_type == MINION_TYPE.ALL:
-#             return "StatsAura({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
-#         return "StatsAura({0}, {1}, {2}, {3})".format(
-#             self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "type": "stats",
+            "attack": self.attack,
+            "health": self.health,
+        })
 
 
 class IncreaseBattlecryMinionCost(Effect):

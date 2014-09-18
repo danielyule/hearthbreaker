@@ -73,7 +73,7 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_filter="beast")])
+        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_filter="beast", include_self=True)])
 
 
 class ScavengingHyena(MinionCard):

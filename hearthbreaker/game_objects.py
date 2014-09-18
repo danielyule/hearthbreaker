@@ -966,6 +966,8 @@ class Minion(Character):
         affected this character (immune, attack & health increases, frozen, windfury)
         """
         self.temp_attack = 0
+        self.aura_health = 0
+        self.aura_attack = 0
         self.immune = False
         self.windfury = False
         self.frozen = False
@@ -983,6 +985,9 @@ class Minion(Character):
         self.battlecry = None
         self.deathrattle = None
         self.can_be_targeted_by_spells = True
+        for aura in self.player.new_auras:
+            if aura.filter(self):
+                aura.apply(self)
         self.trigger("silenced")
         if "copied" in self.events:
             del self.events["copied"]
