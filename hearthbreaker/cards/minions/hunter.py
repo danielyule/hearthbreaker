@@ -14,7 +14,7 @@ class TimberWolf(MinionCard):
         super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, effects=[StatsAura(attack=1, minion_type=MINION_TYPE.BEAST)])
+        return Minion(1, 1, effects=[StatsAura(attack=1, minion_filter="beast")])
 
 
 class SavannahHighmane(MinionCard):
@@ -73,7 +73,7 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_type=MINION_TYPE.BEAST)])
+        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_filter="beast")])
 
 
 class ScavengingHyena(MinionCard):

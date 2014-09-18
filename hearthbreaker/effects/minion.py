@@ -5,39 +5,39 @@ from hearthbreaker.constants import MINION_TYPE
 from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion, Character
 
 
-class SummonOnDeath(Effect):
-    """
-    Causes a minion to summon another minion when it dies
-    """
-
-    def __init__(self, replacement, count=1):
-        """
-        Creates a new SummonOnDeath effect.
-
-        :param class replacement: A MinionCard subclass that corresponds to the minion to summon.
-                                  Should be a class, not an object.
-        """
-        super().__init__()
-        self.replacement = replacement
-        self.count = count
-        self.old_death_rattle = None
-
-    def apply(self):
-        self.old_death_rattle = self.target.deathrattle
-        self.target.deathrattle = self.summon_replacement
-
-    def unapply(self):
-        pass
-
-    def summon_replacement(self, m):
-        if self.old_death_rattle is not None:
-            self.old_death_rattle(m)
-        for i in range(0, self.count):
-            replacement_card = self.replacement()
-            replacement_card.summon(self.target.player, self.target.game, len(self.target.player.minions))
-
-    def __str__(self):
-        return "SummonOnDeath({0})".format(self.replacement().name)
+# class SummonOnDeath(Effect):
+#     """
+#     Causes a minion to summon another minion when it dies
+#     """
+#
+#     def __init__(self, replacement, count=1):
+#         """
+#         Creates a new SummonOnDeath effect.
+#
+#         :param class replacement: A MinionCard subclass that corresponds to the minion to summon.
+#                                   Should be a class, not an object.
+#         """
+#         super().__init__()
+#         self.replacement = replacement
+#         self.count = count
+#         self.old_death_rattle = None
+#
+#     def apply(self):
+#         self.old_death_rattle = self.target.deathrattle
+#         self.target.deathrattle = self.summon_replacement
+#
+#     def unapply(self):
+#         pass
+#
+#     def summon_replacement(self, m):
+#         if self.old_death_rattle is not None:
+#             self.old_death_rattle(m)
+#         for i in range(0, self.count):
+#             replacement_card = self.replacement()
+#             replacement_card.summon(self.target.player, self.target.game, len(self.target.player.minions))
+#
+#     def __str__(self):
+#         return "SummonOnDeath({0})".format(self.replacement().name)
 
 
 class Immune(Effect):
@@ -58,6 +58,63 @@ class Immune(Effect):
 
     def __str__(self):
         return "Immune"
+
+class Aura():
+    def __init__(self, apply_func, unapply_func, filter_func):
+        self.apply = apply_func
+        self.unapply = unapply_func
+        self.filter = filter_func
+
+
+class AuraEffect(Effect):
+    def __init__(self, apply_aura, unapply_aura, minion_filter="minion", players="friendly"):
+        self.apply_aura = apply_aura
+        self.unapply_aura = unapply_aura
+        self.minion_filter = minion_filter
+        self.players = players
+        self.aura = None
+
+    def apply(self):
+        if self.minion_filter == "minion":
+            filter_func = lambda m: m is not self.target
+        elif self.minion_filter == "adjacent":
+            filter_func = lambda m: m.index == self.target.index + 1 or m.index == self.target.index - 1
+        else:
+            type_id = MINION_TYPE.from_str(self.minion_filter)
+            filter_func = lambda m: m is not self.target and m.card.minion_type == type_id
+
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+        self.aura = Aura(self.apply_aura, self.unapply_aura, filter_func)
+        for player in players:
+            player.new_auras.append(self.aura)
+            for minion in player.minions:
+                if filter_func(minion):
+                    self.apply_aura(minion)
+
+    def unapply(self):
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+
+        for player in players:
+            for minion in player.minions:
+                if self.aura.filter(minion):
+                    self.unapply_aura(minion)
+            player.new_auras.remove(self.aura)
+
+
+    def __str__(self):
+        return "Aura"
+
+
 
 
 class ChargeAura(Effect):
@@ -143,49 +200,110 @@ class ChargeAura(Effect):
         return "ChargeAura({0}, {1})".format(self.players, MINION_TYPE.to_str(self.minion_type))
 
 
-class StatsAura(Effect):
+class ChargeAura(AuraEffect):
     """
     A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
     as what type of minions are affected can be customized.
     """
 
-    def __init__(self, attack=0, health=0, players="friendly", minion_type=MINION_TYPE.ALL):
+    def __init__(self, players="friendly", minion_filter="minion"):
+        """
+        Create a new ChargeAura
+
+        :param int attack: The amount to increase this minion's attack by
+        :param int health: The amount to increase this minion's health by
+        :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
+        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
+                                     for any type of minion
+        """
+        super().__init__(self.give_charge, self.take_charge, minion_filter, players)
+
+
+    def give_charge(self, minion):
+        minion.charge = True
+
+    def take_charge(self, minion):
+        minion.charge = False
+
+
+class StatsAura(AuraEffect):
+    """
+    A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
+    as what type of minions are affected can be customized.
+    """
+
+    def __init__(self, attack=0, health=0, players="friendly", minion_filter="minion"):
         """
         Create a new StatsAura
 
         :param int attack: The amount to increase this minion's attack by
         :param int health: The amount to increase this minion's health by
         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion who will be given charge or `MINION_TYPE.ALL` for any minion
+        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
+                                     for any type of minion
         """
-        super().__init__()
+        super().__init__(self.increase_stats, self.decrease_stats, minion_filter, players)
         self.attack = attack
         self.health = health
-        self.players = players
-        self.minion_type = minion_type
 
-    def apply(self):
-        if self.players == "friendly":
-            players = [self.target.player]
-        elif self.players == "enemy":
-            players = [self.target.player.opponent]
-        else:
-            players = [self.target.player, self.target.player.opponent]
-        if self.minion_type == MINION_TYPE.ALL:
-            self.target.add_aura(self.attack, self.health, players)
-        else:
-            self.target.add_aura(self.attack, self.health, players,
-                                 lambda minion: minion.card.minion_type == self.minion_type)
 
-    def unapply(self):
-        pass
+    def increase_stats(self, minion):
+        minion.aura_attack += self.attack
+        minion.aura_health += self.health
+        minion.health += self.health
 
-    def __str__(self):
-        if self.minion_type == MINION_TYPE.ALL:
-            return "StatsAura({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
-        return "StatsAura({0}, {1}, {2}, {3})".format(
-            self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
+    def decrease_stats(self, minion):
+        minion.aura_attack -= self.attack
+        minion.aura_health -= self.health
+        if minion.health > minion.calculate_max_health():
+            minion.health = minion.calculate_max_health()
+
+
+
+
+# class StatsAura(Effect):
+#     """
+#     A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
+#     as what type of minions are affected can be customized.
+#     """
+#
+#     def __init__(self, attack=0, health=0, players="friendly", minion_type=MINION_TYPE.ALL):
+#         """
+#         Create a new StatsAura
+#
+#         :param int attack: The amount to increase this minion's attack by
+#         :param int health: The amount to increase this minion's health by
+#         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
+#         :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
+#                                 minion who will be given charge or `MINION_TYPE.ALL` for any minion
+#         """
+#         super().__init__()
+#         self.attack = attack
+#         self.health = health
+#         self.players = players
+#         self.minion_type = minion_type
+#
+#     def apply(self):
+#         if self.players == "friendly":
+#             players = [self.target.player]
+#         elif self.players == "enemy":
+#             players = [self.target.player.opponent]
+#         else:
+#             players = [self.target.player, self.target.player.opponent]
+#         if self.minion_type == MINION_TYPE.ALL:
+#             self.target.add_aura(self.attack, self.health, players)
+#         else:
+#             self.target.add_aura(self.attack, self.health, players,
+#                                  lambda minion: minion.card.minion_type == self.minion_type)
+#
+#     def unapply(self):
+#         pass
+#
+#     def __str__(self):
+#         if self.minion_type == MINION_TYPE.ALL:
+#             return "StatsAura({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
+#         return "StatsAura({0}, {1}, {2}, {3})".format(
+#             self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
 
 
 class IncreaseBattlecryMinionCost(Effect):

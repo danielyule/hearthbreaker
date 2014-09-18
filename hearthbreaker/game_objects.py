@@ -761,6 +761,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.game = game
         minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
+        for aura in player.new_auras:
+            if aura.filter(minion):
+                aura.apply(minion)
         player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
             minion.battlecry(minion)
@@ -798,6 +801,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.game = game
             minion.index = index
             minion.add_to_board(index)
+            for aura in player.new_auras:
+                if aura.filter(minion):
+                    aura.apply(minion)
             player.trigger("minion_placed", minion)
             player.trigger("minion_summoned", minion)
             player.trigger("after_minion_added", minion)
@@ -875,6 +881,8 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.base_deathrattle = deathrattle
+        self.aura_attack = 0
+        self.aura_health = 0
         self.exhausted = True
         self.removed = False
         if effects:
@@ -911,7 +919,7 @@ class Minion(Character):
         for aura in self.player.auras:
             if aura.filter(self):
                 aura_attack += aura.attack
-        return super().calculate_attack() + aura_attack
+        return super().calculate_attack() + aura_attack + self.aura_attack
 
     def calculate_max_health(self):
         """
@@ -922,7 +930,7 @@ class Minion(Character):
         for aura in self.player.auras:
             if aura.filter(self):
                 aura_health += aura.health
-        return self.base_health + aura_health
+        return self.base_health + aura_health + self.aura_health
 
     def remove_from_board(self):
         for minion in self.player.minions:
@@ -996,10 +1004,11 @@ class Minion(Character):
             deathrattle = self.deathrattle
 
             def delayed_death(c):
-                self.player.trigger("minion_died", self, by)
-                self.silence()
+
                 if deathrattle is not None:
                     deathrattle(self)
+                self.player.trigger("minion_died", self, by)
+                self.silence()
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
@@ -1368,6 +1377,7 @@ class Player(Bindable):
         self.random = random_func
         self.hand = []
         self.auras = []
+        self.new_auras = []
         self.fatigue = 0
         self.agent = agent
         self.game = game
