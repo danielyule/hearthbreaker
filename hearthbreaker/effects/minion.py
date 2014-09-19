@@ -46,6 +46,8 @@ class MinionEffect (metaclass=abc.ABCMeta):
             "summon": Summon,
             "resurrect_friendly": ResurrectFriendlyMinionsAtEndOfTurn,
             "original_deathrattle": OriginalDeathrattle,
+            "charge": Charge,
+            "taunt": Taunt,
         }
         if action in __class_mappings:
             clazz = __class_mappings[action]
@@ -76,6 +78,39 @@ class Immune(MinionEffect):
             "action": "immune",
         }
 
+
+class Charge(MinionEffect):
+    """
+    Gives a minion charge.
+    """
+
+    def apply(self):
+        self.target.charge = True
+
+    def unapply(self):
+        self.target.charge = False
+
+    def __to_json__(self):
+        return {
+            "action": "charge"
+        }
+
+
+class Taunt(MinionEffect):
+    """
+    Gives a minion charge.
+    """
+
+    def apply(self):
+        self.target.taunt = True
+
+    def unapply(self):
+        self.target.taunt = False
+
+    def __to_json__(self):
+        return {
+            "action": "taunt"
+        }
 
 class Aura():
     def __init__(self, apply_func, unapply_func, filter_func):

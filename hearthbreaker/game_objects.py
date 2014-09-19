@@ -860,6 +860,11 @@ class Minion(Character):
             self._effects_to_add = effects
         else:
             self._effects_to_add = []
+
+        if charge:
+            self._effects_to_add.append(hearthbreaker.effects.minion.Charge())
+        if taunt:
+            self._effects_to_add.append(hearthbreaker.effects.minion.Taunt())
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -973,9 +978,7 @@ class Minion(Character):
             self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         self.effects = []
-        self.taunt = False
         self.stealth = False
-        self.charge = False
         self.player.spell_damage -= self.spell_damage
         self.spell_damage = 0
         self.divine_shield = False
@@ -1039,7 +1042,6 @@ class Minion(Character):
         new_minion.stealth = self.stealth
         new_minion.taunt = self.taunt
         new_minion.divine_shield = self.divine_shield
-        new_minion.charge = self.charge
         new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
@@ -1066,7 +1068,6 @@ class Minion(Character):
         minion.health = md['health']
         minion.stealth = md['stealth']
         minion.taunt = md['taunt']
-        minion.charge = md['charge']
         minion.windfury = md['windfury']
         minion.divine_shield = md['divine_shield']
         minion.exhausted = md['exhausted']
@@ -1106,7 +1107,6 @@ class Minion(Character):
             'attack': self.base_attack,
             "stealth": self.stealth,
             "taunt": self.taunt,
-            "charge": self.charge,
             "windfury": self.windfury,
             "divine_shield": self.divine_shield,
             "exhausted": self.exhausted,

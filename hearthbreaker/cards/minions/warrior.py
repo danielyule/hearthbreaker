@@ -1,4 +1,4 @@
-from hearthbreaker.effects.minion import Buff
+from hearthbreaker.effects.minion import Buff, Charge
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -100,7 +100,7 @@ class WarsongCommander(MinionCard):
     def create_minion(self, player):
         def give_charge(m):
             if m is not minion and m.calculate_attack() <= 3:
-                m.charge = True
+                m.add_effect(Charge())
                 m.exhausted = False
 
         def silence():

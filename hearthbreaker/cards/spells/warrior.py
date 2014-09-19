@@ -1,5 +1,6 @@
 import copy
 import hearthbreaker.targeting
+import hearthbreaker.effects.minion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, WeaponCard, Weapon
 
@@ -47,7 +48,7 @@ class Charge(Card):
         super().use(player, game)
 
         self.target.change_attack(2)
-        self.target.charge = True
+        self.target.add_effect(hearthbreaker.effects.minion.Charge())
 
 
 class Cleave(Card):
