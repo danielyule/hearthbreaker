@@ -140,6 +140,7 @@ class TestCommon(unittest.TestCase):
         boar.summon(game.current_player, game, 2)
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
         self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 
@@ -148,11 +149,17 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[4].calculate_attack())
 
         game.current_player.minions[1].die(None)
         game.current_player.minions[1].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 
         # If the wolf is silenced, then the boars to either side should no longer have increased attack
         game.current_player.minions[1].silence()
@@ -1613,6 +1620,18 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].health)
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
         self.assertEqual(3, game.players[0].minions[1].health)
+        game.players[0].minions[0].silence()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(4, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[2].health)
 
     def test_GurubashiBerserker(self):
         game = generate_game_for(GurubashiBerserker, MortalCoil, MinionPlayingAgent, OneSpellTestingAgent)
@@ -2856,3 +2875,14 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(0, len(game.other_player.minions))
+
+    def test_KelThuzad_after_friendly_death(self):
+        game = generate_game_for([RagnarosTheFirelord, Naturalize, KelThuzad], StonetuskBoar,
+                                 SpellTestingAgent, DoNothingBot)
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(22, game.other_player.hero.health)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Kel'Thuzad", game.current_player.minions[0].card.name)
+        self.assertEqual("Ragnaros the Firelord", game.current_player.minions[1].card.name)

@@ -164,7 +164,7 @@ class Replay:
                     self.actions.append(SpellAction(self.last_card, game=self.game))
                     self.last_card = None
 
-    def record_card_played(self, card):
+    def record_card_played(self, card, index):
         self._save_played_card()
         self.last_card = hearthbreaker.proxies.ProxyCard(card, self.game)
         self.last_card.targetable = card.targetable

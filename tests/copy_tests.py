@@ -1086,3 +1086,31 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(20, new_game.players[1].hero.health)
         self.assertEqual(5, len(new_game.players[0].hand))
         self.assertEqual("Headcrack", new_game.players[0].hand[0].name)
+
+    def test_QuestingAdventurer(self):
+        game = generate_game_for(QuestingAdventurer, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        game = game.copy()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        game.players[0].minions[0].silence()
+        game = game.copy()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(4, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[2].health)

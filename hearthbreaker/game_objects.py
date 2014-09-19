@@ -186,6 +186,31 @@ class Bindable:
                 del (self.events[event])
 
 
+class Effect (metaclass=abc.ABCMeta):
+
+    def __init__(self):
+        self.target = None
+
+    def set_target(self, target):
+        self.target = target
+
+    @abc.abstractmethod
+    def apply(self):
+        pass
+
+    @abc.abstractmethod
+    def unapply(self):
+        pass
+
+    @abc.abstractmethod
+    def __str__(self):
+        pass
+
+    # @abc.abstractmethod
+    def __to_json__(self):
+        pass
+
+
 class Character(Bindable, metaclass=abc.ABCMeta):
     """
     A Character in Hearthstone is something that can attack, i.e. a :class:`Hero` or :class:`Minion`.
@@ -366,13 +391,13 @@ class Character(Bindable, metaclass=abc.ABCMeta):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
             if isinstance(self, Minion):
-                self.player.trigger("minion_damaged", self)
+                self.player.trigger("minion_damaged", self, attacker)
             elif isinstance(self, Hero):
                 # The response of a secret to damage must happen immediately
                 self.trigger("hero_damaged", amount, attacker)
             self.health -= amount
             if issubclass(type(attacker), Character):
-                attacker.trigger("did_damage", amount, self)
+                attacker.trigger("did_damage", self, amount)
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
@@ -851,6 +876,8 @@ class Minion(Character):
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.base_deathrattle = deathrattle
+        self.aura_attack = 0
+        self.aura_health = 0
         self.exhausted = True
         self.removed = False
         if effects:
@@ -863,6 +890,11 @@ class Minion(Character):
         self.stealth = False
 
     def add_to_board(self, index):
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.unapply(minion)
         self.game.minion_counter += 1
         self.player.minions.insert(index, self)
         self.born = self.game.minion_counter
@@ -876,6 +908,11 @@ class Minion(Character):
         self.health += self.calculate_max_health() - self.base_health
         for effect in self._effects_to_add:
             self.add_effect(effect)
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.apply(minion)
         self.trigger("added_to_board", self, index)
 
     def calculate_attack(self):
@@ -883,28 +920,31 @@ class Minion(Character):
         Calculates the amount of attack this :class:`Minion` has, including the base attack, any temporary attack
         bonuses for this turn and any aura effects
         """
-        aura_attack = 0
-        for aura in self.player.auras:
-            if aura.filter(self):
-                aura_attack += aura.attack
-        return super().calculate_attack() + aura_attack
+        return super().calculate_attack() + self.aura_attack
 
     def calculate_max_health(self):
         """
         Calculates the maximum amount of health this :class:`Character` has, including the base health, and any aura
         effects
         """
-        aura_health = 0
-        for aura in self.player.auras:
-            if aura.filter(self):
-                aura_health += aura.health
-        return self.base_health + aura_health
+
+        return self.base_health + self.aura_health
 
     def remove_from_board(self):
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.unapply(minion)
         for minion in self.player.minions:
             if minion.index > self.index:
                 minion.index -= 1
         self.game.remove_minion(self, self.player)
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.apply(minion)
         self.removed = True
 
     def replace(self, new_minion):
@@ -920,10 +960,20 @@ class Minion(Character):
         self.removed = True
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.unapply(minion)
         self.player.minions[self.index] = new_minion
         for effect in new_minion._effects_to_add:
             new_minion.add_effect(effect)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.apply(minion)
 
     def attack(self):
         super().attack()
@@ -938,6 +988,11 @@ class Minion(Character):
         self.windfury = False
         self.frozen = False
         self.frozen_this_turn = False
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.unapply(minion)
         for effect in reversed(self.effects):
             self.player.effect_count[type(effect)] -= 1
             effect.unapply()
@@ -951,6 +1006,11 @@ class Minion(Character):
         self.battlecry = None
         self.deathrattle = None
         self.can_be_targeted_by_spells = True
+        for player in self.game.players:
+            for minion in player.minions:
+                for aura in player.auras:
+                    if aura.filter(minion):
+                        aura.apply(minion)
         self.trigger("silenced")
         if "copied" in self.events:
             del self.events["copied"]
@@ -972,13 +1032,15 @@ class Minion(Character):
             deathrattle = self.deathrattle
 
             def delayed_death(c):
-                self.player.trigger("minion_died", self, by)
-                self.silence()
+
                 if deathrattle is not None:
                     deathrattle(self)
+                self.player.trigger("minion_died", self, by)
+                self.silence()
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
+            self.player.dead_this_turn.append(self)
             self.remove_from_board()
 
     def can_attack(self):
@@ -992,88 +1054,6 @@ class Minion(Character):
 
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
-
-    def add_aura(self, attack, health, affected_players, filter_func=lambda m: True):
-        """
-        Adds an aura effect to some minions on the board minions.  This aura can increase the attack or health of
-        the minions, or both.  The effect can be limited to only certain minions with the use of a filter
-        function, and by specifying which player(s) the aura affects.
-
-        This aura is automatically unapplied in case of silence, and applied to any copies of this minion
-
-        :param int attack: The amount to increase minions' attack by
-        :param int health: The amount to increase minion's health AND max health by
-        :param list[hearthbreaker.game_objects.Player] affected_players: A list of players whose minions should be
-                                                                         affected by this aura
-        :param function filter_func: A function that selects which minions to apply this effect to. Takes
-                                     one paramter: the minion to test and returns true if the minion should be
-                                     affected, and false otherwise.
-        """
-
-        complete_filter_func = lambda m: m is not self and filter_func(m)
-
-        class Aura:
-            def __init__(self):
-                self.attack = attack
-                self.health = health
-                self.filter = complete_filter_func
-        aura = Aura()
-        for player in affected_players:
-            player.auras.append(aura)
-            if health > 0:
-                for minion in filter(complete_filter_func, player.minions):
-                    minion.health += health
-                    minion.trigger("health_changed")
-
-        def silenced():
-            for player in affected_players:
-                player.auras.remove(aura)
-                if health > 0:
-                    for filtered_minion in filter(complete_filter_func, player.minions):
-                        if filtered_minion.health > filtered_minion.calculate_max_health():
-                            filtered_minion.health = filtered_minion.calculate_max_health()
-                            filtered_minion.trigger("health_changed")
-
-        self.bind_once("silenced", silenced)
-
-    def add_adjacency_aura(self, attack, health, player):
-        """
-        Adds an aura to this minion that only affects adjacent minions.  This aura can affect the attack or health of
-        adjacent minions or both.
-
-        This aura is automatically unapplied in case of silence, and applied to any copied minions.
-
-        :param int attack: The amount to increase the attack power of the adjacent minions
-        :param int health: The amount to increase the health of the adjacent minions
-        :param hearthbreaker.game_objects.Player player: The player who the adjacent minions belong to.
-        """
-        me = self
-
-        class Aura:
-            def __init__(self):
-                self.attack = attack
-                self.health = health
-                self.filter = lambda mini: mini.index is me.index - 1 or mini.index is me.index + 1
-        aura = Aura()
-        player.auras.append(aura)
-        if health > 0:
-            for minion in filter(aura.filter, player.minions):
-                minion.health += health
-                minion.trigger("health_changed")
-
-        def silenced():
-            player.auras.remove(aura)
-            if health > 0:
-                for filtered_minion in filter(aura.filter, player.minions):
-                    if filtered_minion.health > filtered_minion.calculate_max_health():
-                        filtered_minion.health = filtered_minion.calculate_max_health()
-                        filtered_minion.trigger("health_changed")
-
-        def copied(new_minion, new_owner):
-            new_minion.add_adjacency_aura(attack, health, new_owner)
-
-        self.bind_once("silenced", silenced)
-        self.bind("copied", copied)
 
     def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.base_attack, self.base_health, self.battlecry, self.base_deathrattle)
@@ -1479,6 +1459,7 @@ class Player(Bindable):
         self.effect_count = dict()
         self.opponent = None
         self.cards_played = 0
+        self.dead_this_turn = []
 
     def __str__(self):  # pragma: no cover
         return "Player: " + self.name
@@ -1669,6 +1650,7 @@ class Game(Bindable):
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.cards_played = 0
+        self.current_player.dead_this_turn = []
         self.current_player.trigger("turn_started")
         if self.current_player.hero.weapon is not None:
             self.current_player.hero.change_temp_attack(self.current_player.hero.weapon.base_attack)
@@ -1737,12 +1719,13 @@ class Game(Bindable):
             raise GameException("The game has ended")
         if not card.can_use(self.current_player, self):
             raise GameException("That card cannot be used")
-        self.current_player.trigger("card_played", card)
+        card_index = self.current_player.hand.index(card)
+        self.current_player.hand.pop(card_index)
+        self.current_player.trigger("card_played", card, card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
         if card.overload != 0:
             self.current_player.trigger("overloaded")
 
-        self.current_player.hand.remove(card)
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)
 

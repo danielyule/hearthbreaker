@@ -28,7 +28,7 @@ class Armorsmith(MinionCard):
         super().__init__("Armorsmith", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def gain_one_armor(minion):
+        def gain_one_armor(minion, attacker):
             if minion.player is player:
                 player.hero.increase_armor(1)
 

@@ -104,6 +104,9 @@ or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hea
 Related Projects
 ----------------
 
+A collection of Hearthstone AI related projects can be found at [hs-ai.com](http://hs-ai.com)
+
+
 ###HearthSim
 Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
 with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more

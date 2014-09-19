@@ -1,8 +1,8 @@
 import copy
 import json
-from hearthbreaker.constants import MINION_TYPE
 import abc
-
+from hearthbreaker.constants import MINION_TYPE
+from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion, Character
 
 
 class MinionEffect (metaclass=abc.ABCMeta):
@@ -93,6 +93,7 @@ class Immune(MinionEffect):
     """
     Gives a character immunity.  This immunity will last until the end of the player' turn
     """
+
     def apply(self):
         self.target.immune = True
         self.target.game.current_player.bind("turn_ended", self.remove_immunity)
@@ -108,164 +109,139 @@ class Immune(MinionEffect):
         return "Immune"
 
 
-class DrawOnMinion(MinionEffect):
-    """
-    Causes a card to be drawn every time a minion is played.  Can be given a specific type
-    of minion to draw for.
-    """
+class Aura():
+    def __init__(self, apply_func, unapply_func, filter_func):
+        self.apply = apply_func
+        self.unapply = unapply_func
+        self.filter = filter_func
 
-    def __init__(self, minion_type=MINION_TYPE.ALL):
-        """
-        Creates a new DrawOnMinion effect
 
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion to draw for, or `MINION_TYPE.ALL` for any minion
-        """
-        super().__init__()
-        self.minion_type = minion_type
+class AuraEffect(MinionEffect):
+    def __init__(self, apply_aura, unapply_aura, minion_filter="minion", players="friendly", include_self=False):
+        self.apply_aura = apply_aura
+        self.unapply_aura = unapply_aura
+        self.minion_filter = minion_filter
+        self.players = players
+        self.aura = None
+        self.include_self = include_self
 
     def apply(self):
-        self.target.player.bind("minion_placed", self.check_minion_draw)
+        if self.minion_filter == "minion":
+            if self.include_self:
+                filter_func = lambda m: True
+            else:
+                filter_func = lambda m: m is not self.target
+        elif self.minion_filter == "adjacent":
+            filter_func = lambda m: m.index == self.target.index + 1 or m.index == self.target.index - 1
+        else:
+            type_id = MINION_TYPE.from_str(self.minion_filter)
+            if self.include_self:
+                filter_func = lambda m: m.card.minion_type == type_id
+            else:
+                filter_func = lambda m: m is not self.target and m.card.minion_type == type_id
 
-    def check_minion_draw(self, new_minion):
-        if (self.minion_type != MINION_TYPE.ALL and new_minion.card.minion_type is self.minion_type) \
-                and new_minion is not self.target:
-            self.target.player.draw()
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+        self.aura = Aura(self.apply_aura, self.unapply_aura, filter_func)
+        for player in players:
+            player.auras.append(self.aura)
 
     def unapply(self):
-        self.target.player.unbind("minion_placed", self.check_minion_draw)
+        if self.players == "friendly":
+            players = [self.target.player]
+        elif self.players == "enemy":
+            players = [self.target.player.opponent]
+        elif self.players == "both":
+            players = [self.target.player, self.target.player.opponent]
+
+        for player in players:
+            player.auras.remove(self.aura)
 
     def __str__(self):
-        if self.minion_type == MINION_TYPE.ALL:
-            return "DrawOnMinion(All)"
-        return "DrawOnMinion({0})".format(MINION_TYPE.to_str(self.minion_type))
+        return json.dumps(self.__to_json__())
+
+    def __to_json__(self):
+        return {
+            "filter": self.minion_filter,
+            "players": self.players,
+            "include_self": self.include_self
+        }
 
 
-class ChargeAura(MinionEffect):
+class ChargeAura(AuraEffect):
     """
-    A Charge Aura gives affected minions charge.  Unlike other Auras, a ChargeAura can affect the minion giving the
-    effect.  Whether the minions are friendly or not as well as what
-    type of minions are affected can be customized
+     A Charge Aura gives affected minions charge.   Whether the minions are friendly or not as well as what
+     type of minions are affected can be customized
     """
 
-    def __init__(self, players="friendly", minion_type=MINION_TYPE.ALL):
+    def __init__(self, players="friendly", minion_filter="minion", include_self=False):
         """
         Create a new ChargeAura
-
         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion who will be given charge or `MINION_TYPE.ALL` for any minion
+        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
+                                     for any type of minion
+        :param boolean include_self: Whether or not this aura should also affect the minion that created it.
         """
-        super().__init__()
-        self.affected_minions = []
-        self.charged_minions = []
-        self.players = players
-        self.minion_type = minion_type
+        super().__init__(self.give_charge, self.take_charge, minion_filter, players, include_self)
+        self.affected_minions = set()
 
-    def apply(self):
-        if self.players == "friendly" or self.players == "both":
-            for charge_minion in self.target.player.minions:
-                self.give_charge_if_beast(charge_minion)
+    def give_charge(self, minion):
+        if not minion.charge:
+            minion.charge = True
+            self.affected_minions.add(minion)
 
-            self.target.player.bind("minion_played", self.give_charge_if_beast)
+    def take_charge(self, minion):
+        if minion in self.affected_minions:
+            minion.charge = False
+            self.affected_minions.remove(minion)
 
-        if self.players == "enemy" or self.players == "both":
-            for charge_minion in self.target.player.opponent.minions:
-                self.give_charge_if_beast(charge_minion)
-
-            self.target.player.opponent.bind("minion_played", self.give_charge_if_beast)
-
-    def unapply(self):
-        if self.players == "friendly" or self.players == "both":
-            self.target.player.unbind("minion_played", self.give_charge_if_beast)
-
-        if self.players == "enemy" or self.players == "both":
-            self.target.player.opponent.unbind("minion_played", self.give_charge_if_beast)
-
-    def give_charge_if_beast(self, played_minion):
-        if played_minion is self.target and \
-                (self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type == self.minion_type):
-            self.target.charge = True
-        else:
-            def give_permacharge_effect(minion):
-                def silenced():
-                    minion.charge = True
-
-                def target_silenced():
-                    minion.unbind("silenced", silenced)
-                    minion.unbind("copied", copied)
-                    minion.charge = False
-
-                def copied(new_minion, new_owner):
-                    new_minion.charge = False
-
-                minion.charge = True
-                self.affected_minions.append(minion)
-                minion.bind("silenced", silenced)
-                minion.bind("copied", copied)
-                self.target.bind_once("silenced", target_silenced)
-
-            def watch_for_silence(minion):
-                def silenced():
-                    self.charged_minions.remove(minion)
-                    give_permacharge_effect(minion)
-                minion.bind_once("silenced", silenced)
-                self.target.bind_once("silenced", lambda: minion.unbind("silenced", silenced))
-                self.charged_minions.append(minion)
-
-            if self.minion_type == MINION_TYPE.ALL or played_minion.card.minion_type is self.minion_type:
-                if not played_minion.charge:
-                    give_permacharge_effect(played_minion)
-                else:
-                    watch_for_silence(played_minion)
-
-    def __str__(self):
-        return "ChargeAura({0}, {1})".format(self.players, MINION_TYPE.to_str(self.minion_type))
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "type": "charge"
+        })
 
 
-class StatsAura(MinionEffect):
+class StatsAura(AuraEffect):
     """
     A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
     as what type of minions are affected can be customized.
     """
 
-    def __init__(self, attack=0, health=0, players="friendly", minion_type=MINION_TYPE.ALL):
+    def __init__(self, attack=0, health=0, players="friendly", minion_filter="minion"):
         """
         Create a new StatsAura
 
         :param int attack: The amount to increase this minion's attack by
         :param int health: The amount to increase this minion's health by
         :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param int minion_type: A member of :class:`MINION_TYPE` specifying the type of
-                                minion who will be given charge or `MINION_TYPE.ALL` for any minion
+        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
+                                     for any type of minion
         """
-        super().__init__()
+        super().__init__(self.increase_stats, self.decrease_stats, minion_filter, players)
         self.attack = attack
         self.health = health
-        self.players = players
-        self.minion_type = minion_type
 
-    def apply(self):
-        if self.players == "friendly":
-            players = [self.target.player]
-        elif self.players == "enemy":
-            players = [self.target.player.opponent]
-        else:
-            players = [self.target.player, self.target.player.opponent]
-        if self.minion_type == MINION_TYPE.ALL:
-            self.target.add_aura(self.attack, self.health, players)
-        else:
-            self.target.add_aura(self.attack, self.health, players,
-                                 lambda minion: minion.card.minion_type == self.minion_type)
+    def increase_stats(self, minion):
+        minion.aura_attack += self.attack
+        minion.aura_health += self.health
+        minion.health += self.health
 
-    def unapply(self):
-        pass
+    def decrease_stats(self, minion):
+        minion.aura_attack -= self.attack
+        minion.aura_health -= self.health
+        if minion.health > minion.calculate_max_health():
+            minion.health = minion.calculate_max_health()
 
-    def __str__(self):
-        if self.minion_type == MINION_TYPE.ALL:
-            return "StatsAura({0}, {1}, {2}, ALL)".format(self.attack, self.health, self.players)
-        return "StatsAura({0}, {1}, {2}, {3})".format(
-            self.attack, self.health, self.players, MINION_TYPE.to_str(self.minion_type))
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "type": "stats",
+            "attack": self.attack,
+            "health": self.health,
+        })
 
 
 class IncreaseBattlecryMinionCost(MinionEffect):
@@ -297,9 +273,14 @@ class IncreaseBattlecryMinionCost(MinionEffect):
     def __str__(self):
         return "IncreaseMinionCost(battlecry, {0})".format(self.amount)
 
+    def __to_json__(self):
+        return {
+            "action": "increase_battlecry",
+            "amount": self.amount,
+        }
 
 class DoubleDeathrattle(MinionEffect):
-
+class DoubleDeathrattle(Effect):
     def apply(self):
         if self.target.player.effect_count[DoubleDeathrattle] == 1:
             self.target.player.bind("minion_died", self.trigger_deathrattle)
@@ -316,7 +297,6 @@ class DoubleDeathrattle(MinionEffect):
 
 
 class HealAsDamage(MinionEffect):
-
     def apply(self):
         if self.target.player.effect_count[HealAsDamage] == 1:
             self.target.player.heal_does_damage = True
@@ -383,125 +363,14 @@ class ManaFilter(MinionEffect):
         return "ManaFilter({0}, {1}, {2}, {3})".format(self.amount, self.minimum, self.filter_type, self.player)
 
 
-class GrowIfSecret(MinionEffect):
-    def __init__(self, attack, health):
-        super().__init__()
-        self.attack = attack
-        self.health = health
-
-    def apply(self):
-        self.target.player.bind("turn_ended", self.increase_stats)
-
-    def unapply(self):
-        self.target.player.unbind("turn_ended", self.increase_stats)
-
-    def increase_stats(self):
-        if len(self.target.player.secrets) > 0:
-            self.target.change_attack(self.attack)
-            self.target.increase_health(self.health)
-
-    def __str__(self):
-        return "GrowIf(Secret, {0}, {1})".format(self.attack, self.health)
-
-
-class AddCardOnSpell(MinionEffect):
-    def __init__(self, card):
-        super().__init__()
-        self.card = card
-
-    def apply(self):
-        self.target.player.bind("spell_cast", self.add_card)
-
-    def unapply(self):
-        self.target.player.unbind("spell_cast", self.add_card)
-
-    def add_card(self, spell_card):
-        if len(self.target.player.hand) < 10:
-            self.target.player.hand.append(self.card())
-
-    def __str__(self):
-        return "AddOnSpell({0})".format(self.card().name)
-
-
-class FreezeOnDamage(MinionEffect):
-    def __init__(self):
-        super().__init__()
-
-    def did_damage(self, amount, damaged_minion):
-        damaged_minion.freeze()
-
-    def apply(self):
-        self.target.bind("did_damage", self.did_damage)
-
-    def unapply(self):
-        self.target.unbind("did_damage", self.did_damage)
-
-    def __str__(self):
-        return "OnDamage(freeze)"
-
-
-class KillOnDamage(MinionEffect):
-    def __init__(self):
-        super().__init__()
-
-    def did_damage(self, amount, damaged_minion):
-        if isinstance(damaged_minion, Minion):
-            damaged_minion.die(None)
-            self.target.game.check_delayed()
-
-    def apply(self):
-        self.target.bind("did_damage", self.did_damage)
-
-    def unapply(self):
-        self.target.unbind("did_damage", self.did_damage)
-
-    def __str__(self):
-        return "OnDamage(kill)"
-
-
-class DrawOnAttack(MinionEffect):
-    """
-    Draw some number of cards when this character attacks.  This effect will always affect a given player, regardless
-    of who owns the minion
-    """
-    def __init__(self, amount=1, first_player=True):
-        """
-        Creates a new DrawOnAttack effect
-
-        :param int amount: The number of cards to draw when attacking
-        :param boolean first_player: True if this will draw cards for the first player, false to draw for the second
-        """
-        super().__init__()
-        self.amount = amount
-        self.first_player = first_player
-
-    def apply(self):
-        self.target.bind("attack", self.draw)
-
-    def unapply(self):
-        self.target.unbind("attack", self.draw)
-
-    def draw(self, attack_target):
-        if self.first_player:
-            player = self.target.game.players[0]
-        else:
-            player = self.target.game.players[1]
-        for i in range(0, self.amount):
-            player.draw()
-
-    def __str__(self):
-        return("DrawOn(attack, {0})").format(self.amount)
-
-
-class Buff(MinionEffect):
-    def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly"):
+class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
+    def __init__(self, when, minion_filter="self", target="self", players="friendly"):
         super().__init__()
         self.when = when
         self.minion_filter = minion_filter
-        self.buff_target = target
-        self.attack = attack
-        self.health = health
+        self.action_target = target
         self.players = players
+        self.other = None
 
     def apply(self):
         if self.players == "friendly":
@@ -529,12 +398,21 @@ class Buff(MinionEffect):
             else:
                 for player in players:
                     player.bind("minion_played", self._check_minion_filter)
+        elif self.when == "placed":
+            for player in players:
+                    player.bind("minion_placed", self._check_minion_filter)
+        elif self.when == "attack":
+            self.target.bind("attack", self._check_minion_filter)
+        elif self.when == "attacked":
+            self.target.bind("attacked", self._check_minion_filter)
+        elif self.when == "did_damage":
+            self.target.bind("did_damage", self._check_minion_filter)
         elif self.when == "turn_ended":
             for player in players:
-                player.bind("turn_ended", self._do_action)
+                player.bind("turn_ended", self._check_turn_end_filter)
         elif self.when == "turn_started":
             for player in players:
-                player.bind("turn_started", self._do_action)
+                player.bind("turn_started", self._check_turn_end_filter)
 
     def unapply(self):
         if self.players == "friendly":
@@ -562,52 +440,95 @@ class Buff(MinionEffect):
             else:
                 for player in players:
                     player.unbind("minion_played", self._check_minion_filter)
+        elif self.when == "placed":
+            for player in players:
+                    player.unbind("minion_placed", self._check_minion_filter)
+        elif self.when == "attack":
+            self.target.unbind("attack", self._check_minion_filter)
+        elif self.when == "attacked":
+            self.target.unbind("attacked", self._check_minion_filter)
+        elif self.when == "did_damage":
+            self.target.unbind("did_damage", self._check_minion_filter)
         elif self.when == "turn_ended":
             for player in players:
-                player.unbind("turn_ended", self._do_action)
+                player.unbind("turn_ended", self._check_turn_end_filter)
         elif self.when == "turn_started":
             for player in players:
-                player.unbind("turn_started", self._do_action)
+                player.unbind("turn_started", self._check_turn_end_filter)
 
     def _check_minion_filter(self, minion, *args):
+        self.other = minion
         if self.minion_filter == "self":
             if minion == self.target:
-                self._do_action()
+                self._select_target()
         elif self.minion_filter == "minion":
-            self._do_action()
+            self._select_target()
         elif self.minion_filter == "deathrattle" and minion.deathrattle is not None:
-            self._do_action()
-        else:
+            self._select_target()
+        elif self.target is not minion:
             try:
                 type_id = MINION_TYPE.from_str(self.minion_filter)
                 if minion.card.minion_type == type_id:
-                    self._do_action()
+                    self._select_target()
             except KeyError:
                 pass
 
-    def _check_card_filter(self, card):
+    def _check_card_filter(self, card, index):
         if self.minion_filter == "spell" and card.is_spell():
-            self._do_action()
+            self._select_target()
         elif self.minion_filter == "secret" and isinstance(card, SecretCard):
-            self._do_action()
+            self._select_target()
+        elif self.minion_filter == "card":
+            self._select_target()
 
-    def _do_action(self):
-        if self.buff_target == "self":
+    def _check_turn_end_filter(self):
+        if self.minion_filter != "secret" or len(self.target.player.secrets) > 0:
+            self._select_target()
+
+    def _select_target(self):
+        if self.action_target == "self":
             target = self.target
+        elif self.action_target == "other":
+            target = self.other
         else:
-            if self.buff_target == "random":
+            if self.action_target == "random":
                 targets = copy.copy(self.target.player.minions)
                 targets.extend(self.target.player.opponent.minions)
                 targets.remove(self.target)
-            elif self.buff_target == "random_friendly":
+            elif self.action_target == "random_friendly":
                 targets = copy.copy(self.target.player.minions)
                 targets.remove(self.target)
-            elif self.buff_target == "random_enemy":
+            elif self.action_target == "random_enemy":
                 targets = copy.copy(self.target.player.opponent.minions)
             else:
-                raise RuntimeError("Expected 'target' to be one of 'self', 'random', " +
-                                   "'random_friendly' or 'random_enemy'.  Got '{0}'".format(self.buff_target))
+                raise RuntimeError("Expected 'target' to be one of 'self', 'other', 'random', " +
+                                   "'random_friendly' or 'random_enemy'.  Got '{0}'".format(self.action_target))
             target = targets[self.target.game.random(0, len(targets) - 1)]
+        self._do_action(target)
+
+    @abc.abstractmethod
+    def _do_action(self, target):
+        pass
+
+    def __str__(self):
+        return json.dumps(self.__to_json__())
+
+    def __to_json__(self):
+        return {
+            "when": self.when,
+            "filter": self.minion_filter,
+            "target": self.action_target,
+            "players": self.players,
+        }
+
+
+class Buff(EventEffect):
+    def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+        self.attack = attack
+        self.health = health
+
+    def _do_action(self, target):
         if self.health > 0:
             target.increase_health(self.health)
         elif self.health < 0:
@@ -615,40 +536,123 @@ class Buff(MinionEffect):
         if self.attack != 0:
             target.change_attack(self.attack)
 
-    def __str__(self):
-        return json.dumps({
+    def __to_json__(self):
+        return super().__to_json__().update({
             "action": "buff",
-            "when": self.when,
-            "filter": self.minion_filter,
-            "target": self.buff_target,
             "attack": self.attack,
             "health": self.health,
-            "players": self.players,
+        })
+
+
+class Kill(EventEffect):
+    def __init__(self, when, minion_filter="self", target="self", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+
+    def _do_action(self, target):
+        if isinstance(target, Minion):
+            target.die(None)
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "action": "kill",
+        })
+
+
+class Freeze(EventEffect):
+    def __init__(self, when, minion_filter="self", target="self", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+
+    def _do_action(self, target):
+        if isinstance(target, Character):
+            target.freeze()
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "action": "freeze",
+        })
+
+
+class EventEffectPlayer(EventEffect):
+    def __init__(self, when, minion_filter="self", target="owner", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+
+    def _select_target(self):
+        if self.action_target == "owner":
+            self._do_action(self.target.player)
+        elif self.action_target == "opponent":
+            self._do_action(self.target.player.opponent)
+        elif self.action_target == "p1":
+            self._do_action(self.target.game.players[0])
+        elif self.action_target == "p2":
+            self._do_action(self.target.game.players[1])
+
+
+class AddCard(EventEffectPlayer):
+    def __init__(self, when, card, minion_filter="self", target="owner", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+        self.card = card
+
+    def _do_action(self, target):
+        if len(target.hand) < 10:
+            target.hand.append(self.card())
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "action": "add_card",
+            "card": self.card.name
+        })
+
+
+class Draw(EventEffectPlayer):
+    def __init__(self, when, minion_filter="self", target="owner", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+
+    def _do_action(self, target):
+        target.draw()
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "action": "draw",
+        })
+
+
+class Summon(EventEffectPlayer):
+    def __init__(self, when, card, minion_filter="self", target="owner", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+        self.card = card
+
+    def _do_action(self, target):
+        self.card().summon(target, target.game, len(target.minions))
+
+    def __to_json__(self):
+        return super().__to_json__().update({
+            "action": "summon",
+            "card": self.card.name
         })
 
 
 class ResurrectFriendlyMinionsAtEndOfTurn(MinionEffect):
     def __init__(self):
         super().__init__()
-        self.dead_minions = []
 
     def apply(self):
-        self.target.player.bind("minion_died", self._minion_died)
         self.target.player.bind("turn_ended", self._turn_ended)
         self.target.player.opponent.bind("turn_ended", self._turn_ended)
 
     def unapply(self):
-        self.target.player.unbind("minion_died", self._minion_died)
         self.target.player.unbind("turn_ended", self._turn_ended)
         self.target.player.opponent.unbind("turn_ended", self._turn_ended)
-        self.dead_minions = []
-
-    def _minion_died(self, dead_minion, attacker):
-        self.dead_minions.append(dead_minion.card)
 
     def _turn_ended(self):
-        for minion in self.dead_minions:
-            minion.summon(self.target.player, self.target.game, len(self.target.player.minions))
+        # Will be called once per Kel'Thuzad on the board
+        # http://www.hearthhead.com/card=1794/kelthuzad#comments
+        for minion in sorted(self.target.player.dead_this_turn, key=lambda m: m.born):
+            minion.card.summon(self.target.player, self.target.game, len(self.target.player.minions))
+
+    def __to_json__(self):
+        return {
+            "action": "resurrect_frendly"
+        }
 
     def __str__(self):
-        return "ResurrectFriendlyMinionsAtEndOfTurn({0})".format([card.name for card in self.dead_minions])
+        return ""

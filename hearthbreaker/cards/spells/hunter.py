@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.effects.minion import Immune
+from hearthbreaker.effects.minion import Immune, StatsAura
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -272,15 +272,10 @@ class AnimalCompanion(Card):
 
         class Leokk(MinionCard):
             def __init__(self):
-                super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                def add_effect(m, index):
-                    m.add_aura(1, 0, [player], lambda mini: mini is not minion)
-
-                minion = Minion(2, 4, MINION_TYPE.BEAST)
-                minion.bind("added_to_board", add_effect)
-                return minion
+                return Minion(2, 4, effects=[StatsAura(1, 0)])
 
         beast_list = [Huffer(), Misha(), Leokk()]
         card = beast_list[player.game.random(0, 2)]
