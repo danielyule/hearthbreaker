@@ -2,7 +2,7 @@ import copy
 import json
 import abc
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion, Character
+from hearthbreaker.game_objects import MinionCard, SecretCard, Minion, Character
 
 
 class MinionEffect (metaclass=abc.ABCMeta):
@@ -21,72 +21,12 @@ class MinionEffect (metaclass=abc.ABCMeta):
     def unapply(self):
         pass
 
+    def __str__(self):
+        return json.dumps(self.__to_json__())
+
     @abc.abstractmethod
-    def __str__(self):
+    def __to_json__(self):
         pass
-
-
-class KillMinion(MinionEffect):
-    """
-    Kills a minion.  The minion can be killed at the end of the turn, or at the start of the
-    casting player's next turn.
-    """
-
-    def __init__(self, when):
-        """
-        Creates a new KillMinion effect.
-
-        :param string when: The event when this minion should die.  Possible values
-                            are "turn_ended" and "turn_started".  These events refer to the casting player's turn
-        """
-        super().__init__()
-        self.when = when
-
-    def apply(self):
-        self.target.game.current_player.bind(self.when, self.die)
-
-    def unapply(self):
-        self.target.game.current_player.unbind(self.when, self.die)
-
-    def die(self):
-        self.target.die(None)
-
-    def __str__(self):
-        return "KillMinion({0})".format(self.when)
-
-
-class SummonOnDeath(MinionEffect):
-    """
-    Causes a minion to summon another minion when it dies
-    """
-    def __init__(self, replacement, count=1):
-        """
-        Creates a new SummonOnDeath effect.
-
-        :param class replacement: A MinionCard subclass that corresponds to the minion to summon.
-                                  Should be a class, not an object.
-        """
-        super().__init__()
-        self.replacement = replacement
-        self.count = count
-        self.old_death_rattle = None
-
-    def apply(self):
-        self.old_death_rattle = self.target.deathrattle
-        self.target.deathrattle = self.summon_replacement
-
-    def unapply(self):
-        pass
-
-    def summon_replacement(self, m):
-        if self.old_death_rattle is not None:
-            self.old_death_rattle(m)
-        for i in range(0, self.count):
-            replacement_card = self.replacement()
-            replacement_card.summon(self.target.player, self.target.game, len(self.target.player.minions))
-
-    def __str__(self):
-        return "SummonOnDeath({0})".format(self.replacement().name)
 
 
 class Immune(MinionEffect):
@@ -105,8 +45,10 @@ class Immune(MinionEffect):
     def remove_immunity(self):
         self.target.immune = False
 
-    def __str__(self):
-        return "Immune"
+    def __to_json__(self):
+        return {
+            "action": "immune",
+        }
 
 
 class Aura():
@@ -270,17 +212,14 @@ class IncreaseBattlecryMinionCost(MinionEffect):
         self.target.game.current_player.mana_filters.remove(self.mana_filter)
         self.target.game.other_player.mana_filters.remove(self.mana_filter)
 
-    def __str__(self):
-        return "IncreaseMinionCost(battlecry, {0})".format(self.amount)
-
     def __to_json__(self):
         return {
             "action": "increase_battlecry",
             "amount": self.amount,
         }
 
+
 class DoubleDeathrattle(MinionEffect):
-class DoubleDeathrattle(Effect):
     def apply(self):
         if self.target.player.effect_count[DoubleDeathrattle] == 1:
             self.target.player.bind("minion_died", self.trigger_deathrattle)
@@ -292,8 +231,10 @@ class DoubleDeathrattle(Effect):
     def trigger_deathrattle(self, minion, killed_by):
         minion.deathrattle(minion)
 
-    def __str__(self):
-        return "DoubleDeathrattle()"
+    def __to_json__(self):
+        return {
+            "action": "double_deathrattle",
+        }
 
 
 class HealAsDamage(MinionEffect):
@@ -305,8 +246,10 @@ class HealAsDamage(MinionEffect):
         if self.target.player.effect_count[HealAsDamage] == 0:
             self.target.player.heal_does_damage = False
 
-    def __str__(self):
-        return "HealAsDamage()"
+    def __to_json__(self):
+        return {
+            "action": "heal_as_damage",
+        }
 
 
 class ManaFilter(MinionEffect):
@@ -314,7 +257,7 @@ class ManaFilter(MinionEffect):
     Associates a mana filter with this minion.  A mana filter affects a player by making cards of a certain type
     cost more or less.  The amount to change, player affected, and cards changed can all be customized
     """
-    def __init__(self, amount, filter_type="card", minimum=0, player="friendly"):
+    def __init__(self, amount, filter_type="card", minimum=0, players="friendly"):
         """
         Creates a new mana filter
 
@@ -329,7 +272,7 @@ class ManaFilter(MinionEffect):
         self.minimum = minimum
         self.filter_type = filter_type
         self.filter_object = None
-        self.player = player
+        self.players = players
 
     def apply(self):
         if self.filter_type == "minion":
@@ -348,19 +291,27 @@ class ManaFilter(MinionEffect):
                 self.filter = filter
 
         self.filter_object = Filter(self.amount, self.minimum, my_filter)
-        if self.player == "friendly" or self.player == "both":
+        if self.players == "friendly" or self.players == "both":
             self.target.player.mana_filters.append(self.filter_object)
-        if self.player == "enemy" or self.player == "both":
+        if self.players == "enemy" or self.players == "both":
             self.target.player.opponent.mana_filters.append(self.filter_object)
 
     def unapply(self):
-        if self.player == "friendly" or self.player == "both":
+        if self.players == "friendly" or self.players == "both":
             self.target.player.mana_filters.remove(self.filter_object)
-        if self.player == "enemy" or self.player == "both":
+        if self.players == "enemy" or self.players == "both":
             self.target.player.opponent.mana_filters.remove(self.filter_object)
 
     def __str__(self):
-        return "ManaFilter({0}, {1}, {2}, {3})".format(self.amount, self.minimum, self.filter_type, self.player)
+        return "ManaFilter({0}, {1}, {2}, {3})".format(self.amount, self.minimum, self.filter_type, self.players)
+
+    def __to_json__(self):
+        return {
+            "action": "mana_filter",
+            "amount": self.amount,
+            "minimum": self.minimum,
+            "players": self.players
+        }
 
 
 class EventEffect(MinionEffect, metaclass=abc.ABCMeta):

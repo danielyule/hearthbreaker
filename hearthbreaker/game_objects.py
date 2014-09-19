@@ -186,31 +186,6 @@ class Bindable:
                 del (self.events[event])
 
 
-class Effect (metaclass=abc.ABCMeta):
-
-    def __init__(self):
-        self.target = None
-
-    def set_target(self, target):
-        self.target = target
-
-    @abc.abstractmethod
-    def apply(self):
-        pass
-
-    @abc.abstractmethod
-    def unapply(self):
-        pass
-
-    @abc.abstractmethod
-    def __str__(self):
-        pass
-
-    # @abc.abstractmethod
-    def __to_json__(self):
-        pass
-
-
 class Character(Bindable, metaclass=abc.ABCMeta):
     """
     A Character in Hearthstone is something that can attack, i.e. a :class:`Hero` or :class:`Minion`.

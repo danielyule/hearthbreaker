@@ -166,7 +166,7 @@ class Replay:
 
     def record_card_played(self, card, index):
         self._save_played_card()
-        self.last_card = hearthbreaker.proxies.ProxyCard(card, self.game)
+        self.last_card = hearthbreaker.proxies.ProxyCard(index, self.game)
         self.last_card.targetable = card.targetable
         self.card_class = type(card)
 
