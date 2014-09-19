@@ -5,41 +5,6 @@ from hearthbreaker.constants import MINION_TYPE
 from hearthbreaker.game_objects import Effect, MinionCard, SecretCard, Minion, Character
 
 
-# class SummonOnDeath(Effect):
-#     """
-#     Causes a minion to summon another minion when it dies
-#     """
-#
-#     def __init__(self, replacement, count=1):
-#         """
-#         Creates a new SummonOnDeath effect.
-#
-#         :param class replacement: A MinionCard subclass that corresponds to the minion to summon.
-#                                   Should be a class, not an object.
-#         """
-#         super().__init__()
-#         self.replacement = replacement
-#         self.count = count
-#         self.old_death_rattle = None
-#
-#     def apply(self):
-#         self.old_death_rattle = self.target.deathrattle
-#         self.target.deathrattle = self.summon_replacement
-#
-#     def unapply(self):
-#         pass
-#
-#     def summon_replacement(self, m):
-#         if self.old_death_rattle is not None:
-#             self.old_death_rattle(m)
-#         for i in range(0, self.count):
-#             replacement_card = self.replacement()
-#             replacement_card.summon(self.target.player, self.target.game, len(self.target.player.minions))
-#
-#     def __str__(self):
-#         return "SummonOnDeath({0})".format(self.replacement().name)
-
-
 class Immune(Effect):
     """
     Gives a character immunity.  This immunity will last until the end of the player' turn
@@ -58,6 +23,7 @@ class Immune(Effect):
 
     def __str__(self):
         return "Immune"
+
 
 class Aura():
     def __init__(self, apply_func, unapply_func, filter_func):
@@ -98,10 +64,7 @@ class AuraEffect(Effect):
             players = [self.target.player, self.target.player.opponent]
         self.aura = Aura(self.apply_aura, self.unapply_aura, filter_func)
         for player in players:
-            player.new_auras.append(self.aura)
-            for minion in player.minions:
-                if filter_func(minion):
-                    self.apply_aura(minion)
+            player.auras.append(self.aura)
 
     def unapply(self):
         if self.players == "friendly":
@@ -112,10 +75,7 @@ class AuraEffect(Effect):
             players = [self.target.player, self.target.player.opponent]
 
         for player in players:
-            for minion in player.minions:
-                if self.aura.filter(minion):
-                    self.unapply_aura(minion)
-            player.new_auras.remove(self.aura)
+            player.auras.remove(self.aura)
 
     def __str__(self):
         return json.dumps(self.__to_json__())

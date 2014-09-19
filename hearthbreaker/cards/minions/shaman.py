@@ -1,3 +1,4 @@
+from hearthbreaker.effects.minion import StatsAura
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -42,9 +43,7 @@ class FlametongueTotem(MinionCard):
         super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        minion = Minion(0, 3)
-        minion.add_adjacency_aura(2, 0, player)
-        return minion
+        return Minion(0, 3, effects=[StatsAura(2, 0, minion_filter="adjacent")])
 
 
 class ManaTideTotem(MinionCard):

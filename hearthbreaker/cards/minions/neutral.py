@@ -123,9 +123,7 @@ class DireWolfAlpha(MinionCard):
         super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        minion.add_adjacency_aura(1, 0, player)
-        return minion
+        return Minion(2, 2, effects=[StatsAura(1, 0, minion_filter="adjacent")])
 
 
 class WorgenInfiltrator(MinionCard):
@@ -908,9 +906,7 @@ class RaidLeader(MinionCard):
         super().__init__("Raid Leader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        minion.add_aura(1, 0, [player])
-        return minion
+        return Minion(2, 2, effects=[StatsAura(1, 0)])
 
 
 class DragonlingMechanic(MinionCard):
@@ -1311,10 +1307,7 @@ class GrimscaleOracle(MinionCard):
         super().__init__("Grimscale Oracle", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        minion = Minion(1, 1)
-        minion.add_aura(1, 0, [player.game.current_player, player.game.other_player],
-                        lambda mini: mini.card.minion_type is MINION_TYPE.MURLOC)
-        return minion
+        return Minion(1, 1, effects=[StatsAura(1, 0, minion_filter="murloc", players="both")])
 
 
 class MurlocWarleader(MinionCard):
@@ -1322,10 +1315,7 @@ class MurlocWarleader(MinionCard):
         super().__init__("Murloc Warleader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        minion = Minion(3, 3)
-        minion.add_aura(2, 1, [player.game.current_player, player.game.other_player],
-                        lambda mini: mini.card.minion_type is MINION_TYPE.MURLOC)
-        return minion
+        return Minion(3, 3, effects=[StatsAura(2, 1, minion_filter="murloc", players="both")])
 
 
 class BigGameHunter(MinionCard):
@@ -1489,9 +1479,7 @@ class SouthseaCaptain(MinionCard):
         super().__init__("Southsea Captain", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.PIRATE)
 
     def create_minion(self, player):
-        minion = Minion(3, 3)
-        minion.add_aura(1, 1, [player], lambda mini: mini.card.minion_type is MINION_TYPE.PIRATE)
-        return minion
+        return Minion(3, 3, effects=[StatsAura(1, 1, minion_filter="pirate")])
 
 
 class SouthseaDeckhand(MinionCard):

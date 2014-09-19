@@ -140,6 +140,7 @@ class TestCommon(unittest.TestCase):
         boar.summon(game.current_player, game, 2)
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
         self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 
@@ -148,11 +149,17 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(1, game.current_player.minions[0].calculate_attack())
         self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[4].calculate_attack())
 
         game.current_player.minions[1].die(None)
         game.current_player.minions[1].activate_delayed()
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 
         # If the wolf is silenced, then the boars to either side should no longer have increased attack
         game.current_player.minions[1].silence()
