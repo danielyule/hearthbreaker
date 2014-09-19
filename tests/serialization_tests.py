@@ -6,7 +6,7 @@ import tests.copy_tests
 class SerializationCopyTests(tests.copy_tests.TestMinionCopying):
     def setUp(self):
         def _save_object(o):
-            return o.__json__()
+            return o.__to_json__()
 
         def serialization_copy(old_game):
             game_json = json.dumps(old_game, default=_save_object, indent=2)

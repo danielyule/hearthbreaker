@@ -2,7 +2,7 @@ import copy
 import json
 import abc
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, SecretCard, Minion, Character
+import hearthbreaker.game_objects
 
 
 class MinionEffect (metaclass=abc.ABCMeta):
@@ -27,6 +27,32 @@ class MinionEffect (metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __to_json__(self):
         pass
+
+    @staticmethod
+    def from_json(game, action, *args, **kwargs):
+        __class_mappings = {
+            "immune": Immune,
+            "charge_aura": ChargeAura,
+            "stats_aura": StatsAura,
+            "increase_battlecry": IncreaseBattlecryMinionCost,
+            "double_deathrattle": DoubleDeathrattle,
+            "heal_as_damage": HealAsDamage,
+            "mana_filter": ManaFilter,
+            "buff": Buff,
+            "kill": Kill,
+            "freeze": Freeze,
+            "add_card": AddCard,
+            "draw": Draw,
+            "summon": Summon,
+            "resurrect_friendly": ResurrectFriendlyMinionsAtEndOfTurn,
+            "original_deathrattle": OriginalDeathrattle,
+        }
+        if action in __class_mappings:
+            clazz = __class_mappings[action]
+            obj = clazz(*args, **kwargs)
+            return obj
+        else:
+            return None
 
 
 class Immune(MinionEffect):
@@ -200,7 +226,7 @@ class IncreaseBattlecryMinionCost(MinionEffect):
         class Filter:
             def __init__(self):
                 self.amount = -amount
-                self.filter = lambda c: isinstance(c, MinionCard) and \
+                self.filter = lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard) and \
                     c.create_minion(target.player).battlecry is not None
                 self.min = 0
 
@@ -229,7 +255,8 @@ class DoubleDeathrattle(MinionEffect):
             self.target.player.unbind("minion_died", self.trigger_deathrattle)
 
     def trigger_deathrattle(self, minion, killed_by):
-        minion.deathrattle(minion)
+        if minion.deathrattle is not None:
+            minion.deathrattle(minion)
 
     def __to_json__(self):
         return {
@@ -276,11 +303,11 @@ class ManaFilter(MinionEffect):
 
     def apply(self):
         if self.filter_type == "minion":
-            my_filter = lambda c: isinstance(c, MinionCard)
+            my_filter = lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard)
         elif self.filter_type == "spell":
             my_filter = lambda c: c.is_spell()
         elif self.filter_type == "secret":
-            my_filter = lambda c: isinstance(c, SecretCard)
+            my_filter = lambda c: isinstance(c, hearthbreaker.game_objects.SecretCard)
         else:
             my_filter = lambda c: True
 
@@ -427,7 +454,7 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
     def _check_card_filter(self, card, index):
         if self.minion_filter == "spell" and card.is_spell():
             self._select_target()
-        elif self.minion_filter == "secret" and isinstance(card, SecretCard):
+        elif self.minion_filter == "secret" and isinstance(card, hearthbreaker.game_objects.SecretCard):
             self._select_target()
         elif self.minion_filter == "card":
             self._select_target()
@@ -467,7 +494,7 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
     def __to_json__(self):
         return {
             "when": self.when,
-            "filter": self.minion_filter,
+            "minion_filter": self.minion_filter,
             "target": self.action_target,
             "players": self.players,
         }
@@ -488,11 +515,13 @@ class Buff(EventEffect):
             target.change_attack(self.attack)
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "buff",
             "attack": self.attack,
             "health": self.health,
         })
+        return s_json
 
 
 class Kill(EventEffect):
@@ -500,13 +529,15 @@ class Kill(EventEffect):
         super().__init__(when, minion_filter, target, players)
 
     def _do_action(self, target):
-        if isinstance(target, Minion):
+        if isinstance(target, hearthbreaker.game_objects.Minion):
             target.die(None)
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "kill",
         })
+        return s_json
 
 
 class Freeze(EventEffect):
@@ -514,13 +545,15 @@ class Freeze(EventEffect):
         super().__init__(when, minion_filter, target, players)
 
     def _do_action(self, target):
-        if isinstance(target, Character):
+        if isinstance(target, hearthbreaker.game_objects.Character):
             target.freeze()
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "freeze",
         })
+        return s_json
 
 
 class EventEffectPlayer(EventEffect):
@@ -548,10 +581,12 @@ class AddCard(EventEffectPlayer):
             target.hand.append(self.card())
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "add_card",
             "card": self.card.name
         })
+        return s_json
 
 
 class Draw(EventEffectPlayer):
@@ -562,9 +597,11 @@ class Draw(EventEffectPlayer):
         target.draw()
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "draw",
         })
+        return s_json
 
 
 class Summon(EventEffectPlayer):
@@ -576,10 +613,12 @@ class Summon(EventEffectPlayer):
         self.card().summon(target, target.game, len(target.minions))
 
     def __to_json__(self):
-        return super().__to_json__().update({
+        s_json = super().__to_json__()
+        s_json.update({
             "action": "summon",
             "card": self.card.name
         })
+        return s_json
 
 
 class ResurrectFriendlyMinionsAtEndOfTurn(MinionEffect):
@@ -602,8 +641,24 @@ class ResurrectFriendlyMinionsAtEndOfTurn(MinionEffect):
 
     def __to_json__(self):
         return {
-            "action": "resurrect_frendly"
+            "action": "resurrect_friendly"
         }
 
     def __str__(self):
         return ""
+
+
+class OriginalDeathrattle(MinionEffect):
+    def __init__(self):
+        super().__init__()
+
+    def apply(self):
+        self.target.deathrattle = self.target.card.create_minion(self.target.player).deathrattle
+
+    def unapply(self):
+        self.target.deathrattle = None
+
+    def __to_json__(self):
+        return {
+            "action": "original_deathrattle"
+        }

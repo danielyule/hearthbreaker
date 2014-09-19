@@ -6,7 +6,7 @@ from tests.testing_utils import generate_game_for
 
 
 def _save_object(o):
-    return o.__json__()
+    return o.__to_json__()
 
 def _load_object(d):
     return Game.__from_json__(d)

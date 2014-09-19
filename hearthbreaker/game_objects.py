@@ -1,6 +1,7 @@
 import copy
 import random
 import abc
+import hearthbreaker.effects.minion
 import hearthbreaker.effects.player
 
 import hearthbreaker.powers
@@ -1073,6 +1074,8 @@ class Minion(Character):
         minion.card = card_lookup(md["name"])
         minion.game = game
         minion.player = player
+        for effect in md['effects']:
+            minion._effects_to_add.append(hearthbreaker.effects.minion.MinionEffect.from_json(game, **effect))
         return minion
 
     def bounce(self):
@@ -1084,7 +1087,7 @@ class Minion(Character):
             self.die(None)
             self.game.check_delayed()
 
-    def __json__(self):
+    def __to_json__(self):
         if self.frozen_this_turn and self.player is self.player.game.current_player:
             frozen_for = 3
         elif self.frozen_this_turn:
@@ -1093,7 +1096,8 @@ class Minion(Character):
             frozen_for = 1
         else:
             frozen_for = 0
-        return {
+
+        r_val = {
             'name': self.card.name,
             'sequence_id': self.born,
             'position': self.index,
@@ -1108,8 +1112,12 @@ class Minion(Character):
             "exhausted": self.exhausted,
             "already_attacked": not self.active,
             'frozen_for': frozen_for,
-            'effects': []
+            'effects': self.effects,
         }
+        if self.deathrattle:
+            r_val['effects'].append(hearthbreaker.effects.minion.OriginalDeathrattle())
+
+        return r_val
 
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
@@ -1235,7 +1243,7 @@ class Weapon(Bindable):
             self.player.hero.change_temp_attack(self.base_attack)
         self.player.hero.trigger("weapon_equipped")
 
-    def __json__(self):
+    def __to_json__(self):
         return {
             'name': self.card.name,
             'attack': self.base_attack,
@@ -1244,8 +1252,11 @@ class Weapon(Bindable):
 
     @staticmethod
     def __from_json__(wd):
-        weapon = Weapon(wd['attack'], wd['durability'])
-        weapon.card = card_lookup(wd['name'])
+        weapon_card = card_lookup(wd['name'])
+        weapon = weapon_card.create_weapon(None)
+        weapon.base_attack = wd['attack']
+        weapon.durability = wd['durability']
+        weapon.card = weapon_card
         return weapon
 
 
@@ -1290,7 +1301,7 @@ class Deck:
                 return
         raise GameException("Tried to put back a card that didn't come from this deck")
 
-    def __json__(self):
+    def __to_json__(self):
         card_list = []
         for index in range(0, 30):
             card_list.append({
@@ -1300,7 +1311,7 @@ class Deck:
         return card_list
 
     @classmethod
-    def __from__json__(cls, dd, character_class):
+    def __from__to_json__(cls, dd, character_class):
         cards = []
         used = []
         left = 0
@@ -1366,7 +1377,7 @@ class Hero(Character):
         self.trigger("found_power_target", target)
         return target
 
-    def __json__(self):
+    def __to_json__(self):
         if self.frozen_this_turn and self.player is self.player.game.current_player:
             frozen_for = 3
         elif self.frozen_this_turn:
@@ -1379,6 +1390,7 @@ class Hero(Character):
             'character': hearthbreaker.constants.CHARACTER_CLASS.to_str(self.character_class),
             'weapon': self.weapon,
             'health': self.health,
+            'armor': self.armor,
             'attack': self.base_attack,
             'immune': self.immune,
             'frozen_for': frozen_for,
@@ -1396,6 +1408,7 @@ class Hero(Character):
             hero.frozen = True
         hero.health = hd["health"]
         hero.base_attack = hd["attack"]
+        hero.armor = hd["armor"]
         hero.immune = hd["immune"]
         hero.windfury = hd["windfury"]
         hero.used_windfury = hd["used_windfury"]
@@ -1502,21 +1515,11 @@ class Player(Bindable):
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
 
-    def __json__(self):
-        json_deck = []
-        json_graveyard = []
-
-        for index in range(0, 30):
-            if self.deck.cards[index] not in self.hand:
-                if self.deck.used[index]:
-                    json_graveyard.append(self.deck.cards[index].name)
-                else:
-                    json_deck.append(self.deck.cards[index].name)
-
+    def __to_json__(self):
         return {
             'hero': self.hero,
             'deck': self.deck,
-            'graveyard': json_graveyard,
+            'graveyard': [card for card in self.graveyard],
             'hand': [card.name for card in self.hand],
             'secrets': [secret.name for secret in self.secrets],
             'effects': [effect.__to_json__() for effect in self.effects],
@@ -1528,7 +1531,7 @@ class Player(Bindable):
     @classmethod
     def __from_json__(cls, pd, game, agent):
         hero = Hero.__from_json__(pd["hero"])
-        deck = Deck.__from__json__(pd["deck"], hero.character_class)
+        deck = Deck.__from__to_json__(pd["deck"], hero.character_class)
         player = Player("whatever", deck, agent, game, game.random)
         player.hero = hero
         hero.player = player
@@ -1537,6 +1540,9 @@ class Player(Bindable):
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
         player.hand = [card_lookup(name) for name in pd["hand"]]
+        player.graveyard = set()
+        for card_name in pd["graveyard"]:
+            player.graveyard.add(card_name)
         player.secrets = [card_lookup(name) for name in pd["secrets"]]
         player.minions = [Minion.__from_json__(md, player, game) for md in pd["minions"]]
         return player
@@ -1714,7 +1720,7 @@ class Game(Bindable):
         player.minions.remove(minion)
         player.trigger("minion_removed", minion)
 
-    def __json__(self):
+    def __to_json__(self):
         if self.current_player == self.players[0]:
             active_player = 1
         else:
@@ -1751,5 +1757,10 @@ class Game(Bindable):
             player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(new_game, **effect) for effect in d['players'][index]['effects']]
             for effect in player.effects:
                 effect.apply(player)
+
+            for minion in player.minions:
+                for effect in minion._effects_to_add:
+                    minion.add_effect(effect)
+                minion._effects_to_add = []
             index += 1
         return new_game
