@@ -261,7 +261,7 @@ class SoulOfTheForest(Card):
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
-            minion.add_effect(Summon("death", Treant, "self", "owner"))
+            minion.add_effect(Summon("death", Treant, "self", "owner", "friendly", True))
 
 
 class Swipe(Card):

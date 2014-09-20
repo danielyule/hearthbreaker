@@ -1058,7 +1058,6 @@ class Minion(Character):
             new_minion.game = new_owner.game
         new_minion.effects = []
         new_minion._effects_to_add = [copy.copy(effect) for effect in self.effects]
-        self.trigger("copied", new_minion, new_owner)
         return new_minion
 
     @staticmethod
@@ -1215,7 +1214,6 @@ class Weapon(Bindable):
         new_weapon = copy.copy(self)
         new_weapon.events = copy.copy(self.events)
         new_weapon.player = new_owner
-        self.trigger("copied", new_weapon, new_owner)
         return new_weapon
 
     def destroy(self):

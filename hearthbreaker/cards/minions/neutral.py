@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
-    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal
+    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal, Damage
 from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -968,28 +968,7 @@ class KnifeJuggler(MinionCard):
         super().__init__("Knife Juggler", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def throw_knife(m):
-            if m is minion:
-                return
-            if m.player is player.game.current_player:
-                enemy_player = player.game.other_player
-            else:
-                enemy_player = player.game.current_player
-            targets = copy.copy(enemy_player.minions)
-            targets.append(enemy_player.hero)
-            target = targets[player.game.random(0, len(targets) - 1)]
-            target.damage(1, minion)
-
-        def copy_minion(new_minon, new_player):
-            new_player.bind("after_minion_added", throw_knife)
-            new_minon.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
-            new_minon.bind("copied", copy_minion)
-
-        minion = Minion(3, 2)
-        player.bind("after_minion_added", throw_knife)
-        minion.bind_once("silenced", lambda: player.unbind("after_minion_added", throw_knife))
-        minion.bind("copied", copy_minion)
-        return minion
+        return Minion(3, 2, effects=[Damage("after_added", 1, minion_filter="minion", target="random_enemy")])
 
 
 class CairneBloodhoof(MinionCard):

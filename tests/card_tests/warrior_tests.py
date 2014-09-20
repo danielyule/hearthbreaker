@@ -72,7 +72,7 @@ class TestWarrior(unittest.TestCase):
 
         self.assertEqual(3, len(game.players[1].minions))
 
-        # FrothingBerserker should be played
+        # Frothing Berserker should be played
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
