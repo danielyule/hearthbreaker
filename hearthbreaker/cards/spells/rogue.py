@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects.minion import Stealth
 from hearthbreaker.effects.player import RemoveStealth, ReturnCard, ManaChangeEffect
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -96,7 +97,7 @@ class Conceal(Card):
         stealthed_minions = []
         for minion in player.minions:
             if not minion.stealth:
-                minion.stealth = True
+                minion.add_effect(Stealth())
                 stealthed_minions.append(minion)
 
         if len(stealthed_minions) > 0:

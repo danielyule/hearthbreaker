@@ -41,6 +41,7 @@ class MinionEffect (metaclass=abc.ABCMeta):
             "buff": Buff,
             "kill": Kill,
             "freeze": Freeze,
+            "heal": Heal,
             "add_card": AddCard,
             "draw": Draw,
             "summon": Summon,
@@ -48,6 +49,8 @@ class MinionEffect (metaclass=abc.ABCMeta):
             "original_deathrattle": OriginalDeathrattle,
             "charge": Charge,
             "taunt": Taunt,
+            "stealth": Stealth,
+            "no_spell_target": NoSpellTarget,
         }
         if action in __class_mappings:
             clazz = __class_mappings[action]
@@ -111,6 +114,39 @@ class Taunt(MinionEffect):
         return {
             "action": "taunt"
         }
+
+
+class Stealth(MinionEffect):
+    """
+    Gives a minion stealth
+    """
+    def apply(self):
+        self.target.stealth = True
+
+    def unapply(self):
+        self.target.stealth = False
+
+    def __to_json__(self):
+        return {
+            "action": "stealth"
+        }
+
+
+class NoSpellTarget(MinionEffect):
+    """
+    Keeps a minion from being targeted by spells (can still be targeted by battlecries)
+    """
+    def apply(self):
+        self.target.can_be_targeted_by_spells = False
+
+    def unapply(self):
+        self.target.can_be_targeted_by_spells = True
+
+    def __to_json__(self):
+        return {
+            "action": "no_spell_target"
+        }
+
 
 class Aura():
     def __init__(self, apply_func, unapply_func, filter_func):
@@ -587,6 +623,24 @@ class Freeze(EventEffect):
         s_json = super().__to_json__()
         s_json.update({
             "action": "freeze",
+        })
+        return s_json
+
+
+class Heal(EventEffect):
+    def __init__(self, when, amount, minion_filter="self", target="self", players="friendly"):
+        super().__init__(when, minion_filter, target, players)
+        self.amount = amount
+
+    def _do_action(self, target):
+        if isinstance(target, hearthbreaker.game_objects.Character):
+            target.heal(self.amount, self.target)
+
+    def __to_json__(self):
+        s_json = super().__to_json__()
+        s_json.update({
+            "action": "heal",
+            "amount": self.amount
         })
         return s_json
 

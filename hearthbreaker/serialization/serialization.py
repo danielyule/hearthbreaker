@@ -1,5 +1,5 @@
 import json
-from hearthbreaker.cards import StonetuskBoar, FlameImp, LightsJustice, EyeForAnEye
+from hearthbreaker.cards import FlameImp, LightsJustice, EyeForAnEye
 from hearthbreaker.game_objects import Game
 from tests.agents.testing_agents import SpellTestingAgent
 from tests.testing_utils import generate_game_for
@@ -8,8 +8,10 @@ from tests.testing_utils import generate_game_for
 def _save_object(o):
     return o.__to_json__()
 
+
 def _load_object(d):
     return Game.__from_json__(d)
+
 
 def serialize(game):
     """
@@ -21,6 +23,7 @@ def serialize(game):
     """
 
     return json.dumps(game, default=_save_object, indent=2)
+
 
 def deserialize(json_string, agents):
     """

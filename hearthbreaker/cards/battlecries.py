@@ -1,5 +1,6 @@
 import copy
 from hearthbreaker.constants import MINION_TYPE
+from hearthbreaker.effects.minion import Stealth
 import hearthbreaker.game_objects
 
 
@@ -75,7 +76,7 @@ def give_divine_shield(minion):
 
 def give_stealth(minion):
     if minion.card.target is not None:
-        minion.card.target.stealth = True
+        minion.card.target.add_effect(Stealth())
 
 
 def gain_one_health_for_each_card_in_hand(minion):

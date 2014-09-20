@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
-    ResurrectFriendlyMinionsAtEndOfTurn, Kill
+    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal
 from hearthbreaker.effects.player import ManaChangeEffect, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -2361,18 +2361,7 @@ class StoneskinGargoyle(MinionCard):
         super().__init__("Stoneskin Gargoyle", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def apply_effect(m, p):
-            def restore_health():
-                # The restoration counts as a heal.  See https://twitter.com/bdbrode/status/491263252434014208
-                # Will damage itself with a soulpriest down:
-                # http://www.hearthhead.com/card=237/auchenai-soulpriest#comments:id=1908263
-                m.heal(p.effective_heal_power(m.calculate_max_health() - m.health), None)
-            p.bind("turn_started", restore_health)
-            m.bind_once("silenced", lambda: p.unbind("turn_started", restore_health))
-            m.bind("copied", apply_effect)
-        minion = Minion(1, 4)
-        apply_effect(minion, player)
-        return minion
+        return Minion(1, 4, effects=[Heal("turn_started", 10000, target="self")])
 
 
 class SludgeBelcher(MinionCard):

@@ -865,6 +865,10 @@ class Minion(Character):
             self._effects_to_add.append(hearthbreaker.effects.minion.Charge())
         if taunt:
             self._effects_to_add.append(hearthbreaker.effects.minion.Taunt())
+        if not spell_targetable:
+            self._effects_to_add.append(hearthbreaker.effects.minion.NoSpellTarget())
+        if stealth:
+            self._effects_to_add.append(hearthbreaker.effects.minion.Stealth())
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -978,13 +982,11 @@ class Minion(Character):
             self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         self.effects = []
-        self.stealth = False
         self.player.spell_damage -= self.spell_damage
         self.spell_damage = 0
         self.divine_shield = False
         self.battlecry = None
         self.deathrattle = None
-        self.can_be_targeted_by_spells = True
         for player in self.game.players:
             for minion in player.minions:
                 for aura in player.auras:
@@ -1039,10 +1041,7 @@ class Minion(Character):
         new_minion.health = self.health
         new_minion.events = dict()
         new_minion.bind("did_damage", self.__on_did_damage)
-        new_minion.stealth = self.stealth
-        new_minion.taunt = self.taunt
         new_minion.divine_shield = self.divine_shield
-        new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
@@ -1066,8 +1065,6 @@ class Minion(Character):
     def __from_json__(md, player, game):
         minion = Minion(md['attack'], md['max_health'])
         minion.health = md['health']
-        minion.stealth = md['stealth']
-        minion.taunt = md['taunt']
         minion.windfury = md['windfury']
         minion.divine_shield = md['divine_shield']
         minion.exhausted = md['exhausted']
@@ -1105,8 +1102,6 @@ class Minion(Character):
             'health': self.health,
             'max_health': self.base_health,
             'attack': self.base_attack,
-            "stealth": self.stealth,
-            "taunt": self.taunt,
             "windfury": self.windfury,
             "divine_shield": self.divine_shield,
             "exhausted": self.exhausted,
@@ -1328,7 +1323,6 @@ class Deck:
         return deck
 
 
-
 class Hero(Character):
     def __init__(self, character_class, player):
         super().__init__(0, 30)
@@ -1416,8 +1410,6 @@ class Hero(Character):
         if hd['weapon']:
             hero.weapon = Weapon.__from_json__(hd["weapon"])
         return hero
-
-
 
 
 class Player(Bindable):
@@ -1726,7 +1718,7 @@ class Game(Bindable):
         else:
             active_player = 2
         return {
-            'players' : self.players,
+            'players': self.players,
             'active_player': active_player,
             'current_sequence_id': self.minion_counter,
         }
@@ -1754,7 +1746,8 @@ class Game(Bindable):
         index = 0
         for player in new_game.players:
             player.agent = agents[index]
-            player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(new_game, **effect) for effect in d['players'][index]['effects']]
+            player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(new_game, **effect)
+                              for effect in d['players'][index]['effects']]
             for effect in player.effects:
                 effect.apply(player)
 
