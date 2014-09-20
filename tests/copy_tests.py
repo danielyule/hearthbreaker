@@ -3,6 +3,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
+from hearthbreaker.constants import MINION_TYPE
 from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -579,7 +580,7 @@ class TestMinionCopying(unittest.TestCase):
         game = game.copy()
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
-        self.assertEqual("Flame Imp", game.other_player.minions[0].card.name)
+        self.assertEqual(MINION_TYPE.DEMON, game.other_player.minions[0].card.minion_type)
 
     def test_SorcerersApprentice(self):
         game = generate_game_for([SorcerersApprentice, ArcaneMissiles, SorcerersApprentice, Frostbolt, Frostbolt,
