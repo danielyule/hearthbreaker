@@ -1744,7 +1744,7 @@ class Game(Bindable):
         index = 0
         for player in new_game.players:
             player.agent = agents[index]
-            player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(new_game, **effect)
+            player.effects = [hearthbreaker.effects.player.PlayerEffect.from_json(player, **effect)
                               for effect in d['players'][index]['effects']]
             for effect in player.effects:
                 effect.apply(player)

@@ -1115,3 +1115,36 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[1].health)
         self.assertEqual(4, game.players[0].minions[2].calculate_attack())
         self.assertEqual(4, game.players[0].minions[2].health)
+
+    def test_FreezingTrap(self):
+        game = generate_game_for(FreezingTrap, BluegillWarrior, SpellTestingAgent, PredictableAgentWithoutHeroPower)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(30, game.players[0].hero.health)
+        game.play_single_turn()
+        self.assertEqual(4, len(game.players[0].hand))
+        game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(8, len(game.players[1].hand))
+        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[7].mana_cost(game.players[1]))
+
+    def test_Shadowstep(self):
+        game = generate_game_for([StonetuskBoar, Shadowstep], StonetuskBoar, PredictableAgentWithoutHeroPower,
+                                 DoNothingBot)
+
+        # The Boar should be played, Shadowstep will follow targeting the Boar
+        game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))

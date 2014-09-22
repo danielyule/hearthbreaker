@@ -1,5 +1,6 @@
 import copy
 from hearthbreaker.effects.minion import Immune, StatsAura
+from hearthbreaker.effects.player import ManaAdjustment
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -104,14 +105,8 @@ class FreezingTrap(SecretCard):
 
     def _reveal(self, attacker):
         if isinstance(attacker, Minion) and not attacker.removed:
-            class Filter:
-                def __init__(self):
-                    self.amount = -2
-                    self.filter = lambda c: c is card
-                    self.min = 0
-            card = attacker.card
             attacker.bounce()
-            attacker.player.mana_filters.append(Filter())
+            attacker.player.add_effect(ManaAdjustment(attacker.card, -2))
             super().reveal()
 
 

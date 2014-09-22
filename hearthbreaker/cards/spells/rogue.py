@@ -1,6 +1,6 @@
 import copy
 from hearthbreaker.effects.minion import Stealth
-from hearthbreaker.effects.player import RemoveStealth, ReturnCard, ManaChangeEffect
+from hearthbreaker.effects.player import RemoveStealth, ReturnCard, PlayerManaFilter, ManaAdjustment
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -162,7 +162,7 @@ class Preparation(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_effect(ManaChangeEffect(100, "spell", "turn_ended", True))
+        player.add_effect(PlayerManaFilter(100, "spell", "turn_ended", True))
 
 
 class Sap(Card):
@@ -182,23 +182,10 @@ class Shadowstep(Card):
                          hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self, card):
-                self.amount = 2
-                self.filter = lambda c: c is card
-                self.min = 0
-
-        def card_used(card):
-            if card is self.target.card:
-                player.unbind("card_used", card_used)
-                player.mana_filters.remove(mana_filter)
-
         super().use(player, game)
 
         self.target.bounce()
-        mana_filter = Filter(self.target.card)
-        player.bind("card_used", card_used)
-        player.mana_filters.append(mana_filter)
+        player.add_effect(ManaAdjustment(self.target.card, 2))
 
 
 class Shiv(Card):
