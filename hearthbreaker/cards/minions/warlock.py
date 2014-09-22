@@ -1,4 +1,5 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.effects.minion import ManaFilter
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord, put_minion_on_board_from_hand
@@ -67,17 +68,7 @@ class SummoningPortal(MinionCard):
         super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = 2
-                self.filter = lambda c: isinstance(c, MinionCard)
-                self.min = 1
-
-        mana_filter = Filter()
-        minion = Minion(0, 4)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
-        player.mana_filters.append(mana_filter)
-        return minion
+        return Minion(0, 4, effects=[ManaFilter(2, "minion", 1)])
 
 
 class BloodImp(MinionCard):
@@ -115,7 +106,7 @@ class LordJaraxxus(MinionCard):
             minion.remove_from_board()
             player.trigger("minion_played", minion)
             player.hero.health = minion.health
-            player.hero.base_health = 15
+            player.hero.base_health = minion.base_health + minion.health_delta
             player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS
             player.hero.power = JaraxxusPower(player.hero)
             blood_fury = BloodFury()

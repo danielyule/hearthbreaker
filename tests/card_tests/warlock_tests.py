@@ -463,11 +463,11 @@ class TestWarlock(unittest.TestCase):
             game.play_single_turn()
 
         # Jaraxxus should be played, Repentance should activate, leaving
-        # the hero with one health (but 15 max health)
+        # the hero with one health and one max health
         # See http://www.reddit.com/r/hearthstone/comments/218vsu/jaraxxus_and_sword_of_justice_rule_inconsistency_o/
 
         self.assertEqual(1, game.current_player.hero.health)
-        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+        self.assertEqual(1, game.current_player.hero.calculate_max_health())
 
         game.play_single_turn()
         game.play_single_turn()

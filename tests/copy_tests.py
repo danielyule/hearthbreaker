@@ -1148,3 +1148,35 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))
+
+    def test_UnboundElemental(self):
+        game = generate_game_for([UnboundElemental, DustDevil, DustDevil], StonetuskBoar, MinionPlayingAgent,
+                                 DoNothingBot)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Unbound Elemental", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].calculate_max_health())
+
+        game = game.copy()
+
+        # One Dust Devil should be played, giving the Unbound Elemental +1/+1
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].calculate_max_health())
+        # Test the silence
+        game = game.copy()
+        game.players[0].minions[-1].silence()
+        self.assertEqual(2, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())
+        # Another Dust Devil, nothing should happen because of silence
+        game.play_single_turn()
+        game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())

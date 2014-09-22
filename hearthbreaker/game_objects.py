@@ -241,6 +241,10 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.effects = []
         #: An integer describing when this character was created.  The lower, the earlier it was created
         self.born = -1
+        #: An integer describing how much the attack of this minion has been adjusted
+        self.attack_delta = 0
+        #: An integer describing how much the health of this minion has been adjusted
+        self.health_delta = 0
 
     def attack(self):
         """
@@ -305,14 +309,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         bonuses for this turn
         """
 
-        return self.base_attack + self.temp_attack
+        return self.base_attack + + self.attack_delta + self.temp_attack
 
     def calculate_max_health(self):
         """
         Calculates the maximum amount of health this :class:`Character` has, including the base health, and any aura
         effects
         """
-        return self.base_health
+        return self.base_health + self.health_delta
 
     def delayed_trigger(self, event, *args):
         """
@@ -388,15 +392,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         :param int amount: The amount to change the attack by
         """
-        def apply_silence(minion, player=None):
-            def silence():
-                minion.base_attack -= amount
-            minion.bind_once('silenced', silence)
-            minion.bind("copied", apply_silence)
-
-        self.trigger("attack_changed", amount)
-        self.base_attack += amount
-        apply_silence(self)
+        self.attack_delta += amount
 
     def change_temp_attack(self, amount):
         """
@@ -415,18 +411,11 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         :param int amount: the amount to increase health by
         """
-        def apply_silence(minion, player=None):
-            def silence():
-                minion.base_health -= amount
-                if minion.calculate_max_health() < minion.health:
-                    minion.health = minion.calculate_max_health()
-            minion.bind_once('silenced', silence)
-            minion.bind("copied", apply_silence)
+
         self.trigger("health_increased", amount)
-        self.base_health += amount
+        self.health_delta += amount
         self.health += amount
         self.trigger("health_changed")
-        apply_silence(self)
 
     def decrease_health(self, amount):
         """
@@ -436,18 +425,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         :param int amount: the amount to decrease health by
         """
-        def apply_silence(minion, player=None):
-            def silence():
-                if minion.calculate_max_health() == minion.health:
-                    minion.base_health += amount
-                    minion.health += amount
-                else:
-                    minion.base_health += amount
-            minion.bind_once('silenced', silence)
-            minion.bind("copied", apply_silence)
-
         self.trigger("health_decreased", amount)
-        self.base_health -= amount
+        self.health_delta -= amount
         if self.health > self.calculate_max_health():
             self.health = self.calculate_max_health()
 
@@ -455,7 +434,17 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.enraged = False
             self.trigger("unenraged")
         self.trigger("health_changed")
-        apply_silence(self)
+
+    def set_health_to(self, new_health):
+        """
+        Sets the amount of total health this :class:`Character` has.  This will adjust its actual health if necessary
+        :param new_health: An integer specifying what this character's new health should be
+        """
+        diff = new_health - (self.base_health + self.health_delta)
+        if diff > 0:
+            self.increase_health(diff)
+        elif diff < 0:
+            self.decrease_health(-diff)
 
     def freeze(self):
         """
@@ -527,7 +516,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.player.effect_count[type(effect)] += 1
         effect.set_target(self)
         effect.apply()
-        self.effects.append(effect)
+        if not isinstance(effect, hearthbreaker.effects.minion.TranientEffect):
+            self.effects.append(effect)
 
 
 def _is_spell_targetable(target):
@@ -861,14 +851,6 @@ class Minion(Character):
         else:
             self._effects_to_add = []
 
-        if charge:
-            self._effects_to_add.append(hearthbreaker.effects.minion.Charge())
-        if taunt:
-            self._effects_to_add.append(hearthbreaker.effects.minion.Taunt())
-        if not spell_targetable:
-            self._effects_to_add.append(hearthbreaker.effects.minion.NoSpellTarget())
-        if stealth:
-            self._effects_to_add.append(hearthbreaker.effects.minion.Stealth())
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -890,7 +872,7 @@ class Minion(Character):
             count += 1
         self.index = index
         self.active = True
-        self.health += self.calculate_max_health() - self.base_health
+        self.health += self.calculate_max_health() - self.base_health - self.health_delta
         for effect in self._effects_to_add:
             self.add_effect(effect)
         for player in self.game.players:
@@ -913,7 +895,7 @@ class Minion(Character):
         effects
         """
 
-        return self.base_health + self.aura_health
+        return super().calculate_max_health() + self.aura_health
 
     def remove_from_board(self):
         for player in self.game.players:
@@ -969,8 +951,21 @@ class Minion(Character):
         affected this character (immune, attack & health increases, frozen, windfury)
         """
         self.temp_attack = 0
+        self.attack_delta = 0
+        if self.health_delta > 0:
+            self.health_delta = 0
+            if self.health > self.calculate_max_health():
+                self.health = self.calculate_max_health()
+        elif self.health_delta < 0:
+            if self.health == self.calculate_max_health():
+                self.health_delta = 0
+                self.health = self.calculate_max_health()
         self.immune = False
         self.windfury = False
+        self.taunt = False
+        self.charge = False
+        self.stealth = False
+        self.can_be_targeted_by_spells = True
         self.frozen = False
         self.frozen_this_turn = False
         for player in self.game.players:
@@ -993,8 +988,6 @@ class Minion(Character):
                     if aura.filter(minion):
                         aura.apply(minion)
         self.trigger("silenced")
-        if "copied" in self.events:
-            del self.events["copied"]
 
     def damage(self, amount, attacker):
         if self.divine_shield:
@@ -1039,9 +1032,15 @@ class Minion(Character):
     def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.base_attack, self.base_health, self.battlecry, self.base_deathrattle)
         new_minion.health = self.health
+        new_minion.attack_delta = self.attack_delta
+        new_minion.health_delta = self.health_delta
         new_minion.events = dict()
         new_minion.bind("did_damage", self.__on_did_damage)
         new_minion.divine_shield = self.divine_shield
+        new_minion.taunt = self.taunt
+        new_minion.charge = self.charge
+        new_minion.stealth = self.stealth
+        new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
         new_minion.immune = self.immune
@@ -1072,7 +1071,9 @@ class Minion(Character):
         minion.game = game
         minion.player = player
         for effect in md['effects']:
-            minion._effects_to_add.append(hearthbreaker.effects.minion.MinionEffect.from_json(game, **effect))
+            new_effect = hearthbreaker.effects.minion.MinionEffect.from_json(game, **effect)
+            minion._effects_to_add.append(new_effect)
+
         return minion
 
     def bounce(self):
@@ -1093,7 +1094,21 @@ class Minion(Character):
             frozen_for = 1
         else:
             frozen_for = 0
-
+        effects = copy.copy(self.effects)
+        if self.charge:
+            effects.append(hearthbreaker.effects.minion.Charge())
+        if self.taunt:
+            effects.append(hearthbreaker.effects.minion.Taunt())
+        if not self.can_be_targeted_by_spells:
+            effects.append(hearthbreaker.effects.minion.NoSpellTarget())
+        if self.stealth:
+            effects.append(hearthbreaker.effects.minion.Stealth())
+        if self.deathrattle:
+            effects.append(hearthbreaker.effects.minion.OriginalDeathrattle())
+        if self.attack_delta != 0:
+            effects.append(hearthbreaker.effects.minion.ChangeAttack(self.attack_delta))
+        if self.health_delta != 0:
+            effects.append(hearthbreaker.effects.minion.ChangeHealth(self.health_delta))
         r_val = {
             'name': self.card.name,
             'sequence_id': self.born,
@@ -1106,11 +1121,8 @@ class Minion(Character):
             "exhausted": self.exhausted,
             "already_attacked": not self.active,
             'frozen_for': frozen_for,
-            'effects': self.effects,
+            'effects': effects,
         }
-        if self.deathrattle:
-            r_val['effects'].append(hearthbreaker.effects.minion.OriginalDeathrattle())
-
         return r_val
 
 
@@ -1448,14 +1460,15 @@ class Player(Bindable):
         copied_player.auras = []
         copied_player.mana_filters = []
         copied_player.effects = []
-        for effect in self.effects:
-            copied_player.add_effect(effect)
+
         copied_player.hero = self.hero.copy(copied_player, new_game)
         copied_player.deck = self.deck.copy()
         copied_player.graveyard = copy.copy(self.graveyard)
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
         copied_player.hand = [type(card)() for card in self.hand]
         copied_player.game = new_game
+        for effect in self.effects:
+            copied_player.add_effect(effect)
         copied_player.secrets = [type(secret)() for secret in self.secrets]
         copied_player.effect_count = dict()
         return copied_player
@@ -1534,7 +1547,13 @@ class Player(Bindable):
         for card_name in pd["graveyard"]:
             player.graveyard.add(card_name)
         player.secrets = [card_lookup(name) for name in pd["secrets"]]
-        player.minions = [Minion.__from_json__(md, player, game) for md in pd["minions"]]
+        i = 0
+        player.minions = []
+        for md in pd["minions"]:
+            minion = Minion.__from_json__(md, player, game)
+            minion.index = i
+            player.minions.append(minion)
+            i += 1
         return player
 
 
@@ -1753,5 +1772,7 @@ class Game(Bindable):
                 for effect in minion._effects_to_add:
                     minion.add_effect(effect)
                 minion._effects_to_add = []
+                if minion.health != minion.calculate_max_health():
+                    minion.enraged = True
             index += 1
         return new_game

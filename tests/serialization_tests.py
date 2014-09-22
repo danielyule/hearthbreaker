@@ -14,4 +14,9 @@ class SerializationCopyTests(tests.copy_tests.TestMinionCopying):
             return Game.__from_json__(d, [player.agent for player in old_game.players])
 
         super().setUp()
+        self._old_copy = Game.copy
         Game.copy = serialization_copy
+
+    def tearDown(self):
+        super().tearDown()
+        Game.copy = self._old_copy

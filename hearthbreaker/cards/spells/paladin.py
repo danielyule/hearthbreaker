@@ -103,7 +103,7 @@ class Equality(Card):
         targets.extend(player.minions)
 
         for minion in targets:
-            minion.decrease_health(minion.base_health - 1)
+            minion.set_health_to(1)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
@@ -284,7 +284,7 @@ class Repentance(SecretCard):
 
     def _reveal(self, minion):
 
-        minion.decrease_health(minion.calculate_max_health() - 1)
+        minion.set_health_to(1)
         super().reveal()
 
     def activate(self, player):

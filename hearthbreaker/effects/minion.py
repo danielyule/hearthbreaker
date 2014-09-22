@@ -52,6 +52,8 @@ class MinionEffect (metaclass=abc.ABCMeta):
             "taunt": Taunt,
             "stealth": Stealth,
             "no_spell_target": NoSpellTarget,
+            "change_attack": ChangeAttack,
+            "change_health": ChangeHealth,
         }
         if action in __class_mappings:
             clazz = __class_mappings[action]
@@ -83,7 +85,17 @@ class Immune(MinionEffect):
         }
 
 
-class Charge(MinionEffect):
+class TranientEffect(MinionEffect):
+    """
+    TransientEffects are used only for serialization and de-serialization
+    What they do is tracked by the game engine itself, and doesn't need an effect in the list of effects.
+    As such, these effects are generated at the time a minion is serialized, and removed when it is deserialized
+    """
+    def unapply(self):
+        pass
+
+
+class Charge(TranientEffect):
     """
     Gives a minion charge.
     """
@@ -91,16 +103,13 @@ class Charge(MinionEffect):
     def apply(self):
         self.target.charge = True
 
-    def unapply(self):
-        self.target.charge = False
-
     def __to_json__(self):
         return {
             "action": "charge"
         }
 
 
-class Taunt(MinionEffect):
+class Taunt(TranientEffect):
     """
     Gives a minion charge.
     """
@@ -108,24 +117,18 @@ class Taunt(MinionEffect):
     def apply(self):
         self.target.taunt = True
 
-    def unapply(self):
-        self.target.taunt = False
-
     def __to_json__(self):
         return {
             "action": "taunt"
         }
 
 
-class Stealth(MinionEffect):
+class Stealth(TranientEffect):
     """
     Gives a minion stealth
     """
     def apply(self):
         self.target.stealth = True
-
-    def unapply(self):
-        self.target.stealth = False
 
     def __to_json__(self):
         return {
@@ -133,15 +136,48 @@ class Stealth(MinionEffect):
         }
 
 
-class NoSpellTarget(MinionEffect):
+class ChangeAttack(TranientEffect):
+    """
+    Changes the attack of a minion
+    """
+    def __init__(self, amount):
+        super().__init__()
+        self.amount = amount
+
+    def apply(self):
+        self.target.attack_delta = self.amount
+
+    def __to_json__(self):
+        return {
+            "action": "change_attack",
+            "amount": self.amount,
+        }
+
+
+class ChangeHealth(TranientEffect):
+    """
+    Changes the max health of a minion
+    """
+    def __init__(self, amount):
+        super().__init__()
+        self.amount = amount
+
+    def apply(self):
+        self.target.health_delta = self.amount
+
+    def __to_json__(self):
+        return {
+            "action": "change_health",
+            "amount": self.amount,
+        }
+
+
+class NoSpellTarget(TranientEffect):
     """
     Keeps a minion from being targeted by spells (can still be targeted by battlecries)
     """
     def apply(self):
         self.target.can_be_targeted_by_spells = False
-
-    def unapply(self):
-        self.target.can_be_targeted_by_spells = True
 
     def __to_json__(self):
         return {
