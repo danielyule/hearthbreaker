@@ -514,23 +514,22 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
                 player.unbind("turn_started", self._check_turn_end_filter)
 
     def _check_minion_filter(self, minion, *args):
-        if not self.include_self and minion is self.target:
-            return
         self.other = minion
         if self.minion_filter == "self":
             if minion == self.target:
                 self._select_target()
-        elif self.minion_filter == "minion":
-            self._select_target()
-        elif self.minion_filter == "deathrattle" and minion.deathrattle is not None:
-            self._select_target()
-        elif self.target is not minion:
-            try:
-                type_id = MINION_TYPE.from_str(self.minion_filter)
-                if minion.card.minion_type == type_id:
-                    self._select_target()
-            except KeyError:
-                pass
+        elif self.include_self or minion is not self.target:
+            if self.minion_filter == "minion":
+                self._select_target()
+            elif self.minion_filter == "deathrattle" and minion.deathrattle is not None:
+                self._select_target()
+            elif self.target is not minion:
+                try:
+                    type_id = MINION_TYPE.from_str(self.minion_filter)
+                    if minion.card.minion_type == type_id:
+                        self._select_target()
+                except KeyError:
+                    pass
 
     def _check_card_filter(self, card, index):
         if self.minion_filter == "spell" and card.is_spell():

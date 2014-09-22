@@ -1,4 +1,6 @@
 import copy
+from hearthbreaker.effects.minion import Summon
+from hearthbreaker.effects.player import ManaAdjustment
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard
@@ -23,20 +25,8 @@ class AncestralSpirit(Card):
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        def apply_deathrattle(minion):
-            def resurrection(*args):
-                if old_death_rattle is not None:
-                    old_death_rattle(*args)
-
-                minion = self.target.card
-                minion.summon(player, game, len(player.minions))
-
-            old_death_rattle = minion.deathrattle
-            minion.deathrattle = resurrection
-
         super().use(player, game)
-
-        apply_deathrattle(self.target)
+        self.target.add_effect(Summon("death", type(self.target.card), "self"))
 
 
 class Bloodlust(Card):
@@ -67,24 +57,16 @@ class FarSight(Card):
         super().__init__("Far Sight", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self, card):
-                self.amount = 3
-                self.filter = lambda c: c is card
-                self.min = 0
-
         def reduce_cost(card):
-            nonlocal filter
-            filter = Filter(card)
-            player.unbind("card_drawn", reduce_cost)
+            nonlocal effect
+            effect = ManaAdjustment(card, 3)
 
         super().use(player, game)
-
-        filter = None
-        player.bind("card_drawn", reduce_cost)
+        effect = None
+        player.bind_once("card_drawn", reduce_cost)
         player.draw()
-        if filter is not None:
-            player.mana_filters.append(filter)
+        if effect is not None:
+            player.add_effect(effect)
 
 
 class FeralSpirit(Card):
