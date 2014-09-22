@@ -450,7 +450,7 @@ class ManaFilter(MinionEffect):
 
 
 class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
-    def __init__(self, when, minion_filter="self", target="self", players="friendly", include_self=False):
+    def __init__(self, when, minion_filter, target, players, include_self):
         super().__init__()
         self.when = when
         self.minion_filter = minion_filter
@@ -656,8 +656,8 @@ class Buff(EventEffect):
 
 
 class Kill(EventEffect):
-    def __init__(self, when, minion_filter="self", target="self", players="friendly"):
-        super().__init__(when, minion_filter, target, players)
+    def __init__(self, when, minion_filter="self", target="self", players="friendly", include_self=False):
+        super().__init__(when, minion_filter, target, players, include_self)
 
     def _do_action(self, target):
         if isinstance(target, hearthbreaker.game_objects.Minion):
@@ -707,7 +707,7 @@ class Heal(EventEffect):
 
 class Damage(EventEffect):
     def __init__(self, when, amount, minion_filter="self", target="self", players="friendly"):
-        super().__init__(when, minion_filter, target, players)
+        super().__init__(when, minion_filter, target, players, False)
         self.amount = amount
 
     def _do_action(self, target):

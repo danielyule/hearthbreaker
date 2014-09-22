@@ -4,7 +4,8 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
 from hearthbreaker.constants import MINION_TYPE
-from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower
+from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower, \
+    EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -1180,3 +1181,42 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[-1].calculate_attack())
         self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())
+
+    def test_PowerOverwhelming(self):
+        game = generate_game_for(PowerOverwhelming, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        imp = FlameImp()
+        imp.summon(game.players[0], game, 0)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        def verify_poweroverwhelming():
+            nonlocal game
+            game = game.copy()
+            self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+            self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.players[0].minions[0].bind("health_changed", verify_poweroverwhelming)
+        game.play_single_turn()
+        game._end_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+
+    def test_Corruption(self):
+        game = generate_game_for(Corruption, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingBot)
+        imp = FlameImp()
+        imp.summon(game.players[1], game, 0)
+        self.assertEqual(1, len(game.players[1].minions))
+
+        game.play_single_turn()
+        # Casts Corruption on enemy Imp
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+
+        game.play_single_turn()
+        # Enemy minion still alive until start of my turn
+        self.assertEqual(1, len(game.players[1].minions))
+        game = game.copy()
+
+        game.play_single_turn()
+        # Corruption resolves at start of my turn, no targets to use remaining cards on
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))

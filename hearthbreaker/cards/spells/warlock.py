@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.effects.minion import Kill
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -196,13 +197,7 @@ class Corruption(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        def death():
-            self.target.die(None)
-            game.check_delayed()
-
-        player.bind("turn_started", death)
-        self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
+        self.target.add_effect(Kill("turn_started", "self", players="enemy"))
 
 
 class PowerOverwhelming(Card):
@@ -213,10 +208,6 @@ class PowerOverwhelming(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def death():
-            self.target.die(None)
-
-        player.bind_once("turn_ended", death)
-        self.target.bind_once("silenced", lambda: player.unbind("turn_ended", death))
+        self.target.add_effect(Kill("turn_ended", "self"))
         self.target.change_attack(4)
         self.target.increase_health(4)
