@@ -83,3 +83,4 @@ class CardTest(unittest.TestCase):
 
                     while not game.game_ended:
                         game.play_single_turn()
+            file.close()

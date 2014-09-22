@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_friendly_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
-    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal, Damage
+    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal, Damage, Draw
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -1200,14 +1200,7 @@ class NatPagle(MinionCard):
         super().__init__("Nat Pagle", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def extra_draw():
-            if player.game.random(0, 1) == 1:
-                player.draw()
-
-        minion = Minion(0, 4)
-        player.bind("turn_started", extra_draw)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", extra_draw))
-        return minion
+        return Minion(0, 4, effects=[Draw("turn_started", probability=0.5)])
 
 
 class Nozdormu(MinionCard):

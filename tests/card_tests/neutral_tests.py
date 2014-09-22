@@ -1210,12 +1210,12 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
         game.play_single_turn()
-        # Draw successful
-        self.assertEqual(6, len(game.players[0].hand))
+        # Draw failed
+        self.assertEqual(5, len(game.players[0].hand))
 
         game.play_single_turn()
         game.play_single_turn()
-        # Draw failed
+        # Draw successful
         self.assertEqual(7, len(game.players[0].hand))
 
     def test_RagnarosTheFirelord(self):

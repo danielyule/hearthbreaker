@@ -461,6 +461,9 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
             self.target.bind("attacked", self._check_minion_filter)
         elif self.when == "did_damage":
             self.target.bind("did_damage", self._check_minion_filter)
+        elif self.when == "overloaded":
+            for player in players:
+                player.bind("overloaded", self._check_turn_end_filter)
         elif self.when == "turn_ended":
             for player in players:
                 player.bind("turn_ended", self._check_turn_end_filter)
@@ -506,6 +509,9 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
             self.target.unbind("attacked", self._check_minion_filter)
         elif self.when == "did_damage":
             self.target.unbind("did_damage", self._check_minion_filter)
+        elif self.when == "overloaded":
+            for player in players:
+                player.unbind("overloaded", self._check_turn_end_filter)
         elif self.when == "turn_ended":
             for player in players:
                 player.unbind("turn_ended", self._check_turn_end_filter)
@@ -715,16 +721,19 @@ class AddCard(EventEffectPlayer):
 
 
 class Draw(EventEffectPlayer):
-    def __init__(self, when, minion_filter="self", target="owner", players="friendly"):
+    def __init__(self, when, minion_filter="self", target="owner", players="friendly", probability=1.0):
         super().__init__(when, minion_filter, target, players)
+        self.prob = probability
 
     def _do_action(self, target):
-        target.draw()
+        if not self.prob < 1.0 or target.game.random(0, 100) / 100 < self.prob:
+            target.draw()
 
     def __to_json__(self):
         s_json = super().__to_json__()
         s_json.update({
             "action": "draw",
+            "probability": self.prob
         })
         return s_json
 
