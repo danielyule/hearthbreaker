@@ -212,7 +212,7 @@ yes,Kobold Geomancer,Spell Damage +1,,,2,2,2,Common,Minion,Basic
 yes,Kor'kron Elite,Charge,,Warrior,4,4,3,Common,Minion,Basic
 yes,Lava Burst,Deal 5 damage. Overload: (2),,Shaman,3,,,Rare,Spell,Expert
 yes,Lay on Hands,Restore 8 Health. Draw 3 cards.,,Paladin,8,,,Epic,Spell,Expert
-yes,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,4,6,2,Legendary,Minion,Expert
+yes,Leeroy Jenkins,Charge. Battlecry: Summon two 1/1 Whelps for your opponent.,,,5,6,2,Legendary,Minion,Expert
 yes,Leper Gnome,Deathrattle: Deal 2 damage to the enemy hero.,,,1,2,1,Common,Minion,Expert
 yes,Light's Justice,,,Paladin,1,1,4,Free,Weapon,Basic
 yes,Lightning Bolt,Deal 3 damage. Overload: (1),,Shaman,1,,,Common,Spell,Expert
@@ -348,7 +348,7 @@ yes,Stalagg,"Deathrattle: If Feugen also died this game, summon Thaddius.",,,5,7
 yes,Stampeding Kodo,Battlecry: Destroy a random enemy minion with 2 or less Attack.,Beast,,5,3,5,Rare,Minion,Expert
 yes,Starfall,Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.,,Druid,5,,,Rare,Spell,Expert
 yes,Starfire,Deal 5 damage. Draw a card.,,Druid,6,,,Common,Spell,Basic
-yes,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,2,2,1,Common,Minion,Basic
+yes,Starving Buzzard,"Whenever you summon a Beast, draw a card.",Beast,Hunter,5,3,2,Common,Minion,Basic
 yes,Stoneskin Gargoyle,"At the start of your turn, restore this minion to full Health.",,,3,1,4,Common,Minion,Curse of Naxxramas
 yes,Stonetusk Boar,Charge,Beast,,1,1,1,Free,Minion,Basic
 yes,Stormforged Axe,Overload: (1),,Shaman,2,2,3,Common,Weapon,Expert

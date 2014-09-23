@@ -1734,7 +1734,7 @@ class KingMukla(MinionCard):
 
 class LeeroyJenkins(MinionCard):
     def __init__(self):
-        super().__init__("Leeroy Jenkins", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+        super().__init__("Leeroy Jenkins", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
         def summon_whelps(m):

@@ -1744,7 +1744,7 @@ class TestCommon(unittest.TestCase):
 
     def test_LeeroyJenkins(self):
         game = generate_game_for(LeeroyJenkins, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
-        for turn in range(0, 7):
+        for turn in range(0, 9):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))

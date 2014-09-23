@@ -62,10 +62,10 @@ class KingKrush(MinionCard):
 
 class StarvingBuzzard(MinionCard):
     def __init__(self):
-        super().__init__("Starving Buzzard", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+        super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 1, effects=[Draw("placed", "beast", "owner")])
+        return Minion(3, 2, effects=[Draw("placed", "beast", "owner")])
 
 
 class TundraRhino(MinionCard):

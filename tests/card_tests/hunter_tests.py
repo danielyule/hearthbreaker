@@ -415,36 +415,36 @@ class TestHunter(unittest.TestCase):
 
     def test_StarvingBuzzard(self):
         game = generate_game_for(StarvingBuzzard, StonetuskBoar, MinionPlayingAgent, MinionPlayingAgent)
-        for turn in range(0, 3):
+        for turn in range(0, 9):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual(5, len(game.players[1].hand))
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(2, len(game.players[1].minions))
-        self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
 
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(2, len(game.players[1].minions))
-        self.assertEqual(5, len(game.players[0].hand))
-        self.assertEqual(5, len(game.players[1].hand))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[1].hand))
 
     def test_BuzzardAndOwl(self):
         game = generate_game_for([StarvingBuzzard, IronbeakOwl], StonetuskBoar, MinionPlayingAgent, DoNothingBot)
 
-        for turn in range(0, 7):
+        for turn in range(0, 11):
             game.play_single_turn()
 
         # The buzzard should be silenced, but only after drawing a card from the owl
-        self.assertEqual(5, len(game.current_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
         self.assertEqual(0, len(game.current_player.minions[1].effects))
 
     def test_TundraRhino(self):
