@@ -7,5 +7,6 @@ The following people have contributed to the Hearthstone Sim Project:
  * [Markus Persson](https://github.com/Ragowit)
  * [@randomflyingtaco](https://github.com/randomflyingtaco)
  * [Jade McGough] (https://github.com/zetsubo)
+ * [Mike Harris](https://github.com/mharris717)
  
 Special thanks to Xinhuan for the insightful comments both here and on [Hearthhead](http://www.hearthhead.com/user=Xinhuan#comments)
