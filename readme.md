@@ -18,16 +18,17 @@ human opponents within Hearthstone itself.  It is designed to be used as a libra
 Usage
 -----
 
-Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+ on any
+operating system that supports them.
 
 ###Console Application
 
 ![Console Screenshot](http://danielyule.github.io/hearthbreaker/_static/console_screenshot.png)
 
-There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
-at random.
+There is a basic console that you can use for playing against a bot.  There are two bots to choose from: a random bot
+that plays completely randomly or a trading bot which tries to trade efficiently with your minions.
 
-Start the console with ``python hearthbreaker/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
+Start the console with ``python text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
 in cockatrice format, with a card name in English on each line, preceded by a number to specify how many.  For example:
 
     2 Goldshire Footman

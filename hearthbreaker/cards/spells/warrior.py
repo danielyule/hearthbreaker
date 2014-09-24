@@ -48,7 +48,7 @@ class Charge(Card):
         super().use(player, game)
 
         self.target.change_attack(2)
-        self.target.add_effect(hearthbreaker.effects.minion.Charge())
+        self.target.charge = True
 
 
 class Cleave(Card):

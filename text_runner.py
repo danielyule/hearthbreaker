@@ -2,9 +2,9 @@ import curses
 import curses.textpad
 import sys
 import re
-from hearthbreaker.agents.basic_agents import RandomAgent
 
 from hearthbreaker.cards import *
+from hearthbreaker.agents import registry
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game, card_lookup, Deck
 from hearthbreaker.ui.game_printer import GameRender
@@ -308,7 +308,7 @@ def render_game(stdscr):
                 else:
                     color = curses.color_pair(3)
 
-                self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19], color))
+                self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
                 index += 1
             self.window.refresh()
             self.text_window.refresh()
@@ -330,7 +330,7 @@ def render_game(stdscr):
                     else:
                         color = curses.color_pair(3)
 
-                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19], color))
+                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
                     index += 1
                 self.window.refresh()
                 self.text_window.refresh()
@@ -339,14 +339,49 @@ def render_game(stdscr):
 
             return options[selected]
 
+    def choose_agent(window):
+        agents = registry.get_names()
+        curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_BLUE)
+        window.addstr(10, 34, "Choose agent")
+        ch = 0
+        selected = 0
+        while ch != 10 and ch != 27:
+            index = 0
+            for agent in agents:
+                if index == selected:
+                    color = curses.color_pair(3)
+                else:
+                    color = curses.color_pair(0)
+                window.addstr(index + 11, 25, "{:^30}".format(agent), color)
+                index += 1
+
+            window.refresh()
+            ch = window.getch()
+            if ch == curses.KEY_UP:
+                selected -= 1
+                if selected < 0:
+                    selected = len(agents) - 1
+            if ch == curses.KEY_DOWN:
+                selected += 1
+                if selected == len(agents):
+                    selected = 0
+
+        window.clear()
+        if ch == 27:
+            sys.exit(0)
+        else:
+            return registry.create_agent(agents[selected])
+
     stdscr.clear()
 
     prompt_window = stdscr.derwin(1, 80, 23, 0)
     text_window = stdscr.derwin(1, 80, 24, 0)
 
+    agent = choose_agent(stdscr)
+
     deck1 = load_deck(sys.argv[1])
     deck2 = load_deck(sys.argv[2])
-    game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), RandomAgent()])
+    game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), agent])
     if isinstance(game.players[0].agent, TextAgent):
         renderer = GameRender(stdscr, game, game.players[0])
     else:
