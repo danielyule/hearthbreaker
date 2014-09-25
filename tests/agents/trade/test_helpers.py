@@ -37,8 +37,15 @@ class TempCard:
 
 
 class FakePlayer(Player):
+    def __init__(self, name, deck, agent, game, random_func=random.randint):
+        super().__init__(name, deck, agent, game, random_func=random_func)
+        self.draws_to_prevent = 1
+
     def draw(self):
-        None
+        if self.draws_to_prevent == 0:
+            return super().draw()
+        else:
+            self.draws_to_prevent -= 1
 
 
 class FakeGame(Game):
@@ -59,11 +66,6 @@ class FakeGame(Game):
         self.other_player.opponent = self.current_player
         self.game_ended = False
         self.minion_counter = 0
-        for i in range(0, 3):
-            self.players[0].draw()
-
-        for i in range(0, 4):
-            self.players[1].draw()
 
 
 class TestHelpers:
