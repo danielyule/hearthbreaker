@@ -13,6 +13,9 @@ class TestCaseMixin:
         for minion in minions:
             minion.use(player, game)
 
+    def set_board(self, game, player_index, *minions):
+        return self.add_minions(game, player_index, *minions)
+
     def make_all_active(self, game):
         for player in game.players:
             for minion in player.minions:
@@ -63,3 +66,7 @@ class TestCaseMixin:
     def set_hand(self, game, player_index, *cards):
         cards = self.make_cards(*cards)
         game.players[player_index].hand = cards
+
+    def set_mana(self, game, player_index, mana):
+        player = game.players[player_index]
+        player.mana = player.max_mana = mana

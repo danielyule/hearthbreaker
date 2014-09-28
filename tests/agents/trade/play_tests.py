@@ -1,5 +1,5 @@
 import unittest
-from hearthbreaker.cards import ArgentSquire, DireWolfAlpha, HarvestGolem, BloodfenRaptor, MagmaRager
+from hearthbreaker.cards import ArgentSquire, DireWolfAlpha, HarvestGolem, BloodfenRaptor, MagmaRager, Wisp, Ysera
 from hearthbreaker.game_objects import TheCoin
 from tests.agents.trade.test_helpers import TestHelpers
 from hearthbreaker.agents.trade.possible_play import PossiblePlays
@@ -65,6 +65,16 @@ class TestTradeAgentPlayTests(TestCaseMixin, unittest.TestCase):
 
         self.assert_minions(game.players[0], "Dire Wolf Alpha", "Dire Wolf Alpha")
 
+    def test_will_play_three_cards(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, Wisp(), ArgentSquire(), DireWolfAlpha())
+        self.set_mana(game, 0, 3)
+
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Wisp", "Argent Squire", "Dire Wolf Alpha")
+
 
 class TestTradeAgentPlayCoinTests(TestCaseMixin, unittest.TestCase):
     def test_coin(self):
@@ -80,3 +90,39 @@ class TestTradeAgentPlayCoinTests(TestCaseMixin, unittest.TestCase):
         play = possible_plays.plays()[0]
         names = [c.name for c in play.cards]
         self.assertEqual(names, ["Argent Squire"])
+
+
+class TestTradeAgentHeroPowerTests(TestCaseMixin, unittest.TestCase):
+    def test_will_use_hero_power_with_empty_hand(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0)
+        self.set_mana(game, 0, 10)
+
+        possible = PossiblePlays([], 10)
+        play = possible.plays()[0]
+        self.assertEqual(play.cards[0].name, "Hero Power")
+
+        game.play_single_turn()
+        self.assert_minions(game.players[0], "War Golem")
+
+    def test_wont_kill_self_with_hero_power(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0)
+        self.set_mana(game, 0, 10)
+        game.players[0].hero.health = 1
+
+        game.play_single_turn()
+        self.assert_minions(game.players[0])
+        self.assertEqual(game.players[0].hero.health, 1)
+
+    def test_will_hero_power_first_if_inevitable(self):
+        possible = PossiblePlays([DireWolfAlpha()], 10)
+        play = possible.plays()[0]
+        self.assertEqual(play.first_card().name, "Hero Power")
+
+    def test_will_not_hero_power_if_not_inevitable(self):
+        possible = PossiblePlays([Ysera()], 10)
+        play = possible.plays()[0]
+        self.assertEqual(play.first_card().name, "Ysera")

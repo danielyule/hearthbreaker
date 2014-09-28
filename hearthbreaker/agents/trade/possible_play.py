@@ -11,7 +11,13 @@ class PossiblePlay:
         self.available_mana = available_mana
 
     def card_mana(self):
-        return reduce(lambda s, c: s + c.mana, self.cards, 0)
+        def eff_mana(card):
+            if card.name == "The Coin":
+                return -1
+            else:
+                return card.mana
+
+        return reduce(lambda s, c: s + eff_mana(c), self.cards, 0)
 
     def sorted_mana(self):
         return Util.reverse_sorted(map(lambda c: c.mana, self.cards))
@@ -34,6 +40,9 @@ class PossiblePlay:
 
         if self.has_hero_power() and self.available_mana < 6:
             res -= 10000000000000000
+
+        if any(map(lambda c: c.name == "The Coin", self.cards)):
+            res -= 100
 
         return res
 
@@ -63,44 +72,38 @@ class CoinPlays:
         cards = [c for c in filter(lambda c: c.name == 'The Coin', self.cards)]
         return cards[0]
 
-    def plays(self):
+    def raw_plays_with_coin(self):
+        res = []
         if self.has_coin():
-            coinPlays = self.after_coin().plays_inner()
-            if len(coinPlays) > 0:
-                best = coinPlays[0]
-                if best.wasted() == 0:
-                    res = []
-                    for play in coinPlays:
-                        cards = [self.coin()] + play.cards
-                        new_play = PossiblePlay(cards, play.available_mana - 1)
-                        res.append(new_play)
-                    return res
+            coinPlays = self.after_coin().raw_plays()
 
-            return self.without_coin().plays_inner()
-        else:
-            return self.plays_inner()
+            for play in coinPlays:
+                cards = [self.coin()] + play
+                res.append(cards)
+
+        return res
+
+    def raw_plays(self):
+        res = []
+        for play in self.raw_plays_without_coin():
+            res.append(play)
+
+        for play in self.raw_plays_with_coin():
+            res.append(play)
+
+        return res
 
     def has_coin(self):
-        for card in self.cards:
-            if card.name == "The Coin":
-                return True
-        return False
+        return any(map(lambda c: c.name == "The Coin", self.cards))
+
+    def cards_without_coin(self):
+        return Util.filter_out_one(self.cards, lambda c: c.name == "The Coin")
 
     def after_coin(self):
-        if not self.has_coin():
-            raise Exception("No Coin")
-        cards = [c for c in filter(lambda c: c.name != 'The Coin', self.cards)]
-        if len(cards) != len(self.cards) - 1:
-            raise Exception("bad")
-        return PossiblePlays(cards, self.mana + 1)
+        return PossiblePlays(self.cards_without_coin(), self.mana + 1)
 
     def without_coin(self):
-        if not self.has_coin():
-            raise Exception("No Coin")
-        cards = [c for c in filter(lambda c: c.name != 'The Coin', self.cards)]
-        if len(cards) != len(self.cards) - 1:
-            raise Exception("bad")
-        return PossiblePlays(cards, self.mana)
+        return PossiblePlays(self.cards_without_coin(), self.mana)
 
 
 class HeroPowerCard:
@@ -118,12 +121,23 @@ class PossiblePlays(CoinPlays):
         self.mana = mana
         self.allow_hero_power = allow_hero_power
 
-    def raw_plays(self):
+    def possible_is_pointless_coin(self, possible):
+        if len(possible) != 1 or possible[0].name != "The Coin":
+            return False
+
+        cards_playable_after_coin = [card for card in filter(lambda c: c.mana - 1 == self.mana, self.cards)]
+        return len(cards_playable_after_coin) == 0
+
+    def raw_plays_without_coin(self):
         res = []
 
         possible = [card for card in
                     filter(lambda card: card.mana <= self.mana, self.cards)]
-        if self.mana >= 2 and self.allow_hero_power and False:
+
+        if self.possible_is_pointless_coin(possible):
+            possible = []
+
+        if self.mana >= 2 and self.allow_hero_power:
             possible.append(HeroPowerCard())
 
         if len(possible) == 0:
@@ -157,15 +171,25 @@ class PossiblePlays(CoinPlays):
 
         return res
 
+    def plays(self):
+        return self.plays_inner()
+
+    def __str__(self):
+        res = []
+        for play in self.plays():
+            res.append(play.__str__())
+        return str.join("\n", res)
+
 
 class PlayMixin:
-    def play_cards(self, player):
+    def play_one_card(self, player):
         if len(player.minions) == 7:
             return
         if player.game.game_ended:
             return
 
-        plays = PossiblePlays(player.hand, player.mana, allow_hero_power=(not player.hero.power.used)).plays()
+        allow_hero_power = (not player.hero.power.used) and player.hero.health > 2
+        plays = PossiblePlays(player.hand, player.mana, allow_hero_power=allow_hero_power).plays()
 
         if len(plays) > 0:
             play = plays[0]
@@ -177,6 +201,12 @@ class PlayMixin:
             if card.name == 'Hero Power':
                 player.hero.power.use()
             else:
+                self.last_card_played = card
                 player.game.play_card(card)
 
+            return card
+
+    def play_cards(self, player):
+        card = self.play_one_card(player)
+        if card:
             self.play_cards(player)

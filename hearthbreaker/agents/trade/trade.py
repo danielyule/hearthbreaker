@@ -1,36 +1,5 @@
-import collections
-import functools
 from functools import reduce
-
-
-class memoized(object):
-    '''Decorator. Caches a function's return value each time it is called.
-    If called later with the same arguments, the cached value is returned
-    (not reevaluated).
-    '''
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        if not isinstance(args, collections.Hashable):
-            # uncacheable. a list, for instance.
-            # better to not cache than blow up.
-            return self.func(*args)
-        if args in self.cache:
-            return self.cache[args]
-        else:
-            value = self.func(*args)
-            self.cache[args] = value
-            return value
-
-    def __repr__(self):
-        '''Return the function's docstring.'''
-        return self.func.__doc__
-
-    def __get__(self, obj, objtype):
-        '''Support instance methods.'''
-        return functools.partial(self.__call__, obj)
+from hearthbreaker.agents.trade.util import memoized
 
 
 class FakeCard:
@@ -57,7 +26,7 @@ class Trade:
 
     def after_damage(self, target, attacker):
         res = FakeCard(target)
-        res.health -= attacker.base_attack
+        res.health -= attacker.calculate_attack()
         return res
 
     def start_value(self):
@@ -235,8 +204,8 @@ class Trades:
                 res = sorted(res, key=lambda t: t.value())[0:4]
             elif len(res) >= 8:
                 res = sorted(res, key=lambda t: t.value())[0:3]
-
-            res = sorted(res, key=self.trade_value)
+            else:
+                res = sorted(res, key=self.trade_value)
         else:
             res = sorted(res, key=lambda t: t.value())
 

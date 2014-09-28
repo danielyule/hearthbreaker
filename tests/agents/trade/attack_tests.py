@@ -1,6 +1,7 @@
 import unittest
 from hearthbreaker.cards import Wisp, WarGolem, BloodfenRaptor, GoldshireFootman, RiverCrocolisk, MagmaRager, \
-    ChillwindYeti, VoidWalker, AmaniBerserker
+    ChillwindYeti, VoidWalker, AmaniBerserker, AbusiveSergeant, DarkIronDwarf, ShatteredSunCleric, ImpMaster, \
+    ElvenArcher, Shieldbearer, StormpikeCommando
 from hearthbreaker.game_objects import Hero, MinionCard
 from tests.agents.trade.test_helpers import TestHelpers, TempCard
 from tests.agents.trade.test_case_mixin import TestCaseMixin
@@ -94,6 +95,98 @@ class TestTradeAgentAttackTradesTests(TestCaseMixin, unittest.TestCase):
 
         self.assertEqual(len(trades.trades()), 2)
         self.assertEqual(trades.trades()[0].opp_minion.__class__, Hero)
+
+
+class TestProperBuffs(TestCaseMixin, unittest.TestCase):
+    def test_smoke(self):
+        self.assertEqual(2, 2)
+
+    def test_abusive(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, AbusiveSergeant())
+        self.set_board(game, 0, Wisp())
+        self.set_board(game, 1, RiverCrocolisk())
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Abusive Sergeant")
+        self.assert_minions(game.players[1])
+
+    def test_dwarf(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, DarkIronDwarf())
+        self.set_board(game, 0, Wisp())
+        self.set_board(game, 1, RiverCrocolisk())
+
+        game.players[0].mana = 4
+        game.players[0].max_mana = 4
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Dark Iron Dwarf")
+        self.assert_minions(game.players[1])
+
+    def test_cleric(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, ShatteredSunCleric())
+        self.set_board(game, 0, Wisp())
+        self.set_board(game, 1, BloodfenRaptor())
+        self.set_mana(game, 0, 3)
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Shattered Sun Cleric")
+        self.assert_minions(game.players[1])
+
+    def test_cleric_buff_to_keep_alive(self):
+        # This test does not pass yet. Agent picks a random friendly minion
+        return
+
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, ShatteredSunCleric())
+        self.set_board(game, 0, MagmaRager(), Wisp())
+        self.set_board(game, 1, ImpMaster())
+        self.set_mana(game, 0, 3)
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Shattered Sun Cleric", "Magma Rager", "Wisp")
+        self.assert_minions(game.players[1])
+
+    def test_archer_attacks_enemy(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, ElvenArcher())
+        self.set_board(game, 0, Shieldbearer())
+        self.set_board(game, 1, BloodfenRaptor())
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Shieldbearer", "Elven Archer")
+        self.assertEqual(game.players[1].minions[0].health, 1)
+
+    def test_commando_attacks_enemy(self):
+        game = TestHelpers().make_game()
+
+        self.set_hand(game, 0, StormpikeCommando())
+        self.set_board(game, 0, Wisp())
+        self.set_board(game, 1, BloodfenRaptor())
+        self.set_mana(game, 0, 5)
+
+        self.make_all_active(game)
+        game.play_single_turn()
+
+        self.assert_minions(game.players[0], "Wisp", "Stormpike Commando")
+        self.assert_minions(game.players[1])
 
 
 class TestTempCard(unittest.TestCase):
