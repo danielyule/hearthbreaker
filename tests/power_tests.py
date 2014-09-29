@@ -5,6 +5,7 @@ from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
 from tests.agents.testing_agents import SpellTestingAgent
 from hearthbreaker.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
     DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith, MassDispel
+from hearthbreaker.powers import MindSpike, MindShatter
 from tests.testing_utils import generate_game_for
 
 
@@ -57,6 +58,26 @@ class TestPowers(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(22, game.players[1].hero.health)
+
+    def test_MindSpike(self):
+        game = generate_game_for(Shadowform, MogushanWarden, PredictableBot, DoNothingBot)
+
+        game.players[0].hero.power = MindSpike(game.players[0].hero)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(28, game.players[1].hero.health)
+
+    def test_MindShatter(self):
+        game = generate_game_for(Shadowform, Shadowform, PredictableBot, DoNothingBot)
+
+        game.players[0].hero.power = MindShatter(game.players[0].hero)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[1].hero.health)
 
     def test_RoguePower(self):
         game = generate_game_for(DefiasRingleader, MogushanWarden, PredictableBot, DoNothingBot)
