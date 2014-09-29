@@ -1,4 +1,3 @@
-import re
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game, card_lookup, Deck
@@ -7,22 +6,23 @@ import timeit
 
 
 def load_deck(filename):
-    deck_file = open(filename, "r")
-    contents = deck_file.read()
-    items = re.split('\n', contents)
     cards = []
     character_class = CHARACTER_CLASS.MAGE
-    for line in items[0:]:
-        line = line.strip(" \n\t\r")
-        parts = line.split(" ", 1)
-        count = int(parts[0])
-        for i in range(0, count):
-            card = card_lookup(parts[1])
-            if card.character_class != CHARACTER_CLASS.ALL:
-                character_class = card.character_class
-            cards.append(card)
 
-    deck_file.close()
+    with open(filename, "r") as deck_file:
+        contents = deck_file.read()
+        items = contents.splitlines()
+        for line in items[0:]:
+            parts = line.split(" ", 1)
+            count = int(parts[0])
+            for i in range(0, count):
+                card = card_lookup(parts[1])
+                if card.character_class != CHARACTER_CLASS.ALL:
+                    character_class = card.character_class
+                cards.append(card)
+
+    if len(cards) > 30:
+        pass
 
     return Deck(cards, character_class)
 
