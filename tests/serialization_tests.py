@@ -3,7 +3,7 @@ from hearthbreaker.game_objects import Game
 import tests.copy_tests
 
 
-class SerializationCopyTests(tests.copy_tests.TestMinionCopying):
+class TestMinionSerialization(tests.copy_tests.TestMinionCopying):
     def setUp(self):
         def _save_object(o):
             return o.__to_json__()

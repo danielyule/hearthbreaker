@@ -364,14 +364,24 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.health)
 
     def test_CommandingShout(self):
-        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar,
-                                  StonetuskBoar, StonetuskBoar, CommandingShout], Abomination,
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar,
+                                  CommandingShout], UnstableGhoul,
                                  PredictableAgentWithoutHeroPower, MinionPlayingAgent)
-        for turn in range(0, 11):
+        for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Unstable Ghoul", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(0, len(game.current_player.minions))
 
     def test_Gorehowl(self):
         game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],

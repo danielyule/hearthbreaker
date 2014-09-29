@@ -17,6 +17,7 @@ class PlayerEffect(metaclass=abc.ABCMeta):
             "duplicate_minion": DuplicateMinion,
             "remove_stealth": RemoveStealth,
             "return_card": ReturnCard,
+            "min_health": MinimumHealth,
         }
         if action in __class_mappings:
             clazz = __class_mappings[action]
@@ -196,14 +197,14 @@ class RemoveStealth(PlayerEffect):
 
     def apply(self, player):
 
-        def duplicate():
+        def remove_stealth():
             for ref in self.minions:
                 minion = ref.resolve(player.game)
                 if minion:
                     minion.stealth = False
             player.effects.remove(self)
 
-        player.bind_once(self.when, duplicate)
+        player.bind_once(self.when, remove_stealth)
 
     def __to_json__(self):
         return {
@@ -244,3 +245,38 @@ class ReturnCard(PlayerEffect):
     def __from_json__(self, player, card, when):
         self.card = hearthbreaker.game_objects.card_lookup(card)
         self.when = when
+
+
+class MinimumHealth(PlayerEffect):
+    def __init__(self, min_health):
+        super().__init__()
+        self.min_health = min_health
+
+    def apply(self, player):
+        def create_monitoring_functions(m):
+            def keep_above_one():
+                if m.health < self.min_health:
+                    m.health = self.min_health
+
+            def turn_ended():
+                m.unbind("health_changed", keep_above_one)
+            m.bind("health_changed", keep_above_one)
+            player.bind_once("turn_ended", turn_ended)
+        for minion in player.minions:
+            create_monitoring_functions(minion)
+
+        def unapply():
+            player.effects.remove(self)
+            player.unbind("minion_summoned", create_monitoring_functions)
+
+        player.bind("minion_summoned", create_monitoring_functions)
+        player.bind_once("turn_ended", unapply)
+
+    def __to_json__(self):
+        return {
+            "action": "min_health",
+            "minimum": self.min_health,
+        }
+
+    def __from_json__(self, player, min_health):
+        self.min_health = min_health

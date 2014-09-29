@@ -1407,3 +1407,140 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+
+    def test_Armorsmith(self):
+        game = generate_game_for(Armorsmith, StonetuskBoar, MinionPlayingAgent, PredictableAgentWithoutHeroPower)
+
+        # Armorsmith should be played
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual("Armorsmith", game.players[0].minions[0].card.name)
+        self.assertEqual(0, game.players[0].hero.armor)
+
+        game = game.copy()
+
+        # Three Stonetusks should attack, generating one armor each
+        game.play_single_turn()
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].hero.armor)
+
+    def test_GrommashHellscream(self):
+        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PredictableAgentWithoutHeroPower, SpellTestingAgent)
+
+        for turn in range(0, 14):
+            game.play_single_turn()
+
+        # Hellscream should be played, attacking (charge) and getting 2 damage by trap that will trigger enrage,
+        # dealing 10 damage as result
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(10, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
+        self.assertEqual(20, game.players[1].hero.health)
+
+        game.players[0].minions[0].heal(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].damage(2, None)
+        self.assertEqual(10, game.players[0].minions[0].calculate_attack())
+        game = game.copy()
+        game.players[0].minions[0].silence()
+        game = game.copy()
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].heal(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        game.players[0].minions[0].damage(2, None)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+
+    def test_WarsongCommander(self):
+        game = generate_game_for(WarsongCommander, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+
+        # Super special test cases - http://www.hearthhead.com/card=1009/warsong-commander#comments:id=1935295
+        game.players[0].mana = 100
+
+        # Play the Warsong Commander
+        commander = WarsongCommander()
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)  # Should not give charge to itself
+        game = game.copy()
+        # Test so that enrage doesn't remove the charge
+        worgen = RagingWorgen()
+        worgen.use(game.players[0], game)
+        game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertTrue(game.players[0].minions[0].charge)
+
+        # Remove the Warsong Commander
+        game.players[0].minions[-1].die(None)
+        game.check_delayed()
+        game = game.copy()
+        # The previous charged minions should still have charge
+        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[-1].charge)
+
+        # Test so that a minion played before Warsong doesn't get charge
+        shield = Shieldbearer()
+        shield.summon(game.players[0], game, 0)
+        self.assertFalse(game.players[0].minions[0].charge)
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+        # Remove the Warsong again
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        # Buff a minion to above 3
+        game.players[0].minions[0].change_attack(5)
+        # Play Warsong, the buffed minion should not get charge
+        game = game.copy()
+        commander.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[1].charge)
+
+        # Auras!
+        stormwind = StormwindChampion()
+        stormwind.use(game.players[0], game)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[1].health)
+        # Kill the worgen
+        game.players[0].minions[-1].die(None)
+        game.players[0].minions[-1].activate_delayed()
+        game = game.copy()
+        # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
+        worgen.use(game.players[0], game)
+        self.assertFalse(game.players[0].minions[0].charge)
+
+    def test_CommandingShout(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, BoulderfistOgre,
+                                  CommandingShout, FacelessManipulator], RecklessRocketeer,
+                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Reckless Rocketeer", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].health)
+        self.assertEqual("Reckless Rocketeer", game.current_player.minions[0].card.name)
+
+    def test_Gorehowl(self):
+        game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
+                                 PredictableAgentWithoutHeroPower, SpellTestingAgent)
+
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.current_player.hero.weapon.durability)
+
+        game = game.copy()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(23, game.other_player.hero.health)
+        self.assertIsNone(game.current_player.hero.weapon)

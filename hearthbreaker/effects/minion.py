@@ -44,6 +44,7 @@ class MinionEffect(metaclass=abc.ABCMeta):
             "freeze": Freeze,
             "heal": Heal,
             "damage": Damage,
+            "give_charge": GiveCharge,
             "add_card": AddCard,
             "draw": Draw,
             "summon": Summon,
@@ -55,6 +56,7 @@ class MinionEffect(metaclass=abc.ABCMeta):
             "no_spell_target": NoSpellTarget,
             "change_attack": ChangeAttack,
             "change_health": ChangeHealth,
+            "increase_armor": IncreaseArmor,
             "can't_attack": CantAttack,
         }
         if action in __class_mappings:
@@ -200,7 +202,7 @@ class Aura():
 
 
 class AuraEffect(MinionEffect):
-    def __init__(self, apply_aura, unapply_aura, minion_filter="minion", players="friendly", include_self=False):
+    def __init__(self, apply_aura, unapply_aura, minion_filter, players, include_self):
         self.apply_aura = apply_aura
         self.unapply_aura = unapply_aura
         self.minion_filter = minion_filter
@@ -249,7 +251,7 @@ class AuraEffect(MinionEffect):
 
     def __to_json__(self):
         return {
-            "filter": self.minion_filter,
+            "minion_filter": self.minion_filter,
             "players": self.players,
             "include_self": self.include_self
         }
@@ -283,9 +285,11 @@ class ChargeAura(AuraEffect):
             self.affected_minions.remove(minion)
 
     def __to_json__(self):
-        return super().__to_json__().update({
-            "type": "charge"
+        r_json = super().__to_json__()
+        r_json.update({
+            "action": "charge_aura"
         })
+        return r_json
 
 
 class StatsAura(AuraEffect):
@@ -294,7 +298,7 @@ class StatsAura(AuraEffect):
     as what type of minions are affected can be customized.
     """
 
-    def __init__(self, attack=0, health=0, players="friendly", minion_filter="minion"):
+    def __init__(self, attack=0, health=0, players="friendly", minion_filter="minion", include_self=False):
         """
         Create a new StatsAura
 
@@ -304,7 +308,7 @@ class StatsAura(AuraEffect):
         :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
                                      for any type of minion
         """
-        super().__init__(self.increase_stats, self.decrease_stats, minion_filter, players)
+        super().__init__(self.increase_stats, self.decrease_stats, minion_filter, players, include_self)
         self.attack = attack
         self.health = health
 
@@ -320,11 +324,13 @@ class StatsAura(AuraEffect):
             minion.health = minion.calculate_max_health()
 
     def __to_json__(self):
-        return super().__to_json__().update({
-            "type": "stats",
+        r_json = super().__to_json__()
+        r_json.update({
+            "action": "stats_aura",
             "attack": self.attack,
             "health": self.health,
         })
+        return r_json
 
 
 class IncreaseBattlecryMinionCost(MinionEffect):
@@ -503,6 +509,10 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
             self.target.bind("attacked", self._check_minion_filter)
         elif self.when == "did_damage":
             self.target.bind("did_damage", self._check_minion_filter)
+        elif self.when == "enraged":
+            if self.action_target == "self":
+                self.target.bind("enraged", self._do_enraged_action)
+                self.target.bind("unenraged", self._undo_enraged_action)
         elif self.when == "overloaded":
             for player in players:
                 player.bind("overloaded", self._check_turn_end_filter)
@@ -570,6 +580,8 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
             if self.minion_filter == "minion":
                 self._select_target()
             elif self.minion_filter == "deathrattle" and minion.deathrattle is not None:
+                self._select_target()
+            elif self.minion_filter == "attack_less_than_or_equal_to_3" and minion.calculate_attack() <= 3:
                 self._select_target()
             elif self.target is not minion:
                 try:
@@ -657,7 +669,35 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
         }
 
 
-class Buff(EventEffect):
+class ReversibleEffect(EventEffect, metaclass=abc.ABCMeta):
+    def apply(self):
+        if self.when == "enraged":
+            if self.action_target == "self":
+                self.target.bind("enraged", self._do_enraged_action)
+                self.target.bind("unenraged", self._undo_enraged_action)
+        else:
+            super().apply()
+
+    def unapply(self):
+        if self.when == "enraged":
+            if self.action_target == "self":
+                self.target.unbind("enraged", self._do_enraged_action)
+                self.target.unbind("unenraged", self._undo_enraged_action)
+        else:
+            super().unapply()
+
+    def _do_enraged_action(self):
+        self._do_action(self.target)
+
+    def _undo_enraged_action(self):
+        self._undo_action(self.target)
+
+    @abc.abstractmethod
+    def _undo_action(self, target):
+        pass
+
+
+class Buff(ReversibleEffect):
     def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly",
                  include_self=False, target_self=False):
         super().__init__(when, minion_filter, target, players, include_self, target_self)
@@ -671,6 +711,14 @@ class Buff(EventEffect):
             target.decrease_health(-self.health)
         if self.attack != 0:
             target.change_attack(self.attack)
+
+    def _undo_action(self, target):
+        if self.health > 0:
+            target.decrease_health(self.health)
+        elif self.health < 0:
+            target.increase_health(-self.health)
+        if self.attack != 0:
+            target.change_attack(-self.attack)
 
     def __to_json__(self):
         s_json = super().__to_json__()
@@ -773,6 +821,23 @@ class Damage(EventEffect):
         return s_json
 
 
+class GiveCharge(EventEffect):
+    def __init__(self, when, minion_filter="self", target="self", players="friendly", include_self=False,
+                 target_self=False):
+        super().__init__(when, minion_filter, target, players, include_self, target_self)
+
+    def _do_action(self, target):
+        if isinstance(target, hearthbreaker.game_objects.Minion):
+            target.charge = True
+
+    def __to_json__(self):
+        s_json = super().__to_json__()
+        s_json.update({
+            "action": "give_charge",
+        })
+        return s_json
+
+
 class EventEffectPlayer(EventEffect):
     def __init__(self, when, minion_filter, target, players, include_self, target_self):
         super().__init__(when, minion_filter, target, players, include_self, target_self)
@@ -843,6 +908,24 @@ class Summon(EventEffectPlayer):
         s_json.update({
             "action": "summon",
             "card": self.card().name
+        })
+        return s_json
+
+
+class IncreaseArmor(EventEffectPlayer):
+    def __init__(self, when, amount, minion_filter="self", target="owner", players="friendly", include_self=False,
+                 target_self=False):
+        super().__init__(when, minion_filter, target, players, include_self, target_self)
+        self.amount = amount
+
+    def _do_action(self, target):
+        target.hero.armor += self.amount
+
+    def __to_json__(self):
+        s_json = super().__to_json__()
+        s_json.update({
+            "action": "increase_armor",
+            "amount": self.amount
         })
         return s_json
 

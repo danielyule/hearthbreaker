@@ -87,6 +87,11 @@ class PredictableAgentWithoutHeroPower(DoNothingBot):
         while player.hero.can_attack():
             player.hero.attack()
 
-        for minion in copy.copy(player.minions):
-            if minion.can_attack():
-                minion.attack()
+        done_something = True
+        while done_something:
+            done_something = False
+            for minion in player.minions:
+                if minion.can_attack():
+                    done_something = True
+                    minion.attack()
+                    break

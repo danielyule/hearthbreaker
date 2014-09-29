@@ -1,6 +1,6 @@
 import copy
 import hearthbreaker.targeting
-import hearthbreaker.effects.minion
+from hearthbreaker.effects.player import MinimumHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, WeaponCard, Weapon
 
@@ -74,16 +74,7 @@ class CommandingShout(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        def create_effect(minion):
-            def keep_above_one():
-                if minion.health < 0:
-                    minion.health = 1
-            minion.bind("health_changed", keep_above_one)
-            minion.bind("silenced", lambda: minion.unbind("health_changed", keep_above_one))
-
-        for minion in player.minions:
-            create_effect(minion)
+        player.add_effect(MinimumHealth(1))
 
         player.draw()
 

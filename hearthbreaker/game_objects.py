@@ -285,7 +285,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
-        self.damage(target.calculate_attack(), target)
+        target_attack = target.calculate_attack()
+        if target_attack > 0:
+            self.damage(target_attack, target)
         target.damage(my_attack, self)
         self.player.game.check_delayed()
         self.trigger("attack_completed")
@@ -731,9 +733,12 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         player.trigger("minion_placed", minion)
         if minion.battlecry is not None:
             minion.battlecry(minion)
-        player.trigger("minion_played", minion)
-        player.trigger("minion_summoned", minion)
-        player.trigger("after_minion_added", minion)
+        # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
+        if not minion.removed:
+            minion = player.minions[minion.index]
+            player.trigger("minion_played", minion)
+            player.trigger("minion_summoned", minion)
+            player.trigger("after_minion_added", minion)
 
     def summon(self, player, game, index):
         """
@@ -924,7 +929,8 @@ class Minion(Character):
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
-        self.removed = True
+        new_minion.active = True
+        new_minion.exhausted = True
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         for player in self.game.players:
@@ -1256,9 +1262,9 @@ class Weapon(Bindable):
         }
 
     @staticmethod
-    def __from_json__(wd):
+    def __from_json__(wd, player):
         weapon_card = card_lookup(wd['name'])
-        weapon = weapon_card.create_weapon(None)
+        weapon = weapon_card.create_weapon(player)
         weapon.base_attack = wd['attack']
         weapon.durability = wd['durability']
         weapon.card = weapon_card
@@ -1404,7 +1410,7 @@ class Hero(Character):
         }
 
     @classmethod
-    def __from_json__(cls, hd):
+    def __from_json__(cls, hd, player):
         hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), None)
         if hd["frozen_for"] == 3 or hd["frozen_for"] == 2:
             hero.frozen_this_turn = True
@@ -1418,7 +1424,7 @@ class Hero(Character):
         hero.used_windfury = hd["used_windfury"]
         hero.active = not hd["already_attacked"]
         if hd['weapon']:
-            hero.weapon = Weapon.__from_json__(hd["weapon"])
+            hero.weapon = Weapon.__from_json__(hd["weapon"], player)
         return hero
 
 
@@ -1469,7 +1475,11 @@ class Player(Bindable):
         copied_player.game = new_game
         for effect in self.effects:
             copied_player.add_effect(effect)
-        copied_player.secrets = [type(secret)() for secret in self.secrets]
+        copied_player.secrets = []
+        for secret in self.secrets:
+            new_secret = type(secret)()
+            new_secret.player = copied_player
+            copied_player.secrets.append(new_secret)
         copied_player.effect_count = dict()
         return copied_player
 
@@ -1533,9 +1543,10 @@ class Player(Bindable):
 
     @classmethod
     def __from_json__(cls, pd, game, agent):
-        hero = Hero.__from_json__(pd["hero"])
-        deck = Deck.__from__to_json__(pd["deck"], hero.character_class)
+        deck = Deck.__from__to_json__(pd["deck"],
+                                      hearthbreaker.constants.CHARACTER_CLASS.from_str(pd["hero"]["character"]))
         player = Player("whatever", deck, agent, game, game.random)
+        hero = Hero.__from_json__(pd["hero"], player)
         player.hero = hero
         hero.player = player
         if hero.weapon:
@@ -1546,7 +1557,12 @@ class Player(Bindable):
         player.graveyard = set()
         for card_name in pd["graveyard"]:
             player.graveyard.add(card_name)
-        player.secrets = [card_lookup(name) for name in pd["secrets"]]
+
+        player.secrets = []
+        for secret_name in pd["secrets"]:
+            secret = card_lookup(secret_name)
+            secret.player = player
+            player.secrets.append(secret)
         i = 0
         player.minions = []
         for md in pd["minions"]:
