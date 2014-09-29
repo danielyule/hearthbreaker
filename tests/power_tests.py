@@ -62,12 +62,9 @@ class TestPowers(unittest.TestCase):
     def test_MindSpike(self):
         game = generate_game_for(Shadowform, MogushanWarden, PredictableBot, DoNothingBot)
 
-        for turn in range(0, 9):
-            game.play_single_turn()
-        
-        self.assertIsInstance(game.players[0].hero.power, MindSpike)
+        game.players[0].hero.power = MindSpike(game.players[0].hero)
 
-        for turn in range(9, 11):
+        for turn in range(0, 3):
             game.play_single_turn()
 
         self.assertEqual(28, game.players[1].hero.health)
@@ -75,16 +72,12 @@ class TestPowers(unittest.TestCase):
     def test_MindShatter(self):
         game = generate_game_for(Shadowform, Shadowform, PredictableBot, DoNothingBot)
 
-        for turn in range(0, 9):
+        game.players[0].hero.power = MindShatter(game.players[0].hero)
+
+        for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertIsInstance(game.players[0].hero.power, MindSpike)
-
-        for turn in range(9, 13):
-           game.play_single_turn()
-
-        self.assertIsInstance(game.players[0].hero.power, MindShatter)
-        self.assertEqual(25, game.players[1].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)
 
     def test_RoguePower(self):
         game = generate_game_for(DefiasRingleader, MogushanWarden, PredictableBot, DoNothingBot)
