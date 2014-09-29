@@ -9,6 +9,6 @@ The following people have contributed to the Hearthstone Sim Project:
  * [Mike Harris](https://github.com/mharris717) (Trading Bot Implementation)
  * [Jade McGough] (https://github.com/zetsubo) (Documentation Fixes)
  * [Peter Kappler] (https://github.com/pkappler) (OS X Fixes)
- * [@littmuss](https://github.com/littmuss)  (Bug fixes and additional testing)
+ * [@littmus](https://github.com/littmus)  (Bug fixes and additional testing)
  
 Special thanks to Xinhuan for the insightful comments both here and on [Hearthhead](http://www.hearthhead.com/user=Xinhuan#comments)
