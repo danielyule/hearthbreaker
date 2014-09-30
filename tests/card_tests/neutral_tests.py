@@ -1549,6 +1549,21 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
 
+    def test_VioletTeacherCounterspell(self):
+        game = generate_game_for([VioletTeacher, Fireball], Counterspell, MinionPlayingAgent, MinionPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[1].secrets))
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].secrets))
+
     def test_GadgetzanAuctioneer(self):
         game = generate_game_for([GadgetzanAuctioneer, CircleOfHealing], CircleOfHealing,
                                  MinionPlayingAgent, OneSpellTestingAgent)
