@@ -46,8 +46,8 @@ class TestReplay(unittest.TestCase):
     def test_recording_game(self):
         self.maxDiff = None
         random.seed(9876)
-        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar()] * 30, CHARACTER_CLASS.MAGE)
-        deck2 = hearthbreaker.game_objects.Deck([Naturalize()] * 30, CHARACTER_CLASS.DRUID)
+        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
         agent1 = PredictableBot()
         agent2 = PredictableBot()
         game = RecordingGame([deck1, deck2], [agent1, agent2])

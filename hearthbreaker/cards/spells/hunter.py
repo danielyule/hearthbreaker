@@ -67,7 +67,7 @@ class Tracking(Card):
         cards = []
         for card_index in range(0, 3):
             if player.can_draw():
-                cards.append(player.deck.draw(game.random))
+                cards.append(player.deck.draw(game))
         if len(cards) > 0:
             chosen_card = player.agent.choose_option(*cards)
             player.hand.append(chosen_card)
@@ -132,7 +132,7 @@ class Misdirection(SecretCard):
                 old_target = old_target_func(targets)
                 possibilities.remove(old_target)
                 game.current_player.agent.choose_target = old_target_func
-                return possibilities[game.random(0, len(possibilities) - 1)]
+                return game.random_choice(possibilities)
 
             old_target_func = game.current_player.agent.choose_target
             game.current_player.agent.choose_target = choose_random
@@ -161,7 +161,7 @@ class DeadlyShot(Card):
     def use(self, player, game):
         super().use(player, game)
         targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
-        target = targets[player.game.random(0, len(targets) - 1)]
+        target = game.random_choice(targets)
         target.die(None)
         game.check_delayed()
 
@@ -178,7 +178,8 @@ class MultiShot(Card):
 
         targets = copy.copy(game.other_player.minions)
         for i in range(0, 2):
-            target = targets.pop(game.random(0, len(targets) - 1))
+            target = game.random_choice(targets)
+            targets.remove(target)
             target.damage(player.effective_spell_damage(3), self)
 
     def can_use(self, player, game):
@@ -273,7 +274,7 @@ class AnimalCompanion(Card):
                 return Minion(2, 4, effects=[StatsAura(1, 0)])
 
         beast_list = [Huffer(), Misha(), Leokk()]
-        card = beast_list[player.game.random(0, 2)]
+        card = game.random_choice(beast_list)
         card.summon(player, player.game, len(player.minions))
 
 

@@ -648,7 +648,7 @@ class EventEffect(MinionEffect, metaclass=abc.ABCMeta):
                 raise RuntimeError("Expected 'target' to be one of 'self', 'other', 'random', " +
                                    "'random_friendly' or 'random_enemy'.  Got '{0}'".format(self.action_target))
             if len(targets) > 0:
-                target = targets[self.target.game.random(0, len(targets) - 1)]
+                target = self.target.game.random_choice(targets)
                 self._do_action(target)
 
     @abc.abstractmethod
@@ -879,7 +879,7 @@ class Draw(EventEffectPlayer):
         self.prob = probability
 
     def _do_action(self, target):
-        if not self.prob < 1.0 or target.game.random(0, 100) / 100 < self.prob:
+        if not self.prob < 1.0 or target.game.random_amount(0, 100) / 100 < self.prob:
             target.draw()
 
     def __to_json__(self):

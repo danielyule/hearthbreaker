@@ -15,7 +15,7 @@ class AvengingWrath(Card):
         for i in range(0, player.effective_spell_damage(8)):
             targets = copy.copy(game.other_player.minions)
             targets.append(game.other_player.hero)
-            target = targets[game.random(0, len(targets) - 1)]
+            target = game.random_choice(targets)
             target.damage(1, self)
 
 
@@ -192,7 +192,7 @@ class Avenge(SecretCard):
 
     def _reveal(self, dead_minion, attacker):
         if len(self.player.minions) > 0:
-            target = self.player.minions[self.player.game.random(0, len(self.player.minions) - 1)]
+            target = self.player.game.random_choice(self.player.minions)
             target.change_attack(3)
             target.increase_health(2)
             super().reveal()

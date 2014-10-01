@@ -4,6 +4,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
 from hearthbreaker.constants import MINION_TYPE
+from hearthbreaker.game_objects import MinionCard
 from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, PredictableAgentWithoutHeroPower, \
     EnemyMinionSpellTestingAgent, OneSpellTestingAgent
 from tests.testing_utils import generate_game_for
@@ -539,7 +540,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(2, len(game.other_player.minions))
 
-        self.assertEqual("Oasis Snapjaw", game.other_player.minions[1].card.name)
+        self.assertTrue(isinstance(game.other_player.minions[1].card, MinionCard))
 
         for turn in range(0, 2):
             game.play_single_turn()

@@ -13,7 +13,7 @@ class ArcaneMissiles(Card):
         for i in range(0, player.effective_spell_damage(3)):
             targets = copy.copy(game.other_player.minions)
             targets.append(game.other_player.hero)
-            target = targets[game.random(0, len(targets) - 1)]
+            target = game.random_choice(targets)
             target.damage(1, self)
 
 

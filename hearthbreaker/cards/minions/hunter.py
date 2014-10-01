@@ -95,7 +95,7 @@ class Webspinner(MinionCard):
                            StranglethornTiger, YoungDragonhawk, AngryChicken, EmperorCobra, StampedingKodo,
                            CaptainsParrot, HungryCrab, KingMukla, Maexxna, TimberWolf, ScavengingHyena, StarvingBuzzard,
                            TundraRhino, Webspinner, SavannahHighmane, KingKrush, TheBeast]
-            card = beast_cards[minion.player.game.random(0, len(beast_cards) - 1)]
+            card = minion.game.random_choice(beast_cards)
             if len(minion.player.hand) < 10:
                 minion.player.hand.append(card())
 

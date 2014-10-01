@@ -579,6 +579,7 @@ class Card(Bindable):
             self.get_targets = target_func
             self.filter_func = filter_func
         self.overload = overload
+        self.drawn = True
 
     def can_use(self, player, game):
         """
@@ -1277,7 +1278,8 @@ class Deck:
             raise GameException("Deck must have exactly 30 cards in it")
         self.cards = cards
         self.character_class = character_class
-        self.used = [False] * 30
+        for card in cards:
+            card.drawn = False
         self.left = 30
 
     def copy(self):
@@ -1286,28 +1288,20 @@ class Deck:
     def can_draw(self):
         return self.left > 0
 
-    def draw(self, random_func):
+    def draw(self, game):
         if not self.can_draw():
             raise GameException("Cannot draw more than 30 cards")
-
-        index = random_func(0, self.left - 1)
-        count = 0
-        i = 0
-        while count <= index:
-            if not self.used[i]:
-                count += 1
-            i += 1
-
-        self.used[i - 1] = True
+        card = game.random_draw(self.cards, lambda c: not c.drawn)
+        card.drawn = True
         self.left -= 1
-        return self.cards[i - 1]
+        return card
 
     def put_back(self, card):
         for index in range(0, 30):
             if self.cards[index] == card:
-                if self.used[index] is False:
+                if not card.drawn:
                     raise GameException("Tried to put back a card that hadn't been used yet")
-                self.used[index] = False
+                self.cards[index].drawn = False
                 self.left += 1
                 return
         raise GameException("Tried to put back a card that didn't come from this deck")
@@ -1317,7 +1311,7 @@ class Deck:
         for index in range(0, 30):
             card_list.append({
                 'name': self.cards[index].name,
-                'used': self.used[index]
+                'used': self.cards[index].drawn
             })
         return card_list
 
@@ -1327,7 +1321,9 @@ class Deck:
         used = []
         left = 0
         for entry in dd:
-            cards.append(card_lookup(entry["name"]))
+            card = card_lookup(entry["name"])
+            card.drawn = entry["used"]
+            cards.append(card)
             used.append(entry["used"])
             if entry["used"]:
                 left += 1
@@ -1485,7 +1481,7 @@ class Player(Bindable):
 
     def draw(self):
         if self.can_draw():
-            card = self.deck.draw(self.random)
+            card = self.deck.draw(self.game)
             self.trigger("card_drawn", card)
             if len(self.hand) < 10:
                 self.hand.append(card)
@@ -1545,7 +1541,7 @@ class Player(Bindable):
     def __from_json__(cls, pd, game, agent):
         deck = Deck.__from__to_json__(pd["deck"],
                                       hearthbreaker.constants.CHARACTER_CLASS.from_str(pd["hero"]["character"]))
-        player = Player("whatever", deck, agent, game, game.random)
+        player = Player("whatever", deck, agent, game, game.random_func)
         hero = Hero.__from_json__(pd["hero"], player)
         player.hero = hero
         hero.player = player
@@ -1577,7 +1573,7 @@ class Game(Bindable):
     def __init__(self, decks, agents, random_func=random.randint):
         super().__init__()
         self.delayed_minions = set()
-        self.random = random_func
+        self.random_func = random_func
         first_player = random_func(0, 1)
         if first_player is 0:
             play_order = [0, 1]
@@ -1596,6 +1592,18 @@ class Game(Bindable):
 
         for i in range(0, 4):
             self.players[1].draw()
+
+    def random_draw(self, cards, requirement):
+        filtered_cards = [card for card in filter(requirement, cards)]
+        if len(filtered_cards) > 0:
+            return filtered_cards[self.random_func(0, len(filtered_cards) - 1)]
+        return None
+
+    def random_choice(self, choice):
+        return choice[self.random_func(0, len(choice) - 1)]
+
+    def random_amount(self, minimum, maximum):
+        return self.random_func(minimum, maximum)
 
     def check_delayed(self):
         sorted_minions = sorted(self.delayed_minions, key=lambda m: m.born)
@@ -1762,7 +1770,7 @@ class Game(Bindable):
         new_game.minion_counter = d["current_sequence_id"]
         new_game.delayed_minions = set()
         new_game.game_ended = False
-        new_game.random = random.randint
+        new_game.random_func = random.randint
         new_game.events = {}
         new_game.players = [Player.__from_json__(pd, new_game, None) for pd in d["players"]]
         if d["active_player"] == 1:

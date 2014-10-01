@@ -34,9 +34,11 @@ class Brawl(Card):
         minions = copy.copy(player.minions)
         minions.extend(game.other_player.minions)
 
-        while len(minions) > 1:
-            minion = minions.pop(game.random(0, len(minions) - 1))
-            minion.die(self)
+        if len(minions) > 1:
+            survivor = game.random_choice(minions)
+            for minion in minions:
+                if minion is not survivor:
+                    minion.die(self)
 
 
 class Charge(Card):
@@ -61,7 +63,8 @@ class Cleave(Card):
         minions = copy.copy(game.other_player.minions)
 
         for i in range(0, 2):
-            minion = minions.pop(game.random(0, len(minions) - 1))
+            minion = game.random_choice(minions)
+            minions.remove(minion)
             minion.damage(player.effective_spell_damage(2), self)
 
     def can_use(self, player, game):

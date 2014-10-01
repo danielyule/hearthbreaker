@@ -2503,8 +2503,8 @@ class TestCommon(unittest.TestCase):
 
         used_count = 0
 
-        for u in game.other_player.deck.used:
-            if u:
+        for c in game.other_player.deck.cards:
+            if c.drawn:
                 used_count += 1
 
         self.assertEqual(11, used_count)

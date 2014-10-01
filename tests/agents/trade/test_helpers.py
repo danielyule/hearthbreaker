@@ -52,7 +52,7 @@ class FakeGame(Game):
     def __init__(self, decks, agents, random_func=random.randint):
         super(Game, self).__init__()
         self.delayed_minions = set()
-        self.random = random_func
+        self.random_func = random_func
         first_player = random_func(0, 1)
         if first_player is 0:
             play_order = [0, 1]

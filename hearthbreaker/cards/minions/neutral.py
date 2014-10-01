@@ -2,7 +2,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
-    put_friendly_minion_on_board_from_enemy_deck
+    put_enemy_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
     ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal, Damage, Draw, BuffTemp, ManaFilter, CantAttack, Summon
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
@@ -1007,7 +1007,7 @@ class SylvanasWindrunner(MinionCard):
 
             targets = copy.copy(m.player.opponent.minions)
             if len(targets) > 0:
-                target = targets[player.game.random(0, len(targets) - 1)]
+                target = m.game.random_choice(targets)
                 new_minion = target.copy(m.player)
                 target.remove_from_board()
                 new_minion.add_to_board(len(m.player.minions))
@@ -1024,7 +1024,7 @@ class StampedingKodo(MinionCard):
             targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game,
                                                                                  lambda x: x.calculate_attack() <= 2)
             if targets is not None:
-                target = targets[player.game.random(0, len(targets) - 1)]
+                target = player.game.random_choice(targets)
                 target.die(None)
 
         return Minion(3, 5, battlecry=random_destroy)
@@ -1268,7 +1268,7 @@ class MadBomber(MinionCard):
                 targets.append(player.game.other_player.hero)
                 targets.append(player.game.current_player.hero)
                 targets.remove(m)
-                target = targets[player.game.random(0, len(targets) - 1)]
+                target = player.game.random_choice(targets)
                 target.damage(1, None)
 
         return Minion(3, 2, battlecry=three_bombs)
@@ -1302,7 +1302,7 @@ class MindControlTech(MinionCard):
         def mind_control(m):
             if len(player.game.other_player.minions) >= 4:
                 targets = copy.copy(player.game.other_player.minions)
-                target = targets[player.game.random(0, len(targets) - 1)]
+                target = player.game.random_choice(targets)
                 new_minion = target.copy(player)
                 target.remove_from_board()
                 new_minion.add_to_board(len(player.minions))
@@ -1371,17 +1371,17 @@ class YoungPriestess(MinionCard):
         super().__init__("Young Priestess", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def buff_ally_health():
-            targets = copy.copy(player.game.current_player.minions)
-            targets.remove(minion)
-            if len(targets) > 0:
-                target = targets[player.game.random(0, len(targets) - 1)]
-                target.increase_health(1)
-
-        minion = Minion(2, 1)
-        player.bind("turn_ended", buff_ally_health)
-        minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
-        return minion
+        # def buff_ally_health():
+        #     targets = copy.copy(player.game.current_player.minions)
+        #     targets.remove(minion)
+        #     if len(targets) > 0:
+        #         target = targets[player.game.random(0, len(targets) - 1)]
+        #         target.increase_health(1)
+        #
+        # minion = Minion(2, 1)
+        # player.bind("turn_ended", buff_ally_health)
+        # minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
+        return Minion(2, 1, effects=[Buff("turn_ended", target="random_minion", health=1)])
 
 
 class AcolyteOfPain(MinionCard):
@@ -1716,17 +1716,26 @@ class CaptainsParrot(MinionCard):
 
     def create_minion(self, player):
         def draw_pirate(m):
-            minions = []
-            for i in range(0, 30):
-                if not m.player.deck.used[i] and isinstance(m.player.deck.cards[i], MinionCard) and \
-                        m.player.deck.cards[i].minion_type == MINION_TYPE.PIRATE:
-                    minions.append(i)
-            if len(minions) > 0:
-                index = minions.pop(player.game.random(0, len(minions) - 1))
-                m.player.deck.used[index] = True
-                m.player.deck.left -= 1
-                m.player.hand.append(m.player.deck.cards[index])
-                self.trigger("card_drawn", m.player.deck.cards[index])
+            # minions = []
+            # for i in range(0, 30):
+            #     if not m.player.deck.used[i] and isinstance(m.player.deck.cards[i], MinionCard) and \
+            #             m.player.deck.cards[i].minion_type == MINION_TYPE.PIRATE:
+            #         minions.append(i)
+            # if len(minions) > 0:
+            #     index = minions.pop(player.game.random(0, len(minions) - 1))
+            #     m.player.deck.used[index] = True
+            #     m.player.deck.left -= 1
+            #     m.player.hand.append(m.player.deck.cards[index])
+            #     self.trigger("card_drawn", m.player.deck.cards[index])
+            if len(m.player.hand) < 10:
+                card = m.game.random_draw(m.player.deck.cards,
+                                          lambda c: not c.drawn and
+                                          isinstance(c, MinionCard) and c.minion_type == MINION_TYPE.PIRATE)
+                if card:
+                    card.drawn = True
+                    m.player.deck.left -= 1
+                    m.player.hand.append(card)
+                    m.player.trigger("card_drawn")
 
         return Minion(1, 1, battlecry=draw_pirate)
 
@@ -1751,22 +1760,15 @@ class TinkmasterOverspark(MinionCard):
                 def create_minion(self, player):
                     return Minion(5, 5)
 
-            squirrel = Squirrel()
-            devilsaur = Devilsaur()
             targets = copy.copy(player.game.other_player.minions)
             targets.extend(player.game.current_player.minions)
             targets.remove(m)
             if len(targets) > 0:
-                target = targets[player.game.random(0, len(targets) - 1)]
-                if player.game.random(0, 1) == 1:
-                    minion = squirrel.create_minion(None)
-                    minion.card = squirrel
-                    target.replace(minion)
-                else:
-                    minion = devilsaur.create_minion(None)
-                    minion.card = devilsaur
-                    target.replace(minion)
-
+                target = player.game.random_choice(targets)
+                choice = player.game.random_choice([Devilsaur(), Squirrel()])
+                minion = choice.create_minion(None)
+                minion.card = choice
+                target.replace(minion)
         return Minion(3, 3, battlecry=transform_random)
 
 
@@ -1781,7 +1783,7 @@ class AlarmoBot(MinionCard):
                 if isinstance(player.hand[i], MinionCard):
                     swap_targets.append(player.hand[i])
             if len(swap_targets) > 0:
-                swap_target = swap_targets[player.game.random(0, len(swap_targets) - 1)]
+                swap_target = player.game.random_choice(swap_targets)
                 index = minion.index
                 minion.bounce()
                 player.hand.remove(swap_target)
@@ -1813,7 +1815,7 @@ class EliteTaurenChieftain(MinionCard):
                         def create_minion(self, p):
                             return Minion(1, 1)
 
-                    for i in range(0, player.game.random(3, 5)):
+                    for i in range(0, player.game.random_amount(3, 5)):
                         Murloc().summon(player, player.game, len(player.minions))
 
             class PowerOfTheHorde(Card):
@@ -1825,7 +1827,7 @@ class EliteTaurenChieftain(MinionCard):
 
                     horde_list = [FrostwolfGrunt(), TaurenWarrior(), ThrallmarFarseer(),
                                   SilvermoonGuardian(), SenjinShieldmasta(), CairneBloodhoof()]
-                    horde_summon = horde_list[player.game.random(0, 5)]
+                    horde_summon = game.random_choice(horde_list)
                     horde_summon.summon(player, player.game, len(player.minions))
 
             class RoguesDoIt(Card):
@@ -1842,9 +1844,9 @@ class EliteTaurenChieftain(MinionCard):
             etc_card_list = [IAmMurloc(), PowerOfTheHorde(), RoguesDoIt()]
             for p in player.game.players:
                 if len(p.hand) < 10:
-                    p.hand.append(etc_card_list[player.game.random(0, 2)])
+                    p.hand.append(player.game.random_choice(etc_card_list))
                 else:
-                    self.trigger("card_destroyed", etc_card_list[player.game.random(0, 2)])
+                    self.trigger("card_destroyed", player.game.random_choice(etc_card_list))
 
         return Minion(5, 5, battlecry=both_may_rock)
 
@@ -2006,10 +2008,11 @@ class Ysera(MinionCard):
                 def create_minion(self, player):
                     return Minion(7, 6)
             dream_card_list = [EmeraldDrake(), PlayfulSister(), Nightmare(), YseraAwakens(), Dream()]
+            card = player.game.random_choice(dream_card_list)
             if len(player.hand) < 10:
-                player.hand.append(dream_card_list[player.game.random(0, 4)])
+                player.hand.append(card)
             else:
-                self.trigger("card_destroyed", dream_card_list[player.game.random(0, 4)])
+                self.trigger("card_destroyed", card)
         minion = Minion(4, 12)
         player.bind("turn_ended", dream_card)
         minion.bind_once("silenced", lambda: player.unbind("turn_ended", dream_card))
@@ -2030,7 +2033,7 @@ class GelbinMekkatorque(MinionCard):
                     def random_buff():
                         targets = copy.copy(player.game.other_player.minions)
                         targets.extend(player.game.current_player.minions)
-                        target = targets[player.game.random(0, len(targets) - 1)]
+                        target = player.game.random_choice(targets)
                         target.change_attack(1)
                         target.increase_health(1)
                     minion = Minion(0, 4)
@@ -2060,7 +2063,7 @@ class GelbinMekkatorque(MinionCard):
                     def poultrymorph():
                         targets = copy.copy(player.game.other_player.minions)
                         targets.extend(player.game.current_player.minions)
-                        target = targets[player.game.random(0, len(targets) - 1)]
+                        target = player.game.random_choice(targets)
 
                         class Chicken(MinionCard):
                             def __init__(self):
@@ -2090,14 +2093,14 @@ class GelbinMekkatorque(MinionCard):
                                 player.game, lambda x: x.health != x.calculate_max_health()):
                             targets.append(m)
                         if len(targets) > 0:
-                            repairee = targets[player.game.random(0, len(targets) - 1)]
+                            repairee = player.game.random_choice(targets)
                             repairee.heal(player.effective_heal_power(6), self)
                     minion = Minion(0, 3)
                     player.bind("turn_ended", repair)
                     minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
                     return minion
             invention_list = [Emboldener3000(), HomingChicken(), Poultryizer(), RepairBot()]
-            invention = invention_list[player.game.random(0, 3)]
+            invention = player.game.random_choice(invention_list)
             invention.summon(player, player.game, m.index + 1)
         return Minion(6, 6, battlecry=awesome_invention)
 
@@ -2275,7 +2278,7 @@ class Deathlord(MinionCard):
         super().__init__("Deathlord", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 8, taunt=True, deathrattle=put_friendly_minion_on_board_from_enemy_deck)
+        return Minion(2, 8, taunt=True, deathrattle=put_enemy_minion_on_board_from_enemy_deck)
 
 
 class SpectralKnight(MinionCard):
@@ -2355,17 +2358,14 @@ class MadScientist(MinionCard):
 
     def create_minion(self, player):
         def play_secret(minion):
-            secret_indices = []
-            for index in range(0, 30):
-                if not minion.player.deck.used[index] and \
-                        isinstance(minion.player.deck.cards[index], SecretCard) and \
-                        minion.player.deck.cards[index].name not in [secret.name for secret in minion.player.secrets]:
-                    secret_indices.append(index)
-            if len(secret_indices) > 0:
-                secret_index = secret_indices[minion.game.random(0, len(secret_indices) - 1)]
-                secret = minion.player.deck.cards[secret_index]
+            secret = minion.game.random_draw(minion.player.deck.cards,
+                                             lambda c: not c.drawn and
+                                             isinstance(c, SecretCard) and
+                                             c.name not in [s.name for s in minion.player.secrets])
+            if secret:
                 minion.player.secrets.append(secret)
-                minion.player.deck.used[secret_index] = True
+                secret.drawn = True
+                minion.player.deck.left -= 1
                 if minion.player is minion.game.other_player:
                     secret.player = minion.player
                     secret.activate(minion.player)

@@ -137,22 +137,19 @@ class SenseDemons(Card):
             def create_minion(self, p):
                 return Minion(1, 1)
 
-        minions = []
-        for i in range(0, 30):
-            if (not game.current_player.deck.used[i] and isinstance(game.current_player.deck.cards[i], MinionCard) and
-                    game.current_player.deck.cards[i].minion_type == MINION_TYPE.DEMON):
-                minions.append(i)
-
         for i in range(0, 2):
-            if len(minions) > 0:
-                index = minions.pop(game.random(0, len(minions) - 1))
-                player.deck.used[index] = True
+            demon_card = game.random_draw(game.current_player.deck.cards,
+                                          lambda c: not c.drawn and
+                                          isinstance(c, MinionCard) and
+                                          c.minion_type == MINION_TYPE.DEMON)
+            if demon_card:
+                demon_card.drawn = True
                 player.deck.left -= 1
                 if len(player.hand) < 10:
-                    player.hand.append(player.deck.cards[index])
-                    self.trigger("card_drawn", player.deck.cards[index])
+                    player.hand.append(demon_card)
+                    self.trigger("card_drawn", demon_card)
                 else:
-                    player.trigger("card_destroyed", player.deck.cards[index])
+                    player.trigger("card_destroyed", demon_card)
             else:
                 if len(player.hand) < 10:
                     player.hand.append(WorthlessImp())
@@ -167,7 +164,7 @@ class BaneOfDoom(Card):
     def use(self, player, game):
         super().use(player, game)
         demon_list = [BloodImp, VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard]
-        card = demon_list[game.random(0, len(demon_list) - 1)]
+        card = game.random_choice(demon_list)
         if self.target.health <= player.effective_spell_damage(2) and \
                 (isinstance(self.target, Minion) and not self.target.divine_shield):
             self.target.damage(player.effective_spell_damage(2), self)
