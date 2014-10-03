@@ -178,7 +178,7 @@ def put_enemy_minion_on_board_from_enemy_deck(minion):
         chosen_card.summon(player, player.game, len(player.minions))
 
 
-def put_minion_on_board_from_hand(minion):
+def put_demon_on_board_from_hand(minion):
     player = minion.player
     chosen_card = player.game.random_draw(player.hand,
                                           lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard) and

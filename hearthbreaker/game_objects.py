@@ -1425,7 +1425,7 @@ class Hero(Character):
 
 
 class Player(Bindable):
-    def __init__(self, name, deck, agent, game, random_func=random.randint):
+    def __init__(self, name, deck, agent, game):
         super().__init__()
         self.hero = Hero(deck.character_class, self)
         self.name = name
@@ -1435,7 +1435,6 @@ class Player(Bindable):
         self.spell_damage = 0
         self.minions = []
         self.graveyard = set()
-        self.random = random_func
         self.hand = []
         self.auras = []
         self.fatigue = 0
@@ -1513,7 +1512,7 @@ class Player(Bindable):
     def discard(self):
         if len(self.hand) > 0:
             targets = self.hand
-            target = targets[self.random(0, len(targets) - 1)]
+            target = self.game.random_choice(targets)
             self.hand.remove(target)
             self.trigger("card_discarded", target)
 
@@ -1541,7 +1540,7 @@ class Player(Bindable):
     def __from_json__(cls, pd, game, agent):
         deck = Deck.__from__to_json__(pd["deck"],
                                       hearthbreaker.constants.CHARACTER_CLASS.from_str(pd["hero"]["character"]))
-        player = Player("whatever", deck, agent, game, game.random_func)
+        player = Player("whatever", deck, agent, game)
         hero = Hero.__from_json__(pd["hero"], player)
         player.hero = hero
         hero.player = player
@@ -1570,17 +1569,16 @@ class Player(Bindable):
 
 
 class Game(Bindable):
-    def __init__(self, decks, agents, random_func=random.randint):
+    def __init__(self, decks, agents):
         super().__init__()
         self.delayed_minions = set()
-        self.random_func = random_func
-        first_player = random_func(0, 1)
+        first_player = self._generate_random_between(0, 1)
         if first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
-        self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self, random_func),
-                        Player("two", decks[play_order[1]], agents[play_order[1]], self, random_func)]
+        self.players = [Player("one", decks[play_order[0]], agents[play_order[0]], self),
+                        Player("two", decks[play_order[1]], agents[play_order[1]], self)]
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.current_player.opponent = self.other_player
@@ -1596,14 +1594,17 @@ class Game(Bindable):
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
         if len(filtered_cards) > 0:
-            return filtered_cards[self.random_func(0, len(filtered_cards) - 1)]
+            return filtered_cards[self._generate_random_between(0, len(filtered_cards) - 1)]
         return None
 
     def random_choice(self, choice):
-        return choice[self.random_func(0, len(choice) - 1)]
+        return choice[self._generate_random_between(0, len(choice) - 1)]
 
     def random_amount(self, minimum, maximum):
-        return self.random_func(minimum, maximum)
+        return self._generate_random_between(minimum, maximum)
+
+    def _generate_random_between(self, lowest, highest):
+        return random.randint(lowest, highest)
 
     def check_delayed(self):
         sorted_minions = sorted(self.delayed_minions, key=lambda m: m.born)

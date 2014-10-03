@@ -1,4 +1,3 @@
-from random import randint
 import re
 
 import hearthbreaker
@@ -269,10 +268,14 @@ class Replay:
             elif action == 'random':
                 if len(self.random_numbers) > 0:
                     raise ReplayException("Only one random number list per file")
+                self.random_numbers = []
                 if len(args[0]) > 0:
-                    self.random_numbers = [int(num) for num in args]
-                else:
-                    self.random_numbers = []
+                    for num in args:
+                        if num.isdigit():
+                            self.random_numbers.append(int(num))
+                        else:
+                            self.random_numbers.append(hearthbreaker.proxies.ProxyCharacter(num))
+
             elif action == 'deck':
                 if len(self.decks) > 1:
                     raise ReplayException("Maximum of two decks per file")
@@ -329,7 +332,8 @@ class RecordingGame(hearthbreaker.game_objects.Game):
         self.replay.game = self
         agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
 
-        super().__init__(decks, agents, self._find_random)
+        super().__init__(decks, agents)
+        self.__recorded_randoms__ = []
 
         self.replay.save_decks(*decks)
 
@@ -342,8 +346,14 @@ class RecordingGame(hearthbreaker.game_objects.Game):
             player.bind("card_played", self.replay.record_card_played)
             player.bind("attack", self.replay.record_attack)
 
-    def _find_random(self, lower_bound, upper_bound):
-        result = randint(lower_bound, upper_bound)
+    def random_choice(self, choice):
+        result = super().random_choice(choice)
+        if isinstance(result, hearthbreaker.game_objects.Character):
+            self.replay.random_numbers[-1] = hearthbreaker.proxies.ProxyCharacter(result)
+        return result
+
+    def _generate_random_between(self, lowest, highest):
+        result = super()._generate_random_between(lowest, highest)
         self.replay.record_random(result)
         return result
 
@@ -403,9 +413,20 @@ class SavedGame(hearthbreaker.game_objects.Game):
             def choose_option(self, *options):
                 return options[self.next_option]
 
-        if len(replay.random_numbers) is 0:
-            random_func = null_random
-        else:
-            random_func = replay_random
+        self.replay = replay
+        self.random_index = 0
+        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()])
 
-        super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()], random_func)
+    def _generate_random_between(self, lowest, highest):
+        if len(self.replay.random_numbers) == 0:
+            return 0
+        else:
+            self.random_index += 1
+            return self.replay.random_numbers[self.random_index - 1]
+
+    def random_choice(self, choice):
+        if isinstance(self.replay.random_numbers[self.random_index], hearthbreaker.proxies.ProxyCharacter):
+            result = self.replay.random_numbers[self.random_index].resolve(self)
+            self.random_index += 1
+            return result
+        return super().random_choice(choice)

@@ -2,7 +2,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.effects.minion import ManaFilter, Buff
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
-    destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord, put_minion_on_board_from_hand
+    destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord, put_demon_on_board_from_hand
 from hearthbreaker.powers import JaraxxusPower
 
 
@@ -137,4 +137,4 @@ class Voidcaller(MinionCard):
         super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=put_minion_on_board_from_hand)
+        return Minion(3, 4, deathrattle=put_demon_on_board_from_hand)

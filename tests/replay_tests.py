@@ -9,6 +9,7 @@ from hearthbreaker.agents.basic_agents import PredictableBot
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.cards import *
 import hearthbreaker.game_objects
+from tests.agents.testing_agents import PredictableAgentWithoutHeroPower, MinionPlayingAgent
 
 
 class TestReplay(unittest.TestCase):
@@ -66,3 +67,24 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(panther.health, 3)
         self.assertEqual(panther.calculate_attack(), 4)
         self.assertEqual(panther.index, 0)
+
+    def test_random_character_saving(self):
+        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        agent1 = PredictableAgentWithoutHeroPower()
+        agent2 = MinionPlayingAgent()
+        random.seed(4879)
+        game = RecordingGame([deck1, deck2], [agent1, agent2])
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        output = StringIO()
+        game.replay.write_replay(output)
+        random.seed(4879)
+        new_game = SavedGame(StringIO(output.getvalue()))
+        for turn in range(0, 17):
+            new_game.play_single_turn()
+
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(30, new_game.other_player.hero.health)
+        self.assertEqual(5, len(new_game.other_player.minions))
