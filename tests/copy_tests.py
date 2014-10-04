@@ -633,18 +633,23 @@ class TestMinionCopying(unittest.TestCase):
     def test_KirinTorMage(self):
         game = generate_game_for([KirinTorMage, BoulderfistOgre, Spellbender],
                                  StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        new_game = None
         for turn in range(0, 4):
             game.play_single_turn()
 
         def check_secret_cost():
+            nonlocal new_game
             new_game = game.copy()
             self.assertEqual(1, len(new_game.current_player.minions))
             self.assertEqual("Kirin Tor Mage", new_game.current_player.minions[0].card.name)
-            self.assertEqual(0, new_game.current_player.hand[1].mana_cost(game.current_player))
+            self.assertEqual(0, new_game.current_player.hand[1].mana_cost(new_game.current_player))
             self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
         game.other_player.bind_once("turn_ended", check_secret_cost)
         game.play_single_turn()
+        new_game._end_turn()
+        self.assertEqual(3, new_game.current_player.hand[1].mana_cost(new_game.current_player))
+        self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
     def test_WaterElemental(self):
         game = generate_game_for(WaterElemental, StonetuskBoar, PredictableBot, DoNothingBot)

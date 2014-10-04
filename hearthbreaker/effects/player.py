@@ -1,4 +1,5 @@
 import abc
+
 import hearthbreaker.game_objects
 import hearthbreaker.proxies
 
@@ -9,6 +10,7 @@ class PlayerEffect(metaclass=abc.ABCMeta):
     action is.  Each type of action has a set of parameters that determine how it applies.  Each action type has a
     specific subclass to represent it.
     """
+
     @staticmethod
     def from_json(player, action, *args, **kwargs):
         __class_mappings = {
@@ -36,7 +38,6 @@ class PlayerEffect(metaclass=abc.ABCMeta):
 
 
 class PlayerManaFilter(PlayerEffect):
-
     def __init__(self, amount, card_filter, until, only_first=False):
         """
         Adds a mana filter to the cards that this player has.  Unlike the
@@ -89,6 +90,7 @@ class PlayerManaFilter(PlayerEffect):
             if my_filter(card):
                 remove()
                 player.unbind(self.until, remove)
+
         if self.until != "forever":
             player.bind_once(self.until, remove)
         if self.only_first:
@@ -114,6 +116,7 @@ class ManaAdjustment(PlayerEffect):
     """
     Unlike a ManaFilter, this effect only affects a single card.  As such, there are fewer customization options.
     """
+
     def __init__(self, card, amount):
         self.card = card
         self.amount = amount
@@ -135,6 +138,7 @@ class ManaAdjustment(PlayerEffect):
                 self.amount = amount
                 self.min = 0
                 self.filter = m_filter
+
         f = Filter(self.amount, lambda c: c is self.card)
         player.mana_filters.append(f)
 
@@ -167,7 +171,6 @@ class DuplicateMinion(PlayerEffect):
         self.when = when
 
     def apply(self, player):
-
         def duplicate():
             minion = self.minion.resolve(player.game)
             if minion:
@@ -260,8 +263,10 @@ class MinimumHealth(PlayerEffect):
 
             def turn_ended():
                 m.unbind("health_changed", keep_above_one)
+
             m.bind("health_changed", keep_above_one)
             player.bind_once("turn_ended", turn_ended)
+
         for minion in player.minions:
             create_monitoring_functions(minion)
 

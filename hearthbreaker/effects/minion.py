@@ -233,7 +233,7 @@ class AuraEffect(MinionEffect):
             players = [self.target.player, self.target.player.opponent]
         self.aura = Aura(self.apply_aura, self.unapply_aura, filter_func)
         for player in players:
-            player.auras.append(self.aura)
+            player.minion_auras.append(self.aura)
 
     def unapply(self):
         if self.players == "friendly":
@@ -244,7 +244,7 @@ class AuraEffect(MinionEffect):
             players = [self.target.player, self.target.player.opponent]
 
         for player in players:
-            player.auras.remove(self.aura)
+            player.minion_auras.remove(self.aura)
 
     def __str__(self):
         return json.dumps(self.__to_json__())
