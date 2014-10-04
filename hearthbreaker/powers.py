@@ -236,7 +236,7 @@ class ShamanPower(Power):
         if not self.wrath_of_air_totem:
             totems.append(WrathOfAirTotem())
 
-        random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
+        random_totem = self.hero.player.game.random_choice(totems)
         random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 

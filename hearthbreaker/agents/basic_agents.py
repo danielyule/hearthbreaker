@@ -38,10 +38,11 @@ class PredictableBot:
 
         while done_something:
             done_something = False
-            for card in copy.copy(player.hand):
+            for card in player.hand:
                 if card.can_use(player, player.game):
                     player.game.play_card(card)
                     done_something = True
+                    break
 
         for minion in copy.copy(player.minions):
             if minion.can_attack():

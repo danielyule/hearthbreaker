@@ -102,6 +102,6 @@ class AnubarAmbusher(MinionCard):
             targets = copy.copy(minion.player.minions)
 
             if len(targets) > 0:
-                targets[minion.game.random(0, len(targets) - 1)].bounce()
+                minion.game.random_choice(targets).bounce()
 
         return Minion(5, 5, deathrattle=return_random_friendly_minion)

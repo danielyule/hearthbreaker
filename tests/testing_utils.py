@@ -24,8 +24,8 @@ class StackedDeck(Deck):
 
     def draw(self, random_func):
         for card_index in range(0, 30):
-            if not self.used[card_index]:
-                self.used[card_index] = True
+            if not self.cards[card_index].drawn:
+                self.cards[card_index].drawn = True
                 self.left -= 1
                 return self.cards[card_index]
 

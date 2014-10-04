@@ -51,7 +51,7 @@ class Lightwell(MinionCard):
             targets = hearthbreaker.targeting.find_friendly_spell_target(
                 player.game, lambda character: character.health != character.calculate_max_health())
             if len(targets) != 0:
-                targets[player.game.random(0, len(targets) - 1)].heal(player.effective_heal_power(3), minion)
+                player.game.random_choice(targets).heal(player.effective_heal_power(3), minion)
 
         minion = Minion(0, 5)
         player.bind("turn_started", heal_damaged_friendly_character)
@@ -107,5 +107,5 @@ class DarkCultist(MinionCard):
         def give_3_health(minion):
             targets = copy.copy(minion.player.minions)
             if len(targets) > 0:
-                targets[minion.game.random(0, len(targets) - 1)].increase_health(3)
+                minion.game.random_choice(targets).increase_health(3)
         return Minion(3, 4, deathrattle=give_3_health)

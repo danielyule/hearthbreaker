@@ -37,8 +37,8 @@ class TempCard:
 
 
 class FakePlayer(Player):
-    def __init__(self, name, deck, agent, game, random_func=random.randint):
-        super().__init__(name, deck, agent, game, random_func=random_func)
+    def __init__(self, name, deck, agent, game):
+        super().__init__(name, deck, agent, game)
         self.draws_to_prevent = 1
 
     def draw(self):
@@ -52,14 +52,14 @@ class FakeGame(Game):
     def __init__(self, decks, agents, random_func=random.randint):
         super(Game, self).__init__()
         self.delayed_minions = set()
-        self.random = random_func
+        self.random_func = random_func
         first_player = random_func(0, 1)
         if first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
-        self.players = [FakePlayer("one", decks[play_order[0]], agents[play_order[0]], self, random_func),
-                        FakePlayer("two", decks[play_order[1]], agents[play_order[1]], self, random_func)]
+        self.players = [FakePlayer("one", decks[play_order[0]], agents[play_order[0]], self),
+                        FakePlayer("two", decks[play_order[1]], agents[play_order[1]], self)]
         self.current_player = self.players[0]
         self.other_player = self.players[1]
         self.current_player.opponent = self.other_player

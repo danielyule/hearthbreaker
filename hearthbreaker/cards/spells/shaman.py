@@ -97,10 +97,11 @@ class ForkedLightning(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = copy.copy(game.other_player.minions)
+        minions = copy.copy(game.other_player.minions)
         for i in range(0, 2):
-            target = targets.pop(game.random(0, len(targets) - 1))
-            target.damage(player.effective_spell_damage(2), self)
+            minion = game.random_choice(minions)
+            minions.remove(minion)
+            minion.damage(player.effective_spell_damage(3), self)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
@@ -169,7 +170,7 @@ class LightningStorm(Card):
         super().use(player, game)
 
         for minion in copy.copy(game.other_player.minions):
-            minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
+            minion.damage(player.effective_spell_damage(game.random_amount(2, 3)), self)
 
 
 class RockbiterWeapon(Card):
