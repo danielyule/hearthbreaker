@@ -2,18 +2,18 @@ from hearthbreaker.effects.base import MinionEvent, PlayerEvent
 
 
 class DidDamage(MinionEvent):
-    def __init__(self):
-        super().__init__("did_damage")
+    def __init__(self, condition=None):
+        super().__init__("did_damage", condition)
 
 
 class SpellCast(PlayerEvent):
-    def __init__(self):
-        super().__init__("spell_cast")
+    def __init__(self, condition=None):
+        super().__init__("spell_cast", condition)
 
 
 class Either(PlayerEvent):
     def __init__(self, event1, event2):
-        super().__init__("either")
+        super().__init__("either", None)
         self.event1 = event1
         self.event2 = event2
 
@@ -38,31 +38,11 @@ class Either(PlayerEvent):
         return Either(event1, event2)
 
 
-class MatchingCardPlayed(PlayerEvent):
-    def __init__(self, card_selector=None):
-        super().__init__("card_played")
-        self.selector = card_selector
-        self.func = None
-
-    def bind(self, target, func):
-        self.func = func
-        target.player.bind(self.event_name, self._check_selector)
-
-    def unbind(self, target, func):
-        self.func = func
-        target.player.unbind(self.event_name, self._check_selector)
-
-    def _check_selector(self, card, index):
-        if self.selector and self.selector.match(card):
-            self.func(card, index)
-
-    def __to_json__(self):
-        return {
-            'event_name': 'matching_card_played',
-            'card_selector': self.selector
-        }
+class CardPlayed(PlayerEvent):
+    def __init__(self, condition):
+        super().__init__("card_played", condition)
 
 
 class TurnEnded(PlayerEvent):
-    def __init__(self):
-        super().__init__("turn_ended")
+    def __init__(self, condition=None):
+        super().__init__("turn_ended", condition)

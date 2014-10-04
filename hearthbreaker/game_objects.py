@@ -1096,7 +1096,7 @@ class Minion(Character):
         minion.game = game
         minion.player = player
         for effect in md['effects']:
-            new_effect = hearthbreaker.effects.minion.MinionEffect.from_json(game, **effect)
+            new_effect = hearthbreaker.effects.base.NewEffect.from_json(game, **effect)
             minion._effects_to_add.append(new_effect)
 
         return minion

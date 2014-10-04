@@ -31,6 +31,22 @@ class ChangeAttack(ReversibleAction):
         }
 
 
+class ChangeHealth(ReversibleAction):
+    def __init__(self, amount):
+        self.amount = amount
+
+    def act(self, target):
+        target.increase_health(self.amount)
+
+    def unact(self, target):
+        target.decrease_health(self.amount)
+
+    def __to_json__(self):
+        return {
+            "type": "change_attack",
+            "amount": self.amount
+        }
+
 class ManaChange(ReversibleAction):
     def __init__(self, amount, minimum, card_selector):
         self.amount = amount
