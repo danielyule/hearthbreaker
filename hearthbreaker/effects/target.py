@@ -9,7 +9,7 @@ class Target(Targeting):
 
     def __to_json__(self):
         return {
-            'type': 'target'
+            'name': 'target'
         }
 
 
@@ -19,5 +19,15 @@ class Self(Targeting):
 
     def __to_json__(self):
         return {
-            'type': 'self'
+            'name': 'self'
+        }
+
+
+class Owner(Targeting):
+    def select_target(self, this, focus, other):
+        return this.player.hero
+
+    def __to_json__(self):
+        return {
+            'name': 'self'
         }

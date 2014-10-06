@@ -1,5 +1,8 @@
 import copy
+from hearthbreaker.effects.base import Aura
+from hearthbreaker.effects.selector import SelfSelector
 import hearthbreaker.targeting
+import hearthbreaker.effects.action
 from hearthbreaker.effects.player import MinimumHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, WeaponCard, Weapon
@@ -50,7 +53,7 @@ class Charge(Card):
         super().use(player, game)
 
         self.target.change_attack(2)
-        self.target.charge = True
+        self.target.add_aura(Aura(hearthbreaker.effects.action.Charge(), SelfSelector()))
 
 
 class Cleave(Card):

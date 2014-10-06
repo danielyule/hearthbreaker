@@ -46,3 +46,18 @@ class CardPlayed(PlayerEvent):
 class TurnEnded(PlayerEvent):
     def __init__(self, condition=None):
         super().__init__("turn_ended", condition)
+
+
+class MinionDied(PlayerEvent):
+    def __init__(self, condition=None):
+        super().__init__("minion_died", condition)
+
+
+class MinionPlaced(PlayerEvent):
+    def __init__(self, condition=None):
+        super().__init__("minion_placed", condition)
+
+
+class Overloaded(PlayerEvent):
+    def __init__(self, condition=None):
+        super().__init__("overloaded", condition)

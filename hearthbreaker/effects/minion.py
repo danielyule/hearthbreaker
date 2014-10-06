@@ -32,8 +32,6 @@ class MinionEffect(metaclass=abc.ABCMeta):
     def from_json(game, action, *args, **kwargs):
         __class_mappings = {
             "immune": Immune,
-            "charge_aura": ChargeAura,
-            "stats_aura": StatsAura,
             "increase_battlecry": IncreaseBattlecryMinionCost,
             "double_deathrattle": DoubleDeathrattle,
             "heal_as_damage": HealAsDamage,
@@ -106,7 +104,7 @@ class Charge(TranientEffect):
     """
 
     def apply(self):
-        self.target.charge = True
+        self.target.charge = 1
 
     def __to_json__(self):
         return {
@@ -192,145 +190,6 @@ class NoSpellTarget(TranientEffect):
         return {
             "action": "no_spell_target"
         }
-
-
-class Aura():
-    def __init__(self, apply_func, unapply_func, filter_func):
-        self.apply = apply_func
-        self.unapply = unapply_func
-        self.filter = filter_func
-
-
-class AuraEffect(MinionEffect):
-    def __init__(self, apply_aura, unapply_aura, minion_filter, players, include_self):
-        self.apply_aura = apply_aura
-        self.unapply_aura = unapply_aura
-        self.minion_filter = minion_filter
-        self.players = players
-        self.aura = None
-        self.include_self = include_self
-
-    def apply(self):
-        if self.minion_filter == "minion":
-            if self.include_self:
-                filter_func = lambda m: True
-            else:
-                filter_func = lambda m: m is not self.target
-        elif self.minion_filter == "adjacent":
-            filter_func = lambda m: m.index == self.target.index + 1 or m.index == self.target.index - 1
-        else:
-            type_id = MINION_TYPE.from_str(self.minion_filter)
-            if self.include_self:
-                filter_func = lambda m: m.card.minion_type == type_id
-            else:
-                filter_func = lambda m: m is not self.target and m.card.minion_type == type_id
-
-        if self.players == "friendly":
-            players = [self.target.player]
-        elif self.players == "enemy":
-            players = [self.target.player.opponent]
-        elif self.players == "both":
-            players = [self.target.player, self.target.player.opponent]
-        self.aura = Aura(self.apply_aura, self.unapply_aura, filter_func)
-        for player in players:
-            player.minion_auras.append(self.aura)
-
-    def unapply(self):
-        if self.players == "friendly":
-            players = [self.target.player]
-        elif self.players == "enemy":
-            players = [self.target.player.opponent]
-        elif self.players == "both":
-            players = [self.target.player, self.target.player.opponent]
-
-        for player in players:
-            player.minion_auras.remove(self.aura)
-
-    def __str__(self):
-        return json.dumps(self.__to_json__())
-
-    def __to_json__(self):
-        return {
-            "minion_filter": self.minion_filter,
-            "players": self.players,
-            "include_self": self.include_self
-        }
-
-
-class ChargeAura(AuraEffect):
-    """
-     A Charge Aura gives affected minions charge.   Whether the minions are friendly or not as well as what
-     type of minions are affected can be customized
-    """
-
-    def __init__(self, players="friendly", minion_filter="minion", include_self=False):
-        """
-        Create a new ChargeAura
-        :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
-                                     for any type of minion
-        :param boolean include_self: Whether or not this aura should also affect the minion that created it.
-        """
-        super().__init__(self.give_charge, self.take_charge, minion_filter, players, include_self)
-        self.affected_minions = set()
-
-    def give_charge(self, minion):
-        if not minion.charge:
-            minion.charge = True
-            self.affected_minions.add(minion)
-
-    def take_charge(self, minion):
-        if minion in self.affected_minions:
-            minion.charge = False
-            self.affected_minions.remove(minion)
-
-    def __to_json__(self):
-        r_json = super().__to_json__()
-        r_json.update({
-            "action": "charge_aura"
-        })
-        return r_json
-
-
-class StatsAura(AuraEffect):
-    """
-    A StatsAura increases the health and/or attack of affected minions.  Whether the minions are friendly or not as well
-    as what type of minions are affected can be customized.
-    """
-
-    def __init__(self, attack=0, health=0, players="friendly", minion_filter="minion", include_self=False):
-        """
-        Create a new StatsAura
-
-        :param int attack: The amount to increase this minion's attack by
-        :param int health: The amount to increase this minion's health by
-        :param string players: Whose minions should be given charge.  Possible values are "friendly", "enemy" and "both"
-        :param string minion_filter: A string representing either a minion type ("Beast", "Dragon", etc.) or "minion"
-                                     for any type of minion
-        """
-        super().__init__(self.increase_stats, self.decrease_stats, minion_filter, players, include_self)
-        self.attack = attack
-        self.health = health
-
-    def increase_stats(self, minion):
-        minion.aura_attack += self.attack
-        minion.aura_health += self.health
-        minion.health += self.health
-
-    def decrease_stats(self, minion):
-        minion.aura_attack -= self.attack
-        minion.aura_health -= self.health
-        if minion.health > minion.calculate_max_health():
-            minion.health = minion.calculate_max_health()
-
-    def __to_json__(self):
-        r_json = super().__to_json__()
-        r_json.update({
-            "action": "stats_aura",
-            "attack": self.attack,
-            "health": self.health,
-        })
-        return r_json
 
 
 class IncreaseBattlecryMinionCost(MinionEffect):
@@ -828,7 +687,7 @@ class GiveCharge(EventEffect):
 
     def _do_action(self, target):
         if isinstance(target, hearthbreaker.game_objects.Minion):
-            target.charge = True
+            target.charge += 1
 
     def __to_json__(self):
         s_json = super().__to_json__()

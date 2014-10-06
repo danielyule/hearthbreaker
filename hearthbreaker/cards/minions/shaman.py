@@ -1,4 +1,9 @@
-from hearthbreaker.effects.minion import StatsAura, Draw, Buff
+from hearthbreaker.effects.action import ChangeAttack, Draw, Give, ChangeHealth
+from hearthbreaker.effects.base import Aura, NewEffect
+from hearthbreaker.effects.condition import Adjacent
+from hearthbreaker.effects.event import TurnEnded, Overloaded
+from hearthbreaker.effects.selector import MinionSelector
+from hearthbreaker.effects.target import Owner, Self
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -43,7 +48,7 @@ class FlametongueTotem(MinionCard):
         super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 3, effects=[StatsAura(2, 0, minion_filter="adjacent")])
+        return Minion(0, 3, auras=[Aura(ChangeAttack(2), MinionSelector(Adjacent()))])
 
 
 class ManaTideTotem(MinionCard):
@@ -51,7 +56,7 @@ class ManaTideTotem(MinionCard):
         super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 3, effects=[Draw("turn_ended")])
+        return Minion(0, 3, effects=[NewEffect(TurnEnded(), Draw(), Owner())])
 
 
 class UnboundElemental(MinionCard):
@@ -59,7 +64,8 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[Buff("overloaded", attack=1, health=1)])
+        return Minion(2, 4, effects=[NewEffect(Overloaded(), Give(ChangeAttack(1)), Self()),
+                                     NewEffect(Overloaded(), Give(ChangeHealth(1)), Self())])
 
 
 class Windspeaker(MinionCard):

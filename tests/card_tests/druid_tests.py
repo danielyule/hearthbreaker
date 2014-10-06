@@ -390,8 +390,6 @@ class TestDruid(unittest.TestCase):
         test_bear.player = game.current_player
         self.assertEqual(4, test_bear.calculate_attack())
         self.assertEqual(4, test_bear.calculate_max_health())
-        self.assertTrue(test_bear.charge)
-        self.assertFalse(test_bear.taunt)
 
         game.current_player.agent.choose_option = lambda cat, bear: bear
 
@@ -408,8 +406,6 @@ class TestDruid(unittest.TestCase):
         test_bear.player = game.current_player
         self.assertEqual(4, test_bear.calculate_attack())
         self.assertEqual(6, test_bear.calculate_max_health())
-        self.assertFalse(test_bear.charge)
-        self.assertTrue(test_bear.taunt)
 
     def test_Nourish(self):
 

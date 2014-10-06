@@ -114,6 +114,7 @@ class TestCommon(unittest.TestCase):
         # The minions to either side should have their attack increased
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
         self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 

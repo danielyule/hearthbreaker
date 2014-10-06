@@ -1,5 +1,10 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects.minion import ChargeAura, StatsAura, Buff, Draw
+from hearthbreaker.effects.action import Draw, ChangeAttack, ChangeHealth, Charge
+from hearthbreaker.effects.base import NewEffect, Aura
+from hearthbreaker.effects.condition import MinionIsType
+from hearthbreaker.effects.event import MinionPlaced, MinionDied
+from hearthbreaker.effects.selector import MinionSelector
+from hearthbreaker.effects.target import Owner, Self
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -14,7 +19,7 @@ class TimberWolf(MinionCard):
         super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, effects=[StatsAura(attack=1, minion_filter="beast")])
+        return Minion(1, 1, auras=[Aura(ChangeAttack(1), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
 
 
 class SavannahHighmane(MinionCard):
@@ -65,7 +70,7 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(3, 2, effects=[Draw("placed", "beast", "owner")])
+        return Minion(3, 2, effects=[NewEffect(MinionPlaced(MinionIsType(MINION_TYPE.BEAST)), Draw(), Owner())])
 
 
 class TundraRhino(MinionCard):
@@ -73,7 +78,8 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_filter="beast", include_self=True)])
+        return Minion(2, 5, charge=True,
+                      auras=[Aura(Charge(), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
 
 
 class ScavengingHyena(MinionCard):
@@ -81,7 +87,8 @@ class ScavengingHyena(MinionCard):
         super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[Buff("death", "beast", "self", 2, 1, "friendly")])
+        return Minion(2, 2, effects=[NewEffect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeAttack(2), Self()),
+                                     NewEffect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeHealth(1), Self())])
 
 
 class Webspinner(MinionCard):

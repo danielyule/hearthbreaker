@@ -1,12 +1,12 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth
+from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, Give
 from hearthbreaker.effects.aura import ManaAura
-from hearthbreaker.effects.base import NewEffect
+from hearthbreaker.effects.base import NewEffect, Aura
 from hearthbreaker.effects.condition import HasSecret
 from hearthbreaker.effects.event import SpellCast, DidDamage, TurnEnded
-from hearthbreaker.effects.minion import AddCard, ManaFilter
-from hearthbreaker.effects.selector import SecretSelector
+from hearthbreaker.effects.minion import AddCard
+from hearthbreaker.effects.selector import SecretSelector, SpellSelector, PlayerSelector
 from hearthbreaker.effects.target import Self, Target
 from hearthbreaker.game_objects import MinionCard, Minion
 
@@ -24,7 +24,7 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 2, effects=[ManaFilter(1, "spell")])
+        return Minion(3, 2, auras=[Aura(ManaChange(1, 0, SpellSelector()), PlayerSelector())])
 
 
 class KirinTorMage(MinionCard):
@@ -43,8 +43,8 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[NewEffect(TurnEnded(HasSecret()), ChangeAttack(2), Self()),
-                                     NewEffect(TurnEnded(HasSecret()), ChangeHealth(2), Self())])
+        return Minion(3, 3, effects=[NewEffect(TurnEnded(HasSecret()), Give(ChangeAttack(2)), Self()),
+                                     NewEffect(TurnEnded(HasSecret()), Give(ChangeHealth(2)), Self())])
 
 
 class WaterElemental(MinionCard):

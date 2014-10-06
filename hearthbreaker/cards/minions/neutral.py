@@ -3,9 +3,13 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_enemy_minion_on_board_from_enemy_deck
-from hearthbreaker.effects.minion import StatsAura, IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
+from hearthbreaker.effects.action import Charge, ChangeAttack, ChangeHealth
+from hearthbreaker.effects.base import Aura
+from hearthbreaker.effects.condition import Adjacent, MinionIsType
+from hearthbreaker.effects.minion import IncreaseBattlecryMinionCost, DoubleDeathrattle, Buff, \
     ResurrectFriendlyMinionsAtEndOfTurn, Kill, Heal, Damage, Draw, BuffTemp, ManaFilter, CantAttack, Summon
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
+from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -123,7 +127,7 @@ class DireWolfAlpha(MinionCard):
         super().__init__("Dire Wolf Alpha", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[StatsAura(1, 0, minion_filter="adjacent")])
+        return Minion(2, 2, auras=[Aura(ChangeAttack(1), MinionSelector(Adjacent()))])
 
 
 class WorgenInfiltrator(MinionCard):
@@ -648,7 +652,7 @@ class StormwindChampion(MinionCard):
         super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(6, 6, effects=[StatsAura(attack=1, health=1)])
+        minion = Minion(6, 6, auras=[Aura(ChangeAttack(1), MinionSelector()), Aura(ChangeHealth(1), MinionSelector())])
         return minion
 
 
@@ -689,14 +693,11 @@ class CrazedAlchemist(MinionCard):
             if self.target is not None:
                 temp_attack = self.target.calculate_attack()
                 temp_health = self.target.health
-                self.target.change_attack(temp_health - self.target.base_attack)
-                if temp_attack < self.target.base_health:
-                    self.target.decrease_health(self.target.base_health - temp_attack)
-                elif temp_attack > self.target.base_health:
-                    self.target.increase_health(temp_attack - self.target.base_health)
-                self.target.health = self.target.calculate_max_health()
-                if self.target.health is 0:
+                if temp_attack == 0:
                     self.target.die(None)
+                else:
+                    self.target.set_attack_to(temp_health)
+                    self.target.set_health_to(temp_attack)
         return Minion(2, 2, battlecry=swap)
 
 
@@ -875,7 +876,7 @@ class RaidLeader(MinionCard):
         super().__init__("Raid Leader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[StatsAura(1, 0)])
+        return Minion(2, 2, auras=[Aura(ChangeAttack(1), MinionSelector())])
 
 
 class DragonlingMechanic(MinionCard):
@@ -1179,7 +1180,8 @@ class GrimscaleOracle(MinionCard):
         super().__init__("Grimscale Oracle", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        return Minion(1, 1, effects=[StatsAura(1, 0, minion_filter="murloc", players="both")])
+        return Minion(1, 1, auras=[Aura(ChangeAttack(1),
+                                        MinionSelector(MinionIsType(MINION_TYPE.MURLOC), BothPlayer()))])
 
 
 class MurlocWarleader(MinionCard):
@@ -1187,7 +1189,10 @@ class MurlocWarleader(MinionCard):
         super().__init__("Murloc Warleader", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[StatsAura(2, 1, minion_filter="murloc", players="both")])
+        return Minion(3, 3, auras=[Aura(ChangeAttack(2),
+                                        MinionSelector(MinionIsType(MINION_TYPE.MURLOC), BothPlayer())),
+                                   Aura(ChangeHealth(1),
+                                        MinionSelector(MinionIsType(MINION_TYPE.MURLOC), BothPlayer()))])
 
 
 class BigGameHunter(MinionCard):
@@ -1351,7 +1356,8 @@ class SouthseaCaptain(MinionCard):
         super().__init__("Southsea Captain", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.PIRATE)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[StatsAura(1, 1, minion_filter="pirate")])
+        return Minion(3, 3, auras=[Aura(ChangeAttack(1), MinionSelector(MinionIsType(MINION_TYPE.PIRATE))),
+                                   Aura(ChangeHealth(1), MinionSelector(MinionIsType(MINION_TYPE.PIRATE)))])
 
 
 class SouthseaDeckhand(MinionCard):
@@ -1361,7 +1367,7 @@ class SouthseaDeckhand(MinionCard):
     def create_minion(self, player):
         def charge_if_weapon(m):
             if player.hero.weapon is not None:
-                m.charge = True
+                m.add_aura(Aura(Charge(), SelfSelector()))
 
         return Minion(2, 1, battlecry=charge_if_weapon)
 
@@ -1648,9 +1654,7 @@ class LeeroyJenkins(MinionCard):
             whelp.summon(player.game.other_player, player.game, len(player.game.other_player.minions))
             whelp.summon(player.game.other_player, player.game, len(player.game.other_player.minions))
 
-        minion = Minion(6, 2, battlecry=summon_whelps)
-        minion.charge = True
-        return minion
+        return Minion(6, 2, charge=True, battlecry=summon_whelps)
 
 
 class MountainGiant(MinionCard):

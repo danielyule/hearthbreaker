@@ -1,4 +1,9 @@
-from hearthbreaker.effects.minion import Buff, IncreaseArmor, GiveCharge
+from hearthbreaker.effects.action import Charge, Give
+from hearthbreaker.effects.base import NewEffect
+from hearthbreaker.effects.condition import AttackLessThanOrEqualTo
+from hearthbreaker.effects.event import MinionPlaced
+from hearthbreaker.effects.minion import Buff, IncreaseArmor
+from hearthbreaker.effects.target import Target
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -75,4 +80,4 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[GiveCharge("placed", "attack_less_than_or_equal_to_3", "other")])
+        return Minion(2, 3, effects=[NewEffect(MinionPlaced(AttackLessThanOrEqualTo(3)), Give(Charge()), Target())])

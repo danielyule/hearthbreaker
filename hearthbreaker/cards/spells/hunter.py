@@ -1,6 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Immune, StatsAura
+from hearthbreaker.effects.action import ChangeAttack
+from hearthbreaker.effects.base import Aura
+from hearthbreaker.effects.minion import Immune
 from hearthbreaker.effects.player import ManaAdjustment
+from hearthbreaker.effects.selector import MinionSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -230,12 +233,10 @@ class UnleashTheHounds(Card):
 
         class Hound(MinionCard):
             def __init__(self):
-                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(1, 1, MINION_TYPE.BEAST)
-                minion.charge = True
-                return minion
+                return Minion(1, 1, charge=True)
         for target in hearthbreaker.targeting.find_enemy_minion_spell_target(player.game, lambda x: True):
             hound = Hound()
             hound.summon(player, game, len(player.minions))
@@ -250,28 +251,25 @@ class AnimalCompanion(Card):
 
         class Huffer(MinionCard):
             def __init__(self):
-                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL,
+                                 minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(4, 2, MINION_TYPE.BEAST)
-                minion.charge = True
-                return minion
+                return Minion(4, 2, charge=True)
 
         class Misha(MinionCard):
             def __init__(self):
-                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(4, 4, MINION_TYPE.BEAST)
-                minion.taunt = True
-                return minion
+                return Minion(4, 4, taunt=True)
 
         class Leokk(MinionCard):
             def __init__(self):
                 super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                return Minion(2, 4, effects=[StatsAura(1, 0)])
+                return Minion(2, 4, auras=[Aura(ChangeAttack(1), MinionSelector())])
 
         beast_list = [Huffer(), Misha(), Leokk()]
         card = game.random_choice(beast_list)
