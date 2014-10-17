@@ -108,6 +108,17 @@ class TurnEndAction(ReplayAction):
         pass
 
 
+class TurnStartAction(ReplayAction):
+    def __init__(self, game=None):
+        pass
+
+    def to_output_string(self):
+        return 'start()'
+
+    def play(self, game):
+        pass
+
+
 class ConcedeAction(ReplayAction):
     def __init__(self):
         pass
@@ -137,10 +148,6 @@ class Replay:
 
     def record_random(self, result):
         self.random_numbers.append(result)
-
-    def record_turn_end(self):
-        self._save_played_card()
-        self.actions.append(TurnEndAction())
 
     def _save_played_card(self):
         if self.last_card is not None:
@@ -265,6 +272,8 @@ class Replay:
                     self.actions.append(PowerAction(args[0]))
             elif action == 'end':
                 self.actions.append(TurnEndAction())
+            elif action == 'start':
+                self.actions.append(TurnStartAction())
             elif action == 'random':
                 if len(self.random_numbers) > 0:
                     raise ReplayException("Only one random number list per file")
@@ -340,7 +349,6 @@ class RecordingGame(hearthbreaker.game_objects.Game):
         self.bind("kept_cards", self.replay.record_kept_index)
 
         for player in self.players:
-            player.bind("turn_ended", self.replay.record_turn_end,)
             player.bind("used_power", self.replay.record_power)
             player.hero.bind("found_power_target", self.replay.record_power_target)
             player.bind("card_played", self.replay.record_card_played)
@@ -356,6 +364,15 @@ class RecordingGame(hearthbreaker.game_objects.Game):
         result = super()._generate_random_between(lowest, highest)
         self.replay.record_random(result)
         return result
+
+    def _end_turn(self):
+        self.replay._save_played_card()
+        self.replay.actions.append(TurnEndAction())
+        super()._end_turn()
+
+    def _start_turn(self):
+        self.replay.actions.append(TurnStartAction())
+        super()._start_turn()
 
 
 class SavedGame(hearthbreaker.game_objects.Game):
