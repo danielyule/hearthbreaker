@@ -6,7 +6,9 @@ keep(0,1,3)
 start()
  summon( 0,0) ;p1
  end( )
+ start()
 end( )
+start()
 end()
 start()
 play(0,p1:0) ; p2

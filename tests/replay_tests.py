@@ -1,6 +1,7 @@
 import unittest
 from io import StringIO
 from os import listdir
+from os.path import isdir
 import re
 import random
 
@@ -21,17 +22,29 @@ class TestReplay(unittest.TestCase):
             return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
         self.maxDiff = None
-        for rfile in filter(lambda file: re.compile(r'.*\.rep$').match(file), listdir("tests/replays")):
+        file_match = re.compile(r'.*\.rep$')
+        files = []
+
+        def get_files_from(folder_name):
+            for file in listdir(folder_name):
+                if file_match.match(file):
+                    files.append(folder_name + "/" + file)
+                elif isdir(folder_name + "/" + file):
+                    get_files_from(folder_name + "/" + file)
+
+        get_files_from("tests/replays")
+
+        for rfile in files:
             replay = Replay()
-            replay.parse_replay("tests/replays/" + rfile)
+            replay.parse_replay(rfile)
             output = StringIO()
             replay.write_replay(output)
-            f = open("tests/replays/" + rfile, 'r')
+            f = open(rfile, 'r')
             file_string = f.read()
             f.close()
             file_string = "\n".join(map(process_line, file_string.split("\n")))
 
-            self.assertEqual(output.getvalue(), file_string)
+            self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
 
     def test_loading_game(self):
         game = SavedGame("tests/replays/example.rep")
@@ -82,6 +95,7 @@ class TestReplay(unittest.TestCase):
         game.replay.write_replay(output)
         random.seed(4879)
         new_game = SavedGame(StringIO(output.getvalue()))
+        new_game.pre_game()
         for turn in range(0, 17):
             new_game.play_single_turn()
 

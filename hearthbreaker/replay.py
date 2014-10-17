@@ -14,12 +14,17 @@ class ReplayException(Exception):
 
 
 class ReplayAction:
+    def __init__(self):
+        super().__init__()
+        self.random_numbers = []
+
     def play(self, game):
         pass
 
 
 class SpellAction(ReplayAction):
-    def __init__(self, card, target=None, game=None):
+    def __init__(self, card, target=None):
+        super().__init__()
         self.card = card
         if target is not None:
             self.target = hearthbreaker.proxies.ProxyCharacter(target)
@@ -39,7 +44,8 @@ class SpellAction(ReplayAction):
 
 
 class MinionAction(ReplayAction):
-    def __init__(self, card, index, target=None, game=None):
+    def __init__(self, card, index, target=None):
+        super().__init__()
         self.card = card
         self.index = index
         if target is not None:
@@ -62,7 +68,8 @@ class MinionAction(ReplayAction):
 
 
 class AttackAction(ReplayAction):
-    def __init__(self, character, target, game=None):
+    def __init__(self, character, target):
+        super().__init__()
         self.character = hearthbreaker.proxies.ProxyCharacter(character)
         self.target = hearthbreaker.proxies.ProxyCharacter(target)
 
@@ -76,13 +83,13 @@ class AttackAction(ReplayAction):
 
 
 class PowerAction(ReplayAction):
-    def __init__(self, target=None, game=None):
+    def __init__(self, target=None):
+        super().__init__()
         self.target = target
         if target is not None:
             self.target = hearthbreaker.proxies.ProxyCharacter(target)
         else:
             self.target = None
-        self.game = game
 
     def to_output_string(self):
         if self.target is not None:
@@ -98,7 +105,8 @@ class PowerAction(ReplayAction):
 
 
 class TurnEndAction(ReplayAction):
-    def __init__(self, game=None):
+    def __init__(self):
+        super().__init__()
         pass
 
     def to_output_string(self):
@@ -109,7 +117,8 @@ class TurnEndAction(ReplayAction):
 
 
 class TurnStartAction(ReplayAction):
-    def __init__(self, game=None):
+    def __init__(self):
+        super().__init__()
         pass
 
     def to_output_string(self):
@@ -121,6 +130,7 @@ class TurnStartAction(ReplayAction):
 
 class ConcedeAction(ReplayAction):
     def __init__(self):
+        super().__init__()
         pass
 
     def to_output_string(self):
@@ -134,45 +144,47 @@ class ConcedeAction(ReplayAction):
 class Replay:
     def __init__(self):
         self.actions = []
-        self.random_numbers = []
         self.last_card = None
         self.card_class = None
         self.last_target = None
         self.last_index = None
-        self.game = None
         self.decks = []
         self.keeps = []
+        self.header_random = []
 
     def save_decks(self, deck1, deck2):
         self.decks = [deck1, deck2]
 
     def record_random(self, result):
-        self.random_numbers.append(result)
+        if len(self.actions) > 0:
+            self.actions[-1].random_numbers.append(result)
+        else:
+            self.header_random.append(result)
 
     def _save_played_card(self):
         if self.last_card is not None:
             if issubclass(self.card_class, hearthbreaker.game_objects.MinionCard):
                 if self.last_card.targetable:
-                    self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target, self.game))
+                    self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target))
                     self.last_card = None
                     self.last_index = None
                     self.last_target = None
                 else:
-                    self.actions.append(MinionAction(self.last_card, self.last_index, game=self.game))
+                    self.actions.append(MinionAction(self.last_card, self.last_index))
                     self.last_card = None
                     self.last_index = None
             else:
                 if self.last_card.targetable:
-                    self.actions.append(SpellAction(self.last_card, self.last_target, self.game))
+                    self.actions.append(SpellAction(self.last_card, self.last_target))
                     self.last_card = None
                     self.last_target = None
                 else:
-                    self.actions.append(SpellAction(self.last_card, game=self.game))
+                    self.actions.append(SpellAction(self.last_card))
                     self.last_card = None
 
     def record_card_played(self, card, index):
         self._save_played_card()
-        self.last_card = hearthbreaker.proxies.ProxyCard(index, self.game)
+        self.last_card = hearthbreaker.proxies.ProxyCard(index)
         self.last_card.targetable = card.targetable
         self.card_class = type(card)
 
@@ -181,11 +193,11 @@ class Replay:
 
     def record_attack(self, attacker, target):
         self._save_played_card()
-        self.actions.append(AttackAction(attacker, target, target.player.game))
+        self.actions.append(AttackAction(attacker, target))
 
     def record_power(self):
         self._save_played_card()
-        self.actions.append(PowerAction(game=self.game))
+        self.actions.append(PowerAction())
 
     def record_power_target(self, target):
         self.actions[len(self.actions) - 1].target = hearthbreaker.proxies.ProxyCharacter(target)
@@ -222,12 +234,19 @@ class Replay:
             writer.write(",")
             writer.write(",".join([card.name for card in shorten_deck(deck.cards)]))
             writer.write(")\n")
-
-        if self.random_numbers.count(0) == len(self.random_numbers):
+        found_random = False
+        if self.header_random.count(0) == len(self.header_random):
+            for action in self.actions:
+                if action.random_numbers.count(0) != len(action.random_numbers):
+                    found_random = True
+                    break
+        else:
+            found_random = True
+        if not found_random:
             writer.write("random()\n")
         else:
             writer.write("random(")
-            writer.write(",".join([str(num) for num in self.random_numbers]))
+            writer.write(",".join([str(num) for num in self.header_random]))
             writer.write(")\n")
 
         for keep in self.keeps:
@@ -237,6 +256,10 @@ class Replay:
 
         for action in self.actions:
             writer.write(action.to_output_string() + "\n")
+            if len(action.random_numbers) > 0:
+                writer.write("random(")
+                writer.write(",".join([str(num) for num in action.random_numbers]))
+                writer.write(")\n")
 
     def parse_replay(self, replayfile):
 
@@ -275,15 +298,17 @@ class Replay:
             elif action == 'start':
                 self.actions.append(TurnStartAction())
             elif action == 'random':
-                if len(self.random_numbers) > 0:
-                    raise ReplayException("Only one random number list per file")
-                self.random_numbers = []
-                if len(args[0]) > 0:
+                if len(self.actions) == 0:
+                    if len(args[0]) > 0:
+                        for num in args:
+                            self.header_random.append(int(num))
+
+                else:
                     for num in args:
                         if num.isdigit():
-                            self.random_numbers.append(int(num))
+                            self.actions[-1].random_numbers.append(int(num))
                         else:
-                            self.random_numbers.append(hearthbreaker.proxies.ProxyCharacter(num))
+                            self.actions[-1].random_numbers.append(hearthbreaker.proxies.ProxyCharacter(num))
 
             elif action == 'deck':
                 if len(self.decks) > 1:
@@ -338,7 +363,6 @@ class RecordingGame(hearthbreaker.game_objects.Game):
                 setattr(self.__getattribute__("agent"), key, value)
 
         self.replay = hearthbreaker.replay.Replay()
-        self.replay.game = self
         agents = [RecordingAgent(agents[0]), RecordingAgent(agents[1])]
 
         super().__init__(decks, agents)
@@ -357,7 +381,7 @@ class RecordingGame(hearthbreaker.game_objects.Game):
     def random_choice(self, choice):
         result = super().random_choice(choice)
         if isinstance(result, hearthbreaker.game_objects.Character):
-            self.replay.random_numbers[-1] = hearthbreaker.proxies.ProxyCharacter(result)
+            self.replay.actions[-1].random_numbers[-1] = hearthbreaker.proxies.ProxyCharacter(result)
         return result
 
     def _generate_random_between(self, lowest, highest):
@@ -381,7 +405,7 @@ class SavedGame(hearthbreaker.game_objects.Game):
         replay = Replay()
         replay.parse_replay(replay_file)
 
-        action_index = 0
+        self.action_index = -1
         random_index = 0
         game_ref = self
         k_index = 0
@@ -410,13 +434,11 @@ class SavedGame(hearthbreaker.game_objects.Game):
                 return keep_arr
 
             def do_turn(self, player):
-                nonlocal action_index
-                while action_index < len(replay.actions) and not player.hero.dead and type(
-                        replay.actions[action_index]) is not hearthbreaker.replay.TurnEndAction:
-                    replay.actions[action_index].play(game_ref)
-                    action_index += 1
-
-                action_index += 1
+                while game_ref.action_index < len(replay.actions) and not player.hero.dead and type(
+                        replay.actions[game_ref.action_index]) is not hearthbreaker.replay.TurnEndAction:
+                    game_ref.random_index = 0
+                    replay.actions[game_ref.action_index].play(game_ref)
+                    game_ref.action_index += 1
 
             def set_game(self, game):
                 pass
@@ -435,15 +457,32 @@ class SavedGame(hearthbreaker.game_objects.Game):
         super().__init__(replay.decks, [ReplayAgent(), ReplayAgent()])
 
     def _generate_random_between(self, lowest, highest):
-        if len(self.replay.random_numbers) == 0:
+        if len(self.replay.header_random) == 0:
             return 0
         else:
             self.random_index += 1
-            return self.replay.random_numbers[self.random_index - 1]
+            if self.action_index == -1:
+                return self.replay.header_random[self.random_index - 1]
+            return self.replay.actions[self.action_index].random_numbers[self.random_index - 1]
 
     def random_choice(self, choice):
-        if isinstance(self.replay.random_numbers[self.random_index], hearthbreaker.proxies.ProxyCharacter):
-            result = self.replay.random_numbers[self.random_index].resolve(self)
+        if isinstance(self.replay.actions[self.action_index].random_numbers[self.random_index],
+                      hearthbreaker.proxies.ProxyCharacter):
+            result = self.replay.actions[self.action_index].random_numbers[self.random_index].resolve(self)
             self.random_index += 1
             return result
         return super().random_choice(choice)
+
+    def _start_turn(self):
+        self.random_index = 0
+        super()._start_turn()
+        self.action_index += 1
+
+    def _end_turn(self):
+        self.random_index = 0
+        super()._end_turn()
+        self.action_index += 1
+
+    def pre_game(self):
+        super().pre_game()
+        self.action_index = 0

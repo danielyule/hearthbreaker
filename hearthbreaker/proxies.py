@@ -72,7 +72,7 @@ class TrackingProxyCharacter(ProxyCharacter):
 
 
 class ProxyCard:
-    def __init__(self, card_reference, game=None):
+    def __init__(self, card_reference):
         self.card_ref = -1
         if isinstance(card_reference, str):
             self.card_ref = card_reference

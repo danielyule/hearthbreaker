@@ -1,6 +1,8 @@
 deck(Druid, Druid of the Claw)
 deck(Druid, Druid of the Claw)
 random()
+keep(0,1,2)
+keep(0,1,2,3)
 start()
 end()
 start()

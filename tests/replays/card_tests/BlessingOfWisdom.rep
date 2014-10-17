@@ -1,6 +1,8 @@
 deck(Paladin, Blessing of Wisdom)
 deck(Priest, Stonetusk Boar, Stonetusk Boar, Ironbeak Owl)
 random()
+keep(0,1,2)
+keep(0,1,2,3)
 start()
 end()
 start()

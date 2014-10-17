@@ -1,6 +1,8 @@
 deck(Paladin, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Noble Sacrifice)
 deck(Priest, Stonetusk Boar)
 random()
+keep(0,1,2)
+keep(0,1,2,3)
 start()
 summon(0, 0)
 end()

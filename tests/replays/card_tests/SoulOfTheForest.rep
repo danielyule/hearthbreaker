@@ -1,6 +1,8 @@
 deck(Druid, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Soul of the Forest)
 deck(Priest, Stonetusk Boar, Ironbeak Owl)
 random()
+keep(0,1,2)
+keep(0,1,2,3)
 start()
 summon(0,0)
 end()

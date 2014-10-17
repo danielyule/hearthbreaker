@@ -1,6 +1,8 @@
 deck(Priest, Shadowform)
 deck(Priest, Stonetusk Boar)
 random()
+keep(0,1,2)
+keep(0,1,2,3)
 start()
 end()
 start()
