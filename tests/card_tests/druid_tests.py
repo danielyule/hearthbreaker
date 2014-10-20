@@ -285,7 +285,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
     def test_SoulOfTheForest(self):
-        game = SavedGame("tests/replays/card_tests/SoulOfTheForest.rep")
+        game = SavedGame("tests/replays/card_tests/SoulOfTheForest.hsreplay")
         game.start()
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[1].calculate_attack())

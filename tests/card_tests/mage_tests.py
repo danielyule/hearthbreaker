@@ -38,7 +38,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
-        game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
+        game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.hsreplay")
         game.start()
 
         self.assertEqual(1, len(game.current_player.minions))
