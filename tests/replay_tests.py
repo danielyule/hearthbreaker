@@ -1,3 +1,4 @@
+import json
 import unittest
 from io import StringIO
 from os import listdir
@@ -14,14 +15,11 @@ from tests.agents.testing_agents import PredictableAgentWithoutHeroPower, Minion
 
 
 class TestReplay(unittest.TestCase):
-    def test_reading_and_writing(self):
-        def process_line(line):
-            line = re.sub(r'\s*,\s*', ',', line)
-            line = re.sub(r'\s*\(\s*', '(', line)
-            line = re.sub(r'\s+\)', ')', line)
-            return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
-        self.maxDiff = None
+    def __compare_json(self, json1, json2):
+        return json.loads(json1) == json.loads(json2)
+
+    def test_reading_and_writing(self):
         file_match = re.compile(r'.*\.rep$')
         files = []
 
@@ -36,18 +34,17 @@ class TestReplay(unittest.TestCase):
 
         for rfile in files:
             replay = Replay()
-            replay.parse_replay(rfile)
+            replay.read_replay_json(rfile)
             output = StringIO()
-            replay.write_replay(output)
+            replay.write_replay_json(output)
             f = open(rfile, 'r')
             file_string = f.read()
             f.close()
-            file_string = "\n".join(map(process_line, file_string.split("\n")))
 
             self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
 
     def test_loading_game(self):
-        game = SavedGame("tests/replays/example.rep")
+        game = SavedGame("tests/replays/example.hsreplay")
 
         game.start()
 
@@ -67,14 +64,16 @@ class TestReplay(unittest.TestCase):
         game = RecordingGame([deck1, deck2], [agent1, agent2])
         game.start()
         output = StringIO()
-        game.replay.write_replay(output)
-        f = open("tests/replays/stonetusk_innervate.rep", 'r')
-        self.assertEqual(output.getvalue(), f.read())
+        game.replay.write_replay_json(output)
+        f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
+        dif = self.__compare_json(output.getvalue(), f.read())
+        self.assertTrue(dif)
         f.close()
 
     def test_option_replay(self):
-        game = SavedGame("tests/replays/stonetusk_power.rep")
+        game = SavedGame("tests/replays/stonetusk_power.hsreplay")
         game.start()
+        self.assertEqual(1, len(game.other_player.minions))
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")
         self.assertEqual(panther.health, 3)
@@ -92,7 +91,7 @@ class TestReplay(unittest.TestCase):
             game.play_single_turn()
 
         output = StringIO()
-        game.replay.write_replay(output)
+        game.replay.write_replay_json(output)
         random.seed(4879)
         new_game = SavedGame(StringIO(output.getvalue()))
         new_game.pre_game()
@@ -102,3 +101,25 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(2, len(new_game.current_player.minions))
         self.assertEqual(30, new_game.other_player.hero.health)
         self.assertEqual(5, len(new_game.other_player.minions))
+
+    def test_json_saving(self):
+        self.maxDiff = 6000
+        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        agent1 = PredictableAgentWithoutHeroPower()
+        agent2 = MinionPlayingAgent()
+        random.seed(4879)
+        game = RecordingGame([deck1, deck2], [agent1, agent2])
+        game.pre_game()
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        output = StringIO()
+        game.replay.write_replay_json(output)
+        inp = StringIO(output.getvalue())
+        new_replay = Replay.__new__(Replay)
+        new_replay.read_replay_json(inp)
+        old_output = output.getvalue()
+        other_output = StringIO()
+        new_replay.write_replay_json(other_output)
+        self.assertEqual(other_output.getvalue(), old_output)
