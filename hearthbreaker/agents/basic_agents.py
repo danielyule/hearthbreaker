@@ -1,9 +1,33 @@
+import abc
 import copy
 
 import random
 
 
-class DoNothingBot:
+class Agent(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def do_card_check(self, cards):
+        pass
+
+    @abc.abstractmethod
+    def do_turn(self, player):
+        pass
+
+    @abc.abstractmethod
+    def choose_target(self, targets):
+        pass
+
+    @abc.abstractmethod
+    def choose_index(self, card, player):
+        pass
+
+    @abc.abstractmethod
+    def choose_option(self, *options):
+        pass
+
+
+class DoNothingAgent(Agent):
     def __init__(self):
         self.game = None
 
@@ -23,7 +47,7 @@ class DoNothingBot:
         return options[0]
 
 
-class PredictableBot:
+class PredictableAgent(Agent):
     def do_card_check(self, cards):
         return [True, True, True, True]
 
@@ -58,7 +82,7 @@ class PredictableBot:
         return options[0]
 
 
-class RandomAgent(DoNothingBot):
+class RandomAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()
 

@@ -1,4 +1,4 @@
-# from hearthbreaker.agents.basic_agents import RandomAgent
+from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.agents.trade.possible_play import PlayMixin
 from hearthbreaker.agents.trade.trade import TradeMixin, AttackMixin
 from hearthbreaker.agents.trade.util import Util
@@ -125,7 +125,7 @@ class NullCard:
         return None
 
 
-class TradeAgent(TradeMixin, AttackMixin, PlayMixin, ChooseTargetMixin):
+class TradeAgent(TradeMixin, AttackMixin, PlayMixin, ChooseTargetMixin, DoNothingAgent):
     def __init__(self):
         super().__init__()
         self.current_trade = None

@@ -2,10 +2,10 @@ import unittest
 import csv
 import re
 
-from hearthbreaker.agents.basic_agents import DoNothingBot
+from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
 from hearthbreaker.game_objects import card_lookup
-from tests.agents.testing_agents import PredictableAgentWithoutHeroPower
+from tests.agents.testing_agents import PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -13,7 +13,7 @@ from hearthbreaker.cards import *
 class CardTest(unittest.TestCase):
     # Make sure that the cards have been initialized correctly based on the data in cards.csv
     def test_all_cards(self):
-        fake_game = generate_game_for(StonetuskBoar, StonetuskBoar, DoNothingBot, DoNothingBot)
+        fake_game = generate_game_for(StonetuskBoar, StonetuskBoar, DoNothingAgent, DoNothingAgent)
         overload_re = re.compile("Overload: \((\\d)\)")
         spell_damage_re = re.compile("Spell Damage \\+(\\d)")
         battlecry_re = re.compile("Battlecry: .*")
@@ -81,7 +81,7 @@ class CardTest(unittest.TestCase):
             for row in reader:
                 if row["Implemented?"] == "yes":
                     card = card_lookup(row["Name"])
-                    game = generate_game_for(type(card), StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+                    game = generate_game_for(type(card), StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
 
                     while not game.game_ended:
                         game.play_single_turn()

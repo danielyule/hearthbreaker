@@ -7,11 +7,11 @@ import re
 import random
 
 from hearthbreaker.replay import Replay, RecordingGame, SavedGame
-from hearthbreaker.agents.basic_agents import PredictableBot
+from hearthbreaker.agents.basic_agents import PredictableAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.cards import *
 import hearthbreaker.game_objects
-from tests.agents.testing_agents import PredictableAgentWithoutHeroPower, MinionPlayingAgent
+from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent
 
 
 class TestReplay(unittest.TestCase):
@@ -59,8 +59,8 @@ class TestReplay(unittest.TestCase):
         random.seed(9876)
         deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
         deck2 = hearthbreaker.game_objects.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
-        agent1 = PredictableBot()
-        agent2 = PredictableBot()
+        agent1 = PredictableAgent()
+        agent2 = PredictableAgent()
         game = RecordingGame([deck1, deck2], [agent1, agent2])
         game.start()
         output = StringIO()
@@ -83,8 +83,8 @@ class TestReplay(unittest.TestCase):
     def test_random_character_saving(self):
         deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
         deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
-        agent1 = PredictableAgentWithoutHeroPower()
-        agent2 = MinionPlayingAgent()
+        agent1 = PlayAndAttackAgent()
+        agent2 = OneCardPlayingAgent()
         random.seed(4879)
         game = RecordingGame([deck1, deck2], [agent1, agent2])
         for turn in range(0, 17):
@@ -106,8 +106,8 @@ class TestReplay(unittest.TestCase):
         self.maxDiff = 6000
         deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
         deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
-        agent1 = PredictableAgentWithoutHeroPower()
-        agent2 = MinionPlayingAgent()
+        agent1 = PlayAndAttackAgent()
+        agent2 = OneCardPlayingAgent()
         random.seed(4879)
         game = RecordingGame([deck1, deck2], [agent1, agent2])
         game.pre_game()
