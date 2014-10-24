@@ -10,4 +10,4 @@ Wild growth should be used at 10 mana to get the excess mana card
 Once Sap or Frozen trap is a card, any spell cards which summon minions should be tested
 Nourish should be tested at 10 mana with the choosing mana option
 StackedDeck is never run to Fatigue
-PredictableBot is never asked to choose an option
+PredictableAgent is never asked to choose an option

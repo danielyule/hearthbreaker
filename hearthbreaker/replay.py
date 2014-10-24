@@ -8,330 +8,13 @@ import hearthbreaker.game_objects
 import hearthbreaker.cards
 import hearthbreaker.game_objects
 import hearthbreaker.proxies
+from hearthbreaker.serialization.move import Move, SpellMove, MinionMove, AttackMove, PowerMove, TurnEndMove, \
+    TurnStartMove, ConcedeMove
 
 
 class ReplayException(Exception):
     def __init__(self, message):
         super().__init__(message)
-
-
-class ReplayAction:
-    def __init__(self):
-        super().__init__()
-        self.random_numbers = []
-
-    def play(self, game):
-        pass
-
-    @staticmethod
-    def from_json(name, random, **json):
-        cls = None
-        if name == 'play':
-            cls = PlayAction
-        elif name == 'attack':
-            cls = AttackAction
-        elif name == 'power':
-            cls = PowerAction
-        elif name == 'end':
-            cls = TurnEndAction
-        elif name == 'start':
-            cls = TurnStartAction
-        elif name == 'concede':
-            cls = ConcedeAction
-
-        obj = cls.__new__(cls)
-        cls.__from_json__(obj, **json)
-        obj.random_numbers = []
-        for num in random:
-            if isinstance(num, dict):
-                obj.random_numbers.append(hearthbreaker.proxies.ProxyCharacter.from_json(**num))
-            else:
-                obj.random_numbers.append(num)
-        return obj
-
-    def __to_json__(self):
-        pass
-
-
-class PlayAction(ReplayAction):
-    def __init__(self, card, index, target=None):
-        super().__init__()
-        self.card = card
-        self.index = index
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
-        return 'summon({0},{1})'.format(self.card.to_output(), self.index)
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-
-        game.current_player.agent.next_index = self.index
-        game.play_card(self.card.resolve(game))
-        game.current_player.agent.nextIndex = -1
-
-    def __to_json__(self):
-        if self.target is not None:
-            if self.index > -1:
-                return {
-                    'name': 'play',
-                    'card': self.card,
-                    'index': self.index,
-                    'target': self.target,
-                    'random': self.random_numbers,
-                }
-            else:
-                return {
-                    'name': 'play',
-                    'card': self.card,
-                    'target': self.target,
-                    'random': self.random_numbers,
-                }
-        else:
-            if self.index > -1:
-                return {
-                    'name': 'play',
-                    'card': self.card,
-                    'index': self.index,
-                    'random': self.random_numbers,
-                }
-            else:
-                return {
-                    'name': 'play',
-                    'card': self.card,
-                    'random': self.random_numbers,
-                }
-
-    def __from_json__(self, card, index=-1, target=None):
-        self.card = hearthbreaker.proxies.ProxyCard.from_json(**card)
-        self.index = index
-        if target:
-            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
-        else:
-            self.target = None
-
-
-class SpellAction(ReplayAction):
-    def __init__(self, card, target=None):
-        super().__init__()
-        self.card = card
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-        game.play_card(self.card.resolve(game))
-        game.current_player.agent.next_target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'play({0},{1})'.format(self.card.to_output(), self.target.to_output())
-        return 'play({0})'.format(self.card.to_output())
-
-    def __to_json__(self):
-        if self.target is not None:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'target': self.target,
-                'random': self.random_numbers,
-            }
-        else:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'random': self.random_numbers,
-            }
-
-    def __from_json__(self, card, target=None):
-        self.card = hearthbreaker.proxies.ProxyCard(card)
-        if target:
-            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(target)
-        else:
-            self.target = None
-
-
-class MinionAction(ReplayAction):
-    def __init__(self, card, index, target=None):
-        super().__init__()
-        self.card = card
-        self.index = index
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
-        return 'summon({0},{1})'.format(self.card.to_output(), self.index)
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-
-        game.current_player.agent.next_index = self.index
-        game.play_card(self.card.resolve(game))
-        game.current_player.agent.nextIndex = -1
-
-    def __to_json__(self):
-        if self.target is not None:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'index': self.index,
-                'target': self.target,
-                'random': self.random_numbers,
-            }
-        else:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'index': self.index,
-                'random': self.random_numbers,
-            }
-
-    def __from_json__(self, card, index, target=None):
-        self.card = hearthbreaker.proxies.ProxyCard(card)
-        self.index = index
-        if target:
-            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
-
-
-class AttackAction(ReplayAction):
-    def __init__(self, character, target):
-        super().__init__()
-        self.character = hearthbreaker.proxies.ProxyCharacter(character)
-        self.target = hearthbreaker.proxies.ProxyCharacter(target)
-
-    def to_output_string(self):
-        return 'attack({0},{1})'.format(self.character.to_output(), self.target.to_output())
-
-    def play(self, game):
-        game.current_player.agent.next_target = self.target.resolve(game)
-        self.character.resolve(game).attack()
-        game.current_player.agent.next_target = None
-
-    def __to_json__(self):
-        return {
-            'name': 'attack',
-            'character': self.character,
-            'target': self.target,
-            'random': self.random_numbers,
-        }
-
-    def __from_json__(self, character, target):
-        self.character = hearthbreaker.proxies.ProxyCharacter.from_json(**character)
-        self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
-
-
-class PowerAction(ReplayAction):
-    def __init__(self, target=None):
-        super().__init__()
-        self.target = target
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'power({0})'.format(self.target.to_output())
-        else:
-            return 'power()'
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-        game.current_player.hero.power.use()
-        game.current_player.agent.next_target = None
-
-    def __to_json__(self):
-        if self.target:
-            return {
-                'name': 'power',
-                'target': self.target,
-                'random': self.random_numbers,
-            }
-        else:
-            return {
-                'name': 'power',
-                'random': self.random_numbers,
-            }
-
-    def __from_json__(self, target):
-        self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
-
-
-class TurnEndAction(ReplayAction):
-    def __init__(self):
-        super().__init__()
-        pass
-
-    def to_output_string(self):
-        return 'end()'
-
-    def play(self, game):
-        pass
-
-    def __to_json__(self):
-        return {
-            'name': 'end',
-            'random': self.random_numbers,
-        }
-
-    def __from_json__(self):
-        pass
-
-
-class TurnStartAction(ReplayAction):
-    def __init__(self):
-        super().__init__()
-
-    def to_output_string(self):
-        return 'start()'
-
-    def play(self, game):
-        pass
-
-    def __to_json__(self):
-        return {
-            'name': 'start',
-            'random': self.random_numbers,
-        }
-
-    def __from_json__(self):
-        pass
-
-
-class ConcedeAction(ReplayAction):
-    def __init__(self):
-        super().__init__()
-
-    def to_output_string(self):
-        return "concede()"
-
-    def play(self, game):
-        game.current_player.hero.die(None)
-        game.current_player.hero.activate_delayed()
-
-    def __to_json__(self):
-        return {
-            'name': 'concede',
-            'random': self.random_numbers,
-        }
-
-    def __from_json__(self):
-        pass
 
 
 class Replay:
@@ -358,21 +41,21 @@ class Replay:
         if self.last_card is not None:
             if issubclass(self.card_class, hearthbreaker.game_objects.MinionCard):
                 if self.last_card.targetable:
-                    self.actions.append(MinionAction(self.last_card, self.last_index, self.last_target))
+                    self.actions.append(MinionMove(self.last_card, self.last_index, self.last_target))
                     self.last_card = None
                     self.last_index = None
                     self.last_target = None
                 else:
-                    self.actions.append(MinionAction(self.last_card, self.last_index))
+                    self.actions.append(MinionMove(self.last_card, self.last_index))
                     self.last_card = None
                     self.last_index = None
             else:
                 if self.last_card.targetable:
-                    self.actions.append(SpellAction(self.last_card, self.last_target))
+                    self.actions.append(SpellMove(self.last_card, self.last_target))
                     self.last_card = None
                     self.last_target = None
                 else:
-                    self.actions.append(SpellAction(self.last_card))
+                    self.actions.append(SpellMove(self.last_card))
                     self.last_card = None
 
     def record_card_played(self, card, index):
@@ -386,11 +69,11 @@ class Replay:
 
     def record_attack(self, attacker, target):
         self._save_played_card()
-        self.actions.append(AttackAction(attacker, target))
+        self.actions.append(AttackMove(attacker, target))
 
     def record_power(self):
         self._save_played_card()
-        self.actions.append(PowerAction())
+        self.actions.append(PowerMove())
 
     def record_power_target(self, target):
         self.actions[len(self.actions) - 1].target = hearthbreaker.proxies.ProxyCharacter(target)
@@ -489,7 +172,7 @@ class Replay:
         self.keeps = jd['header']['keep']
         if len(self.keeps) == 0:
             self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
-        self.actions = [ReplayAction.from_json(**js) for js in jd['actions']]
+        self.actions = [Move.from_json(**js) for js in jd['actions']]
 
     def parse_replay(self, replayfile):
 
@@ -505,7 +188,7 @@ class Replay:
                     target = args[1]
                 else:
                     target = None
-                self.actions.append(SpellAction(hearthbreaker.proxies.ProxyCard(card), target))
+                self.actions.append(SpellMove(hearthbreaker.proxies.ProxyCard(card), target))
 
             elif action == 'summon':
                 card = args[0]
@@ -517,18 +200,18 @@ class Replay:
                 else:
                     target = None
 
-                self.actions.append(MinionAction(hearthbreaker.proxies.ProxyCard(card), index, target))
+                self.actions.append(MinionMove(hearthbreaker.proxies.ProxyCard(card), index, target))
             elif action == 'attack':
-                self.actions.append(AttackAction(args[0], args[1]))
+                self.actions.append(AttackMove(args[0], args[1]))
             elif action == 'power':
                 if len(args) > 0 and args[0] != '':
-                    self.actions.append(PowerAction(args[0]))
+                    self.actions.append(PowerMove(args[0]))
                 else:
-                    self.actions.append(PowerAction())
+                    self.actions.append(PowerMove())
             elif action == 'end':
-                self.actions.append(TurnEndAction())
+                self.actions.append(TurnEndMove())
             elif action == 'start':
-                self.actions.append(TurnStartAction())
+                self.actions.append(TurnStartMove())
             elif action == 'random':
                 if len(self.actions) == 0:
                     if len(args[0]) > 0:
@@ -556,7 +239,7 @@ class Replay:
                 self.keeps.append([int(a) for a in args])
 
             elif action == 'concede':
-                self.actions.append(ConcedeAction())
+                self.actions.append(ConcedeMove())
         replayfile.close()
         if len(self.keeps) is 0:
             self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
@@ -623,11 +306,11 @@ class RecordingGame(hearthbreaker.game_objects.Game):
 
     def _end_turn(self):
         self.replay._save_played_card()
-        self.replay.actions.append(TurnEndAction())
+        self.replay.actions.append(TurnEndMove())
         super()._end_turn()
 
     def _start_turn(self):
-        self.replay.actions.append(TurnStartAction())
+        self.replay.actions.append(TurnStartMove())
         super()._start_turn()
 
 
@@ -658,7 +341,7 @@ class SavedGame(hearthbreaker.game_objects.Game):
 
             def do_turn(self, player):
                 while game_ref.action_index < len(replay.actions) and not player.hero.dead and type(
-                        replay.actions[game_ref.action_index]) is not hearthbreaker.replay.TurnEndAction:
+                        replay.actions[game_ref.action_index]) is not hearthbreaker.serialization.move.TurnEndMove:
                     game_ref.random_index = 0
                     replay.actions[game_ref.action_index].play(game_ref)
                     game_ref.action_index += 1
