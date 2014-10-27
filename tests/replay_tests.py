@@ -5,8 +5,9 @@ from os import listdir
 from os.path import isdir
 import re
 import random
+from hearthbreaker.game_objects import Game
 
-from hearthbreaker.replay import Replay, RecordingGame, SavedGame
+from hearthbreaker.replay import Replay, record, playback
 from hearthbreaker.agents.basic_agents import PredictableAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.cards import *
@@ -44,7 +45,7 @@ class TestReplay(unittest.TestCase):
             self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
 
     def test_loading_game(self):
-        game = SavedGame("tests/replays/example.hsreplay")
+        game = playback(Replay("tests/replays/example.hsreplay"))
 
         game.start()
 
@@ -61,17 +62,19 @@ class TestReplay(unittest.TestCase):
         deck2 = hearthbreaker.game_objects.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
         agent1 = PredictableAgent()
         agent2 = PredictableAgent()
-        game = RecordingGame([deck1, deck2], [agent1, agent2])
+
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
         game.start()
         output = StringIO()
-        game.replay.write_replay_json(output)
+        replay.write_replay_json(output)
         f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
         dif = self.__compare_json(output.getvalue(), f.read())
         self.assertTrue(dif)
         f.close()
 
     def test_option_replay(self):
-        game = SavedGame("tests/replays/stonetusk_power.hsreplay")
+        game = playback(Replay("tests/replays/stonetusk_power.hsreplay"))
         game.start()
         self.assertEqual(1, len(game.other_player.minions))
         panther = game.other_player.minions[0]
@@ -86,14 +89,16 @@ class TestReplay(unittest.TestCase):
         agent1 = PlayAndAttackAgent()
         agent2 = OneCardPlayingAgent()
         random.seed(4879)
-        game = RecordingGame([deck1, deck2], [agent1, agent2])
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
+        game.pre_game()
         for turn in range(0, 17):
             game.play_single_turn()
 
         output = StringIO()
-        game.replay.write_replay_json(output)
+        replay.write_replay_json(output)
         random.seed(4879)
-        new_game = SavedGame(StringIO(output.getvalue()))
+        new_game = playback(Replay(StringIO(output.getvalue())))
         new_game.pre_game()
         for turn in range(0, 17):
             new_game.play_single_turn()
@@ -109,15 +114,16 @@ class TestReplay(unittest.TestCase):
         agent1 = PlayAndAttackAgent()
         agent2 = OneCardPlayingAgent()
         random.seed(4879)
-        game = RecordingGame([deck1, deck2], [agent1, agent2])
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
         game.pre_game()
         for turn in range(0, 17):
             game.play_single_turn()
 
         output = StringIO()
-        game.replay.write_replay_json(output)
+        replay.write_replay_json(output)
         inp = StringIO(output.getvalue())
-        new_replay = Replay.__new__(Replay)
+        new_replay = Replay()
         new_replay.read_replay_json(inp)
         old_output = output.getvalue()
         other_output = StringIO()

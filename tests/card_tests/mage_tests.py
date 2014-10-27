@@ -4,7 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.game_objects import Game
-from hearthbreaker.replay import SavedGame
+from hearthbreaker.replay import playback, Replay
 from tests.agents.testing_agents import SpellTestingAgent, OneCardPlayingAgent, EnemySpellTestingAgent, \
     MinionAttackingAgent
 from tests.testing_utils import generate_game_for, StackedDeck
@@ -38,7 +38,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
-        game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.hsreplay")
+        game = playback(Replay("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.hsreplay"))
         game.start()
 
         self.assertEqual(1, len(game.current_player.minions))
