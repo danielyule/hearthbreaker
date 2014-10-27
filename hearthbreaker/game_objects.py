@@ -1659,8 +1659,8 @@ class Game(Bindable):
     def __init__(self, decks, agents):
         super().__init__()
         self.delayed_minions = set()
-        first_player = self._generate_random_between(0, 1)
-        if first_player is 0:
+        self.first_player = self._generate_random_between(0, 1)
+        if self.first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
@@ -1672,11 +1672,7 @@ class Game(Bindable):
         self.other_player.opponent = self.current_player
         self.game_ended = False
         self.minion_counter = 0
-        for i in range(0, 3):
-            self.players[0].draw()
-
-        for i in range(0, 4):
-            self.players[1].draw()
+        self.__pre_game_run = False
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -1700,6 +1696,15 @@ class Game(Bindable):
             minion.activate_delayed()
 
     def pre_game(self):
+        if self.__pre_game_run:
+            return
+        self.__pre_game_run = True
+
+        for i in range(0, 3):
+            self.players[0].draw()
+
+        for i in range(0, 4):
+            self.players[1].draw()
         card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
         self.trigger("kept_cards", self.players[0].hand, card_keep_index)
         put_back_cards = []

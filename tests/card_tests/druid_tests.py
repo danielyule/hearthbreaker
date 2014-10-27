@@ -6,7 +6,7 @@ from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTesting
     EnemyMinionSpellTestingAgent, SpellTestingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game
-from hearthbreaker.replay import SavedGame
+from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hearthbreaker.cards import *
 
@@ -285,7 +285,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
     def test_SoulOfTheForest(self):
-        game = SavedGame("tests/replays/card_tests/SoulOfTheForest.hsreplay")
+        game = playback(Replay("tests/replays/card_tests/SoulOfTheForest.hsreplay"))
         game.start()
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[1].calculate_attack())

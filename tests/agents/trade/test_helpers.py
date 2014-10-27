@@ -2,9 +2,9 @@ import random
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.agents.trade_agent import TradeAgent
 from hearthbreaker.cards import WarGolem
-from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Deck, Game, MinionCard, Minion, TheCoin, Player
+from hearthbreaker.game_objects import Game, MinionCard, Minion, TheCoin, Player
 import re
+from tests.testing_utils import generate_game_for
 
 
 def t(self):
@@ -53,8 +53,8 @@ class FakeGame(Game):
         super(Game, self).__init__()
         self.delayed_minions = set()
         self.random_func = random_func
-        first_player = random_func(0, 1)
-        if first_player is 0:
+        self.first_player = random_func(0, 1)
+        if self.first_player is 0:
             play_order = [0, 1]
         else:
             play_order = [1, 0]
@@ -66,6 +66,7 @@ class FakeGame(Game):
         self.other_player.opponent = self.current_player
         self.game_ended = False
         self.minion_counter = 0
+        self.__pre_game_run = False
 
 
 class TestHelpers:
@@ -96,15 +97,4 @@ class TestHelpers:
         return [c for c in list]
 
     def make_game(self, before_draw_callback=None):
-        cs = [WarGolem() for i in range(0, 30)]
-        deck1 = Deck(self.list_copy(cs), CHARACTER_CLASS.DRUID)
-        deck2 = Deck(self.list_copy(cs), CHARACTER_CLASS.WARLOCK)
-
-        trade = TradeAgent()
-        r = RandomAgent()
-
-        game = FakeGame([deck2, deck1], [trade, r])
-        game.pre_game()
-        game.current_player = game.players[1]
-
-        return game
+        return generate_game_for(WarGolem, WarGolem, TradeAgent, RandomAgent)

@@ -6,7 +6,7 @@ from tests.agents.testing_agents import OneCardPlayingAgent, SpellTestingAgent, 
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game
 from tests.testing_utils import generate_game_for, StackedDeck
-from hearthbreaker.replay import SavedGame
+from hearthbreaker.replay import playback, Replay
 from hearthbreaker.cards import *
 
 
@@ -324,7 +324,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].minions))
 
         # Test using the hero power, then cast Shadowform and use the new power (this is possible)
-        game = SavedGame("tests/replays/card_tests/Shadowform.hsreplay")
+        game = playback(Replay("tests/replays/card_tests/Shadowform.hsreplay"))
         game.start()
         self.assertEqual(10, game.players[0].max_mana)
         self.assertEqual(3, game.players[0].mana)

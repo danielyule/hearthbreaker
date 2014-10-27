@@ -5,7 +5,7 @@ from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from tests.agents.testing_agents import OneCardPlayingAgent, SpellTestingAgent, EnemyMinionSpellTestingAgent, \
     PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
-from hearthbreaker.replay import SavedGame
+from hearthbreaker.replay import playback, Replay
 from hearthbreaker.cards import *
 
 
@@ -79,7 +79,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
     def test_BlessingOfWisdom(self):
-        game = SavedGame("tests/replays/card_tests/BlessingOfWisdom.hsreplay")
+        game = playback(Replay("tests/replays/card_tests/BlessingOfWisdom.hsreplay"))
         game.start()
         self.assertEqual(3, len(game.current_player.minions))
         # 7 cards have been drawn.
@@ -333,7 +333,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(29, game.players[0].hero.health)
 
         # Test with 7 minions
-        game = SavedGame("tests/replays/card_tests/NobleSacrifice.hsreplay")
+        game = playback(Replay("tests/replays/card_tests/NobleSacrifice.hsreplay"))
         game.start()
         self.assertEqual(7, len(game.players[0].minions))
         self.assertEqual(29, game.players[0].hero.health)
