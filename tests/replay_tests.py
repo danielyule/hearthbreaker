@@ -20,9 +20,15 @@ class TestReplay(unittest.TestCase):
     def __compare_json(self, json1, json2):
         return json.loads(json1) == json.loads(json2)
 
-    def test_reading_and_writing(self):
-        file_match = re.compile(r'.*\.rep$')
+    def test_reading_and_writing_compact(self):
+        file_match = re.compile(r'.*\.rep')
         files = []
+
+        def process_line(line):
+            line = re.sub(r'\s*,\s*', ',', line)
+            line = re.sub(r'\s*\(\s*', '(', line)
+            line = re.sub(r'\s+\)', ')', line)
+            return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
         def get_files_from(folder_name):
             for file in listdir(folder_name):
@@ -31,16 +37,53 @@ class TestReplay(unittest.TestCase):
                 elif isdir(folder_name + "/" + file):
                     get_files_from(folder_name + "/" + file)
 
-        get_files_from("tests/replays")
+        get_files_from("tests/replays/compact")
 
         for rfile in files:
             replay = Replay()
-            replay.read_replay_json(rfile)
+            replay.parse_replay(rfile)
             output = StringIO()
-            replay.write_replay_json(output)
+            replay.write_replay(output)
             f = open(rfile, 'r')
             file_string = f.read()
             f.close()
+            file_string = "\n".join(map(process_line, file_string.split("\n")))
+
+            self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
+
+    def test_compact_to_json_conversion(self):
+        file_match = re.compile(r'.*\.rep')
+        files = []
+
+        def process_line(line):
+            line = re.sub(r'\s*,\s*', ',', line)
+            line = re.sub(r'\s*\(\s*', '(', line)
+            line = re.sub(r'\s+\)', ')', line)
+            return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
+
+        def get_files_from(folder_name):
+            for file in listdir(folder_name):
+                if file_match.match(file):
+                    files.append(folder_name + "/" + file)
+                elif isdir(folder_name + "/" + file):
+                    get_files_from(folder_name + "/" + file)
+
+        get_files_from("tests/replays/compact")
+
+        for rfile in files:
+            replay = Replay()
+            replay.parse_replay(rfile)
+            json_output = StringIO()
+            replay.write_replay_json(json_output)
+            json_replay = Replay()
+            json_input = StringIO(json_output.getvalue())
+            json_replay.read_replay_json(json_input)
+            output = StringIO()
+            json_replay.write_replay(output)
+            f = open(rfile, 'r')
+            file_string = f.read()
+            f.close()
+            file_string = "\n".join(map(process_line, file_string.split("\n")))
 
             self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
 
@@ -69,6 +112,7 @@ class TestReplay(unittest.TestCase):
         output = StringIO()
         replay.write_replay_json(output)
         f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
+        print(output.getvalue())
         dif = self.__compare_json(output.getvalue(), f.read())
         self.assertTrue(dif)
         f.close()

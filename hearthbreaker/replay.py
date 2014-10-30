@@ -8,8 +8,8 @@ import hearthbreaker.game_objects
 import hearthbreaker.cards
 import hearthbreaker.game_objects
 import hearthbreaker.proxies
-from hearthbreaker.serialization.move import Move, SpellMove, MinionMove, AttackMove, PowerMove, TurnEndMove, \
-    TurnStartMove, ConcedeMove
+from hearthbreaker.serialization.move import Move, AttackMove, PowerMove, TurnEndMove, \
+    TurnStartMove, ConcedeMove, PlayMove
 
 
 class ReplayException(Exception):
@@ -43,21 +43,21 @@ class Replay:
         if self.last_card is not None:
             if issubclass(self.card_class, hearthbreaker.game_objects.MinionCard):
                 if self.last_card.targetable:
-                    self.actions.append(MinionMove(self.last_card, self.last_index, self.last_target))
+                    self.actions.append(PlayMove(self.last_card, self.last_index, self.last_target))
                     self.last_card = None
                     self.last_index = None
                     self.last_target = None
                 else:
-                    self.actions.append(MinionMove(self.last_card, self.last_index))
+                    self.actions.append(PlayMove(self.last_card, self.last_index))
                     self.last_card = None
                     self.last_index = None
             else:
                 if self.last_card.targetable:
-                    self.actions.append(SpellMove(self.last_card, self.last_target))
+                    self.actions.append(PlayMove(self.last_card, target=self.last_target))
                     self.last_card = None
                     self.last_target = None
                 else:
-                    self.actions.append(SpellMove(self.last_card))
+                    self.actions.append(PlayMove(self.last_card))
                     self.last_card = None
 
     def record_card_played(self, card, index):
@@ -190,7 +190,7 @@ class Replay:
                     target = args[1]
                 else:
                     target = None
-                self.actions.append(SpellMove(hearthbreaker.proxies.ProxyCard(card), target))
+                self.actions.append(PlayMove(hearthbreaker.proxies.ProxyCard(card), target=target))
 
             elif action == 'summon':
                 card = args[0]
@@ -202,7 +202,7 @@ class Replay:
                 else:
                     target = None
 
-                self.actions.append(MinionMove(hearthbreaker.proxies.ProxyCard(card), index, target))
+                self.actions.append(PlayMove(hearthbreaker.proxies.ProxyCard(card), index, target))
             elif action == 'attack':
                 self.actions.append(AttackMove(args[0], args[1]))
             elif action == 'power':

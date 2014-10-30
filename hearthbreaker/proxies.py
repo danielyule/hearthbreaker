@@ -112,7 +112,7 @@ class ProxyCard:
         return game.current_player.hand[int(self.card_ref)]
 
     def __str__(self):
-        if self.option:
+        if self.option is not None:
             return str(self.card_ref) + ':' + str(self.option)
         return str(self.card_ref)
 

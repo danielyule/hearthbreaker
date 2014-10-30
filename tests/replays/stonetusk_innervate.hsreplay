@@ -1,1099 +1,997 @@
 {
+  "header": {
+    "random": [
+      1, 
+      2, 
+      19, 
+      14, 
+      28, 
+      24, 
+      9, 
+      17
+    ], 
+    "keep": [
+      [
+        0, 
+        1, 
+        2
+      ], 
+      [
+        0, 
+        1, 
+        2, 
+        3
+      ]
+    ], 
+    "decks": [
+      {
+        "cards": [
+          "Stonetusk Boar"
+        ], 
+        "class": "Mage"
+      }, 
+      {
+        "cards": [
+          "Naturalize"
+        ], 
+        "class": "Druid"
+      }
+    ]
+  }, 
   "actions": [
     {
       "random": [
         22
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         19
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "name": "play", 
       "card": {
         "card_index": 3
-      },
-      "random": [],
-      "name": "play"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         13
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         6
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         16
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p2"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         22
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         19
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         1
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         13
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
+      "random": [
+        13, 
+        1
+      ], 
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": [
-        13,
-        1
-      ]
-    },
+      }
+    }, 
     {
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         6
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 2,
+        "minion": 2, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         2
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
+      "random": [
+        12, 
+        6
+      ], 
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": [
-        12,
-        6
-      ]
-    },
+      }
+    }, 
     {
-      "card": {
-        "card_index": 0
-      },
-      "target": {
-        "minion": 0,
-        "player": "p2"
-      },
-      "name": "play",
       "random": [
-        1,
+        1, 
         1
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
+      "name": "play", 
+      "card": {
+        "card_index": 0
+      }, 
+      "target": {
+        "minion": 0, 
+        "player": "p2"
+      }
+    }, 
+    {
       "name": "end"
-    },
+    }, 
     {
       "random": [
         5
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 2,
+        "minion": 2, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 3,
+        "minion": 3, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         14
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
+      "random": [
+        0, 
+        10
+      ], 
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": [
-        0,
-        10
-      ]
-    },
+      }
+    }, 
     {
-      "card": {
-        "card_index": 0
-      },
-      "target": {
-        "minion": 0,
-        "player": "p2"
-      },
-      "name": "play",
       "random": [
-        7,
+        7, 
         1
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
+      }
+    }, 
+    {
       "random": [
-        2,
+        2, 
         8
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
+      "name": "play", 
+      "card": {
+        "card_index": 0
+      }, 
+      "target": {
+        "minion": 0, 
+        "player": "p2"
+      }
+    }, 
+    {
       "name": "end"
-    },
+    }, 
     {
       "random": [
         6
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 2,
+        "minion": 2, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 3,
+        "minion": 3, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 4,
+        "minion": 4, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         17
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
-      "character": {
-        "player": "p1"
-      },
-      "target": {
-        "minion": 0,
-        "player": "p2"
-      },
-      "name": "attack",
       "random": [
-        0,
+        0, 
         3
-      ]
-    },
-    {
-      "card": {
-        "card_index": 0
-      },
+      ], 
+      "character": {
+        "player": "p1"
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
+      }
+    }, 
+    {
       "random": [
-        0,
+        0, 
         2
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
+      }
+    }, 
+    {
       "random": [
-        0,
+        0, 
         0
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
+      }
+    }, 
+    {
       "random": [
         0
-      ]
-    },
-    {
+      ], 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
+      "name": "play", 
+      "card": {
+        "card_index": 0
+      }, 
+      "target": {
+        "minion": 0, 
+        "player": "p2"
+      }
+    }, 
+    {
       "name": "end"
-    },
+    }, 
     {
-      "random": [],
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
         "player": "p1"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 2,
+        "minion": 2, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 3,
+        "minion": 3, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 4,
+        "minion": 4, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 5,
+        "minion": 5, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
       "random": [
         13
-      ],
+      ], 
       "name": "start"
-    },
+    }, 
     {
-      "random": [],
       "name": "power"
-    },
+    }, 
     {
       "character": {
         "player": "p1"
-      },
+      }, 
+      "name": "attack", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
+      }, 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "name": "play",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
-    },
+    }, 
     {
-      "random": [],
       "name": "start"
-    },
+    }, 
     {
+      "name": "power", 
       "target": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
-      "random": [],
-      "name": "power"
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
+      "index": 0, 
+      "name": "play", 
       "card": {
         "card_index": 0
-      },
-      "random": [],
-      "name": "play",
-      "index": 0
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 0,
+        "minion": 0, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 1,
+        "minion": 1, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 2,
+        "minion": 2, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 3,
+        "minion": 3, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 4,
+        "minion": 4, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
       "character": {
-        "minion": 5,
+        "minion": 5, 
         "player": "p2"
-      },
+      }, 
+      "name": "attack", 
       "target": {
         "player": "p1"
-      },
-      "name": "attack",
-      "random": []
-    },
+      }
+    }, 
     {
-      "random": [],
       "name": "end"
     }
-  ],
-  "header": {
-    "random": [
-      1,
-      2,
-      19,
-      14,
-      28,
-      24,
-      9,
-      17
-    ],
-    "decks": [
-      {
-        "class": "Mage",
-        "cards": [
-          "Stonetusk Boar"
-        ]
-      },
-      {
-        "class": "Druid",
-        "cards": [
-          "Naturalize"
-        ]
-      }
-    ],
-    "keep": [
-      [
-        0,
-        1,
-        2
-      ],
-      [
-        0,
-        1,
-        2,
-        3
-      ]
-    ]
-  }
+  ]
 }
+
