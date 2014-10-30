@@ -36,11 +36,8 @@ class MinionEffect(metaclass=abc.ABCMeta):
             "double_deathrattle": DoubleDeathrattle,
             "heal_as_damage": HealAsDamage,
             "mana_filter": ManaFilter,
-            "buff": Buff,
             "buff_temp": BuffTemp,
             "kill": Kill,
-            "freeze": Freeze,
-            "heal": Heal,
             "damage": Damage,
             "give_charge": GiveCharge,
             "add_card": AddCard,
@@ -556,39 +553,6 @@ class ReversibleEffect(EventEffect, metaclass=abc.ABCMeta):
         pass
 
 
-class Buff(ReversibleEffect):
-    def __init__(self, when, minion_filter="self", target="self", attack=0, health=0, players="friendly",
-                 include_self=False, target_self=False):
-        super().__init__(when, minion_filter, target, players, include_self, target_self)
-        self.attack = attack
-        self.health = health
-
-    def _do_action(self, target):
-        if self.health > 0:
-            target.increase_health(self.health)
-        elif self.health < 0:
-            target.decrease_health(-self.health)
-        if self.attack != 0:
-            target.change_attack(self.attack)
-
-    def _undo_action(self, target):
-        if self.health > 0:
-            target.decrease_health(self.health)
-        elif self.health < 0:
-            target.increase_health(-self.health)
-        if self.attack != 0:
-            target.change_attack(-self.attack)
-
-    def __to_json__(self):
-        s_json = super().__to_json__()
-        s_json.update({
-            "action": "buff",
-            "attack": self.attack,
-            "health": self.health,
-        })
-        return s_json
-
-
 class BuffTemp(EventEffect):
     def __init__(self, when, minion_filter="self", target="self", attack=0, players="friendly",
                  include_self=False, target_self=False):
@@ -625,40 +589,23 @@ class Kill(EventEffect):
         return s_json
 
 
-class Freeze(EventEffect):
-    def __init__(self, when, minion_filter="self", target="self", players="friendly", include_self=False,
-                 target_self=False):
-        super().__init__(when, minion_filter, target, players, include_self, target_self)
-
-    def _do_action(self, target):
-        if isinstance(target, hearthbreaker.game_objects.Character):
-            target.freeze()
-
-    def __to_json__(self):
-        s_json = super().__to_json__()
-        s_json.update({
-            "action": "freeze",
-        })
-        return s_json
-
-
-class Heal(EventEffect):
-    def __init__(self, when, amount, minion_filter="self", target="self", players="friendly", include_self=False,
-                 target_self=False):
-        super().__init__(when, minion_filter, target, players, include_self, target_self)
-        self.amount = amount
-
-    def _do_action(self, target):
-        if isinstance(target, hearthbreaker.game_objects.Character):
-            target.heal(self.amount, self.target)
-
-    def __to_json__(self):
-        s_json = super().__to_json__()
-        s_json.update({
-            "action": "heal",
-            "amount": self.amount
-        })
-        return s_json
+# class Heal(EventEffect):
+#     def __init__(self, when, amount, minion_filter="self", target="self", players="friendly", include_self=False,
+#                  target_self=False):
+#         super().__init__(when, minion_filter, target, players, include_self, target_self)
+#         self.amount = amount
+#
+#     def _do_action(self, target):
+#         if isinstance(target, hearthbreaker.game_objects.Character):
+#             target.heal(self.amount, self.target)
+#
+#     def __to_json__(self):
+#         s_json = super().__to_json__()
+#         s_json.update({
+#             "action": "heal",
+#             "amount": self.amount
+#         })
+#         return s_json
 
 
 class Damage(EventEffect):

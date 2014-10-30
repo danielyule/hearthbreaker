@@ -1,4 +1,4 @@
-from hearthbreaker.effects.action import ChangeAttack, Draw, Give, ChangeHealth
+from hearthbreaker.effects.action import ChangeAttack, Draw, ChangeHealth
 from hearthbreaker.effects.base import Aura, NewEffect
 from hearthbreaker.effects.condition import Adjacent
 from hearthbreaker.effects.event import TurnEnded, Overloaded
@@ -64,8 +64,8 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[NewEffect(Overloaded(), Give(ChangeAttack(1)), Self()),
-                                     NewEffect(Overloaded(), Give(ChangeHealth(1)), Self())])
+        return Minion(2, 4, effects=[NewEffect(Overloaded(), ChangeAttack(1), Self()),
+                                     NewEffect(Overloaded(), ChangeHealth(1), Self())])
 
 
 class Windspeaker(MinionCard):

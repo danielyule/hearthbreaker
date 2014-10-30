@@ -1,9 +1,10 @@
-from hearthbreaker.effects.action import Charge, Give
+from hearthbreaker.effects.action import Charge, ChangeAttack
 from hearthbreaker.effects.base import NewEffect
 from hearthbreaker.effects.condition import AttackLessThanOrEqualTo
-from hearthbreaker.effects.event import MinionPlaced
-from hearthbreaker.effects.minion import Buff, IncreaseArmor
-from hearthbreaker.effects.target import Target
+from hearthbreaker.effects.event import MinionPlaced, MinionDamaged
+from hearthbreaker.effects.minion import IncreaseArmor
+from hearthbreaker.effects.selector import BothPlayer
+from hearthbreaker.effects.target import Target, Self
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -55,7 +56,7 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(2, 4, effects=[Buff("damaged", "minion", "self", 1, 0, "both", True)])
+        minion = Minion(2, 4, effects=[NewEffect(MinionDamaged(player=BothPlayer()), ChangeAttack(1), Self())])
         return minion
 
 
@@ -64,7 +65,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 9, charge=True, effects=[Buff("enraged", attack=6)])
+        return Minion(4, 9, charge=True, enrage=[ChangeAttack(6)])
 
 
 class KorkronElite(MinionCard):
@@ -80,4 +81,4 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[NewEffect(MinionPlaced(AttackLessThanOrEqualTo(3)), Give(Charge()), Target())])
+        return Minion(2, 3, effects=[NewEffect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), Target())])

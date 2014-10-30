@@ -116,19 +116,6 @@ class SpellSelector(CardSelector):
         return self
 
 
-class SelfSelector(Selector):
-    def get_targets(self, source, player):
-        return source
-
-    def match(self, source, obj):
-        return source is obj
-
-    def __to_json__(self):
-        return {
-            'name': 'self'
-        }
-
-
 class PlayerSelector(Selector):
     def __init__(self, players=FriendlyPlayer()):
         self.players = players
@@ -189,3 +176,16 @@ class MinionSelector(Selector):
             self.condition = Condition.from_json(**condition)
         self.players = Player.from_json(players)
         return self
+
+
+class SelfSelector(Selector):
+    def get_targets(self, source, player):
+        return source
+
+    def match(self, source, obj):
+        return source is obj
+
+    def __to_json__(self):
+        return {
+            'name': 'self'
+        }

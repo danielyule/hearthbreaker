@@ -5,7 +5,7 @@ import hearthbreaker.effects.minion
 import hearthbreaker.effects.player
 import hearthbreaker.effects.base
 import hearthbreaker.effects.action
-from hearthbreaker.effects.selector import SelfSelector, MinionSelector
+from hearthbreaker.effects.selector import MinionSelector
 
 import hearthbreaker.powers
 import hearthbreaker.targeting
@@ -197,7 +197,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
      This common superclass handles all of the status effects and calculations involved in attacking or being attacked.
     """
 
-    def __init__(self, attack_power, health, stealth=False, windfury=False):
+    def __init__(self, attack_power, health, stealth=False, windfury=False, enrage=None):
         """
         Create a new Character with the given attack power and health
 
@@ -205,6 +205,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         :param int health: the maximum health of this character
         :param boolean stealth: (optional) True if this character has stealth, false otherwise.  Default: false
         :param boolean windfury: (optional) True if this character has windfury, false otherwise.  Default: false
+        :param List[Action]: (optional) A list of :class:`hearthbreaker.effects.base.ReversibleActions` that describe
+                             what will happen when this character is enraged
         """
         super().__init__()
 
@@ -248,6 +250,11 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.attack_delta = 0
         #: An integer describing how much the health of this minion has been adjusted
         self.health_delta = 0
+        #: A list of actions that describe what will happen when this character is enraged
+        if enrage:
+            self.enrage = enrage
+        else:
+            self.enrage = []
 
     def attack(self):
         """
@@ -387,6 +394,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
                 self.trigger("enraged")
+                self._do_enrage()
             if self.health <= 0:
                 self.die(attacker)
 
@@ -399,7 +407,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         """
         self.attack_delta += amount
         self.auras.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.ChangeAttack(amount),
-                                                          SelfSelector()))
+                                                          hearthbreaker.effects.selector.SelfSelector()))
 
     def change_temp_attack(self, amount):
         """
@@ -423,7 +431,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.health_delta += amount
         self.health += amount
         self.auras.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.ChangeHealth(amount),
-                                                          SelfSelector()))
+                                                          hearthbreaker.effects.selector.SelfSelector()))
         self.trigger("health_changed")
 
     def decrease_health(self, amount):
@@ -442,8 +450,9 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         if self.enraged and self.health == self.calculate_max_health():
             self.enraged = False
             self.trigger("unenraged")
+            self._do_unenrage()
         self.auras.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.ChangeHealth(-amount),
-                                                          SelfSelector()))
+                                                          hearthbreaker.effects.selector.SelfSelector()))
         self.trigger("health_changed")
 
     def set_attack_to(self, new_attack):
@@ -477,6 +486,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.decrease_health(-diff)
         self.health = self.calculate_max_health()
         if was_enraged:
+            self._do_unenrage()
             self.trigger('unenraged')
 
     def freeze(self):
@@ -508,6 +518,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             if self.enraged and self.health == self.calculate_max_health():
                 self.enraged = False
                 self.trigger("unenraged")
+                self._do_unenrage()
             self.trigger("health_changed")
 
     def die(self, by):
@@ -551,6 +562,14 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         effect.apply()
         if not isinstance(effect, hearthbreaker.effects.minion.TranientEffect):
             self.effects.append(effect)
+
+    def _do_enrage(self):
+        for action in self.enrage:
+            action.act(self)
+
+    def _do_unenrage(self):
+        for action in self.enrage:
+            action.unact(self)
 
 
 def _is_spell_targetable(target):
@@ -866,8 +885,8 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 class Minion(Character):
     def __init__(self, attack, health, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
-                 windfury=False, spell_targetable=True, effects=None, auras=None):
-        super().__init__(attack, health, windfury=windfury, stealth=stealth)
+                 windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
+        super().__init__(attack, health, windfury=windfury, stealth=stealth, enrage=enrage)
         self.taunt = taunt
         self.game = None
         self.card = None
@@ -895,7 +914,7 @@ class Minion(Character):
             self._auras_to_add = []
         if charge:
             self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.Charge(),
-                                                                      SelfSelector()))
+                                                                      hearthbreaker.effects.selector.SelfSelector()))
 
         self.bind("did_damage", self.__on_did_damage)
 
@@ -975,14 +994,14 @@ class Minion(Character):
     def add_aura(self, aura):
         self.auras.append(aura)
         aura.set_target(self)
-        if isinstance(aura.selector, SelfSelector):
+        if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
             aura.action.act(self)
         else:
             self.player.add_aura(aura)
 
     def remove_aura(self, aura):
         self.auras.remove(aura)
-        if isinstance(aura.selector, SelfSelector):
+        if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
             aura.action.unact(self)
         else:
             self.player.remove_aura(aura)
@@ -1032,7 +1051,7 @@ class Minion(Character):
             self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         for aura in reversed(self.auras):
-            if isinstance(aura.selector, SelfSelector):
+            if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
                 aura.action.unact(self)
             else:
                 self.player.remove_aura(aura)
@@ -1043,6 +1062,9 @@ class Minion(Character):
         self.divine_shield = False
         self.battlecry = None
         self.deathrattle = None
+        if self.enraged:
+            self._do_unenrage()
+        self.enrage = []
         if self.calculate_max_health() < self.health or health_full:
             self.health = self.calculate_max_health()
         self.trigger("silenced")

@@ -1,3 +1,5 @@
+import copy
+
 __author__ = 'Daniel'
 
 from hearthbreaker.effects.base import Targeting
@@ -30,4 +32,18 @@ class Owner(Targeting):
     def __to_json__(self):
         return {
             'name': 'self'
+        }
+
+
+class RandomFriendlyMinion(Targeting):
+    def select_target(self, this, focus, other):
+        targets = copy.copy(this.player.minions)
+        targets.remove(this)
+        if len(targets) > 0:
+            return this.player.game.random_choice(targets)
+        return None
+
+    def __to_json__(self):
+        return {
+            'name': 'random_friendly_minion'
         }

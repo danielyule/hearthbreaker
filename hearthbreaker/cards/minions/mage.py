@@ -1,6 +1,6 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, Give
+from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth, ManaChange
 from hearthbreaker.effects.aura import ManaAura
 from hearthbreaker.effects.base import NewEffect, Aura
 from hearthbreaker.effects.condition import HasSecret
@@ -43,8 +43,8 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[NewEffect(TurnEnded(HasSecret()), Give(ChangeAttack(2)), Self()),
-                                     NewEffect(TurnEnded(HasSecret()), Give(ChangeHealth(2)), Self())])
+        return Minion(3, 3, effects=[NewEffect(TurnEnded(HasSecret()), ChangeAttack(2), Self()),
+                                     NewEffect(TurnEnded(HasSecret()), ChangeHealth(2), Self())])
 
 
 class WaterElemental(MinionCard):

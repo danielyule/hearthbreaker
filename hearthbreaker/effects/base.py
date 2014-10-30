@@ -69,83 +69,31 @@ class AuraUntil(Aura):
         return AuraUntil(action, selector, until)
 
 
-class Domain(metaclass=abc.ABCMeta):
-
+class Selector(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_targets(self, source, player):
-        pass
-
-    @abc.abstractmethod
-    def __to_json__(self):
         pass
 
     @abc.abstractmethod
     def match(self, source, obj):
         pass
 
+    @abc.abstractmethod
+    def __to_json__(self):
+        pass
+
     @staticmethod
     def from_json(name, **kwargs):
-        import hearthbreaker.effects.domain as domain_mod
+        import hearthbreaker.effects.selector as selector_mod
 
-        cls_name = string.capwords(name, '_').replace("_", "") + "Domain"
-        cls = getattr(domain_mod, cls_name)
+        cls_name = string.capwords(name, '_').replace("_", "") + "Selector"
+        cls = getattr(selector_mod, cls_name)
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
 
     def __from_json__(self, **kwargs):
         self.__init__(**kwargs)
         return self
-
-#
-# class MinionAura(Aura):
-#     def __init__(self, effect, players, selector):
-#         super().__init__()
-#         self.effect = effect
-#         self.players = players
-#         self.selector = selector
-#
-#     def apply(self):
-#         targets = self.players.get_player_minions(self.target)
-#         targets = self.selector.select(targets)
-#         for target in targets:
-#             self.effect.act(target)
-#
-#     def unapply(self):
-#         targets = self.players.get_player_minions(self.target)
-#         targets = self.selector.select(targets)
-#         for target in targets:
-#             self.effect.unact(target)
-
-
-# class PlayerAura(Aura):
-#     def __init__(self, action, until):
-#         super().__init__()
-#         self.action = action
-#         self.until = until
-#         self.target = None
-#
-#     def apply(self):
-#         self.action.act(self.target)
-#         self.until.bind(self.target.hero, self.__until__)
-#
-#     def __until__(self, *args):
-#         self.target.remove_aura(self)
-#
-#     def unapply(self):
-#         self.action.unact(self.target)
-#         self.until.unbind(self.target.hero, self.__until__)
-#
-#     def __to_json__(self):
-#         return {
-#             'action': self.action,
-#             'until': self.until,
-#         }
-#
-#     @staticmethod
-#     def from_json(**json):
-#         action = Action.from_json(**json['action'])
-#         until = Event.from_json(**json['until'])
-#         return PlayerAura(action, until)
 
 
 class Action(metaclass=abc.ABCMeta):
@@ -175,6 +123,10 @@ class ReversibleAction(Action, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def unact(self, target):
         pass
+
+
+class MinionAction(ReversibleAction, metaclass=abc.ABCMeta):
+    pass
 
 
 class Event(metaclass=abc.ABCMeta):
@@ -239,52 +191,35 @@ class MinionEvent(Event):
 
 
 class PlayerEvent(Event):
+    def __init__(self, event_name, condition, player):
+        super().__init__(event_name, condition)
+        self.player = player
+
     def bind(self, target, func):
-        if self.condition:
-            self.__target__ = target
-            self.__func__ = func
-            target.player.bind(self.event_name, self.__action__)
-        else:
-            target.player.bind(self.event_name, func)
+        for player in self.player.get_players(target.player):
+            if self.condition:
+                self.__target__ = target
+                self.__func__ = func
+                player.bind(self.event_name, self.__action__)
+            else:
+                player.bind(self.event_name, func)
 
     def unbind(self, target, func):
-        if self.condition:
-            target.player.unbind(self.event_name, self.__action__)
-        else:
-            target.player.unbind(self.event_name, func)
-
-
-class Selector(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def get_targets(self, source, player):
-        pass
-
-    @abc.abstractmethod
-    def match(self, source, obj):
-        pass
-
-    @abc.abstractmethod
-    def __to_json__(self):
-        pass
-
-    @staticmethod
-    def from_json(name, **kwargs):
-        import hearthbreaker.effects.selector as selector_mod
-
-        cls_name = string.capwords(name, '_').replace("_", "") + "Selector"
-        cls = getattr(selector_mod, cls_name)
-        obj = cls.__new__(cls)
-        return obj.__from_json__(**kwargs)
-
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
+        for player in self.player.get_players(target.player):
+            if self.condition:
+                player.unbind(self.event_name, self.__action__)
+            else:
+                player.unbind(self.event_name, func)
 
 
 class NewEffect:
     def __init__(self, event, action, targeting):
         self.event = event
-        self.action = action
+        if isinstance(action, MinionAction):
+            from hearthbreaker.effects.action import Give
+            self.action = Give(action)
+        else:
+            self.action = action
         self.targeting = targeting
         self.target = None
 
@@ -299,7 +234,8 @@ class NewEffect:
 
     def _find_target(self, focus=None, other=None):
         target = self.targeting.select_target(self.target, focus, other)
-        self.action.act(target)
+        if target:
+            self.action.act(target)
 
     def __to_json__(self):
         return {

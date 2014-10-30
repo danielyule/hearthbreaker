@@ -76,6 +76,19 @@ class MinionIsType(Condition):
         return self
 
 
+class MinionHasDeathrattle(Condition):
+    def __to_json__(self):
+        return {
+            'name': 'minion_has_deathrattle'
+        }
+
+    def __init__(self):
+        super().__init__()
+
+    def evaluate(self, target, minion, *args):
+        return minion.deathrattle is not None
+
+
 class Adjacent(Condition):
     def __to_json__(self):
         return {

@@ -1,4 +1,4 @@
-from hearthbreaker.effects.base import ReversibleAction, Selector, Action, Aura
+from hearthbreaker.effects.base import ReversibleAction, Selector, Action, MinionAction, Aura
 from hearthbreaker.effects.selector import SelfSelector
 import hearthbreaker.game_objects
 
@@ -16,7 +16,31 @@ class Freeze(ReversibleAction):
         }
 
 
-class ChangeAttack(ReversibleAction):
+class Give(ReversibleAction):
+    def __init__(self, aura):
+        if isinstance(aura, Action):
+            self.aura = Aura(aura, SelfSelector())
+        else:
+            self.aura = aura
+
+    def act(self, target):
+        target.add_aura(self.aura)
+
+    def unact(self, target):
+        target.remove_aura(self.aura)
+
+    def __to_json__(self):
+        return {
+            'name': 'give',
+            'aura': self.aura
+        }
+
+    def __from_json__(self, aura):
+        self.aura = Aura.from_json(**aura)
+        return self
+
+
+class ChangeAttack(MinionAction):
     def __init__(self, amount):
         self.amount = amount
 
@@ -33,7 +57,7 @@ class ChangeAttack(ReversibleAction):
         }
 
 
-class ChangeHealth(ReversibleAction):
+class ChangeHealth(MinionAction):
     def __init__(self, amount):
         self.amount = amount
 
@@ -127,6 +151,21 @@ class Kill(Action):
         }
 
 
+class Heal(Action):
+    def __init__(self, amount):
+        super().__init__()
+        self.amount = amount
+
+    def act(self, target):
+        target.heal(self.amount, None)
+
+    def __to_json__(self):
+        return {
+            'name': 'heal',
+            'amount': self.amount
+        }
+
+
 class Draw(Action):
     def act(self, target):
         target.player.draw()
@@ -137,31 +176,7 @@ class Draw(Action):
         }
 
 
-class Give(ReversibleAction):
-    def __init__(self, aura):
-        if isinstance(aura, Action):
-            self.aura = Aura(aura, SelfSelector())
-        else:
-            self.aura = aura
-
-    def act(self, target):
-        target.add_aura(self.aura)
-
-    def unact(self, target):
-        target.remove_aura(self.aura)
-
-    def __to_json__(self):
-        return {
-            'name': 'give',
-            'aura': self.aura
-        }
-
-    def __from_json__(self, aura):
-        self.aura = Aura.from_json(**aura)
-        return self
-
-
-class Charge(ReversibleAction):
+class Charge(MinionAction):
     def act(self, target):
         target.charge += 1
 
