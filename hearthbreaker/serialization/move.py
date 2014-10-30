@@ -1,4 +1,4 @@
-import hearthbreaker
+import hearthbreaker.game_objects
 
 __author__ = 'dyule'
 
@@ -12,7 +12,7 @@ class Move:
         pass
 
     @staticmethod
-    def from_json(name, random, **json):
+    def from_json(name, random=[], **json):
         cls = None
         if name == 'play':
             cls = PlayMove
@@ -40,9 +40,16 @@ class Move:
     def __to_json__(self):
         pass
 
+    def __update_json__(self, json):
+        if len(self.random_numbers) > 0:
+            json.update({
+                'random': self.random_numbers
+            })
+        return json
+
 
 class PlayMove(Move):
-    def __init__(self, card, index, target=None):
+    def __init__(self, card, index=-1, target=None):
         super().__init__()
         self.card = card
         self.index = index
@@ -59,37 +66,44 @@ class PlayMove(Move):
         game.play_card(self.card.resolve(game))
         game.current_player.agent.nextIndex = -1
 
+    def to_output_string(self):
+        if self.index > -1:
+            if self.target is not None:
+                return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
+            return 'summon({0},{1})'.format(self.card.to_output(), self.index)
+        else:
+            if self.target is not None:
+                return 'play({0},{1})'.format(self.card.to_output(), self.target.to_output())
+            return 'play({0})'.format(self.card.to_output())
+
     def __to_json__(self):
         if self.target is not None:
             if self.index > -1:
-                return {
+                json = {
                     'name': 'play',
                     'card': self.card,
                     'index': self.index,
                     'target': self.target,
-                    'random': self.random_numbers,
                 }
             else:
-                return {
+                json = {
                     'name': 'play',
                     'card': self.card,
                     'target': self.target,
-                    'random': self.random_numbers,
                 }
         else:
             if self.index > -1:
-                return {
+                json = {
                     'name': 'play',
                     'card': self.card,
                     'index': self.index,
-                    'random': self.random_numbers,
                 }
             else:
-                return {
+                json = {
                     'name': 'play',
                     'card': self.card,
-                    'random': self.random_numbers,
                 }
+        return self.__update_json__(json)
 
     def __from_json__(self, card, index=-1, target=None):
         self.card = hearthbreaker.proxies.ProxyCard.from_json(**card)
@@ -98,96 +112,6 @@ class PlayMove(Move):
             self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
         else:
             self.target = None
-
-
-class SpellMove(Move):
-    def __init__(self, card, target=None):
-        super().__init__()
-        self.card = card
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-        game.play_card(self.card.resolve(game))
-        game.current_player.agent.next_target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'play({0},{1})'.format(self.card.to_output(), self.target.to_output())
-        return 'play({0})'.format(self.card.to_output())
-
-    def __to_json__(self):
-        if self.target is not None:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'target': self.target,
-                'random': self.random_numbers,
-            }
-        else:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'random': self.random_numbers,
-            }
-
-    def __from_json__(self, card, target=None):
-        self.card = hearthbreaker.proxies.ProxyCard(card)
-        if target:
-            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(target)
-        else:
-            self.target = None
-
-
-class MinionMove(Move):
-    def __init__(self, card, index, target=None):
-        super().__init__()
-        self.card = card
-        self.index = index
-        if target is not None:
-            self.target = hearthbreaker.proxies.ProxyCharacter(target)
-        else:
-            self.target = None
-
-    def to_output_string(self):
-        if self.target is not None:
-            return 'summon({0},{1},{2})'.format(self.card.to_output(), self.index, self.target.to_output())
-        return 'summon({0},{1})'.format(self.card.to_output(), self.index)
-
-    def play(self, game):
-        if self.target is not None:
-            game.current_player.agent.next_target = self.target.resolve(game)
-
-        game.current_player.agent.next_index = self.index
-        game.play_card(self.card.resolve(game))
-        game.current_player.agent.nextIndex = -1
-
-    def __to_json__(self):
-        if self.target is not None:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'index': self.index,
-                'target': self.target,
-                'random': self.random_numbers,
-            }
-        else:
-            return {
-                'name': 'play',
-                'card': self.card,
-                'index': self.index,
-                'random': self.random_numbers,
-            }
-
-    def __from_json__(self, card, index, target=None):
-        self.card = hearthbreaker.proxies.ProxyCard(card)
-        self.index = index
-        if target:
-            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
 
 
 class AttackMove(Move):
@@ -205,12 +129,11 @@ class AttackMove(Move):
         game.current_player.agent.next_target = None
 
     def __to_json__(self):
-        return {
+        return self.__update_json__({
             'name': 'attack',
             'character': self.character,
             'target': self.target,
-            'random': self.random_numbers,
-        }
+        })
 
     def __from_json__(self, character, target):
         self.character = hearthbreaker.proxies.ProxyCharacter.from_json(**character)
@@ -240,19 +163,21 @@ class PowerMove(Move):
 
     def __to_json__(self):
         if self.target:
-            return {
+            json = {
                 'name': 'power',
                 'target': self.target,
-                'random': self.random_numbers,
             }
         else:
-            return {
+            json = {
                 'name': 'power',
-                'random': self.random_numbers,
             }
+        return self.__update_json__(json)
 
-    def __from_json__(self, target):
-        self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
+    def __from_json__(self, target=None):
+        if target is not None:
+            self.target = hearthbreaker.proxies.ProxyCharacter.from_json(**target)
+        else:
+            self.target = None
 
 
 class TurnEndMove(Move):
@@ -267,10 +192,9 @@ class TurnEndMove(Move):
         pass
 
     def __to_json__(self):
-        return {
+        return self.__update_json__({
             'name': 'end',
-            'random': self.random_numbers,
-        }
+        })
 
     def __from_json__(self):
         pass
@@ -287,10 +211,9 @@ class TurnStartMove(Move):
         pass
 
     def __to_json__(self):
-        return {
+        return self.__update_json__({
             'name': 'start',
-            'random': self.random_numbers,
-        }
+        })
 
     def __from_json__(self):
         pass
@@ -308,10 +231,9 @@ class ConcedeMove(Move):
         game.current_player.hero.activate_delayed()
 
     def __to_json__(self):
-        return {
+        return self.__update_json__({
             'name': 'concede',
-            'random': self.random_numbers,
-        }
+        })
 
     def __from_json__(self):
         pass
