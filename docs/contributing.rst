@@ -264,7 +264,7 @@ Mage if none of the cards are class specific.
 The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:
 
-:class:`DoNothingBot <hearthbreaker.agents.basic_agents.DoNothingBot>`
+:class:`DoNothingAgent <hearthbreaker.agents.basic_agents.DoNothingAgent>`
 
     As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
     the enemy player doesn't need to do anything.
@@ -278,9 +278,9 @@ agents:
     only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
     hero power)
 
-:class:`PredictableBot <tests.agents.basic_agents.PredictableBot>`
+:class:`PredictableAgent <tests.agents.basic_agents.PredictableAgent>`
 
-    PredictableBot tries to do everything it can in a very particular order:
+    PredictableAgent tries to do everything it can in a very particular order:
      1. Use the hero ability
      2. Play as many cards as it has mana for, in the order they are in the deck.
      3. Attack with the hero if possible (The targeting works similar to spell testing agent above)
@@ -296,7 +296,7 @@ card is a spell that does four damage to its target.
                                  HoggerSmash,             # The first player will have 30 Hogger SMASH!es
                                  MogushanWarden,          # The second player will have 30 Wardens
                                  SpellTestingAgent,       # The first player will try to play SMASH!
-                                 DoNothingBot)            # The second player needs only get hit with the smash
+                                 DoNothingAgent)            # The second player needs only get hit with the smash
         for turn in range(0, 4):                          # Advance the game to the turn before smash is played
             game.play_single_turn()
         self.assertEqual(30, game.players[1].hero.health) # Ensure the second player's health hasn't been affected

@@ -46,6 +46,24 @@ class ProxyCharacter:
     def to_output(self):
         return str(self)
 
+    def __to_json__(self):
+        if self.minion_ref is not None:
+            return {
+                'player': self.player_ref,
+                'minion': self.minion_ref
+            }
+        else:
+            return {
+                'player': self.player_ref
+            }
+
+    @staticmethod
+    def from_json(player, minion=None):
+        rval = ProxyCharacter.__new__(ProxyCharacter)
+        rval.player_ref = player
+        rval.minion_ref = minion
+        return rval
+
 
 class TrackingProxyCharacter(ProxyCharacter):
     def __init__(self, character_ref, game):
@@ -72,26 +90,48 @@ class TrackingProxyCharacter(ProxyCharacter):
 
 
 class ProxyCard:
-    def __init__(self, card_reference, game=None):
-        self.card_ref = -1
+    def __init__(self, card_reference):
+        self.option = None
         if isinstance(card_reference, str):
-            self.card_ref = card_reference
+            if str.find(card_reference, ":") > -1:
+                card_arr = str.split(card_reference, ":")
+                self.card_ref = int(card_arr[0])
+                self.option = int(card_arr[1])
+            else:
+                self.card_ref = int(card_reference)
         else:
-            self.card_ref = str(card_reference)
-
+            self.card_ref = card_reference
         self.targetable = False
 
     def set_option(self, option):
-        self.card_ref = ":" + str(option)
+        self.option = option
 
     def resolve(self, game):
-        ref = self.card_ref.split(':')
-        if len(ref) > 1:
-            game.current_player.agent.next_option = int(ref[1])
-        return game.current_player.hand[int(ref[0])]
+        if self.option is not None:
+            game.current_player.agent.next_option = int(self.option)
+        return game.current_player.hand[int(self.card_ref)]
 
     def __str__(self):
+        if self.option is not None:
+            return str(self.card_ref) + ':' + str(self.option)
         return str(self.card_ref)
 
     def to_output(self):
         return str(self)
+
+    def __to_json__(self):
+        if self.option is not None:
+            return {
+                'card_index': self.card_ref,
+                'option': self.option
+            }
+        else:
+            return {
+                'card_index': self.card_ref
+            }
+
+    @staticmethod
+    def from_json(card_index, option=None):
+        rval = ProxyCard(card_index)
+        rval.set_option(option)
+        return rval

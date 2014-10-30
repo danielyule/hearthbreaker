@@ -110,7 +110,7 @@ class TestTradeAgentHeroPowerTests(TestCaseMixin, unittest.TestCase):
         game = TestHelpers().make_game()
 
         self.set_hand(game, 0)
-        self.set_mana(game, 0, 10)
+        self.set_mana(game, 0, 2)
         game.players[0].hero.health = 1
 
         game.play_single_turn()
