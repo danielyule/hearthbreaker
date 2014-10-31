@@ -157,6 +157,7 @@ class Replay:
             'random': self.header_random,
         }
         json.dump({'header': header, 'actions': self.actions}, writer, default=lambda o: o.__to_json__(), indent=2)
+        file.close()
 
     def read_replay_json(self, file):
         if 'read' not in dir(file):
@@ -175,6 +176,7 @@ class Replay:
         if len(self.keeps) == 0:
             self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
         self.actions = [Move.from_json(**js) for js in jd['actions']]
+        file.close()
 
     def parse_replay(self, replayfile):
 
