@@ -112,7 +112,6 @@ class TestReplay(unittest.TestCase):
         output = StringIO()
         replay.write_replay_json(output)
         f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
-        print(output.getvalue())
         dif = self.__compare_json(output.getvalue(), f.read())
         self.assertTrue(dif)
         f.close()
