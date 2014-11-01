@@ -1554,7 +1554,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_VioletTeacherCounterspell(self):
-        game = generate_game_for([VioletTeacher, Fireball], Counterspell, MinionPlayingAgent, MinionPlayingAgent)
+        game = generate_game_for([VioletTeacher, Fireball], Counterspell, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()

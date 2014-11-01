@@ -105,8 +105,10 @@ class Replay:
 
     def write_replay(self, file):
         if 'write' not in dir(file):
+            was_filename = True
             writer = open(file, 'w')
         else:
+            was_filename = False
             writer = file
 
         for deck in self.decks:
@@ -141,9 +143,13 @@ class Replay:
                 writer.write("random(")
                 writer.write(",".join([str(num) for num in action.random_numbers]))
                 writer.write(")\n")
+        if was_filename:
+            file.close()
 
     def write_replay_json(self, file):
+        was_filename = False
         if 'write' not in dir(file):
+            was_filename = True
             writer = open(file, 'w')
         else:
             writer = file
@@ -157,10 +163,13 @@ class Replay:
             'random': self.header_random,
         }
         json.dump({'header': header, 'actions': self.actions}, writer, default=lambda o: o.__to_json__(), indent=2)
-        file.close()
+        if was_filename:
+            file.close()
 
     def read_replay_json(self, file):
+        was_filename = False
         if 'read' not in dir(file):
+            was_filename = True
             file = open(file, 'r')
 
         jd = json.load(file)
@@ -176,11 +185,13 @@ class Replay:
         if len(self.keeps) == 0:
             self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
         self.actions = [Move.from_json(**js) for js in jd['actions']]
-        file.close()
+        if was_filename:
+            file.close()
 
     def parse_replay(self, replayfile):
-
+        was_filename = False
         if 'read' not in dir(replayfile):
+            was_filename = True
             replayfile = open(replayfile, 'r')
         line_pattern = re.compile("\s*(\w*)\s*\(([^)]*)\)\s*(;.*)?$")
         for line in replayfile:
@@ -244,7 +255,8 @@ class Replay:
 
             elif action == 'concede':
                 self.actions.append(ConcedeMove())
-        replayfile.close()
+        if was_filename:
+            replayfile.close()
         if len(self.keeps) is 0:
             self.keeps = [[0, 1, 2], [0, 1, 2, 3]]
 
