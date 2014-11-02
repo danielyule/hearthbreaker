@@ -26,6 +26,17 @@ the replay.  For example: ::
     replay.write_json("my_replay.hsreplay") # Save the replay to a file
 
 
+
+Playing back a game
+~~~~~~~~~~~~~~~~~~~
+
+Playing back a game is a matter of loading the replay, getting a game for playing it back, and then starting the game
+For example: ::
+
+    replay = Replay()                      # create a new replay object
+    replay.read_json("my_replay.hsreplay") # load the replay (this can be combined with the previous line)
+    game = playback(replay)                # create a game associated with the replay
+    game.start()                           # play the recorded game
 """
 
 
