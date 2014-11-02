@@ -153,7 +153,7 @@ The replay file must be in the complete format</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.read">
-<tt class="descname">read</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">read</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L269"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a replay in the compact format.  This format is a series of directives, and isn&#8217;t as flexible
 or well structured as the json format (in :meth:write_json).  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -161,8 +161,8 @@ or well structured as the json format (in :meth:write_json).  For more info, see
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; Either a string or a file object.  If a string, then it is assumed to be a filename describing
-where a replay file is to be found.  If a file object, then the file object should be opened for
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#str" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a> or <a class="reference external" href="http://docs.python.org/3.3/library/io.html#io.TextIOBase" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">io.TextIOBase</span></tt></a>) &#8211; Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+where a replay file is to be found.  If an IO object, then the IO object should be opened for
 reading.</td>
 </tr>
 </tbody>
@@ -171,7 +171,7 @@ reading.</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.read_json">
-<tt class="descname">read_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L235"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read_json" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">read_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a replay in the complete json format.  This format is compatible with the netplay format, and is
 also designed to be more future proof.  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -179,8 +179,8 @@ also designed to be more future proof.  For more info, see the
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; Either a string or a file object.  If a string, then it is assumed to be a filename describing
-where a replay file is found.  If a file object, then the file object should be opened for
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#str" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a> or <a class="reference external" href="http://docs.python.org/3.3/library/io.html#io.TextIOBase" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">io.TextIOBase</span></tt></a>) &#8211; Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+where a replay file is found.  If an IO object, then the IO object should be opened for
 reading.</td>
 </tr>
 </tbody>
@@ -197,8 +197,8 @@ or well structured as the json format (in :meth:write_json).  For more info, see
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; Either a string or a file object.  If a string, then it is assumed to be a filename describing
-where a replay file is to be written.  If a file object, then the file object should be opened for
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#str" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a> or <a class="reference external" href="http://docs.python.org/3.3/library/io.html#io.TextIOBase" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">io.TextIOBase</span></tt></a>) &#8211; Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+where a replay file is to be written.  If an IO object, then the IO object should be opened for
 writing.</td>
 </tr>
 </tbody>
@@ -207,7 +207,7 @@ writing.</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.write_json">
-<tt class="descname">write_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L205"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write_json" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L206"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a replay in the complete json format.  This format is compatible with the netplay format, and is
 also designed to be more future proof.  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -215,8 +215,8 @@ also designed to be more future proof.  For more info, see the
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> &#8211; Either a string or a file object.  If a string, then it is assumed to be a filename describing
-where a replay file should be written.  If a file object, then the file object should be opened for
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file</strong> (<a class="reference external" href="http://docs.python.org/3.3/library/stdtypes.html#str" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">str</span></tt></a> or <a class="reference external" href="http://docs.python.org/3.3/library/io.html#io.TextIOBase" title="(in Python v3.3)"><tt class="xref py py-class docutils literal"><span class="pre">io.TextIOBase</span></tt></a>) &#8211; Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+where a replay file should be written.  If an IO object, then the IO object should be opened for
 writing.</td>
 </tr>
 </tbody>
@@ -227,16 +227,17 @@ writing.</td>
 
 <dl class="function">
 <dt id="hearthbreaker.replay.playback">
-<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">playback</tt><big>(</big><em>replay</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L438"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.playback" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">playback</tt><big>(</big><em>replay</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L444"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.playback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a game which can be replayed back out of a replay.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>replay</strong> (<em>Replay</em>) &#8211; The replay to load the game out of</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>replay</strong> (<a class="reference internal" href="#hearthbreaker.replay.Replay" title="hearthbreaker.replay.Replay"><tt class="xref py py-class docutils literal"><span class="pre">Replay</span></tt></a>) &#8211; The replay to load the game out of</td>
 </tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Rval hearthbreaker.game_objects.Game:</th></tr>
-<tr class="field-even field"><td>&nbsp;</td><td class="field-body">A game which when played will perform all of the actions in the replay.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A game which when played will perform all of the actions in the replay.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.Game" title="hearthbreaker.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">Game</span></tt></a></td>
 </tr>
 </tbody>
 </table>
@@ -244,7 +245,7 @@ writing.</td>
 
 <dl class="function">
 <dt id="hearthbreaker.replay.record">
-<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">record</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L348"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.record" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">record</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L352"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.record" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ready a game for recording.  This function must be called before the game is played.</p>
 <p>Several methods of the game and its agents are modified.  These modifications will not affect the operation
 of the game or its agents, although any further modifications to these methods will not be recorded.</p>
@@ -252,10 +253,12 @@ of the game or its agents, although any further modifications to these methods w
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>game</strong> (<a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.Game" title="hearthbreaker.game_objects.Game"><em>hearthbreaker.game_objects.Game</em></a>) &#8211; A game which has not been started</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>game</strong> (<a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.Game" title="hearthbreaker.game_objects.Game"><tt class="xref py py-class docutils literal"><span class="pre">Game</span></tt></a>) &#8211; A game which has not been started</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Rval Replay:</th><td class="field-body">A replay that will track the actions of the game as it is played.  Once the game is complete,
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A replay that will track the actions of the game as it is played.  Once the game is complete,
 this replay can be written to a file to remember the state of this game.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hearthbreaker.replay.Replay" title="hearthbreaker.replay.Replay"><tt class="xref py py-class docutils literal"><span class="pre">Replay</span></tt></a></td>
 </tr>
 </tbody>
 </table>
