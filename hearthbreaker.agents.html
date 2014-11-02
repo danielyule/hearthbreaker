@@ -111,109 +111,135 @@
 <div class="section" id="module-hearthbreaker.agents.basic_agents">
 <span id="hearthbreaker-agents-basic-agents-module"></span><h2>hearthbreaker.agents.basic_agents module<a class="headerlink" href="#module-hearthbreaker.agents.basic_agents" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">DoNothingBot</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L6"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent">
+<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">Agent</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L7"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent.choose_index">
+<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L21"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent.choose_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.choose_index">
-<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.choose_index" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent.choose_option">
+<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent.choose_option" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.choose_option">
-<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.choose_option" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent.choose_target">
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L17"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L16"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.choose_target" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent.do_card_check">
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L9"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent.do_card_check" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.do_card_check">
-<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L10"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.do_card_check" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.DoNothingBot.do_turn">
-<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingBot.do_turn" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.Agent.do_turn">
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L13"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.Agent.do_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">PredictableBot</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent">
+<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">DoNothingAgent</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hearthbreaker.agents.basic_agents.Agent" title="hearthbreaker.agents.basic_agents.Agent"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.agents.basic_agents.Agent</span></tt></a></p>
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.__init__" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.__init__">
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.choose_index">
-<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.choose_index" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.choose_index">
+<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L43"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.choose_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.choose_option">
-<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L59"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.choose_option" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.choose_option">
+<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L46"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.choose_option" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L53"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.choose_target" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.choose_target">
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.do_card_check">
-<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.do_card_check" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.do_card_check">
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L34"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.do_card_check" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="hearthbreaker.agents.basic_agents.PredictableBot.do_turn">
-<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableBot.do_turn" title="Permalink to this definition">¶</a></dt>
+<dt id="hearthbreaker.agents.basic_agents.DoNothingAgent.do_turn">
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L37"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.DoNothingAgent.do_turn" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent">
+<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">PredictableAgent</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L50"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hearthbreaker.agents.basic_agents.Agent" title="hearthbreaker.agents.basic_agents.Agent"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.agents.basic_agents.Agent</span></tt></a></p>
+<dl class="method">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent.choose_index">
+<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L78"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent.choose_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent.choose_option">
+<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L81"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent.choose_option" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent.choose_target">
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L75"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent.choose_target" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent.do_card_check">
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L51"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent.do_card_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hearthbreaker.agents.basic_agents.PredictableAgent.do_turn">
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L54"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.PredictableAgent.do_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">RandomAgent</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L63"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#hearthbreaker.agents.basic_agents.DoNothingBot" title="hearthbreaker.agents.basic_agents.DoNothingBot"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.agents.basic_agents.DoNothingBot</span></tt></a></p>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.agents.basic_agents.</tt><tt class="descname">RandomAgent</tt><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L85"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hearthbreaker.agents.basic_agents.DoNothingAgent" title="hearthbreaker.agents.basic_agents.DoNothingAgent"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.agents.basic_agents.DoNothingAgent</span></tt></a></p>
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.__init__">
-<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L64"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L86"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.choose_index">
-<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L94"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_index" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_index</tt><big>(</big><em>card</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L116"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.choose_option">
-<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L97"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_option" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_option</tt><big>(</big><em>*options</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L119"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_option" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L91"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L113"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.do_card_check">
-<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L67"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.do_card_check" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_card_check</tt><big>(</big><em>cards</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L89"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.do_card_check" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.agents.basic_agents.RandomAgent.do_turn">
-<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L70"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.do_turn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">do_turn</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/agents/basic_agents.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.agents.basic_agents.RandomAgent.do_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

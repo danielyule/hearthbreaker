@@ -5,21 +5,13 @@ Subpackages
 -----------
 
 .. toctree::
+    :titlesonly:
 
-    hearthbreaker.agents
+    hearthbreaker.replays
+    hearthbreaker.game_objects
 
 Submodules
 ----------
-
-
-
-hearthbreaker.game_objects module
----------------------------------
-
-.. automodule:: hearthbreaker.game_objects
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 
 hearthbreaker.powers module
@@ -28,21 +20,13 @@ hearthbreaker.powers module
 .. automodule:: hearthbreaker.powers
 
 
-hearthbreaker.replay module
----------------------------
-
-.. automodule:: hearthbreaker.replay
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 hearthbreaker.targeting module
 ------------------------------
 
 .. automodule:: hearthbreaker.targeting
 
-hearthbreaker.constants module
-------------------------------
+Hearthbreaker Constants
+-----------------------
 
 .. automodule:: hearthbreaker.constants
     :members:

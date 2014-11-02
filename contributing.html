@@ -348,7 +348,7 @@ copies of that card.  The method will choose a character class based on the make
 Mage if none of the cards are class specific.</p>
 <p>The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
 agents:</p>
-<p><a class="reference internal" href="hearthbreaker.agents.html#hearthbreaker.agents.basic_agents.DoNothingBot" title="hearthbreaker.agents.basic_agents.DoNothingBot"><tt class="xref py py-class docutils literal"><span class="pre">DoNothingBot</span></tt></a></p>
+<p><a class="reference internal" href="hearthbreaker.agents.html#hearthbreaker.agents.basic_agents.DoNothingAgent" title="hearthbreaker.agents.basic_agents.DoNothingAgent"><tt class="xref py py-class docutils literal"><span class="pre">DoNothingAgent</span></tt></a></p>
 <blockquote>
 <div>As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
 the enemy player doesn&#8217;t need to do anything.</div></blockquote>
@@ -360,10 +360,10 @@ enemy minion if one is down, then a friendly minion if one is present, or if the
 There are variations on this agent, which will target specific groups, such as EnemySpellTestingAgent, which will
 only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
 hero power)</div></blockquote>
-<p><tt class="xref py py-class docutils literal"><span class="pre">PredictableBot</span></tt></p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">PredictableAgent</span></tt></p>
 <blockquote>
 <div><dl class="docutils">
-<dt>PredictableBot tries to do everything it can in a very particular order:</dt>
+<dt>PredictableAgent tries to do everything it can in a very particular order:</dt>
 <dd><ol class="first last arabic simple">
 <li>Use the hero ability</li>
 <li>Play as many cards as it has mana for, in the order they are in the deck.</li>
@@ -380,7 +380,7 @@ card is a spell that does four damage to its target.</p>
                              <span class="n">HoggerSmash</span><span class="p">,</span>             <span class="c"># The first player will have 30 Hogger SMASH!es</span>
                              <span class="n">MogushanWarden</span><span class="p">,</span>          <span class="c"># The second player will have 30 Wardens</span>
                              <span class="n">SpellTestingAgent</span><span class="p">,</span>       <span class="c"># The first player will try to play SMASH!</span>
-                             <span class="n">DoNothingBot</span><span class="p">)</span>            <span class="c"># The second player needs only get hit with the smash</span>
+                             <span class="n">DoNothingAgent</span><span class="p">)</span>            <span class="c"># The second player needs only get hit with the smash</span>
     <span class="k">for</span> <span class="n">turn</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>                          <span class="c"># Advance the game to the turn before smash is played</span>
         <span class="n">game</span><span class="o">.</span><span class="n">play_single_turn</span><span class="p">()</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="n">game</span><span class="o">.</span><span class="n">players</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">hero</span><span class="o">.</span><span class="n">health</span><span class="p">)</span> <span class="c"># Ensure the second player&#39;s health hasn&#39;t been affected</span>
