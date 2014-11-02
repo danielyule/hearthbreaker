@@ -62,8 +62,8 @@ class MagePower(Power):
         super().__init__(hero)
 
     def use(self):
-        super().use()
         target = self.hero.find_power_target()
+        super().use()
         target.damage(1 * self.hero.player.spell_multiplier, None)
         self.hero.player.game.check_delayed()
 
@@ -73,8 +73,8 @@ class PriestPower(Power):
         super().__init__(hero)
 
     def use(self):
-        super().use()
         target = self.hero.find_power_target()
+        super().use()
         if self.hero.player.heal_does_damage:
             target.damage(2 * self.hero.player.spell_multiplier, None)
         else:

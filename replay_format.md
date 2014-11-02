@@ -4,6 +4,8 @@ There are two replay formats that hearthbreaker recognizes: the [compact format]
 [complete format](#complete-format).  Either one can be used, although by default, hearthbreaker uses the complete 
 format.  Further, the complete format has more robust validation applied.  There are examples of each in [`tests/replays`](tests/replays)
 
+Documentation on how to use the replays can be found in the [Replays module](http://danielyule.github.io/hearthbreaker/hearthbreaker.replays.html).
+
 Complete Replay File Format
 ===========================
 
@@ -30,6 +32,7 @@ The header is an object that describes the initial setup of the game.  It has th
      "keep": [...],
      "random": [...],
 }
+```
 
 ### Deck
 The deck array consists of objects that specify which cards each player is using, as well as which class each player
