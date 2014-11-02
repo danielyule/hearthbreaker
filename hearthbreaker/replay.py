@@ -156,9 +156,10 @@ class Replay:
         or well structured as the json format (in :meth:write_json).  For more info, see the
         `replay format <https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md>`_
 
-        :param file: Either a string or a file object.  If a string, then it is assumed to be a filename describing
-                     where a replay file is to be written.  If a file object, then the file object should be opened for
+        :param file: Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+                     where a replay file is to be written.  If an IO object, then the IO object should be opened for
                      writing.
+        :type file: :class:`str` or :class:`io.TextIOBase`
         """
         if 'write' not in dir(file):
             was_filename = True
@@ -208,9 +209,10 @@ class Replay:
         also designed to be more future proof.  For more info, see the
         `replay format <https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md>`_
 
-        :param file: Either a string or a file object.  If a string, then it is assumed to be a filename describing
-                     where a replay file should be written.  If a file object, then the file object should be opened for
+        :param file: Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+                     where a replay file should be written.  If an IO object, then the IO object should be opened for
                      writing.
+        :type file: :class:`str` or :class:`io.TextIOBase`
         """
         was_filename = False
         if 'write' not in dir(file):
@@ -238,9 +240,10 @@ class Replay:
         also designed to be more future proof.  For more info, see the
         `replay format <https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md>`_
 
-        :param file: Either a string or a file object.  If a string, then it is assumed to be a filename describing
-                     where a replay file is found.  If a file object, then the file object should be opened for
+        :param file: Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+                     where a replay file is found.  If an IO object, then the IO object should be opened for
                      reading.
+        :type file: :class:`str` or :class:`io.TextIOBase`
         """
         was_filename = False
         if 'read' not in dir(file):
@@ -269,9 +272,10 @@ class Replay:
         or well structured as the json format (in :meth:write_json).  For more info, see the
         `replay format <https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md>`_
 
-        :param file: Either a string or a file object.  If a string, then it is assumed to be a filename describing
-                     where a replay file is to be found.  If a file object, then the file object should be opened for
+        :param file: Either a string or an IO object.  If a string, then it is assumed to be a filename describing
+                     where a replay file is to be found.  If an IO object, then the IO object should be opened for
                      reading.
+        :type file: :class:`str` or :class:`io.TextIOBase`
         """
         was_filename = False
         if 'read' not in dir(file):
@@ -352,9 +356,11 @@ def record(game):
     Several methods of the game and its agents are modified.  These modifications will not affect the operation
     of the game or its agents, although any further modifications to these methods will not be recorded.
 
-    :param hearthbreaker.game_objects.Game game: A game which has not been started
-    :rval Replay: A replay that will track the actions of the game as it is played.  Once the game is complete,
+    :param game: A game which has not been started
+    :type game: :class:`Game <hearthbreaker.game_objects.Game>`
+    :return: A replay that will track the actions of the game as it is played.  Once the game is complete,
                   this replay can be written to a file to remember the state of this game.
+    :rtype: :class:`Replay`
     """
     class RecordingAgent:
         __slots__ = ['agent']
@@ -439,8 +445,10 @@ def playback(replay):
     """
     Create a game which can be replayed back out of a replay.
 
-    :param Replay replay: The replay to load the game out of
-    :rval hearthbreaker.game_objects.Game: A game which when played will perform all of the actions in the replay.
+    :param replay: The replay to load the game out of
+    :type replay: :class:`Replay`
+    :return: A game which when played will perform all of the actions in the replay.
+    :rtype: :class:`Game <hearthbreaker.game_objects.Game>`
     """
     move_index = -1
     k_index = 0
