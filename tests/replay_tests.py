@@ -41,9 +41,9 @@ class TestReplay(unittest.TestCase):
 
         for rfile in files:
             replay = Replay()
-            replay.parse_replay(rfile)
+            replay.read(rfile)
             output = StringIO()
-            replay.write_replay(output)
+            replay.write(output)
             f = open(rfile, 'r')
             file_string = f.read()
             f.close()
@@ -72,14 +72,14 @@ class TestReplay(unittest.TestCase):
 
         for rfile in files:
             replay = Replay()
-            replay.parse_replay(rfile)
+            replay.read(rfile)
             json_output = StringIO()
-            replay.write_replay_json(json_output)
+            replay.write_json(json_output)
             json_replay = Replay()
             json_input = StringIO(json_output.getvalue())
-            json_replay.read_replay_json(json_input)
+            json_replay.read_json(json_input)
             output = StringIO()
-            json_replay.write_replay(output)
+            json_replay.write(output)
             f = open(rfile, 'r')
             file_string = f.read()
             f.close()
@@ -110,9 +110,12 @@ class TestReplay(unittest.TestCase):
         replay = record(game)
         game.start()
         output = StringIO()
-        replay.write_replay_json(output)
+        replay.write_json(output)
         f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
         dif = self.__compare_json(output.getvalue(), f.read())
+        with open("bler.hsreplay", "w") as debug_file:
+            replay.write_json(debug_file)
+
         self.assertTrue(dif)
         f.close()
 
@@ -139,7 +142,7 @@ class TestReplay(unittest.TestCase):
             game.play_single_turn()
 
         output = StringIO()
-        replay.write_replay_json(output)
+        replay.write_json(output)
         random.seed(4879)
         new_game = playback(Replay(StringIO(output.getvalue())))
         new_game.pre_game()
@@ -164,11 +167,11 @@ class TestReplay(unittest.TestCase):
             game.play_single_turn()
 
         output = StringIO()
-        replay.write_replay_json(output)
+        replay.write_json(output)
         inp = StringIO(output.getvalue())
         new_replay = Replay()
-        new_replay.read_replay_json(inp)
+        new_replay.read_json(inp)
         old_output = output.getvalue()
         other_output = StringIO()
-        new_replay.write_replay_json(other_output)
+        new_replay.write_json(other_output)
         self.assertEqual(other_output.getvalue(), old_output)
