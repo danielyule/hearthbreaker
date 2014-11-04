@@ -1,5 +1,8 @@
 import copy
-from hearthbreaker.effects.minion import Draw
+from hearthbreaker.effects.action import Draw
+from hearthbreaker.effects.base import NewEffect
+from hearthbreaker.effects.event import Attack
+from hearthbreaker.effects.selector import PlayerSelector, PlayerOne, PlayerTwo
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard
@@ -62,10 +65,10 @@ class BlessingOfWisdom(Card):
     def use(self, player, game):
         super().use(player, game)
         if player is game.players[0]:
-            draw_player = "p1"
+            draw_player = PlayerOne()
         else:
-            draw_player = "p2"
-        self.target.add_effect(Draw("attack", "minion", draw_player))
+            draw_player = PlayerTwo()
+        self.target.add_effect(NewEffect(Attack(), Draw(), PlayerSelector(draw_player)))
 
 
 class Consecration(Card):

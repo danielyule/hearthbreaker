@@ -20,7 +20,11 @@ class Player(metaclass=abc.ABCMeta):
         elif name == "enemy":
             return EnemyPlayer()
         elif name == "both":
-            return BothPlayer
+            return BothPlayer()
+        elif name == "player_one":
+            return PlayerOne()
+        elif name == "player_two":
+            return PlayerTwo()
 
 
 class FriendlyPlayer(Player):
@@ -54,6 +58,28 @@ class BothPlayer(Player):
 
     def __to_json__(self):
         return "both"
+
+
+class PlayerOne(Player):
+    def match(self, source, obj):
+        return source.player is obj.player.game.players[0]
+
+    def get_players(self, target):
+        return [target.game.players[0]]
+
+    def __to_json__(self):
+        return "player_one"
+
+
+class PlayerTwo(Player):
+    def match(self, source, obj):
+        return source.player is obj.player.game.players[1]
+
+    def get_players(self, target):
+        return [target.game.players[1]]
+
+    def __to_json__(self):
+        return "player_two"
 
 
 class CardSelector(Selector, metaclass=abc.ABCMeta):
@@ -107,6 +133,37 @@ class SpellSelector(CardSelector):
     def __to_json__(self):
         return {
             'name': 'spell',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self
+
+
+class BattlecrySelector(CardSelector):
+    def match(self, source, obj):
+        return isinstance(obj, hearthbreaker.game_objects.MinionCard) and \
+            obj.create_minion(source.player).battlecry is not None
+
+    def __to_json__(self):
+        return {
+            'name': 'battlecry',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self
+
+
+class MinionCardSelector(CardSelector):
+    def match(self, source, obj):
+        return isinstance(obj, hearthbreaker.game_objects.MinionCard)
+
+    def __to_json__(self):
+        return {
+            'name': 'minion_card',
             'players': self.players
         }
 

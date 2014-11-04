@@ -3,14 +3,16 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_enemy_minion_on_board_from_enemy_deck
-from hearthbreaker.effects.action import Charge, ChangeAttack, ChangeHealth, Heal
+from hearthbreaker.effects.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
+    Chance
 from hearthbreaker.effects.base import Aura, NewEffect
 from hearthbreaker.effects.condition import Adjacent, MinionIsType, MinionHasDeathrattle
 from hearthbreaker.effects.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted
-from hearthbreaker.effects.minion import IncreaseBattlecryMinionCost, DoubleDeathrattle, \
-    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Damage, Draw, BuffTemp, ManaFilter, CantAttack, Summon
+from hearthbreaker.effects.minion import DoubleDeathrattle, \
+    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Damage, BuffTemp
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
-from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector
+from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
+    PlayerSelector, MinionCardSelector
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -605,7 +607,7 @@ class VentureCoMercenary(MinionCard):
         super().__init__("Venture Co. Mercenary", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(7, 6, effects=[ManaFilter(-3, filter_type="minion")])
+        return Minion(7, 6, auras=[Aura(ManaChange(-3, 0, MinionCardSelector()), PlayerSelector())])
 
 
 class AmaniBerserker(MinionCard):
@@ -1081,7 +1083,7 @@ class Hogger(MinionCard):
         super().__init__("Hogger", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 4, effects=[Summon("turn_ended", card=Gnoll)])
+        return Minion(4, 4, effects=[NewEffect(TurnEnded(), Summon(Gnoll()), PlayerSelector())])
 
 
 class Imp(MinionCard):
@@ -1097,7 +1099,8 @@ class ImpMaster(MinionCard):
         super().__init__("Imp Master", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 5, effects=[Damage("turn_ended", target="self", amount=1), Summon("turn_ended", Imp)])
+        return Minion(1, 5, effects=[Damage("turn_ended", target="self", amount=1),
+                                     NewEffect(TurnEnded(), Summon(Imp()), PlayerSelector())])
 
 
 class InjuredBlademaster(MinionCard):
@@ -1123,7 +1126,7 @@ class NatPagle(MinionCard):
         super().__init__("Nat Pagle", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(0, 4, effects=[Draw("turn_started", probability=0.5)])
+        return Minion(0, 4, effects=[NewEffect(TurnStarted(), Chance(Draw()), PlayerSelector())])
 
 
 class Nozdormu(MinionCard):
@@ -1139,7 +1142,8 @@ class RagnarosTheFirelord(MinionCard):
         super().__init__("Ragnaros the Firelord", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(8, 8, effects=[CantAttack(), Damage("turn_ended", 8, target="random_enemy")])
+        return Minion(8, 8, effects=[Damage("turn_ended", 8, target="random_enemy")],
+                      auras=[Aura(CantAttack(), SelfSelector())])
 
 
 class AncientWatcher(MinionCard):
@@ -1147,7 +1151,7 @@ class AncientWatcher(MinionCard):
         super().__init__("Ancient Watcher", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(4, 5, effects=[CantAttack()])
+        return Minion(4, 5, auras=[Aura(CantAttack(), SelfSelector())])
 
 
 class ColdlightOracle(MinionCard):
@@ -2201,7 +2205,7 @@ class NerubarWeblord(MinionCard):
         super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 4, effects=[IncreaseBattlecryMinionCost(2)])
+        return Minion(1, 4, auras=[Aura(ManaChange(-2, 0, BattlecrySelector()), PlayerSelector(BothPlayer()))])
 
 
 class UnstableGhoul(MinionCard):

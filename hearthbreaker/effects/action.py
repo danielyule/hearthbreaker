@@ -117,7 +117,7 @@ class ManaChange(ReversibleAction):
         self.amount = amount
         self.minimum = minimum
         self.card_selector = card_selector
-        self.filter = None
+        self.filters = {}
 
     def act(self, target):
         class Filter:
@@ -126,11 +126,11 @@ class ManaChange(ReversibleAction):
                 self.min = minimum
                 self.filter = filter
 
-        self.filter = Filter(self.amount, self.minimum, lambda c: self.card_selector.match(target, c))
-        target.player.mana_filters.append(self.filter)
+        self.filters[target.player] = Filter(self.amount, self.minimum, lambda c: self.card_selector.match(target, c))
+        target.player.mana_filters.append(self.filters[target.player])
 
     def unact(self, target):
-        target.player.mana_filters.remove(self.filter)
+        target.player.mana_filters.remove(self.filters[target.player])
 
     def __to_json__(self):
         return {
@@ -144,6 +144,7 @@ class ManaChange(ReversibleAction):
         self.amount = amount
         self.minimum = minimum
         self.card_selector = hearthbreaker.effects.selector.Selector.from_json(**card_selector)
+        self.filters = {}
         return self
 
 
@@ -152,7 +153,7 @@ class Summon(Action):
         self.card = card
 
     def act(self, target):
-        self.card().summon(target.player, target.game, len(target.player.minions))
+        self.card.summon(target.player, target.player.game, len(target.player.minions))
 
     def __to_json__(self):
         return {
@@ -238,3 +239,91 @@ class Stealth(MinionAction):
         return {
             'name': 'stealth'
         }
+
+
+class CantAttack(MinionAction):
+    def __init__(self):
+        super().__init__()
+        self._old_attack = None
+
+    def act(self, target):
+        self._old_attack = target.can_attack
+        target.can_attack = lambda: False
+
+    def unact(self, target):
+        target.can_attack = self._old_attack
+
+    def __to_json__(self):
+        return {
+            "name": "cant_attack"
+        }
+
+
+class IncreaseArmor(Action):
+    def __init__(self, amount=1):
+        super().__init__()
+        self.amount = amount
+
+    def act(self, target):
+        target.armor += self.amount
+
+    def __to_json__(self):
+        return {
+            'name': 'increase_armor'
+        }
+
+
+class NoSpellTarget(ReversibleAction):
+    """
+    Keeps a minion from being targeted by spells (can still be targeted by battlecries)
+    """
+
+    def act(self, target):
+        target.can_be_targeted_by_spells = False
+
+    def unact(self, target):
+        target.can_be_targeted_by_spells = True
+
+    def __to_json__(self):
+        return {
+            "name": "no_spell_target"
+        }
+
+
+class Chance(Action):
+    def __init__(self, action, one_in=2):
+        self.action = action
+        self.one_in = one_in
+
+    def act(self, target):
+        if 1 == target.player.game.random_amount(1, self.one_in):
+            self.action.act(target)
+
+    def __to_json__(self):
+        return {
+            'name': 'chance',
+            'action': self.action,
+            'one_in': self.one_in
+        }
+
+    def __from_json__(self, action, one_in):
+        self.action = Action.from_json(**action)
+        self.one_in = one_in
+
+
+class AddCard(Action):
+    def __init__(self, card):
+        self.card = type(card)
+
+    def act(self, target):
+        if len(target.player.hand) < 10:
+            target.player.hand.append(self.card())
+
+    def __to_json__(self):
+        return {
+            'name': 'add_card',
+            'card': self.card().name
+        }
+
+    def __from_json__(self, card):
+        self.card = hearthbreaker.game_objects.card_lookup(card)

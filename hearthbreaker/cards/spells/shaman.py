@@ -1,6 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Summon
+from hearthbreaker.effects.action import Summon
+from hearthbreaker.effects.base import NewEffect
+from hearthbreaker.effects.event import Death
 from hearthbreaker.effects.player import ManaAdjustment
+from hearthbreaker.effects.selector import SelfSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard
@@ -26,7 +29,7 @@ class AncestralSpirit(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_effect(Summon("death", type(self.target.card), "self"))
+        self.target.add_effect(NewEffect(Death(), Summon(self.target.card), SelfSelector()))
 
 
 class Bloodlust(Card):

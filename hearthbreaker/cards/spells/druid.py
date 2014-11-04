@@ -266,7 +266,7 @@ class SoulOfTheForest(Card):
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         # TODO this will not work correctly with Baron Rivendare, as it is not officially a deathrattle
         for minion in player.minions:
-            minion.add_effect(NewEffect(MinionDied(MinionIsTarget()), Summon(Treant), SelfSelector()))
+            minion.add_effect(NewEffect(MinionDied(MinionIsTarget()), Summon(Treant()), SelfSelector()))
 
 
 class Swipe(Card):

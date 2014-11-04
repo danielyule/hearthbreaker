@@ -1,11 +1,10 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth, ManaChange
+from hearthbreaker.effects.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, AddCard
 from hearthbreaker.effects.aura import ManaAura
 from hearthbreaker.effects.base import NewEffect, Aura
 from hearthbreaker.effects.condition import HasSecret
 from hearthbreaker.effects.event import SpellCast, DidDamage, TurnEnded
-from hearthbreaker.effects.minion import AddCard
 from hearthbreaker.effects.selector import SecretSelector, SpellSelector, PlayerSelector, SelfSelector, TargetSelector
 from hearthbreaker.game_objects import MinionCard, Minion
 
@@ -59,4 +58,4 @@ class ArchmageAntonidas(MinionCard):
         super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(5, 7, effects=[AddCard("played", hearthbreaker.cards.Fireball, "spell", "owner")])
+        return Minion(5, 7, effects=[NewEffect(SpellCast(), AddCard(hearthbreaker.cards.Fireball()), PlayerSelector())])

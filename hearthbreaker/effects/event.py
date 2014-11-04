@@ -79,3 +79,13 @@ class MinionDamaged(PlayerEvent):
 class Overloaded(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
         super().__init__("overloaded", condition, player)
+
+
+class Attack(MinionEvent):
+    def __init__(self, condition=None):
+        super().__init__("attack", condition)
+
+
+class Death(MinionEvent):
+    def __init__(self, condition=None):
+        super().__init__("died", condition)

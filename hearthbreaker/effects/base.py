@@ -33,7 +33,7 @@ class Aura(JSONObject):
             self.action.act(target)
 
     def unapply(self):
-        targets = self.selector.get_targets(self.target, self.target.player)
+        targets = self.selector.get_targets(self.target)
         for target in targets:
             self.action.unact(target)
 

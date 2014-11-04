@@ -896,7 +896,7 @@ class Minion(Character):
         self.taunt = 0
         self.spell_damage = spell_damage
         self.divine_shield = divine_shield
-        self.can_be_targeted_by_spells = spell_targetable
+        self.can_be_targeted_by_spells = True
         self.battlecry = battlecry
         self.deathrattle = deathrattle
         self.base_deathrattle = deathrattle
@@ -923,7 +923,9 @@ class Minion(Character):
         if stealth:
             self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.Stealth(),
                                                                       hearthbreaker.effects.selector.SelfSelector()))
-
+        if not spell_targetable:
+            self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.NoSpellTarget(),
+                                                                      hearthbreaker.effects.selector.SelfSelector()))
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
@@ -1049,7 +1051,6 @@ class Minion(Character):
         self.temp_attack = 0
         self.immune = False
         self.windfury = False
-        self.can_be_targeted_by_spells = True
         self.frozen = False
         self.frozen_this_turn = False
         health_full = self.health == self.calculate_max_health()
@@ -1185,8 +1186,6 @@ class Minion(Character):
         else:
             frozen_for = 0
         effects = copy.copy(self.effects)
-        if not self.can_be_targeted_by_spells:
-            effects.append(hearthbreaker.effects.minion.NoSpellTarget())
         if self.deathrattle:
             effects.append(hearthbreaker.effects.minion.OriginalDeathrattle())
         r_val = {

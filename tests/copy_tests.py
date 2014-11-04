@@ -1551,3 +1551,19 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(23, game.other_player.hero.health)
         self.assertIsNone(game.current_player.hero.weapon)
+
+    def test_NerubarWeblord(self):
+        game = generate_game_for([NerubarWeblord, EarthenRingFarseer], [NoviceEngineer, IronfurGrizzly],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        game.current_player.minions[0].silence()
+        game = game.copy()
+        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
