@@ -10,8 +10,7 @@ from hearthbreaker.effects.event import TurnEnded, CardPlayed, MinionSummoned, T
 from hearthbreaker.effects.minion import IncreaseBattlecryMinionCost, DoubleDeathrattle, \
     ResurrectFriendlyMinionsAtEndOfTurn, Kill, Damage, Draw, BuffTemp, ManaFilter, CantAttack, Summon
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
-from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector
-from hearthbreaker.effects.target import Self, RandomFriendlyMinion
+from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -1065,8 +1064,8 @@ class Gruul(MinionCard):
         super().__init__("Gruul", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 7, effects=[NewEffect(TurnEnded(player=BothPlayer()), ChangeAttack(1), Self()),
-                                     NewEffect(TurnEnded(player=BothPlayer()), ChangeHealth(1), Self())])
+        return Minion(7, 7, effects=[NewEffect(TurnEnded(player=BothPlayer()), ChangeAttack(1), SelfSelector()),
+                                     NewEffect(TurnEnded(player=BothPlayer()), ChangeHealth(1), SelfSelector())])
 
 
 class Gnoll(MinionCard):
@@ -1116,7 +1115,7 @@ class MasterSwordsmith(MinionCard):
         super().__init__("Master Swordsmith", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[NewEffect(TurnEnded(), ChangeAttack(1), RandomFriendlyMinion())])
+        return Minion(1, 3, effects=[NewEffect(TurnEnded(), ChangeAttack(1), RandomSelector(MinionSelector()))])
 
 
 class NatPagle(MinionCard):
@@ -1380,7 +1379,7 @@ class YoungPriestess(MinionCard):
         super().__init__("Young Priestess", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 1, effects=[NewEffect(TurnEnded(), ChangeHealth(1), RandomFriendlyMinion())])
+        return Minion(2, 1, effects=[NewEffect(TurnEnded(), ChangeHealth(1), RandomSelector(MinionSelector()))])
 
 
 class AcolyteOfPain(MinionCard):
@@ -1522,8 +1521,8 @@ class QuestingAdventurer(MinionCard):
         super().__init__("Questing Adventurer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[NewEffect(CardPlayed(), ChangeAttack(1), Self()),
-                                     NewEffect(CardPlayed(), ChangeHealth(1), Self())])
+        return Minion(2, 2, effects=[NewEffect(CardPlayed(), ChangeAttack(1), SelfSelector()),
+                                     NewEffect(CardPlayed(), ChangeHealth(1), SelfSelector())])
 
 
 class GurubashiBerserker(MinionCard):
@@ -2234,7 +2233,7 @@ class StoneskinGargoyle(MinionCard):
         super().__init__("Stoneskin Gargoyle", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 4, effects=[NewEffect(TurnStarted(), Heal(10000), Self())])
+        return Minion(1, 4, effects=[NewEffect(TurnStarted(), Heal(10000), SelfSelector())])
 
 
 class SludgeBelcher(MinionCard):
@@ -2292,8 +2291,9 @@ class Undertaker(MinionCard):
         super().__init__("Undertaker", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 2, effects=[NewEffect(MinionSummoned(MinionHasDeathrattle()), ChangeAttack(1), Self()),
-                                     NewEffect(MinionSummoned(MinionHasDeathrattle()), ChangeHealth(1), Self())])
+        return Minion(1, 2, effects=[NewEffect(MinionSummoned(MinionHasDeathrattle()), ChangeAttack(1), SelfSelector()),
+                                     NewEffect(MinionSummoned(MinionHasDeathrattle()), ChangeHealth(1), SelfSelector())]
+                      )
 
 
 class WailingSoul(MinionCard):
@@ -2387,8 +2387,8 @@ class ShadeOfNaxxramas(MinionCard):
         super().__init__("Shade of Naxxramas", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        return Minion(2, 2, stealth=True, effects=[NewEffect(TurnStarted(), ChangeAttack(1), Self()),
-                                                   NewEffect(TurnStarted(), ChangeHealth(1), Self())])
+        return Minion(2, 2, stealth=True, effects=[NewEffect(TurnStarted(), ChangeAttack(1), SelfSelector()),
+                                                   NewEffect(TurnStarted(), ChangeHealth(1), SelfSelector())])
 
 
 class KelThuzad(MinionCard):

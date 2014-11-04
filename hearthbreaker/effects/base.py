@@ -1,9 +1,24 @@
 import abc
+import json
 import string
-import hearthbreaker.effects.minion
 
 
-class Aura:
+class JSONObject(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def __to_json__(self):
+        pass
+
+    @staticmethod
+    @abc.abstractclassmethod
+    def from_json(action, selector):
+        pass
+
+    def __str__(self):
+        return json.dumps(self.__to_json__(), default=lambda o: o.__to_json__(), sort_keys=True)
+
+
+class Aura(JSONObject):
     def __init__(self, action, selector):
         self.target = None
         self.action = action
@@ -13,7 +28,7 @@ class Aura:
         self.target = target
 
     def apply(self):
-        targets = self.selector.get_targets(self.target, self.target.player)
+        targets = self.selector.get_targets(self.target)
         for target in targets:
             self.action.act(target)
 
@@ -69,17 +84,13 @@ class AuraUntil(Aura):
         return AuraUntil(action, selector, until)
 
 
-class Selector(metaclass=abc.ABCMeta):
+class Selector(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def get_targets(self, source, player):
+    def get_targets(self, source, target=None):
         pass
 
     @abc.abstractmethod
     def match(self, source, obj):
-        pass
-
-    @abc.abstractmethod
-    def __to_json__(self):
         pass
 
     @staticmethod
@@ -96,7 +107,7 @@ class Selector(metaclass=abc.ABCMeta):
         return self
 
 
-class Action(metaclass=abc.ABCMeta):
+class Action(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def act(self, target):
         pass
@@ -114,10 +125,6 @@ class Action(metaclass=abc.ABCMeta):
         self.__init__(**kwargs)
         return self
 
-    @abc.abstractmethod
-    def __to_json__(self):
-        pass
-
 
 class ReversibleAction(Action, metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -129,7 +136,7 @@ class MinionAction(ReversibleAction, metaclass=abc.ABCMeta):
     pass
 
 
-class Event(metaclass=abc.ABCMeta):
+class Event(JSONObject, metaclass=abc.ABCMeta):
     def __init__(self, event_name, condition):
         self.event_name = event_name
         self.condition = condition
@@ -212,15 +219,15 @@ class PlayerEvent(Event):
                 player.unbind(self.event_name, func)
 
 
-class NewEffect:
-    def __init__(self, event, action, targeting):
+class NewEffect(JSONObject):
+    def __init__(self, event, action, selector):
         self.event = event
         if isinstance(action, MinionAction):
             from hearthbreaker.effects.action import Give
             self.action = Give(action)
         else:
             self.action = action
-        self.targeting = targeting
+        self.selector = selector
         self.target = None
 
     def apply(self):
@@ -233,52 +240,30 @@ class NewEffect:
         self.target = target
 
     def _find_target(self, focus=None, other=None):
-        target = self.targeting.select_target(self.target, focus, other)
-        if target:
+        targets = self.selector.get_targets(self.target, focus)
+        for target in targets:
             self.action.act(target)
 
     def __to_json__(self):
         return {
             'event': self.event,
             'action': self.action,
-            'targeting': self.targeting,
+            'selector': self.selector,
         }
 
     @staticmethod
     def from_json(game, **kwargs):
         if 'action' not in kwargs or type(kwargs['action']) is str:
+            import hearthbreaker.effects.minion
             return hearthbreaker.effects.minion.MinionEffect.from_json(game, **kwargs)
         else:
             action = Action.from_json(**kwargs['action'])
             event = Event.from_json(**kwargs['event'])
-            targeting = Targeting.from_json(**kwargs['targeting'])
-            return NewEffect(event, action, targeting)
+            selector = Selector.from_json(**kwargs['selector'])
+            return NewEffect(event, action, selector)
 
 
-class Targeting(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def select_target(self, this, focus, other):
-        pass
-
-    @abc.abstractmethod
-    def __to_json__(self):
-        pass
-
-    @staticmethod
-    def from_json(name, **kwargs):
-        import hearthbreaker.effects.target as action_mod
-
-        cls_name = string.capwords(name, '_').replace("_", "")
-        cls = getattr(action_mod, cls_name)
-        obj = cls.__new__(cls)
-        return obj.__from_json__(**kwargs)
-
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
-
-
-class Condition(metaclass=abc.ABCMeta):
+class Condition(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def evaluate(self, target, *args):
         pass

@@ -1,5 +1,6 @@
+import hearthbreaker
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.effects.base import Condition, Selector
+from hearthbreaker.effects.base import Condition
 
 
 class HasSecret(Condition):
@@ -27,7 +28,7 @@ class CardMatches(Condition):
         }
 
     def __from_json__(self, selector):
-        selector = Selector.from_json(**selector)
+        selector = hearthbreaker.effects.selector.Selector.from_json(**selector)
         self.__init__(selector)
         return self
 

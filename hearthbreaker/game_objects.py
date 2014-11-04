@@ -1,15 +1,16 @@
 import copy
 import random
 import abc
+
 import hearthbreaker.effects.minion
 import hearthbreaker.effects.player
 import hearthbreaker.effects.base
 import hearthbreaker.effects.action
-from hearthbreaker.effects.selector import MinionSelector
-
+import hearthbreaker.effects.selector
 import hearthbreaker.powers
 import hearthbreaker.targeting
 import hearthbreaker.constants
+
 
 card_table = {}
 
@@ -236,8 +237,8 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.immune = False
         #: The list of delayed events
         self.delayed = []
-        #: If this character has stealth
-        self.stealth = stealth
+        #: Non zero if this character has stealth
+        self.stealth = 0
         #: If this character is enraged
         self.enraged = False
         #: If this character has been removed from the board
@@ -824,6 +825,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             player.trigger("minion_placed", minion)
             player.trigger("minion_summoned", minion)
             player.trigger("after_minion_added", minion)
+            return minion
 
     @abc.abstractmethod
     def create_minion(self, player):
@@ -887,11 +889,11 @@ class Minion(Character):
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
         super().__init__(attack, health, windfury=windfury, stealth=stealth, enrage=enrage)
-        self.taunt = taunt
         self.game = None
         self.card = None
         self.index = -1
         self.charge = 0
+        self.taunt = 0
         self.spell_damage = spell_damage
         self.divine_shield = divine_shield
         self.can_be_targeted_by_spells = spell_targetable
@@ -914,6 +916,12 @@ class Minion(Character):
             self._auras_to_add = []
         if charge:
             self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.Charge(),
+                                                                      hearthbreaker.effects.selector.SelfSelector()))
+        if taunt:
+            self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.Taunt(),
+                                                                      hearthbreaker.effects.selector.SelfSelector()))
+        if stealth:
+            self._auras_to_add.append(hearthbreaker.effects.base.Aura(hearthbreaker.effects.action.Stealth(),
                                                                       hearthbreaker.effects.selector.SelfSelector()))
 
         self.bind("did_damage", self.__on_did_damage)
@@ -1041,8 +1049,6 @@ class Minion(Character):
         self.temp_attack = 0
         self.immune = False
         self.windfury = False
-        self.taunt = False
-        self.stealth = False
         self.can_be_targeted_by_spells = True
         self.frozen = False
         self.frozen_this_turn = False
@@ -1115,9 +1121,9 @@ class Minion(Character):
         new_minion.events = dict()
         new_minion.bind("did_damage", self.__on_did_damage)
         new_minion.divine_shield = self.divine_shield
-        new_minion.taunt = self.taunt
+        new_minion.taunt = 0
         new_minion.charge = 0
-        new_minion.stealth = self.stealth
+        new_minion.stealth = 0
         new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.spell_damage = self.spell_damage
         new_minion.temp_attack = self.temp_attack
@@ -1179,12 +1185,8 @@ class Minion(Character):
         else:
             frozen_for = 0
         effects = copy.copy(self.effects)
-        if self.taunt:
-            effects.append(hearthbreaker.effects.minion.Taunt())
         if not self.can_be_targeted_by_spells:
             effects.append(hearthbreaker.effects.minion.NoSpellTarget())
-        if self.stealth:
-            effects.append(hearthbreaker.effects.minion.Stealth())
         if self.deathrattle:
             effects.append(hearthbreaker.effects.minion.OriginalDeathrattle())
         r_val = {
@@ -1259,17 +1261,6 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
     def is_spell(self):
         return False
-
-
-class TheCoin(Card):
-    def __init__(self):
-        super().__init__("The Coin", 0, hearthbreaker.constants.CHARACTER_CLASS.ALL,
-                         hearthbreaker.constants.CARD_RARITY.SPECIAL)
-
-    def use(self, player, game):
-        super().use(player, game)
-        if player.mana < 10:
-            player.mana += 1
 
 
 class Weapon(Bindable):
@@ -1601,7 +1592,7 @@ class Player(Bindable):
         effect.apply(self)
 
     def add_aura(self, aura):
-        if isinstance(aura.selector, MinionSelector):
+        if isinstance(aura.selector, hearthbreaker.effects.selector.MinionSelector):
             self.minion_auras.append(aura)
         else:
             self.player_auras.append(aura)
@@ -1610,7 +1601,7 @@ class Player(Bindable):
         aura.apply()
 
     def remove_aura(self, aura):
-        if isinstance(aura.selector, MinionSelector):
+        if isinstance(aura.selector, hearthbreaker.effects.selector.MinionSelector):
             self.minion_auras.remove(aura)
         else:
             self.player_auras.remove(aura)
@@ -1718,6 +1709,7 @@ class Game(Bindable):
             minion.activate_delayed()
 
     def pre_game(self):
+        from hearthbreaker.cards import TheCoin
         if self.__pre_game_run:
             return
         self.__pre_game_run = True

@@ -1,6 +1,6 @@
-from hearthbreaker.effects.base import ReversibleAction, Selector, Action, MinionAction, Aura
-from hearthbreaker.effects.selector import SelfSelector
+from hearthbreaker.effects.base import ReversibleAction, Action, MinionAction, Aura
 import hearthbreaker.game_objects
+import hearthbreaker.effects.selector
 
 
 class Freeze(ReversibleAction):
@@ -19,7 +19,7 @@ class Freeze(ReversibleAction):
 class Give(ReversibleAction):
     def __init__(self, aura):
         if isinstance(aura, Action):
-            self.aura = Aura(aura, SelfSelector())
+            self.aura = Aura(aura, hearthbreaker.effects.selector.SelfSelector())
         else:
             self.aura = aura
 
@@ -32,6 +32,31 @@ class Give(ReversibleAction):
     def __to_json__(self):
         return {
             'name': 'give',
+            'aura': self.aura
+        }
+
+    def __from_json__(self, aura):
+        self.aura = Aura.from_json(**aura)
+        return self
+
+
+class Take(Action):
+    def __init__(self, aura):
+        if isinstance(aura, Action):
+            self.aura = Aura(aura, hearthbreaker.effects.selector.SelfSelector())
+        else:
+            self.aura = aura
+
+    def act(self, target):
+        aura_json = str(self.aura)
+        for aura in target.auras:
+            if str(aura) == aura_json:
+                target.remove_aura(aura)
+                break
+
+    def __to_json__(self):
+        return {
+            'name': 'take',
             'aura': self.aura
         }
 
@@ -118,7 +143,7 @@ class ManaChange(ReversibleAction):
     def __from_json__(self, amount, minimum, card_selector):
         self.amount = amount
         self.minimum = minimum
-        self.card_selector = Selector.from_json(**card_selector)
+        self.card_selector = hearthbreaker.effects.selector.Selector.from_json(**card_selector)
         return self
 
 
@@ -186,4 +211,30 @@ class Charge(MinionAction):
     def __to_json__(self):
         return {
             'name': 'charge'
+        }
+
+
+class Taunt(MinionAction):
+    def act(self, target):
+        target.taunt += 1
+
+    def unact(self, target):
+        target.taunt -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'taunt'
+        }
+
+
+class Stealth(MinionAction):
+    def act(self, target):
+        target.stealth += 1
+
+    def unact(self, target):
+        target.stealth -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'stealth'
         }

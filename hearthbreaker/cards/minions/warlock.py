@@ -3,7 +3,7 @@ from hearthbreaker.effects.action import ChangeHealth
 from hearthbreaker.effects.base import NewEffect
 from hearthbreaker.effects.event import TurnEnded
 from hearthbreaker.effects.minion import ManaFilter
-from hearthbreaker.effects.target import RandomFriendlyMinion
+from hearthbreaker.effects.selector import RandomSelector, MinionSelector
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord, put_demon_on_board_from_hand
@@ -79,7 +79,8 @@ class BloodImp(MinionCard):
         super().__init__("Blood Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(0, 1, stealth=True, effects=[NewEffect(TurnEnded(), ChangeHealth(1), RandomFriendlyMinion())])
+        return Minion(0, 1, stealth=True,
+                      effects=[NewEffect(TurnEnded(), ChangeHealth(1), RandomSelector(MinionSelector()))])
 
 
 class LordJaraxxus(MinionCard):

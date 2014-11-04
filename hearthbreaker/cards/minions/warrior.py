@@ -3,8 +3,7 @@ from hearthbreaker.effects.base import NewEffect
 from hearthbreaker.effects.condition import AttackLessThanOrEqualTo
 from hearthbreaker.effects.event import MinionPlaced, MinionDamaged
 from hearthbreaker.effects.minion import IncreaseArmor
-from hearthbreaker.effects.selector import BothPlayer
-from hearthbreaker.effects.target import Target, Self
+from hearthbreaker.effects.selector import BothPlayer, SelfSelector, TargetSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -56,7 +55,7 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(2, 4, effects=[NewEffect(MinionDamaged(player=BothPlayer()), ChangeAttack(1), Self())])
+        minion = Minion(2, 4, effects=[NewEffect(MinionDamaged(player=BothPlayer()), ChangeAttack(1), SelfSelector())])
         return minion
 
 
@@ -81,4 +80,4 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[NewEffect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), Target())])
+        return Minion(2, 3, effects=[NewEffect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), TargetSelector())])

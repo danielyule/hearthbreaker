@@ -3,7 +3,7 @@ from hearthbreaker.effects.action import Summon, Kill
 from hearthbreaker.effects.base import NewEffect
 from hearthbreaker.effects.condition import MinionIsTarget
 from hearthbreaker.effects.event import MinionDied, TurnEnded
-from hearthbreaker.effects.target import Self
+from hearthbreaker.effects.selector import SelfSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -266,7 +266,7 @@ class SoulOfTheForest(Card):
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         # TODO this will not work correctly with Baron Rivendare, as it is not officially a deathrattle
         for minion in player.minions:
-            minion.add_effect(NewEffect(MinionDied(MinionIsTarget()), Summon(Treant), Self()))
+            minion.add_effect(NewEffect(MinionDied(MinionIsTarget()), Summon(Treant), SelfSelector()))
 
 
 class Swipe(Card):
@@ -371,7 +371,7 @@ class ForceOfNature(Card):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[NewEffect(TurnEnded(), Kill(), Self())])
+                return Minion(2, 2, charge=True, effects=[NewEffect(TurnEnded(), Kill(), SelfSelector())])
 
         for i in [0, 1, 2]:
             treant_card = Treant()

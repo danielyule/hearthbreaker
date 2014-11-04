@@ -45,9 +45,6 @@ class MinionEffect(metaclass=abc.ABCMeta):
             "summon": Summon,
             "resurrect_friendly": ResurrectFriendlyMinionsAtEndOfTurn,
             "original_deathrattle": OriginalDeathrattle,
-            "charge": Charge,
-            "taunt": Taunt,
-            "stealth": Stealth,
             "no_spell_target": NoSpellTarget,
             "change_attack": ChangeAttack,
             "change_health": ChangeHealth,
@@ -95,46 +92,46 @@ class TranientEffect(MinionEffect):
         pass
 
 
-class Charge(TranientEffect):
-    """
-    Gives a minion charge.
-    """
-
-    def apply(self):
-        self.target.charge = 1
-
-    def __to_json__(self):
-        return {
-            "action": "charge"
-        }
-
-
-class Taunt(TranientEffect):
-    """
-    Gives a minion charge.
-    """
-
-    def apply(self):
-        self.target.taunt = True
-
-    def __to_json__(self):
-        return {
-            "action": "taunt"
-        }
+# class Charge(TranientEffect):
+#     """
+#     Gives a minion charge.
+#     """
+#
+#     def apply(self):
+#         self.target.charge = 1
+#
+#     def __to_json__(self):
+#         return {
+#             "action": "charge"
+#         }
 
 
-class Stealth(TranientEffect):
-    """
-    Gives a minion stealth
-    """
-
-    def apply(self):
-        self.target.stealth = True
-
-    def __to_json__(self):
-        return {
-            "action": "stealth"
-        }
+# class Taunt(TranientEffect):
+#     """
+#     Gives a minion charge.
+#     """
+#
+#     def apply(self):
+#         self.target.taunt = True
+#
+#     def __to_json__(self):
+#         return {
+#             "action": "taunt"
+#         }
+#
+#
+# class Stealth(TranientEffect):
+#     """
+#     Gives a minion stealth
+#     """
+#
+#     def apply(self):
+#         self.target.stealth = True
+#
+#     def __to_json__(self):
+#         return {
+#             "action": "stealth"
+#         }
 
 
 class ChangeAttack(TranientEffect):

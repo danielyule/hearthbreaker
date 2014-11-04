@@ -1,6 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Stealth
-from hearthbreaker.effects.player import RemoveStealth, ReturnCard, PlayerManaFilter, ManaAdjustment
+from hearthbreaker.effects.action import Stealth, Take
+from hearthbreaker.effects.base import Aura, NewEffect
+from hearthbreaker.effects.event import TurnStarted
+from hearthbreaker.effects.player import ReturnCard, PlayerManaFilter, ManaAdjustment
+from hearthbreaker.effects.selector import SelfSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -94,14 +97,11 @@ class Conceal(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        stealthed_minions = []
         for minion in player.minions:
             if not minion.stealth:
-                minion.add_effect(Stealth())
-                stealthed_minions.append(minion)
-
-        if len(stealthed_minions) > 0:
-            player.add_effect(RemoveStealth(stealthed_minions, "turn_started"))
+                aura = Aura(Stealth(), SelfSelector())
+                minion.add_aura(aura)
+                minion.add_effect(NewEffect(TurnStarted(), Take(aura), SelfSelector()))
 
 
 class DeadlyPoison(Card):
