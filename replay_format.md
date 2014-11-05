@@ -28,13 +28,13 @@ The header is an object that describes the initial setup of the game.  It has th
 
 ```json
 {
-     "deck": [...],
+     "decks": [...],
      "keep": [...],
      "random": [...],
 }
 ```
 
-### Deck
+### Decks
 The deck array consists of objects that specify which cards each player is using, as well as which class each player
 is playing as.  The order of the decks given is not in play order.  Play order will be determined by the first number in
 the [random](#random) property below.  Each object has two properties: `class` and `cards`.  
@@ -151,7 +151,7 @@ Compact Replay File Format
 ==========================
 
 The compact replay file format is a text file made up of a series of directives,
-one per line.  In general, the file has two components: the [header](#header), and the [moves](#moves).
+one per line.  In general, the file has two components: the [header](#header-1), and the [moves](#moves-1).
 The format is case sensitive.
 
 Each header directive corresponds to a property in the complete format's header.  Each move directive corresponds to
@@ -160,7 +160,7 @@ a move object in the complete format, except that the `play` and `summon` direct
 
 Header
 ------
-The header consists of three directives: the [`deck`](#deck) directive, the [`random`](#random) directive and the [`keep`](#keep-optional) directive
+The header consists of three directives: the [`deck`](#deck) directive, the [`random`](#random-1) directive and the [`keep`](#keep-optional) directive
 
 ###Deck
 `deck(class, card1, card2,....,card30)`
@@ -230,7 +230,7 @@ random numbers, see the note on [random semantics](#random-semantics)
 
 Moves
 -----
-Move directives specify user actions.  There are six types of user moves: [`play`](#play), [`summon`](#summon), [`attack`](#attack), [`power`](#power), [`start`](#start), [`end`](#end) and [`concede`](#concede).
+Move directives specify user actions.  There are six types of user moves: [`play`](#play-1), [`summon`](#summon), [`attack`](#attack-1), [`power`](#power-1), [`start`](#start-1), [`end`](#end-1) and [`concede`](#concede-1).
 
 ###Play
 `play(card_index[:option][, target])`
