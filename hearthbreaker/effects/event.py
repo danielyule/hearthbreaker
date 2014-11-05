@@ -1,4 +1,5 @@
 from hearthbreaker.effects.base import MinionEvent, PlayerEvent
+from hearthbreaker.effects.condition import MinionIsNotTarget
 from hearthbreaker.effects.selector import FriendlyPlayer, Player
 
 
@@ -46,6 +47,11 @@ class CardPlayed(PlayerEvent):
         super().__init__("card_played", condition, player)
 
 
+class AfterAdded(PlayerEvent):
+    def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
+        super().__init__("after_minion_added", condition, player)
+
+
 class TurnEnded(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
         super().__init__("turn_ended", condition, player)
@@ -62,12 +68,12 @@ class MinionDied(PlayerEvent):
 
 
 class MinionPlaced(PlayerEvent):
-    def __init__(self, condition=None, player=FriendlyPlayer()):
+    def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
         super().__init__("minion_placed", condition, player)
 
 
 class MinionSummoned(PlayerEvent):
-    def __init__(self, condition=None, player=FriendlyPlayer()):
+    def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
         super().__init__("minion_summoned", condition, player)
 
 

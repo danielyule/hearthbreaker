@@ -4,15 +4,16 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand, opponent_draw_two, \
     put_enemy_minion_on_board_from_enemy_deck
 from hearthbreaker.effects.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
-    Chance
+    Chance, Kill, Damage, IncreaseTempAttack
 from hearthbreaker.effects.base import Aura, NewEffect
-from hearthbreaker.effects.condition import Adjacent, MinionIsType, MinionHasDeathrattle
-from hearthbreaker.effects.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted
+from hearthbreaker.effects.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion
+from hearthbreaker.effects.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
+    SpellCast
 from hearthbreaker.effects.minion import DoubleDeathrattle, \
-    ResurrectFriendlyMinionsAtEndOfTurn, Kill, Damage, BuffTemp
+    ResurrectFriendlyMinionsAtEndOfTurn
 from hearthbreaker.effects.player import PlayerManaFilter, DuplicateMinion
 from hearthbreaker.effects.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
-    PlayerSelector, MinionCardSelector
+    PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -296,7 +297,7 @@ class ManaAddict(MinionCard):
         super().__init__("Mana Addict", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[BuffTemp("played", "spell", attack=2)])
+        return Minion(1, 3, effects=[NewEffect(SpellCast(), IncreaseTempAttack(2), SelfSelector())])
 
 
 class OasisSnapjaw(MinionCard):
@@ -683,7 +684,7 @@ class EmperorCobra(MinionCard):
         super().__init__("Emperor Cobra", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[Kill("did_damage", "minion", "other")])
+        return Minion(2, 3, effects=[NewEffect(DidDamage(), Kill(), TargetSelector(IsMinion()))])
 
 
 class CrazedAlchemist(MinionCard):
@@ -738,7 +739,7 @@ class BaronGeddon(MinionCard):
         super().__init__("Baron Geddon", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 5, effects=[Damage("turn_ended", amount=2, target="all")])
+        return Minion(7, 5, effects=[NewEffect(TurnEnded(), Damage(2), CharacterSelector(players=BothPlayer()))])
 
 
 class AngryChicken(MinionCard):
@@ -941,7 +942,8 @@ class KnifeJuggler(MinionCard):
         super().__init__("Knife Juggler", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 2, effects=[Damage("after_added", 1, minion_filter="minion", target="random_enemy")])
+        return Minion(3, 2, effects=[NewEffect(AfterAdded(), Damage(1),
+                                               RandomSelector(CharacterSelector(players=EnemyPlayer())))])
 
 
 class CairneBloodhoof(MinionCard):
@@ -1050,7 +1052,8 @@ class Demolisher(MinionCard):
         super().__init__("Demolisher", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 4, effects=[Damage("turn_started", 2, target="random_enemy")])
+        return Minion(1, 4, effects=[NewEffect(TurnStarted(), Damage(2),
+                                               RandomSelector(CharacterSelector(players=EnemyPlayer())))])
 
 
 class Doomsayer(MinionCard):
@@ -1058,7 +1061,8 @@ class Doomsayer(MinionCard):
         super().__init__("Doomsayer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        return Minion(0, 7, effects=[Kill("turn_started", target="minion", target_self=True)])
+        return Minion(0, 7, effects=[NewEffect(TurnStarted(), Kill(),
+                                               MinionSelector(condition=None, players=BothPlayer()))])
 
 
 class Gruul(MinionCard):
@@ -1099,7 +1103,7 @@ class ImpMaster(MinionCard):
         super().__init__("Imp Master", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 5, effects=[Damage("turn_ended", target="self", amount=1),
+        return Minion(1, 5, effects=[NewEffect(TurnEnded(), Damage(1), SelfSelector()),
                                      NewEffect(TurnEnded(), Summon(Imp()), PlayerSelector())])
 
 
@@ -1142,7 +1146,8 @@ class RagnarosTheFirelord(MinionCard):
         super().__init__("Ragnaros the Firelord", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(8, 8, effects=[Damage("turn_ended", 8, target="random_enemy")],
+        return Minion(8, 8, effects=[NewEffect(TurnEnded(), Damage(8),
+                                               RandomSelector(CharacterSelector(players=EnemyPlayer())))],
                       auras=[Aura(CantAttack(), SelfSelector())])
 
 
@@ -2178,7 +2183,7 @@ class Maexxna(MinionCard):
         super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-            return Minion(2, 8, effects=[Kill("did_damage", "minion", "other")])
+            return Minion(2, 8, effects=[NewEffect(DidDamage(), Kill(), TargetSelector(IsMinion()))])
 
 
 class HauntedCreeper(MinionCard):

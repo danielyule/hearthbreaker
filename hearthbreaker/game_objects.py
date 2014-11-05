@@ -561,16 +561,15 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         self.player.effect_count[type(effect)] += 1
         effect.set_target(self)
         effect.apply()
-        if not isinstance(effect, hearthbreaker.effects.minion.TranientEffect):
-            self.effects.append(effect)
+        self.effects.append(effect)
 
     def _do_enrage(self):
         for action in self.enrage:
-            action.act(self)
+            action.act(self, self)
 
     def _do_unenrage(self):
         for action in self.enrage:
-            action.unact(self)
+            action.unact(self, self)
 
 
 def _is_spell_targetable(target):
@@ -929,7 +928,9 @@ class Minion(Character):
         self.bind("did_damage", self.__on_did_damage)
 
     def __on_did_damage(self, amount, target):
-        self.stealth = False
+        self.auras = [aura for aura in filter(lambda a: not isinstance(a.action, hearthbreaker.effects.action.Stealth),
+                                              self.auras)]
+        self.stealth = 0
 
     def add_to_board(self, index):
         aura_affects = {}
@@ -957,9 +958,9 @@ class Minion(Character):
                 for minion in self.player.minions:
                     is_in = minion in aura_affects[aura]
                     if not is_in and aura.match(minion):
-                        aura.action.act(minion)
+                        aura.action.act(aura.target, minion)
                     elif is_in and not aura.match(minion):
-                        aura.action.unact(minion)
+                        aura.action.unact(aura.target, minion)
         for aura in self._auras_to_add:
             self.add_aura(aura)
 
@@ -997,22 +998,22 @@ class Minion(Character):
             for minion in self.player.minions:
                 is_in = minion in aura_affects[aura]
                 if not is_in and aura.match(minion):
-                    aura.action.act(minion)
+                    aura.action.act(aura.target, minion)
                 elif is_in and not aura.match(minion):
-                    aura.action.unact(minion)
+                    aura.action.unact(aura.target, minion)
 
     def add_aura(self, aura):
         self.auras.append(aura)
         aura.set_target(self)
         if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
-            aura.action.act(self)
+            aura.action.act(aura.target, self)
         else:
             self.player.add_aura(aura)
 
     def remove_aura(self, aura):
         self.auras.remove(aura)
         if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
-            aura.action.unact(self)
+            aura.action.unact(aura.target, self)
         else:
             self.player.remove_aura(aura)
 
@@ -1035,7 +1036,7 @@ class Minion(Character):
             new_minion.add_effect(effect)
         for aura in self.player.minion_auras:
             if aura.match(new_minion):
-                aura.action.act(new_minion)
+                aura.action.act(self, new_minion)
         for aura in new_minion._auras_to_add:
             new_minion.add_aura(aura)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
@@ -1059,7 +1060,7 @@ class Minion(Character):
             effect.unapply()
         for aura in reversed(self.auras):
             if isinstance(aura.selector, hearthbreaker.effects.selector.SelfSelector):
-                aura.action.unact(self)
+                aura.action.unact(aura.target, self)
             else:
                 self.player.remove_aura(aura)
         self.effects = []

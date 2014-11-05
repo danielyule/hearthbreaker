@@ -30,12 +30,12 @@ class Aura(JSONObject):
     def apply(self):
         targets = self.selector.get_targets(self.target)
         for target in targets:
-            self.action.act(target)
+            self.action.act(self.target, target)
 
     def unapply(self):
         targets = self.selector.get_targets(self.target)
         for target in targets:
-            self.action.unact(target)
+            self.action.unact(self.target, target)
 
     def match(self, obj):
         return self.selector.match(self.target, obj)
@@ -84,6 +84,30 @@ class AuraUntil(Aura):
         return AuraUntil(action, selector, until)
 
 
+class Player(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def get_players(self, target):
+        pass
+
+    @abc.abstractmethod
+    def match(self, source, obj):
+        pass
+
+    @staticmethod
+    def from_json(name):
+        from hearthbreaker.effects.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne, PlayerTwo
+        if name == "friendly":
+            return FriendlyPlayer()
+        elif name == "enemy":
+            return EnemyPlayer()
+        elif name == "both":
+            return BothPlayer()
+        elif name == "player_one":
+            return PlayerOne()
+        elif name == "player_two":
+            return PlayerTwo()
+
+
 class Selector(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_targets(self, source, target=None):
@@ -109,7 +133,7 @@ class Selector(JSONObject, metaclass=abc.ABCMeta):
 
 class Action(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def act(self, target):
+    def act(self, actor, target):
         pass
 
     @staticmethod
@@ -128,7 +152,7 @@ class Action(JSONObject, metaclass=abc.ABCMeta):
 
 class ReversibleAction(Action, metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def unact(self, target):
+    def unact(self, actor, target):
         pass
 
 
@@ -218,11 +242,25 @@ class PlayerEvent(Event):
             else:
                 player.unbind(self.event_name, func)
 
+    def __to_json__(self):
+        super_json = super().__to_json__()
+        super_json.update({
+            'player': self.player
+        })
+        return super_json
+
+    def __from_json__(self, player, condition=None):
+        if condition:
+            condition = Condition.from_json(**condition)
+        player = Player.from_json(player)
+        self.__init__(condition, player)
+        return self
+
 
 class NewEffect(JSONObject):
     def __init__(self, event, action, selector):
         self.event = event
-        if isinstance(action, MinionAction):
+        if isinstance(action, ReversibleAction):
             from hearthbreaker.effects.action import Give
             self.action = Give(action)
         else:
@@ -242,7 +280,7 @@ class NewEffect(JSONObject):
     def _find_target(self, focus=None, other=None):
         targets = self.selector.get_targets(self.target, focus)
         for target in targets:
-            self.action.act(target)
+            self.action.act(self.target, target)
 
     def __to_json__(self):
         return {

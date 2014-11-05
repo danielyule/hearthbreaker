@@ -1,30 +1,7 @@
 import abc
 import hearthbreaker.game_objects
-from hearthbreaker.effects.base import Selector
+from hearthbreaker.effects.base import Selector, Player
 import hearthbreaker.effects.condition
-
-
-class Player(metaclass=abc.ABCMeta):
-    @abc.abstractmethod
-    def get_players(self, target):
-        pass
-
-    @abc.abstractmethod
-    def match(self, source, obj):
-        pass
-
-    @staticmethod
-    def from_json(name):
-        if name == "friendly":
-            return FriendlyPlayer()
-        elif name == "enemy":
-            return EnemyPlayer()
-        elif name == "both":
-            return BothPlayer()
-        elif name == "player_one":
-            return PlayerOne()
-        elif name == "player_two":
-            return PlayerTwo()
 
 
 class FriendlyPlayer(Player):
@@ -230,6 +207,53 @@ class MinionSelector(Selector):
     def __from_json__(self, players, condition=None):
         if condition:
             self.condition = hearthbreaker.effects.condition.Condition.from_json(**condition)
+        else:
+            self.condition = None
+        self.players = Player.from_json(players)
+        return self
+
+
+class CharacterSelector(Selector):
+    def __init__(self, condition=hearthbreaker.effects.condition.MinionIsNotTarget(), players=FriendlyPlayer()):
+        self.condition = condition
+        self.players = players
+
+    def get_targets(self, source, obj=None):
+        players = self.players.get_players(source.player)
+        targets = []
+        for p in players:
+            for minion in p.minions:
+                if self.match(source, minion):
+                    targets.append(minion)
+            if self.match(source, p.hero):
+                targets.append(p.hero)
+
+        return targets
+
+    def match(self, source, obj):
+        if self.condition:
+            return isinstance(obj, hearthbreaker.game_objects.Character) and self.players.match(source, obj) \
+                and self.condition.evaluate(source, obj)
+        else:
+            return isinstance(obj, hearthbreaker.game_objects.Character) and self.players.match(source, obj)
+
+    def __to_json__(self):
+        if self.condition:
+            return {
+                'name': 'character',
+                'condition': self.condition,
+                'players': self.players
+            }
+        return {
+            'name': 'character',
+            'players': self.players
+        }
+
+    def __from_json__(self, players, condition=None):
+        if condition:
+            self.condition = hearthbreaker.effects.condition.Condition.from_json(**condition)
+        else:
+            self.condition = None
         self.players = Player.from_json(players)
         return self
 
@@ -248,16 +272,35 @@ class SelfSelector(Selector):
 
 
 class TargetSelector(Selector):
+
+    def __init__(self, condition=None):
+        super().__init__()
+        self.condition = condition
+
     def get_targets(self, source, obj=None):
-        return [obj]
+        if not self.condition or self.condition.evaluate(source, obj):
+            return [obj]
+        return []
 
     def match(self, source, obj):
         return False
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'name': 'target',
+                'condition': self.condition,
+            }
         return {
-            'name': 'target'
+            'name': 'target',
         }
+
+    def __from_json__(self, condition=None):
+        if condition:
+            self.condition = hearthbreaker.effects.condition.Condition.from_json(**condition)
+        else:
+            self.condition = None
+        return self
 
 
 class RandomSelector(Selector):

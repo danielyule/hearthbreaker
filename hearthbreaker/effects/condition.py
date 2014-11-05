@@ -33,6 +33,16 @@ class CardMatches(Condition):
         return self
 
 
+class IsMinion(Condition):
+    def evaluate(self, target, minion, *args):
+        return isinstance(minion, hearthbreaker.game_objects.Minion)
+
+    def __to_json__(self):
+        return {
+            "name": 'is_minion'
+        }
+
+
 class MinionIsTarget(Condition):
     def evaluate(self, target, minion, *args):
         return minion is target
