@@ -1,6 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Immune, StatsAura
-from hearthbreaker.effects.player import ManaAdjustment
+from hearthbreaker.tags.action import ChangeAttack, Immune
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Aura, AuraUntil
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, CurrentPlayer, SpecificCardSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
@@ -37,8 +40,7 @@ class BestialWrath(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        self.target.add_effect(Immune())
+        self.target.add_aura(AuraUntil(Immune(), SelfSelector(), TurnEnded(player=CurrentPlayer())))
         self.target.change_temp_attack(2)
 
 
@@ -106,7 +108,7 @@ class FreezingTrap(SecretCard):
     def _reveal(self, attacker):
         if isinstance(attacker, Minion) and not attacker.removed:
             attacker.bounce()
-            attacker.player.add_effect(ManaAdjustment(attacker.card, -2))
+            attacker.player.add_aura(ManaAura(-2, 0, SpecificCardSelector(attacker.card), True, False))
             super().reveal()
 
 
@@ -230,12 +232,10 @@ class UnleashTheHounds(Card):
 
         class Hound(MinionCard):
             def __init__(self):
-                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(1, 1, MINION_TYPE.BEAST)
-                minion.charge = True
-                return minion
+                return Minion(1, 1, charge=True)
         for target in hearthbreaker.targeting.find_enemy_minion_spell_target(player.game, lambda x: True):
             hound = Hound()
             hound.summon(player, game, len(player.minions))
@@ -250,28 +250,25 @@ class AnimalCompanion(Card):
 
         class Huffer(MinionCard):
             def __init__(self):
-                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL,
+                                 minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(4, 2, MINION_TYPE.BEAST)
-                minion.charge = True
-                return minion
+                return Minion(4, 2, charge=True)
 
         class Misha(MinionCard):
             def __init__(self):
-                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
+                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                minion = Minion(4, 4, MINION_TYPE.BEAST)
-                minion.taunt = True
-                return minion
+                return Minion(4, 4, taunt=True)
 
         class Leokk(MinionCard):
             def __init__(self):
                 super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
             def create_minion(self, player):
-                return Minion(2, 4, effects=[StatsAura(1, 0)])
+                return Minion(2, 4, auras=[Aura(ChangeAttack(1), MinionSelector())])
 
         beast_list = [Huffer(), Misha(), Leokk()]
         card = game.random_choice(beast_list)

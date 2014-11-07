@@ -1,3 +1,6 @@
+from hearthbreaker.tags.action import Equip
+from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.selector import PlayerSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -31,21 +34,19 @@ class GuardianOfKings(MinionCard):
         return minion
 
 
+class Ashbringer(WeaponCard):
+    def __init__(self):
+        super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
+
+    def create_weapon(self, player):
+        weapon = Weapon(5, 3)
+        return weapon
+
+
 class TirionFordring(MinionCard):
     def __init__(self):
         super().__init__("Tirion Fordring", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        class Ashbringer(WeaponCard):
-            def __init__(self):
-                super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
-
-            def create_weapon(self, player):
-                weapon = Weapon(5, 3)
-                return weapon
-
-        def equip_ashbringer(minion):
-            ashbringer = Ashbringer().create_weapon(minion.player)
-            ashbringer.equip(minion.player)
-
-        return Minion(6, 6, divine_shield=True, taunt=True, deathrattle=equip_ashbringer)
+        return Minion(6, 6, divine_shield=True, taunt=True,
+                      deathrattle=Deathrattle(Equip(Ashbringer()), PlayerSelector()))

@@ -1,3 +1,6 @@
+from hearthbreaker.tags.action import Taunt
+from hearthbreaker.tags.base import Aura
+from hearthbreaker.tags.selector import SelfSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, Card
@@ -135,7 +138,7 @@ class AncientOfWar(MinionCard):
         minion = Minion(5, 5)
         if option is health:
             minion.increase_health(5)
-            minion.taunt = True
+            minion.add_aura(Aura(Taunt(), SelfSelector()))
         else:
             minion.change_attack(5)
 

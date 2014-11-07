@@ -1,6 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Stealth
-from hearthbreaker.effects.player import RemoveStealth, ReturnCard, PlayerManaFilter, ManaAdjustment
+from hearthbreaker.tags.action import Stealth, Take, AddCard
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Aura, Effect
+from hearthbreaker.tags.event import TurnStarted, TurnEnded
+from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, SpellSelector, SpecificCardSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -94,14 +97,11 @@ class Conceal(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        stealthed_minions = []
         for minion in player.minions:
             if not minion.stealth:
-                minion.add_effect(Stealth())
-                stealthed_minions.append(minion)
-
-        if len(stealthed_minions) > 0:
-            player.add_effect(RemoveStealth(stealthed_minions, "turn_started"))
+                aura = Aura(Stealth(), SelfSelector())
+                minion.add_aura(aura)
+                minion.add_effect(Effect(TurnStarted(), Take(aura), SelfSelector()))
 
 
 class DeadlyPoison(Card):
@@ -153,7 +153,7 @@ class Headcrack(Card):
         super().use(player, game)
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
         if player.cards_played > 0:
-            player.add_effect(ReturnCard(self, "turn_ended"))
+            player.add_effect(Effect(TurnEnded(), AddCard(self), PlayerSelector()))
 
 
 class Preparation(Card):
@@ -162,7 +162,7 @@ class Preparation(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_effect(PlayerManaFilter(100, "spell", "turn_ended", True))
+        player.add_aura(ManaAura(100, 0, SpellSelector(), True))
 
 
 class Sap(Card):
@@ -185,7 +185,7 @@ class Shadowstep(Card):
         super().use(player, game)
 
         self.target.bounce()
-        player.add_effect(ManaAdjustment(self.target.card, 2))
+        player.add_aura(ManaAura(3, 0, SpecificCardSelector(self.target.card), True, False))
 
 
 class Shiv(Card):

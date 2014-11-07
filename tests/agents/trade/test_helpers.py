@@ -1,8 +1,8 @@
 import random
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.agents.trade_agent import TradeAgent
-from hearthbreaker.cards import WarGolem
-from hearthbreaker.game_objects import Game, MinionCard, Minion, TheCoin, Player
+from hearthbreaker.cards import WarGolem, TheCoin
+from hearthbreaker.game_objects import Game, MinionCard, Minion, Player
 import re
 from tests.testing_utils import generate_game_for
 
@@ -12,13 +12,15 @@ def t(self):
 Minion.try_name = t
 
 
-class TempCard:
-    def __init__(self, base_attack, health, name="", taunt=False):
+class TempCard(MinionCard):
+    def __init__(self, base_attack=0, health=0, name="", taunt=False):
         self.base_attack = base_attack
         self.health = health
         self.name = name
         self.taunt = taunt
         self.mana = None
+        self.minion_type = 0
+        self.rarity = 0
 
     def create_minion(self, player):
         res = Minion(self.base_attack, self.health, taunt=self.taunt)

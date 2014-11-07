@@ -1,5 +1,9 @@
 import copy
-from hearthbreaker.effects.minion import Kill
+from hearthbreaker.tags.action import Kill, Bounce
+from hearthbreaker.tags.base import Effect, Deathrattle
+from hearthbreaker.tags.condition import IsMinion
+from hearthbreaker.tags.event import DidDamage
+from hearthbreaker.tags.selector import TargetSelector, RandomSelector, MinionSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -72,7 +76,7 @@ class PatientAssassin(MinionCard):
         super().__init__("Patient Assassin", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        return Minion(1, 1, stealth=True, effects=[Kill("did_damage", "minion", "other")])
+        return Minion(1, 1, stealth=True, effects=[Effect(DidDamage(), Kill(), TargetSelector(IsMinion()))])
 
 
 class SI7Agent(MinionCard):
@@ -104,4 +108,4 @@ class AnubarAmbusher(MinionCard):
             if len(targets) > 0:
                 minion.game.random_choice(targets).bounce()
 
-        return Minion(5, 5, deathrattle=return_random_friendly_minion)
+        return Minion(5, 5, deathrattle=Deathrattle(Bounce(), RandomSelector(MinionSelector())))

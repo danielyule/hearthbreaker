@@ -1,5 +1,6 @@
-import copy
-from hearthbreaker.effects.minion import HealAsDamage
+from hearthbreaker.tags.action import HealAsDamage, ChangeHealth
+from hearthbreaker.tags.base import Aura, Deathrattle
+from hearthbreaker.tags.selector import PlayerSelector, RandomSelector, MinionSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -11,7 +12,7 @@ class AuchenaiSoulpriest(MinionCard):
         super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 5, effects=[HealAsDamage()])
+        return Minion(3, 5, auras=[Aura(HealAsDamage(), PlayerSelector())])
 
 
 class CabalShadowPriest(MinionCard):
@@ -104,8 +105,4 @@ class DarkCultist(MinionCard):
         super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def give_3_health(minion):
-            targets = copy.copy(minion.player.minions)
-            if len(targets) > 0:
-                minion.game.random_choice(targets).increase_health(3)
-        return Minion(3, 4, deathrattle=give_3_health)
+        return Minion(3, 4, deathrattle=Deathrattle(ChangeHealth(3), RandomSelector(MinionSelector())))

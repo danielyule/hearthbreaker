@@ -32,6 +32,8 @@ class CardTest(unittest.TestCase):
                     minion = card.create_minion(fake_game.current_player)
                     minion.player = fake_game.current_player
                     minion.game = fake_game
+                    minion.card = card
+                    minion.add_to_board(0)
                     for effect in split_re.split(row["Text"]):
                         if effect == "Taunt":
                             self.assertTrue(minion.taunt, "Expected {:s} to have taunt".format(row["Name"]))

@@ -1,6 +1,7 @@
 import copy
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.effects.minion import Stealth
+from hearthbreaker.tags.action import Stealth
+from hearthbreaker.tags.base import Aura
 import hearthbreaker.game_objects
 
 
@@ -76,7 +77,7 @@ def give_divine_shield(minion):
 
 def give_stealth(minion):
     if minion.card.target is not None:
-        minion.card.target.add_effect(Stealth())
+        minion.card.target.add_aura(Aura(Stealth(), hearthbreaker.tags.selector.SelfSelector()))
 
 
 def gain_one_health_for_each_card_in_hand(minion):

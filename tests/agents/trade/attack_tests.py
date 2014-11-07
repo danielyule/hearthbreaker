@@ -189,16 +189,17 @@ class TestProperBuffs(TestCaseMixin, unittest.TestCase):
         self.assert_minions(game.players[1])
 
 
-class TestTempCard(unittest.TestCase):
-    def test_make(self):
-        m = TempCard.make("1/2")
-        self.assertEqual(m.create_minion(None).health, 2)
-
-    def test_taunt(self):
-        mm = TempCard.make("1/2t")
-        m = mm.create_minion(None)
-        self.assertEqual(m.health, 2)
-        self.assertEqual(m.taunt, True)
+# class TestTempCard(unittest.TestCase):
+#     def test_make(self):
+#         m = TempCard.make("1/2")
+#         self.assertEqual(m.create_minion(None).health, 2)
+#
+#     def test_taunt(self):
+#         mm = TempCard.make("1/2t")
+#         m = mm.create_minion(None)
+#         self.assertEqual(m.health, 2)
+#         m.add_to_board(0)
+#         self.assertEqual(m.taunt, True)
 
 
 class TestTradeAgentAttackLethalTests(TestCaseMixin, unittest.TestCase):
@@ -275,7 +276,7 @@ class TestTradeAgentAttackLethalTests(TestCaseMixin, unittest.TestCase):
 
     def test_lots(self):
         me = self.make_minions("1/1", "2/1", "3/2", "2/6", "4/4", "5/5")
-        opp = self.make_minions("1/1t", "2/1", "3/2t", "2/6", "4/4", "5/5t", "2/5t", "8/3t")
+        opp = self.make_minions("1/1t", "2/1", "3/2t", "2/6", "4/4", "5/5t", "2/5t")
 
         game, trades = self.make_trades2(me, opp)
         trade = trades.trades()[0]

@@ -367,7 +367,7 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(8, len(game.other_player.hand))
-        self.assertEqual(ScavengingHyena, type(game.other_player.hand[7]))
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.hand[7].minion_type)
 
     def test_Duplicate(self):
         game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, OneCardPlayingAgent, SpellTestingAgent)
@@ -634,18 +634,23 @@ class TestMinionCopying(unittest.TestCase):
     def test_KirinTorMage(self):
         game = generate_game_for([KirinTorMage, BoulderfistOgre, Spellbender],
                                  StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        new_game = None
         for turn in range(0, 4):
             game.play_single_turn()
 
         def check_secret_cost():
+            nonlocal new_game
             new_game = game.copy()
             self.assertEqual(1, len(new_game.current_player.minions))
             self.assertEqual("Kirin Tor Mage", new_game.current_player.minions[0].card.name)
-            self.assertEqual(0, new_game.current_player.hand[1].mana_cost(game.current_player))
+            self.assertEqual(0, new_game.current_player.hand[1].mana_cost(new_game.current_player))
             self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
         game.other_player.bind_once("turn_ended", check_secret_cost)
         game.play_single_turn()
+        new_game._end_turn()
+        self.assertEqual(3, new_game.current_player.hand[1].mana_cost(new_game.current_player))
+        self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
     def test_WaterElemental(self):
         game = generate_game_for(WaterElemental, StonetuskBoar, PredictableAgent, DoNothingAgent)
@@ -1546,3 +1551,19 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(23, game.other_player.hero.health)
         self.assertIsNone(game.current_player.hero.weapon)
+
+    def test_NerubarWeblord(self):
+        game = generate_game_for([NerubarWeblord, EarthenRingFarseer], [NoviceEngineer, IronfurGrizzly],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        game.current_player.minions[0].silence()
+        game = game.copy()
+        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))

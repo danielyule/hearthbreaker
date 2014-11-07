@@ -114,6 +114,7 @@ class TestCommon(unittest.TestCase):
         # The minions to either side should have their attack increased
         self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
         self.assertEqual(1, game.current_player.minions[3].calculate_attack())
 
@@ -934,8 +935,10 @@ class TestCommon(unittest.TestCase):
         game = generate_game_for(SylvanasWindrunner, SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
         imp = FlameImp()
         imp.summon(game.players[1], game, 0)
-        for turn in range(0, 12):
+        for turn in range(0, 11):
             game.play_single_turn()
+
+        game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
@@ -2610,7 +2613,7 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(4, len(game.current_player.minions))
         self.assertFalse(game.current_player.minions[3].charge)
-        self.assertIsNone(game.current_player.minions[2].deathrattle)
+        self.assertEqual(0, len(game.current_player.minions[2].deathrattle))
         self.assertFalse(game.current_player.minions[1].taunt)
         self.assertTrue(game.other_player.minions[0].divine_shield)
 
@@ -2906,3 +2909,27 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual("Kel'Thuzad", game.current_player.minions[0].card.name)
         self.assertEqual("Ragnaros the Firelord", game.current_player.minions[1].card.name)
+
+    def test_KelThuzad_with_another_KelThuzad(self):
+        game = generate_game_for([KelThuzad, KelThuzad, Pyroblast],
+                                 [TirionFordring, Assassinate, Assassinate, Assassinate],
+                                 OneCardPlayingAgent, SpellTestingAgent)
+
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        # One assassinate should be played, which should kill off one Kel'Thuzad, however the other Kel'Thuzad should
+        # bring bring back
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+
+        # Still just the two Kel'Thuzads, after one is killed by pyroblast and brought back
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+
+        # Now both Kel'Thuzads should be assassinated, and both be dead
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))

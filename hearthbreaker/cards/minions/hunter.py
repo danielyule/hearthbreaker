@@ -1,5 +1,9 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.effects.minion import ChargeAura, StatsAura, Buff, Draw
+from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, Replace, AddCardByType
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle
+from hearthbreaker.tags.condition import MinionIsType
+from hearthbreaker.tags.event import MinionPlaced, MinionDied
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
 from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
@@ -14,7 +18,15 @@ class TimberWolf(MinionCard):
         super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, effects=[StatsAura(attack=1, minion_filter="beast")])
+        return Minion(1, 1, auras=[Aura(ChangeAttack(1), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
+
+
+class Hyena(MinionCard):
+    def __init__(self):
+        super().__init__("Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(2, 2, MINION_TYPE.BEAST)
 
 
 class SavannahHighmane(MinionCard):
@@ -22,18 +34,7 @@ class SavannahHighmane(MinionCard):
         super().__init__("Savannah Highmane", 6, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        def summon_hyenas(m):
-            class Hyena(MinionCard):
-                def __init__(self):
-                    super().__init__("Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL)
-
-                def create_minion(self, player):
-                    return Minion(2, 2, MINION_TYPE.BEAST)
-
-            Hyena().summon(m.player, m.game, m.index)
-            Hyena().summon(m.player, m.game, m.index)
-
-        return Minion(6, 5, deathrattle=summon_hyenas)
+        return Minion(6, 5, deathrattle=Deathrattle(Replace(Hyena(), 2), PlayerSelector()))
 
 
 class Houndmaster(MinionCard):
@@ -65,7 +66,8 @@ class StarvingBuzzard(MinionCard):
         super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(3, 2, effects=[Draw("placed", "beast", "owner")])
+        return Minion(3, 2,
+                      effects=[Effect(MinionPlaced(MinionIsType(MINION_TYPE.BEAST)), Draw(), PlayerSelector())])
 
 
 class TundraRhino(MinionCard):
@@ -73,7 +75,8 @@ class TundraRhino(MinionCard):
         super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 5, effects=[ChargeAura(players="friendly", minion_filter="beast", include_self=True)])
+        return Minion(2, 5, charge=True,
+                      auras=[Aura(Charge(), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
 
 
 class ScavengingHyena(MinionCard):
@@ -81,7 +84,9 @@ class ScavengingHyena(MinionCard):
         super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[Buff("death", "beast", "self", 2, 1, "friendly")])
+        return Minion(2, 2,
+                      effects=[Effect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeAttack(2), SelfSelector()),
+                               Effect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeHealth(1), SelfSelector())])
 
 
 class Webspinner(MinionCard):
@@ -99,4 +104,4 @@ class Webspinner(MinionCard):
             if len(minion.player.hand) < 10:
                 minion.player.hand.append(card())
 
-        return Minion(1, 1, deathrattle=add_beast_to_hand)
+        return Minion(1, 1, deathrattle=Deathrattle(AddCardByType(MINION_TYPE.BEAST), PlayerSelector()))

@@ -1,4 +1,8 @@
-from hearthbreaker.effects.minion import Buff, IncreaseArmor, GiveCharge
+from hearthbreaker.tags.action import Charge, ChangeAttack, IncreaseArmor
+from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.condition import AttackLessThanOrEqualTo
+from hearthbreaker.tags.event import MinionPlaced, MinionDamaged
+from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, PlayerSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -28,7 +32,7 @@ class Armorsmith(MinionCard):
         super().__init__("Armorsmith", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 4, effects=[IncreaseArmor("damaged", 1, "minion", players="friendly", include_self=True)])
+        return Minion(1, 4, effects=[Effect(MinionDamaged(), IncreaseArmor(), PlayerSelector())])
 
 
 class CruelTaskmaster(MinionCard):
@@ -50,7 +54,7 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(2, 4, effects=[Buff("damaged", "minion", "self", 1, 0, "both", True)])
+        minion = Minion(2, 4, effects=[Effect(MinionDamaged(player=BothPlayer()), ChangeAttack(1), SelfSelector())])
         return minion
 
 
@@ -59,7 +63,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 9, charge=True, effects=[Buff("enraged", attack=6)])
+        return Minion(4, 9, charge=True, enrage=[ChangeAttack(6)])
 
 
 class KorkronElite(MinionCard):
@@ -75,4 +79,4 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[GiveCharge("placed", "attack_less_than_or_equal_to_3", "other")])
+        return Minion(2, 3, effects=[Effect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), TargetSelector())])

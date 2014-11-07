@@ -1,11 +1,12 @@
 import copy
-from hearthbreaker.effects.minion import Kill
-
+from hearthbreaker.tags.action import Kill
+from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.event import TurnStarted, TurnEnded
+from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, Hero
-from hearthbreaker.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
-    Succubus, Felguard, BloodImp
+from hearthbreaker.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
 
 
 class MortalCoil(Card):
@@ -194,7 +195,7 @@ class Corruption(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_effect(Kill("turn_started", "self", players="enemy"))
+        self.target.add_effect(Effect(TurnStarted(player=EnemyPlayer()), Kill(), SelfSelector()))
 
 
 class PowerOverwhelming(Card):
@@ -205,6 +206,6 @@ class PowerOverwhelming(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_effect(Kill("turn_ended", "self"))
+        self.target.add_effect(Effect(TurnEnded(), Kill(), SelfSelector()))
         self.target.change_attack(4)
         self.target.increase_health(4)

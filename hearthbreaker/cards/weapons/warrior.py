@@ -1,5 +1,8 @@
 import copy
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.action import Damage
+from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.selector import MinionSelector, BothPlayer
 from hearthbreaker.game_objects import WeaponCard, Weapon, Minion
 
 
@@ -45,4 +48,4 @@ class DeathsBite(WeaponCard):
             for minion in targets:
                 minion.damage(1, None)
 
-        return Weapon(4, 2, deathrattle=deal_one_to_all)
+        return Weapon(4, 2, deathrattle=Deathrattle(Damage(1), MinionSelector(players=BothPlayer())))

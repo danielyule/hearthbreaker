@@ -43,10 +43,10 @@ class TestCaseMixin:
         return str.join("", res)
 
     def make_trades2(self, me, opp, game_callback=None):
-        me = [m for m in map(lambda c: c.create_minion(None), me)]
-        opp = [m for m in map(lambda c: c.create_minion(None), opp)]
-
         game = self.make_game()
+        me = [m for m in map(lambda card: card.summon(game.current_player, game, len(game.current_player.minions)), me)]
+        opp = [m for m in map(lambda card: card.summon(game.other_player, game, len(game.other_player.minions)), opp)]
+
         if game_callback:
             game_callback(game)
 

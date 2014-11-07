@@ -2,6 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
+from hearthbreaker.constants import MINION_TYPE
 from tests.agents.testing_agents import SpellTestingAgent, OneCardPlayingAgent, WeaponTestingAgent, \
     PlayAndAttackAgent, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
@@ -561,58 +562,4 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(4, len(game.other_player.hand))
-        self.assertEqual(ScavengingHyena, type(game.other_player.hand[3]))
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(5, len(game.other_player.hand))
-        self.assertEqual(SilverbackPatriarch, type(game.other_player.hand[4]))
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(6, len(game.other_player.hand))
-        self.assertEqual(IronbeakOwl, type(game.other_player.hand[5]))
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(7, len(game.other_player.hand))
-        self.assertEqual(DireWolfAlpha, type(game.other_player.hand[6]))
-
-        # Skip over the hyena
-
-        for turn in range(0, 4):
-            game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(8, len(game.other_player.hand))
-        self.assertEqual(IronbeakOwl, type(game.other_player.hand[7]))
-
-        # Skip over the Patriarch
-        for turn in range(0, 4):
-            game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(9, len(game.other_player.hand))
-        self.assertEqual(KingMukla, type(game.other_player.hand[8]))
-
-        # Skip over the Ironbeak Owl
-        for turn in range(0, 4):
-            game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(10, len(game.other_player.hand))
-        self.assertEqual(ScavengingHyena, type(game.other_player.hand[9]))
-
-        # Skip over the Wolf
-        for turn in range(0, 4):
-            game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(10, len(game.other_player.hand))
-        self.assertEqual(IronfurGrizzly, type(game.other_player.hand[9]))
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.hand[3].minion_type)

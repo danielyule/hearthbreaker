@@ -1,6 +1,8 @@
 import copy
-from hearthbreaker.effects.minion import Summon
-from hearthbreaker.effects.player import ManaAdjustment
+from hearthbreaker.tags.action import Replace
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard
@@ -26,7 +28,7 @@ class AncestralSpirit(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_effect(Summon("death", type(self.target.card), "self"))
+        self.target.deathrattle.append(Deathrattle(Replace(self.target.card), PlayerSelector()))
 
 
 class Bloodlust(Card):
@@ -58,15 +60,15 @@ class FarSight(Card):
 
     def use(self, player, game):
         def reduce_cost(card):
-            nonlocal effect
-            effect = ManaAdjustment(card, 3)
+            nonlocal aura
+            aura = ManaAura(3, 0, SpecificCardSelector(card), True, False)
 
         super().use(player, game)
-        effect = None
+        aura = None
         player.bind_once("card_drawn", reduce_cost)
         player.draw()
-        if effect is not None:
-            player.add_effect(effect)
+        if aura is not None:
+            player.add_aura(aura)
 
 
 class FeralSpirit(Card):
