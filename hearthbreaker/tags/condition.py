@@ -33,6 +33,17 @@ class CardMatches(Condition):
         return self
 
 
+class HasOverload(Condition):
+
+    def evaluate(self, target, card, args):
+        return card.overload > 0
+
+    def __to_json__(self):
+        return {
+            'name': 'has_overload'
+        }
+
+
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
         return isinstance(minion, hearthbreaker.game_objects.Minion)

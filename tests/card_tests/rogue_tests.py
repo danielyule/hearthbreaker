@@ -95,6 +95,7 @@ class TestRogue(unittest.TestCase):
         # Lots of turns have passed. The opponent hero shouldn't have died of the poison effect
         self.assertEqual(7, len(game.players[0].minions))
         self.assertEqual(26, game.players[1].hero.health)
+        self.assertFalse(game.players[1].hero.dead)
         # And Sunwalker should have been played
         self.assertEqual(1, len(game.players[1].minions))
         self.assertTrue(game.players[1].minions[0].divine_shield)

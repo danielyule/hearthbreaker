@@ -3,11 +3,6 @@ from hearthbreaker.tags.condition import MinionIsNotTarget
 from hearthbreaker.tags.selector import FriendlyPlayer, Player
 
 
-class DidDamage(MinionEvent):
-    def __init__(self, condition=None):
-        super().__init__("did_damage", condition)
-
-
 class SpellCast(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
         super().__init__("spell_cast", condition, player)
@@ -77,21 +72,21 @@ class MinionSummoned(PlayerEvent):
         super().__init__("minion_summoned", condition, player)
 
 
-class MinionDamaged(PlayerEvent):
+class CharacterDamaged(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
-        super().__init__("minion_damaged", condition, player)
+        super().__init__("character_damaged", condition, player)
 
 
-class Overloaded(PlayerEvent):
+class CharacterHealed(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
-        super().__init__("overloaded", condition, player)
+        super().__init__("character_healed", condition, player)
 
 
 class Attack(MinionEvent):
-    def __init__(self, condition=None):
-        super().__init__("attack", condition)
+    def __init__(self):
+        super().__init__("attack")
 
 
-class Death(MinionEvent):
-    def __init__(self, condition=None):
-        super().__init__("died", condition)
+class DidDamage(MinionEvent):
+    def __init__(self):
+        super().__init__("did_damage")

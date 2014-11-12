@@ -9,7 +9,7 @@ from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect, Deathrattle
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast
+    SpellCast, CharacterHealed
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector
 from hearthbreaker.game_objects import Minion, MinionCard, SecretCard, Card
@@ -1495,13 +1495,7 @@ class Lightwarden(MinionCard):
         super().__init__("Lightwarden", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def lightwarden_grow():
-            minion.change_attack(2)
-
-        minion = Minion(1, 2)
-        player.game.bind("minion_healed", lightwarden_grow)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", lightwarden_grow))
-        return minion
+        return Minion(1, 2, effects=[Effect(CharacterHealed(player=BothPlayer()), ChangeAttack(2), SelfSelector())])
 
 
 class QuestingAdventurer(MinionCard):

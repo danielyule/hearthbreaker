@@ -428,6 +428,10 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(24, game.players[0].deck.left)
 
+        game.players[0].hero.health = 28
+        game.players[0].hero.heal(2, None)
+        self.assertEqual(24, game.players[0].deck.left)
+
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()

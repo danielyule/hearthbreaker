@@ -1,6 +1,9 @@
-from hearthbreaker.tags.action import HealAsDamage, ChangeHealth
-from hearthbreaker.tags.base import Aura, Deathrattle
-from hearthbreaker.tags.selector import PlayerSelector, RandomSelector, MinionSelector
+from hearthbreaker.tags.action import HealAsDamage, ChangeHealth, Heal, Draw, AttackEqualsHealth
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect
+from hearthbreaker.tags.condition import IsMinion
+from hearthbreaker.tags.event import TurnStarted, CharacterHealed
+from hearthbreaker.tags.selector import PlayerSelector, RandomSelector, MinionSelector, CharacterSelector, BothPlayer, \
+    SelfSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -30,17 +33,7 @@ class Lightspawn(MinionCard):
         super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def attack_equal_to_health():
-            return minion.health
-
-        def silence():
-            minion.calculate_attack = old_calculate
-
-        minion = Minion(0, 5)
-        old_calculate = minion.calculate_attack
-        minion.calculate_attack = attack_equal_to_health
-        minion.bind_once("silenced", silence)
-        return minion
+        return Minion(0, 5, auras=[Aura(AttackEqualsHealth(), SelfSelector())])
 
 
 class Lightwell(MinionCard):
@@ -48,16 +41,7 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def heal_damaged_friendly_character():
-            targets = hearthbreaker.targeting.find_friendly_spell_target(
-                player.game, lambda character: character.health != character.calculate_max_health())
-            if len(targets) != 0:
-                player.game.random_choice(targets).heal(player.effective_heal_power(3), minion)
-
-        minion = Minion(0, 5)
-        player.bind("turn_started", heal_damaged_friendly_character)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", heal_damaged_friendly_character))
-        return minion
+        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), RandomSelector(CharacterSelector()))])
 
 
 class NorthshireCleric(MinionCard):
@@ -66,13 +50,8 @@ class NorthshireCleric(MinionCard):
                          CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        def draw_card():
-            player.draw()
-
-        minion = Minion(1, 3)
-        player.game.bind("minion_healed", draw_card)
-        minion.bind_once("silenced", lambda: player.game.unbind("minion_healed", draw_card))
-        return minion
+        return Minion(1, 3, effects=[Effect(CharacterHealed(condition=IsMinion(),
+                                                            player=BothPlayer()), Draw(), PlayerSelector())])
 
 
 class ProphetVelen(MinionCard):

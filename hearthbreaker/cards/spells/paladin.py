@@ -5,7 +5,7 @@ from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard
+from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
 
 
 class AvengingWrath(Card):
@@ -212,15 +212,16 @@ class EyeForAnEye(SecretCard):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, amount, what):
-        self.player.game.current_player.hero.damage(amount, self)
+    def _reveal(self, character, attacker, amount):
+        if isinstance(character, Hero):
+            character.player.opponent.hero.damage(amount, self)
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind("hero_damaged", self._reveal)
+        player.bind("character_damaged", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("hero_damaged", self._reveal)
+        player.unbind("character_damaged", self._reveal)
 
 
 class NobleSacrifice(SecretCard):

@@ -688,15 +688,14 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        # The player won't have taken damage because of armor, and so shouldn't be frozen
+        # The player won't have taken damage because of armor, but should be frozen anyway
         self.assertEqual(30, game.current_player.hero.health)
-        self.assertFalse(game.current_player.hero.frozen)
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(28, game.current_player.hero.health)
         self.assertTrue(game.current_player.hero.frozen)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(30, game.current_player.hero.health)
 
     def test_BlessingOfWisdom(self):
         game = generate_game_for([OasisSnapjaw, BlessingOfWisdom, CoreHound], [FacelessManipulator, CoreHound],
@@ -1567,3 +1566,106 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
         self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
         self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+
+    def test_Lightwell(self):
+        game = generate_game_for(Lightwell, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(28, game.players[0].hero.health)
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        # Lightwell is out, it should heal at the beginning of this turn
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(30, game.players[0].hero.health)
+
+    def test_Lightwarden(self):
+        game = generate_game_for([Lightwarden, MindControl],
+                                 [StonetuskBoar, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre],
+                                 PredictableAgent, PredictableAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        game = game.copy()
+
+        game.play_single_turn()  # Heal Lightwarden
+
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.players[0].hero.health = 28
+        game.players[0].hero.heal(2, None)
+        game = game.copy()
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+
+    def test_Lightspawn(self):
+        game = generate_game_for(Lightspawn, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
+
+        # Lightspawn should be played
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        game = game.copy()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        # Lightspawn should have taken some hits
+        game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        game.players[0].minions[0].heal(2, None)
+        game = game.copy()
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.players[0].minions[0].increase_health(4)
+        game = game.copy()
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
+
+        game = game.copy()
+        game.players[0].minions[0].decrease_health(2)  # max_health goes from 9 to 7
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
+
+    def test_NorthshireCleric(self):
+        game = generate_game_for(NorthshireCleric, StonetuskBoar, PredictableAgent, PredictableAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(26, game.players[0].deck.left)
+
+        game = game.copy()
+        # Northshire is damaged, should get a heal and a card should be drawn
+        game.play_single_turn()
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(24, game.players[0].deck.left)
+
+        game.players[0].hero.health = 28
+        game.players[0].hero.heal(2, None)
+        self.assertEqual(24, game.players[0].deck.left)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game = game.copy()
+        # Silence one Northshire, the other one should still work
+        game.players[0].minions[0].silence()
+        game = game.copy()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(22, game.players[0].deck.left)
+        game.play_single_turn()
+        self.assertEqual(20, game.players[0].deck.left)

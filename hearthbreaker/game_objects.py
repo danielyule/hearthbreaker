@@ -394,11 +394,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             elif issubclass(type(attacker), Card):
                 self.trigger("damaged_by_spell", amount, attacker)
             self.delayed_trigger("damaged", amount, attacker)
-            if isinstance(self, Minion):
-                self.player.trigger("minion_damaged", self, attacker)
-            elif isinstance(self, Hero):
-                # The response of a secret to damage must happen immediately
-                self.trigger("hero_damaged", amount, attacker)
+            self.player.trigger("character_damaged", self, attacker, amount)
             self.health -= amount
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", self, amount)
@@ -517,6 +513,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.damage(-amount, source)
         if amount > 0:
             self.trigger("healed", amount)
+            self.player.trigger("character_healed", self, amount)
             self.health += amount
             if self.health > self.calculate_max_health():
                 self.health = self.calculate_max_health()
@@ -1091,8 +1088,6 @@ class Minion(Character):
 
     def heal(self, amount, source):
         super().heal(amount, source)
-        if amount > 0:
-            self.game.trigger("minion_healed")
 
     def die(self, by):
         # Since deathrattle gets removed by silence, save it
@@ -1392,14 +1387,14 @@ class Deck:
     def __from__to_json__(cls, dd, character_class):
         cards = []
         used = []
-        left = 0
+        left = 30
         for entry in dd:
             card = card_lookup(entry["name"])
             card.drawn = entry["used"]
             cards.append(card)
             used.append(entry["used"])
             if entry["used"]:
-                left += 1
+                left -= 1
         deck = Deck.__new__(Deck)
         deck.cards = cards
         deck.used = used
@@ -1441,6 +1436,8 @@ class Hero(Character):
             new_amount = -self.armor
             self.armor = 0
             super().damage(new_amount, attacker)
+        elif issubclass(type(attacker), Character):
+            attacker.trigger("did_damage", self, 0)
 
     def increase_armor(self, amount):
         self.trigger("armor_increased", amount)
@@ -1855,8 +1852,6 @@ class Game(Bindable):
         self.current_player.hand.pop(card_index)
         self.current_player.trigger("card_played", card, card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
-        if card.overload != 0:
-            self.current_player.trigger("overloaded")
 
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)

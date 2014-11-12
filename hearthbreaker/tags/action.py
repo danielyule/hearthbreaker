@@ -649,3 +649,24 @@ class Duplicate(Action):
         self.__min_ref = minion
         self.minion = None
         return self
+
+
+class AttackEqualsHealth(ReversibleAction):
+    def __init__(self):
+        super().__init__()
+        self._calculate_attack = {}
+
+    def act(self, actor, target):
+        def attack_equal_to_health():
+            return target.health
+
+        self._calculate_attack[target] = target.calculate_attack
+        target.calculate_attack = attack_equal_to_health
+
+    def unact(self, actor, target):
+        target.calculate_attack = self._calculate_attack[target]
+
+    def __to_json__(self):
+        return {
+            'name': 'attack_equals_health'
+        }

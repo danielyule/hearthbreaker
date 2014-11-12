@@ -648,6 +648,15 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(2, len(game.current_player.minions))
 
+    def test_EmperorCobra_on_hero(self):
+        game = generate_game_for(EmperorCobra, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(28, game.other_player.hero.health)
+        self.assertFalse(game.other_player.hero.dead)
+
     def test_CrazedAlchemist(self):
         game = generate_game_for([FlametongueTotem, StormwindChampion, MagmaRager],
                                  [CrazedAlchemist, CrazedAlchemist, BoulderfistOgre],
@@ -1613,6 +1622,11 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.players[0].hero.health = 28
+        game.players[0].hero.heal(2, None)
+
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
 
     def test_FlesheatingGhoul(self):
         game = generate_game_for(CircleOfHealing, StonetuskBoar, OneCardPlayingAgent, PlayAndAttackAgent)

@@ -80,15 +80,15 @@ class TestMage(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        # The player won't have taken damage because of armor, and so shouldn't be frozen
+        # The player won't have taken damage because of armor, but should still be frozen
         self.assertEqual(30, game.current_player.hero.health)
-        self.assertFalse(game.current_player.hero.frozen)
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(28, game.current_player.hero.health)
         self.assertTrue(game.current_player.hero.frozen)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The player should still be frozen from last turn, and so shouldn't have attacked
+        self.assertEqual(30, game.current_player.hero.health)
 
     def test_IceLance(self):
         game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, OneCardPlayingAgent)

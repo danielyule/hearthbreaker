@@ -171,7 +171,7 @@ class MinionAction(ReversibleAction, metaclass=abc.ABCMeta):
 
 
 class Event(JSONObject, metaclass=abc.ABCMeta):
-    def __init__(self, event_name, condition):
+    def __init__(self, event_name, condition=None):
         self.event_name = event_name
         self.condition = condition
         self.__func__ = None
@@ -201,7 +201,9 @@ class Event(JSONObject, metaclass=abc.ABCMeta):
     def __from_json__(self, condition=None):
         if condition:
             condition = Condition.from_json(**condition)
-        self.__init__(condition)
+            self.__init__(condition)
+        else:
+            self.__init__()
         return self
 
     def __to_json__(self):
@@ -288,7 +290,7 @@ class Effect(JSONObject):
     def set_target(self, target):
         self.target = target
 
-    def _find_target(self, focus=None, other=None):
+    def _find_target(self, focus=None, other=None, *args):
         targets = self.selector.get_targets(self.target, focus)
         for target in targets:
             self.action.act(self.target, target)
