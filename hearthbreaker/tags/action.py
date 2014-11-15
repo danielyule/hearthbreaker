@@ -670,3 +670,52 @@ class AttackEqualsHealth(ReversibleAction):
         return {
             'name': 'attack_equals_health'
         }
+
+
+class Stolen(ReversibleAction):
+    def act(self, actor, target):
+        pass
+
+    def unact(self, actor, target):
+        minion = target.copy(target.player.opponent)
+        target.remove_from_board()
+        minion.add_to_board(len(target.player.opponent.minions))
+
+    def __to_json__(self):
+        return {
+            'name': 'stolen'
+        }
+
+
+class MultiplySpellDamage(ReversibleAction):
+    def __init__(self, amount=2):
+        self.amount = amount
+
+    def act(self, actor, target):
+        target.player.spell_multiplier *= self.amount
+
+    def unact(self, actor, target):
+        target.player.spell_multiplier //= self.amount
+
+    def __to_json__(self):
+        return {
+            'name': 'multiply_spell_damage',
+            'amount': self.amount
+        }
+
+
+class MultiplyHealAmount(ReversibleAction):
+    def __init__(self, amount=2):
+        self.amount = amount
+
+    def act(self, actor, target):
+        target.player.heal_multiplier *= self.amount
+
+    def unact(self, actor, target):
+        target.player.heal_multiplier //= self.amount
+
+    def __to_json__(self):
+        return {
+            'name': 'multiply_heal_amount',
+            'amount': self.amount
+        }

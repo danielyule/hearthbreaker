@@ -237,13 +237,31 @@ class TestPriest(unittest.TestCase):
         game.play_single_turn()
 
         # Shadow Madness should be played again targeting the damaged Mogu'shan. Silence should follow after, that
-        # target the "mind controlled" Mogu'shan, making it stay on our side when turn ends.
+        # target the "mind controlled" Mogu'shan, immediately causing it to switch to our side, before it can attack.
         game.play_single_turn()
-        self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual("Mogu'shan Warden", game.players[1].minions[0].card.name)
-        self.assertEqual(2, game.players[1].minions[0].health)
-        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Mogu'shan Warden", game.players[0].minions[0].card.name)
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
+
+    def test_ShadowMadness_and_Corruption(self):
+        game = generate_game_for([ShadowMadness, PowerOverwhelming], [OasisSnapjaw, WarGolem],
+                                 SpellTestingAgent, OneCardPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        # Both Shadow Madness and Power Overlwhelming should be played on the Snapjaw.  At the end of the turn, the
+        # Snapjaw should revert back to the owning player, and not die, but still have its effect.
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(6, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(11, game.other_player.minions[0].health)
+
+        game.play_single_turn()
+
+        # Now the Snapjaw should be dead
+        self.assertEqual(0, len(game.current_player.minions))
 
     def test_ShadowWordDeath(self):
         game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, OneCardPlayingAgent, SpellTestingAgent)

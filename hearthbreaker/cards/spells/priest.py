@@ -1,4 +1,8 @@
 import copy
+from hearthbreaker.tags.action import Stolen
+from hearthbreaker.tags.base import AuraUntil
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import SelfSelector
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -189,27 +193,20 @@ class ShadowMadness(Card):
                          lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
-        def unbind_turn_ended():
-            player.unbind("turn_ended", switch_side)
-
-        def switch_side(*args):
-            minion.unbind("silenced", unbind_turn_ended)
-            m = minion.copy(self.target.player)
-
-            minion.remove_from_board()
-            m.add_to_board(len(self.target.player.minions))
 
         super().use(player, game)
 
         minion = self.target.copy(player)
         minion.active = True
         minion.exhausted = False
-        minion.bind_once("silenced", unbind_turn_ended)
+
         # What happens if there are already 7 minions?
         self.target.remove_from_board()
         minion.add_to_board(len(player.minions))
 
-        player.bind_once("turn_ended", switch_side)
+        # When silenced, the minion should immediately come back to its previous
+        # owner.  See https://twitter.com/bdbrode/status/510251195173470208
+        minion.add_aura(AuraUntil(Stolen(), SelfSelector(), TurnEnded()))
 
 
 class ShadowWordDeath(Card):

@@ -1,4 +1,5 @@
-from hearthbreaker.tags.action import HealAsDamage, ChangeHealth, Heal, Draw, AttackEqualsHealth
+from hearthbreaker.tags.action import HealAsDamage, ChangeHealth, Heal, Draw, AttackEqualsHealth, MultiplySpellDamage, \
+    MultiplyHealAmount
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed
@@ -59,15 +60,8 @@ class ProphetVelen(MinionCard):
         super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def silence():
-            player.heal_multiplier //= 2
-            player.spell_multiplier //= 2
-
-        minion = Minion(7, 7)
-        minion.bind_once("silenced", silence)
-        player.heal_multiplier *= 2
-        player.spell_multiplier *= 2
-        return minion
+        return Minion(7, 7, auras=[Aura(MultiplySpellDamage(2), PlayerSelector()),
+                                   Aura(MultiplyHealAmount(2), PlayerSelector())])
 
 
 class TempleEnforcer(MinionCard):
