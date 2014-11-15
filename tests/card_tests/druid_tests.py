@@ -38,7 +38,7 @@ class TestDruid(unittest.TestCase):
         class ClawAgent(EnemySpellTestingAgent):
             def do_turn(self, player):
                 super().do_turn(player)
-                testing_env.assertEqual(2, game.current_player.hero.temp_attack)
+                testing_env.assertEqual(2, game.current_player.hero.calculate_attack())
                 testing_env.assertEqual(2, game.current_player.hero.armor)
 
         game = generate_game_for(Claw, StonetuskBoar, ClawAgent, OneCardPlayingAgent)
@@ -261,8 +261,8 @@ class TestDruid(unittest.TestCase):
         self.assertListEqual([mock.call(2)], player_increase_mock.call_args_list)
 
         # And make sure that it went down again
-        self.assertEqual(0, game.current_player.minions[0].temp_attack)
-        self.assertEqual(0, game.current_player.minions[1].temp_attack)
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
         self.assertEqual(0, game.current_player.hero.calculate_attack())
 
     def test_Bite(self):
@@ -272,7 +272,7 @@ class TestDruid(unittest.TestCase):
             def do_turn(self, player):
                 super().do_turn(player)
                 if player.mana == 0:
-                    testing_env.assertEqual(4, game.current_player.hero.temp_attack)
+                    testing_env.assertEqual(4, game.current_player.hero.calculate_attack())
                     testing_env.assertEqual(4, game.current_player.hero.armor)
 
         game = generate_game_for(Bite, StonetuskBoar, BiteAgent, DoNothingAgent)

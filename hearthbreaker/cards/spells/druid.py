@@ -64,7 +64,7 @@ class Savagery(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.damage(player.effective_spell_damage(player.hero.temp_attack), self)
+        self.target.damage(player.effective_spell_damage(player.hero.calculate_attack()), self)
 
 
 class MarkOfTheWild(Card):

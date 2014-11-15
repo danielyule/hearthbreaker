@@ -39,7 +39,7 @@ class Bloodlust(Card):
         super().use(player, game)
 
         for minion in player.minions:
-            minion.temp_attack += 3
+            minion.change_temp_attack(3)
 
 
 class EarthShock(Card):

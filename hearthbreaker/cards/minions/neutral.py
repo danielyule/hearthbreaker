@@ -3,10 +3,10 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
-    Chance, Kill, Damage, IncreaseTempAttack, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, Replace, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate
+    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, Replace, IfInGraveyard, \
+    Steal, ApplySecretFromDeck, Duplicate, Give
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Aura, Effect, Deathrattle
+from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed
@@ -295,7 +295,8 @@ class ManaAddict(MinionCard):
         super().__init__("Mana Addict", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[Effect(SpellCast(), IncreaseTempAttack(2), SelfSelector())])
+        return Minion(1, 3, effects=[Effect(SpellCast(), Give(AuraUntil(ChangeAttack(2), SelfSelector(), TurnEnded())),
+                                            SelfSelector())])
 
 
 class OasisSnapjaw(MinionCard):

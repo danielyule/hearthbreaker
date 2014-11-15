@@ -1,4 +1,4 @@
-from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition
+from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil
 import hearthbreaker.game_objects
 import hearthbreaker.tags.selector
 
@@ -30,7 +30,10 @@ class Give(Action):
         }
 
     def __from_json__(self, aura):
-        self.aura = Aura.from_json(**aura)
+        if "until" in aura:
+            self.aura = AuraUntil.from_json(**aura)
+        else:
+            self.aura = Aura.from_json(**aura)
         return self
 
 
@@ -76,21 +79,21 @@ class ChangeAttack(MinionAction):
         }
 
 
-class IncreaseTempAttack(MinionAction):
-    def __init__(self, amount):
-        self.amount = amount
-
-    def act(self, actor, target):
-        target.temp_attack += self.amount
-
-    def unact(self, actor, target):
-        target.temp_attack -= self.amount
-
-    def __to_json__(self):
-        return {
-            "name": "increase_temp_attack",
-            "amount": self.amount
-        }
+# class IncreaseTempAttack(MinionAction):
+#     def __init__(self, amount):
+#         self.amount = amount
+#
+#     def act(self, actor, target):
+#         target.temp_attack += self.amount
+#
+#     def unact(self, actor, target):
+#         target.temp_attack -= self.amount
+#
+#     def __to_json__(self):
+#         return {
+#             "name": "increase_temp_attack",
+#             "amount": self.amount
+#         }
 
 
 class ChangeHealth(MinionAction):

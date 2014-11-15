@@ -90,3 +90,8 @@ class Attack(MinionEvent):
 class DidDamage(MinionEvent):
     def __init__(self):
         super().__init__("did_damage")
+
+
+class WeaponDestroyed(MinionEvent):
+    def __init__(self):
+        super().__init__("weapon_destroyed")

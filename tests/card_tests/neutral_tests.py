@@ -999,7 +999,7 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         def check_attack(m):
-            self.assertEqual(2, game.players[0].minions[0].temp_attack)
+            self.assertEqual(3, game.players[0].minions[0].calculate_attack())
 
         game.players[0].bind("spell_cast", check_attack)
         self.assertEqual(1, len(game.players[0].minions))
@@ -1009,7 +1009,6 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(0, game.players[0].minions[0].temp_attack)
         self.assertEqual(6, len(game.players[0].hand))
 
     def test_RagingWorgen(self):
