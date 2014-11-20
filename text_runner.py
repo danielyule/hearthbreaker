@@ -382,7 +382,7 @@ def render_game(stdscr):
     deck1 = load_deck(sys.argv[1])
     deck2 = load_deck(sys.argv[2])
     game = Game([deck1, deck2], [TextAgent(stdscr, prompt_window, text_window), agent])
-    if isinstance(game.players[0].agent, TextAgent):
+    if game.first_player == 0:
         renderer = GameRender(stdscr, game, game.players[0])
     else:
         renderer = GameRender(stdscr, game, game.players[1])
