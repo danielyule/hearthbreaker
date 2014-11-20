@@ -381,3 +381,24 @@ class RandomSelector(Selector):
     def __from_json__(self, selector):
         self.selector = Selector.from_json(**selector)
         return self
+
+
+class WeaponSelector(Selector):
+    def __init__(self, players=FriendlyPlayer()):
+        self.players = players
+
+    def get_targets(self, source, obj=None):
+        return [p.hero for p in self.players.get_players(source.player)]
+
+    def match(self, source, obj):
+        return source.player is obj
+
+    def __to_json__(self):
+        return {
+            'name': 'weapon',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self

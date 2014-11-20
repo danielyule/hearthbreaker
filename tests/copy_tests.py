@@ -1724,3 +1724,224 @@ class TestMinionCopying(unittest.TestCase):
         game = game.copy()
         self.assertEqual(1, game.players[0].spell_multiplier)
         self.assertEqual(1, game.players[0].heal_multiplier)
+
+    def test_SpitefulSmith(self):
+        game = generate_game_for(LightsJustice, [MortalCoil, AcidicSwampOoze, CircleOfHealing],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        smith = SpitefulSmith()
+        smith.summon(game.players[0], game, 0)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        game = game.copy()
+
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(29, game.players[1].hero.health)  # No enrage, only LJ
+
+        game.play_single_turn()
+
+        game = game.copy()
+
+        self.assertEqual(22, game.players[1].hero.health)  # Enrage LJ for 3 + Smith for 4
+
+        game.play_single_turn()  # Ooze
+
+        self.assertEqual(1, len(game.players[1].minions))
+
+        game.play_single_turn()  # New weapon
+
+        game = game.copy()
+
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(27, game.players[0].hero.health)  # Enrage LJ for 3 to kill Ooze
+        self.assertEqual(18, game.players[1].hero.health)  # Smith to face for 4
+
+        game.play_single_turn()  # Circle of Healing
+        game = game.copy()
+        game.play_single_turn()  # Unenraged LJ for 1 + Smith for 4
+
+        self.assertEqual(13, game.players[1].hero.health)
+
+    def test_CultMaster(self):
+        game = generate_game_for([StonetuskBoar, FacelessManipulator], CultMaster,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        self.assertEqual(6, len(game.other_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
+
+        # The faceless copies the Cult master, and then the stonetusk boar attacks and dies, resulting in a card draw
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        self.assertEqual(7, len(game.current_player.hand))
+        self.assertEqual(8, len(game.other_player.hand))
+
+    def test_AcolyteOfPain(self):
+        game = generate_game_for(AcolyteOfPain, [MortalCoil, ShadowWordPain], OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+
+        game = game.copy()
+
+        game.play_single_turn()  # Mortal Coils the Acolyte
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+        game.play_single_turn()  # Plays 2nd Acolyte
+        game = game.copy()
+        game.play_single_turn()  # Pains 1 Acolyte, no draw
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+
+    def test_MurlocTidecaller(self):
+        game = generate_game_for(MurlocTidecaller, FacelessManipulator, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[2].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[3].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[4].calculate_attack())
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.other_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.other_player.minions[2].calculate_attack())
+        self.assertEqual(5, game.other_player.minions[3].calculate_attack())
+        self.assertEqual(6, game.other_player.minions[4].calculate_attack())
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+
+    def test_VioletTeacher(self):
+        game = generate_game_for([VioletTeacher, CircleOfHealing], CircleOfHealing,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        game = game.copy()
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_GadgetzanAuctioneer(self):
+        game = generate_game_for([GadgetzanAuctioneer, CircleOfHealing, SinisterStrike], CircleOfHealing,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+
+        game = game.copy()
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+
+        game.players[0].minions[0].silence()
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+
+    def test_IllidanStormrage(self):
+        game = generate_game_for([IllidanStormrage, CircleOfHealing], CircleOfHealing,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        game = game.copy()
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_FlesheatingGhoul(self):
+        game = generate_game_for(CircleOfHealing, StonetuskBoar, OneCardPlayingAgent, PlayAndAttackAgent)
+        ghoul = FlesheatingGhoul()
+        ghoul.summon(game.players[0], game, 0)
+        game.play_single_turn()
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game.play_single_turn()  # Circle
+        game = game.copy()
+        game.play_single_turn()  # Two Boars into Ghoul
+        game = game.copy()
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(30, game.players[0].hero.health)
+
+    def test_GurubashiBerserker(self):
+        game = generate_game_for([GurubashiBerserker, BoulderfistOgre],
+                                 MortalCoil, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[1].health)
+
+    def test_WildPyromancer(self):
+        game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,
+                                 SpellTestingAgent, DoNothingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual("Wild Pyromancer", game.players[0].hand[0].name)
+
+        game.play_single_turn()
+        game = game.copy()
+        game.play_single_turn()
+
+        # The two pyros killed each other with the effect after mind blast
+        self.assertEqual(0, len(game.players[0].minions))

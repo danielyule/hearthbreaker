@@ -15,6 +15,9 @@ class JSONObject(metaclass=abc.ABCMeta):
     def from_json(action, selector):
         pass
 
+    def eq(self, other):
+        return str(self) == str(other)
+
     def __str__(self):
         return json.dumps(self.__to_json__(), default=lambda o: o.__to_json__(), sort_keys=True)
 

@@ -1,5 +1,5 @@
 from hearthbreaker.tags.base import MinionEvent, PlayerEvent
-from hearthbreaker.tags.condition import MinionIsNotTarget
+from hearthbreaker.tags.condition import MinionIsNotTarget, CardIsNotTarget
 from hearthbreaker.tags.selector import FriendlyPlayer, Player
 
 
@@ -40,6 +40,11 @@ class Either(PlayerEvent):
 class CardPlayed(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
         super().__init__("card_played", condition, player)
+
+
+class CardUsed(PlayerEvent):
+    def __init__(self, condition=CardIsNotTarget(), player=FriendlyPlayer()):
+        super().__init__("card_used", condition, player)
 
 
 class AfterAdded(PlayerEvent):

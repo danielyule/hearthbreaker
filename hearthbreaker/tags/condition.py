@@ -1,5 +1,6 @@
 import hearthbreaker
 from hearthbreaker.constants import MINION_TYPE
+import hearthbreaker.game_objects
 from hearthbreaker.tags.base import Condition
 
 
@@ -10,6 +11,26 @@ class HasSecret(Condition):
     def __to_json__(self):
         return {
             'name': 'has_secret'
+        }
+
+
+class IsSecret(Condition):
+    def evaluate(self, target, obj, *args):
+        return isinstance(obj, hearthbreaker.game_objects.SecretCard)
+
+    def __to_json__(self):
+        return {
+            'name': 'is_secret'
+        }
+
+
+class IsSpell(Condition):
+    def evaluate(self, target, obj, *args):
+        return isinstance(obj, hearthbreaker.game_objects.Card) and obj.is_spell()
+
+    def __to_json__(self):
+        return {
+            'name': 'is_spell'
         }
 
 
@@ -71,6 +92,16 @@ class MinionIsNotTarget(Condition):
     def __to_json__(self):
         return {
             'name': 'minion_is_not_target'
+        }
+
+
+class CardIsNotTarget(Condition):
+    def evaluate(self, target, card, *args):
+        return target.card is not card
+
+    def __to_json__(self):
+        return {
+            'name': 'card_is_not_target'
         }
 
 

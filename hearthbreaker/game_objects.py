@@ -210,14 +210,12 @@ class Character(Bindable, metaclass=abc.ABCMeta):
      This common superclass handles all of the status tags and calculations involved in attacking or being attacked.
     """
 
-    def __init__(self, attack_power, health, stealth=False, windfury=False, enrage=None):
+    def __init__(self, attack_power, health, enrage=None):
         """
         Create a new Character with the given attack power and health
 
         :param int attack_power: the amount of attack this character has at creation
         :param int health: the maximum health of this character
-        :param boolean stealth: (optional) True if this character has stealth, false otherwise.  Default: false
-        :param boolean windfury: (optional) True if this character has windfury, false otherwise.  Default: false
         :param List[Action]: (optional) A list of :class:`hearthbreaker.tags.base.ReversibleActions` that describe
                              what will happen when this character is enraged
         """
@@ -234,7 +232,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.windfury = windfury
+        self.windfury = 0
         #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
@@ -278,7 +276,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.player.add_aura(aura)
 
     def remove_aura(self, aura):
-        self.auras.remove(aura)
+        self.auras = [au for au in filter(lambda a: not a.eq(aura), self.auras)]
         if isinstance(aura.selector, hearthbreaker.tags.selector.SelfSelector):
             aura.unapply()
         else:
@@ -547,7 +545,6 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         Silence this :class:`Character`.  This will trigger the silence event, and undo any status tags that have
         affected this character (immune, attack & health increases, frozen, windfury)
         """
-        self.windfury = False
         self.frozen = False
         self.frozen_this_turn = False
         health_full = self.health == self.calculate_max_health()
@@ -933,7 +930,7 @@ class Minion(Character):
     def __init__(self, attack, health, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
-        super().__init__(attack, health, windfury=windfury, stealth=stealth, enrage=enrage)
+        super().__init__(attack, health, enrage=enrage)
         self.game = None
         self.card = None
         self.index = -1
@@ -968,6 +965,9 @@ class Minion(Character):
                                                                    hearthbreaker.tags.selector.SelfSelector()))
         if stealth:
             self._auras_to_add.append(hearthbreaker.tags.base.Aura(hearthbreaker.tags.action.Stealth(),
+                                                                   hearthbreaker.tags.selector.SelfSelector()))
+        if windfury:
+            self._auras_to_add.append(hearthbreaker.tags.base.Aura(hearthbreaker.tags.action.Windfury(),
                                                                    hearthbreaker.tags.selector.SelfSelector()))
         if not spell_targetable:
             self._auras_to_add.append(hearthbreaker.tags.base.Aura(hearthbreaker.tags.action.NoSpellTarget(),
@@ -1098,8 +1098,8 @@ class Minion(Character):
                         rattle.deathrattle(self)
                         if self.player.double_deathrattle:
                             rattle.deathrattle(self)
-                self.player.trigger("minion_died", self, by)
                 self.silence()
+                self.player.trigger("minion_died", self, by)
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
@@ -1134,6 +1134,8 @@ class Minion(Character):
         new_minion.taunt = 0
         new_minion.charge = 0
         new_minion.stealth = 0
+        new_minion.enraged = self.enraged
+        new_minion.enrage = copy.deepcopy(self.enrage)
         new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
         new_minion.spell_damage = self.spell_damage
         new_minion.immune = self.immune
@@ -1158,10 +1160,11 @@ class Minion(Character):
     def __from_json__(md, player, game):
         minion = Minion(md['attack'], md['max_health'])
         minion.health = md['max_health'] - md['damage']
-        minion.windfury = md['windfury']
         minion.divine_shield = md['divine_shield']
         minion.exhausted = md['exhausted']
         minion.active = not md['already_attacked']
+        minion.born = md['sequence_id']
+        minion.enrage = [hearthbreaker.tags.base.Action.from_json(**e) for e in md['enrage']]
         minion.deathrattle = []
         for rattle in md['deathrattles']:
             minion.deathrattle.append(hearthbreaker.tags.base.Deathrattle.from_json(**rattle))
@@ -1204,11 +1207,11 @@ class Minion(Character):
             'damage': self.calculate_max_health() - self.health,
             'max_health': self.base_health,
             'attack': self.base_attack,
-            "windfury": self.windfury,
             "divine_shield": self.divine_shield,
             "exhausted": self.exhausted,
             "already_attacked": not self.active,
             'deathrattles': self.deathrattle,
+            'enrage': self.enrage,
             'frozen_for': frozen_for,
             'tags': effects,
             'auras': self.auras,
@@ -1316,7 +1319,6 @@ class Weapon(Bindable):
         self.player.hero.weapon = None
         if self.player.game.current_player is self.player:
             self.player.hero.silence()
-        self.player.hero.windfury = False
         self.player.hero.trigger("weapon_destroyed")
 
     def equip(self, player):
@@ -1324,12 +1326,6 @@ class Weapon(Bindable):
         if self.player.hero.weapon is not None:
             self.player.hero.weapon.destroy()
         self.player.hero.weapon = self
-        if self.player.game.current_player is self.player:
-            self.player.hero.add_aura(hearthbreaker.tags.base.AuraUntil(
-                hearthbreaker.tags.action.ChangeAttack(self.base_attack),
-                hearthbreaker.tags.selector.SelfSelector(), hearthbreaker.tags.event.Either(
-                    hearthbreaker.tags.event.TurnEnded(),
-                    hearthbreaker.tags.event.WeaponDestroyed())))
         self.player.hero.trigger("weapon_equipped")
 
     def __to_json__(self):
@@ -1418,13 +1414,21 @@ class Hero(Character):
 
         self.armor = 0
         self.weapon = None
+        self.bonus_attack = 0
         self.character_class = character_class
         self.player = player
         self.power = hearthbreaker.powers.powers(self.character_class)(self)
 
+    def calculate_attack(self):
+        if self.weapon:
+            return super().calculate_attack() + self.weapon.base_attack + self.bonus_attack
+        else:
+            return super().calculate_attack()
+
     def copy(self, new_owner, new_game):
         new_hero = copy.copy(self)
         new_hero.events = dict()
+        new_hero.bonus_attack = 0
         if self.weapon:
             new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.player = new_owner
@@ -1479,7 +1483,6 @@ class Hero(Character):
             'attack': self.base_attack,
             'immune': self.immune,
             'frozen_for': frozen_for,
-            'windfury': self.windfury,
             'used_windfury': self.used_windfury,
             'already_attacked': not self.active
         }
@@ -1495,7 +1498,6 @@ class Hero(Character):
         hero.base_attack = hd["attack"]
         hero.armor = hd["armor"]
         hero.immune = hd["immune"]
-        hero.windfury = hd["windfury"]
         hero.used_windfury = hd["used_windfury"]
         hero.active = not hd["already_attacked"]
         if hd['weapon']:
@@ -1626,9 +1628,9 @@ class Player(Bindable):
 
     def remove_aura(self, aura):
         if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.minion_auras.remove(aura)
+            self.minion_auras = [au for au in filter(lambda a: not a.eq(aura), self.minion_auras)]
         else:
-            self.player_auras.remove(aura)
+            self.player_auras = [au for au in filter(lambda a: not a.eq(aura), self.player_auras)]
         aura.unapply()
 
     def choose_target(self, targets):
@@ -1787,12 +1789,6 @@ class Game(Bindable):
         self.current_player.cards_played = 0
         self.current_player.dead_this_turn = []
         self.current_player.trigger("turn_started")
-        if self.current_player.hero.weapon is not None:
-            self.current_player.hero.add_aura(hearthbreaker.tags.base.AuraUntil(
-                hearthbreaker.tags.action.ChangeAttack(self.current_player.hero.weapon.base_attack),
-                hearthbreaker.tags.selector.SelfSelector(), hearthbreaker.tags.event.Either(
-                    hearthbreaker.tags.event.TurnEnded(),
-                    hearthbreaker.tags.event.WeaponDestroyed())))
         self.current_player.hero.power.used = False
         self.current_player.hero.active = True
         self.current_player.draw()

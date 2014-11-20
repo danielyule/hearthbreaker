@@ -1668,12 +1668,19 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[2].health)
 
     def test_GurubashiBerserker(self):
-        game = generate_game_for(GurubashiBerserker, MortalCoil, OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for([GurubashiBerserker, BoulderfistOgre],
+                                 MortalCoil, OneCardPlayingAgent, OneCardPlayingAgent)
         for turn in range(0, 10):
             game.play_single_turn()
 
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[1].health)
 
     def test_MadBomber(self):
         game = generate_game_for(MadBomber, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -2236,6 +2243,21 @@ class TestCommon(unittest.TestCase):
 
         # The two pyros killed each other with the effect after mind blast
         self.assertEqual(0, len(game.players[0].minions))
+
+    def test_WildPyro_Equality(self):
+        game = generate_game_for([IronfurGrizzly, WildPyromancer, Equality], GoldshireFootman,
+                                 SpellTestingAgent, SpellTestingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
 
     def test_FacelessManipulator(self):
         game = generate_game_for(FacelessManipulator, Abomination, EnemyMinionSpellTestingAgent, OneCardPlayingAgent)

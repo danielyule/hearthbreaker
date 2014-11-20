@@ -1,6 +1,7 @@
 from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil
 import hearthbreaker.game_objects
 import hearthbreaker.tags.selector
+import hearthbreaker.proxies
 
 
 class Freeze(Action):
@@ -22,6 +23,10 @@ class Give(Action):
 
     def act(self, actor, target):
         target.add_aura(self.aura)
+
+    def unact(self, actor, target):
+        self.aura.target = target
+        target.remove_aura(self.aura)
 
     def __to_json__(self):
         return {
@@ -345,6 +350,19 @@ class Immune(MinionAction):
     def __to_json__(self):
         return {
             'name': 'immune'
+        }
+
+
+class Windfury(MinionAction):
+    def act(self, actor, target):
+        target.windfury += 1
+
+    def unact(self, actor, target):
+        target.windfury -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'windfury'
         }
 
 
@@ -720,5 +738,22 @@ class MultiplyHealAmount(ReversibleAction):
     def __to_json__(self):
         return {
             'name': 'multiply_heal_amount',
+            'amount': self.amount
+        }
+
+
+class IncreaseWeaponAttack(ReversibleAction):
+    def __init__(self, amount):
+        self.amount = amount
+
+    def act(self, actor, target):
+        target.bonus_attack += self.amount
+
+    def unact(self, actor, target):
+        target.bonus_attack -= self.amount
+
+    def __to_json__(self):
+        return {
+            'name': 'increase_weapon_attack',
             'amount': self.amount
         }

@@ -1,9 +1,8 @@
 import copy
 from hearthbreaker.tags.action import Summon, Kill
-from hearthbreaker.tags.base import Effect
-from hearthbreaker.tags.condition import MinionIsTarget
-from hearthbreaker.tags.event import MinionDied, TurnEnded
-from hearthbreaker.tags.selector import SelfSelector
+from hearthbreaker.tags.base import Effect, Deathrattle
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -264,9 +263,8 @@ class SoulOfTheForest(Card):
                 return Minion(2, 2)
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
-        # TODO this will not work correctly with Baron Rivendare, as it is not officially a deathrattle
         for minion in player.minions:
-            minion.add_effect(Effect(MinionDied(MinionIsTarget()), Summon(Treant()), SelfSelector()))
+            minion.deathrattle.append(Deathrattle(Summon(Treant()), PlayerSelector()))
 
 
 class Swipe(Card):
