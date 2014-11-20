@@ -5,14 +5,15 @@ from os import listdir
 from os.path import isdir
 import re
 import random
-from hearthbreaker.game_objects import Game
+from hearthbreaker.game_objects import Game, Deck
 
 from hearthbreaker.replay import Replay, record, playback
-from hearthbreaker.agents.basic_agents import PredictableAgent
+from hearthbreaker.agents.basic_agents import PredictableAgent, RandomAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.cards import *
 import hearthbreaker.game_objects
 from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent
+from tests.testing_utils import StackedDeck
 
 
 class TestReplay(unittest.TestCase):
@@ -175,3 +176,19 @@ class TestReplay(unittest.TestCase):
         other_output = StringIO()
         new_replay.write_json(other_output)
         self.assertEqual(other_output.getvalue(), old_output)
+
+    # Due to bug #55 (thanks to dur3x)
+    def test_deck_shortening(self):
+        deck1 = Deck([RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      GoldshireFootman(), GoldshireFootman()], CHARACTER_CLASS.DRUID)
+        deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.HUNTER)
+        game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
+        replay = record(game)
+        game.start()
+        replay.write(StringIO())

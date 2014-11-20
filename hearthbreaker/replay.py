@@ -149,6 +149,7 @@ class Replay:
                     break
             if matched:
                 return cards[0:pattern_length]
+        return cards
 
     def write(self, file):
         """
@@ -201,7 +202,7 @@ class Replay:
                 writer.write(",".join([str(num) for num in move.random_numbers]))
                 writer.write(")\n")
         if was_filename:
-            file.close()
+            writer.close()
 
     def write_json(self, file):
         """
@@ -232,7 +233,7 @@ class Replay:
         json.dump({'header': header, 'moves': self._moves}, writer, default=lambda o: o.__to_json__(), indent=2,
                   sort_keys=True)
         if was_filename:
-            file.close()
+            writer.close()
 
     def read_json(self, file):
         """
