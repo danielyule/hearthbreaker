@@ -6,7 +6,6 @@ from hearthbreaker.cards import *
 from hearthbreaker.agents import registry
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game, card_lookup, Deck
-from hearthbreaker.replay import record
 from hearthbreaker.ui.game_printer import GameRender
 
 
