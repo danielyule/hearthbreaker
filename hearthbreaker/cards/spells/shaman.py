@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.tags.action import Replace
+from hearthbreaker.tags.action import Summon
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Deathrattle, Aura
 from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector, SelfSelector
@@ -28,7 +28,7 @@ class AncestralSpirit(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.deathrattle.append(Deathrattle(Replace(self.target.card), PlayerSelector()))
+        self.target.deathrattle.append(Deathrattle(Summon(self.target.card), PlayerSelector()))
 
 
 class Bloodlust(Card):

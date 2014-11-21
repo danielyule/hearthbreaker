@@ -198,8 +198,17 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target):
+        if isinstance(actor, hearthbreaker.game_objects.Minion):
+            if actor.removed:
+                index = actor.index
+            else:
+                index = actor.index + 1
+        else:
+            for summon in range(self.count):
+                index = len(target.player.minions)
+
         for summon in range(self.count):
-            self.card.summon(target.player, target.player.game, len(target.player.minions))
+                self.card.summon(target.player, target.player.game, index)
 
     def __to_json__(self):
         if self.count > 1:
@@ -210,33 +219,6 @@ class Summon(Action):
             }
         return {
             'name': 'summon',
-            'card': self.card.name
-        }
-
-    def __from_json__(self, card, count=1):
-        self.card = hearthbreaker.game_objects.card_lookup(card)
-        self.count = count
-        return self
-
-
-class Replace(Action):
-    def __init__(self, card, count=1):
-        self.card = card
-        self.count = count
-
-    def act(self, actor, target):
-        for summon in range(self.count):
-            self.card.summon(target.player, target.player.game, actor.index)
-
-    def __to_json__(self):
-        if self.count > 1:
-            return {
-                'name': 'replace',
-                'card': self.card.name,
-                'count': self.count
-            }
-        return {
-            'name': 'replace',
             'card': self.card.name
         }
 
