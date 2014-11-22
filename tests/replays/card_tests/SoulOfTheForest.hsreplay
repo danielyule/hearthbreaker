@@ -132,7 +132,7 @@
         "card_index": 0
       },
       "target": {
-        "minion": 0,
+        "minion": 1,
         "player": "p1"
       },
       "name": "play",
@@ -145,7 +145,7 @@
         "player": "p2"
       },
       "target": {
-        "minion": 0,
+        "minion": 1,
         "player": "p1"
       },
       "name": "attack",

@@ -1,5 +1,9 @@
 import hearthbreaker.constants
 import hearthbreaker.game_objects
+import hearthbreaker.tags.action
+import hearthbreaker.tags.base
+import hearthbreaker.tags.selector
+import hearthbreaker.tags.event
 
 
 def powers(character_class):
@@ -188,17 +192,11 @@ class ShamanPower(Power):
                                  hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
 
             def create_minion(self, player):
-                def heal_friendly_minions():
-                    for m in player.minions:
-                        m.heal(player.effective_heal_power(1), self)
-
-                def silence():
-                    player.unbind("turn_ended", heal_friendly_minions)
-
-                minion = hearthbreaker.game_objects.Minion(0, 2)
-                player.bind("turn_ended", heal_friendly_minions)
-                minion.bind_once("silenced", silence)
-                return minion
+                return hearthbreaker.game_objects.Minion(0, 2, effects=[hearthbreaker.tags.base.Effect(
+                    hearthbreaker.tags.event.TurnEnded(),
+                    hearthbreaker.tags.action.Heal(1),
+                    hearthbreaker.tags.selector.MinionSelector(condition=None)
+                )])
 
         class SearingTotem(hearthbreaker.game_objects.MinionCard):
             def __init__(self):

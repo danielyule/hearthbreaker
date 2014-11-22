@@ -3,8 +3,8 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
-    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, Replace, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand
+    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, IfInGraveyard, \
+    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
@@ -875,7 +875,7 @@ class CairneBloodhoof(MinionCard):
         super().__init__("Cairne Bloodhoof", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 5, deathrattle=Deathrattle(Replace(BaineBloodhoof()), PlayerSelector()))
+        return Minion(4, 5, deathrattle=Deathrattle(Summon(BaineBloodhoof()), PlayerSelector()))
 
 
 class DamagedGolem(MinionCard):
@@ -891,7 +891,7 @@ class HarvestGolem(MinionCard):
         super().__init__("Harvest Golem", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 3, deathrattle=Deathrattle(Replace(DamagedGolem()), PlayerSelector()))
+        return Minion(2, 3, deathrattle=Deathrattle(Summon(DamagedGolem()), PlayerSelector()))
 
 
 class FinkleEinhorn(MinionCard):
@@ -1922,7 +1922,7 @@ class NerubianEgg(MinionCard):
         super().__init__("Nerubian Egg", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(0, 2, deathrattle=Deathrattle(Replace(Nerubian()), PlayerSelector()))
+        return Minion(0, 2, deathrattle=Deathrattle(Summon(Nerubian()), PlayerSelector()))
 
 
 class Maexxna(MinionCard):
@@ -1947,7 +1947,7 @@ class HauntedCreeper(MinionCard):
 
     def create_minion(self, player):
 
-        return Minion(1, 2, deathrattle=Deathrattle(Replace(SpectralSpider(), 2), PlayerSelector()))
+        return Minion(1, 2, deathrattle=Deathrattle(Summon(SpectralSpider(), 2), PlayerSelector()))
 
 
 class NerubarWeblord(MinionCard):
@@ -2003,7 +2003,7 @@ class SludgeBelcher(MinionCard):
         super().__init__("Sludge Belcher", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 5, taunt=True, deathrattle=Deathrattle(Replace(Slime()), PlayerSelector()))
+        return Minion(3, 5, taunt=True, deathrattle=Deathrattle(Summon(Slime()), PlayerSelector()))
 
 
 class BaronRivendare(MinionCard):
@@ -2081,7 +2081,7 @@ class Feugen(MinionCard):
         super().__init__("Feugen", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 7, deathrattle=Deathrattle(IfInGraveyard(Replace(Thaddius()), Stalagg()), PlayerSelector()))
+        return Minion(4, 7, deathrattle=Deathrattle(IfInGraveyard(Summon(Thaddius()), Stalagg()), PlayerSelector()))
 
 
 class Stalagg(MinionCard):
@@ -2089,7 +2089,7 @@ class Stalagg(MinionCard):
         super().__init__("Stalagg", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 4, deathrattle=Deathrattle(IfInGraveyard(Replace(Thaddius()), Feugen()), PlayerSelector()))
+        return Minion(7, 4, deathrattle=Deathrattle(IfInGraveyard(Summon(Thaddius()), Feugen()), PlayerSelector()))
 
 
 class MadScientist(MinionCard):

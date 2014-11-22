@@ -198,6 +198,15 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target):
+        if isinstance(actor, hearthbreaker.game_objects.Minion):
+            if actor.removed:
+                index = actor.index
+            else:
+                index = actor.index + 1
+        else:
+            for summon in range(self.count):
+                index = len(target.player.minions)
+
         for summon in range(self.count):
             self.card.summon(target, target.game, len(target.minions))
 
