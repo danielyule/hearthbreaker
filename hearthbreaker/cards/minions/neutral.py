@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
     Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, Replace, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack
+    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
@@ -12,7 +12,8 @@ from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathr
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
-    PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector
+    PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
+    HeroSelector
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -231,7 +232,7 @@ class LeperGnome(MinionCard):
                 player.game.current_player.hero.damage(2, None)
                 player.game.current_player.hero.activate_delayed()
 
-        return Minion(2, 1, deathrattle=Deathrattle(Damage(2), PlayerSelector(EnemyPlayer())))
+        return Minion(2, 1, deathrattle=Deathrattle(Damage(2), HeroSelector(EnemyPlayer())))
 
 
 class IronforgeRifleman(MinionCard):
@@ -1590,22 +1591,7 @@ class AlarmoBot(MinionCard):
         super().__init__("Alarm-o-Bot", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def swap_with_hand():
-            swap_targets = []
-            for i in range(0, len(player.hand)):
-                if isinstance(player.hand[i], MinionCard):
-                    swap_targets.append(player.hand[i])
-            if len(swap_targets) > 0:
-                swap_target = player.game.random_choice(swap_targets)
-                index = minion.index
-                minion.bounce()
-                player.hand.remove(swap_target)
-                swap_target.summon(player, player.game, index)
-
-        minion = Minion(0, 3)
-        player.bind("turn_started", swap_with_hand)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", swap_with_hand))
-        return minion
+        return Minion(0, 3, effects=[Effect(TurnStarted(), SwapWithHand(), PlayerSelector())])
 
 
 class EliteTaurenChieftain(MinionCard):
@@ -1670,22 +1656,8 @@ class MillhouseManastorm(MinionCard):
 
     def create_minion(self, player):
         def free_spells(m):
-            class Filter:
-                def __init__(self):
-                    self.amount = 10
-                    self.filter = lambda c: c.is_spell()
-                    self.min = 0
-
-            free = Filter()
-
-            def start_free_spells():
-                player.game.other_player.mana_filters.append(free)
-
-            def end_free_spells():
-                player.game.other_player.mana_filters.remove(free)
-
-            player.game.other_player.bind_once("turn_started", start_free_spells)
-            player.game.other_player.bind_once("turn_ended", end_free_spells)
+            m.player.opponent.add_effect(Effect(TurnStarted(), Give(ManaAura(100, 0, SpellSelector(), False, True)),
+                                                PlayerSelector()))
 
         return Minion(4, 4, battlecry=free_spells)
 
@@ -1695,30 +1667,8 @@ class PintSizedSummoner(MinionCard):
         super().__init__("Pint-Sized Summoner", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = 1
-                self.filter = lambda c: isinstance(c, MinionCard)
-                self.min = 0
-
-        lesser = Filter()
-
-        def start_discounted_minion():
-            player.mana_filters.append(lesser)
-
-        def end_discounted_minion(m):
-            player.mana_filters.remove(lesser)
-
-        def subbind():
-            player.bind_once("minion_played", end_discounted_minion)
-            minion.bind_once("silenced", lambda: player.unbind("minion_played", end_discounted_minion))
-
-        minion = Minion(2, 2)
-        player.bind("turn_started", start_discounted_minion)
-        player.bind("turn_started", subbind)
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", start_discounted_minion))
-        minion.bind_once("silenced", lambda: player.unbind("turn_started", subbind))
-        return minion
+        return Minion(2, 2, effects=[Effect(TurnStarted(), Give(ManaAura(1, 0, MinionCardSelector(), True, True)),
+                                            PlayerSelector())])
 
 
 class OldMurkEye(MinionCard):
@@ -2115,7 +2065,7 @@ class ZombieChow(MinionCard):
         super().__init__("Zombie Chow", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 3, deathrattle=Deathrattle(Heal(5), PlayerSelector(EnemyPlayer())))
+        return Minion(2, 3, deathrattle=Deathrattle(Heal(5), HeroSelector(EnemyPlayer())))
 
 
 class Thaddius(MinionCard):
@@ -2147,7 +2097,7 @@ class MadScientist(MinionCard):
         super().__init__("Mad Scientist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 2, deathrattle=Deathrattle(ApplySecretFromDeck(), SelfSelector()))
+        return Minion(2, 2, deathrattle=Deathrattle(ApplySecretFromDeck(), PlayerSelector()))
 
 
 class EchoingOoze(MinionCard):

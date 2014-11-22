@@ -1945,3 +1945,38 @@ class TestMinionCopying(unittest.TestCase):
 
         # The two pyros killed each other with the effect after mind blast
         self.assertEqual(0, len(game.players[0].minions))
+
+    def test_AlarmOBot(self):
+        game = generate_game_for(AlarmoBot, [FacelessManipulator,
+                                             Pyroblast, Pyroblast, Pyroblast, Pyroblast,
+                                             Pyroblast, Pyroblast, Pyroblast, Deathwing],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Alarm-o-Bot", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Deathwing", game.current_player.minions[0].card.name)
+
+    def test_MillhouseManastorm(self):
+        game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))

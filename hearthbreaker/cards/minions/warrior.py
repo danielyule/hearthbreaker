@@ -2,7 +2,7 @@ from hearthbreaker.tags.action import Charge, ChangeAttack, IncreaseArmor
 from hearthbreaker.tags.base import Effect
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged
-from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, PlayerSelector
+from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
@@ -32,7 +32,7 @@ class Armorsmith(MinionCard):
         super().__init__("Armorsmith", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(1, 4, effects=[Effect(CharacterDamaged(condition=IsMinion()), IncreaseArmor(), PlayerSelector())])
+        return Minion(1, 4, effects=[Effect(CharacterDamaged(condition=IsMinion()), IncreaseArmor(), HeroSelector())])
 
 
 class CruelTaskmaster(MinionCard):

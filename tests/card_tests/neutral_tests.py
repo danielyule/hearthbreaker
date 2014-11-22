@@ -2012,14 +2012,16 @@ class TestCommon(unittest.TestCase):
         # Ok, that's all 3 cards covered
 
     def test_MillhouseManastorm(self):
-        game = generate_game_for(MillhouseManastorm, SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-
         game.play_single_turn()
-
+        self.assertEqual(0, len(game.players[0].minions))
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
 
     def test_PintSizedSummoner(self):

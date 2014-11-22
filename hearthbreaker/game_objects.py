@@ -1854,8 +1854,8 @@ class Game(Bindable):
             raise GameException("That card cannot be used")
         card_index = self.current_player.hand.index(card)
         self.current_player.hand.pop(card_index)
-        self.current_player.trigger("card_played", card, card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
+        self.current_player.trigger("card_played", card, card_index)
 
         if card.is_spell():
             self.current_player.trigger("spell_cast", card)
@@ -1904,11 +1904,9 @@ class Game(Bindable):
         index = 0
         for player in new_game.players:
             player.agent = agents[index]
-            player.effects = [hearthbreaker.tags.base.Effect.from_json(new_game, **effect)
-                              for effect in d['players'][index]['tags']]
-            for effect in player.effects:
-                effect.set_target(player.hero)
-                effect.apply()
+            for effect_json in d['players'][index]['tags']:
+                effect = hearthbreaker.tags.base.Effect.from_json(new_game, **effect_json)
+                player.add_effect(effect)
             player.player_auras = []
             for aura_json in d['players'][index]['auras']:
                 aura = hearthbreaker.tags.base.AuraUntil.from_json(**aura_json)

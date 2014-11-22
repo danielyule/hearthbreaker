@@ -168,13 +168,13 @@ class ManaChange(ReversibleAction):
                 self.min = minimum
                 self.filter = filter
 
-        self.card_selector.track_cards(target.player)
-        self.filters[target.player] = Filter(self.amount, self.minimum, lambda c: self.card_selector.match(target, c))
-        target.player.mana_filters.append(self.filters[target.player])
+        self.card_selector.track_cards(target)
+        self.filters[target] = Filter(self.amount, self.minimum, lambda c: self.card_selector.match(target, c))
+        target.mana_filters.append(self.filters[target])
 
     def unact(self, actor, target):
-        target.player.mana_filters.remove(self.filters[target.player])
-        self.card_selector.untrack_cards(target.player)
+        target.mana_filters.remove(self.filters[target])
+        self.card_selector.untrack_cards(target)
 
     def __to_json__(self):
         return {
@@ -199,7 +199,7 @@ class Summon(Action):
 
     def act(self, actor, target):
         for summon in range(self.count):
-            self.card.summon(target.player, target.player.game, len(target.player.minions))
+            self.card.summon(target, target.game, len(target.minions))
 
     def __to_json__(self):
         if self.count > 1:
@@ -226,7 +226,7 @@ class Replace(Action):
 
     def act(self, actor, target):
         for summon in range(self.count):
-            self.card.summon(target.player, target.player.game, actor.index)
+            self.card.summon(target, target.game, actor.index)
 
     def __to_json__(self):
         if self.count > 1:
@@ -292,7 +292,7 @@ class Draw(Action):
 
     def act(self, actor, target):
         for draw in range(0, self.amount):
-            target.player.draw()
+            target.draw()
 
     def __to_json__(self):
         return {
@@ -421,7 +421,7 @@ class Chance(Action):
         self.one_in = one_in
 
     def act(self, actor, target):
-        if 1 == target.player.game.random_amount(1, self.one_in):
+        if 1 == target.game.random_amount(1, self.one_in):
             self.action.act(actor, target)
 
     def __to_json__(self):
@@ -443,7 +443,7 @@ class IfInGraveyard(Action):
         self.card = card.name
 
     def act(self, actor, target):
-        if self.card in target.player.graveyard:
+        if self.card in target.graveyard:
             self.action.act(actor, target)
 
     def __to_json__(self):
@@ -464,8 +464,8 @@ class AddCard(Action):
         self.card = card
 
     def act(self, actor, target):
-        if len(target.player.hand) < 10:
-            target.player.hand.append(self.card)
+        if len(target.hand) < 10:
+            target.hand.append(self.card)
 
     def __to_json__(self):
         return {
@@ -484,9 +484,9 @@ class AddCardByType(Action):
 
     def act(self, actor, target):
         cards = hearthbreaker.game_objects.get_cards_by_type(self.card_type)
-        card = target.player.game.random_choice(cards)
-        if len(target.player.hand) < 10:
-            target.player.hand.append(card)
+        card = target.game.random_choice(cards)
+        if len(target.hand) < 10:
+            target.hand.append(card)
 
     def __to_json__(self):
         return {
@@ -508,16 +508,16 @@ class ResurrectFriendly(Action):
     def act(self, actor, target):
         # Will be called once per Kel'Thuzad on the board
         # http://www.hearthhead.com/card=1794/kelthuzad#comments
-        for minion in sorted(target.player.dead_this_turn, key=lambda m: m.born):
-            minion.card.summon(target.player, target.player.game, len(target.player.minions))
+        for minion in sorted(target.dead_this_turn, key=lambda m: m.born):
+            minion.card.summon(target, target.game, len(target.minions))
 
 
 class DoubleDeathrattle(ReversibleAction):
     def act(self, actor, target):
-        target.player.double_deathrattle += 1
+        target.double_deathrattle += 1
 
     def unact(self, actor, target):
-        target.player.double_deathrattle -= 1
+        target.double_deathrattle -= 1
 
     def __to_json__(self):
         return {
@@ -527,10 +527,10 @@ class DoubleDeathrattle(ReversibleAction):
 
 class HealAsDamage(ReversibleAction):
     def act(self, actor, target):
-        target.player.heal_does_damage += 1
+        target.heal_does_damage += 1
 
     def unact(self, actor, target):
-        target.player.heal_does_damage -= 1
+        target.heal_does_damage -= 1
 
     def __to_json__(self):
         return {
@@ -550,13 +550,13 @@ class Bounce(Action):
 
 class SummonFromDeck(Action):
     def act(self, actor, target):
-        chosen_card = target.player.game.random_draw(target.player.deck.cards,
-                                                     lambda c: not c.drawn and
-                                                     isinstance(c, hearthbreaker.game_objects.MinionCard))
+        chosen_card = target.game.random_draw(target.deck.cards,
+                                              lambda c: not c.drawn and
+                                              isinstance(c, hearthbreaker.game_objects.MinionCard))
         if chosen_card:
             chosen_card.drawn = True
-            target.player.deck.left -= 1
-            chosen_card.summon(target.player, target.player.game, len(target.player.minions))
+            target.deck.left -= 1
+            chosen_card.summon(target, target.game, len(target.minions))
 
     def __to_json__(self):
         return {
@@ -569,12 +569,16 @@ class SummonFromHand(Action):
         self.condition = condition
 
     def act(self, actor, target):
-        chosen_card = target.player.game.random_draw(target.player.hand,
-                                                     lambda c: self.condition.evaluate(c) and
-                                                     isinstance(c, hearthbreaker.game_objects.MinionCard))
+        if self.condition:
+            chosen_card = target.game.random_draw(target.hand,
+                                                  lambda c: self.condition.evaluate(c) and
+                                                  isinstance(c, hearthbreaker.game_objects.MinionCard))
+        else:
+            chosen_card = target.game.random_draw(target.hand,
+                                                  lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard))
         if chosen_card:
-            chosen_card.summon(target.player, target.player.game, len(target.player.minions))
-            target.player.hand.remove(chosen_card)
+            chosen_card.summon(target, target.game, len(target.minions))
+            target.hand.remove(chosen_card)
 
     def __to_json__(self):
         if self.condition:
@@ -594,18 +598,53 @@ class SummonFromHand(Action):
         return self
 
 
+class SwapWithHand(Action):
+    def __init__(self, condition=None):
+        self.condition = condition
+
+    def act(self, actor, target):
+        if self.condition:
+            chosen_card = target.game.random_draw(target.hand,
+                                                  lambda c: self.condition.evaluate(c) and
+                                                  isinstance(c, hearthbreaker.game_objects.MinionCard))
+        else:
+            chosen_card = target.game.random_draw(target.hand,
+                                                  lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard))
+        if chosen_card:
+            chosen_card.summon(target, target.game, len(target.minions))
+            target.hand.remove(chosen_card)
+            actor.bounce()
+
+    def __to_json__(self):
+        if self.condition:
+            return {
+                'name': 'swap_with_hand',
+                'condition': self.condition
+            }
+        return {
+            'name': 'swap_with_hand'
+        }
+
+    def __from_json__(self, condition=None):
+        if condition:
+            self.condition = Condition.from_json(**condition)
+        else:
+            self.condition = None
+        return self
+
+
 class ApplySecretFromDeck(Action):
     def act(self, actor, target):
-        secret = target.game.random_draw(target.player.deck.cards,
+        secret = target.game.random_draw(target.deck.cards,
                                          lambda c: not c.drawn and isinstance(c, hearthbreaker.game_objects.SecretCard)
-                                         and c.name not in [s.name for s in target.player.secrets])
+                                         and c.name not in [s.name for s in target.secrets])
         if secret:
-            target.player.secrets.append(secret)
+            target.secrets.append(secret)
             secret.drawn = True
-            target.player.deck.left -= 1
-            if target.player is target.game.other_player:
-                secret.player = target.player
-                secret.activate(target.player)
+            target.deck.left -= 1
+            if target is target.game.other_player:
+                secret.player = target
+                secret.activate(target)
 
     def __to_json__(self):
         return {
@@ -618,8 +657,8 @@ class Equip(Action):
         self.weapon = weapon
 
     def act(self, actor, target):
-        weapon = self.weapon.create_weapon(target.player)
-        weapon.equip(target.player)
+        weapon = self.weapon.create_weapon(target)
+        weapon.equip(target)
 
     def __to_json__(self):
         return {
@@ -655,7 +694,7 @@ class Duplicate(Action):
             self.minion = hearthbreaker.proxies.TrackingProxyCharacter(self.__min_ref, player.game)
 
     def act(self, actor, target):
-        minion = self.minion.resolve(target.player.game)
+        minion = self.minion.resolve(target.game)
         if minion:
             dup = minion.copy(minion.player)
             dup.add_to_board(minion.index + 1)
@@ -713,10 +752,10 @@ class MultiplySpellDamage(ReversibleAction):
         self.amount = amount
 
     def act(self, actor, target):
-        target.player.spell_multiplier *= self.amount
+        target.spell_multiplier *= self.amount
 
     def unact(self, actor, target):
-        target.player.spell_multiplier //= self.amount
+        target.spell_multiplier //= self.amount
 
     def __to_json__(self):
         return {
@@ -730,10 +769,10 @@ class MultiplyHealAmount(ReversibleAction):
         self.amount = amount
 
     def act(self, actor, target):
-        target.player.heal_multiplier *= self.amount
+        target.heal_multiplier *= self.amount
 
     def unact(self, actor, target):
-        target.player.heal_multiplier //= self.amount
+        target.heal_multiplier //= self.amount
 
     def __to_json__(self):
         return {

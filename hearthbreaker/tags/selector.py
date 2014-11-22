@@ -177,7 +177,7 @@ class SpellSelector(CardSelector):
 class BattlecrySelector(CardSelector):
     def match(self, source, obj):
         return isinstance(obj, hearthbreaker.game_objects.MinionCard) and \
-            obj.create_minion(source.player).battlecry is not None
+            obj.create_minion(source).battlecry is not None
 
     def __to_json__(self):
         return {
@@ -205,12 +205,33 @@ class MinionCardSelector(CardSelector):
         return self
 
 
-class PlayerSelector(Selector):
+class HeroSelector(Selector):
     def __init__(self, players=FriendlyPlayer()):
         self.players = players
 
     def get_targets(self, source, obj=None):
         return [p.hero for p in self.players.get_players(source.player)]
+
+    def match(self, source, obj):
+        return source.player is obj
+
+    def __to_json__(self):
+        return {
+            'name': 'hero',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self
+
+
+class PlayerSelector(Selector):
+    def __init__(self, players=FriendlyPlayer()):
+        self.players = players
+
+    def get_targets(self, source, obj=None):
+        return self.players.get_players(source.player)
 
     def match(self, source, obj):
         return source.player is obj
