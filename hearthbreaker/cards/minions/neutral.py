@@ -4,7 +4,7 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
     Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack
+    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \

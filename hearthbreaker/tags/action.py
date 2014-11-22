@@ -208,7 +208,7 @@ class Summon(Action):
                 index = len(target.player.minions)
 
         for summon in range(self.count):
-            self.card.summon(target, target.game, len(target.minions))
+            self.card.summon(target, target.game, index)
 
     def __to_json__(self):
         if self.count > 1:
