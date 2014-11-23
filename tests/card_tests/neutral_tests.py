@@ -2556,7 +2556,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(2, len(game.other_player.minions))
 
-        self.assertEqual("Oasis Snapjaw", game.other_player.minions[1].card.name)
+        self.assertEqual("Water Elemental", game.other_player.minions[1].card.name)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -2715,6 +2715,22 @@ class TestCommon(unittest.TestCase):
         # Feugen is assassinated, which should summon Thaddius
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Thaddius", game.other_player.minions[0].card.name)
+
+    def test_Fuegen_no_Stalagg(self):
+        game = generate_game_for(Feugen, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # Feugen should have been played and assassinated, leaving no minions behind
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Feugen is assassinated again, which should not summon Thaddius
+        self.assertEqual(0, len(game.other_player.minions))
 
     def test_Stalagg(self):
         game = generate_game_for([Feugen, Stalagg], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)

@@ -67,7 +67,8 @@ class HasOverload(Condition):
 
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
-        return isinstance(minion, hearthbreaker.game_objects.Minion)
+        return isinstance(minion, hearthbreaker.game_objects.Minion) \
+            or isinstance(minion, hearthbreaker.game_objects.MinionCard)
 
     def __to_json__(self):
         return {
@@ -111,13 +112,13 @@ class MinionIsType(Condition):
         self.minion_type = minion_type
         self.include_self = include_self
 
-    def evaluate(self, target, minion=None, *args):
+    def evaluate(self, target, minion, *args):
         if isinstance(target, hearthbreaker.game_objects.Minion):
             if self.include_self or target is not minion:
                 return minion.card.minion_type == self.minion_type
             return False
         else:
-            return isinstance(target, hearthbreaker.game_objects.MinionCard) and target.minion_type == self.minion_type
+            return isinstance(minion, hearthbreaker.game_objects.MinionCard) and minion.minion_type == self.minion_type
 
     def __to_json__(self):
         return {
@@ -184,3 +185,21 @@ class IsDamaged(Condition):
         return {
             'name': 'is_damaged'
         }
+
+
+class InGraveyard(Condition):
+    def __init__(self, card):
+        self.card = card
+
+    def evaluate(self, target, *args):
+        return self.card.name in target.player.graveyard or self.card.name in target.player.opponent.graveyard
+
+    def __to_json__(self):
+        return {
+            'name': 'in_graveyard',
+            'card': self.card.name
+        }
+
+    def __from_json__(self, card):
+        self.card = hearthbreaker.game_objects.card_lookup(card)
+        return self

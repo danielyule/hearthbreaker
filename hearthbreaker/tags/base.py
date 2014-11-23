@@ -340,11 +340,15 @@ class Condition(JSONObject, metaclass=abc.ABCMeta):
 
 
 class Deathrattle(JSONObject):
-    def __init__(self, action, selector):
+    def __init__(self, action, selector, condition=None):
         self.action = action
         self.selector = selector
+        self.condition = condition
 
     def deathrattle(self, target):
+        if self.condition:
+            if not self.condition.evaluate(target):
+                return
         targets = self.selector.get_targets(target, target)
         for t in targets:
             self.action.act(target, t)
@@ -352,16 +356,24 @@ class Deathrattle(JSONObject):
         target.player.game.check_delayed()
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'action': self.action,
+                'selector': self.selector,
+                'condition': self.condition,
+            }
         return {
             'action': self.action,
             'selector': self.selector
         }
 
     @staticmethod
-    def from_json(action, selector):
+    def from_json(action, selector, condition=None):
         action = Action.from_json(**action)
         selector = Selector.from_json(**selector)
-        return Deathrattle(action, selector)
+        if condition:
+            condition = Condition.from_json(**condition)
+        return Deathrattle(action, selector, condition)
 
 
 class CARD_SOURCE:
@@ -407,11 +419,11 @@ class CardQuery(JSONObject):
         if self.source == CARD_SOURCE.COLLECTION:
             card_list = hearthbreaker.game_objects.get_cards()
         elif self.source == CARD_SOURCE.MY_DECK:
-            card_list = filter(lambda c: not c.used, player.deck.cards)
+            card_list = filter(lambda c: not c.drawn, player.deck.cards)
         elif self.source == CARD_SOURCE.MY_HAND:
             card_list = player.hand
         elif self.source == CARD_SOURCE.OPPONENT_DECK:
-            card_list = filter(lambda c: not c.used, player.opponent.deck.cards)
+            card_list = filter(lambda c: not c.drawn, player.opponent.deck.cards)
         elif self.source == CARD_SOURCE.OPPONENT_HAND:
             card_list = player.opponent.hand
         elif self.source == CARD_SOURCE.LIST:
@@ -423,8 +435,9 @@ class CardQuery(JSONObject):
         # TODO Throw an exception in any other case?
 
         if self.condition is not None:
-            card_list = [card for card in filter(lambda c: self.condition.evaluate(c), card_list)]
+            card_list = filter(lambda c: self.condition.evaluate(player, c), card_list)
 
+        card_list = [card for card in card_list]
         card_len = len(card_list)
         if card_len == 1:
             chosen_card = card_list[0]
@@ -435,8 +448,13 @@ class CardQuery(JSONObject):
 
         if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST or self.make_copy:
             return chosen_card
-        elif self.source == CARD_SOURCE.MY_DECK or self.source == CARD_SOURCE.OPPONENT_DECK:
-            chosen_card.used = True
+        elif self.source == CARD_SOURCE.MY_DECK:
+            chosen_card.drawn = True
+            player.deck.left -= 1
+            return chosen_card
+        elif self.source == CARD_SOURCE.OPPONENT_DECK:
+            chosen_card.drawn = True
+            player.opponent.deck.left -= 1
             return chosen_card
         elif self.source == CARD_SOURCE.MY_HAND:
             player.hand.remove(chosen_card)

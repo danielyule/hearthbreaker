@@ -3,12 +3,12 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
-    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform
+    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle,\
+    Steal, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform, ApplySecret
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
-    MinionIsTarget, IsSpell, IsDamaged
+    MinionIsTarget, IsSpell, IsDamaged, InGraveyard
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
@@ -1965,7 +1965,9 @@ class Deathlord(MinionCard):
         super().__init__("Deathlord", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 8, taunt=True, deathrattle=Deathrattle(SummonFromDeck(), PlayerSelector(EnemyPlayer())))
+        return Minion(2, 8, taunt=True, deathrattle=Deathrattle(Summon(CardQuery(condition=IsMinion(),
+                                                                                 source=CARD_SOURCE.MY_DECK)),
+                                                                PlayerSelector(EnemyPlayer())))
 
 
 class SpectralKnight(MinionCard):
@@ -2019,7 +2021,7 @@ class Feugen(MinionCard):
         super().__init__("Feugen", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 7, deathrattle=Deathrattle(IfInGraveyard(Summon(Thaddius()), Stalagg()), PlayerSelector()))
+        return Minion(4, 7, deathrattle=Deathrattle(Summon(Thaddius()), PlayerSelector(), InGraveyard(Stalagg())))
 
 
 class Stalagg(MinionCard):
@@ -2027,7 +2029,7 @@ class Stalagg(MinionCard):
         super().__init__("Stalagg", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 4, deathrattle=Deathrattle(IfInGraveyard(Summon(Thaddius()), Feugen()), PlayerSelector()))
+        return Minion(7, 4, deathrattle=Deathrattle(Summon(Thaddius()), PlayerSelector(), InGraveyard(Feugen())))
 
 
 class MadScientist(MinionCard):
@@ -2035,7 +2037,7 @@ class MadScientist(MinionCard):
         super().__init__("Mad Scientist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 2, deathrattle=Deathrattle(ApplySecretFromDeck(), PlayerSelector()))
+        return Minion(2, 2, deathrattle=Deathrattle(ApplySecret(CARD_SOURCE.MY_DECK), PlayerSelector()))
 
 
 class EchoingOoze(MinionCard):

@@ -1,6 +1,6 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import ChangeHealth, ManaChange, SummonFromHand
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle
+from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import MinionIsType
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector
@@ -142,4 +142,5 @@ class Voidcaller(MinionCard):
         super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=Deathrattle(SummonFromHand(MinionIsType(MINION_TYPE.DEMON)), PlayerSelector()))
+        return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(condition=MinionIsType(MINION_TYPE.DEMON),
+                                                                     source=CARD_SOURCE.MY_HAND)), PlayerSelector()))

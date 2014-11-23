@@ -1,5 +1,7 @@
-from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil, CardQuery
+from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil, CardQuery, \
+    CARD_SOURCE
 import hearthbreaker.game_objects
+from hearthbreaker.tags.condition import IsSecret
 import hearthbreaker.tags.selector
 import hearthbreaker.proxies
 
@@ -452,28 +454,6 @@ class Chance(Action):
         return self
 
 
-class IfInGraveyard(Action):
-    def __init__(self, action, card):
-        self.action = action
-        self.card = card.name
-
-    def act(self, actor, target):
-        if self.card in target.graveyard:
-            self.action.act(actor, target)
-
-    def __to_json__(self):
-        return {
-            'name': 'if_in_graveyard',
-            'action': self.action,
-            'card': self.card
-        }
-
-    def __from_json__(self, action, card):
-        self.action = Action.from_json(**action)
-        self.card = card
-        return self
-
-
 class AddCard(Action):
     def __init__(self, card):
         if isinstance(card, hearthbreaker.game_objects.Card):
@@ -494,27 +474,6 @@ class AddCard(Action):
     def __from_json__(self, card, count=1):
         self.card = CardQuery.from_json(**card)
         return self
-
-
-# class AddCardByType(Action):
-#     def __init__(self, card_type):
-#         self.card_type = card_type
-#
-#     def act(self, actor, target):
-#         cards = hearthbreaker.game_objects.get_cards_by_type(self.card_type)
-#         card = target.game.random_choice(cards)
-#         if len(target.hand) < 10:
-#             target.hand.append(card)
-#
-#     def __to_json__(self):
-#         return {
-#             'name': 'add_card_by_type',
-#             'card_type': hearthbreaker.constants.MINION_TYPE.to_str(self.card_type)
-#         }
-#
-#     def __from_json__(self, card_type):
-#         self.card_type = hearthbreaker.constants.MINION_TYPE.from_str(self.card_type)
-#         return self
 
 
 class ResurrectFriendly(Action):
@@ -566,54 +525,54 @@ class Bounce(Action):
         }
 
 
-class SummonFromDeck(Action):
-    def act(self, actor, target):
-        chosen_card = target.game.random_draw(target.deck.cards,
-                                              lambda c: not c.drawn and
-                                              isinstance(c, hearthbreaker.game_objects.MinionCard))
-        if chosen_card:
-            chosen_card.drawn = True
-            target.deck.left -= 1
-            chosen_card.summon(target, target.game, len(target.minions))
-
-    def __to_json__(self):
-        return {
-            'name': 'summon_from_deck'
-        }
-
-
-class SummonFromHand(Action):
-    def __init__(self, condition=None):
-        self.condition = condition
-
-    def act(self, actor, target):
-        if self.condition:
-            chosen_card = target.game.random_draw(target.hand,
-                                                  lambda c: self.condition.evaluate(c) and
-                                                  isinstance(c, hearthbreaker.game_objects.MinionCard))
-        else:
-            chosen_card = target.game.random_draw(target.hand,
-                                                  lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard))
-        if chosen_card:
-            chosen_card.summon(target, target.game, len(target.minions))
-            target.hand.remove(chosen_card)
-
-    def __to_json__(self):
-        if self.condition:
-            return {
-                'name': 'summon_from_hand',
-                'condition': self.condition
-            }
-        return {
-            'name': 'summon_from_hand'
-        }
-
-    def __from_json__(self, condition=None):
-        if condition:
-            self.condition = Condition.from_json(**condition)
-        else:
-            self.condition = None
-        return self
+# class SummonFromDeck(Action):
+#     def act(self, actor, target):
+#         chosen_card = target.game.random_draw(target.deck.cards,
+#                                               lambda c: not c.drawn and
+#                                               isinstance(c, hearthbreaker.game_objects.MinionCard))
+#         if chosen_card:
+#             chosen_card.drawn = True
+#             target.deck.left -= 1
+#             chosen_card.summon(target, target.game, len(target.minions))
+#
+#     def __to_json__(self):
+#         return {
+#             'name': 'summon_from_deck'
+#         }
+#
+#
+# class SummonFromHand(Action):
+#     def __init__(self, condition=None):
+#         self.condition = condition
+#
+#     def act(self, actor, target):
+#         if self.condition:
+#             chosen_card = target.game.random_draw(target.hand,
+#                                                   lambda c: self.condition.evaluate(c) and
+#                                                   isinstance(c, hearthbreaker.game_objects.MinionCard))
+#         else:
+#             chosen_card = target.game.random_draw(target.hand,
+#                                                   lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard))
+#         if chosen_card:
+#             chosen_card.summon(target, target.game, len(target.minions))
+#             target.hand.remove(chosen_card)
+#
+#     def __to_json__(self):
+#         if self.condition:
+#             return {
+#                 'name': 'summon_from_hand',
+#                 'condition': self.condition
+#             }
+#         return {
+#             'name': 'summon_from_hand'
+#         }
+#
+#     def __from_json__(self, condition=None):
+#         if condition:
+#             self.condition = Condition.from_json(**condition)
+#         else:
+#             self.condition = None
+#         return self
 
 
 class SwapWithHand(Action):
@@ -651,23 +610,29 @@ class SwapWithHand(Action):
         return self
 
 
-class ApplySecretFromDeck(Action):
+class ApplySecret(Action):
+
+    def __init__(self, source):
+        self.source = source
+        self._query = CardQuery(condition=IsSecret(), source=source)
+
     def act(self, actor, target):
-        secret = target.game.random_draw(target.deck.cards,
-                                         lambda c: not c.drawn and isinstance(c, hearthbreaker.game_objects.SecretCard)
-                                         and c.name not in [s.name for s in target.secrets])
+        secret = self._query.get_card(target)
         if secret:
             target.secrets.append(secret)
-            secret.drawn = True
-            target.deck.left -= 1
             if target is target.game.other_player:
                 secret.player = target
                 secret.activate(target)
 
     def __to_json__(self):
         return {
-            'name': 'apply_secret_from_deck'
+            'name': 'apply_secret',
+            'source': CARD_SOURCE.to_str(self.source)
         }
+
+    def __from_json__(self, source):
+        self.source = CARD_SOURCE.from_str(source)
+        self._query = CardQuery(condition=IsSecret(), source=source)
 
 
 class Equip(Action):
