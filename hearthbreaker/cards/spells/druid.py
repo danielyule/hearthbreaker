@@ -247,6 +247,14 @@ class Bite(Card):
         player.hero.increase_armor(4)
 
 
+class Treant(MinionCard):
+    def __init__(self):
+        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+    def create_minion(self, _):
+        return Minion(2, 2)
+
+
 class SoulOfTheForest(Card):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID,
@@ -255,12 +263,6 @@ class SoulOfTheForest(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def create_minion(self, _):
-                return Minion(2, 2)
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:

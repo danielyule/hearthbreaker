@@ -2,17 +2,11 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
-from hearthbreaker.cards.minions.hunter import TimberWolf, ScavengingHyena, StarvingBuzzard, KingKrush, SavannahHighmane, \
-    Webspinner, TundraRhino
-from hearthbreaker.cards.minions.neutral import RiverCrocolisk, OasisSnapjaw, CoreHound, DireWolfAlpha, \
-    SilverbackPatriarch, JunglePanther, IronfurGrizzly, IronbeakOwl, HauntedCreeper, StranglethornTiger, YoungDragonhawk, \
-    AngryChicken, EmperorCobra, StampedingKodo, CaptainsParrot, HungryCrab, KingMukla, Maexxna, TheBeast
 from tests.agents.testing_agents import SpellTestingAgent, OneCardPlayingAgent
-from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
+from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
-from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner, \
-    BloodfenRaptor
-from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard, get_cards_by_type
+from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
+from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
 
 
 class TestGame(unittest.TestCase):
@@ -156,16 +150,6 @@ class TestGame(unittest.TestCase):
         # gone yet
 
         self.assertEqual(1, len(game.current_player.minions))
-
-    def test_minion_lookup_by_type(self):
-        beast_cards = {RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound, DireWolfAlpha,
-                       HauntedCreeper, IronbeakOwl, IronfurGrizzly, JunglePanther, SilverbackPatriarch,
-                       StranglethornTiger, YoungDragonhawk, AngryChicken, EmperorCobra, StampedingKodo, CaptainsParrot,
-                       HungryCrab, KingMukla, Maexxna, TimberWolf, ScavengingHyena, StarvingBuzzard, TundraRhino,
-                       Webspinner, SavannahHighmane, KingKrush, TheBeast}
-        card_list = get_cards_by_type(MINION_TYPE.BEAST)
-        for card in card_list:
-            self.assertIn(type(card), beast_cards)
 
 
 class TestBinding(unittest.TestCase):

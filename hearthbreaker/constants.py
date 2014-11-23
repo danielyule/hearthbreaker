@@ -19,6 +19,11 @@ class CARD_RARITY:
     def from_str(rarity_name):
         return CARD_RARITY.__rarities[rarity_name.upper()]
 
+    @staticmethod
+    def to_str(class_number):
+        classes = dict(zip(CARD_RARITY.__rarities.values(), CARD_RARITY.__rarities.keys()))
+        return classes[class_number].capitalize()
+
 
 class CHARACTER_CLASS:
     ALL = 0

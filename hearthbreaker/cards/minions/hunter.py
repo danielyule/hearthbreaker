@@ -1,16 +1,11 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, AddCardByType, Summon
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle
+from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, Summon, AddCard
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery
 from hearthbreaker.tags.condition import MinionIsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector
 from hearthbreaker.game_objects import MinionCard, Minion
 import hearthbreaker.targeting
-from hearthbreaker.cards.minions.neutral import (RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound,
-                                                 DireWolfAlpha, HauntedCreeper, IronbeakOwl, IronfurGrizzly,
-                                                 JunglePanther, SilverbackPatriarch, StranglethornTiger,
-                                                 YoungDragonhawk, AngryChicken, EmperorCobra, StampedingKodo,
-                                                 CaptainsParrot, HungryCrab, KingMukla, Maexxna, TheBeast)
 
 
 class TimberWolf(MinionCard):
@@ -94,14 +89,5 @@ class Webspinner(MinionCard):
         super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        def add_beast_to_hand(minion):
-            beast_cards = [RiverCrocolisk, BloodfenRaptor, OasisSnapjaw, StonetuskBoar, CoreHound, DireWolfAlpha,
-                           HauntedCreeper, IronbeakOwl, IronfurGrizzly, JunglePanther, SilverbackPatriarch,
-                           StranglethornTiger, YoungDragonhawk, AngryChicken, EmperorCobra, StampedingKodo,
-                           CaptainsParrot, HungryCrab, KingMukla, Maexxna, TimberWolf, ScavengingHyena, StarvingBuzzard,
-                           TundraRhino, Webspinner, SavannahHighmane, KingKrush, TheBeast]
-            card = minion.game.random_choice(beast_cards)
-            if len(minion.player.hand) < 10:
-                minion.player.hand.append(card())
-
-        return Minion(1, 1, deathrattle=Deathrattle(AddCardByType(MINION_TYPE.BEAST), PlayerSelector()))
+        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(condition=MinionIsType(MINION_TYPE.BEAST))),
+                                                    PlayerSelector()))

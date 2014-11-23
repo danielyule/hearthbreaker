@@ -2073,26 +2073,29 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(9, game.players[0].minions[0].calculate_attack())
         self.assertEqual(17, game.players[0].minions[0].health)
         self.assertEqual(1, len(game.players[0].hand))
-        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        self.assertEqual("Laughing Sister", game.players[0].hand[0].name)
         ysera.summon(game.players[0], game, 0)  # Backup Ysera strats
 
         game.play_single_turn()  # 1st Ysera Dies to Nightmare, RIP
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].hand))
-        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        self.assertEqual("Laughing Sister", game.players[0].hand[0].name)
 
         game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].hand))
-        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        self.assertEqual("Laughing Sister", game.players[0].hand[0].name)
 
         game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].hand))
         self.assertEqual("Dream", game.players[0].hand[0].name)
+
+        # Allow Ysera to be replayed again
+        game.players[0].max_mana = 8
 
         game.play_single_turn()  # Bounce and replay Ysera
         game.play_single_turn()
@@ -2105,7 +2108,7 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].hand))
-        self.assertEqual("Playful Sister", game.players[0].hand[0].name)
+        self.assertEqual("Laughing Sister", game.players[0].hand[0].name)
         game.players[0].discard()
 
         game.play_single_turn()
@@ -2148,6 +2151,8 @@ class TestCommon(unittest.TestCase):
         ysera.summon(game.players[0], game, 1)
         for turn in range(0, 5):
             game.play_single_turn()
+
+        self.assertEqual(10, len(game.players[0].hand))
 
     def test_GelbinMekkaTwerk(self):
         game = generate_game_for([GelbinMekkatorque, TwistingNether], StonetuskBoar,
@@ -2210,7 +2215,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(5, game.players[0].minions[1].health)
 
     def test_LorewalkerCho(self):
-        game = generate_game_for(FreezingTrap, SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for([FreezingTrap, MagmaRager], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
         cho = LorewalkerCho()
         cho.summon(game.players[0], game, 0)
         for turn in range(0, 2):
@@ -2222,8 +2227,14 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertEqual(5, len(game.players[0].hand))
-        self.assertEqual("Freezing Trap", game.players[0].hand[4].name)
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual("Freezing Trap", game.players[1].hand[5].name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertNotEqual("Magma Rager", game.players[1].hand[5].name)
 
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,

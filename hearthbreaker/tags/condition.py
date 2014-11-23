@@ -174,3 +174,13 @@ class AttackLessThanOrEqualTo(Condition):
             'include_self': self.include_self,
             'attack_max': self.attack_max
         }
+
+
+class IsDamaged(Condition):
+    def evaluate(self, target, minion, *args):
+        return minion.health != minion.calculate_max_health()
+
+    def __to_json__(self):
+        return {
+            'name': 'is_damaged'
+        }

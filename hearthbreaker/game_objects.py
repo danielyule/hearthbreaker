@@ -42,16 +42,9 @@ def card_lookup(card_name):
     return None
 
 
-def get_cards_by_type(card_type):
-    card_list = []
-    if not len(card_table):
-        card_lookup("The Coin")
-    for card in card_table.values():
-        card = card()
-        if isinstance(card, MinionCard) and card.minion_type == card_type \
-                and card.rarity != hearthbreaker.constants.CARD_RARITY.SPECIAL:
-            card_list.append(card)
-
+def get_cards():
+    card_list = filter(lambda c: c.rarity != hearthbreaker.constants.CARD_RARITY.SPECIAL,
+                       [card() for card in card_table.values()])
     return card_list
 
 
@@ -1650,6 +1643,7 @@ class Player(Bindable):
             'minions': self.minions,
             'mana': self.mana,
             'max_mana': self.max_mana,
+            'name': self.name,
         }
 
     @classmethod
@@ -1664,6 +1658,7 @@ class Player(Bindable):
             hero.weapon.player = player
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
+        player.name = pd['name']
         player.hand = [card_lookup(name) for name in pd["hand"]]
         player.graveyard = set()
         for card_name in pd["graveyard"]:
@@ -1702,6 +1697,7 @@ class Game(Bindable):
         self.game_ended = False
         self.minion_counter = 0
         self.__pre_game_run = False
+        self.last_spell = None
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -1725,7 +1721,6 @@ class Game(Bindable):
             minion.activate_delayed()
 
     def pre_game(self):
-        from hearthbreaker.cards import TheCoin
         if self.__pre_game_run:
             return
         self.__pre_game_run = True
@@ -1757,7 +1752,7 @@ class Game(Bindable):
         for card in put_back_cards:
             self.players[1].put_back(card)
 
-        self.players[1].hand.append(TheCoin())
+        self.players[1].hand.append(card_lookup("The Coin"))
 
     def start(self):
         self.pre_game()
@@ -1858,6 +1853,7 @@ class Game(Bindable):
         self.current_player.trigger("card_played", card, card_index)
 
         if card.is_spell():
+            self.last_spell = card
             self.current_player.trigger("spell_cast", card)
 
         if not card.cancel:

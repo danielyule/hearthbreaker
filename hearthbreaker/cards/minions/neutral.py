@@ -4,16 +4,16 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
     Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle, SummonFromDeck, IfInGraveyard, \
-    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand
+    Steal, ApplySecretFromDeck, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil
+from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
-    MinionIsTarget, IsSpell
+    MinionIsTarget, IsSpell, IsDamaged
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
-    HeroSelector
+    HeroSelector, OtherPlayer
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -1681,26 +1681,72 @@ class OldMurkEye(MinionCard):
             targets.extend(player.game.other_player.minions)
             for target in targets:
                 if target is not m and target.card.minion_type is MINION_TYPE.MURLOC:
-                    minion.change_attack(1)
+                    m.change_attack(1)
 
-        def check_murloc(m):
-            if m is not minion and m.card.minion_type is MINION_TYPE.MURLOC:
-                minion.change_attack(1)
+        return Minion(2, 4, battlecry=set_base_attack, charge=True,
+                      effects=[Effect(MinionPlaced(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
+                                      ChangeAttack(1), SelfSelector()),
+                               Effect(MinionPlaced(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
+                                      ChangeHealth(1), SelfSelector()),
+                               Effect(MinionDied(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
+                                      ChangeAttack(-1), SelfSelector()),
+                               Effect(MinionDied(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
+                                      ChangeHealth(-1), SelfSelector())])
 
-        def rip_murloc(m, by):
-            if m is not minion and m.card.minion_type is MINION_TYPE.MURLOC:
-                minion.change_attack(-1)
 
-        minion = Minion(2, 4, battlecry=set_base_attack, charge=True)
-        player.game.current_player.bind("minion_played", check_murloc)
-        minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_played", check_murloc))
-        player.game.other_player.bind("minion_played", check_murloc)
-        minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_played", check_murloc))
-        player.game.current_player.bind("minion_died", rip_murloc)
-        minion.bind_once("silenced", lambda: player.game.current_player.unbind("minion_died", rip_murloc))
-        player.game.other_player.bind("minion_died", rip_murloc)
-        minion.bind_once("silenced", lambda: player.game.other_player.unbind("minion_died", rip_murloc))
-        return minion
+class Dream(Card):
+    def __init__(self):
+        super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.bounce()
+
+
+class YseraAwakens(Card):
+    def __init__(self):
+        super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(player.game.other_player.minions)
+        targets.extend(player.game.current_player.minions)
+        targets.append(player.game.other_player.hero)
+        targets.append(player.game.current_player.hero)
+        for minion in targets:
+            if isinstance(minion, Minion) and minion.card.name == "Ysera":
+                targets.remove(minion)
+        for minion in targets:
+            minion.damage(player.effective_spell_damage(5), self)
+
+
+class Nightmare(Card):
+    def __init__(self):
+        super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.add_aura(Aura(ChangeAttack(5), SelfSelector()))
+        self.target.add_aura(Aura(ChangeHealth(5), SelfSelector()))
+        self.target.add_effect(Effect(TurnStarted(), Kill(), SelfSelector()))
+
+
+class LaughingSister(MinionCard):
+    def __init__(self):
+        super().__init__("Laughing Sister", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, player):
+        return Minion(3, 5, spell_targetable=False)
+
+
+class EmeraldDrake(MinionCard):
+    def __init__(self):
+        super().__init__("Emerald Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
+
+    def create_minion(self, player):
+        return Minion(7, 6)
 
 
 class Ysera(MinionCard):
@@ -1708,78 +1754,19 @@ class Ysera(MinionCard):
         super().__init__("Ysera", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.DRAGON)
 
     def create_minion(self, player):
-        def dream_card():
-            class Dream(Card):
-                def __init__(self):
-                    super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                                     hearthbreaker.targeting.find_minion_spell_target)
+        dream_card_list = [EmeraldDrake(), LaughingSister(), Nightmare(), YseraAwakens(), Dream()]
+        return Minion(4, 12, effects=[Effect(TurnEnded(),
+                                             AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=dream_card_list)),
+                                             PlayerSelector())])
 
-                def use(self, player, game):
-                    super().use(player, game)
-                    self.target.bounce()
 
-            class YseraAwakens(Card):
-                def __init__(self):
-                    super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+class Chicken(MinionCard):
+    def __init__(self):
+        super().__init__("Chicken", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         MINION_TYPE.BEAST)
 
-                def use(self, player, game):
-                    super().use(player, game)
-                    targets = copy.copy(player.game.other_player.minions)
-                    targets.extend(player.game.current_player.minions)
-                    targets.append(player.game.other_player.hero)
-                    targets.append(player.game.current_player.hero)
-                    for minion in targets:
-                        if isinstance(minion, Minion) and minion.card.name == "Ysera":
-                            targets.remove(minion)
-                    for minion in targets:
-                        minion.damage(player.effective_spell_damage(5), self)
-
-            class Nightmare(Card):
-                def __init__(self):
-                    super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                                     hearthbreaker.targeting.find_minion_spell_target)
-
-                def use(self, player, game):
-                    super().use(player, game)
-                    self.target.change_attack(5)
-                    self.target.increase_health(5)
-
-                    def death():
-                        self.target.die(None)
-                        game.check_delayed()
-
-                    player.bind("turn_started", death)
-                    self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
-
-            class PlayfulSister(MinionCard):
-                def __init__(self):
-                    super().__init__("Playful Sister", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
-
-                def create_minion(self, player):
-                    def silence():
-                        minion.spell_targettable = lambda: True
-
-                    minion = Minion(3, 5)
-                    minion.spell_targettable = lambda: False
-                    minion.bind("silenced", silence)
-                    return minion
-
-            class EmeraldDrake(MinionCard):
-                def __init__(self):
-                    super().__init__("Emerald Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
-
-                def create_minion(self, player):
-                    return Minion(7, 6)
-            dream_card_list = [EmeraldDrake(), PlayfulSister(), Nightmare(), YseraAwakens(), Dream()]
-            card = player.game.random_choice(dream_card_list)
-            if len(player.hand) < 10:
-                player.hand.append(card)
-            else:
-                self.trigger("card_destroyed", card)
-        minion = Minion(4, 12)
-        player.bind("turn_ended", dream_card)
-        minion.bind_once("silenced", lambda: player.unbind("turn_ended", dream_card))
-        return minion
+    def create_minion(self, p):
+        return Minion(1, 1)
 
 
 class GelbinMekkatorque(MinionCard):
@@ -1793,75 +1780,34 @@ class GelbinMekkatorque(MinionCard):
                     super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
                 def create_minion(self, player):
-                    def random_buff():
-                        targets = copy.copy(player.game.other_player.minions)
-                        targets.extend(player.game.current_player.minions)
-                        target = player.game.random_choice(targets)
-                        target.change_attack(1)
-                        target.increase_health(1)
-                    minion = Minion(0, 4)
-                    player.bind("turn_ended", random_buff)
-                    minion.bind_once("silenced", lambda: player.unbind("turn_ended", random_buff))
-                    return minion
+                    return Minion(0, 4, effects=[Effect(TurnEnded(), Give([Aura(ChangeAttack(1), SelfSelector()),
+                                                                           Aura(ChangeHealth(1), SelfSelector())]),
+                                                        RandomSelector(MinionSelector(condition=None,
+                                                                                      players=BothPlayer())))])
 
             class HomingChicken(MinionCard):
                 def __init__(self):
                     super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
                 def create_minion(self, player):
-                    def death_draw():
-                        minion.die(None)
-                        for i in range(0, 3):
-                            player.draw()
-                    minion = Minion(0, 1)
-                    player.bind_once("turn_started", death_draw)
-                    minion.bind_once("silenced", lambda: player.unbind("turn_started", death_draw))
-                    return minion
+                    return Minion(0, 3, effects=[Effect(TurnStarted(), Kill(), SelfSelector()),
+                                                 Effect(TurnStarted(), Draw(3), PlayerSelector())])
 
             class Poultryizer(MinionCard):
                 def __init__(self):
                     super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
                 def create_minion(self, player):
-                    def poultrymorph():
-                        targets = copy.copy(player.game.other_player.minions)
-                        targets.extend(player.game.current_player.minions)
-                        target = player.game.random_choice(targets)
-
-                        class Chicken(MinionCard):
-                            def __init__(self):
-                                super().__init__("Chicken", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                                                 MINION_TYPE.BEAST)
-
-                            def create_minion(self, p):
-                                return Minion(1, 1)
-
-                        chicken = Chicken()
-                        minion = chicken.create_minion(None)
-                        minion.card = chicken
-                        target.replace(minion)
-                    minion = Minion(0, 3)
-                    player.bind("turn_started", poultrymorph)
-                    minion.bind_once("silenced", lambda: player.unbind("turn_started", poultrymorph))
-                    return minion
+                    return Minion(0, 3, effects=[Effect(TurnStarted(), Transform(Chicken()),
+                                                        RandomSelector(MinionSelector(None, BothPlayer())))])
 
             class RepairBot(MinionCard):
                 def __init__(self):
                     super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
                 def create_minion(self, player):
-                    def repair():
-                        targets = []
-                        for m in hearthbreaker.targeting.find_spell_target(
-                                player.game, lambda x: x.health != x.calculate_max_health()):
-                            targets.append(m)
-                        if len(targets) > 0:
-                            repairee = player.game.random_choice(targets)
-                            repairee.heal(player.effective_heal_power(6), self)
-                    minion = Minion(0, 3)
-                    player.bind("turn_ended", repair)
-                    minion.bind_once("silenced", lambda: player.unbind("turn_ended", repair))
-                    return minion
+                    return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(6),
+                                                        RandomSelector(CharacterSelector(IsDamaged(), BothPlayer())))])
             invention_list = [Emboldener3000(), HomingChicken(), Poultryizer(), RepairBot()]
             invention = player.game.random_choice(invention_list)
             invention.summon(player, player.game, m.index + 1)
@@ -1873,17 +1819,9 @@ class LorewalkerCho(MinionCard):
         super().__init__("Lorewalker Cho", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def pass_spell(card):
-            if len(player.game.other_player.hand) < 10:
-                card_type = type(card)
-                player.game.other_player.hand.append(card_type())
-
-        minion = Minion(0, 4)
-        player.game.current_player.bind("spell_cast", pass_spell)
-        minion.bind_once("silenced", lambda: player.game.current_player.unbind("spell_cast", pass_spell))
-        player.game.other_player.bind("spell_cast", pass_spell)
-        minion.bind_once("silenced", lambda: player.game.other_player.unbind("spell_cast", pass_spell))
-        return minion
+        return Minion(0, 4, effects=[Effect(SpellCast(player=BothPlayer()),
+                                            AddCard(CardQuery(source=CARD_SOURCE.LAST_SPELL)),
+                                            PlayerSelector(OtherPlayer()))])
 
 
 class WildPyromancer(MinionCard):

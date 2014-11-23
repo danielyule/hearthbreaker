@@ -1980,3 +1980,130 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
+
+    def test_Ysera(self):
+        game = generate_game_for(Innervate, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        ysera = Ysera()
+        ysera.summon(game.players[0], game, 0)
+        game = game.copy()
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        def check_nightmare():
+            game.play_single_turn()
+            game.play_single_turn()
+            for minion in game.players[0].minions:
+                if minion.card.name == "Ysera":
+                    self.assertEqual(9, minion.calculate_attack())
+                    self.assertEqual(17, minion.health)
+                    break
+            ysera.summon(game.players[0], game, 0)  # Backup Ysera strats
+
+        def check_laughing_sister():
+            game.play_single_turn()
+            game.play_single_turn()
+            self.assertEqual("Laughing Sister", game.players[0].minions[0].card.name)
+            self.assertFalse(game.players[0].minions[0].spell_targetable())
+
+        def check_dream():
+            game.players[0].max_mana = 8
+            game.play_single_turn()
+            game.play_single_turn()
+            self.assertEqual("Ysera", game.players[0].minions[0].card.name)
+
+        def check_ysera_awakens():
+            health_list = {}
+            for player in game.players:
+                for minion in player.minions:
+                    health_list[minion] = minion.health
+
+                health_list[player.hero] = player.hero.health
+
+            game.play_single_turn()
+            game.play_single_turn()
+
+            for player in game.players:
+                for minion in player.minions:
+                    if minion.card.name == "Ysera":
+                        self.assertEqual(health_list[minion], minion.health)
+                    else:
+                        self.assertEqual(health_list[minion] - 5, minion.health)
+                self.assertEqual(health_list[player.hero] - 5, player.hero.health)
+
+        def check_emerald_drake():
+            game.play_single_turn()
+            game.play_single_turn()
+            self.assertEqual("Emerald Drake", game.players[0].minions[0].card.name)
+
+        required = ["Nightmare", "Dream", "Ysera Awakens", "Emerald Drake", "Laughing Sister"]
+
+        while len(required) > 0:
+            self.assertEqual(1, len(game.players[0].hand))
+            card_name = game.players[0].hand[0].name
+            if card_name in required:
+                required.remove(card_name)
+            game = game.copy()
+            if card_name == "Nightmare":
+                check_nightmare()
+            elif card_name == "Dream":
+                check_dream()
+            elif card_name == "Ysera Awakens":
+                check_ysera_awakens()
+            elif card_name == "Emerald Drake":
+                check_emerald_drake()
+            elif card_name == "Laughing Sister":
+                check_laughing_sister()
+            else:
+                self.assertTrue(False, "Unexpected card name: {}".format(card_name))
+
+    def test_LorewalkerCho(self):
+        game = generate_game_for([FreezingTrap, MagmaRager], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
+        cho = LorewalkerCho()
+        cho.summon(game.players[0], game, 0)
+
+        game = game.copy()
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[0].hero.health)
+        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual("Sinister Strike", game.players[0].hand[4].name)
+
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual("Freezing Trap", game.players[1].hand[5].name)
+
+        game = game.copy()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertNotEqual("Magma Rager", game.players[1].hand[5].name)
+
+    def test_OldMurkEye(self):
+        game = generate_game_for([OldMurkEye, ArcaneExplosion], BluegillWarrior,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())

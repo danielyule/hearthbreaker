@@ -70,6 +70,17 @@ class CurrentPlayer(Player):
         return "current_player"
 
 
+class OtherPlayer(Player):
+    def match(self, source, obj):
+        return source.player is obj.player.game.other_player
+
+    def get_players(self, target):
+        return [target.game.other_player]
+
+    def __to_json__(self):
+        return "other_player"
+
+
 class CardSelector(Selector, metaclass=abc.ABCMeta):
     def __init__(self, players=FriendlyPlayer()):
         self.players = players

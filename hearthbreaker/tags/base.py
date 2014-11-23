@@ -1,7 +1,8 @@
 import abc
 import json
 import string
-import hearthbreaker
+import hearthbreaker.game_objects
+import hearthbreaker.constants
 
 
 class JSONObject(metaclass=abc.ABCMeta):
@@ -103,7 +104,7 @@ class Player(metaclass=abc.ABCMeta):
     @staticmethod
     def from_json(name):
         from hearthbreaker.tags.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne,\
-            PlayerTwo, CurrentPlayer
+            PlayerTwo, CurrentPlayer, OtherPlayer
         if name == "friendly":
             return FriendlyPlayer()
         elif name == "enemy":
@@ -115,7 +116,9 @@ class Player(metaclass=abc.ABCMeta):
         elif name == "player_two":
             return PlayerTwo()
         elif name == "current_player":
-            return CurrentPlayer
+            return CurrentPlayer()
+        elif name == "other_player":
+            return OtherPlayer()
 
 
 class Selector(JSONObject, metaclass=abc.ABCMeta):
@@ -359,3 +362,117 @@ class Deathrattle(JSONObject):
         action = Action.from_json(**action)
         selector = Selector.from_json(**selector)
         return Deathrattle(action, selector)
+
+
+class CARD_SOURCE:
+    COLLECTION = 0
+    MY_HAND = 1
+    MY_DECK = 2
+    OPPONENT_HAND = 3
+    OPPONENT_DECK = 4
+    LIST = 5
+    LAST_SPELL = 6
+    __sources = {
+        "COLLECTION": COLLECTION,
+        "MY_HAND": MY_HAND,
+        "MY_DECK": MY_DECK,
+        "OPPONENT_HAND": OPPONENT_HAND,
+        "OPPONENT_DECK": OPPONENT_DECK,
+        "LIST": LIST,
+        "LAST_SPELL": LAST_SPELL,
+    }
+
+    @staticmethod
+    def from_str(source_name):
+        return CARD_SOURCE.__sources[source_name.upper()]
+
+    @staticmethod
+    def to_str(source_number):
+        sources = dict(zip(CARD_SOURCE.__sources.values(), CARD_SOURCE.__sources.keys()))
+        return sources[source_number].capitalize()
+
+
+class CardQuery(JSONObject):
+    def __init__(self, name=None, condition=None, source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False):
+        self.name = name
+        self.condition = condition
+        self.source = source
+        self.source_list = source_list
+        self.make_copy = make_copy
+
+    def get_card(self, player):
+        if self.name:
+            return hearthbreaker.game_objects.card_lookup(self.name)
+
+        if self.source == CARD_SOURCE.COLLECTION:
+            card_list = hearthbreaker.game_objects.get_cards()
+        elif self.source == CARD_SOURCE.MY_DECK:
+            card_list = filter(lambda c: not c.used, player.deck.cards)
+        elif self.source == CARD_SOURCE.MY_HAND:
+            card_list = player.hand
+        elif self.source == CARD_SOURCE.OPPONENT_DECK:
+            card_list = filter(lambda c: not c.used, player.opponent.deck.cards)
+        elif self.source == CARD_SOURCE.OPPONENT_HAND:
+            card_list = player.opponent.hand
+        elif self.source == CARD_SOURCE.LIST:
+            card_list = self.source_list
+        elif self.source == CARD_SOURCE.LAST_SPELL:
+            return player.game.last_spell
+        else:
+            card_list = []
+        # TODO Throw an exception in any other case?
+
+        if self.condition is not None:
+            card_list = [card for card in filter(lambda c: self.condition.evaluate(c), card_list)]
+
+        card_len = len(card_list)
+        if card_len == 1:
+            chosen_card = card_list[0]
+        elif card_len == 0:
+            return None
+        else:
+            chosen_card = player.game.random_choice(card_list)
+
+        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST or self.make_copy:
+            return chosen_card
+        elif self.source == CARD_SOURCE.MY_DECK or self.source == CARD_SOURCE.OPPONENT_DECK:
+            chosen_card.used = True
+            return chosen_card
+        elif self.source == CARD_SOURCE.MY_HAND:
+            player.hand.remove(chosen_card)
+            return chosen_card
+        elif self.source == CARD_SOURCE.OPPONENT_HAND:
+            player.opponent.hand.remove(chosen_card)
+            return chosen_card
+
+    def __to_json__(self):
+        json_obj = {}
+        if self.name:
+            json_obj['name'] = self.name
+        else:
+            if self.condition is not None:
+                json_obj['condition'] = self.condition
+            if self.source is not None:
+                json_obj['source'] = CARD_SOURCE.to_str(self.source)
+            if self.source_list:
+                json_obj['source_list'] = [card.name for card in self.source_list]
+            if self.make_copy:
+                json_obj['make_copy'] = self.make_copy
+
+        return json_obj
+
+    @staticmethod
+    def from_json(name=None, condition=None, source="collection", source_list=None, make_copy=False):
+        query = CardQuery.__new__(CardQuery)
+        query.name = name
+        if condition:
+            query.condition = Condition.from_json(**condition)
+        else:
+            query.condition = None
+        query.source = CARD_SOURCE.from_str(source)
+        if source_list:
+            query.source_list = [hearthbreaker.game_objects.card_lookup(item) for item in source_list]
+        else:
+            query.source_list = None
+        query.make_copy = make_copy
+        return query
