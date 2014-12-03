@@ -411,3 +411,33 @@ yes,Young Priestess,"At the end of your turn, give another random friendly minio
 yes,Youthful Brewmaster,Battlecry: Return a friendly minion from the battlefield to your hand.,,,2,3,2,Common,Minion,Expert
 yes,Ysera,"At the end of your turn, draw a Dream Card.",Dragon,,9,4,12,Legendary,Minion,Expert
 yes,Zombie Chow,Deathrattle: Restore 5 Health to the enemy hero.,,,1,2,3,Common,Minion,Curse of Naxxramas
+no,Annoy-o-Tron,Taunt Divine Shield,Mech,,2,1,2,Common,Minion,Goblins vs. Gnomes
+no,Blingtron 3000,Battlecry: Equip a random weapon for each player,Mech,,5,3,4,Legendary,Minion,Goblins vs. Gnomes
+no,Bomb Lobber,Battlecry: Deal 4 damage to a random enemy minion,,,5,3,3,Rare,Minion,Goblins vs. Gnomes
+no,Boom Bot,Deathrattle: Deal 1-4 damage to a random enemy.,Mech,,1,1,1,Common,Minion,Goblins vs. Gnomes
+no,Cogmaster,Has +2 Attack whle you have a mech,,,1,1,2,Common,Minion,Goblins vs. Gnomes
+no,Dr. Boom,Battlecry: Summon two 1/1/ Boom Bots.  Warning: Bots may explode.,,,7,7,7,Legendary,Minion,Goblins vs. Gnomes
+no,Enhance-o Mechano,"Battlecry: Give your other minions Windfury, Taunt or Divine Shield. (at random)",Mech,,4,3,2,Epic,Minion,Goblins vs. Gnomes
+no,Explosive Sheep,Deathrattle: Deal 2 damage to all minions.,Mech,,2,1,1,Common,Minion,Goblins vs. Gnomes
+no,Flamecannon,Deal 4 damage to a random enemy minion,,Mage,2,,,Common,Spell,Goblins vs. Gnomes
+no,Goblin Blastmage,"Battlecry: If you control a Mech, deal 4 damage randomly split among enemy characters",,Mage,4,5,4,Rare,Minion,Goblins vs. Gnomes
+no,Madder Bomber,Battlecry: Deal 6 damage randomly split between all other characters,,,5,5,4,Rare,Minion,Goblins vs. Gnomes
+no,Mechwarper,Your Mechs cost (1) less,Mech,,2,2,3,Common,Minion,Goblins vs. Gnomes
+no,Mekgineer Thermaplugg,"Whenever an enemy minion dies, summon a leper gnome",Mech,,9,9,7,Legendary,Minion,Goblins vs. Gnomes
+no,Micro Machine,"At the start of each turn, gain +1 Attack.",Mech,,2,1,2,Common,Minion,Goblins vs. Gnomes
+no,Piloted Shredder,Deathrattle: Summon a random 2-Cost minion.,Mech,,4,4,3,Common,Minion,Goblins vs. Gnomes
+no,Piloted Sky Golem,Deathrattle: Summon a random 4-Cost minion.,,,6,5,4,Epic,Minion,Goblins vs. Gnomes
+no,Recombobulator,Battlecry: Transform a friendly minion into a random minion with the same Cost.,,,2,3,2,Epic,Minion,Goblins vs. Gnomes
+no,Shrinkmeister,Battlecry: Give a minion -2 Attack this turn.,,Priest,2,3,2,Common,Minion,Goblins vs. Gnomes
+no,Sneed's Old Shredder,Deathrattle: Summon a random legendary minion.,Mech,,8,5,7,Legendary,Minion,Goblins vs. Gnomes
+no,Spider Tank,,Mech,,3,3,4,Common,Minion,Goblins vs. Gnomes
+no,Unstable Portal,Add a random minion to your hand.  It costs (3) less.,,Mage,2,,,Rare,Spell,Goblins vs. Gnomes
+no,Upgraded Repair Bot,Battlecry: Give a friendly Mech +4 Health.,Mech,Priest,5,5,5,Rare,Minion,Goblins vs. Gnomes
+no,Velen's Chosen,Give minion +2/+4 and Spell Damage +1.,,Priest,3,,,Common,Spell,Goblins vs. Gnomes
+no,V-07-TR-0N,Charge Mega-Windfury (Can attack four times a turn),Mech,,8,4,8,Legendary,Minion,Goblins vs. Gnomes
+no,Mimiron's Head,"At the start of your turn, if you have at least 3 mechs, destroy them all and form V-07-TR-0N",Mech,,5,4,5,Legendary,Minion,Goblins vs. Gnomes
+no,Bouncing Blade,Deal 1 damage to a random minion.  Repeat until a minion dies.,,Warrior,3,,,Epic,Spell,Goblins vs. Gnomes
+no,Clockwork Giant,Costs (1) less for each card in your opponent's hand.,Mech,,12,8,8,Epic,Minion,Goblins vs. Gnomes
+no,Clockwork Gnome,Deathrattle: Add a Spare Part card to your hand.,Mech,,1,2,1,Common,Minion,Goblins vs. Gnomes
+no,Gnomish Experimenter,"Battlecry: Draw a card. If it's a minion, transform it into a Chicken.",,,3,3,2,Rare,Minion,Goblins vs. Gnomes
+no,Tinkertown Technician,"Battlecry: If you have a mech, gain +1/+1 and add a Spare Part to your hand.",,,3,3,3,Common,Minion,Goblins vs. Gnomes
