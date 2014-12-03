@@ -1581,16 +1581,16 @@ class TestCommon(unittest.TestCase):
     def test_GadgetzanAuctioneer(self):
         game = generate_game_for([GadgetzanAuctioneer, CircleOfHealing], CircleOfHealing,
                                  OneCardPlayingAgent, OneCardPlayingAgent)
-        for turn in range(0, 10):
+        for turn in range(0, 12):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[0].hand))
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(9, len(game.players[0].hand))
 
     def test_IllidanStormrage(self):
         game = generate_game_for([IllidanStormrage, CircleOfHealing], CircleOfHealing,

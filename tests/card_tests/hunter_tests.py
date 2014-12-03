@@ -111,7 +111,7 @@ class TestHunter(unittest.TestCase):
 
     def test_Flare(self):
 
-        game = generate_game_for(Vaporize, [WorgenInfiltrator, WorgenInfiltrator, ArcaneShot, Flare],
+        game = generate_game_for(Vaporize, [WorgenInfiltrator, WorgenInfiltrator, ArcaneShot, Tracking],
                                  SpellTestingAgent, SpellTestingAgent)
 
         for turn in range(0, 5):
@@ -127,17 +127,18 @@ class TestHunter(unittest.TestCase):
         old_play = game.other_player.agent.do_turn
 
         def _play_and_attack(player):
+            Flare().use(player, player.game)
             old_play(player)
             player.minions[2].attack()
 
-        # Flare, The Coin, two Worgens and Arcane shot are played
+        # The Coin, two Worgens Arcane shot and Tracking are played
         # Arcane shot kills one of the active Worgens, because Flare has removed its stealth
         game.other_player.agent.do_turn = _play_and_attack
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.secrets))
         self.assertEqual(3, len(game.current_player.minions))
         self.assertFalse(game.current_player.minions[2].stealth)
-        self.assertEqual(1, len(game.current_player.hand))
+        self.assertEqual(2, len(game.current_player.hand))
 
     def test_EaglehornBow(self):
         game = generate_game_for([Snipe, EaglehornBow], StonetuskBoar, PlayAndAttackAgent,

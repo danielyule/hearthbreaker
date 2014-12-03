@@ -62,7 +62,7 @@ class DrainLife(Card):
 
 class Soulfire(Card):
     def __init__(self):
-        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Soulfire", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):

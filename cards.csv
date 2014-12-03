@@ -142,7 +142,7 @@ yes,Fireball,Deal 6 damage.,,Mage,4,,,Free,Spell,Basic
 yes,Flame Imp,Battlecry: Deal 3 damage to your hero.,Demon,Warlock,1,3,2,Common,Minion,Expert
 yes,Flamestrike,Deal 4 damage to all enemy minions.,,Mage,7,,,Common,Spell,Basic
 yes,Flametongue Totem,Adjacent minions have +2 Attack.,Totem,Shaman,2,0,3,Common,Minion,Basic
-yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,1,,,Rare,Spell,Expert
+yes,Flare,All minions lose Stealth. Destroy all enemy Secrets. Draw a card.,,Hunter,2,,,Rare,Spell,Expert
 yes,Flesheating Ghoul,"Whenever a minion dies, gain +1 Attack.",,,3,2,3,Common,Minion,Expert
 yes,Force of Nature,Summon three 2/2 Treants with Charge that die at the end of the turn.,,Druid,6,,,Epic,Spell,Expert
 yes,Forked Lightning,Deal 2 damage to 2 random enemy minions. Overload: (2),,Shaman,1,,,Common,Spell,Expert
@@ -155,7 +155,7 @@ yes,Frostwolf Grunt,Taunt,,,2,2,2,Common,Minion,Basic
 yes,Frostwolf Warlord,Battlecry: Gain +1/+1 for each other friendly minion on the battlefield.,,,5,4,4,Common,Minion,Basic
 yes,Frothing Berserker,"Whenever a minion takes damage, gain +1 Attack.",,Warrior,3,2,4,Rare,Minion,Expert
 yes,Feugen,"Deathrattle: If Stalagg also died this game, summon Thaddius.",,,5,4,7,Legendary,Minion,Curse of Naxxramas
-yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,5,4,4,Rare,Minion,Expert
+yes,Gadgetzan Auctioneer,"Whenever you cast a spell, draw a card.",,,6,4,4,Rare,Minion,Expert
 yes,Gelbin Mekkatorque,Battlecry: Summon an AWESOME invention.,,,6,6,6,Legendary,Minion,Promotion
 yes,Gladiator's Longbow,Your hero is Immune while attacking.,,Hunter,7,5,2,Epic,Weapon,Expert
 yes,Gnomish Inventor,Battlecry: Draw a card.,,,4,2,4,Common,Minion,Basic
@@ -336,7 +336,7 @@ yes,Snake Trap,"Secret: When one of your minions is attacked, summon three 1/1 S
 yes,Snipe,"Secret: When your opponent plays a minion, deal 4 damage to it.",,Hunter,2,,,Common,Spell,Expert
 yes,Sorcerer's Apprentice,Your spells cost (1) less.,,Mage,2,3,2,Common,Minion,Expert
 yes,Soul of the Forest,"Give your minions ""Deathrattle: Summon a 2/2 Treant.""",,Druid,4,,,Common,Spell,Expert
-yes,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,0,,,Common,Spell,Basic
+yes,Soulfire,Deal 4 damage. Discard a random card.,,Warlock,1,,,Common,Spell,Basic
 yes,Southsea Captain,Your other Pirates have +1/+1.,Pirate,,3,3,3,Epic,Minion,Expert
 yes,Southsea Deckhand,Has Charge while you have a weapon equipped.,Pirate,,1,2,1,Common,Minion,Expert
 yes,Spectral Knight,Can't be targeted by spells or hero powers.,,,5,4,6,Common,Minion,Expert

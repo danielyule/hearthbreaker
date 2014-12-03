@@ -1311,7 +1311,7 @@ class VioletTeacher(MinionCard):
 
 class GadgetzanAuctioneer(MinionCard):
     def __init__(self):
-        super().__init__("Gadgetzan Auctioneer", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+        super().__init__("Gadgetzan Auctioneer", 6, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
         return Minion(4, 4, effects=[Effect(SpellCast(), Draw(), PlayerSelector())])

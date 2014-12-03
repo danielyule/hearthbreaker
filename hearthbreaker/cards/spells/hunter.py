@@ -46,7 +46,7 @@ class BestialWrath(Card):
 
 class Flare(Card):
     def __init__(self):
-        super().__init__("Flare", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+        super().__init__("Flare", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
     def use(self, player, game):
         super().use(player, game)

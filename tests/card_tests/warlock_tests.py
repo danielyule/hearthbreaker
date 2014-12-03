@@ -181,9 +181,13 @@ class TestWarlock(unittest.TestCase):
         game = generate_game_for(Soulfire, StonetuskBoar, EnemySpellTestingAgent, DoNothingAgent)
 
         game.play_single_turn()
-        # It should play 2 copies of Soulfire at the enemy hero and discard the remaining 2 copies
+        self.assertEqual(2, len(game.players[0].hand))
+        self.assertEqual(26, game.players[1].hero.health)
+        game.play_single_turn()
+        game.play_single_turn()
+        # It should play 2 copies of Soulfire at the enemy hero and discard the remaining copy
         self.assertEqual(0, len(game.players[0].hand))
-        self.assertEqual(22, game.players[1].hero.health)
+        self.assertEqual(18, game.players[1].hero.health)
         self.assertEqual(30, game.players[0].hero.health)
 
     def test_TwistingNether(self):
