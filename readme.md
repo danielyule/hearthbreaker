@@ -72,8 +72,8 @@ for more details.
 Structure
 ---------
 Almost all of the game logic is found in [hearthbreaker.game_objects](hearthbreker/game_objects.py).  The game functions
-largely on an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the 
-parameters they  receive, see [events.md](events.md).
+largely on a tag based system.  See [the wiki](https://github.com/danielyule/hearthbreaker/wiki/Tag-Format) for more
+details.
 
 The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
 by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
@@ -83,8 +83,8 @@ dictating how the game is run.
 The cards themselves are each a class, and can be found in the [hearthbreaker/cards](hearthbreaker/cards) directory, 
 organized by type (spell/minion/secret/weapon) and by class.
 
-This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
-the replay syntax is documented in [replay_format.md](replay_format.md).
+The project defines a number of interesting formats, which are described 
+[on the wiki](https://github.com/danielyule/hearthbreaker/wiki/Formats)
 
 Contributing
 ------------
@@ -97,6 +97,9 @@ All pull requests which implement new cards must also include a unit test for th
 All pull requests will be automatically verified through 
 [travis-ci.org](https://travis-ci.org/danielyule/hearthbreaker), and a coverage report generated through
  [coveralls.io](https://coveralls.io/r/danielyule/hearthbreaker)
+
+New ideas, and upcoming features are described [on the wiki](https://github.com/danielyule/hearthbreaker/wiki/Roadmap).
+Feel free to get involved with any or all of them.
 
 For more specifics about contributing, see the 
 [contributing page](http://danielyule.github.io/hearthbreaker/contributing.html), 
