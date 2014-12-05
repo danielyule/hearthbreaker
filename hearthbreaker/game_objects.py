@@ -1164,7 +1164,7 @@ class Minion(Character):
         minion.card = card_lookup(md["name"])
         minion.game = game
         minion.player = player
-        for effect in md['tags']:
+        for effect in md['effects']:
             new_effect = hearthbreaker.tags.base.Effect.from_json(game, **effect)
             minion._effects_to_add.append(new_effect)
 
@@ -1192,7 +1192,6 @@ class Minion(Character):
             frozen_for = 1
         else:
             frozen_for = 0
-        effects = copy.copy(self.effects)
         r_val = {
             'name': self.card.name,
             'sequence_id': self.born,
@@ -1206,7 +1205,7 @@ class Minion(Character):
             'deathrattles': self.deathrattle,
             'enrage': self.enrage,
             'frozen_for': frozen_for,
-            'tags': effects,
+            'effects': self.effects,
             'auras': self.auras,
         }
         return r_val
@@ -1419,14 +1418,22 @@ class Hero(Character):
             return super().calculate_attack()
 
     def copy(self, new_owner, new_game):
-        new_hero = copy.copy(self)
-        new_hero.events = dict()
-        new_hero.bonus_attack = 0
+        new_hero = Hero(self.character_class, new_owner)
         if self.weapon:
             new_hero.weapon = self.weapon.copy(new_owner)
-        new_hero.player = new_owner
-        new_hero.power = copy.copy(self.power)
-        new_hero.power.hero = new_hero
+        new_hero.health = self.health
+        new_hero.armor = self.armor
+        new_hero.bonus_attack = 0
+        new_hero.used_windfury = False
+        new_hero.frozen = False
+        new_hero.frozen_this_turn = False
+        for aura in self.auras:
+            new_aura = copy.deepcopy(aura)
+            new_hero.add_aura(new_aura)
+        for effect in self.effects:
+            new_effect = copy.deepcopy(effect)
+            new_hero.add_effect(new_effect)
+
         return new_hero
 
     def attack(self):
@@ -1477,7 +1484,9 @@ class Hero(Character):
             'immune': self.immune,
             'frozen_for': frozen_for,
             'used_windfury': self.used_windfury,
-            'already_attacked': not self.active
+            'already_attacked': not self.active,
+            'effects': self.effects,
+            'auras': self.auras,
         }
 
     @classmethod
@@ -1638,7 +1647,7 @@ class Player(Bindable):
             'graveyard': [card for card in self.graveyard],
             'hand': [card.name for card in self.hand],
             'secrets': [secret.name for secret in self.secrets],
-            'tags': self.effects,
+            'effects': self.effects,
             'auras': [aura for aura in filter(lambda a: isinstance(a, hearthbreaker.tags.base.AuraUntil), auras)],
             'minions': self.minions,
             'mana': self.mana,
@@ -1698,6 +1707,7 @@ class Game(Bindable):
         self.minion_counter = 0
         self.__pre_game_run = False
         self.last_spell = None
+        self._has_turn_ended = True
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -1766,6 +1776,8 @@ class Game(Bindable):
         self._end_turn()
 
     def _start_turn(self):
+        if not self._has_turn_ended:  # when a game is copied, the turn isn't ended before the next one starts
+            self._end_turn()
         if self.current_player == self.players[0]:
             self.current_player = self.players[1]
             self.other_player = self.players[0]
@@ -1787,6 +1799,7 @@ class Game(Bindable):
         self.current_player.hero.power.used = False
         self.current_player.hero.active = True
         self.current_player.draw()
+        self._has_turn_ended = False
 
     def game_over(self):
         self.game_ended = True
@@ -1815,6 +1828,7 @@ class Game(Bindable):
             secret.deactivate(self.other_player)
 
         self.check_delayed()
+        self._has_turn_ended = True
 
     def copy(self):
         copied_game = copy.copy(self)
@@ -1828,6 +1842,7 @@ class Game(Bindable):
 
         copied_game.current_player.opponent = copied_game.other_player
         copied_game.other_player.opponent = copied_game.current_player
+        copied_game._has_turn_ended = copied_game._has_turn_ended
 
         for player in copied_game.players:
             for minion in player.minions:
@@ -1886,6 +1901,7 @@ class Game(Bindable):
         new_game.random_func = random.randint
         new_game.events = {}
         new_game.players = [Player.__from_json__(pd, new_game, None) for pd in d["players"]]
+        new_game._has_turn_ended = False
         if d["active_player"] == 1:
             new_game.current_player = new_game.players[0]
             new_game.other_player = new_game.players[1]
@@ -1900,13 +1916,21 @@ class Game(Bindable):
         index = 0
         for player in new_game.players:
             player.agent = agents[index]
-            for effect_json in d['players'][index]['tags']:
+            for effect_json in d['players'][index]['effects']:
                 effect = hearthbreaker.tags.base.Effect.from_json(new_game, **effect_json)
                 player.add_effect(effect)
             player.player_auras = []
             for aura_json in d['players'][index]['auras']:
                 aura = hearthbreaker.tags.base.AuraUntil.from_json(**aura_json)
                 player.add_aura(aura)
+
+            for effect in d['players'][index]['hero']['effects']:
+                new_effect = hearthbreaker.tags.base.Effect.from_json(player.game, **effect)
+                player.hero.add_effect(new_effect)
+
+            for aura in d['players'][index]['hero']['auras']:
+                new_aura = hearthbreaker.tags.base.AuraUntil.from_json(**aura)
+                player.hero.add_aura(new_aura)
 
             for minion in player.minions:
                 for effect in minion._effects_to_add:

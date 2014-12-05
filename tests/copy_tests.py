@@ -70,6 +70,24 @@ class TestGameCopying(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
 
+    def test_hero_copying(self):
+        test_env = self
+        game = None
+
+        class PowerAndCopyAgent(DoNothingAgent):
+            def do_turn(self, player):
+                nonlocal game
+                if player.hero.power.can_use():
+                    player.hero.power.use()
+                    test_env.assertEqual(1, game.current_player.hero.calculate_attack())
+                    game = game.copy()
+                    test_env.assertEqual(1, game.current_player.hero.calculate_attack())
+
+        game = generate_game_for(HealingTouch, StonetuskBoar, PowerAndCopyAgent, DoNothingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
 
 class TestMinionCopying(unittest.TestCase):
     def setUp(self):
