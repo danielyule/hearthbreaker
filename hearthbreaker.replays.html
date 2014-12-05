@@ -153,7 +153,7 @@ The replay file must be in the complete format</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.read">
-<tt class="descname">read</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L269"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">read</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L270"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a replay in the compact format.  This format is a series of directives, and isn&#8217;t as flexible
 or well structured as the json format (in :meth:write_json).  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -171,7 +171,7 @@ reading.</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.read_json">
-<tt class="descname">read_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L237"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read_json" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">read_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.read_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a replay in the complete json format.  This format is compatible with the netplay format, and is
 also designed to be more future proof.  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -189,7 +189,7 @@ reading.</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.write">
-<tt class="descname">write</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L154"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a replay in the compact format.  This format is a series of directives, and isn&#8217;t as flexible
 or well structured as the json format (in :meth:write_json).  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -207,7 +207,7 @@ writing.</td>
 
 <dl class="method">
 <dt id="hearthbreaker.replay.Replay.write_json">
-<tt class="descname">write_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L206"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write_json" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">write_json</tt><big>(</big><em>file</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L207"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.Replay.write_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a replay in the complete json format.  This format is compatible with the netplay format, and is
 also designed to be more future proof.  For more info, see the
 <a class="reference external" href="https://github.com/danielyule/hearthbreaker/blob/master/replay_format.md">replay format</a></p>
@@ -227,7 +227,7 @@ writing.</td>
 
 <dl class="function">
 <dt id="hearthbreaker.replay.playback">
-<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">playback</tt><big>(</big><em>replay</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L444"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.playback" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">playback</tt><big>(</big><em>replay</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L445"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.playback" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a game which can be replayed back out of a replay.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -245,7 +245,7 @@ writing.</td>
 
 <dl class="function">
 <dt id="hearthbreaker.replay.record">
-<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">record</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L352"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.record" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">hearthbreaker.replay.</tt><tt class="descname">record</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/replay.py#L353"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.replay.record" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ready a game for recording.  This function must be called before the game is played.</p>
 <p>Several methods of the game and its agents are modified.  These modifications will not affect the operation
 of the game or its agents, although any further modifications to these methods will not be recorded.</p>

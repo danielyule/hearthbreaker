@@ -30,7 +30,7 @@
   
     <link rel="top" title="Hearthbreaker Documentaion" href="index.html"/>
         <link rel="next" title="Contributing" href="contributing.html"/>
-        <link rel="prev" title="hearthbreaker.agents package" href="hearthbreaker.agents.html"/> 
+        <link rel="prev" title="Game Objects Module" href="hearthbreaker.game_objects.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -59,7 +59,8 @@
         
             <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="hearthbreaker.html">hearthbreaker package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="hearthbreaker.agents.html">hearthbreaker.agents package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hearthbreaker.replays.html">Replay Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hearthbreaker.game_objects.html">Game Objects Module</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Implemented Cards</a></li>
@@ -1854,7 +1855,7 @@
 <td>All minions lose Stealth. Destroy all enemy Secrets. Draw a card.</td>
 <td>&nbsp;</td>
 <td>Hunter</td>
-<td>1</td>
+<td>2</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>Rare</td>
@@ -2010,7 +2011,7 @@
 <td>Whenever you cast a spell, draw a card.</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
-<td>5</td>
+<td>6</td>
 <td>4</td>
 <td>4</td>
 <td>Rare</td>
@@ -4182,7 +4183,7 @@
 <td>Deal 4 damage. Discard a random card.</td>
 <td>&nbsp;</td>
 <td>Warlock</td>
-<td>0</td>
+<td>1</td>
 <td>&nbsp;</td>
 <td>&nbsp;</td>
 <td>Common</td>
@@ -5077,6 +5078,366 @@
 <td>Minion</td>
 <td>Curse of Naxxramas</td>
 </tr>
+<tr class="row-even"><td>no</td>
+<td>Annoy-o-Tron</td>
+<td>Taunt Divine Shield</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Blingtron 3000</td>
+<td>Battlecry: Equip a random weapon for each player</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>3</td>
+<td>4</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Bomb Lobber</td>
+<td>Battlecry: Deal 4 damage to a random enemy minion</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>3</td>
+<td>3</td>
+<td>Rare</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Boom Bot</td>
+<td>Deathrattle: Deal 1-4 damage to a random enemy.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Cogmaster</td>
+<td>Has +2 Attack whle you have a mech</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Dr. Boom</td>
+<td>Battlecry: Summon two 1/1/ Boom Bots.  Warning: Bots may explode.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>7</td>
+<td>7</td>
+<td>7</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Enhance-o Mechano</td>
+<td>Battlecry: Give your other minions Windfury, Taunt or Divine Shield. (at random)</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>3</td>
+<td>2</td>
+<td>Epic</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Explosive Sheep</td>
+<td>Deathrattle: Deal 2 damage to all minions.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Flamecannon</td>
+<td>Deal 4 damage to a random enemy minion</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Common</td>
+<td>Spell</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Goblin Blastmage</td>
+<td>Battlecry: If you control a Mech, deal 4 damage randomly split among enemy characters</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>4</td>
+<td>5</td>
+<td>4</td>
+<td>Rare</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Madder Bomber</td>
+<td>Battlecry: Deal 6 damage randomly split between all other characters</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>5</td>
+<td>4</td>
+<td>Rare</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Mechwarper</td>
+<td>Your Mechs cost (1) less</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>2</td>
+<td>3</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mekgineer Thermaplugg</td>
+<td>Whenever an enemy minion dies, summon a leper gnome</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>9</td>
+<td>9</td>
+<td>7</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Micro Machine</td>
+<td>At the start of each turn, gain +1 Attack.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>1</td>
+<td>2</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Piloted Shredder</td>
+<td>Deathrattle: Summon a random 2-Cost minion.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>4</td>
+<td>4</td>
+<td>3</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Piloted Sky Golem</td>
+<td>Deathrattle: Summon a random 4-Cost minion.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>6</td>
+<td>5</td>
+<td>4</td>
+<td>Epic</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Recombobulator</td>
+<td>Battlecry: Transform a friendly minion into a random minion with the same Cost.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Epic</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Shrinkmeister</td>
+<td>Battlecry: Give a minion -2 Attack this turn.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Sneed&#8217;s Old Shredder</td>
+<td>Deathrattle: Summon a random legendary minion.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>8</td>
+<td>5</td>
+<td>7</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Spider Tank</td>
+<td>&nbsp;</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>4</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Unstable Portal</td>
+<td>Add a random minion to your hand.  It costs (3) less.</td>
+<td>&nbsp;</td>
+<td>Mage</td>
+<td>2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Rare</td>
+<td>Spell</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Upgraded Repair Bot</td>
+<td>Battlecry: Give a friendly Mech +4 Health.</td>
+<td>Mech</td>
+<td>Priest</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>Rare</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Velen&#8217;s Chosen</td>
+<td>Give minion +2/+4 and Spell Damage +1.</td>
+<td>&nbsp;</td>
+<td>Priest</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Common</td>
+<td>Spell</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>V-07-TR-0N</td>
+<td>Charge Mega-Windfury (Can attack four times a turn)</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>8</td>
+<td>4</td>
+<td>8</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Mimiron&#8217;s Head</td>
+<td>At the start of your turn, if you have at least 3 mechs, destroy them all and form V-07-TR-0N</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>5</td>
+<td>4</td>
+<td>5</td>
+<td>Legendary</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Bouncing Blade</td>
+<td>Deal 1 damage to a random minion.  Repeat until a minion dies.</td>
+<td>&nbsp;</td>
+<td>Warrior</td>
+<td>3</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>Epic</td>
+<td>Spell</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Clockwork Giant</td>
+<td>Costs (1) less for each card in your opponent&#8217;s hand.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>12</td>
+<td>8</td>
+<td>8</td>
+<td>Epic</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Clockwork Gnome</td>
+<td>Deathrattle: Add a Spare Part card to your hand.</td>
+<td>Mech</td>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-even"><td>no</td>
+<td>Gnomish Experimenter</td>
+<td>Battlecry: Draw a card. If it&#8217;s a minion, transform it into a Chicken.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>2</td>
+<td>Rare</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
+<tr class="row-odd"><td>no</td>
+<td>Tinkertown Technician</td>
+<td>Battlecry: If you have a mech, gain +1/+1 and add a Spare Part to your hand.</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+<td>Common</td>
+<td>Minion</td>
+<td>Goblins vs. Gnomes</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -5090,7 +5451,7 @@
         <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="hearthbreaker.agents.html" class="btn btn-neutral" title="hearthbreaker.agents package"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="hearthbreaker.game_objects.html" class="btn btn-neutral" title="Game Objects Module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
