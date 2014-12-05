@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from tests.agents.testing_agents import OneCardPlayingAgent, EnemySpellTestingAgent, \
-    SpellTestingAgent, EnemyMinionSpellTestingAgent, PlayAndAttackAgent
+    CardTestingAgent, EnemyMinionSpellTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import MINION_TYPE
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -134,7 +134,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(5, len(game.players[0].hand))
 
     def test_Hellfire(self):
-        game = generate_game_for(Hellfire, SilverbackPatriarch, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Hellfire, SilverbackPatriarch, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 6):
             game.play_single_turn()
             # plays 1 Silverback Patriarch
@@ -151,7 +151,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(27, game.players[1].hero.health)
 
     def test_ShadowBolt(self):
-        game = generate_game_for(ShadowBolt, SilverbackPatriarch, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(ShadowBolt, SilverbackPatriarch, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 6):
             game.play_single_turn()
             # Plays Silverback Patriarch
@@ -165,7 +165,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_DrainLife(self):
-        game = generate_game_for(DrainLife, MindBlast, EnemySpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(DrainLife, MindBlast, EnemySpellTestingAgent, CardTestingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
             # Uses Mind Blast
@@ -191,7 +191,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(30, game.players[0].hero.health)
 
     def test_TwistingNether(self):
-        game = generate_game_for(TwistingNether, SilverbackPatriarch, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(TwistingNether, SilverbackPatriarch, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 14):
             game.play_single_turn()
             # Plays Silverback Patriarch each turn
@@ -214,7 +214,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_DemonfireAlly(self):
-        game = generate_game_for(Demonfire, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Demonfire, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         imp = FlameImp()
         imp.summon(game.players[0], game, 0)
 
@@ -231,7 +231,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
 
     def test_DemonfireAllyNonDemon(self):
-        game = generate_game_for(Demonfire, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Demonfire, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         raptor = BloodfenRaptor()
         raptor.summon(game.players[0], game, 0)
 
@@ -246,7 +246,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].minions))
 
     def test_SacrificialPact(self):
-        game = generate_game_for(MindBlast, SacrificialPact, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(MindBlast, SacrificialPact, CardTestingAgent, CardTestingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
             # Uses 1 Mindblast
@@ -259,7 +259,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(30, game.players[1].hero.health)
 
     def test_SiphonSoul(self):
-        game = generate_game_for(MindBlast, SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(MindBlast, SiphonSoul, OneCardPlayingAgent, CardTestingAgent)
         for turn in range(0, 11):
             game.play_single_turn()
             # Uses Mindblast for 5 turns
@@ -272,7 +272,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(8, game.players[1].hero.health)
 
     def test_SenseDemons(self):
-        game = generate_game_for([SenseDemons, Doomguard], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([SenseDemons, Doomguard], StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
         self.assertEqual(5, len(game.players[0].hand))
@@ -287,7 +287,7 @@ class TestWarlock(unittest.TestCase):
             game.play_single_turn()
 
     def test_SenseDemonsNoDemons(self):
-        game = generate_game_for(SenseDemons, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(SenseDemons, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
         self.assertEqual(5, len(game.players[0].hand))
@@ -362,7 +362,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].hand))
 
     def test_PowerOverwhelming(self):
-        game = generate_game_for(PowerOverwhelming, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(PowerOverwhelming, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         imp = FlameImp()
         imp.summon(game.players[0], game, 0)
         self.assertEqual(1, len(game.players[0].minions))
@@ -378,7 +378,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].hand))
 
     def test_Shadowflame(self):
-        game = generate_game_for(Shadowflame, Shieldbearer, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Shadowflame, Shieldbearer, CardTestingAgent, OneCardPlayingAgent)
         imp = FlameImp()
         imp.summon(game.players[0], game, 0)
 
@@ -461,7 +461,7 @@ class TestWarlock(unittest.TestCase):
                 if self.turn >= 8:
                     player.game.play_card(player.hand[0])
 
-        game = generate_game_for(LordJaraxxus, [Repentance, Snipe, MirrorEntity], SpellTestingAgent, SecretTester)
+        game = generate_game_for(LordJaraxxus, [Repentance, Snipe, MirrorEntity], CardTestingAgent, SecretTester)
 
         for turn in range(0, 17):
             game.play_single_turn()
@@ -488,7 +488,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual("Lord Jaraxxus", game.other_player.minions[0].card.name)
 
     def test_Jaraxxus_with_SacrificialPact(self):
-        game = generate_game_for(LordJaraxxus, SacrificialPact, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(LordJaraxxus, SacrificialPact, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 18):
             game.play_single_turn()
@@ -518,7 +518,7 @@ class TestWarlock(unittest.TestCase):
 
     def test_Voidcaller(self):
         game = generate_game_for(Assassinate, [Voidcaller, FlameImp, ArgentSquire, BoulderfistOgre, StonetuskBoar],
-                                 SpellTestingAgent, OneCardPlayingAgent)
+                                 CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()

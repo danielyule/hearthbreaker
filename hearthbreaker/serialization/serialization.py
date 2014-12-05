@@ -1,7 +1,7 @@
 import json
 from hearthbreaker.cards import FlameImp, LightsJustice, EyeForAnEye
 from hearthbreaker.game_objects import Game
-from tests.agents.testing_agents import SpellTestingAgent
+from tests.agents.testing_agents import CardTestingAgent
 from tests.testing_utils import generate_game_for
 
 
@@ -37,7 +37,7 @@ def deserialize(json_string, agents):
 
 
 if __name__ == "__main__":
-    game = generate_game_for([LightsJustice, EyeForAnEye], FlameImp, SpellTestingAgent, SpellTestingAgent)
+    game = generate_game_for([LightsJustice, EyeForAnEye], FlameImp, CardTestingAgent, CardTestingAgent)
     for turn in range(0, 5):
         game.play_single_turn()
 

@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from tests.agents.testing_agents import OneCardPlayingAgent, SpellTestingAgent, EnemyMinionSpellTestingAgent, \
+from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, EnemyMinionSpellTestingAgent, \
     PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.replay import playback, Replay
@@ -14,7 +14,7 @@ class TestPaladin(unittest.TestCase):
         random.seed(1857)
 
     def test_AvengingWrath(self):
-        game = generate_game_for(MogushanWarden, AvengingWrath, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, AvengingWrath, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -88,7 +88,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(23, game.other_player.deck.left)
 
     def test_Consecration(self):
-        game = generate_game_for(StonetuskBoar, Consecration, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, Consecration, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -100,7 +100,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].minions))
 
     def test_DivineFavor(self):
-        game = generate_game_for(StonetuskBoar, DivineFavor, DoNothingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, DivineFavor, DoNothingAgent, CardTestingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -125,7 +125,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(10, len(game.players[1].hand))
 
     def test_Equality(self):
-        game = generate_game_for(MogushanWarden, Equality, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, Equality, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -165,7 +165,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(7, game.players[0].minions[0].calculate_max_health())
 
     def test_HammerOfWrath(self):
-        game = generate_game_for(MogushanWarden, HammerOfWrath, DoNothingAgent, SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, HammerOfWrath, DoNothingAgent, CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -177,7 +177,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(9, len(game.players[1].hand))
 
     def test_HandOfProtection(self):
-        game = generate_game_for(StonetuskBoar, HandOfProtection, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, HandOfProtection, OneCardPlayingAgent, CardTestingAgent)
 
         game.play_single_turn()  # Stonetusk Boar should be played
         self.assertEqual(1, len(game.players[0].minions))
@@ -191,7 +191,7 @@ class TestPaladin(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
     def test_HolyLight(self):
-        game = generate_game_for(StonetuskBoar, HolyLight, DoNothingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, HolyLight, DoNothingAgent, CardTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -204,7 +204,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(30, game.players[0].hero.health)
 
     def test_HolyWrath(self):
-        game = generate_game_for(StonetuskBoar, HolyWrath, DoNothingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, HolyWrath, DoNothingAgent, CardTestingAgent)
 
         for turn in range(0, 9):
             game.play_single_turn()
@@ -215,7 +215,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(25, game.players[0].hero.health)
 
     def test_Humility(self):
-        game = generate_game_for(BloodfenRaptor, Humility, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(BloodfenRaptor, Humility, OneCardPlayingAgent, CardTestingAgent)
 
         game.play_single_turn()
         game.play_single_turn()  # No targets for Humility
@@ -231,7 +231,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[0].health)
 
     def test_LayOnHands(self):
-        game = generate_game_for(StonetuskBoar, LayOnHands, DoNothingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, LayOnHands, DoNothingAgent, CardTestingAgent)
 
         for turn in range(0, 15):
             game.play_single_turn()
@@ -303,7 +303,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(26, game.players[0].hero.health)
 
     def test_EyeForAnEye(self):
-        game = generate_game_for(EyeForAnEye, StonetuskBoar, SpellTestingAgent, PredictableAgent)
+        game = generate_game_for(EyeForAnEye, StonetuskBoar, CardTestingAgent, PredictableAgent)
 
         game.play_single_turn()  # Eye for an Eye should be played
         self.assertEqual(1, len(game.players[0].secrets))
@@ -318,7 +318,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_NobleSacrifice(self):
-        game = generate_game_for(NobleSacrifice, StonetuskBoar, SpellTestingAgent, PredictableAgent)
+        game = generate_game_for(NobleSacrifice, StonetuskBoar, CardTestingAgent, PredictableAgent)
 
         game.play_single_turn()  # NobleSacrifice should be played
         self.assertEqual(1, len(game.players[0].secrets))
@@ -341,7 +341,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual("Noble Sacrifice", game.players[0].secrets[0].name)
 
     def test_Redemption(self):
-        game = generate_game_for([Redemption, SilvermoonGuardian], WarGolem, SpellTestingAgent, PredictableAgent)
+        game = generate_game_for([Redemption, SilvermoonGuardian], WarGolem, CardTestingAgent, PredictableAgent)
 
         # Redemption and Silvermoon Guardian should be played
         for turn in range(0, 7):
@@ -373,7 +373,7 @@ class TestPaladin(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].divine_shield)
 
     def test_RedemptionEnemy(self):
-        game = generate_game_for([Redemption, Whirlwind], StonetuskBoar, SpellTestingAgent, PredictableAgent)
+        game = generate_game_for([Redemption, Whirlwind], StonetuskBoar, CardTestingAgent, PredictableAgent)
         for turn in range(0, 2):
             game.play_single_turn()
 
@@ -386,7 +386,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].secrets))
 
     def test_Repentance(self):
-        game = generate_game_for(Repentance, TwilightDrake, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Repentance, TwilightDrake, CardTestingAgent, OneCardPlayingAgent)
 
         # Repentance should be played
         game.play_single_turn()
@@ -404,7 +404,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].health)
 
     def test_RepentanceSelf(self):
-        game = generate_game_for([Repentance, BluegillWarrior], TwilightDrake, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([Repentance, BluegillWarrior], TwilightDrake, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
 
@@ -493,7 +493,7 @@ class TestPaladin(unittest.TestCase):
 
     def test_Avenge(self):
         game = generate_game_for([Avenge, StonetuskBoar, StonetuskBoar], Frostbolt,
-                                 SpellTestingAgent, SpellTestingAgent)
+                                 CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()

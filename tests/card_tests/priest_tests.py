@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from tests.agents.testing_agents import OneCardPlayingAgent, SpellTestingAgent, PlayAndAttackAgent
+from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game
 from tests.testing_utils import generate_game_for, StackedDeck
@@ -19,7 +19,7 @@ class TestPriest(unittest.TestCase):
             [CircleOfHealing(), MogushanWarden(), CircleOfHealing(), CircleOfHealing(), CircleOfHealing(),
              CircleOfHealing(), CircleOfHealing()], CHARACTER_CLASS.PRIEST)
         deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
-        game = Game([deck1, deck2], [SpellTestingAgent(), OneCardPlayingAgent()])
+        game = Game([deck1, deck2], [CardTestingAgent(), OneCardPlayingAgent()])
         game.pre_game()
         game.current_player = 1
 
@@ -33,7 +33,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(game.players[1].minions[0].calculate_max_health(), game.players[1].minions[0].health)
 
     def test_DivineSpirit(self):
-        game = generate_game_for(DivineSpirit, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(DivineSpirit, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()
@@ -65,7 +65,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(7, game.players[1].minions[0].calculate_max_health())
 
     def test_HolyFire(self):
-        game = generate_game_for(HolyFire, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(HolyFire, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 10):
             game.play_single_turn()
@@ -84,7 +84,7 @@ class TestPriest(unittest.TestCase):
     def test_HolyNova(self):
         deck1 = StackedDeck([MogushanWarden(), HolyNova()], CHARACTER_CLASS.PRIEST)
         deck2 = StackedDeck([MogushanWarden()], CHARACTER_CLASS.PALADIN)
-        game = Game([deck1, deck2], [SpellTestingAgent(), OneCardPlayingAgent()])
+        game = Game([deck1, deck2], [CardTestingAgent(), OneCardPlayingAgent()])
         game.pre_game()
         game.current_player = 1
 
@@ -101,14 +101,14 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, game.players[1].minions[0].health)
 
     def test_HolySmite(self):
-        game = generate_game_for(HolySmite, MogushanWarden, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(HolySmite, MogushanWarden, CardTestingAgent, DoNothingAgent)
 
         self.assertEqual(30, game.players[1].hero.health)
         game.play_single_turn()  # Holy Smite should be played
         self.assertEqual(28, game.players[1].hero.health)
 
     def test_InnerFire(self):
-        game = generate_game_for(InnerFire, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(InnerFire, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()
@@ -125,7 +125,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(7, game.players[1].minions[0].health)
 
     def test_MassDispel(self):
-        game = generate_game_for(MassDispel, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(MassDispel, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()
@@ -139,7 +139,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(8, len(game.players[0].hand))
 
     def test_MindBlast(self):
-        game = generate_game_for(MindBlast, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(MindBlast, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -149,7 +149,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(25, game.players[1].hero.health)
 
     def test_MindControl(self):
-        game = generate_game_for(MindControl, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(MindControl, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 18):
             game.play_single_turn()
@@ -161,7 +161,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, len(game.players[1].minions))
 
     def test_MindVision(self):
-        game = generate_game_for(MindVision, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(MindVision, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
 
         self.assertEqual(3, len(game.players[0].hand))
         self.assertEqual(5, len(game.players[1].hand))
@@ -171,7 +171,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, len(game.players[1].hand))
 
     def test_Mindgames(self):
-        game = generate_game_for(Mindgames, MogushanWarden, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Mindgames, MogushanWarden, CardTestingAgent, DoNothingAgent)
 
         # Mindgames should be played, Mogu'shan Warden will be found and put into the battlefield
         for turn in range(0, 7):
@@ -191,7 +191,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Shadow of Nothing", game.players[0].minions[0].card.name)
 
     def test_PowerWordShield(self):
-        game = generate_game_for(StonetuskBoar, PowerWordShield, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, PowerWordShield, OneCardPlayingAgent, CardTestingAgent)
 
         # Power Word: Shield should be played, and target the enemy Stonetusk Boar. And a card should be drawn.
         for turn in range(0, 2):
@@ -247,7 +247,7 @@ class TestPriest(unittest.TestCase):
 
     def test_ShadowMadness_and_Corruption(self):
         game = generate_game_for([ShadowMadness, PowerOverwhelming], [OasisSnapjaw, WarGolem],
-                                 SpellTestingAgent, OneCardPlayingAgent)
+                                 CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 9):
             game.play_single_turn()
 
@@ -264,7 +264,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
 
     def test_ShadowWordDeath(self):
-        game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, OneCardPlayingAgent, CardTestingAgent)
 
         # Ironfur Grizzly should be played
         for turn in range(0, 5):
@@ -288,7 +288,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Ironfur Grizzly", game.players[0].minions[0].card.name)
 
     def test_ShadowWordPain(self):
-        game = generate_game_for([MagmaRager, IronfurGrizzly], ShadowWordPain, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([MagmaRager, IronfurGrizzly], ShadowWordPain, OneCardPlayingAgent, CardTestingAgent)
 
         # Magma Rager should be played
         for turn in range(0, 5):
@@ -349,7 +349,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(28, game.players[1].hero.health)
 
     def test_Silence(self):
-        game = generate_game_for(IronfurGrizzly, Silence, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(IronfurGrizzly, Silence, OneCardPlayingAgent, CardTestingAgent)
 
         # Ironfur Grizzly should be played
         for turn in range(0, 5):
@@ -366,7 +366,7 @@ class TestPriest(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].taunt)
 
     def test_Thoughtsteal(self):
-        game = generate_game_for(Thoughtsteal, IronfurGrizzly, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Thoughtsteal, IronfurGrizzly, CardTestingAgent, DoNothingAgent)
 
         # Thoughtsteal should be played, copying two grizzly
         for turn in range(0, 5):
@@ -573,7 +573,7 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[1].calculate_max_health())
 
     def test_DarkCultist(self):
-        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()

@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
-from tests.agents.testing_agents import SpellTestingAgent, OneCardPlayingAgent
+from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
 from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
@@ -82,7 +82,7 @@ class TestGame(unittest.TestCase):
         for secret_type in SecretCard.__subclasses__():
             random.seed(1857)
             secret = secret_type()
-            game = generate_game_for(secret_type, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+            game = generate_game_for(secret_type, StonetuskBoar, CardTestingAgent, DoNothingAgent)
             for turn in range(0, secret.mana * 2 - 2):
                 game.play_single_turn()
 

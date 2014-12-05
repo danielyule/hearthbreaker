@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from tests.agents.testing_agents import SpellTestingAgent
+from tests.agents.testing_agents import CardTestingAgent
 from hearthbreaker.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, Shadowform, \
     DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith, MassDispel
 from hearthbreaker.powers import MindSpike, MindShatter
@@ -90,7 +90,7 @@ class TestPowers(unittest.TestCase):
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_ShamanPower(self):
-        game = generate_game_for(AlAkirTheWindlord, MassDispel, PredictableAgent, SpellTestingAgent)
+        game = generate_game_for(AlAkirTheWindlord, MassDispel, PredictableAgent, CardTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()

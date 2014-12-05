@@ -5,14 +5,14 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.constants import MINION_TYPE
 from hearthbreaker.game_objects import MinionCard
-from tests.agents.testing_agents import SpellTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
+from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
 
 def create_enemy_copying_agent(turn_to_play=1):
-    class EnemyCopyingAgent(SpellTestingAgent):
+    class EnemyCopyingAgent(CardTestingAgent):
         def __init__(self):
             super().__init__()
             self.turn = 0
@@ -32,7 +32,7 @@ def create_enemy_copying_agent(turn_to_play=1):
 
 
 def create_friendly_copying_agent(turn_to_play=1):
-    class FriendlyCopyingAgent(SpellTestingAgent):
+    class FriendlyCopyingAgent(CardTestingAgent):
         def __init__(self):
             super().__init__()
             self.turn = 0
@@ -127,7 +127,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_SoulOfTheForest(self):
         game = generate_game_for([Abomination, SoulOfTheForest], FacelessManipulator,
-                                 SpellTestingAgent, create_enemy_copying_agent(6))
+                                 CardTestingAgent, create_enemy_copying_agent(6))
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -370,7 +370,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(MINION_TYPE.BEAST, game.other_player.hand[7].minion_type)
 
     def test_Duplicate(self):
-        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -436,7 +436,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].health)
 
     def test_FaerieDragon(self):
-        game = generate_game_for(FaerieDragon, Frostbolt, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(FaerieDragon, Frostbolt, OneCardPlayingAgent, CardTestingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
 
@@ -497,7 +497,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, len(game.current_player.minions))
 
     def test_DancingSwords(self):
-        game = generate_game_for(DancingSwords, ShadowBolt, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(DancingSwords, ShadowBolt, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -573,7 +573,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_Voidcaller(self):
         game = generate_game_for(Assassinate, [Voidcaller, FlameImp, ArgentSquire, BoulderfistOgre, StonetuskBoar],
-                                 SpellTestingAgent, OneCardPlayingAgent)
+                                 CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 8):
             game.play_single_turn()
@@ -587,7 +587,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_SorcerersApprentice(self):
         game = generate_game_for([SorcerersApprentice, ArcaneMissiles, SorcerersApprentice, Frostbolt, Frostbolt,
-                                  Frostbolt], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+                                  Frostbolt], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -616,7 +616,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
 
     def test_Loatheb(self):
-        game = generate_game_for(Loatheb, [Assassinate, BoulderfistOgre], OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(Loatheb, [Assassinate, BoulderfistOgre], OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 9):
             game.play_single_turn()
@@ -633,7 +633,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_KirinTorMage(self):
         game = generate_game_for([KirinTorMage, BoulderfistOgre, Spellbender],
-                                 StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+                                 StonetuskBoar, CardTestingAgent, DoNothingAgent)
         new_game = None
         for turn in range(0, 4):
             game.play_single_turn()
@@ -798,7 +798,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(15, game.other_player.hero.health)
 
     def test_DarkCultist(self):
-        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([StonetuskBoar, DarkCultist], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -813,7 +813,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
 
     def test_Feugen(self):
-        game = generate_game_for([Stalagg, Feugen], Assassinate, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([Stalagg, Feugen], Assassinate, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 10):
             game.play_single_turn()
@@ -899,7 +899,7 @@ class TestMinionCopying(unittest.TestCase):
     def test_EchoingOoze(self):
         new_game = None
 
-        class OozeAgent(SpellTestingAgent):
+        class OozeAgent(CardTestingAgent):
             def __init__(self):
                 super().__init__()
                 self.turn = 0
@@ -961,7 +961,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_KelThuzad(self):
         game = generate_game_for([StonetuskBoar, IronfurGrizzly, MagmaRager, KelThuzad], [WarGolem, Flamestrike],
-                                 OneCardPlayingAgent, SpellTestingAgent)
+                                 OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 15):
             game.play_single_turn()
@@ -1045,7 +1045,7 @@ class TestMinionCopying(unittest.TestCase):
     def test_Conceal(self):
         new_game = None
 
-        class ConcealAgent(SpellTestingAgent):
+        class ConcealAgent(CardTestingAgent):
             def __init__(self):
                 super().__init__()
                 self.turn = 0
@@ -1075,7 +1075,7 @@ class TestMinionCopying(unittest.TestCase):
     def test_Headcrack(self):
         new_game = None
 
-        class HCAgent(SpellTestingAgent):
+        class HCAgent(CardTestingAgent):
             def __init__(self):
                 super().__init__()
                 self.turn = 0
@@ -1141,7 +1141,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[2].health)
 
     def test_FreezingTrap(self):
-        game = generate_game_for(FreezingTrap, BluegillWarrior, SpellTestingAgent, PlayAndAttackAgent)
+        game = generate_game_for(FreezingTrap, BluegillWarrior, CardTestingAgent, PlayAndAttackAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -1206,7 +1206,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[-1].calculate_max_health())
 
     def test_PowerOverwhelming(self):
-        game = generate_game_for(PowerOverwhelming, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(PowerOverwhelming, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         imp = FlameImp()
         imp.summon(game.players[0], game, 0)
         self.assertEqual(1, len(game.players[0].minions))
@@ -1245,7 +1245,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].hand))
 
     def test_ManaAddict(self):
-        game = generate_game_for([ManaAddict, ArcaneIntellect], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([ManaAddict, ArcaneIntellect], StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
 
@@ -1278,7 +1278,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
 
     def test_BaronGeddon(self):
-        game = generate_game_for(BaronGeddon, MassDispel, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(BaronGeddon, MassDispel, OneCardPlayingAgent, CardTestingAgent)
         for turn in range(0, 13):
             game.play_single_turn()
 
@@ -1451,7 +1451,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(3, game.players[0].hero.armor)
 
     def test_GrommashHellscream(self):
-        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PlayAndAttackAgent, SpellTestingAgent)
+        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 14):
             game.play_single_turn()
@@ -1552,7 +1552,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_Gorehowl(self):
         game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
-                                 PlayAndAttackAgent, SpellTestingAgent)
+                                 PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 13):
             game.play_single_turn()
@@ -1689,7 +1689,7 @@ class TestMinionCopying(unittest.TestCase):
     def test_ShadowMadness(self):
         game = generate_game_for([Deathwing],
                                  [Humility, ShadowMadness, FacelessManipulator], OneCardPlayingAgent,
-                                 SpellTestingAgent)
+                                 CardTestingAgent)
 
         for turn in range(0, 20):
             game.play_single_turn()
@@ -1942,7 +1942,7 @@ class TestMinionCopying(unittest.TestCase):
 
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,
-                                 SpellTestingAgent, DoNothingAgent)
+                                 CardTestingAgent, DoNothingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
 
@@ -1984,7 +1984,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual("Deathwing", game.current_player.minions[0].card.name)
 
     def test_MillhouseManastorm(self):
-        game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, CardTestingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
 
@@ -1999,7 +1999,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
 
     def test_Ysera(self):
-        game = generate_game_for(Innervate, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Innervate, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         ysera = Ysera()
         ysera.summon(game.players[0], game, 0)
         game = game.copy()

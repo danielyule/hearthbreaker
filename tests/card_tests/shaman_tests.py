@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from tests.agents.testing_agents import OneCardPlayingAgent, MinionAttackingAgent, SpellTestingAgent, \
+from tests.agents.testing_agents import OneCardPlayingAgent, MinionAttackingAgent, CardTestingAgent, \
     PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -302,7 +302,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(0, game.players[0].hand[-2].mana_cost(game.players[0]))
 
     def test_FeralSpirit(self):
-        game = generate_game_for(FeralSpirit, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(FeralSpirit, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -324,7 +324,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].overload)
 
     def test_ForkedLightning(self):
-        game = generate_game_for(ForkedLightning, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(ForkedLightning, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -338,7 +338,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].overload)
 
     def test_FrostShock(self):
-        game = generate_game_for(FrostShock, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(FrostShock, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         # Frost Shock should be played
         game.play_single_turn()
@@ -346,7 +346,7 @@ class TestShaman(unittest.TestCase):
         self.assertTrue(game.players[1].hero.frozen)
 
     def test_Hex(self):
-        game = generate_game_for(ChillwindYeti, Hex, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(ChillwindYeti, Hex, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -366,7 +366,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(MINION_TYPE.BEAST, game.players[0].minions[0].card.minion_type)
 
     def test_LavaBurst(self):
-        game = generate_game_for(LavaBurst, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(LavaBurst, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -378,7 +378,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].overload)
 
     def test_LightningBolt(self):
-        game = generate_game_for(LightningBolt, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(LightningBolt, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         self.assertEqual(30, game.players[1].hero.health)
 
@@ -387,7 +387,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, game.players[0].overload)
 
     def test_LightningStorm(self):
-        game = generate_game_for(LightningStorm, Shieldbearer, SpellTestingAgent, PlayAndAttackAgent)
+        game = generate_game_for(LightningStorm, Shieldbearer, CardTestingAgent, PlayAndAttackAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -426,7 +426,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[1].calculate_max_health())
 
     def test_Windfury(self):
-        game = generate_game_for(Windfury, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Windfury, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -455,7 +455,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(26, game.players[1].hero.health)
 
     def test_StormforgedAxe(self):
-        game = generate_game_for(StormforgedAxe, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(StormforgedAxe, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()

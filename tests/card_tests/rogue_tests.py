@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, SpellTestingAgent
+from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
@@ -119,7 +119,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_SI7Agent(self):
-        game = generate_game_for(SI7Agent, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(SI7Agent, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -138,7 +138,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[1].health)
 
     def test_Assassinate(self):
-        game = generate_game_for(Assassinate, Sunwalker, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Assassinate, Sunwalker, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -152,7 +152,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_Backstab(self):
-        game = generate_game_for(Backstab, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Backstab, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         # Nothing should happen
         game.play_single_turn()
@@ -166,7 +166,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_Betrayal(self):
-        game = generate_game_for([IronfurGrizzly, EmperorCobra], Betrayal, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([IronfurGrizzly, EmperorCobra], Betrayal, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -182,7 +182,7 @@ class TestRogue(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].immune)
 
     def test_BetrayalMiddle(self):
-        game = generate_game_for(StonetuskBoar, Betrayal, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(StonetuskBoar, Betrayal, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -219,7 +219,7 @@ class TestRogue(unittest.TestCase):
 
     def test_ColdBlood(self):
         game = generate_game_for([StonetuskBoar, ColdBlood, ColdBlood], StonetuskBoar,
-                                 SpellTestingAgent, DoNothingAgent)
+                                 CardTestingAgent, DoNothingAgent)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
@@ -232,7 +232,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(7, game.players[0].minions[0].calculate_attack())
 
     def test_Conceal(self):
-        game = generate_game_for([StonetuskBoar, Conceal, MogushanWarden], StonetuskBoar, SpellTestingAgent,
+        game = generate_game_for([StonetuskBoar, Conceal, MogushanWarden], StonetuskBoar, CardTestingAgent,
                                  DoNothingAgent)
 
         for turn in range(0, 3):
@@ -249,8 +249,8 @@ class TestRogue(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].stealth)
 
     def test_Conceal_Silence(self):
-        game = generate_game_for([IronfurGrizzly, Conceal, BoulderfistOgre], MassDispel, SpellTestingAgent,
-                                 SpellTestingAgent)
+        game = generate_game_for([IronfurGrizzly, Conceal, BoulderfistOgre], MassDispel, CardTestingAgent,
+                                 CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -281,7 +281,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(3, game.players[0].hero.weapon.base_attack)
 
     def test_Eviscerate(self):
-        game = generate_game_for(Eviscerate, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Eviscerate, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -301,7 +301,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(20, game.players[1].hero.health)
 
     def test_FanOfKnives(self):
-        game = generate_game_for(FanOfKnives, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(FanOfKnives, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -315,7 +315,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(6, len(game.players[0].hand))
 
     def test_Headcrack(self):
-        game = generate_game_for(Headcrack, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Headcrack, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -340,7 +340,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(5, len(game.players[0].hand))
 
     def test_HeadcrackOverload(self):
-        game = generate_game_for(Headcrack, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Headcrack, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.players[0].max_mana = 10
         miracle = GadgetzanAuctioneer()
         miracle.summon(game.players[0], game, 0)
@@ -372,7 +372,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].minions))
 
     def test_Sap(self):
-        game = generate_game_for(Sap, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Sap, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -396,7 +396,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))
 
     def test_Shiv(self):
-        game = generate_game_for(Shiv, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Shiv, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -410,7 +410,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(5, len(game.players[0].hand))
 
     def test_SinisterStrike(self):
-        game = generate_game_for(SinisterStrike, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(SinisterStrike, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         self.assertEqual(30, game.players[1].hero.health)
 
@@ -421,7 +421,7 @@ class TestRogue(unittest.TestCase):
     def test_Sprint(self):
         game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar,
                                   StonetuskBoar, StonetuskBoar, Sprint], StonetuskBoar,
-                                 SpellTestingAgent, DoNothingAgent)
+                                 CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -451,7 +451,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(9, len(game.players[1].hand))
 
     def test_AssassinsBlade(self):
-        game = generate_game_for(AssassinsBlade, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(AssassinsBlade, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 9):
             game.play_single_turn()
@@ -460,7 +460,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.weapon.durability)
 
     def test_PerditionsBlade(self):
-        game = generate_game_for(PerditionsBlade, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(PerditionsBlade, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -481,7 +481,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(24, game.players[1].hero.health)
 
     def test_AnubarAmbusher(self):
-        game = generate_game_for(AnubarAmbusher, SiphonSoul, OneCardPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(AnubarAmbusher, SiphonSoul, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 11):
             game.play_single_turn()

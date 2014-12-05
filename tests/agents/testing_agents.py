@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 
 
-class SpellTestingAgent(DoNothingAgent):
+class CardTestingAgent(DoNothingAgent):
     def __init__(self, play_on=1):
         super().__init__()
 
@@ -15,7 +15,7 @@ class SpellTestingAgent(DoNothingAgent):
             player.game.play_card(player.hand[0])
 
 
-class SelfSpellTestingAgent(SpellTestingAgent):
+class SelfSpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 
@@ -23,7 +23,7 @@ class SelfSpellTestingAgent(SpellTestingAgent):
         return self.player.game.current_player.hero
 
 
-class EnemySpellTestingAgent(SpellTestingAgent):
+class EnemySpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 
@@ -31,7 +31,7 @@ class EnemySpellTestingAgent(SpellTestingAgent):
         return self.player.game.other_player.hero
 
 
-class EnemyMinionSpellTestingAgent(SpellTestingAgent):
+class EnemyMinionSpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 

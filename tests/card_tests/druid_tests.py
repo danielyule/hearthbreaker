@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
-    EnemyMinionSpellTestingAgent, SpellTestingAgent
+    EnemyMinionSpellTestingAgent, CardTestingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game
 from hearthbreaker.replay import playback, Replay
@@ -410,7 +410,7 @@ class TestDruid(unittest.TestCase):
     def test_Nourish(self):
 
         # Test gaining two mana
-        game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Nourish, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -437,7 +437,7 @@ class TestDruid(unittest.TestCase):
 
         # Test drawing three cards
         random.seed(1857)
-        game = generate_game_for(Nourish, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Nourish, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.players[0].agent.choose_option = lambda gain2, draw3: draw3
 
         game.play_single_turn()
@@ -456,7 +456,7 @@ class TestDruid(unittest.TestCase):
     def test_Starfall(self):
 
         # Test gaining two mana
-        game = generate_game_for(Starfall, StonetuskBoar, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Starfall, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -474,7 +474,7 @@ class TestDruid(unittest.TestCase):
 
         # Test drawing three cards
         random.seed(1857)
-        game = generate_game_for(Starfall, MogushanWarden, SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Starfall, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
         game.players[0].agent.choose_option = lambda damageAll, damageOne: damageOne
 
         game.play_single_turn()
@@ -492,7 +492,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
 
     def test_ForceOfNature(self):
-        game = generate_game_for(ForceOfNature, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(ForceOfNature, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 10):
             game.play_single_turn()
 

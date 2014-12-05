@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
-from tests.agents.testing_agents import OneCardPlayingAgent, PlayAndAttackAgent, SpellTestingAgent,\
+from tests.agents.testing_agents import OneCardPlayingAgent, PlayAndAttackAgent, CardTestingAgent,\
     SelfSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -85,7 +85,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].health)
 
     def test_GrommashHellscream(self):
-        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PlayAndAttackAgent, SpellTestingAgent)
+        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 14):
             game.play_single_turn()
@@ -188,7 +188,7 @@ class TestWarrior(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].charge)
 
     def test_BattleRage(self):
-        game = generate_game_for(BattleRage, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(BattleRage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.players[0].mana = 100
 
@@ -210,7 +210,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].hand))
 
     def test_Brawl(self):
-        game = generate_game_for(Brawl, StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(Brawl, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.players[0].mana = 100
 
@@ -236,7 +236,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
 
     def test_Charge(self):
-        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, SpellTestingAgent, DoNothingAgent)
+        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.players[0].agent.play_on = 4
 
         for turn in range(0, 6):
@@ -266,7 +266,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[1].minions[1].health)
 
     def test_WhirlwindExecute(self):
-        game = generate_game_for(Execute, [GoldshireFootman, Whirlwind], SpellTestingAgent, OneCardPlayingAgent)
+        game = generate_game_for(Execute, [GoldshireFootman, Whirlwind], CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -385,7 +385,7 @@ class TestWarrior(unittest.TestCase):
 
     def test_Gorehowl(self):
         game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
-                                 PlayAndAttackAgent, SpellTestingAgent)
+                                 PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 13):
             game.play_single_turn()
