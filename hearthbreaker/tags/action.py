@@ -218,6 +218,8 @@ class Summon(Action):
             for summon in range(self.count):
                 index = len(target.minions)
         card = self.card.get_card(target)
+        if card is None:
+            return
         for summon in range(self.count):
             card.summon(target, target.game, index)
 

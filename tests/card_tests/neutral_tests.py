@@ -2580,6 +2580,21 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(11, used_count)
 
+        # This is a test-case where the opponent have no available minions for the deathrattle effect
+        game = generate_game_for(Deathlord, [Fireball], OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.current_player.minions[0].die(None)
+        game.check_delayed()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
     def test_SpectralKnight(self):
         game = generate_game_for(SpectralKnight, Fireball, OneCardPlayingAgent, SpellTestingAgent)
         for turn in range(0, 9):
