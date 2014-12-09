@@ -405,9 +405,9 @@ class CARD_SOURCE:
 
 
 class CardQuery(JSONObject):
-    def __init__(self, name=None, condition=None, source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False):
+    def __init__(self, name=None, conditions=[], source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False):
         self.name = name
-        self.condition = condition
+        self.conditions = conditions
         self.source = source
         self.source_list = source_list
         self.make_copy = make_copy
@@ -434,8 +434,11 @@ class CardQuery(JSONObject):
             card_list = []
         # TODO Throw an exception in any other case?
 
-        if self.condition is not None:
-            card_list = filter(lambda c: self.condition.evaluate(player, c), card_list)
+        def check_condition(condition):
+            return lambda c: condition.evaluate(player, c)
+
+        for condition in self.conditions:
+            card_list = filter(check_condition(condition), card_list)
 
         card_list = [card for card in card_list]
         card_len = len(card_list)
@@ -468,8 +471,8 @@ class CardQuery(JSONObject):
         if self.name:
             json_obj['name'] = self.name
         else:
-            if self.condition is not None:
-                json_obj['condition'] = self.condition
+            if self.conditions is not None:
+                json_obj['conditions'] = self.conditions
             if self.source is not None:
                 json_obj['source'] = CARD_SOURCE.to_str(self.source)
             if self.source_list:
@@ -480,11 +483,12 @@ class CardQuery(JSONObject):
         return json_obj
 
     @staticmethod
-    def from_json(name=None, condition=None, source="collection", source_list=None, make_copy=False):
+    def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False):
         query = CardQuery.__new__(CardQuery)
         query.name = name
-        if condition:
-            query.condition = Condition.from_json(**condition)
+        query.conditions = []
+        for condition in conditions:
+            query.conditions.append(Condition.from_json(**condition))
         else:
             query.condition = None
         query.source = CARD_SOURCE.from_str(source)

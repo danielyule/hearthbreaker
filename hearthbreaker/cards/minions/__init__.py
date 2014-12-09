@@ -177,6 +177,7 @@ from hearthbreaker.cards.minions.neutral import (
     EchoingOoze,
     ShadeOfNaxxramas,
     KelThuzad,
+    PilotedShredder,
 )
 
 from hearthbreaker.cards.minions.druid import (

@@ -616,7 +616,7 @@ class ApplySecret(Action):
 
     def __init__(self, source):
         self.source = source
-        self._query = CardQuery(condition=IsSecret(), source=source)
+        self._query = CardQuery(conditions=[IsSecret()], source=source)
 
     def act(self, actor, target):
         secret = self._query.get_card(target)
@@ -634,7 +634,7 @@ class ApplySecret(Action):
 
     def __from_json__(self, source):
         self.source = CARD_SOURCE.from_str(source)
-        self._query = CardQuery(condition=IsSecret(), source=source)
+        self._query = CardQuery(conditions=[IsSecret()], source=source)
 
 
 class Equip(Action):

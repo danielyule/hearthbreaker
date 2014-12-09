@@ -142,5 +142,5 @@ class Voidcaller(MinionCard):
         super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(condition=MinionIsType(MINION_TYPE.DEMON),
+        return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[MinionIsType(MINION_TYPE.DEMON)],
                                                                      source=CARD_SOURCE.MY_HAND)), PlayerSelector()))

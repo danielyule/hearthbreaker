@@ -129,5 +129,10 @@ an engine based on that.  His work can be found on [Fireplace GitHub page](https
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
 implementations work.  It is interesting for its functional implementation of the cards.
 
+### Hearthstone JSON
+
+[Hearthstone JSON](http://hearthstonejson.com/) is a JSON file containing all cards in Hearthstone, extracted from the executable.  Hearthbreaker
+uses this data to verify that its cards are implemented correctly
+
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
 

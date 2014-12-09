@@ -2142,3 +2142,19 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+    def test_PilotedShredder(self):
+        game = generate_game_for(Assassinate, PilotedShredder, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Piloted Shredder", game.current_player.minions[0].card.name)
+
+        # The assassinate will kill the shredder, and leave the other player with
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].card.mana)

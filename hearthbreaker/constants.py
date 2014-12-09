@@ -71,6 +71,7 @@ class MINION_TYPE:
     DEMON = 5
     PIRATE = 6
     TOTEM = 7
+    MECH = 8
 
     __types = {
         "": NONE,
@@ -81,6 +82,7 @@ class MINION_TYPE:
         "DEMON": DEMON,
         "PIRATE": PIRATE,
         "TOTEM": TOTEM,
+        "MECH": MECH,
     }
 
     @staticmethod

@@ -65,6 +65,20 @@ class HasOverload(Condition):
         }
 
 
+class ManaCost(Condition):
+    def __init__(self, cost):
+        self.cost = cost
+
+    def evaluate(self, target, obj, *args):
+        return obj.mana == self.cost
+
+    def __to_json__(self):
+        return {
+            'name': 'mana_cost',
+            'cost': self.cost
+        }
+
+
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
         return isinstance(minion, hearthbreaker.game_objects.Minion) \

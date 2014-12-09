@@ -3012,3 +3012,18 @@ class TestCommon(unittest.TestCase):
         # Now both Kel'Thuzads should be assassinated, and both be dead
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
+
+    def test_PilotedShredder(self):
+        game = generate_game_for(Assassinate, PilotedShredder, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Piloted Shredder", game.current_player.minions[0].card.name)
+
+        # The assassinate will kill the shredder, and leave the other player with
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].card.mana)

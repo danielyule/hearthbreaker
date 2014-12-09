@@ -89,5 +89,5 @@ class Webspinner(MinionCard):
         super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(condition=MinionIsType(MINION_TYPE.BEAST))),
+        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[MinionIsType(MINION_TYPE.BEAST)])),
                                                     PlayerSelector()))
