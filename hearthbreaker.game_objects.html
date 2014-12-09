@@ -30,7 +30,7 @@
   
     <link rel="top" title="Hearthbreaker Documentaion" href="index.html"/>
         <link rel="up" title="hearthbreaker package" href="hearthbreaker.html"/>
-        <link rel="next" title="Implemented Cards" href="cards.html"/>
+        <link rel="next" title="Contributing" href="contributing.html"/>
         <link rel="prev" title="Replay Module" href="hearthbreaker.replays.html"/> 
 
   
@@ -64,7 +64,6 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="">Game Objects Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cards.html">Implemented Cards</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a><ul class="simple">
 </ul>
 </li>
@@ -262,7 +261,7 @@ ensure its signature matches the parameters called from <a class="reference inte
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Card">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x000000000617DEA0&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L615"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Card" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Card</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x00000000046BDE18&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L615"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Card" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Bindable" title="hearthbreaker.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Bindable</span></tt></a></p>
 <p>Represents a card in Heathstone.  Every card is implemented as a subclass, either directly or through
 <a class="reference internal" href="#hearthbreaker.game_objects.MinionCard" title="hearthbreaker.game_objects.MinionCard"><tt class="xref py py-class docutils literal"><span class="pre">MinionCard</span></tt></a>, <a class="reference internal" href="#hearthbreaker.game_objects.SecretCard" title="hearthbreaker.game_objects.SecretCard"><tt class="xref py py-class docutils literal"><span class="pre">SecretCard</span></tt></a> or <a class="reference internal" href="#hearthbreaker.game_objects.WeaponCard" title="hearthbreaker.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a>.  If it is a direct subclass of this
@@ -272,7 +271,7 @@ or <a class="reference internal" href="#hearthbreaker.game_objects.WeaponCard" t
 cause its effect, but not update the game state.</p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Card.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x000000000617DEA0&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L626"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Card.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function _is_spell_targetable at 0x00000000046BDE18&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L626"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Card.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new <a class="reference internal" href="#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a>.</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">target_func</span></tt> and <tt class="docutils literal"><span class="pre">filter_func</span></tt> have very specific behavior.  In use, the target function is called with</dt>
@@ -802,143 +801,143 @@ targeted by spells cannot be targeted, but any other character can.</p>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Deck">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Deck</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Deck</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1340"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">builtins.object</span></tt></p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Deck.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1342"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>cards</em>, <em>character_class</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1341"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Deck.can_draw">
-<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1354"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.can_draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1353"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.can_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Deck.copy">
-<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1351"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1350"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Deck.draw">
-<tt class="descname">draw</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1357"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">draw</tt><big>(</big><em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1356"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Deck.put_back">
-<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1365"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.put_back" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1364"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Deck.put_back" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Game">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1682"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Game</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1691"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Bindable" title="hearthbreaker.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Bindable</span></tt></a></p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1683"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>decks</em>, <em>agents</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1692"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.check_delayed">
-<tt class="descname">check_delayed</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1717"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.check_delayed" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">check_delayed</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1727"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.check_delayed" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.copy">
-<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1819"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1833"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.game_over">
-<tt class="descname">game_over</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1791"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.game_over" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">game_over</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1804"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.game_over" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.play_card">
-<tt class="descname">play_card</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1845"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.play_card" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play_card</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1860"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.play_card" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.play_single_turn">
-<tt class="descname">play_single_turn</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1763"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.play_single_turn" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">play_single_turn</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1773"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.play_single_turn" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.pre_game">
-<tt class="descname">pre_game</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1723"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.pre_game" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pre_game</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1733"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.pre_game" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.random_amount">
-<tt class="descname">random_amount</tt><big>(</big><em>minimum</em>, <em>maximum</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1711"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_amount" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">random_amount</tt><big>(</big><em>minimum</em>, <em>maximum</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1721"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_amount" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.random_choice">
-<tt class="descname">random_choice</tt><big>(</big><em>choice</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1708"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_choice" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">random_choice</tt><big>(</big><em>choice</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1718"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_choice" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.random_draw">
-<tt class="descname">random_draw</tt><big>(</big><em>cards</em>, <em>requirement</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1702"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">random_draw</tt><big>(</big><em>cards</em>, <em>requirement</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1712"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.random_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.remove_minion">
-<tt class="descname">remove_minion</tt><big>(</big><em>minion</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1865"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.remove_minion" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">remove_minion</tt><big>(</big><em>minion</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1880"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.remove_minion" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Game.start">
-<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1757"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.start" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">start</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1767"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Game.start" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Hero">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Hero</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1404"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Hero</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1403"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Character" title="hearthbreaker.game_objects.Character"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Character</span></tt></a></p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1405"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>character_class</em>, <em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1404"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.attack">
-<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1432"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1439"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.calculate_attack">
-<tt class="descname">calculate_attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1415"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.calculate_attack" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">calculate_attack</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1414"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.calculate_attack" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.copy">
-<tt class="descname">copy</tt><big>(</big><em>new_owner</em>, <em>new_game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1421"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>new_owner</em>, <em>new_game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1420"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.damage">
-<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1439"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">damage</tt><big>(</big><em>amount</em>, <em>attacker</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1446"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.die">
-<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1452"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.die" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">die</tt><big>(</big><em>by</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1459"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.die" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.find_power_target">
-<tt class="descname">find_power_target</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1456"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.find_power_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">find_power_target</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1463"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.find_power_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Hero.increase_armor">
-<tt class="descname">increase_armor</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1448"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.increase_armor" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">increase_armor</tt><big>(</big><em>amount</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1455"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Hero.increase_armor" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1044,7 +1043,7 @@ tags</p>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.MinionCard">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>minion_type=0</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x000000000617C620&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L747"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">MinionCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>minion_type=0</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x00000000046B9598&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L747"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.MinionCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Card</span></tt></a></p>
 <p>Describes a <a class="reference internal" href="#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> for summoning a minion.  This is distinct from the <a class="reference internal" href="#hearthbreaker.game_objects.Minion" title="hearthbreaker.game_objects.Minion"><tt class="xref py py-class docutils literal"><span class="pre">Minion</span></tt></a> that represents the
 minion after it has been played.  This class represents the card aspects (mana cost, character class and rarity)
@@ -1061,7 +1060,7 @@ as well as being responsible for creating the minion that will be added to the t
 </table>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.MinionCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>minion_type=0</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x000000000617C620&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L756"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.MinionCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>minion_type=0</em>, <em>targeting_func=None</em>, <em>filter_func=&lt;function MinionCard.&lt;lambda&gt; at 0x00000000046B9598&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L756"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.MinionCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>All parameters are passed directly to the <a class="reference internal" href="#hearthbreaker.game_objects.Card.__init__" title="hearthbreaker.game_objects.Card.__init__"><tt class="xref py py-meth docutils literal"><span class="pre">superclass's</span> <span class="pre">__init__</span> <span class="pre">method</span></tt></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1216,66 +1215,66 @@ played as a side effect of of card (e.g. Feral Spirit)</p>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Player">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1501"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Player</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1510"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Bindable" title="hearthbreaker.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Bindable</span></tt></a></p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1502"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>deck</em>, <em>agent</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1511"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.add_aura">
-<tt class="descname">add_aura</tt><big>(</big><em>aura</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1613"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.add_aura" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_aura</tt><big>(</big><em>aura</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1622"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.add_aura" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.add_effect">
-<tt class="descname">add_effect</tt><big>(</big><em>effect</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1603"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.add_effect" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">add_effect</tt><big>(</big><em>effect</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1612"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.add_effect" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.can_draw">
-<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1579"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.can_draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">can_draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1588"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.can_draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.choose_target">
-<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1629"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.choose_target" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">choose_target</tt><big>(</big><em>targets</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1638"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.choose_target" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.copy">
-<tt class="descname">copy</tt><big>(</big><em>new_game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1534"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>new_game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1543"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.discard">
-<tt class="descname">discard</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1596"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.discard" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">discard</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1605"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.discard" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.draw">
-<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1565"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.draw" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">draw</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1574"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.draw" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.effective_heal_power">
-<tt class="descname">effective_heal_power</tt><big>(</big><em>base_heal</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1585"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.effective_heal_power" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">effective_heal_power</tt><big>(</big><em>base_heal</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1594"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.effective_heal_power" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.effective_spell_damage">
-<tt class="descname">effective_spell_damage</tt><big>(</big><em>base_damage</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1582"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.effective_spell_damage" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">effective_spell_damage</tt><big>(</big><em>base_damage</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1591"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.effective_spell_damage" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.put_back">
-<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1591"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.put_back" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">put_back</tt><big>(</big><em>card</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1600"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.put_back" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Player.remove_aura">
-<tt class="descname">remove_aura</tt><big>(</big><em>aura</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1622"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.remove_aura" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">remove_aura</tt><big>(</big><em>aura</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1631"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Player.remove_aura" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -1318,13 +1317,13 @@ played as a side effect of of card (e.g. Feral Spirit)</p>
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.Weapon">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Weapon</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1271"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">Weapon</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1270"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Bindable" title="hearthbreaker.game_objects.Bindable"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Bindable</span></tt></a></p>
 <p>Represents a Hearthstone weapon.  All weapons have attack power and durability.  The logic for handling the
 attacks is handled by <a class="reference internal" href="#hearthbreaker.game_objects.Hero" title="hearthbreaker.game_objects.Hero"><tt class="xref py py-class docutils literal"><span class="pre">Hero</span></tt></a>, but it can be modified through the use of events.</p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Weapon.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1277"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>attack_power</em>, <em>durability</em>, <em>battlecry=None</em>, <em>deathrattle=None</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1276"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a new weapon with the given attack power and durability.  A battlecry and deathrattle can also
 optionally be set.
 :param int attack_power: The amount of attack this weapon gives the hero
@@ -1335,17 +1334,17 @@ optionally be set.
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Weapon.copy">
-<tt class="descname">copy</tt><big>(</big><em>new_owner</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1300"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.copy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">copy</tt><big>(</big><em>new_owner</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1299"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Weapon.destroy">
-<tt class="descname">destroy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1306"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.destroy" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">destroy</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1305"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.destroy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.Weapon.equip">
-<tt class="descname">equip</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1317"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.equip" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">equip</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1316"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.Weapon.equip" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="attribute">
@@ -1376,12 +1375,12 @@ optionally be set.
 
 <dl class="class">
 <dt id="hearthbreaker.game_objects.WeaponCard">
-<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">WeaponCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000006182D90&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1215"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hearthbreaker.game_objects.</tt><tt class="descname">WeaponCard</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x000000000459B950&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1214"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">hearthbreaker.game_objects.Card</span></tt></a></p>
 <p>Represents a <a class="reference internal" href="#hearthbreaker.game_objects.Card" title="hearthbreaker.game_objects.Card"><tt class="xref py py-class docutils literal"><span class="pre">Card</span></tt></a> for creating a <a class="reference internal" href="#hearthbreaker.game_objects.Weapon" title="hearthbreaker.game_objects.Weapon"><tt class="xref py py-class docutils literal"><span class="pre">Weapon</span></tt></a></p>
 <dl class="method">
 <dt id="hearthbreaker.game_objects.WeaponCard.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x0000000006182D90&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1220"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.__init__" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">__init__</tt><big>(</big><em>name</em>, <em>mana</em>, <em>character_class</em>, <em>rarity</em>, <em>target_func=None</em>, <em>filter_func=&lt;function WeaponCard.&lt;lambda&gt; at 0x000000000459B950&gt;</em>, <em>overload=0</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1219"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new <a class="reference internal" href="#hearthbreaker.game_objects.WeaponCard" title="hearthbreaker.game_objects.WeaponCard"><tt class="xref py py-class docutils literal"><span class="pre">WeaponCard</span></tt></a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1413,18 +1412,18 @@ require anything but the default</li>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.WeaponCard.create_weapon">
-<tt class="descname">create_weapon</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1260"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.create_weapon" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">create_weapon</tt><big>(</big><em>player</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1259"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.create_weapon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new weapon.  Any new weapon cards which are created must override this method.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.WeaponCard.is_spell">
-<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1267"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.is_spell" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">is_spell</tt><big>(</big><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1266"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.is_spell" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="hearthbreaker.game_objects.WeaponCard.use">
-<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1244"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.use" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">use</tt><big>(</big><em>player</em>, <em>game</em><big>)</big><a class="reference external" href="http://github.com/danielyule/hearthbreaker/blob/master/hearthbreaker/game_objects.py#L1243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hearthbreaker.game_objects.WeaponCard.use" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new weapon and attach it to the player&#8217;s hero</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1474,7 +1473,7 @@ by that name exists.</td>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="cards.html" class="btn btn-neutral float-right" title="Implemented Cards"/>Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing"/>Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="hearthbreaker.replays.html" class="btn btn-neutral" title="Replay Module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
