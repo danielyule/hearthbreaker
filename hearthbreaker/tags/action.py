@@ -1,3 +1,4 @@
+import copy
 from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil, CardQuery, \
     CARD_SOURCE
 import hearthbreaker.game_objects
@@ -155,6 +156,12 @@ class MinimumHealth(MinionAction):
     def unact(self, actor, target):
         target.unbind("health_changed", self.__keep_funcs[target])
 
+    def __deep_copy__(self, memo):
+        return MinimumHealth(self.min_health)
+
+    def __copy__(self):
+        return MinimumHealth(self.min_health)
+
     def __to_json__(self):
         return {
             'name': 'minimun_health',
@@ -183,6 +190,12 @@ class ManaChange(ReversibleAction):
     def unact(self, actor, target):
         target.mana_filters.remove(self.filters[target])
         self.card_selector.untrack_cards(target)
+
+    def __deep_copy__(self, memo):
+        return ManaChange(self.amount, self.minimum, copy.deepcopy(self.card_selector, memo))
+
+    def __copy__(self):
+        return ManaChange(self.amount, self.minimum, self.card_selector)
 
     def __to_json__(self):
         return {
@@ -710,6 +723,12 @@ class AttackEqualsHealth(ReversibleAction):
 
     def unact(self, actor, target):
         target.calculate_attack = self._calculate_attack[target]
+
+    def __deep_copy__(self, memo):
+        return AttackEqualsHealth()
+
+    def __copy__(self):
+        return AttackEqualsHealth()
 
     def __to_json__(self):
         return {

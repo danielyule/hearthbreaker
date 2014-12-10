@@ -1123,7 +1123,7 @@ class Minion(Character):
         new_minion = Minion(self.base_attack, self.base_health, self.battlecry)
         new_minion.health = self.base_health - (self.calculate_max_health() - self.health)
         new_minion.divine_shield = self.divine_shield
-        new_minion.deathrattle = copy.copy(self.deathrattle)
+        new_minion.deathrattle = copy.deepcopy(self.deathrattle)
         new_minion.taunt = 0
         new_minion.charge = 0
         new_minion.stealth = 0
@@ -1348,7 +1348,15 @@ class Deck:
         self.left = 30
 
     def copy(self):
-        return copy.deepcopy(self)
+        def copy_card(card):
+            new_card = type(card)()
+            new_card.drawn = card.drawn
+            return new_card
+        new_deck = Deck.__new__(Deck)
+        new_deck.cards = [copy_card(card) for card in self.cards]
+        new_deck.character_class = self.character_class
+        new_deck.left = self.left
+        return new_deck
 
     def can_draw(self):
         return self.left > 0
