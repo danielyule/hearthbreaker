@@ -29,7 +29,7 @@
 
   
     <link rel="top" title="Hearthbreaker Documentaion" href="index.html"/>
-        <link rel="prev" title="Implemented Cards" href="cards.html"/> 
+        <link rel="prev" title="Game Objects Module" href="hearthbreaker.game_objects.html"/> 
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.6.2/modernizr.min.js"></script>
@@ -62,7 +62,6 @@
 <li class="toctree-l2"><a class="reference internal" href="hearthbreaker.game_objects.html">Game Objects Module</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="cards.html">Implemented Cards</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="">Contributing</a><ul class="simple">
 </ul>
 </li>
@@ -159,7 +158,6 @@ simply writing <tt class="docutils literal"><span class="pre">from</span> <span 
 <li>Add the method which performs the action of the card (<a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.Card.use" title="hearthbreaker.game_objects.Card.use"><tt class="xref py py-meth docutils literal"><span class="pre">use</span></tt></a> for spells, <a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.MinionCard.create_minion" title="hearthbreaker.game_objects.MinionCard.create_minion"><tt class="xref py py-meth docutils literal"><span class="pre">create_minion</span></tt></a> for minions, <a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.WeaponCard.create_weapon" title="hearthbreaker.game_objects.WeaponCard.create_weapon"><tt class="xref py py-meth docutils literal"><span class="pre">create_weapon</span></tt></a> for
 weapons, and <a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.SecretCard.activate" title="hearthbreaker.game_objects.SecretCard.activate"><tt class="xref py py-meth docutils literal"><span class="pre">activate</span></tt></a>, <a class="reference internal" href="hearthbreaker.game_objects.html#hearthbreaker.game_objects.SecretCard.deactivate" title="hearthbreaker.game_objects.SecretCard.deactivate"><tt class="xref py py-meth docutils literal"><span class="pre">deactivate</span></tt></a> and <tt class="xref py py-meth docutils literal"><span class="pre">_reveal</span></tt> for secrets &#8211; see the section for each type of card)</li>
 <li>Add an entry to the appropriate <tt class="docutils literal"><span class="pre">__init__.py</span></tt></li>
-<li>Change the card&#8217;s entry in <tt class="docutils literal"><span class="pre">cards.csv</span></tt> to &#8216;yes&#8217; in the first column</li>
 <li>Run <tt class="docutils literal"><span class="pre">flake8</span></tt> in the project&#8217;s root folder to ensure proper formatting.</li>
 </ol>
 </dd>
@@ -345,9 +343,8 @@ look like this:</p>
 must be at minimum one test for each card, or possibly more if the card is especially complex, or has finicky
 interactions with other cards.</p>
 <p>The basic attributes for each card (mana cost, rarity, health if it&#8217;s a minion, etc) are tested automatically against
-the data in <a class="reference external" href="https://github.com/danielyule/hearthstone-simulator/blob/master/cards.csv">cards.csv</a>, so you do not need
-to test these things yourself.  Any card which has a yes in its implemented column in cards.csv will be automatically
-tested.</p>
+the data in <a class="reference external" href="https://github.com/danielyule/hearthstone-simulator/blob/master/AllSets.enUS.json">AllSets.enUs.json</a>, so you do not need
+to test these things yourself.</p>
 <p>Each card unit tests consists of a game played with that card and some others.  The decks used in unit testing are not
 constrained by the two copies of any card limitation, so any number can be used.</p>
 <p>Most unit tests utilize the <tt class="xref py py-meth docutils literal"><span class="pre">generate_game_for</span></tt> method.  This method takes
@@ -422,7 +419,7 @@ card is a spell that does four damage to its target.</p>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="cards.html" class="btn btn-neutral" title="Implemented Cards"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="hearthbreaker.game_objects.html" class="btn btn-neutral" title="Game Objects Module"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
