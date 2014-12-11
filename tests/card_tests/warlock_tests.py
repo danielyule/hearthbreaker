@@ -529,3 +529,34 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Flame Imp", game.other_player.minions[0].card.name)
+
+    def testAnimaGolem(self):
+        game = generate_game_for([Loatheb, AnimaGolem, TwistingNether, AnimaGolem], StonetuskBoar,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # Loatheb should be played
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Loatheb", game.other_player.minions[0].card.name)
+        self.assertEqual(5, len(game.current_player.minions))
+
+        # The golem should be played, and live past the end of its turn, because of Loatheb
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Anima Golem", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Twisting Nether is played, removing everything from the board
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+
+        # The golem is played alone, which results in its death at the end of the turn
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))

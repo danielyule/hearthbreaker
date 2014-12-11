@@ -160,6 +160,16 @@ class MinionHasDeathrattle(Condition):
         return len(minion.deathrattle) > 0
 
 
+class OnlyMinion(Condition):
+    def evaluate(self, target, *args):
+        return len(target.player.minions) == 1
+
+    def __to_json__(self):
+        return {
+            'name': 'only_minion',
+        }
+
+
 class Adjacent(Condition):
     def __to_json__(self):
         return {

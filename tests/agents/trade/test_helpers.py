@@ -17,6 +17,7 @@ class TempCard(MinionCard):
         self.base_attack = base_attack
         self.health = health
         self.name = name
+        self.ref_name = name
         self.taunt = taunt
         self.mana = None
         self.minion_type = 0

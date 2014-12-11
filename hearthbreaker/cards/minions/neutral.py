@@ -6,7 +6,7 @@ from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, 
     Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle,\
     Steal, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform, ApplySecret
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE, Battlecry
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
@@ -2066,3 +2066,20 @@ class PilotedShredder(MinionCard):
     def create_minion(self, player):
         return Minion(4, 3, deathrattle=Deathrattle(Summon(CardQuery(conditions=[ManaCost(2), IsMinion()])),
                                                     PlayerSelector()))
+
+
+class AntiqueHealbot(MinionCard):
+    def __init__(self):
+        super().__init__("Antique Healbot", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH,
+                         battlecry=Battlecry(Heal(8), HeroSelector()))
+
+    def create_minion(self, player):
+        return Minion(3, 3)
+
+
+class AnnoyOTron(MinionCard):
+    def __init__(self):
+        super().__init__("Annoy-o-Tron", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 2, divine_shield=True, taunt=True)

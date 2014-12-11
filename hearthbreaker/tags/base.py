@@ -121,6 +121,23 @@ class Player(metaclass=abc.ABCMeta):
             return OtherPlayer()
 
 
+class Picker(JSONObject, metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def pick(self, targets, player):
+        pass
+
+    @staticmethod
+    def from_json(name):
+        from hearthbreaker.tags.selector import UserPicker, AllPicker, RandomPicker
+        if name == "user":
+            return UserPicker()
+        elif name == "all":
+            return AllPicker()
+        elif name == "random":
+            return RandomPicker()
+
+
 class Selector(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def get_targets(self, source, target=None):
@@ -498,3 +515,44 @@ class CardQuery(JSONObject):
             query.source_list = None
         query.make_copy = make_copy
         return query
+
+
+class Battlecry(JSONObject):
+    def __init__(self, action, selector, condition=None):
+        self.action = action
+        self.selector = selector
+        self.condition = condition
+
+    def battlecry(self, target):
+        if self.condition:
+            if not self.condition.evaluate(target):
+                return
+        targets = self.selector.get_targets(target, target)
+        for t in targets:
+            self.action.act(target, t)
+
+    def __to_json__(self):
+        if self.condition:
+            return {
+                'action': self.action,
+                'selector': self.selector,
+                'condition': self.condition
+            }
+        return {
+            'action': self.action,
+            'selector': self.selector
+        }
+
+    @staticmethod
+    def from_json(action, selector, condition=None):
+        action = Action.from_json(**action)
+        selector = Selector.from_json(**selector)
+        if condition:
+            condition = Condition.from_json(**condition)
+        return Battlecry(action, selector, condition)
+
+
+class Choice(Battlecry):
+    def __init__(self, card, action, selector, condition=None):
+        self.card = card
+        super().__init__(action, selector, condition)

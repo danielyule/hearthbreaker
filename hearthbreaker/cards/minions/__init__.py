@@ -178,6 +178,8 @@ from hearthbreaker.cards.minions.neutral import (
     ShadeOfNaxxramas,
     KelThuzad,
     PilotedShredder,
+    AntiqueHealbot,
+    AnnoyOTron,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -187,6 +189,7 @@ from hearthbreaker.cards.minions.druid import (
     AncientOfWar,
     IronbarkProtector,
     Cenarius,
+    AnodizedRoboCub,
 )
 
 from hearthbreaker.cards.minions.hunter import (
@@ -261,6 +264,7 @@ from hearthbreaker.cards.minions.warlock import (
     LordJaraxxus,
     VoidTerror,
     Voidcaller,
+    AnimaGolem,
 )
 
 from hearthbreaker.cards.minions.warrior import (

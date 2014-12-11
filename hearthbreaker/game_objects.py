@@ -28,7 +28,7 @@ def card_lookup(card_name):
         subclasses = card_type.__subclasses__()
         if len(subclasses) is 0:
             c = card_type()
-            card_table[c.name] = card_type
+            card_table[c.ref_name] = card_type
         for sub_type in subclasses:
             card_lookup_rec(sub_type)
 
@@ -624,7 +624,7 @@ class Card(Bindable):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable, overload=0):
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None):
         """
             Creates a new :class:`Card`.
 
@@ -654,6 +654,10 @@ class Card(Bindable):
         """
         super().__init__()
         self.name = name
+        if ref_name:
+            self.ref_name = ref_name
+        else:
+            self.ref_name = name
         self.mana = mana
         self.character_class = character_class
         self.rarity = rarity
@@ -754,7 +758,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :meth:`create_minion`
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
-                 targeting_func=None, filter_func=lambda target: not target.stealth, overload=0):
+                 targeting_func=None, filter_func=lambda target: not target.stealth, ref_name=None, battlecry=None,
+                 choices=None, overload=0):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -771,9 +776,18 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
                                         feasible targets.
         :param function filter_func: Used to filter targets returned from the targeting function for appropriateness.
                                      Typically used for ensuring that stealthed minions aren't targeted
+        :param string ref_name: The name used for reference for this card.  If None (the default), the reference name
+                                will be the same as its name.  Otherwise, this name must be unique across all cards.
+        :param battlecry: Describes the battlecry this minion will use when it enters the field, or None for no
+                          battlecry
+        :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
+        :param choices: Gives a list of :class:`Choice <hearthbreaker.tags.base.Choice>`s for the user to pick between
+        :type choices: [:class:`hearthbreaker.tags.base.Choice`]
         """
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload)
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name)
         self.minion_type = minion_type
+        self.battlecry = battlecry
+        self.choices = choices
 
     def can_use(self, player, game):
         """
@@ -818,10 +832,15 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
         player.trigger("minion_placed", minion)
-        if minion.battlecry is not None:
+        if self.choices:
+            choice = player.agent.choose_option(*self.choices)
+            choice.battlecry(minion)
+        if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
+            self.battlecry.battlecry(minion)
+        elif minion.battlecry is not None:
             minion.battlecry(minion)
-        # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
         if not minion.removed:
+            # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
             minion = player.minions[minion.index]
             player.trigger("minion_played", minion)
             player.trigger("minion_summoned", minion)

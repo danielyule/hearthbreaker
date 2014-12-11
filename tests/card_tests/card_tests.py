@@ -70,7 +70,7 @@ class CardTest(unittest.TestCase):
                                     self.assertTrue(minion.charge,
                                                     "Expected {:s} to have charge".format(card_info["name"]))
                                 elif battlecry_re.match(effect):
-                                    self.assertTrue(minion.battlecry is not None,
+                                    self.assertTrue(minion.battlecry is not None or card.battlecry is not None,
                                                     "Expected {:s} to have a battlecry".format
                                                     (card_info["name"]))
                                 elif deathrattle_re.match(effect):

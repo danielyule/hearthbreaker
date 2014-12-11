@@ -27,11 +27,6 @@ class TestDruid(unittest.TestCase):
         # The mana should not go over 10 on turn 9 (or any other turn)
         self.assertEqual(10, game.current_player.mana)
 
-    def test_Moonfire(self):
-        game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, OneCardPlayingAgent)
-        game.play_single_turn()
-        self.assertEqual(26, game.other_player.hero.health)
-
     def test_Claw(self):
         testing_env = self
 
@@ -373,6 +368,11 @@ class TestDruid(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Keeper of the Grove", game.current_player.minions[0].card.name)
+
+    def test_Moonfire(self):
+        game = generate_game_for(Moonfire, StonetuskBoar, EnemySpellTestingAgent, OneCardPlayingAgent)
+        game.play_single_turn()
+        self.assertEqual(26, game.other_player.hero.health)
 
     def test_DruidOfTheClaw(self):
         game = generate_game_for(DruidOfTheClaw, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -781,3 +781,49 @@ class TestDruid(unittest.TestCase):
         self.assertEqual("Treant", game.other_player.minions[5].card.name)
         self.assertEqual(2, game.other_player.minions[5].calculate_attack())
         self.assertEqual(2, game.other_player.minions[5].calculate_max_health())
+
+    def test_AnodizedRoboCub(self):
+        game = generate_game_for(AnodizedRoboCub, IronbeakOwl, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Anodized Robo Cub", game.current_player.minions[0].card.name)
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].health)
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
+        self.assertFalse(game.other_player.minions[0].taunt)
+
+        random.seed(1857)
+        game = generate_game_for(AnodizedRoboCub, IronbeakOwl, OneCardPlayingAgent, OneCardPlayingAgent)
+        game.players[0].agent.choose_option = lambda health, attack: attack
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
+        self.assertTrue(game.current_player.minions[0].taunt)
+        self.assertEqual("Anodized Robo Cub", game.current_player.minions[0].card.name)
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].health)
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertFalse(game.other_player.minions[0].taunt)

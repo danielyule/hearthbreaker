@@ -1,6 +1,6 @@
 import abc
 import hearthbreaker.game_objects
-from hearthbreaker.tags.base import Selector, Player
+from hearthbreaker.tags.base import Selector, Player, Picker
 import hearthbreaker.tags.condition
 
 
@@ -79,6 +79,33 @@ class OtherPlayer(Player):
 
     def __to_json__(self):
         return "other_player"
+
+
+class AllPicker(Picker):
+    def pick(self, targets, player):
+        return targets
+
+    def __to_json__(self):
+        return "all"
+
+
+class UserPicker(Picker):
+    def pick(self, targets, player):
+        filtered_targets = [target for target in filter(lambda t: not t.stealth, targets)]
+        if len(filtered_targets) > 0:
+            return [player.agent.choose_target(filtered_targets)]
+        return filtered_targets
+
+    def __to_json__(self):
+        return "user"
+
+
+class RandomPicker(Picker):
+    def pick(self, targets, player):
+        return [player.game.random_choice(*targets)]
+
+    def __to_json__(self):
+        return "random"
 
 
 class CardSelector(Selector, metaclass=abc.ABCMeta):
@@ -259,9 +286,11 @@ class PlayerSelector(Selector):
 
 
 class MinionSelector(Selector):
-    def __init__(self, condition=hearthbreaker.tags.condition.MinionIsNotTarget(), players=FriendlyPlayer()):
+    def __init__(self, condition=hearthbreaker.tags.condition.MinionIsNotTarget(), players=FriendlyPlayer(),
+                 picker=AllPicker()):
         self.condition = condition
         self.players = players
+        self.picker = picker
 
     def get_targets(self, source, obj=None):
         players = self.players.get_players(source.player)
@@ -271,7 +300,7 @@ class MinionSelector(Selector):
                 if self.match(source, minion):
                     targets.append(minion)
 
-        return targets
+        return self.picker.pick(targets, source.player)
 
     def match(self, source, obj):
         if self.condition:
@@ -285,26 +314,31 @@ class MinionSelector(Selector):
             return {
                 'name': 'minion',
                 'condition': self.condition,
-                'players': self.players
+                'players': self.players,
+                'picker': self.picker
             }
         return {
             'name': 'minion',
-            'players': self.players
+            'players': self.players,
+            'picker': self.picker
         }
 
-    def __from_json__(self, players, condition=None):
+    def __from_json__(self, players, picker, condition=None):
         if condition:
             self.condition = hearthbreaker.tags.condition.Condition.from_json(**condition)
         else:
             self.condition = None
         self.players = Player.from_json(players)
+        self.picker = Picker.from_json(picker)
         return self
 
 
 class CharacterSelector(Selector):
-    def __init__(self, condition=hearthbreaker.tags.condition.MinionIsNotTarget(), players=FriendlyPlayer()):
+    def __init__(self, condition=hearthbreaker.tags.condition.MinionIsNotTarget(), players=FriendlyPlayer(),
+                 picker=AllPicker()):
         self.condition = condition
         self.players = players
+        self.picker = picker
 
     def get_targets(self, source, obj=None):
         players = self.players.get_players(source.player)
@@ -313,10 +347,11 @@ class CharacterSelector(Selector):
             for minion in p.minions:
                 if self.match(source, minion):
                     targets.append(minion)
+        for p in players:  # Done in this order for historical reasons.
             if self.match(source, p.hero):
                 targets.append(p.hero)
 
-        return targets
+        return self.picker.pick(targets, source.player)
 
     def match(self, source, obj):
         if self.condition:
@@ -330,19 +365,22 @@ class CharacterSelector(Selector):
             return {
                 'name': 'character',
                 'condition': self.condition,
-                'players': self.players
+                'players': self.players,
+                'picker': self.picker
             }
         return {
             'name': 'character',
-            'players': self.players
+            'players': self.players,
+            'picker': self.picker,
         }
 
-    def __from_json__(self, players, condition=None):
+    def __from_json__(self, players, picker, condition=None):
         if condition:
             self.condition = hearthbreaker.tags.condition.Condition.from_json(**condition)
         else:
             self.condition = None
         self.players = Player.from_json(players)
+        self.picker = Picker.from_json(picker)
         return self
 
 

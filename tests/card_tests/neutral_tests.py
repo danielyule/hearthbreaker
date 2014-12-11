@@ -3027,3 +3027,14 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].card.mana)
+
+    def test_AntiqueHealbot(self):
+        game = generate_game_for(AntiqueHealbot, Frostbolt, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(21, game.other_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(29, game.current_player.hero.health)

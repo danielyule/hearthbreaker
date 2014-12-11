@@ -65,8 +65,7 @@ So, when implementing a new card, follow these steps:
  4. Add the method which performs the action of the card (:meth:`use <hearthbreaker.game_objects.Card.use>` for spells, :meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hearthbreaker.game_objects.WeaponCard.create_weapon>` for
     weapons, and :meth:`activate <hearthbreaker.game_objects.SecretCard.activate>`, :meth:`deactivate <hearthbreaker.game_objects.SecretCard.deactivate>` and :meth:`_reveal <hearthbreaker.game_objects.SecretCard._reveal>` for secrets -- see the section for each type of card)
  5. Add an entry to the appropriate ``__init__.py``
- 6. Change the card's entry in ``cards.csv`` to 'yes' in the first column
- 7. Run ``flake8`` in the project's root folder to ensure proper formatting.
+ 6. Run ``flake8`` in the project's root folder to ensure proper formatting.
 
 Creating a Constructor
 ''''''''''''''''''''''
@@ -272,9 +271,8 @@ must be at minimum one test for each card, or possibly more if the card is espec
 interactions with other cards.
 
 The basic attributes for each card (mana cost, rarity, health if it's a minion, etc) are tested automatically against
-the data in `cards.csv <https://github.com/danielyule/hearthstone-simulator/blob/master/cards.csv>`_, so you do not need
-to test these things yourself.  Any card which has a yes in its implemented column in cards.csv will be automatically
-tested.
+the data in `AllSets.enUs.json <https://github.com/danielyule/hearthstone-simulator/blob/master/AllSets.enUS.json>`_, so you do not need
+to test these things yourself.
 
 Each card unit tests consists of a game played with that card and some others.  The decks used in unit testing are not
 constrained by the two copies of any card limitation, so any number can be used.

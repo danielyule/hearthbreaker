@@ -1,9 +1,10 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon
+from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon, Kill
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE
-from hearthbreaker.tags.condition import MinionIsType
+from hearthbreaker.tags.condition import MinionIsType, OnlyMinion
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector
+from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector, SelfSelector, \
+    BothPlayer
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
     destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
@@ -144,3 +145,11 @@ class Voidcaller(MinionCard):
     def create_minion(self, player):
         return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[MinionIsType(MINION_TYPE.DEMON)],
                                                                      source=CARD_SOURCE.MY_HAND)), PlayerSelector()))
+
+
+class AnimaGolem(MinionCard):
+    def __init__(self):
+        super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(9, 9, effects=[Effect(TurnEnded(OnlyMinion(), BothPlayer()), Kill(), SelfSelector())])
