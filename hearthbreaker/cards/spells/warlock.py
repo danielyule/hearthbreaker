@@ -6,7 +6,7 @@ from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, Hero
-from hearthbreaker.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
+from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
 
 
 class MortalCoil(Card):
@@ -164,7 +164,7 @@ class BaneOfDoom(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        demon_list = [BloodImp, VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard]
+        demon_list = [BloodImp, Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard]
         card = game.random_choice(demon_list)
         if self.target.health <= player.effective_spell_damage(2) and \
                 (isinstance(self.target, Minion) and not self.target.divine_shield):

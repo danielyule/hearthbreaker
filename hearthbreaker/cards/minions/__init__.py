@@ -254,7 +254,7 @@ from hearthbreaker.cards.minions.shaman import (
 from hearthbreaker.cards.minions.warlock import (
     FlameImp,
     PitLord,
-    VoidWalker,
+    Voidwalker,
     DreadInfernal,
     Felguard,
     Doomguard,

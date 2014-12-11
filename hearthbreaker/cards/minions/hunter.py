@@ -1,11 +1,10 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, Summon, AddCard
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery
+from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, Summon, AddCard, Give, Taunt
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry
 from hearthbreaker.tags.condition import MinionIsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
 from hearthbreaker.game_objects import MinionCard, Minion
-import hearthbreaker.targeting
 
 
 class TimberWolf(MinionCard):
@@ -35,17 +34,13 @@ class SavannahHighmane(MinionCard):
 class Houndmaster(MinionCard):
     def __init__(self):
         super().__init__("Houndmaster", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.NONE,
-                         hearthbreaker.targeting.find_friendly_minion_battlecry_target,
-                         lambda m: m.card.minion_type is MINION_TYPE.BEAST)
+                         battlecry=Battlecry(Give([Aura(ChangeHealth(2), SelfSelector()),
+                                                   Aura(ChangeAttack(2), SelfSelector()),
+                                                   Aura(Taunt(), SelfSelector())]),
+                                             MinionSelector(MinionIsType(MINION_TYPE.BEAST), picker=UserPicker())))
 
     def create_minion(self, player):
-        def buff_beast(m):
-            if self.target is not None:
-                self.target.increase_health(2)
-                self.target.change_attack(2)
-                self.target.taunt = True
-
-        return Minion(4, 3, battlecry=buff_beast)
+        return Minion(4, 3)
 
 
 class KingKrush(MinionCard):

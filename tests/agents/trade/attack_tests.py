@@ -1,6 +1,6 @@
 import unittest
 from hearthbreaker.cards import Wisp, WarGolem, BloodfenRaptor, GoldshireFootman, RiverCrocolisk, MagmaRager, \
-    ChillwindYeti, VoidWalker, AmaniBerserker, AbusiveSergeant, DarkIronDwarf, ShatteredSunCleric, ImpMaster, \
+    ChillwindYeti, Voidwalker, AmaniBerserker, AbusiveSergeant, DarkIronDwarf, ShatteredSunCleric, ImpMaster, \
     ElvenArcher, Shieldbearer, StormpikeCommando
 from hearthbreaker.game_objects import Hero, MinionCard
 from tests.agents.trade.test_helpers import TestHelpers, TempCard
@@ -79,7 +79,7 @@ class TestTradeAgentAttackTradesTests(TestCaseMixin, unittest.TestCase):
         self.assertEqual(trades.trades()[0].opp_minion.name, "Chillwind Yeti")
 
     def test_trades_smart2(self):
-        me = self.make_cards(VoidWalker())
+        me = self.make_cards(Voidwalker())
         opp = self.make_cards(Wisp(), ChillwindYeti())
 
         trades = self.make_trades(me, opp)
@@ -88,7 +88,7 @@ class TestTradeAgentAttackTradesTests(TestCaseMixin, unittest.TestCase):
         self.assertEqual(trades.trades()[0].opp_minion.name, "Wisp")
 
     def test_trades_smart3(self):
-        me = [VoidWalker()]
+        me = [Voidwalker()]
         opp = [ChillwindYeti()]
 
         trades = self.make_trades(me, opp)

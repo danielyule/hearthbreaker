@@ -31,7 +31,7 @@ class BothPlayer(Player):
         return True
 
     def get_players(self, target):
-        return [target, target.opponent]
+        return [target.opponent, target]
 
     def __to_json__(self):
         return "both"

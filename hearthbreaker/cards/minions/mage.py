@@ -1,8 +1,8 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, AddCard
+from hearthbreaker.tags.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, AddCard, Give
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Effect, Aura
+from hearthbreaker.tags.base import Effect, Aura, Battlecry
 from hearthbreaker.tags.condition import HasSecret
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, PlayerSelector, SelfSelector, TargetSelector
@@ -27,13 +27,14 @@ class SorcerersApprentice(MinionCard):
 
 class KirinTorMage(MinionCard):
     def __init__(self):
-        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Give([ManaAura(100, 0, SecretSelector(), True)]), PlayerSelector()))
 
     def create_minion(self, player):
         def first_secret_cost_zero(m):
             m.player.add_aura(ManaAura(100, 0, SecretSelector(), True))
 
-        return Minion(4, 3, battlecry=first_secret_cost_zero)
+        return Minion(4, 3)
 
 
 class EtherealArcanist(MinionCard):

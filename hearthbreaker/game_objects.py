@@ -33,7 +33,7 @@ def card_lookup(card_name):
             card_lookup_rec(sub_type)
 
     if len(card_table) == 0:
-        for card_class in Card.__subclasses__():
+        for card_class in Card.__subclasses__()[::-1]:
             card_lookup_rec(card_class)
 
     card = card_table[card_name]
@@ -781,7 +781,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param battlecry: Describes the battlecry this minion will use when it enters the field, or None for no
                           battlecry
         :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
-        :param choices: Gives a list of :class:`Choice <hearthbreaker.tags.base.Choice>`s for the user to pick between
+        :param choices: Gives a list of :class:`hearthbreaker.tags.base.Choice` s for the user to pick between
         :type choices: [:class:`hearthbreaker.tags.base.Choice`]
         """
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name)

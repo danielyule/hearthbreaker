@@ -27,7 +27,7 @@ class PitLord(MinionCard):
         return Minion(5, 6, battlecry=pit_lord)
 
 
-class VoidWalker(MinionCard):
+class Voidwalker(MinionCard):
     def __init__(self):
         super().__init__("Voidwalker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON)
 

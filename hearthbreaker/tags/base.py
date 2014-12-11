@@ -556,3 +556,17 @@ class Choice(Battlecry):
     def __init__(self, card, action, selector, condition=None):
         self.card = card
         super().__init__(action, selector, condition)
+
+    def __to_json__(self):
+        super_json = super().__to_json__()
+        super_json['card'] = self.card.ref_name
+        return super_json
+
+    @staticmethod
+    def from_json(card, action, selector, condition=None):
+        action = Action.from_json(**action)
+        selector = Selector.from_json(**selector)
+        if condition:
+            condition = Condition.from_json(**condition)
+        card = hearthbreaker.game_objects.card_lookup(card)
+        return Choice(card, action, selector, condition)
