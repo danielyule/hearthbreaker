@@ -3,7 +3,6 @@ from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura
     CARD_SOURCE
 import hearthbreaker.game_objects
 from hearthbreaker.tags.condition import IsSecret
-import hearthbreaker.tags.selector
 import hearthbreaker.proxies
 
 
@@ -19,8 +18,10 @@ class Freeze(Action):
 
 class Give(Action):
     def __init__(self, auras):
+
         if isinstance(auras, Action):
-            self.auras = [Aura(auras, hearthbreaker.tags.selector.SelfSelector())]
+            from hearthbreaker.tags.selector import SelfSelector
+            self.auras = [Aura(auras, SelfSelector())]
         elif isinstance(auras, list):
             self.auras = auras
         else:
@@ -54,7 +55,8 @@ class Give(Action):
 class Take(Action):
     def __init__(self, aura):
         if isinstance(aura, Action):
-            self.aura = Aura(aura, hearthbreaker.tags.selector.SelfSelector())
+            from hearthbreaker.tags.selector import SelfSelector
+            self.aura = Aura(aura, SelfSelector())
         else:
             self.aura = aura
 
@@ -206,9 +208,10 @@ class ManaChange(ReversibleAction):
         }
 
     def __from_json__(self, amount, minimum, card_selector):
+        from hearthbreaker.tags.base import Selector
         self.amount = amount
         self.minimum = minimum
-        self.card_selector = hearthbreaker.tags.selector.Selector.from_json(**card_selector)
+        self.card_selector = Selector.from_json(**card_selector)
         self.filters = {}
         return self
 

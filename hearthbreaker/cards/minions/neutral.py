@@ -1,7 +1,3 @@
-from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage, \
-    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
-    heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
-    destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
     Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle,\
     Steal, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform, ApplySecret, Silence
@@ -14,6 +10,10 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, RandomSelector, BattlecrySelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker
+from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage, \
+    gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
+    heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
+    destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 import hearthbreaker.targeting
@@ -578,11 +578,6 @@ class Abomination(MinionCard):
         super().__init__("Abomination", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def deal_two_to_all(minion):
-            for target in hearthbreaker.targeting.find_battlecry_target(player.game, lambda x: True):
-                target.damage(2, self)
-            player.game.check_delayed()
-
         return Minion(4, 4, deathrattle=Deathrattle(Damage(2), CharacterSelector(players=BothPlayer())), taunt=True)
 
 
