@@ -1962,7 +1962,7 @@ class Game(Bindable):
                 player.hero.add_effect(Effect.from_json(player.game, **effect))
 
             for aura in d['players'][index]['hero']['auras']:
-                player.hero.add_aura( AuraUntil.from_json(**aura))
+                player.hero.add_aura(AuraUntil.from_json(**aura))
 
             for minion in player.minions:
                 for effect in minion._effects_to_add:
