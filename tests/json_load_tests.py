@@ -4,6 +4,11 @@ import tests.card_tests.druid_tests
 import tests.card_tests.mage_tests
 import tests.card_tests.hunter_tests
 import tests.card_tests.paladin_tests
+import tests.card_tests.priest_tests
+import tests.card_tests.rogue_tests
+import tests.card_tests.shaman_tests
+import tests.card_tests.warlock_tests
+import tests.card_tests.warrior_tests
 
 
 class JSONTester:
@@ -31,6 +36,9 @@ class JSONTester:
             if 'choices' in card_def:
                 init_dict['choices'] = [Choice.from_json(**choice) for choice in card_def['choices']]
 
+            if 'combo' in card_def:
+                init_dict['combo'] = Battlecry.from_json(**card_def['combo'])
+
             if 'overload' in card_def:
                 init_dict['overload'] = card_def['overload']
 
@@ -48,7 +56,7 @@ class JSONTester:
                 create_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
 
             if 'enrage' in card_def:
-                create_dict['enrage'] = Action.from_json(**card_def['enrage'])
+                create_dict['enrage'] = [Action.from_json(**action) for action in card_def['enrage']]
 
             if 'deathrattle' in card_def:
                 create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])
@@ -59,7 +67,7 @@ class JSONTester:
             return Minion(**create_dict)
         if card_def['rarity'] != "Special":
             name = re.sub("[:'.-]", "", card_def['name'])
-            name = "".join([word.title() for word in name.split()])
+            name = "".join([word[0].upper() + word[1:] for word in name.split()])
             cls_def = getattr(hearthbreaker.cards, name, None)
             if cls_def:
                 self.old_attrs[name] = {
@@ -100,3 +108,35 @@ class TestJSONHunter(JSONTester, tests.card_tests.hunter_tests.TestHunter):
 
 class TestJSONPaladin(JSONTester, tests.card_tests.paladin_tests.TestPaladin):
     pass
+
+
+class TestJSONPriest(JSONTester, tests.card_tests.priest_tests.TestPriest):
+    pass
+
+
+class TestJSONRogue(JSONTester, tests.card_tests.rogue_tests.TestRogue):
+    def test_EdwinVanCleef(self):
+        pass  # Edwin can't be impemented currently with the new Battlecry mechanic, so we skip his test
+
+
+class TestJSONShaman(JSONTester, tests.card_tests.shaman_tests.TestShaman):
+    pass
+
+
+class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
+    def test_Jaraxxus(self):
+        pass
+
+    def test_Jaraxxus_with_SacrificialPact(self):
+        pass
+
+    def test_Jaraxxus_with_secrets(self):
+        pass
+
+    def test_VoidTerror(self):
+        pass
+
+
+class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
+    def test_WarsongCommander(self):
+        pass  # This test uses Bloodsail Corsair, which also can't be implemented (yet)

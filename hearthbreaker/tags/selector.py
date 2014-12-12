@@ -91,7 +91,7 @@ class AllPicker(Picker):
 
 class UserPicker(Picker):
     def pick(self, targets, player):
-        filtered_targets = [target for target in filter(lambda t: not t.stealth, targets)]
+        filtered_targets = [target for target in filter(lambda t: t.player is player or not t.stealth, targets)]
         if len(filtered_targets) > 0:
             return [player.agent.choose_target(filtered_targets)]
         return filtered_targets
@@ -102,7 +102,10 @@ class UserPicker(Picker):
 
 class RandomPicker(Picker):
     def pick(self, targets, player):
-        return [player.game.random_choice(*targets)]
+        if len(targets) > 1:
+            return [player.game.random_choice(targets)]
+        else:
+            return targets
 
     def __to_json__(self):
         return "random"
@@ -215,7 +218,7 @@ class SpellSelector(CardSelector):
 class BattlecrySelector(CardSelector):
     def match(self, source, obj):
         return isinstance(obj, hearthbreaker.game_objects.MinionCard) and \
-            obj.create_minion(source).battlecry is not None
+            obj.battlecry is not None
 
     def __to_json__(self):
         return {

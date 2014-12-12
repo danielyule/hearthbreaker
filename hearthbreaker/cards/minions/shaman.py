@@ -1,12 +1,11 @@
-from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth
-from hearthbreaker.tags.base import Aura, Effect
+from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth, Damage, Give, Windfury
+from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector
-import hearthbreaker.targeting
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, CharacterSelector, BothPlayer, \
+    UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
-from hearthbreaker.cards.battlecries import deal_three_damage, give_windfury
 
 
 class AlAkirTheWindlord(MinionCard):
@@ -36,10 +35,10 @@ class EarthElemental(MinionCard):
 class FireElemental(MinionCard):
     def __init__(self):
         super().__init__("Fire Elemental", 6, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_battlecry_target)
+                         battlecry=Battlecry(Damage(3), CharacterSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(6, 5, battlecry=deal_three_damage)
+        return Minion(6, 5)
 
 
 class FlametongueTotem(MinionCard):
@@ -70,7 +69,7 @@ class UnboundElemental(MinionCard):
 class Windspeaker(MinionCard):
     def __init__(self):
         super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         battlecry=Battlecry(Give(Windfury()), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(3, 3, battlecry=give_windfury)
+        return Minion(3, 3)

@@ -126,15 +126,17 @@ class TestRogue(unittest.TestCase):
 
         # SI:7 Agent should have been played, no combo
         self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
 
-        for turn in range(0, 6):
+        for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[0].minions))
 
         # Two SI:7 should be played, the second trigger the combo targeting one of our own minions...
         game.play_single_turn()
-        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[1].health)
 
     def test_Assassinate(self):

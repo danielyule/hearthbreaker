@@ -359,6 +359,21 @@ class Draw(Action):
         }
 
 
+class Discard(Action):
+    def __init__(self, amount=1):
+        self.amount = amount
+
+    def act(self, actor, target):
+        for index in range(0, self.amount):
+            target.discard()
+
+    def __to_json__(self):
+        return {
+            'name': 'discard',
+            'amount': self.amount
+        }
+
+
 class Charge(MinionAction):
     def act(self, actor, target):
         target.charge += 1
@@ -798,4 +813,16 @@ class Silence(Action):
     def __to_json__(self):
         return {
             'name': 'silence'
+        }
+
+
+class DestroyManaCrystal(Action):
+    def act(self, actor, target):
+        target.max_mana -= 1
+        if target.mana > 0:
+            target.mana -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'destroy_mana_crystal'
         }

@@ -1,30 +1,30 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon, Kill
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon, Kill, Damage, Discard, DestroyManaCrystal
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
 from hearthbreaker.tags.condition import MinionIsType, OnlyMinion
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector, SelfSelector, \
-    BothPlayer
+from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector, \
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
-from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
-    destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord
 from hearthbreaker.powers import JaraxxusPower
 
 
 class FlameImp(MinionCard):
     def __init__(self):
-        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(3), HeroSelector()))
 
     def create_minion(self, player):
-        return Minion(3, 2, battlecry=flame_imp)
+        return Minion(3, 2)
 
 
 class PitLord(MinionCard):
     def __init__(self):
-        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.DEMON)
+        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(5), HeroSelector()))
 
     def create_minion(self, player):
-        return Minion(5, 6, battlecry=pit_lord)
+        return Minion(5, 6)
 
 
 class Voidwalker(MinionCard):
@@ -37,34 +37,38 @@ class Voidwalker(MinionCard):
 
 class DreadInfernal(MinionCard):
     def __init__(self):
-        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(1), CharacterSelector(players=BothPlayer())))
 
     def create_minion(self, player):
-        return Minion(6, 6, battlecry=deal_one_damage_all_characters)
+        return Minion(6, 6)
 
 
 class Felguard(MinionCard):
     def __init__(self):
-        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(DestroyManaCrystal(), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(3, 5, battlecry=destroy_own_crystal, taunt=True)
+        return Minion(3, 5, taunt=True)
 
 
 class Doomguard(MinionCard):
     def __init__(self):
-        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Discard(2), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(5, 7, battlecry=discard_two, charge=True)
+        return Minion(5, 7, charge=True)
 
 
 class Succubus(MinionCard):
     def __init__(self):
-        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON)
+        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Discard(1), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(4, 3, battlecry=discard_one)
+        return Minion(4, 3)
 
 
 class SummoningPortal(MinionCard):

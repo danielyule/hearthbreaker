@@ -1,34 +1,43 @@
 [
   {
-    "attack": 3, 
+    "mana": 2, 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 3, 
     "rarity": "Free", 
-    "ref_name": "Bloodfen Raptor", 
-    "name": "Bloodfen Raptor"
+    "name": "Bloodfen Raptor", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Elven Archer", 
-    "name": "Elven Archer"
-  }, 
-  {
-    "attack": 1, 
     "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "rarity": "Free", 
-    "ref_name": "Novice Engineer", 
-    "name": "Novice Engineer"
+    "attack": 1, 
+    "rarity": "Common", 
+    "name": "Elven Archer", 
+    "character_class": ""
   }, 
   {
+    "mana": 2, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "draw", 
+          "amount": 1
+        }
+      ]
+    }, 
+    "health": 1, 
     "attack": 1, 
+    "rarity": "Free", 
+    "name": "Novice Engineer", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -40,47 +49,46 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 1, 
     "rarity": "Free", 
-    "ref_name": "Stonetusk Boar", 
-    "name": "Stonetusk Boar"
+    "name": "Stonetusk Boar", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
-    "rarity": "Common", 
     "battlecry": {
-      "action": {
-        "name": "silence"
-      }, 
       "selector": {
+        "players": "both", 
+        "name": "minion", 
         "picker": "user", 
         "condition": {
           "name": "minion_is_not_target"
-        }, 
-        "players": "both", 
-        "name": "minion"
-      }
+        }
+      }, 
+      "actions": [
+        {
+          "name": "silence"
+        }
+      ]
     }, 
-    "ref_name": "Ironbeak Owl", 
-    "name": "Ironbeak Owl"
-  }, 
-  {
-    "attack": 7, 
-    "health": 7, 
-    "mana": 7, 
-    "character_class": "", 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "War Golem", 
-    "name": "War Golem"
+    "name": "Ironbeak Owl", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
+    "mana": 7, 
+    "health": 7, 
+    "attack": 7, 
+    "rarity": "Common", 
+    "name": "War Golem", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -92,14 +100,13 @@
       }
     ], 
     "health": 7, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Mogu'shan Warden", 
-    "name": "Mogu'shan Warden"
+    "name": "Mogu'shan Warden", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -111,25 +118,23 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Faerie Dragon", 
-    "name": "Faerie Dragon"
+    "name": "Faerie Dragon", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 2, 
-    "spell_damage": 1, 
+    "mana": 2, 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Kobold Geomancer", 
-    "name": "Kobold Geomancer"
+    "spell_damage": 1, 
+    "name": "Kobold Geomancer", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -141,14 +146,13 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Argent Squire", 
-    "name": "Argent Squire"
+    "name": "Argent Squire", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -160,59 +164,55 @@
       }
     ], 
     "health": 3, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Silvermoon Guardian", 
-    "name": "Silvermoon Guardian"
+    "name": "Silvermoon Guardian", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 1, 
     "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
-    "rarity": "Rare", 
-    "ref_name": "Twilight Drake", 
-    "name": "Twilight Drake"
-  }, 
-  {
-    "attack": 5, 
     "health": 1, 
-    "mana": 3, 
+    "attack": 4, 
+    "rarity": "Rare", 
+    "name": "Twilight Drake", 
     "character_class": "", 
-    "rarity": "Free", 
-    "ref_name": "Magma Rager", 
-    "name": "Magma Rager"
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
+    "health": 1, 
+    "attack": 5, 
+    "rarity": "Free", 
+    "name": "Magma Rager", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 2, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "adjacent"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+          }
         }
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Dire Wolf Alpha", 
-    "name": "Dire Wolf Alpha"
+    "name": "Dire Wolf Alpha", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 2, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -224,170 +224,151 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Worgen Infiltrator", 
-    "name": "Worgen Infiltrator"
+    "name": "Worgen Infiltrator", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "spell_damage": 1, 
-    "health": 7, 
     "mana": 6, 
-    "character_class": "", 
+    "health": 7, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Archmage", 
-    "name": "Archmage"
+    "spell_damage": 1, 
+    "name": "Archmage", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "spell_damage": 1, 
-    "health": 4, 
     "mana": 3, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Dalaran Mage", 
-    "name": "Dalaran Mage"
-  }, 
-  {
-    "attack": 4, 
-    "spell_damage": 5, 
-    "health": 12, 
-    "mana": 9, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
-    "rarity": "Legendary", 
-    "ref_name": "Malygos", 
-    "name": "Malygos"
-  }, 
-  {
-    "attack": 4, 
-    "spell_damage": 1, 
     "health": 4, 
-    "mana": 5, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
-    "rarity": "Rare", 
-    "ref_name": "Azure Drake", 
-    "name": "Azure Drake"
-  }, 
-  {
-    "attack": 4, 
-    "spell_damage": 1, 
-    "health": 4, 
-    "mana": 4, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Ogre Magi", 
-    "name": "Ogre Magi"
-  }, 
-  {
-    "attack": 4, 
-    "health": 3, 
-    "mana": 4, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Spellbreaker", 
-    "name": "Spellbreaker"
-  }, 
-  {
     "attack": 1, 
-    "spell_damage": 1, 
-    "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "amount": 1, 
-        "name": "draw"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }
-    }, 
-    "rarity": "Legendary", 
-    "ref_name": "Bloodmage Thalnos", 
-    "name": "Bloodmage Thalnos"
-  }, 
-  {
-    "attack": 2, 
-    "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "amount": 1, 
-        "name": "draw"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }
-    }, 
     "rarity": "Common", 
-    "ref_name": "Loot Hoarder", 
-    "name": "Loot Hoarder"
+    "spell_damage": 1, 
+    "name": "Dalaran Mage", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
-    "mana": 1, 
+    "mana": 9, 
+    "health": 12, 
+    "attack": 4, 
+    "rarity": "Legendary", 
+    "spell_damage": 5, 
+    "name": "Malygos", 
     "character_class": "", 
+    "minion_type": "Dragon"
+  }, 
+  {
+    "mana": 5, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "draw", 
+          "amount": 1
+        }
+      ]
+    }, 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Rare", 
+    "spell_damage": 1, 
+    "name": "Azure Drake", 
+    "character_class": "", 
+    "minion_type": "Dragon"
+  }, 
+  {
+    "mana": 4, 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Common", 
+    "spell_damage": 1, 
+    "name": "Ogre Magi", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 4, 
+    "health": 3, 
+    "attack": 4, 
+    "rarity": "Common", 
+    "name": "Spellbreaker", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 2, 
     "deathrattle": {
       "action": {
-        "amount": 2, 
-        "name": "damage"
+        "name": "draw", 
+        "amount": 1
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }
+    }, 
+    "health": 1, 
+    "attack": 1, 
+    "rarity": "Legendary", 
+    "spell_damage": 1, 
+    "name": "Bloodmage Thalnos", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 2, 
+    "deathrattle": {
+      "action": {
+        "name": "draw", 
+        "amount": 1
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }
+    }, 
+    "health": 1, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Loot Hoarder", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 1, 
+    "deathrattle": {
+      "action": {
+        "name": "damage", 
+        "amount": 2
       }, 
       "selector": {
         "players": "enemy", 
         "name": "hero"
       }
     }, 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Leper Gnome", 
-    "name": "Leper Gnome"
+    "name": "Leper Gnome", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 3, 
-    "character_class": "", 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Ironforge Rifleman", 
-    "name": "Ironforge Rifleman"
+    "name": "Ironforge Rifleman", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 4, 
     "mana": 4, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Gnomish Inventor", 
-    "name": "Gnomish Inventor"
-  }, 
-  {
-    "attack": 1, 
-    "auras": [
-      {
-        "action": {
-          "name": "taunt"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
-    "health": 2, 
-    "mana": 1, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Goldshire Footman", 
-    "name": "Goldshire Footman"
-  }, 
-  {
+    "health": 4, 
     "attack": 2, 
+    "rarity": "Common", 
+    "name": "Gnomish Inventor", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -399,14 +380,31 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Frostwolf Grunt", 
-    "name": "Frostwolf Grunt"
+    "name": "Goldshire Footman", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 2, 
+    "auras": [
+      {
+        "action": {
+          "name": "taunt"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Frostwolf Grunt", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -418,15 +416,14 @@
       }
     ], 
     "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Ironfur Grizzly", 
-    "name": "Ironfur Grizzly"
+    "name": "Ironfur Grizzly", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 6, 
+    "mana": 6, 
     "auras": [
       {
         "action": {
@@ -438,27 +435,22 @@
       }
     ], 
     "health": 5, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 6, 
     "rarity": "Common", 
-    "ref_name": "Lord of the Arena", 
-    "name": "Lord of the Arena"
+    "name": "Lord of the Arena", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Free", 
-    "ref_name": "Murloc Raider", 
-    "name": "Murloc Raider"
+    "name": "Murloc Raider", 
+    "character_class": "", 
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 1, 
-    "health": 3, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -473,8 +465,8 @@
                 "player": "friendly"
               }, 
               "action": {
-                "amount": 2, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 2
               }, 
               "selector": {
                 "name": "self"
@@ -488,22 +480,23 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Mana Addict", 
-    "name": "Mana Addict"
+    "name": "Mana Addict", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 7, 
     "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "health": 7, 
+    "attack": 2, 
     "rarity": "Free", 
-    "ref_name": "Oasis Snapjaw", 
-    "name": "Oasis Snapjaw"
+    "name": "Oasis Snapjaw", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 5, 
+    "mana": 6, 
     "auras": [
       {
         "action": {
@@ -515,24 +508,22 @@
       }
     ], 
     "health": 2, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 5, 
     "rarity": "Free", 
-    "ref_name": "Reckless Rocketeer", 
-    "name": "Reckless Rocketeer"
+    "name": "Reckless Rocketeer", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "health": 3, 
+    "attack": 2, 
     "rarity": "Free", 
-    "ref_name": "River Crocolisk", 
-    "name": "River Crocolisk"
+    "name": "River Crocolisk", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 3, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -544,14 +535,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 3, 
     "rarity": "Free", 
-    "ref_name": "Sen'jin Shieldmasta", 
-    "name": "Sen'jin Shieldmasta"
+    "name": "Sen'jin Shieldmasta", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -563,53 +553,50 @@
       }
     ], 
     "health": 1, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Scarlet Crusader", 
-    "name": "Scarlet Crusader"
+    "name": "Scarlet Crusader", 
+    "character_class": ""
   }, 
   {
+    "mana": 1, 
+    "auras": [
+      {
+        "action": {
+          "name": "taunt"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "health": 4, 
     "attack": 0, 
-    "auras": [
-      {
-        "action": {
-          "name": "taunt"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
-    "health": 4, 
-    "mana": 1, 
-    "character_class": "", 
     "rarity": "Common", 
-    "ref_name": "Shieldbearer", 
-    "name": "Shieldbearer"
+    "name": "Shieldbearer", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "auras": [
-      {
-        "action": {
-          "name": "taunt"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
-    "health": 4, 
     "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "auras": [
+      {
+        "action": {
+          "name": "taunt"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "health": 4, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Silverback Patriarch", 
-    "name": "Silverback Patriarch"
+    "name": "Silverback Patriarch", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 4, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -621,43 +608,40 @@
       }
     ], 
     "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Jungle Panther", 
-    "name": "Jungle Panther"
+    "name": "Jungle Panther", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
+    "mana": 7, 
+    "auras": [
+      {
+        "action": {
+          "name": "stealth"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "health": 5, 
     "attack": 7, 
-    "auras": [
-      {
-        "action": {
-          "name": "stealth"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
-    "health": 5, 
-    "mana": 7, 
-    "character_class": "", 
     "rarity": "Rare", 
-    "ref_name": "Ravenholdt Assassin", 
-    "name": "Ravenholdt Assassin"
+    "name": "Ravenholdt Assassin", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 2, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 2, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Stormpike Commando", 
-    "name": "Stormpike Commando"
+    "name": "Stormpike Commando", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -669,14 +653,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Stormwind Knight", 
-    "name": "Stormwind Knight"
+    "name": "Stormwind Knight", 
+    "character_class": ""
   }, 
   {
-    "attack": 5, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -688,15 +671,14 @@
       }
     ], 
     "health": 5, 
-    "mana": 5, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 5, 
     "rarity": "Common", 
-    "ref_name": "Stranglethorn Tiger", 
-    "name": "Stranglethorn Tiger"
+    "name": "Stranglethorn Tiger", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 4, 
+    "mana": 6, 
     "auras": [
       {
         "action": {
@@ -716,14 +698,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Sunwalker", 
-    "name": "Sunwalker"
+    "name": "Sunwalker", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -735,14 +716,13 @@
       }
     ], 
     "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Thrallmar Farseer", 
-    "name": "Thrallmar Farseer"
+    "name": "Thrallmar Farseer", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
+    "mana": 6, 
     "auras": [
       {
         "action": {
@@ -754,14 +734,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Windfury Harpy", 
-    "name": "Windfury Harpy"
+    "name": "Windfury Harpy", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -773,15 +752,14 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Young Dragonhawk", 
-    "name": "Young Dragonhawk"
+    "name": "Young Dragonhawk", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 3, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -793,14 +771,13 @@
       }
     ], 
     "health": 1, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 3, 
     "rarity": "Free", 
-    "ref_name": "Wolfrider", 
-    "name": "Wolfrider"
+    "name": "Wolfrider", 
+    "character_class": ""
   }, 
   {
-    "attack": 5, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -812,60 +789,70 @@
       }
     ], 
     "health": 4, 
-    "mana": 5, 
-    "character_class": "", 
+    "attack": 5, 
     "rarity": "Common", 
-    "ref_name": "Booty Bay Bodyguard", 
-    "name": "Booty Bay Bodyguard"
+    "name": "Booty Bay Bodyguard", 
+    "character_class": ""
   }, 
   {
-    "attack": 6, 
+    "mana": 6, 
     "health": 7, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 6, 
     "rarity": "Free", 
-    "ref_name": "Boulderfist Ogre", 
-    "name": "Boulderfist Ogre"
+    "name": "Boulderfist Ogre", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 5, 
     "mana": 4, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Chillwind Yeti", 
-    "name": "Chillwind Yeti"
-  }, 
-  {
-    "attack": 9, 
     "health": 5, 
-    "mana": 7, 
-    "character_class": "", 
-    "minion_type": "Beast", 
-    "rarity": "Common", 
-    "ref_name": "Core Hound", 
-    "name": "Core Hound"
-  }, 
-  {
-    "attack": 2, 
-    "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
-    "rarity": "Free", 
-    "ref_name": "Voodoo Doctor", 
-    "name": "Voodoo Doctor"
-  }, 
-  {
-    "attack": 3, 
-    "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Earthen Ring Farseer", 
-    "name": "Earthen Ring Farseer"
-  }, 
-  {
     "attack": 4, 
+    "rarity": "Common", 
+    "name": "Chillwind Yeti", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 7, 
+    "health": 5, 
+    "attack": 9, 
+    "rarity": "Common", 
+    "name": "Core Hound", 
+    "character_class": "", 
+    "minion_type": "Beast"
+  }, 
+  {
+    "mana": 1, 
+    "health": 1, 
+    "attack": 2, 
+    "rarity": "Free", 
+    "name": "Voodoo Doctor", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
+    "battlecry": {
+      "selector": {
+        "players": "both", 
+        "name": "character", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "heal", 
+          "amount": 3
+        }
+      ]
+    }, 
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Earthen Ring Farseer", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -877,32 +864,29 @@
       }
     ], 
     "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Arcane Golem", 
-    "name": "Arcane Golem"
+    "name": "Arcane Golem", 
+    "character_class": ""
   }, 
   {
-    "attack": 5, 
-    "health": 4, 
     "mana": 6, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 5, 
     "rarity": "Common", 
-    "ref_name": "Priestess of Elune", 
-    "name": "Priestess of Elune"
+    "name": "Priestess of Elune", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 5, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 5, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Darkscale Healer", 
-    "name": "Darkscale Healer"
+    "name": "Darkscale Healer", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
+    "mana": 6, 
     "auras": [
       {
         "action": {
@@ -922,14 +906,13 @@
       }
     ], 
     "health": 2, 
-    "mana": 6, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Argent Commander", 
-    "name": "Argent Commander"
+    "name": "Argent Commander", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -941,111 +924,102 @@
       }
     ], 
     "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
-    "rarity": "Common", 
-    "ref_name": "Bluegill Warrior", 
-    "name": "Bluegill Warrior"
-  }, 
-  {
-    "attack": 1, 
-    "health": 1, 
-    "mana": 0, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Wisp", 
-    "name": "Wisp"
-  }, 
-  {
-    "attack": 4, 
-    "health": 4, 
-    "mana": 5, 
-    "character_class": "", 
-    "rarity": "Free", 
-    "ref_name": "Nightblade", 
-    "name": "Nightblade"
-  }, 
-  {
-    "attack": 3, 
-    "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Shattered Sun Cleric", 
-    "name": "Shattered Sun Cleric"
-  }, 
-  {
-    "attack": 4, 
-    "health": 5, 
-    "mana": 6, 
-    "character_class": "", 
-    "rarity": "Legendary", 
-    "ref_name": "The Black Knight", 
-    "name": "The Black Knight"
-  }, 
-  {
     "attack": 2, 
+    "rarity": "Common", 
+    "name": "Bluegill Warrior", 
+    "character_class": "", 
+    "minion_type": "Murloc"
+  }, 
+  {
+    "mana": 0, 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Abusive Sergeant", 
-    "name": "Abusive Sergeant"
+    "name": "Wisp", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
-    "mana": 4, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Dark Iron Dwarf", 
-    "name": "Dark Iron Dwarf"
-  }, 
-  {
-    "attack": 4, 
-    "auras": [
-      {
-        "action": {
-          "name": "taunt"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
-    "health": 4, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Free", 
+    "name": "Nightblade", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
+    "health": 2, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Shattered Sun Cleric", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 6, 
+    "health": 5, 
+    "attack": 4, 
+    "rarity": "Legendary", 
+    "name": "The Black Knight", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 1, 
+    "health": 1, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Abusive Sergeant", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 4, 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Common", 
+    "name": "Dark Iron Dwarf", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 5, 
     "deathrattle": {
       "action": {
-        "amount": 2, 
-        "name": "damage"
+        "name": "damage", 
+        "amount": 2
       }, 
       "selector": {
+        "players": "both", 
+        "name": "character", 
         "picker": "all", 
         "condition": {
           "name": "minion_is_not_target"
-        }, 
-        "players": "both", 
-        "name": "character"
+        }
       }
     }, 
+    "auras": [
+      {
+        "action": {
+          "name": "taunt"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Abomination", 
-    "name": "Abomination"
+    "name": "Abomination", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 6, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 6, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Fen Creeper", 
-    "name": "Fen Creeper"
+    "name": "Fen Creeper", 
+    "character_class": ""
   }, 
   {
-    "attack": 7, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -1053,9 +1027,9 @@
             "players": "friendly", 
             "name": "minion_card"
           }, 
+          "name": "mana_change", 
           "minimum": 0, 
-          "amount": -3, 
-          "name": "mana_change"
+          "amount": -3
         }, 
         "selector": {
           "players": "friendly", 
@@ -1064,101 +1038,91 @@
       }
     ], 
     "health": 6, 
-    "mana": 5, 
-    "character_class": "", 
+    "attack": 7, 
     "rarity": "Common", 
-    "ref_name": "Venture Co. Mercenary", 
-    "name": "Venture Co. Mercenary"
+    "name": "Venture Co. Mercenary", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 2, 
+    "health": 3, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Amani Berserker", 
     "character_class": "", 
     "enrage": [
       {
-        "amount": 3, 
-        "name": "change_attack"
+        "name": "change_attack", 
+        "amount": 3
       }
-    ], 
-    "rarity": "Common", 
-    "ref_name": "Amani Berserker", 
-    "name": "Amani Berserker"
+    ]
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Silver Hand Knight", 
-    "name": "Silver Hand Knight"
+    "name": "Silver Hand Knight", 
+    "character_class": ""
   }, 
   {
-    "attack": 6, 
+    "mana": 7, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+          }
         }
       }, 
       {
         "action": {
-          "amount": 1, 
-          "name": "change_health"
+          "name": "change_health", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+          }
         }
       }
     ], 
     "health": 6, 
-    "mana": 7, 
-    "character_class": "", 
+    "attack": 6, 
     "rarity": "Common", 
-    "ref_name": "Stormwind Champion", 
-    "name": "Stormwind Champion"
+    "name": "Stormwind Champion", 
+    "character_class": ""
   }, 
   {
-    "attack": 12, 
-    "health": 12, 
     "mana": 10, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
+    "health": 12, 
+    "attack": 12, 
     "rarity": "Legendary", 
-    "ref_name": "Deathwing", 
-    "name": "Deathwing"
+    "name": "Deathwing", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 8, 
-    "health": 8, 
     "mana": 9, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
+    "health": 8, 
+    "attack": 8, 
     "rarity": "Legendary", 
-    "ref_name": "Alexstrasza", 
-    "name": "Alexstrasza"
+    "name": "Alexstrasza", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Beast", 
     "effects": [
       {
         "event": {
@@ -1168,58 +1132,54 @@
           "name": "kill"
         }, 
         "selector": {
+          "name": "target", 
           "condition": {
             "name": "is_minion"
-          }, 
-          "name": "target"
+          }
         }
       }
     ], 
-    "rarity": "Rare", 
-    "ref_name": "Emperor Cobra", 
-    "name": "Emperor Cobra"
-  }, 
-  {
+    "health": 3, 
     "attack": 2, 
-    "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
     "rarity": "Rare", 
-    "ref_name": "Crazed Alchemist", 
-    "name": "Crazed Alchemist"
-  }, 
-  {
-    "attack": 3, 
-    "health": 2, 
-    "mana": 2, 
+    "name": "Emperor Cobra", 
     "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Acidic Swamp Ooze", 
-    "name": "Acidic Swamp Ooze"
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 5, 
-    "health": 4, 
+    "mana": 2, 
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Rare", 
+    "name": "Crazed Alchemist", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 2, 
+    "health": 2, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Acidic Swamp Ooze", 
+    "character_class": ""
+  }, 
+  {
     "mana": 4, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 5, 
     "rarity": "Common", 
-    "ref_name": "Ancient Brewmaster", 
-    "name": "Ancient Brewmaster"
+    "name": "Ancient Brewmaster", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "", 
+    "health": 2, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Youthful Brewmaster", 
-    "name": "Youthful Brewmaster"
+    "name": "Youthful Brewmaster", 
+    "character_class": ""
   }, 
   {
-    "attack": 7, 
-    "health": 5, 
     "mana": 7, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1227,59 +1187,59 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 2, 
-          "name": "damage"
+          "name": "damage", 
+          "amount": 2
         }, 
         "selector": {
+          "players": "both", 
+          "name": "character", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "both", 
-          "name": "character"
+          }
         }
       }
     ], 
+    "health": 5, 
+    "attack": 7, 
     "rarity": "Legendary", 
-    "ref_name": "Baron Geddon", 
-    "name": "Baron Geddon"
+    "name": "Baron Geddon", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 1, 
     "enrage": [
       {
-        "amount": 5, 
-        "name": "change_attack"
+        "name": "change_attack", 
+        "amount": 5
       }
     ], 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "health": 1, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Angry Chicken", 
-    "name": "Angry Chicken"
+    "name": "Angry Chicken", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Raging Worgen", 
     "character_class": "", 
     "enrage": [
       {
-        "amount": 1, 
-        "name": "change_attack"
+        "name": "change_attack", 
+        "amount": 1
       }, 
       {
         "name": "windfury"
       }
-    ], 
-    "rarity": "Common", 
-    "ref_name": "Raging Worgen", 
-    "name": "Raging Worgen"
+    ]
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -1291,30 +1251,31 @@
       }
     ], 
     "health": 3, 
-    "mana": 3, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Tauren Warrior", 
     "character_class": "", 
     "enrage": [
       {
-        "amount": 3, 
-        "name": "change_attack"
+        "name": "change_attack", 
+        "amount": 3
       }
-    ], 
-    "rarity": "Common", 
-    "ref_name": "Tauren Warrior", 
-    "name": "Tauren Warrior"
+    ]
   }, 
   {
-    "attack": 4, 
-    "health": 6, 
     "mana": 5, 
+    "health": 6, 
+    "attack": 4, 
+    "rarity": "Common", 
+    "name": "Spiteful Smith", 
     "character_class": "", 
     "enrage": [
       {
         "auras": [
           {
             "action": {
-              "amount": 2, 
-              "name": "increase_weapon_attack"
+              "name": "increase_weapon_attack", 
+              "amount": 2
             }, 
             "selector": {
               "players": "friendly", 
@@ -1324,259 +1285,236 @@
         ], 
         "name": "give"
       }
-    ], 
-    "rarity": "Common", 
-    "ref_name": "Spiteful Smith", 
-    "name": "Spiteful Smith"
+    ]
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Epic", 
-    "ref_name": "Blood Knight", 
-    "name": "Blood Knight"
+    "name": "Blood Knight", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Frostwolf Warlord", 
-    "name": "Frostwolf Warlord"
+    "name": "Frostwolf Warlord", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+          }
         }
       }
     ], 
     "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Free", 
-    "ref_name": "Raid Leader", 
-    "name": "Raid Leader"
+    "name": "Raid Leader", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 4, 
     "mana": 4, 
-    "character_class": "", 
+    "health": 4, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Dragonling Mechanic", 
-    "name": "Dragonling Mechanic"
+    "name": "Dragonling Mechanic", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 2, 
     "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
-    "rarity": "Common", 
-    "ref_name": "Murloc Tidehunter", 
-    "name": "Murloc Tidehunter"
-  }, 
-  {
     "attack": 2, 
-    "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
     "rarity": "Common", 
-    "ref_name": "Razorfen Hunter", 
-    "name": "Razorfen Hunter"
+    "name": "Murloc Tidehunter", 
+    "character_class": "", 
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 3, 
-    "health": 2, 
+    "mana": 3, 
+    "health": 3, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Razorfen Hunter", 
+    "character_class": ""
+  }, 
+  {
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
           "event_name": "after_minion_added", 
+          "player": "friendly", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
-          "amount": 1, 
-          "name": "damage"
+          "name": "damage", 
+          "amount": 1
         }, 
         "selector": {
+          "name": "random", 
           "selector": {
+            "players": "enemy", 
+            "name": "character", 
             "picker": "all", 
             "condition": {
               "name": "minion_is_not_target"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }, 
-          "name": "random"
+            }
+          }
         }
       }
     ], 
+    "health": 2, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Knife Juggler", 
-    "name": "Knife Juggler"
+    "name": "Knife Juggler", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 5, 
     "mana": 4, 
-    "character_class": "", 
+    "health": 5, 
+    "attack": 4, 
     "rarity": "Special", 
-    "ref_name": "Baine Bloodhoof", 
-    "name": "Baine Bloodhoof"
+    "name": "Baine Bloodhoof", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
           "name": "Baine Bloodhoof"
-        }, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 5, 
+    "attack": 4, 
     "rarity": "Legendary", 
-    "ref_name": "Cairne Bloodhoof", 
-    "name": "Cairne Bloodhoof"
+    "name": "Cairne Bloodhoof", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Special", 
-    "ref_name": "Damaged Golem", 
-    "name": "Damaged Golem"
+    "name": "Damaged Golem", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Mech", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
           "name": "Damaged Golem"
-        }, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
-    "rarity": "Common", 
-    "ref_name": "Harvest Golem", 
-    "name": "Harvest Golem"
-  }, 
-  {
-    "attack": 3, 
     "health": 3, 
-    "mana": 2, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Harvest Golem", 
     "character_class": "", 
-    "rarity": "Special", 
-    "ref_name": "Finkle Einhorn", 
-    "name": "Finkle Einhorn"
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 9, 
-    "health": 7, 
+    "mana": 2, 
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Special", 
+    "name": "Finkle Einhorn", 
+    "character_class": ""
+  }, 
+  {
     "mana": 6, 
-    "character_class": "", 
-    "minion_type": "Beast", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
           "name": "Finkle Einhorn"
-        }, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "enemy", 
         "name": "player"
       }
     }, 
+    "health": 7, 
+    "attack": 9, 
     "rarity": "Legendary", 
-    "ref_name": "The Beast", 
-    "name": "The Beast"
+    "name": "The Beast", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 5, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
         "name": "steal"
       }, 
       "selector": {
+        "name": "random", 
         "selector": {
+          "players": "enemy", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "enemy", 
-          "name": "minion"
-        }, 
-        "name": "random"
+          }
+        }
       }
     }, 
-    "rarity": "Legendary", 
-    "ref_name": "Sylvanas Windrunner", 
-    "name": "Sylvanas Windrunner"
-  }, 
-  {
-    "attack": 3, 
     "health": 5, 
-    "mana": 5, 
-    "character_class": "", 
-    "minion_type": "Beast", 
-    "rarity": "Rare", 
-    "ref_name": "Stampeding Kodo", 
-    "name": "Stampeding Kodo"
-  }, 
-  {
     "attack": 5, 
-    "health": 5, 
-    "mana": 6, 
-    "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Frost Elemental", 
-    "name": "Frost Elemental"
+    "rarity": "Legendary", 
+    "name": "Sylvanas Windrunner", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 4, 
-    "mana": 3, 
+    "mana": 5, 
+    "health": 5, 
+    "attack": 3, 
+    "rarity": "Rare", 
+    "name": "Stampeding Kodo", 
     "character_class": "", 
-    "minion_type": "Mech", 
+    "minion_type": "Beast"
+  }, 
+  {
+    "mana": 6, 
+    "health": 5, 
+    "attack": 5, 
+    "rarity": "Common", 
+    "name": "Frost Elemental", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
     "effects": [
       {
         "event": {
@@ -1584,31 +1522,31 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 2, 
-          "name": "damage"
+          "name": "damage", 
+          "amount": 2
         }, 
         "selector": {
+          "name": "random", 
           "selector": {
+            "players": "enemy", 
+            "name": "character", 
             "picker": "all", 
             "condition": {
               "name": "minion_is_not_target"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }, 
-          "name": "random"
+            }
+          }
         }
       }
     ], 
+    "health": 4, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Demolisher", 
-    "name": "Demolisher"
+    "name": "Demolisher", 
+    "character_class": "", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 0, 
-    "health": 7, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1619,21 +1557,20 @@
           "name": "kill"
         }, 
         "selector": {
-          "picker": "all", 
           "players": "both", 
-          "name": "minion"
+          "name": "minion", 
+          "picker": "all"
         }
       }
     ], 
+    "health": 7, 
+    "attack": 0, 
     "rarity": "Epic", 
-    "ref_name": "Doomsayer", 
-    "name": "Doomsayer"
+    "name": "Doomsayer", 
+    "character_class": ""
   }, 
   {
-    "attack": 7, 
-    "health": 7, 
     "mana": 8, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1644,8 +1581,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -1667,8 +1604,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -1682,12 +1619,14 @@
         }
       }
     ], 
+    "health": 7, 
+    "attack": 7, 
     "rarity": "Legendary", 
-    "ref_name": "Gruul", 
-    "name": "Gruul"
+    "name": "Gruul", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -1699,17 +1638,13 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Special", 
-    "ref_name": "Gnoll", 
-    "name": "Gnoll"
+    "name": "Gnoll", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
     "mana": 6, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1717,10 +1652,10 @@
           "player": "friendly"
         }, 
         "action": {
+          "name": "summon", 
           "card": {
             "name": "Gnoll"
-          }, 
-          "name": "summon"
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -1728,25 +1663,23 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Legendary", 
-    "ref_name": "Hogger", 
-    "name": "Hogger"
+    "name": "Hogger", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Demon", 
+    "health": 1, 
+    "attack": 1, 
     "rarity": "Special", 
-    "ref_name": "Imp", 
-    "name": "Imp"
+    "name": "Imp", 
+    "character_class": "", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 1, 
-    "health": 5, 
     "mana": 3, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1754,8 +1687,8 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 1, 
-          "name": "damage"
+          "name": "damage", 
+          "amount": 1
         }, 
         "selector": {
           "name": "self"
@@ -1767,10 +1700,10 @@
           "player": "friendly"
         }, 
         "action": {
+          "name": "summon", 
           "card": {
             "name": "Imp"
-          }, 
-          "name": "summon"
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -1778,24 +1711,22 @@
         }
       }
     ], 
-    "rarity": "Rare", 
-    "ref_name": "Imp Master", 
-    "name": "Imp Master"
-  }, 
-  {
-    "attack": 4, 
-    "health": 7, 
-    "mana": 3, 
-    "character_class": "", 
-    "rarity": "Rare", 
-    "ref_name": "Injured Blademaster", 
-    "name": "Injured Blademaster"
-  }, 
-  {
+    "health": 5, 
     "attack": 1, 
-    "health": 3, 
+    "rarity": "Rare", 
+    "name": "Imp Master", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
+    "health": 7, 
+    "attack": 4, 
+    "rarity": "Rare", 
+    "name": "Injured Blademaster", 
+    "character_class": ""
+  }, 
+  {
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1806,8 +1737,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -1817,27 +1748,26 @@
           "name": "give"
         }, 
         "selector": {
+          "name": "random", 
           "selector": {
+            "players": "friendly", 
+            "name": "minion", 
             "picker": "all", 
             "condition": {
               "name": "minion_is_not_target"
-            }, 
-            "players": "friendly", 
-            "name": "minion"
-          }, 
-          "name": "random"
+            }
+          }
         }
       }
     ], 
+    "health": 3, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Master Swordsmith", 
-    "name": "Master Swordsmith"
+    "name": "Master Swordsmith", 
+    "character_class": ""
   }, 
   {
-    "attack": 0, 
-    "health": 4, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -1845,12 +1775,12 @@
           "player": "friendly"
         }, 
         "action": {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "one_in": 2, 
-          "name": "chance"
+          "name": "chance", 
+          "action": {
+            "name": "draw", 
+            "amount": 1
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -1858,22 +1788,46 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 0, 
     "rarity": "Legendary", 
-    "ref_name": "Nat Pagle", 
-    "name": "Nat Pagle"
+    "name": "Nat Pagle", 
+    "character_class": ""
   }, 
   {
-    "attack": 8, 
-    "health": 8, 
     "mana": 9, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
+    "health": 8, 
+    "attack": 8, 
     "rarity": "Legendary", 
-    "ref_name": "Nozdormu", 
-    "name": "Nozdormu"
+    "name": "Nozdormu", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 8, 
+    "mana": 8, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "turn_ended", 
+          "player": "friendly"
+        }, 
+        "action": {
+          "name": "damage", 
+          "amount": 8
+        }, 
+        "selector": {
+          "name": "random", 
+          "selector": {
+            "players": "enemy", 
+            "name": "character", 
+            "picker": "all", 
+            "condition": {
+              "name": "minion_is_not_target"
+            }
+          }
+        }
+      }
+    ], 
     "auras": [
       {
         "action": {
@@ -1885,37 +1839,13 @@
       }
     ], 
     "health": 8, 
-    "mana": 8, 
-    "character_class": "", 
-    "effects": [
-      {
-        "event": {
-          "event_name": "turn_ended", 
-          "player": "friendly"
-        }, 
-        "action": {
-          "amount": 8, 
-          "name": "damage"
-        }, 
-        "selector": {
-          "selector": {
-            "picker": "all", 
-            "condition": {
-              "name": "minion_is_not_target"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }, 
-          "name": "random"
-        }
-      }
-    ], 
+    "attack": 8, 
     "rarity": "Legendary", 
-    "ref_name": "Ragnaros the Firelord", 
-    "name": "Ragnaros the Firelord"
+    "name": "Ragnaros the Firelord", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -1927,164 +1857,153 @@
       }
     ], 
     "health": 5, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Ancient Watcher", 
-    "name": "Ancient Watcher"
+    "name": "Ancient Watcher", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
     "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
-    "rarity": "Rare", 
-    "ref_name": "Coldlight Oracle", 
-    "name": "Coldlight Oracle"
-  }, 
-  {
     "attack": 2, 
-    "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
     "rarity": "Rare", 
-    "ref_name": "Coldlight Seer", 
-    "name": "Coldlight Seer"
+    "name": "Coldlight Oracle", 
+    "character_class": "", 
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 1, 
+    "mana": 3, 
+    "health": 3, 
+    "attack": 2, 
+    "rarity": "Rare", 
+    "name": "Coldlight Seer", 
+    "character_class": "", 
+    "minion_type": "Murloc"
+  }, 
+  {
+    "mana": 1, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "both", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "players": "both", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
         }
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Grimscale Oracle", 
-    "name": "Grimscale Oracle"
+    "name": "Grimscale Oracle", 
+    "character_class": "", 
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 3, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
-          "amount": 2, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 2
         }, 
         "selector": {
+          "players": "both", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "players": "both", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
         }
       }, 
       {
         "action": {
-          "amount": 1, 
-          "name": "change_health"
+          "name": "change_health", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "both", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "players": "both", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
         }
       }
     ], 
     "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
-    "rarity": "Epic", 
-    "ref_name": "Murloc Warleader", 
-    "name": "Murloc Warleader"
-  }, 
-  {
-    "attack": 4, 
-    "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
-    "rarity": "Epic", 
-    "ref_name": "Big Game Hunter", 
-    "name": "Big Game Hunter"
-  }, 
-  {
-    "attack": 1, 
-    "health": 2, 
-    "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
-    "rarity": "Rare", 
-    "ref_name": "Bloodsail Corsair", 
-    "name": "Bloodsail Corsair"
-  }, 
-  {
-    "attack": 2, 
-    "health": 3, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
-    "rarity": "Common", 
-    "ref_name": "Bloodsail Raider", 
-    "name": "Bloodsail Raider"
-  }, 
-  {
-    "attack": 5, 
-    "health": 4, 
-    "mana": 5, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
-    "rarity": "Legendary", 
-    "ref_name": "Captain Greenskin", 
-    "name": "Captain Greenskin"
-  }, 
-  {
-    "attack": 1, 
-    "health": 2, 
-    "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Beast", 
-    "rarity": "Epic", 
-    "ref_name": "Hungry Crab", 
-    "name": "Hungry Crab"
-  }, 
-  {
     "attack": 3, 
-    "health": 2, 
-    "mana": 2, 
+    "rarity": "Epic", 
+    "name": "Murloc Warleader", 
     "character_class": "", 
-    "rarity": "Common", 
-    "ref_name": "Mad Bomber", 
-    "name": "Mad Bomber"
+    "minion_type": "Murloc"
   }, 
   {
+    "mana": 3, 
+    "health": 2, 
+    "attack": 4, 
+    "rarity": "Epic", 
+    "name": "Big Game Hunter", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 1, 
+    "health": 2, 
+    "attack": 1, 
+    "rarity": "Rare", 
+    "name": "Bloodsail Corsair", 
+    "character_class": "", 
+    "minion_type": "Pirate"
+  }, 
+  {
+    "mana": 2, 
+    "health": 3, 
     "attack": 2, 
+    "rarity": "Common", 
+    "name": "Bloodsail Raider", 
+    "character_class": "", 
+    "minion_type": "Pirate"
+  }, 
+  {
+    "mana": 5, 
+    "health": 4, 
+    "attack": 5, 
+    "rarity": "Legendary", 
+    "name": "Captain Greenskin", 
+    "character_class": "", 
+    "minion_type": "Pirate"
+  }, 
+  {
+    "mana": 1, 
+    "health": 2, 
+    "attack": 1, 
+    "rarity": "Epic", 
+    "name": "Hungry Crab", 
+    "character_class": "", 
+    "minion_type": "Beast"
+  }, 
+  {
+    "mana": 2, 
+    "health": 2, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Mad Bomber", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -2092,9 +2011,9 @@
             "players": "friendly", 
             "name": "minion_card"
           }, 
+          "name": "mana_change", 
           "minimum": 0, 
-          "amount": -1, 
-          "name": "mana_change"
+          "amount": -1
         }, 
         "selector": {
           "players": "both", 
@@ -2103,44 +2022,38 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Mana Wraith", 
-    "name": "Mana Wraith"
+    "name": "Mana Wraith", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Mind Control Tech", 
-    "name": "Mind Control Tech"
+    "name": "Mind Control Tech", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 2, 
     "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
     "effects": [
       {
         "event": {
           "event_name": "minion_summoned", 
+          "player": "both", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "player": "both"
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2154,79 +2067,76 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Murloc Tidecaller", 
-    "name": "Murloc Tidecaller"
-  }, 
-  {
-    "attack": 8, 
-    "health": 8, 
-    "mana": 9, 
+    "name": "Murloc Tidecaller", 
     "character_class": "", 
-    "minion_type": "Dragon", 
-    "rarity": "Legendary", 
-    "ref_name": "Onyxia", 
-    "name": "Onyxia"
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 3, 
+    "mana": 9, 
+    "health": 8, 
+    "attack": 8, 
+    "rarity": "Legendary", 
+    "name": "Onyxia", 
+    "character_class": "", 
+    "minion_type": "Dragon"
+  }, 
+  {
+    "mana": 3, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Pirate", 
-            "name": "minion_is_type"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Pirate"
+          }
         }
       }, 
       {
         "action": {
-          "amount": 1, 
-          "name": "change_health"
+          "name": "change_health", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Pirate", 
-            "name": "minion_is_type"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Pirate"
+          }
         }
       }
     ], 
     "health": 3, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
+    "attack": 3, 
     "rarity": "Epic", 
-    "ref_name": "Southsea Captain", 
-    "name": "Southsea Captain"
+    "name": "Southsea Captain", 
+    "character_class": "", 
+    "minion_type": "Pirate"
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Southsea Deckhand", 
-    "name": "Southsea Deckhand"
+    "name": "Southsea Deckhand", 
+    "character_class": "", 
+    "minion_type": "Pirate"
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2237,8 +2147,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2248,27 +2158,26 @@
           "name": "give"
         }, 
         "selector": {
+          "name": "random", 
           "selector": {
+            "players": "friendly", 
+            "name": "minion", 
             "picker": "all", 
             "condition": {
               "name": "minion_is_not_target"
-            }, 
-            "players": "friendly", 
-            "name": "minion"
-          }, 
-          "name": "random"
+            }
+          }
         }
       }
     ], 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Young Priestess", 
-    "name": "Young Priestess"
+    "name": "Young Priestess", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2276,8 +2185,8 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -2285,15 +2194,14 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Acolyte of Pain", 
-    "name": "Acolyte of Pain"
+    "name": "Acolyte of Pain", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 2, 
     "mana": 4, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2301,8 +2209,8 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -2310,30 +2218,29 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Cult Master", 
-    "name": "Cult Master"
+    "name": "Cult Master", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 2, 
     "mana": 1, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
           "event_name": "spell_cast", 
+          "player": "both", 
           "condition": {
             "name": "is_secret"
-          }, 
-          "player": "both"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2349,17 +2256,17 @@
       {
         "event": {
           "event_name": "spell_cast", 
+          "player": "both", 
           "condition": {
             "name": "is_secret"
-          }, 
-          "player": "both"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2373,24 +2280,22 @@
         }
       }
     ], 
-    "rarity": "Rare", 
-    "ref_name": "Secretkeeper", 
-    "name": "Secretkeeper"
-  }, 
-  {
+    "health": 2, 
     "attack": 1, 
-    "health": 1, 
-    "mana": 0, 
-    "character_class": "", 
-    "rarity": "Special", 
-    "ref_name": "Violet Apprentice", 
-    "name": "Violet Apprentice"
+    "rarity": "Rare", 
+    "name": "Secretkeeper", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 5, 
+    "mana": 0, 
+    "health": 1, 
+    "attack": 1, 
+    "rarity": "Special", 
+    "name": "Violet Apprentice", 
+    "character_class": ""
+  }, 
+  {
     "mana": 4, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2398,10 +2303,10 @@
           "player": "friendly"
         }, 
         "action": {
+          "name": "summon", 
           "card": {
             "name": "Violet Apprentice"
-          }, 
-          "name": "summon"
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -2409,15 +2314,14 @@
         }
       }
     ], 
+    "health": 5, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Violet Teacher", 
-    "name": "Violet Teacher"
+    "name": "Violet Teacher", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
     "mana": 6, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2425,8 +2329,8 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -2434,39 +2338,36 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Rare", 
-    "ref_name": "Gadgetzan Auctioneer", 
-    "name": "Gadgetzan Auctioneer"
+    "name": "Gadgetzan Auctioneer", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
+    "health": 1, 
+    "attack": 2, 
     "rarity": "Special", 
-    "ref_name": "Flame of Azzinoth", 
-    "name": "Flame of Azzinoth"
+    "name": "Flame of Azzinoth", 
+    "character_class": ""
   }, 
   {
-    "attack": 7, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "", 
-    "minion_type": "Demon", 
     "effects": [
       {
         "event": {
           "event_name": "card_used", 
+          "player": "friendly", 
           "condition": {
             "name": "card_is_not_target"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
+          "name": "summon", 
           "card": {
             "name": "Flame of Azzinoth"
-          }, 
-          "name": "summon"
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -2474,15 +2375,15 @@
         }
       }
     ], 
+    "health": 5, 
+    "attack": 7, 
     "rarity": "Legendary", 
-    "ref_name": "Illidan Stormrage", 
-    "name": "Illidan Stormrage"
+    "name": "Illidan Stormrage", 
+    "character_class": "", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2493,8 +2394,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2508,15 +2409,14 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Flesheating Ghoul", 
-    "name": "Flesheating Ghoul"
+    "name": "Flesheating Ghoul", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 2, 
     "mana": 1, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2527,8 +2427,8 @@
           "auras": [
             {
               "action": {
-                "amount": 2, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 2
               }, 
               "selector": {
                 "name": "self"
@@ -2542,15 +2442,14 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 1, 
     "rarity": "Rare", 
-    "ref_name": "Lightwarden", 
-    "name": "Lightwarden"
+    "name": "Lightwarden", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 3, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2561,8 +2460,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2584,8 +2483,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -2599,30 +2498,29 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Questing Adventurer", 
-    "name": "Questing Adventurer"
+    "name": "Questing Adventurer", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 7, 
     "mana": 5, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
           "event_name": "character_damaged", 
+          "player": "friendly", 
           "condition": {
             "name": "minion_is_target"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 3, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 3
               }, 
               "selector": {
                 "name": "self"
@@ -2636,58 +2534,55 @@
         }
       }
     ], 
+    "health": 7, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Gurubashi Berserker", 
-    "name": "Gurubashi Berserker"
+    "name": "Gurubashi Berserker", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 4, 
     "health": 5, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Ancient Mage", 
-    "name": "Ancient Mage"
+    "name": "Ancient Mage", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 4, 
-    "character_class": "", 
+    "health": 3, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Defender of Argus", 
-    "name": "Defender of Argus"
+    "name": "Defender of Argus", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 2, 
-    "character_class": "", 
+    "health": 3, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Sunfury Protector", 
-    "name": "Sunfury Protector"
+    "name": "Sunfury Protector", 
+    "character_class": ""
   }, 
   {
-    "attack": 5, 
-    "health": 4, 
     "mana": 5, 
-    "character_class": "", 
-    "rarity": "Legendary", 
-    "ref_name": "Harrison Jones", 
-    "name": "Harrison Jones"
-  }, 
-  {
+    "health": 4, 
     "attack": 5, 
-    "health": 5, 
-    "mana": 3, 
-    "character_class": "", 
-    "minion_type": "Beast", 
     "rarity": "Legendary", 
-    "ref_name": "King Mukla", 
-    "name": "King Mukla"
+    "name": "Harrison Jones", 
+    "character_class": ""
   }, 
   {
-    "attack": 6, 
+    "mana": 3, 
+    "health": 5, 
+    "attack": 5, 
+    "rarity": "Legendary", 
+    "name": "King Mukla", 
+    "character_class": "", 
+    "minion_type": "Beast"
+  }, 
+  {
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -2699,41 +2594,37 @@
       }
     ], 
     "health": 2, 
-    "mana": 5, 
-    "character_class": "", 
+    "attack": 6, 
     "rarity": "Legendary", 
-    "ref_name": "Leeroy Jenkins", 
-    "name": "Leeroy Jenkins"
+    "name": "Leeroy Jenkins", 
+    "character_class": ""
   }, 
   {
-    "attack": 8, 
-    "health": 8, 
     "mana": 12, 
-    "character_class": "", 
+    "health": 8, 
+    "attack": 8, 
     "rarity": "Epic", 
-    "ref_name": "Mountain Giant", 
-    "name": "Mountain Giant"
+    "name": "Mountain Giant", 
+    "character_class": ""
   }, 
   {
-    "attack": 8, 
-    "health": 8, 
     "mana": 20, 
-    "character_class": "", 
-    "rarity": "Epic", 
-    "ref_name": "Molten Giant", 
-    "name": "Molten Giant"
-  }, 
-  {
-    "attack": 8, 
     "health": 8, 
-    "mana": 10, 
-    "character_class": "", 
+    "attack": 8, 
     "rarity": "Epic", 
-    "ref_name": "Sea Giant", 
-    "name": "Sea Giant"
+    "name": "Molten Giant", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 10, 
+    "health": 8, 
+    "attack": 8, 
+    "rarity": "Epic", 
+    "name": "Sea Giant", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -2745,38 +2636,31 @@
       }
     ], 
     "health": 3, 
-    "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Pirate", 
-    "rarity": "Common", 
-    "ref_name": "Dread Corsair", 
-    "name": "Dread Corsair"
-  }, 
-  {
-    "attack": 1, 
-    "health": 1, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
-    "rarity": "Epic", 
-    "ref_name": "Captain's Parrot", 
-    "name": "Captain's Parrot"
-  }, 
-  {
     "attack": 3, 
-    "health": 3, 
-    "mana": 3, 
+    "rarity": "Common", 
+    "name": "Dread Corsair", 
     "character_class": "", 
-    "rarity": "Legendary", 
-    "ref_name": "Tinkmaster Overspark", 
-    "name": "Tinkmaster Overspark"
+    "minion_type": "Pirate"
   }, 
   {
-    "attack": 0, 
-    "health": 3, 
-    "mana": 3, 
+    "mana": 2, 
+    "health": 1, 
+    "attack": 1, 
+    "rarity": "Epic", 
+    "name": "Captain's Parrot", 
     "character_class": "", 
-    "minion_type": "Mech", 
+    "minion_type": "Beast"
+  }, 
+  {
+    "mana": 3, 
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Legendary", 
+    "name": "Tinkmaster Overspark", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
     "effects": [
       {
         "event": {
@@ -2792,33 +2676,31 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 0, 
     "rarity": "Rare", 
-    "ref_name": "Alarm-o-Bot", 
-    "name": "Alarm-o-Bot"
+    "name": "Alarm-o-Bot", 
+    "character_class": "", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 5, 
-    "health": 5, 
     "mana": 5, 
-    "character_class": "", 
+    "health": 5, 
+    "attack": 5, 
     "rarity": "Legendary", 
-    "ref_name": "Elite Tauren Chieftain", 
-    "name": "Elite Tauren Chieftain"
+    "name": "Elite Tauren Chieftain", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
+    "mana": 2, 
     "health": 4, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Legendary", 
-    "ref_name": "Millhouse Manastorm", 
-    "name": "Millhouse Manastorm"
+    "name": "Millhouse Manastorm", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -2829,32 +2711,32 @@
           "auras": [
             {
               "until": {
+                "event_name": "either", 
                 "event1": {
                   "event_name": "card_played", 
+                  "player": "friendly", 
                   "condition": {
+                    "name": "card_matches", 
                     "selector": {
                       "players": "friendly", 
                       "name": "minion_card"
-                    }, 
-                    "name": "card_matches"
-                  }, 
-                  "player": "friendly"
+                    }
+                  }
                 }, 
-                "event_name": "either", 
+                "player": "friendly", 
                 "event2": {
                   "event_name": "turn_ended", 
                   "player": "friendly"
-                }, 
-                "player": "friendly"
+                }
               }, 
               "action": {
                 "card_selector": {
                   "players": "friendly", 
                   "name": "minion_card"
                 }, 
+                "name": "mana_change", 
                 "minimum": 0, 
-                "amount": 1, 
-                "name": "mana_change"
+                "amount": 1
               }, 
               "selector": {
                 "players": "friendly", 
@@ -2870,12 +2752,128 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Pint-Sized Summoner", 
-    "name": "Pint-Sized Summoner"
+    "name": "Pint-Sized Summoner", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 4, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "minion_placed", 
+          "player": "both", 
+          "condition": {
+            "include_self": false, 
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_attack", 
+                "amount": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "event": {
+          "event_name": "minion_placed", 
+          "player": "both", 
+          "condition": {
+            "include_self": false, 
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "event": {
+          "event_name": "minion_died", 
+          "player": "both", 
+          "condition": {
+            "include_self": false, 
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_attack", 
+                "amount": -1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "event": {
+          "event_name": "minion_died", 
+          "player": "both", 
+          "condition": {
+            "include_self": false, 
+            "name": "minion_is_type", 
+            "minion_type": "Murloc"
+          }
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": -1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
     "auras": [
       {
         "action": {
@@ -2887,129 +2885,14 @@
       }
     ], 
     "health": 4, 
-    "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Murloc", 
-    "effects": [
-      {
-        "event": {
-          "event_name": "minion_placed", 
-          "condition": {
-            "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "player": "both"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }, 
-      {
-        "event": {
-          "event_name": "minion_placed", 
-          "condition": {
-            "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "player": "both"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }, 
-      {
-        "event": {
-          "event_name": "minion_died", 
-          "condition": {
-            "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "player": "both"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": -1, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }, 
-      {
-        "event": {
-          "event_name": "minion_died", 
-          "condition": {
-            "include_self": false, 
-            "minion_type": "Murloc", 
-            "name": "minion_is_type"
-          }, 
-          "player": "both"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": -1, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
+    "attack": 2, 
     "rarity": "Legendary", 
-    "ref_name": "Old Murk-Eye", 
-    "name": "Old Murk-Eye"
+    "name": "Old Murk-Eye", 
+    "character_class": "", 
+    "minion_type": "Murloc"
   }, 
   {
-    "attack": 3, 
+    "mana": 3, 
     "auras": [
       {
         "action": {
@@ -3021,28 +2904,22 @@
       }
     ], 
     "health": 5, 
-    "mana": 3, 
-    "character_class": "", 
+    "attack": 3, 
     "rarity": "Special", 
-    "ref_name": "Laughing Sister", 
-    "name": "Laughing Sister"
+    "name": "Laughing Sister", 
+    "character_class": ""
   }, 
   {
-    "attack": 7, 
-    "health": 6, 
     "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
+    "health": 6, 
+    "attack": 7, 
     "rarity": "Special", 
-    "ref_name": "Emerald Drake", 
-    "name": "Emerald Drake"
+    "name": "Emerald Drake", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 4, 
-    "health": 12, 
     "mana": 9, 
-    "character_class": "", 
-    "minion_type": "Dragon", 
     "effects": [
       {
         "event": {
@@ -3050,7 +2927,9 @@
           "player": "friendly"
         }, 
         "action": {
+          "name": "add_card", 
           "card": {
+            "source": "List", 
             "source_list": [
               "Emerald Drake", 
               "Laughing Sister", 
@@ -3058,10 +2937,8 @@
               "Ysera Awakens", 
               "Dream"
             ], 
-            "conditions": [], 
-            "source": "List"
-          }, 
-          "name": "add_card"
+            "conditions": []
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -3069,34 +2946,32 @@
         }
       }
     ], 
+    "health": 12, 
+    "attack": 4, 
     "rarity": "Legendary", 
-    "ref_name": "Ysera", 
-    "name": "Ysera"
+    "name": "Ysera", 
+    "character_class": "", 
+    "minion_type": "Dragon"
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 0, 
-    "character_class": "", 
-    "minion_type": "Beast", 
+    "health": 1, 
+    "attack": 1, 
     "rarity": "Special", 
-    "ref_name": "Chicken", 
-    "name": "Chicken"
+    "name": "Chicken", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 6, 
-    "health": 6, 
     "mana": 6, 
-    "character_class": "", 
+    "health": 6, 
+    "attack": 6, 
     "rarity": "Legendary", 
-    "ref_name": "Gelbin Mekkatorque", 
-    "name": "Gelbin Mekkatorque"
+    "name": "Gelbin Mekkatorque", 
+    "character_class": ""
   }, 
   {
-    "attack": 0, 
-    "health": 4, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -3104,11 +2979,11 @@
           "player": "both"
         }, 
         "action": {
+          "name": "add_card", 
           "card": {
-            "conditions": [], 
-            "source": "Last_spell"
-          }, 
-          "name": "add_card"
+            "source": "Last_spell", 
+            "conditions": []
+          }
         }, 
         "selector": {
           "players": "other_player", 
@@ -3116,84 +2991,78 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 0, 
     "rarity": "Legendary", 
-    "ref_name": "Lorewalker Cho", 
-    "name": "Lorewalker Cho"
+    "name": "Lorewalker Cho", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
           "event_name": "card_used", 
+          "player": "friendly", 
           "condition": {
             "name": "is_spell"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
-          "amount": 1, 
-          "name": "damage"
+          "name": "damage", 
+          "amount": 1
         }, 
         "selector": {
-          "picker": "all", 
           "players": "both", 
-          "name": "minion"
+          "name": "minion", 
+          "picker": "all"
         }
       }
     ], 
-    "rarity": "Rare", 
-    "ref_name": "Wild Pyromancer", 
-    "name": "Wild Pyromancer"
-  }, 
-  {
-    "attack": 3, 
-    "health": 3, 
-    "mana": 5, 
-    "character_class": "", 
-    "rarity": "Epic", 
-    "ref_name": "Faceless Manipulator", 
-    "name": "Faceless Manipulator"
-  }, 
-  {
-    "attack": 4, 
-    "health": 4, 
-    "mana": 3, 
-    "character_class": "", 
-    "rarity": "Special", 
-    "ref_name": "Nerubian", 
-    "name": "Nerubian"
-  }, 
-  {
-    "attack": 0, 
     "health": 2, 
+    "attack": 3, 
+    "rarity": "Rare", 
+    "name": "Wild Pyromancer", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 5, 
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Epic", 
+    "name": "Faceless Manipulator", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Special", 
+    "name": "Nerubian", 
+    "character_class": ""
+  }, 
+  {
     "mana": 2, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
           "name": "Nerubian"
-        }, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 2, 
+    "attack": 0, 
     "rarity": "Rare", 
-    "ref_name": "Nerubian Egg", 
-    "name": "Nerubian Egg"
+    "name": "Nerubian Egg", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 8, 
     "mana": 6, 
-    "character_class": "", 
-    "minion_type": "Beast", 
     "effects": [
       {
         "event": {
@@ -3203,51 +3072,52 @@
           "name": "kill"
         }, 
         "selector": {
+          "name": "target", 
           "condition": {
             "name": "is_minion"
-          }, 
-          "name": "target"
+          }
         }
       }
     ], 
+    "health": 8, 
+    "attack": 2, 
     "rarity": "Legendary", 
-    "ref_name": "Maexxna", 
-    "name": "Maexxna"
+    "name": "Maexxna", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "", 
+    "health": 1, 
+    "attack": 1, 
     "rarity": "Special", 
-    "ref_name": "Spectral Spider", 
-    "name": "Spectral Spider"
+    "name": "Spectral Spider", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Beast", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
+        "count": 2, 
         "card": {
           "name": "Spectral Spider"
-        }, 
-        "count": 2, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 2, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Haunted Creeper", 
-    "name": "Haunted Creeper"
+    "name": "Haunted Creeper", 
+    "character_class": "", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -3255,9 +3125,9 @@
             "players": "friendly", 
             "name": "battlecry"
           }, 
+          "name": "mana_change", 
           "minimum": 0, 
-          "amount": -2, 
-          "name": "mana_change"
+          "amount": -2
         }, 
         "selector": {
           "players": "both", 
@@ -3266,14 +3136,27 @@
       }
     ], 
     "health": 4, 
-    "mana": 2, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Nerub'ar Weblord", 
-    "name": "Nerub'ar Weblord"
+    "name": "Nerub'ar Weblord", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
+    "mana": 2, 
+    "deathrattle": {
+      "action": {
+        "name": "damage", 
+        "amount": 1
+      }, 
+      "selector": {
+        "players": "both", 
+        "name": "minion", 
+        "picker": "all", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }
+    }, 
     "auras": [
       {
         "action": {
@@ -3285,40 +3168,21 @@
       }
     ], 
     "health": 3, 
-    "mana": 2, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "amount": 1, 
-        "name": "damage"
-      }, 
-      "selector": {
-        "picker": "all", 
-        "condition": {
-          "name": "minion_is_not_target"
-        }, 
-        "players": "both", 
-        "name": "minion"
-      }
-    }, 
-    "rarity": "Common", 
-    "ref_name": "Unstable Ghoul", 
-    "name": "Unstable Ghoul"
-  }, 
-  {
-    "attack": 5, 
-    "health": 5, 
-    "mana": 5, 
-    "character_class": "", 
-    "rarity": "Legendary", 
-    "ref_name": "Loatheb", 
-    "name": "Loatheb"
-  }, 
-  {
     "attack": 1, 
-    "health": 4, 
+    "rarity": "Common", 
+    "name": "Unstable Ghoul", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 5, 
+    "health": 5, 
+    "attack": 5, 
+    "rarity": "Legendary", 
+    "name": "Loatheb", 
+    "character_class": ""
+  }, 
+  {
     "mana": 3, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -3326,20 +3190,22 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 10000, 
-          "name": "heal"
+          "name": "heal", 
+          "amount": 10000
         }, 
         "selector": {
           "name": "self"
         }
       }
     ], 
+    "health": 4, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Stoneskin Gargoyle", 
-    "name": "Stoneskin Gargoyle"
+    "name": "Stoneskin Gargoyle", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -3351,14 +3217,25 @@
       }
     ], 
     "health": 2, 
-    "mana": 1, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Special", 
-    "ref_name": "Slime", 
-    "name": "Slime"
+    "name": "Slime", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
+    "mana": 5, 
+    "deathrattle": {
+      "action": {
+        "name": "summon", 
+        "card": {
+          "name": "Slime"
+        }
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }
+    }, 
     "auras": [
       {
         "action": {
@@ -3370,26 +3247,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 5, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "card": {
-          "name": "Slime"
-        }, 
-        "name": "summon"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }
-    }, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Sludge Belcher", 
-    "name": "Sludge Belcher"
+    "name": "Sludge Belcher", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -3402,33 +3266,48 @@
       }
     ], 
     "health": 7, 
-    "mana": 4, 
-    "character_class": "", 
+    "attack": 1, 
     "rarity": "Legendary", 
-    "ref_name": "Baron Rivendare", 
-    "name": "Baron Rivendare"
+    "name": "Baron Rivendare", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 4, 
     "mana": 3, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
-        "amount": 2, 
-        "name": "draw"
+        "name": "draw", 
+        "amount": 2
       }, 
       "selector": {
         "players": "enemy", 
         "name": "player"
       }
     }, 
+    "health": 4, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Dancing Swords", 
-    "name": "Dancing Swords"
+    "name": "Dancing Swords", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 3, 
+    "deathrattle": {
+      "action": {
+        "name": "summon", 
+        "card": {
+          "source": "My_deck", 
+          "conditions": [
+            {
+              "name": "is_minion"
+            }
+          ]
+        }
+      }, 
+      "selector": {
+        "players": "enemy", 
+        "name": "player"
+      }
+    }, 
     "auras": [
       {
         "action": {
@@ -3440,31 +3319,13 @@
       }
     ], 
     "health": 8, 
-    "mana": 3, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "card": {
-          "conditions": [
-            {
-              "name": "is_minion"
-            }
-          ], 
-          "source": "My_deck"
-        }, 
-        "name": "summon"
-      }, 
-      "selector": {
-        "players": "enemy", 
-        "name": "player"
-      }
-    }, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Deathlord", 
-    "name": "Deathlord"
+    "name": "Deathlord", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -3476,32 +3337,28 @@
       }
     ], 
     "health": 6, 
-    "mana": 5, 
-    "character_class": "", 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Spectral Knight", 
-    "name": "Spectral Knight"
+    "name": "Spectral Knight", 
+    "character_class": ""
   }, 
   {
-    "attack": 1, 
-    "health": 2, 
     "mana": 1, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
           "event_name": "minion_summoned", 
+          "player": "friendly", 
           "condition": {
             "name": "minion_has_deathrattle"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -3517,17 +3374,17 @@
       {
         "event": {
           "event_name": "minion_summoned", 
+          "player": "friendly", 
           "condition": {
             "name": "minion_has_deathrattle"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -3541,102 +3398,96 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Undertaker", 
-    "name": "Undertaker"
+    "name": "Undertaker", 
+    "character_class": ""
   }, 
   {
-    "attack": 3, 
-    "health": 5, 
     "mana": 4, 
-    "character_class": "", 
+    "health": 5, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Wailing Soul", 
-    "name": "Wailing Soul"
+    "name": "Wailing Soul", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 1, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
-        "amount": 5, 
-        "name": "heal"
+        "name": "heal", 
+        "amount": 5
       }, 
       "selector": {
         "players": "enemy", 
         "name": "hero"
       }
     }, 
-    "rarity": "Common", 
-    "ref_name": "Zombie Chow", 
-    "name": "Zombie Chow"
-  }, 
-  {
-    "attack": 11, 
-    "health": 11, 
-    "mana": 10, 
-    "character_class": "", 
-    "rarity": "Special", 
-    "ref_name": "Thaddius", 
-    "name": "Thaddius"
-  }, 
-  {
-    "attack": 4, 
-    "health": 7, 
-    "mana": 5, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "card": {
-          "name": "Thaddius"
-        }, 
-        "name": "summon"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }, 
-      "condition": {
-        "card": "Stalagg", 
-        "name": "in_graveyard"
-      }
-    }, 
-    "rarity": "Legendary", 
-    "ref_name": "Feugen", 
-    "name": "Feugen"
-  }, 
-  {
-    "attack": 7, 
-    "health": 4, 
-    "mana": 5, 
-    "character_class": "", 
-    "deathrattle": {
-      "action": {
-        "card": {
-          "name": "Thaddius"
-        }, 
-        "name": "summon"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }, 
-      "condition": {
-        "card": "Feugen", 
-        "name": "in_graveyard"
-      }
-    }, 
-    "rarity": "Legendary", 
-    "ref_name": "Stalagg", 
-    "name": "Stalagg"
-  }, 
-  {
+    "health": 3, 
     "attack": 2, 
-    "health": 2, 
+    "rarity": "Common", 
+    "name": "Zombie Chow", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 10, 
+    "health": 11, 
+    "attack": 11, 
+    "rarity": "Special", 
+    "name": "Thaddius", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 5, 
+    "deathrattle": {
+      "action": {
+        "name": "summon", 
+        "card": {
+          "name": "Thaddius"
+        }
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "condition": {
+        "name": "in_graveyard", 
+        "card": "Stalagg"
+      }
+    }, 
+    "health": 7, 
+    "attack": 4, 
+    "rarity": "Legendary", 
+    "name": "Feugen", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 5, 
+    "deathrattle": {
+      "action": {
+        "name": "summon", 
+        "card": {
+          "name": "Thaddius"
+        }
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "condition": {
+        "name": "in_graveyard", 
+        "card": "Feugen"
+      }
+    }, 
+    "health": 4, 
+    "attack": 7, 
+    "rarity": "Legendary", 
+    "name": "Stalagg", 
+    "character_class": ""
+  }, 
+  {
     "mana": 2, 
-    "character_class": "", 
     "deathrattle": {
       "action": {
         "source": "My_deck", 
@@ -3647,21 +3498,70 @@
         "name": "player"
       }
     }, 
-    "rarity": "Common", 
-    "ref_name": "Mad Scientist", 
-    "name": "Mad Scientist"
-  }, 
-  {
-    "attack": 1, 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
-    "rarity": "Epic", 
-    "ref_name": "Echoing Ooze", 
-    "name": "Echoing Ooze"
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Mad Scientist", 
+    "character_class": ""
   }, 
   {
-    "attack": 2, 
+    "mana": 2, 
+    "health": 2, 
+    "attack": 1, 
+    "rarity": "Epic", 
+    "name": "Echoing Ooze", 
+    "character_class": ""
+  }, 
+  {
+    "mana": 3, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "turn_started", 
+          "player": "friendly"
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_attack", 
+                "amount": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "event": {
+          "event_name": "turn_started", 
+          "player": "friendly"
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
     "auras": [
       {
         "action": {
@@ -3673,65 +3573,13 @@
       }
     ], 
     "health": 2, 
-    "mana": 3, 
-    "character_class": "", 
-    "effects": [
-      {
-        "event": {
-          "event_name": "turn_started", 
-          "player": "friendly"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }, 
-      {
-        "event": {
-          "event_name": "turn_started", 
-          "player": "friendly"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "name": "self"
-        }
-      }
-    ], 
+    "attack": 2, 
     "rarity": "Epic", 
-    "ref_name": "Shade of Naxxramas", 
-    "name": "Shade of Naxxramas"
+    "name": "Shade of Naxxramas", 
+    "character_class": ""
   }, 
   {
-    "attack": 6, 
-    "health": 8, 
     "mana": 8, 
-    "character_class": "", 
     "effects": [
       {
         "event": {
@@ -3747,63 +3595,65 @@
         }
       }
     ], 
+    "health": 8, 
+    "attack": 6, 
     "rarity": "Legendary", 
-    "ref_name": "Kel'Thuzad", 
-    "name": "Kel'Thuzad"
+    "name": "Kel'Thuzad", 
+    "character_class": ""
   }, 
   {
-    "attack": 4, 
-    "health": 3, 
     "mana": 4, 
-    "character_class": "", 
-    "minion_type": "Mech", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
+          "source": "Collection", 
           "conditions": [
             {
-              "cost": 2, 
-              "name": "mana_cost"
+              "name": "mana_cost", 
+              "cost": 2
             }, 
             {
               "name": "is_minion"
             }
-          ], 
-          "source": "Collection"
-        }, 
-        "name": "summon"
+          ]
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 3, 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Piloted Shredder", 
-    "name": "Piloted Shredder"
+    "name": "Piloted Shredder", 
+    "character_class": "", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 5, 
-    "character_class": "", 
-    "minion_type": "Mech", 
-    "rarity": "Common", 
     "battlecry": {
-      "action": {
-        "amount": 8, 
-        "name": "heal"
-      }, 
       "selector": {
         "players": "friendly", 
         "name": "hero"
-      }
+      }, 
+      "actions": [
+        {
+          "name": "heal", 
+          "amount": 8
+        }
+      ]
     }, 
-    "ref_name": "Antique Healbot", 
-    "name": "Antique Healbot"
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Antique Healbot", 
+    "character_class": "", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 1, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -3823,55 +3673,57 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "", 
-    "minion_type": "Mech", 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Annoy-o-Tron", 
-    "name": "Annoy-o-Tron"
+    "name": "Annoy-o-Tron", 
+    "character_class": "", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 2, 
+    "mana": 4, 
     "choices": [
       {
         "card": "moonfire_keeper", 
-        "action": {
-          "amount": 2, 
-          "name": "damage"
-        }, 
         "selector": {
+          "players": "both", 
+          "name": "character", 
           "picker": "user", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "both", 
-          "name": "character"
-        }
+          }
+        }, 
+        "actions": [
+          {
+            "name": "damage", 
+            "amount": 2
+          }
+        ]
       }, 
       {
         "card": "Dispel", 
-        "action": {
-          "name": "silence"
-        }, 
         "selector": {
+          "players": "both", 
+          "name": "minion", 
           "picker": "user", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "both", 
-          "name": "minion"
-        }
+          }
+        }, 
+        "actions": [
+          {
+            "name": "silence"
+          }
+        ]
       }
     ], 
     "health": 4, 
-    "mana": 4, 
-    "character_class": "Druid", 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Keeper of the Grove", 
-    "name": "Keeper of the Grove"
+    "name": "Keeper of the Grove", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 4, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -3883,14 +3735,14 @@
       }
     ], 
     "health": 4, 
-    "mana": 5, 
-    "character_class": "Druid", 
-    "rarity": "Special", 
     "ref_name": "Druid of the Claw (cat)", 
-    "name": "Druid of the Claw"
+    "attack": 4, 
+    "rarity": "Special", 
+    "name": "Druid of the Claw", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 4, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -3902,141 +3754,150 @@
       }
     ], 
     "health": 6, 
-    "mana": 5, 
-    "character_class": "Druid", 
-    "rarity": "Special", 
     "ref_name": "Druid of the Claw (bear)", 
-    "name": "Druid of the Claw"
+    "attack": 4, 
+    "rarity": "Special", 
+    "name": "Druid of the Claw", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 4, 
+    "mana": 5, 
     "choices": [
       {
         "card": "Cat Form", 
-        "action": {
-          "card": {
-            "name": "Druid of the Claw (cat)"
-          }, 
-          "name": "transform"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Druid of the Claw (cat)"
+            }
+          }
+        ]
       }, 
       {
         "card": "Bear Form", 
-        "action": {
-          "card": {
-            "name": "Druid of the Claw (bear)"
-          }, 
-          "name": "transform"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Druid of the Claw (bear)"
+            }
+          }
+        ]
       }
     ], 
     "health": 4, 
-    "mana": 5, 
-    "character_class": "Druid", 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Druid of the Claw", 
-    "name": "Druid of the Claw"
+    "name": "Druid of the Claw", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 5, 
+    "mana": 7, 
     "choices": [
       {
         "card": "Ancient Secrets", 
-        "action": {
-          "amount": 5, 
-          "name": "heal"
-        }, 
         "selector": {
           "players": "friendly", 
           "name": "hero"
-        }
+        }, 
+        "actions": [
+          {
+            "name": "heal", 
+            "amount": 5
+          }
+        ]
       }, 
       {
         "card": "Ancient  Teachings", 
-        "action": {
-          "amount": 3, 
-          "name": "draw"
-        }, 
         "selector": {
           "players": "friendly", 
           "name": "player"
-        }
+        }, 
+        "actions": [
+          {
+            "name": "draw", 
+            "amount": 3
+          }
+        ]
       }
     ], 
     "health": 5, 
-    "mana": 7, 
-    "character_class": "Druid", 
+    "attack": 5, 
     "rarity": "Epic", 
-    "ref_name": "Ancient of Lore", 
-    "name": "Ancient of Lore"
+    "name": "Ancient of Lore", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 5, 
+    "mana": 7, 
     "choices": [
       {
         "card": "+5 Health and Taunt", 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 5, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }, 
-            {
-              "action": {
-                "name": "taunt"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "auras": [
+              {
+                "action": {
+                  "name": "change_health", 
+                  "amount": 5
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }, 
+              {
+                "action": {
+                  "name": "taunt"
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }
+            ], 
+            "name": "give"
+          }
+        ]
       }, 
       {
         "card": "+5 Attack", 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 5, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "auras": [
+              {
+                "action": {
+                  "name": "change_attack", 
+                  "amount": 5
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }
+            ], 
+            "name": "give"
+          }
+        ]
       }
     ], 
     "health": 5, 
-    "mana": 7, 
-    "character_class": "Druid", 
+    "attack": 5, 
     "rarity": "Epic", 
-    "ref_name": "Ancient of War", 
-    "name": "Ancient of War"
+    "name": "Ancient of War", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 8, 
+    "mana": 8, 
     "auras": [
       {
         "action": {
@@ -4048,14 +3909,13 @@
       }
     ], 
     "health": 8, 
-    "mana": 8, 
-    "character_class": "Druid", 
+    "attack": 8, 
     "rarity": "Common", 
-    "ref_name": "Ironbark Protector", 
-    "name": "Ironbark Protector"
+    "name": "Ironbark Protector", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 2, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -4067,127 +3927,132 @@
       }
     ], 
     "health": 2, 
-    "mana": 1, 
-    "character_class": "Druid", 
-    "rarity": "Common", 
     "ref_name": "Treant (taunt)", 
-    "name": "Treant"
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Treant", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 5, 
+    "mana": 9, 
     "choices": [
       {
         "card": "Give your other minions +2/+2 and taunt", 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 2, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }, 
-            {
-              "action": {
-                "amount": 2, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }, 
-            {
-              "action": {
-                "name": "taunt"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
-        }
+          }
+        }, 
+        "actions": [
+          {
+            "auras": [
+              {
+                "action": {
+                  "name": "change_attack", 
+                  "amount": 2
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }, 
+              {
+                "action": {
+                  "name": "change_health", 
+                  "amount": 2
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }, 
+              {
+                "action": {
+                  "name": "taunt"
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }
+            ], 
+            "name": "give"
+          }
+        ]
       }, 
       {
         "card": "Summon two 2/2 Treants with taunt", 
-        "action": {
-          "card": {
-            "name": "Treant (taunt)"
-          }, 
-          "count": 2, 
-          "name": "summon"
-        }, 
         "selector": {
           "players": "friendly", 
           "name": "player"
-        }
+        }, 
+        "actions": [
+          {
+            "name": "summon", 
+            "count": 2, 
+            "card": {
+              "name": "Treant (taunt)"
+            }
+          }
+        ]
       }
     ], 
     "health": 8, 
-    "mana": 9, 
-    "character_class": "Druid", 
+    "attack": 5, 
     "rarity": "Legendary", 
-    "ref_name": "Cenarius", 
-    "name": "Cenarius"
+    "name": "Cenarius", 
+    "character_class": "Druid"
   }, 
   {
-    "attack": 2, 
+    "mana": 2, 
     "choices": [
       {
         "card": "Attack Mode", 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_attack"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "auras": [
+              {
+                "action": {
+                  "name": "change_attack", 
+                  "amount": 1
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }
+            ], 
+            "name": "give"
+          }
+        ]
       }, 
       {
         "card": "Tank Mode", 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
         "selector": {
           "name": "self"
-        }
+        }, 
+        "actions": [
+          {
+            "auras": [
+              {
+                "action": {
+                  "name": "change_health", 
+                  "amount": 1
+                }, 
+                "selector": {
+                  "name": "self"
+                }
+              }
+            ], 
+            "name": "give"
+          }
+        ]
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "Druid", 
-    "minion_type": "Mech", 
+    "attack": 2, 
     "auras": [
       {
         "action": {
@@ -4199,124 +4064,123 @@
       }
     ], 
     "rarity": "Common", 
-    "ref_name": "Anodized Robo Cub", 
-    "name": "Anodized Robo Cub"
+    "name": "Anodized Robo Cub", 
+    "character_class": "Druid", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 1, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
-          "amount": 1, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 1
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Beast", 
-            "name": "minion_is_type"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Beast"
+          }
         }
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
+    "attack": 1, 
     "rarity": "Free", 
-    "ref_name": "Timber Wolf", 
-    "name": "Timber Wolf"
+    "name": "Timber Wolf", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Special", 
-    "ref_name": "Hyena", 
-    "name": "Hyena"
+    "name": "Hyena", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 6, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
+        "count": 2, 
         "card": {
           "name": "Hyena"
-        }, 
-        "count": 2, 
-        "name": "summon"
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 5, 
+    "attack": 6, 
     "rarity": "Rare", 
-    "ref_name": "Savannah Highmane", 
-    "name": "Savannah Highmane"
+    "name": "Savannah Highmane", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 4, 
-    "health": 3, 
     "mana": 4, 
-    "character_class": "Hunter", 
-    "rarity": "Free", 
     "battlecry": {
-      "action": {
-        "auras": [
-          {
-            "action": {
-              "amount": 2, 
-              "name": "change_health"
-            }, 
-            "selector": {
-              "name": "self"
-            }
-          }, 
-          {
-            "action": {
-              "amount": 2, 
-              "name": "change_attack"
-            }, 
-            "selector": {
-              "name": "self"
-            }
-          }, 
-          {
-            "action": {
-              "name": "taunt"
-            }, 
-            "selector": {
-              "name": "self"
-            }
-          }
-        ], 
-        "name": "give"
-      }, 
       "selector": {
+        "players": "friendly", 
+        "name": "minion", 
         "picker": "user", 
         "condition": {
           "include_self": false, 
-          "minion_type": "Beast", 
-          "name": "minion_is_type"
-        }, 
-        "players": "friendly", 
-        "name": "minion"
-      }
+          "name": "minion_is_type", 
+          "minion_type": "Beast"
+        }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": 2
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }, 
+            {
+              "action": {
+                "name": "change_attack", 
+                "amount": 2
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }, 
+            {
+              "action": {
+                "name": "taunt"
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
     }, 
-    "ref_name": "Houndmaster", 
-    "name": "Houndmaster"
+    "health": 3, 
+    "attack": 4, 
+    "rarity": "Free", 
+    "name": "Houndmaster", 
+    "character_class": "Hunter"
   }, 
   {
-    "attack": 8, 
+    "mana": 9, 
     "auras": [
       {
         "action": {
@@ -4328,33 +4192,28 @@
       }
     ], 
     "health": 8, 
-    "mana": 9, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
+    "attack": 8, 
     "rarity": "Legendary", 
-    "ref_name": "King Krush", 
-    "name": "King Krush"
+    "name": "King Krush", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 3, 
-    "health": 2, 
     "mana": 5, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
     "effects": [
       {
         "event": {
           "event_name": "minion_placed", 
+          "player": "friendly", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Beast", 
-            "name": "minion_is_type"
-          }, 
-          "player": "friendly"
+            "name": "minion_is_type", 
+            "minion_type": "Beast"
+          }
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -4362,26 +4221,29 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Starving Buzzard", 
-    "name": "Starving Buzzard"
+    "name": "Starving Buzzard", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 2, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
           "name": "charge"
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Beast", 
-            "name": "minion_is_type"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+            "name": "minion_is_type", 
+            "minion_type": "Beast"
+          }
         }
       }, 
       {
@@ -4394,36 +4256,31 @@
       }
     ], 
     "health": 5, 
-    "mana": 5, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Tundra Rhino", 
-    "name": "Tundra Rhino"
+    "name": "Tundra Rhino", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
     "effects": [
       {
         "event": {
           "event_name": "minion_died", 
+          "player": "friendly", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Beast", 
-            "name": "minion_is_type"
-          }, 
-          "player": "friendly"
+            "name": "minion_is_type", 
+            "minion_type": "Beast"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 2, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 2
               }, 
               "selector": {
                 "name": "self"
@@ -4439,19 +4296,19 @@
       {
         "event": {
           "event_name": "minion_died", 
+          "player": "friendly", 
           "condition": {
             "include_self": false, 
-            "minion_type": "Beast", 
-            "name": "minion_is_type"
-          }, 
-          "player": "friendly"
+            "name": "minion_is_type", 
+            "minion_type": "Beast"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -4465,44 +4322,43 @@
         }
       }
     ], 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Scavenging Hyena", 
-    "name": "Scavenging Hyena"
+    "name": "Scavenging Hyena", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
-    "health": 1, 
     "mana": 1, 
-    "character_class": "Hunter", 
-    "minion_type": "Beast", 
     "deathrattle": {
       "action": {
+        "name": "add_card", 
         "card": {
+          "source": "Collection", 
           "conditions": [
             {
               "include_self": false, 
-              "minion_type": "Beast", 
-              "name": "minion_is_type"
+              "name": "minion_is_type", 
+              "minion_type": "Beast"
             }
-          ], 
-          "source": "Collection"
-        }, 
-        "name": "add_card"
+          ]
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 1, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Webspinner", 
-    "name": "Webspinner"
+    "name": "Webspinner", 
+    "character_class": "Hunter", 
+    "minion_type": "Beast"
   }, 
   {
-    "attack": 1, 
-    "health": 3, 
     "mana": 1, 
-    "character_class": "Mage", 
     "effects": [
       {
         "event": {
@@ -4513,8 +4369,8 @@
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -4528,12 +4384,14 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 1, 
     "rarity": "Common", 
-    "ref_name": "Mana Wyrm", 
-    "name": "Mana Wyrm"
+    "name": "Mana Wyrm", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 3, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
@@ -4541,9 +4399,9 @@
             "players": "friendly", 
             "name": "spell"
           }, 
+          "name": "mana_change", 
           "minimum": 0, 
-          "amount": 1, 
-          "name": "mana_change"
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -4552,86 +4410,83 @@
       }
     ], 
     "health": 2, 
-    "mana": 2, 
-    "character_class": "Mage", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Sorcerer's Apprentice", 
-    "name": "Sorcerer's Apprentice"
+    "name": "Sorcerer's Apprentice", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 4, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Mage", 
-    "rarity": "Rare", 
     "battlecry": {
-      "action": {
-        "auras": [
-          {
-            "until": {
-              "event1": {
-                "event_name": "card_played", 
-                "condition": {
-                  "selector": {
-                    "players": "friendly", 
-                    "name": "secret"
-                  }, 
-                  "name": "card_matches"
-                }, 
-                "player": "friendly"
-              }, 
-              "event_name": "either", 
-              "event2": {
-                "event_name": "turn_ended", 
-                "player": "friendly"
-              }, 
-              "player": "friendly"
-            }, 
-            "action": {
-              "card_selector": {
-                "players": "friendly", 
-                "name": "secret"
-              }, 
-              "minimum": 0, 
-              "amount": 100, 
-              "name": "mana_change"
-            }, 
-            "selector": {
-              "players": "friendly", 
-              "name": "player"
-            }
-          }
-        ], 
-        "name": "give"
-      }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
-      }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "until": {
+                "event_name": "either", 
+                "event1": {
+                  "event_name": "card_played", 
+                  "player": "friendly", 
+                  "condition": {
+                    "name": "card_matches", 
+                    "selector": {
+                      "players": "friendly", 
+                      "name": "secret"
+                    }
+                  }
+                }, 
+                "player": "friendly", 
+                "event2": {
+                  "event_name": "turn_ended", 
+                  "player": "friendly"
+                }
+              }, 
+              "action": {
+                "card_selector": {
+                  "players": "friendly", 
+                  "name": "secret"
+                }, 
+                "name": "mana_change", 
+                "minimum": 0, 
+                "amount": 100
+              }, 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
     }, 
-    "ref_name": "Kirin Tor Mage", 
-    "name": "Kirin Tor Mage"
+    "health": 3, 
+    "attack": 4, 
+    "rarity": "Rare", 
+    "name": "Kirin Tor Mage", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 4, 
-    "character_class": "Mage", 
     "effects": [
       {
         "event": {
           "event_name": "turn_ended", 
+          "player": "friendly", 
           "condition": {
             "name": "has_secret"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 2, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 2
               }, 
               "selector": {
                 "name": "self"
@@ -4647,17 +4502,17 @@
       {
         "event": {
           "event_name": "turn_ended", 
+          "player": "friendly", 
           "condition": {
             "name": "has_secret"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 2, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 2
               }, 
               "selector": {
                 "name": "self"
@@ -4671,15 +4526,14 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Ethereal Arcanist", 
-    "name": "Ethereal Arcanist"
+    "name": "Ethereal Arcanist", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 3, 
-    "health": 6, 
     "mana": 4, 
-    "character_class": "Mage", 
     "effects": [
       {
         "event": {
@@ -4693,15 +4547,14 @@
         }
       }
     ], 
+    "health": 6, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Water Elemental", 
-    "name": "Water Elemental"
+    "name": "Water Elemental", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 5, 
-    "health": 7, 
     "mana": 7, 
-    "character_class": "Mage", 
     "effects": [
       {
         "event": {
@@ -4709,10 +4562,10 @@
           "player": "friendly"
         }, 
         "action": {
+          "name": "add_card", 
           "card": {
             "name": "Fireball"
-          }, 
-          "name": "add_card"
+          }
         }, 
         "selector": {
           "players": "friendly", 
@@ -4720,93 +4573,108 @@
         }
       }
     ], 
+    "health": 7, 
+    "attack": 5, 
     "rarity": "Legendary", 
-    "ref_name": "Archmage Antonidas", 
-    "name": "Archmage Antonidas"
+    "name": "Archmage Antonidas", 
+    "character_class": "Mage"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Paladin", 
-    "rarity": "Rare", 
     "battlecry": {
-      "action": {
-        "auras": [
-          {
-            "action": {
-              "attack": 1, 
-              "name": "set_attack"
-            }, 
-            "selector": {
-              "name": "self"
-            }
-          }
-        ], 
-        "name": "give"
-      }, 
       "selector": {
-        "picker": "all", 
         "players": "enemy", 
-        "name": "minion"
-      }
+        "name": "minion", 
+        "picker": "all"
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "set_attack", 
+                "attack": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
     }, 
-    "ref_name": "Aldor Peacekeeper", 
-    "name": "Aldor Peacekeeper"
+    "health": 3, 
+    "attack": 3, 
+    "rarity": "Rare", 
+    "name": "Aldor Peacekeeper", 
+    "character_class": "Paladin"
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 2, 
-    "character_class": "Paladin", 
-    "rarity": "Common", 
     "battlecry": {
-      "action": {
-        "auras": [
-          {
-            "action": {
-              "name": "divine_shield"
-            }, 
-            "selector": {
-              "name": "self"
-            }
-          }
-        ], 
-        "name": "give"
-      }, 
       "selector": {
+        "players": "friendly", 
+        "name": "minion", 
         "picker": "all", 
         "condition": {
           "name": "minion_is_not_target"
-        }, 
-        "players": "friendly", 
-        "name": "minion"
-      }
+        }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "divine_shield"
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
     }, 
-    "ref_name": "Argent Protector", 
-    "name": "Argent Protector"
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Argent Protector", 
+    "character_class": "Paladin"
   }, 
   {
-    "attack": 5, 
-    "health": 6, 
     "mana": 7, 
-    "character_class": "Paladin", 
-    "rarity": "Common", 
     "battlecry": {
-      "action": {
-        "amount": 6, 
-        "name": "heal"
-      }, 
       "selector": {
         "players": "friendly", 
         "name": "hero"
-      }
+      }, 
+      "actions": [
+        {
+          "name": "heal", 
+          "amount": 6
+        }
+      ]
     }, 
-    "ref_name": "Guardian of Kings", 
-    "name": "Guardian of Kings"
+    "health": 6, 
+    "attack": 5, 
+    "rarity": "Common", 
+    "name": "Guardian of Kings", 
+    "character_class": "Paladin"
   }, 
   {
-    "attack": 6, 
+    "mana": 8, 
+    "deathrattle": {
+      "action": {
+        "weapon": "Ashbringer", 
+        "name": "equip"
+      }, 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }
+    }, 
     "auras": [
       {
         "action": {
@@ -4826,24 +4694,13 @@
       }
     ], 
     "health": 6, 
-    "mana": 8, 
-    "character_class": "Paladin", 
-    "deathrattle": {
-      "action": {
-        "weapon": "Ashbringer", 
-        "name": "equip"
-      }, 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
-      }
-    }, 
+    "attack": 6, 
     "rarity": "Legendary", 
-    "ref_name": "Tirion Fordring", 
-    "name": "Tirion Fordring"
+    "name": "Tirion Fordring", 
+    "character_class": "Paladin"
   }, 
   {
-    "attack": 3, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -4856,23 +4713,38 @@
       }
     ], 
     "health": 5, 
-    "mana": 4, 
-    "character_class": "Priest", 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Auchenai Soulpriest", 
-    "name": "Auchenai Soulpriest"
+    "name": "Auchenai Soulpriest", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 4, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "Priest", 
+    "battlecry": {
+      "selector": {
+        "players": "enemy", 
+        "name": "minion", 
+        "picker": "user", 
+        "condition": {
+          "attack_max": 2, 
+          "include_self": false, 
+          "name": "attack_less_than_or_equal_to"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "steal"
+        }
+      ]
+    }, 
+    "health": 5, 
+    "attack": 4, 
     "rarity": "Epic", 
-    "ref_name": "Cabal Shadow Priest", 
-    "name": "Cabal Shadow Priest"
+    "name": "Cabal Shadow Priest", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 0, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -4884,17 +4756,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 4, 
-    "character_class": "Priest", 
+    "attack": 0, 
     "rarity": "Common", 
-    "ref_name": "Lightspawn", 
-    "name": "Lightspawn"
+    "name": "Lightspawn", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 0, 
-    "health": 5, 
     "mana": 2, 
-    "character_class": "Priest", 
     "effects": [
       {
         "event": {
@@ -4902,43 +4770,42 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 3, 
-          "name": "heal"
+          "name": "heal", 
+          "amount": 3
         }, 
         "selector": {
+          "name": "random", 
           "selector": {
+            "players": "friendly", 
+            "name": "character", 
             "picker": "all", 
             "condition": {
               "name": "minion_is_not_target"
-            }, 
-            "players": "friendly", 
-            "name": "character"
-          }, 
-          "name": "random"
+            }
+          }
         }
       }
     ], 
+    "health": 5, 
+    "attack": 0, 
     "rarity": "Rare", 
-    "ref_name": "Lightwell", 
-    "name": "Lightwell"
+    "name": "Lightwell", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 1, 
-    "health": 3, 
     "mana": 1, 
-    "character_class": "Priest", 
     "effects": [
       {
         "event": {
           "event_name": "character_healed", 
+          "player": "both", 
           "condition": {
             "name": "is_minion"
-          }, 
-          "player": "both"
+          }
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -4946,17 +4813,19 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 1, 
     "rarity": "Free", 
-    "ref_name": "Northshire Cleric", 
-    "name": "Northshire Cleric"
+    "name": "Northshire Cleric", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 7, 
+    "mana": 7, 
     "auras": [
       {
         "action": {
-          "amount": 2, 
-          "name": "multiply_spell_damage"
+          "name": "multiply_spell_damage", 
+          "amount": 2
         }, 
         "selector": {
           "players": "friendly", 
@@ -4965,8 +4834,8 @@
       }, 
       {
         "action": {
-          "amount": 2, 
-          "name": "multiply_heal_amount"
+          "name": "multiply_heal_amount", 
+          "amount": 2
         }, 
         "selector": {
           "players": "friendly", 
@@ -4975,85 +4844,182 @@
       }
     ], 
     "health": 7, 
-    "mana": 7, 
-    "character_class": "Priest", 
+    "attack": 7, 
     "rarity": "Legendary", 
-    "ref_name": "Prophet Velen", 
-    "name": "Prophet Velen"
+    "name": "Prophet Velen", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 6, 
-    "health": 6, 
     "mana": 6, 
-    "character_class": "Priest", 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "minion", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": 3
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
+    }, 
+    "health": 6, 
+    "attack": 6, 
     "rarity": "Common", 
-    "ref_name": "Temple Enforcer", 
-    "name": "Temple Enforcer"
+    "name": "Temple Enforcer", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 3, 
-    "health": 4, 
     "mana": 3, 
-    "character_class": "Priest", 
     "deathrattle": {
       "action": {
-        "amount": 3, 
-        "name": "change_health"
+        "name": "change_health", 
+        "amount": 3
       }, 
       "selector": {
+        "name": "random", 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
-        }, 
-        "name": "random"
+          }
+        }
       }
     }, 
-    "rarity": "Common", 
-    "ref_name": "Dark Cultist", 
-    "name": "Dark Cultist"
-  }, 
-  {
-    "attack": 2, 
-    "health": 2, 
-    "mana": 2, 
-    "character_class": "Rogue", 
-    "rarity": "Common", 
-    "ref_name": "Defias Ringleader", 
-    "name": "Defias Ringleader"
-  }, 
-  {
-    "attack": 2, 
-    "health": 2, 
-    "mana": 3, 
-    "character_class": "Rogue", 
-    "rarity": "Legendary", 
-    "ref_name": "Edwin VanCleef", 
-    "name": "Edwin VanCleef"
-  }, 
-  {
-    "attack": 5, 
-    "health": 3, 
-    "mana": 6, 
-    "character_class": "Rogue", 
-    "rarity": "Epic", 
-    "ref_name": "Kidnapper", 
-    "name": "Kidnapper"
-  }, 
-  {
-    "attack": 4, 
     "health": 4, 
-    "mana": 4, 
-    "character_class": "Rogue", 
-    "rarity": "Rare", 
-    "ref_name": "Master of Disguise", 
-    "name": "Master of Disguise"
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Dark Cultist", 
+    "character_class": "Priest"
   }, 
   {
-    "attack": 1, 
+    "mana": 1, 
+    "health": 1, 
+    "attack": 2, 
+    "rarity": "Special", 
+    "name": "Defias Bandit", 
+    "character_class": "Rogue"
+  }, 
+  {
+    "mana": 2, 
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Defias Ringleader", 
+    "combo": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "summon", 
+          "card": {
+            "name": "Defias Bandit"
+          }
+        }
+      ]
+    }, 
+    "character_class": "Rogue"
+  }, 
+  {
+    "mana": 3, 
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Legendary", 
+    "name": "Edwin VanCleef", 
+    "character_class": "Rogue"
+  }, 
+  {
+    "mana": 6, 
+    "health": 3, 
+    "attack": 5, 
+    "rarity": "Epic", 
+    "name": "Kidnapper", 
+    "combo": {
+      "selector": {
+        "players": "both", 
+        "name": "minion", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "bounce"
+        }
+      ]
+    }, 
+    "character_class": "Rogue"
+  }, 
+  {
+    "mana": 4, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "minion", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "stealth"
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
+    }, 
+    "health": 4, 
+    "attack": 4, 
+    "rarity": "Rare", 
+    "name": "Master of Disguise", 
+    "character_class": "Rogue"
+  }, 
+  {
+    "mana": 2, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "did_damage"
+        }, 
+        "action": {
+          "name": "kill"
+        }, 
+        "selector": {
+          "name": "target", 
+          "condition": {
+            "name": "is_minion"
+          }
+        }
+      }
+    ], 
     "auras": [
       {
         "action": {
@@ -5065,64 +5031,58 @@
       }
     ], 
     "health": 1, 
-    "mana": 2, 
-    "character_class": "Rogue", 
-    "effects": [
-      {
-        "event": {
-          "event_name": "did_damage"
-        }, 
-        "action": {
-          "name": "kill"
-        }, 
-        "selector": {
-          "condition": {
-            "name": "is_minion"
-          }, 
-          "name": "target"
-        }
-      }
-    ], 
+    "attack": 1, 
     "rarity": "Epic", 
-    "ref_name": "Patient Assassin", 
-    "name": "Patient Assassin"
+    "name": "Patient Assassin", 
+    "character_class": "Rogue"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Rogue", 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "SI:7 Agent", 
-    "name": "SI:7 Agent"
+    "name": "SI:7 Agent", 
+    "combo": {
+      "selector": {
+        "players": "both", 
+        "name": "character", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 2
+        }
+      ]
+    }, 
+    "character_class": "Rogue"
   }, 
   {
-    "attack": 5, 
-    "health": 5, 
     "mana": 4, 
-    "character_class": "Rogue", 
     "deathrattle": {
       "action": {
         "name": "bounce"
       }, 
       "selector": {
-        "selector": {
-          "picker": "all", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
-        }, 
-        "name": "random"
+        "players": "friendly", 
+        "name": "minion", 
+        "picker": "random", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
       }
     }, 
+    "health": 5, 
+    "attack": 5, 
     "rarity": "Common", 
-    "ref_name": "Anub'ar Ambusher", 
-    "name": "Anub'ar Ambusher"
+    "name": "Anub'ar Ambusher", 
+    "character_class": "Rogue"
   }, 
   {
-    "attack": 3, 
+    "mana": 8, 
     "auras": [
       {
         "action": {
@@ -5158,14 +5118,13 @@
       }
     ], 
     "health": 5, 
-    "mana": 8, 
-    "character_class": "Shaman", 
+    "attack": 3, 
     "rarity": "Legendary", 
-    "ref_name": "Al'Akir the Windlord", 
-    "name": "Al'Akir the Windlord"
+    "name": "Al'Akir the Windlord", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 3, 
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -5177,14 +5136,14 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "Shaman", 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Dust Devil", 
-    "name": "Dust Devil"
+    "overload": 2, 
+    "name": "Dust Devil", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 7, 
+    "mana": 5, 
     "auras": [
       {
         "action": {
@@ -5196,53 +5155,63 @@
       }
     ], 
     "health": 8, 
-    "mana": 5, 
-    "character_class": "Shaman", 
+    "attack": 7, 
     "rarity": "Epic", 
-    "ref_name": "Earth Elemental", 
-    "name": "Earth Elemental"
+    "overload": 3, 
+    "name": "Earth Elemental", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 6, 
-    "health": 5, 
     "mana": 6, 
-    "character_class": "Shaman", 
+    "battlecry": {
+      "selector": {
+        "players": "both", 
+        "name": "character", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 3
+        }
+      ]
+    }, 
+    "health": 5, 
+    "attack": 6, 
     "rarity": "Common", 
-    "ref_name": "Fire Elemental", 
-    "name": "Fire Elemental"
+    "name": "Fire Elemental", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 0, 
+    "mana": 2, 
     "auras": [
       {
         "action": {
-          "amount": 2, 
-          "name": "change_attack"
+          "name": "change_attack", 
+          "amount": 2
         }, 
         "selector": {
+          "players": "friendly", 
+          "name": "minion", 
           "picker": "all", 
           "condition": {
             "name": "adjacent"
-          }, 
-          "players": "friendly", 
-          "name": "minion"
+          }
         }
       }
     ], 
     "health": 3, 
-    "mana": 2, 
-    "character_class": "Shaman", 
-    "minion_type": "Totem", 
+    "attack": 0, 
     "rarity": "Common", 
-    "ref_name": "Flametongue Totem", 
-    "name": "Flametongue Totem"
+    "name": "Flametongue Totem", 
+    "character_class": "Shaman", 
+    "minion_type": "Totem"
   }, 
   {
-    "attack": 0, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Shaman", 
-    "minion_type": "Totem", 
     "effects": [
       {
         "event": {
@@ -5250,8 +5219,8 @@
           "player": "friendly"
         }, 
         "action": {
-          "amount": 1, 
-          "name": "draw"
+          "name": "draw", 
+          "amount": 1
         }, 
         "selector": {
           "players": "friendly", 
@@ -5259,30 +5228,30 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 0, 
     "rarity": "Rare", 
-    "ref_name": "Mana Tide Totem", 
-    "name": "Mana Tide Totem"
+    "name": "Mana Tide Totem", 
+    "character_class": "Shaman", 
+    "minion_type": "Totem"
   }, 
   {
-    "attack": 2, 
-    "health": 4, 
     "mana": 3, 
-    "character_class": "Shaman", 
     "effects": [
       {
         "event": {
           "event_name": "card_played", 
+          "player": "friendly", 
           "condition": {
             "name": "has_overload"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -5298,17 +5267,17 @@
       {
         "event": {
           "event_name": "card_played", 
+          "player": "friendly", 
           "condition": {
             "name": "has_overload"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_health"
+                "name": "change_health", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -5322,41 +5291,89 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Unbound Elemental", 
-    "name": "Unbound Elemental"
+    "name": "Unbound Elemental", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 3, 
+    "mana": 4, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "minion", 
+        "picker": "user", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "windfury"
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
+    }, 
     "health": 3, 
-    "mana": 4, 
-    "character_class": "Shaman", 
-    "rarity": "Common", 
-    "ref_name": "Windspeaker", 
-    "name": "Windspeaker"
-  }, 
-  {
     "attack": 3, 
-    "health": 2, 
-    "mana": 1, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
     "rarity": "Common", 
-    "ref_name": "Flame Imp", 
-    "name": "Flame Imp"
+    "name": "Windspeaker", 
+    "character_class": "Shaman"
   }, 
   {
-    "attack": 5, 
-    "health": 6, 
-    "mana": 4, 
+    "mana": 1, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "hero"
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 3
+        }
+      ]
+    }, 
+    "health": 2, 
+    "attack": 3, 
+    "rarity": "Common", 
+    "name": "Flame Imp", 
     "character_class": "Warlock", 
-    "minion_type": "Demon", 
-    "rarity": "Epic", 
-    "ref_name": "Pit Lord", 
-    "name": "Pit Lord"
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 1, 
+    "mana": 4, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "hero"
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 5
+        }
+      ]
+    }, 
+    "health": 6, 
+    "attack": 5, 
+    "rarity": "Epic", 
+    "name": "Pit Lord", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
+  }, 
+  {
+    "mana": 1, 
     "auras": [
       {
         "action": {
@@ -5368,25 +5385,50 @@
       }
     ], 
     "health": 3, 
-    "mana": 1, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
+    "attack": 1, 
     "rarity": "Free", 
-    "ref_name": "Voidwalker", 
-    "name": "Voidwalker"
-  }, 
-  {
-    "attack": 6, 
-    "health": 6, 
-    "mana": 6, 
+    "name": "Voidwalker", 
     "character_class": "Warlock", 
-    "minion_type": "Demon", 
-    "rarity": "Common", 
-    "ref_name": "Dread Infernal", 
-    "name": "Dread Infernal"
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 3, 
+    "mana": 6, 
+    "battlecry": {
+      "selector": {
+        "players": "both", 
+        "name": "character", 
+        "picker": "all", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 1
+        }
+      ]
+    }, 
+    "health": 6, 
+    "attack": 6, 
+    "rarity": "Common", 
+    "name": "Dread Infernal", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
+  }, 
+  {
+    "mana": 3, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "destroy_mana_crystal"
+        }
+      ]
+    }, 
     "auras": [
       {
         "action": {
@@ -5398,15 +5440,26 @@
       }
     ], 
     "health": 5, 
-    "mana": 3, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Felguard", 
-    "name": "Felguard"
+    "name": "Felguard", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 5, 
+    "mana": 5, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "discard", 
+          "amount": 2
+        }
+      ]
+    }, 
     "auras": [
       {
         "action": {
@@ -5418,25 +5471,35 @@
       }
     ], 
     "health": 7, 
-    "mana": 5, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
+    "attack": 5, 
     "rarity": "Rare", 
-    "ref_name": "Doomguard", 
-    "name": "Doomguard"
-  }, 
-  {
-    "attack": 4, 
-    "health": 3, 
-    "mana": 2, 
+    "name": "Doomguard", 
     "character_class": "Warlock", 
-    "minion_type": "Demon", 
-    "rarity": "Free", 
-    "ref_name": "Succubus", 
-    "name": "Succubus"
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 0, 
+    "mana": 2, 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "name": "discard", 
+          "amount": 1
+        }
+      ]
+    }, 
+    "health": 3, 
+    "attack": 4, 
+    "rarity": "Free", 
+    "name": "Succubus", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
+  }, 
+  {
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -5444,9 +5507,9 @@
             "players": "friendly", 
             "name": "minion_card"
           }, 
+          "name": "mana_change", 
           "minimum": 1, 
-          "amount": 2, 
-          "name": "mana_change"
+          "amount": 2
         }, 
         "selector": {
           "players": "friendly", 
@@ -5455,14 +5518,46 @@
       }
     ], 
     "health": 4, 
-    "mana": 4, 
-    "character_class": "Warlock", 
+    "attack": 0, 
     "rarity": "Common", 
-    "ref_name": "Summoning Portal", 
-    "name": "Summoning Portal"
+    "name": "Summoning Portal", 
+    "character_class": "Warlock"
   }, 
   {
-    "attack": 0, 
+    "mana": 1, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "turn_ended", 
+          "player": "friendly"
+        }, 
+        "action": {
+          "auras": [
+            {
+              "action": {
+                "name": "change_health", 
+                "amount": 1
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }, 
+        "selector": {
+          "name": "random", 
+          "selector": {
+            "players": "friendly", 
+            "name": "minion", 
+            "picker": "all", 
+            "condition": {
+              "name": "minion_is_not_target"
+            }
+          }
+        }
+      }
+    ], 
     "auras": [
       {
         "action": {
@@ -5474,109 +5569,68 @@
       }
     ], 
     "health": 1, 
-    "mana": 1, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
-    "effects": [
-      {
-        "event": {
-          "event_name": "turn_ended", 
-          "player": "friendly"
-        }, 
-        "action": {
-          "auras": [
-            {
-              "action": {
-                "amount": 1, 
-                "name": "change_health"
-              }, 
-              "selector": {
-                "name": "self"
-              }
-            }
-          ], 
-          "name": "give"
-        }, 
-        "selector": {
-          "selector": {
-            "picker": "all", 
-            "condition": {
-              "name": "minion_is_not_target"
-            }, 
-            "players": "friendly", 
-            "name": "minion"
-          }, 
-          "name": "random"
-        }
-      }
-    ], 
+    "attack": 0, 
     "rarity": "Common", 
-    "ref_name": "Blood Imp", 
-    "name": "Blood Imp"
+    "name": "Blood Imp", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 3, 
-    "health": 15, 
     "mana": 9, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
+    "health": 15, 
+    "attack": 3, 
     "rarity": "Legendary", 
-    "ref_name": "Lord Jaraxxus", 
-    "name": "Lord Jaraxxus"
+    "name": "Lord Jaraxxus", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Rare", 
-    "ref_name": "Void Terror", 
-    "name": "Void Terror"
+    "name": "Void Terror", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 3, 
-    "health": 4, 
     "mana": 4, 
-    "character_class": "Warlock", 
-    "minion_type": "Demon", 
     "deathrattle": {
       "action": {
+        "name": "summon", 
         "card": {
+          "source": "My_hand", 
           "conditions": [
             {
               "include_self": false, 
-              "minion_type": "Demon", 
-              "name": "minion_is_type"
+              "name": "minion_is_type", 
+              "minion_type": "Demon"
             }
-          ], 
-          "source": "My_hand"
-        }, 
-        "name": "summon"
+          ]
+        }
       }, 
       "selector": {
         "players": "friendly", 
         "name": "player"
       }
     }, 
+    "health": 4, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Voidcaller", 
-    "name": "Voidcaller"
+    "name": "Voidcaller", 
+    "character_class": "Warlock", 
+    "minion_type": "Demon"
   }, 
   {
-    "attack": 9, 
-    "health": 9, 
     "mana": 6, 
-    "character_class": "Warlock", 
-    "minion_type": "Mech", 
     "effects": [
       {
         "event": {
           "event_name": "turn_ended", 
+          "player": "both", 
           "condition": {
             "name": "only_minion"
-          }, 
-          "player": "both"
+          }
         }, 
         "action": {
           "name": "kill"
@@ -5586,32 +5640,43 @@
         }
       }
     ], 
+    "health": 9, 
+    "attack": 9, 
     "rarity": "Epic", 
-    "ref_name": "Anima Golem", 
-    "name": "Anima Golem"
+    "name": "Anima Golem", 
+    "character_class": "Warlock", 
+    "minion_type": "Mech"
   }, 
   {
-    "attack": 3, 
-    "health": 3, 
     "mana": 4, 
-    "character_class": "Warrior", 
+    "battlecry": {
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }, 
+      "actions": [
+        {
+          "weapon": "Battle Axe", 
+          "name": "equip"
+        }
+      ]
+    }, 
+    "health": 3, 
+    "attack": 3, 
     "rarity": "Common", 
-    "ref_name": "Arathi Weaponsmith", 
-    "name": "Arathi Weaponsmith"
+    "name": "Arathi Weaponsmith", 
+    "character_class": "Warrior"
   }, 
   {
-    "attack": 1, 
-    "health": 4, 
     "mana": 2, 
-    "character_class": "Warrior", 
     "effects": [
       {
         "event": {
           "event_name": "character_damaged", 
+          "player": "friendly", 
           "condition": {
             "name": "is_minion"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "name": "increase_armor"
@@ -5622,39 +5687,67 @@
         }
       }
     ], 
-    "rarity": "Rare", 
-    "ref_name": "Armorsmith", 
-    "name": "Armorsmith"
-  }, 
-  {
-    "attack": 2, 
-    "health": 2, 
-    "mana": 2, 
-    "character_class": "Warrior", 
-    "rarity": "Common", 
-    "ref_name": "Cruel Taskmaster", 
-    "name": "Cruel Taskmaster"
-  }, 
-  {
-    "attack": 2, 
     "health": 4, 
+    "attack": 1, 
+    "rarity": "Rare", 
+    "name": "Armorsmith", 
+    "character_class": "Warrior"
+  }, 
+  {
+    "mana": 2, 
+    "battlecry": {
+      "selector": {
+        "players": "both", 
+        "name": "minion", 
+        "picker": "all", 
+        "condition": {
+          "name": "minion_is_not_target"
+        }
+      }, 
+      "actions": [
+        {
+          "name": "damage", 
+          "amount": 1
+        }, 
+        {
+          "auras": [
+            {
+              "action": {
+                "name": "change_attack", 
+                "amount": 2
+              }, 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ], 
+          "name": "give"
+        }
+      ]
+    }, 
+    "health": 2, 
+    "attack": 2, 
+    "rarity": "Common", 
+    "name": "Cruel Taskmaster", 
+    "character_class": "Warrior"
+  }, 
+  {
     "mana": 3, 
-    "character_class": "Warrior", 
     "effects": [
       {
         "event": {
           "event_name": "character_damaged", 
+          "player": "both", 
           "condition": {
             "name": "is_minion"
-          }, 
-          "player": "both"
+          }
         }, 
         "action": {
           "auras": [
             {
               "action": {
-                "amount": 1, 
-                "name": "change_attack"
+                "name": "change_attack", 
+                "amount": 1
               }, 
               "selector": {
                 "name": "self"
@@ -5668,12 +5761,14 @@
         }
       }
     ], 
+    "health": 4, 
+    "attack": 2, 
     "rarity": "Rare", 
-    "ref_name": "Frothing Berserker", 
-    "name": "Frothing Berserker"
+    "name": "Frothing Berserker", 
+    "character_class": "Warrior"
   }, 
   {
-    "attack": 4, 
+    "mana": 8, 
     "auras": [
       {
         "action": {
@@ -5685,20 +5780,19 @@
       }
     ], 
     "health": 9, 
-    "mana": 8, 
+    "attack": 4, 
+    "rarity": "Legendary", 
+    "name": "Grommash Hellscream", 
     "character_class": "Warrior", 
     "enrage": [
       {
-        "amount": 6, 
-        "name": "change_attack"
+        "name": "change_attack", 
+        "amount": 6
       }
-    ], 
-    "rarity": "Legendary", 
-    "ref_name": "Grommash Hellscream", 
-    "name": "Grommash Hellscream"
+    ]
   }, 
   {
-    "attack": 4, 
+    "mana": 4, 
     "auras": [
       {
         "action": {
@@ -5710,27 +5804,23 @@
       }
     ], 
     "health": 3, 
-    "mana": 4, 
-    "character_class": "Warrior", 
+    "attack": 4, 
     "rarity": "Common", 
-    "ref_name": "Kor'kron Elite", 
-    "name": "Kor'kron Elite"
+    "name": "Kor'kron Elite", 
+    "character_class": "Warrior"
   }, 
   {
-    "attack": 2, 
-    "health": 3, 
     "mana": 3, 
-    "character_class": "Warrior", 
     "effects": [
       {
         "event": {
           "event_name": "minion_placed", 
+          "player": "friendly", 
           "condition": {
             "attack_max": 3, 
             "include_self": false, 
             "name": "attack_less_than_or_equal_to"
-          }, 
-          "player": "friendly"
+          }
         }, 
         "action": {
           "auras": [
@@ -5750,17 +5840,18 @@
         }
       }
     ], 
+    "health": 3, 
+    "attack": 2, 
     "rarity": "Free", 
-    "ref_name": "Warsong Commander", 
-    "name": "Warsong Commander"
+    "name": "Warsong Commander", 
+    "character_class": "Warrior"
   }, 
   {
-    "attack": 2, 
-    "health": 2, 
     "mana": 1, 
-    "character_class": "Druid", 
+    "health": 2, 
+    "attack": 2, 
     "rarity": "Common", 
-    "ref_name": "Treant", 
-    "name": "Treant"
+    "name": "Treant", 
+    "character_class": "Druid"
   }
 ]

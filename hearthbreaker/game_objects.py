@@ -780,7 +780,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
                  targeting_func=None, filter_func=lambda target: not target.stealth, ref_name=None, battlecry=None,
-                 choices=None, overload=0):
+                 choices=None, combo=None, overload=0):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -804,11 +804,15 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
         :param choices: Gives a list of :class:`hearthbreaker.tags.base.Choice` s for the user to pick between
         :type choices: [:class:`hearthbreaker.tags.base.Choice`]
+        :param combo: Describes the battlecry this minion will have if played after another card.  Note that this
+                      does not count as a battlecry for cards such as Nerub'ar Weblord.
+        :type combo: :class:`hearthbreaker.tags.base.Battlecry`
         """
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name)
         self.minion_type = minion_type
         self.battlecry = battlecry
         self.choices = choices
+        self.combo = combo
 
     def can_use(self, player, game):
         """
@@ -856,10 +860,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         if self.choices:
             choice = player.agent.choose_option(*self.choices)
             choice.battlecry(minion)
-        if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
-            self.battlecry.battlecry(minion)
-        elif minion.battlecry is not None:
-            minion.battlecry(minion)
+        if self.combo and player.cards_played > 0:
+            self.combo.battlecry(minion)
+        else:
+            if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
+                self.battlecry.battlecry(minion)
+            elif minion.battlecry is not None:
+                minion.battlecry(minion)
         if not minion.removed:
             # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
             minion = player.minions[minion.index]

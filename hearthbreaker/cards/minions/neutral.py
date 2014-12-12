@@ -12,7 +12,7 @@ from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector
     HeroSelector, OtherPlayer, UserPicker
 from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage, \
     gain_one_health_for_each_card_in_hand, deal_two_damage, heal_two, \
-    heal_three, give_enemy_crystal, darkscale_healer, priestess_of_elune, \
+    give_enemy_crystal, darkscale_healer, priestess_of_elune, \
     destroy_target, two_temp_attack, nightblade, ssc, deathwing, return_to_hand
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -39,10 +39,11 @@ class ElvenArcher(MinionCard):
 
 class NoviceEngineer(MinionCard):
     def __init__(self):
-        super().__init__("Novice Engineer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE)
+        super().__init__("Novice Engineer", 2, CHARACTER_CLASS.ALL, CARD_RARITY.FREE,
+                         battlecry=Battlecry(Draw(), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(1, 1, battlecry=draw_card)
+        return Minion(1, 1)
 
 
 class StonetuskBoar(MinionCard):
@@ -168,10 +169,11 @@ class Malygos(MinionCard):
 
 class AzureDrake(MinionCard):
     def __init__(self):
-        super().__init__("Azure Drake", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.DRAGON)
+        super().__init__("Azure Drake", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.DRAGON,
+                         battlecry=Battlecry(Draw(), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(4, 4, spell_damage=1, battlecry=draw_card)
+        return Minion(4, 4, spell_damage=1)
 
 
 class OgreMagi(MinionCard):
@@ -474,10 +476,10 @@ class VoodooDoctor(MinionCard):
 class EarthenRingFarseer(MinionCard):
     def __init__(self):
         super().__init__("Earthen Ring Farseer", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_battlecry_target)
+                         battlecry=Battlecry(Heal(3), CharacterSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(3, 3, battlecry=heal_three)
+        return Minion(3, 3)
 
 
 class ArcaneGolem(MinionCard):

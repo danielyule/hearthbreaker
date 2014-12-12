@@ -1,14 +1,12 @@
 from hearthbreaker.tags.action import HealAsDamage, ChangeHealth, Heal, Draw, AttackEqualsHealth, MultiplySpellDamage, \
-    MultiplyHealAmount
-from hearthbreaker.tags.base import Aura, Deathrattle, Effect
-from hearthbreaker.tags.condition import IsMinion
+    MultiplyHealAmount, Steal, Give
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry
+from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed
 from hearthbreaker.tags.selector import PlayerSelector, RandomSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    SelfSelector
-import hearthbreaker.targeting
+    SelfSelector, EnemyPlayer, UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
-from hearthbreaker.cards.battlecries import take_control_of_minion, give_three_health
 
 
 class AuchenaiSoulpriest(MinionCard):
@@ -22,11 +20,13 @@ class AuchenaiSoulpriest(MinionCard):
 class CabalShadowPriest(MinionCard):
     def __init__(self):
         super().__init__("Cabal Shadow Priest", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
-                         targeting_func=hearthbreaker.targeting.find_enemy_minion_battlecry_target,
-                         filter_func=lambda target: target.calculate_attack() <= 2)
+                         battlecry=Battlecry(Steal(),
+                                             MinionSelector(AttackLessThanOrEqualTo(2),
+                                                            players=EnemyPlayer(),
+                                                            picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(4, 5, battlecry=take_control_of_minion)
+        return Minion(4, 5)
 
 
 class Lightspawn(MinionCard):
@@ -67,10 +67,10 @@ class ProphetVelen(MinionCard):
 class TempleEnforcer(MinionCard):
     def __init__(self):
         super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         battlecry=Battlecry(Give(ChangeHealth(3)), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(6, 6, battlecry=give_three_health)
+        return Minion(6, 6)
 
 
 class DarkCultist(MinionCard):
