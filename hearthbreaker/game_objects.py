@@ -277,6 +277,13 @@ class Character(Bindable, metaclass=abc.ABCMeta):
         else:
             self.player.remove_aura(aura)
 
+    def _remove_stealth(self):
+        from hearthbreaker.tags.action import Stealth
+        if self.stealth:
+            self.auras = [aura for aura in filter(
+                lambda a: not isinstance(a.action, Stealth), self.auras)]
+            self.stealth = 0
+
     def attack(self):
         """
         Causes this :class:`Character` to attack.
@@ -310,6 +317,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
 
         self.player.trigger("pre_attack", self)
         target = self.choose_target(targets)
+        self._remove_stealth()
         self.player.trigger("attack", self, target)
         self.trigger("attack", target)
         target.trigger("attacked", self)
@@ -407,6 +415,7 @@ class Character(Bindable, metaclass=abc.ABCMeta):
             self.health -= amount
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", self, amount)
+                attacker._remove_stealth()
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
@@ -955,7 +964,7 @@ class Minion(Character):
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
         super().__init__(attack, health, enrage=enrage)
-        from hearthbreaker.tags.action import Charge, Taunt, Stealth, Windfury, NoSpellTarget
+        from hearthbreaker.tags.action import Charge, Taunt, Stealth, Windfury, NoSpellTarget, DivineShield
         from hearthbreaker.tags.base import Deathrattle, Aura
         from hearthbreaker.tags.selector import SelfSelector
         self.game = None
@@ -963,8 +972,8 @@ class Minion(Character):
         self.index = -1
         self.charge = 0
         self.taunt = 0
+        self.divine_shield = 0
         self.spell_damage = spell_damage
-        self.divine_shield = divine_shield
         self.can_be_targeted_by_spells = True
         self.battlecry = battlecry
         if isinstance(deathrattle, Deathrattle):
@@ -990,18 +999,12 @@ class Minion(Character):
             self._auras_to_add.append(Aura(Taunt(), SelfSelector()))
         if stealth:
             self._auras_to_add.append(Aura(Stealth(), SelfSelector()))
+        if divine_shield:
+            self._auras_to_add.append(Aura(DivineShield(), SelfSelector()))
         if windfury:
             self._auras_to_add.append(Aura(Windfury(), SelfSelector()))
         if not spell_targetable:
             self._auras_to_add.append(Aura(NoSpellTarget(), SelfSelector()))
-        self.bind("did_damage", self.__on_did_damage)
-
-    def __on_did_damage(self, amount, target):
-        from hearthbreaker.tags.action import Stealth
-        if self.stealth:
-            self.auras = [aura for aura in filter(
-                lambda a: not isinstance(a.action, Stealth), self.auras)]
-            self.stealth = 0
 
     def add_to_board(self, index):
         aura_affects = {}
@@ -1101,8 +1104,11 @@ class Minion(Character):
         super().attack()
 
     def damage(self, amount, attacker):
+        from hearthbreaker.tags.action import DivineShield
         if self.divine_shield:
-            self.divine_shield = False
+            self.auras = [aura for aura in filter(
+                lambda a: not isinstance(a.action, DivineShield), self.auras)]
+            self.divine_shield = 0
         else:
             super().damage(amount, attacker)
 
@@ -1152,8 +1158,8 @@ class Minion(Character):
     def copy(self, new_owner, new_game=None):
         new_minion = Minion(self.base_attack, self.base_health, self.battlecry)
         new_minion.health = self.base_health - (self.calculate_max_health() - self.health)
-        new_minion.divine_shield = self.divine_shield
         new_minion.deathrattle = copy.deepcopy(self.deathrattle)
+        new_minion.divine_shield = 0
         new_minion.taunt = 0
         new_minion.charge = 0
         new_minion.stealth = 0
@@ -1184,7 +1190,6 @@ class Minion(Character):
         from hearthbreaker.tags.base import Action, Deathrattle, Effect, Aura
         minion = Minion(md['attack'], md['max_health'])
         minion.health = md['max_health'] - md['damage']
-        minion.divine_shield = md['divine_shield']
         minion.exhausted = md['exhausted']
         minion.active = not md['already_attacked']
         minion.born = md['sequence_id']
@@ -1224,7 +1229,6 @@ class Minion(Character):
             'damage': self.calculate_max_health() - self.health,
             'max_health': self.base_health,
             'attack': self.base_attack,
-            "divine_shield": self.divine_shield,
             "exhausted": self.exhausted,
             "already_attacked": not self.active,
             'deathrattles': self.deathrattle,

@@ -171,6 +171,25 @@ class MinimumHealth(MinionAction):
         }
 
 
+class SetAttack(ReversibleAction):
+    def __init__(self, attack):
+        self.attack = attack
+        self._diff = 0
+
+    def act(self, actor, target):
+        self._diff = self.attack - target.calculate_attack()
+        target.attack_delta += self._diff
+
+    def unact(self, actor, target):
+        target.attack_delta -= self._diff
+
+    def __to_json__(self):
+        return {
+            'name': 'set_attack',
+            'attack': self.attack
+        }
+
+
 class ManaChange(ReversibleAction):
     def __init__(self, amount, minimum, card_selector):
         self.amount = amount
@@ -376,6 +395,19 @@ class Stealth(MinionAction):
     def __to_json__(self):
         return {
             'name': 'stealth'
+        }
+
+
+class DivineShield(MinionAction):
+    def act(self, actor, target):
+        target.divine_shield += 1
+
+    def unact(self, actor, target):
+        target.divine_shield -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'divine_shield'
         }
 
 

@@ -3,6 +3,7 @@ import re
 import tests.card_tests.druid_tests
 import tests.card_tests.mage_tests
 import tests.card_tests.hunter_tests
+import tests.card_tests.paladin_tests
 
 
 class JSONTester:
@@ -94,4 +95,8 @@ class TestJSONMage(JSONTester, tests.card_tests.mage_tests.TestMage):
 
 
 class TestJSONHunter(JSONTester, tests.card_tests.hunter_tests.TestHunter):
+    pass
+
+
+class TestJSONPaladin(JSONTester, tests.card_tests.paladin_tests.TestPaladin):
     pass
