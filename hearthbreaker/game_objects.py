@@ -1447,7 +1447,7 @@ class Hero(Character):
         self.power = hearthbreaker.powers.powers(self.character_class)(self)
 
     def calculate_attack(self):
-        if self.weapon:
+        if self.player == self.player.game.current_player and self.weapon:
             return super().calculate_attack() + self.weapon.base_attack + self.bonus_attack
         else:
             return super().calculate_attack()

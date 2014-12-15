@@ -2,7 +2,8 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
-from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent
+from hearthbreaker.cards.minions.rogue import AnubarAmbusher
+from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
 from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
@@ -131,6 +132,19 @@ class TestGame(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(0, game.other_player.hero.armor)
         self.assertEqual(29, game.current_player.hero.health)
+
+    def test_hero_weapon_sheath(self):
+        game = generate_game_for(AnubarAmbusher, StonetuskBoar, PredictableAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)
 
     def test_deathrattle_ordering(self):
         game = generate_game_for(SylvanasWindrunner, [Abomination, NerubianEgg],
