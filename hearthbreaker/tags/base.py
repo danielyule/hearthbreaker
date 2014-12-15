@@ -128,14 +128,16 @@ class Picker(JSONObject, metaclass=abc.ABCMeta):
         pass
 
     @staticmethod
-    def from_json(name):
+    def from_json(name, count=0):
         from hearthbreaker.tags.selector import UserPicker, AllPicker, RandomPicker
         if name == "user":
             return UserPicker()
         elif name == "all":
             return AllPicker()
         elif name == "random":
-            return RandomPicker()
+            return RandomPicker(count)
+        else:
+            raise TypeError("WHat are you even doing?")
 
 
 class Selector(JSONObject, metaclass=abc.ABCMeta):
@@ -418,7 +420,7 @@ class CARD_SOURCE:
     @staticmethod
     def to_str(source_number):
         sources = dict(zip(CARD_SOURCE.__sources.values(), CARD_SOURCE.__sources.keys()))
-        return sources[source_number].capitalize()
+        return sources[source_number].lower()
 
 
 class CardQuery(JSONObject):

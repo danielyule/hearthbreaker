@@ -2,6 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.cards.minions.neutral import Blingtron3000
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
@@ -35,7 +36,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
@@ -44,7 +44,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].health)
         self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(2, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
 
     def test_ElvenArcher(self):
@@ -194,12 +193,16 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertTrue(game.current_player.minions[0].stealth)
 
-        def _choose_target(targets):
+        def _choose_target_2(targets):
             self.assertEqual(2, len(targets))
             return targets[0]
 
-        game.players[0].agent.choose_target = _choose_target
-        game.players[1].agent.choose_target = _choose_target
+        def _choose_target_3(targets):
+            self.assertEqual(3, len(targets))
+            return targets[0]
+
+        game.players[0].agent.choose_target = _choose_target_3
+        game.players[1].agent.choose_target = _choose_target_2
         game.play_single_turn()
         game.play_single_turn()
 
@@ -213,7 +216,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
@@ -222,7 +224,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
 
     def test_Archmage(self):
@@ -235,7 +236,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(7, game.current_player.minions[0].health)
         self.assertEqual(7, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
@@ -244,7 +244,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(7, game.other_player.minions[0].health)
         self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
 
     def test_DalaranMage(self):
@@ -257,7 +256,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(1, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
 
         game.play_single_turn()
@@ -266,7 +264,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(1, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
 
     def test_AzureDrake(self):
@@ -279,7 +276,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
         self.assertEqual(8, len(game.current_player.hand))
         game.play_single_turn()
@@ -288,7 +284,6 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
         self.assertEqual(4, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(4, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(0, game.other_player.minions[0].spell_damage)
         self.assertEqual(0, game.other_player.spell_damage)
 
     def test_Malygos(self):
@@ -298,7 +293,6 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(5, game.current_player.minions[0].spell_damage)
         self.assertEqual(5, game.current_player.spell_damage)
 
         game.play_single_turn()
@@ -353,7 +347,6 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(1, game.current_player.minions[0].spell_damage)
         self.assertEqual(1, game.current_player.spell_damage)
 
         # The other player will now use their hero power to kill Thalnos, drawing a card
@@ -915,6 +908,7 @@ class TestCommon(unittest.TestCase):
 
         # The MCT should take a knife juggler.  This knife jugger's knife should go off as a consequence of the
         # MCT being added to the board.  See http://www.hearthhead.com/card=734/mind-control-tech#comments:id=1925580
+        self.assertEqual(2, game.other_player.minions[2].health)
         self.assertEqual(29, game.other_player.hero.health)
 
     def test_CairneBloodhoof(self):
@@ -1706,8 +1700,6 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(5, game.players[0].minions[1].health)
-        self.assertEqual(1, game.players[0].minions[0].spell_damage)
-        self.assertEqual(1, game.players[0].minions[2].spell_damage)
         self.assertEqual(2, game.players[0].spell_damage)
 
     def test_DefenderOfArgus(self):
@@ -3038,3 +3030,59 @@ class TestCommon(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(29, game.current_player.hero.health)
+
+    def test_Blingtron3000(self):
+        game = generate_game_for(Blingtron3000, [StonetuskBoar, StonetuskBoar, DeathsBite],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.other_player.hero.weapon)
+        self.assertEqual(0, len(game.other_player.minions))
+
+    def test_BombLobber(self):
+        game = generate_game_for([StonetuskBoar, BombLobber, BombLobber], Loatheb,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        # The bomb lobber should not do any damage, as there are no enemy minions down
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(30, game.other_player.hero.health)
+        self.assertEqual(30, game.current_player.hero.health)
+
+        game.play_single_turn()
+        # The bomb lobber damages the only
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+
+    def test_BurlyRockjawTrogg(self):
+        game = generate_game_for(BurlyRockjawTrogg, [Consecration, Silence], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(5, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[1].calculate_attack())

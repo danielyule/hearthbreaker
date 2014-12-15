@@ -105,13 +105,13 @@ class TestAgents(unittest.TestCase):
         self.assertEqual(3, len(game.current_player.minions))
         self.assertEqual("Dire Wolf Alpha", game.current_player.minions[2].card.name)
 
-        for turn in range(0, 15):
+        for turn in range(0, 21):
             game.play_single_turn()
             self.assertFalse(game.game_ended)
 
         game.play_single_turn()
 
-        self.assertEqual(1, game.current_player.hero.health)
-        self.assertEqual(0, game.other_player.hero.health)
+        self.assertEqual(0, game.current_player.hero.health)
+        self.assertEqual(3, game.other_player.hero.health)
 
         self.assertTrue(game.game_ended)

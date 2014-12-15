@@ -49,7 +49,7 @@ class CardUsed(PlayerEvent):
 
 class AfterAdded(PlayerEvent):
     def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
-        super().__init__("after_minion_added", condition, player)
+        super().__init__("after_added", condition, player)
 
 
 class TurnEnded(PlayerEvent):

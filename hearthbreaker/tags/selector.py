@@ -86,7 +86,9 @@ class AllPicker(Picker):
         return targets
 
     def __to_json__(self):
-        return "all"
+        return {
+            'name': "all"
+        }
 
 
 class UserPicker(Picker):
@@ -97,18 +99,27 @@ class UserPicker(Picker):
         return filtered_targets
 
     def __to_json__(self):
-        return "user"
+        return {
+            'name': "user"
+        }
 
 
 class RandomPicker(Picker):
+    def __init__(self, count=1):
+        self.count = count
+
     def pick(self, targets, player):
-        if len(targets) > 1:
-            return [player.game.random_choice(targets)]
-        else:
-            return targets
+        from hearthbreaker.game_objects import Minion
+        for i in range(self.count):
+            if len(targets) > 0:
+                yield player.game.random_choice(targets)
+            targets = [target for target in filter(lambda t: not (isinstance(t, Minion) and t.dead), targets)]
 
     def __to_json__(self):
-        return "random"
+        return {
+            'name': "random",
+            'count': self.count
+        }
 
 
 class CardSelector(Selector, metaclass=abc.ABCMeta):
@@ -332,7 +343,7 @@ class MinionSelector(Selector):
         else:
             self.condition = None
         self.players = Player.from_json(players)
-        self.picker = Picker.from_json(picker)
+        self.picker = Picker.from_json(**picker)
         return self
 
 
@@ -383,7 +394,7 @@ class CharacterSelector(Selector):
         else:
             self.condition = None
         self.players = Player.from_json(players)
-        self.picker = Picker.from_json(picker)
+        self.picker = Picker.from_json(**picker)
         return self
 
 
@@ -429,30 +440,6 @@ class TargetSelector(Selector):
             self.condition = hearthbreaker.tags.condition.Condition.from_json(**condition)
         else:
             self.condition = None
-        return self
-
-
-class RandomSelector(Selector):
-    def match(self, source, obj):
-        return self.selector.match(source, obj)
-
-    def __init__(self, selector):
-        self.selector = selector
-
-    def get_targets(self, source, obj=None):
-        targets = self.selector.get_targets(source, obj)
-        if len(targets) > 0:
-            return [source.player.game.random_choice(targets)]
-        return []
-
-    def __to_json__(self):
-        return {
-            'name': 'random',
-            'selector': self.selector
-        }
-
-    def __from_json__(self, selector):
-        self.selector = Selector.from_json(**selector)
         return self
 
 

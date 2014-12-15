@@ -1,11 +1,6 @@
 import copy
 import random
 import abc
-
-# import hearthbreaker.tags.base
-# import hearthbreaker.tags.action
-# import hearthbreaker.tags.selector
-# import hearthbreaker.tags.event
 import hearthbreaker.powers
 import hearthbreaker.targeting
 import hearthbreaker.constants
@@ -838,7 +833,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
          5. Battlecry activated (if needed)
          6. minion_played event
          7. minion_summoned_event
-         8. after_minion_added event
+         8. after_added event
 
         The precise ordering of events is necessary so that various tags (Sword of Justice, Knife Juggler, etc)
         trigger in the correct order, and to distinguish from :meth:`summon`, which is called when a minion is
@@ -872,7 +867,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion = player.minions[minion.index]
             player.trigger("minion_played", minion)
             player.trigger("minion_summoned", minion)
-            player.trigger("after_minion_added", minion)
+            player.trigger("after_added", minion)
 
     def summon(self, player, game, index):
         """
@@ -886,7 +881,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
          1. Minion is placed on the board
          2. minion_placed event
          3. minion_summoned_event
-         4. after_minion_added event
+         4. after_added event
 
         The ordering is important so that efects trigger in the correct order.
 
@@ -906,7 +901,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             minion.add_to_board(index)
             player.trigger("minion_placed", minion)
             player.trigger("minion_summoned", minion)
-            player.trigger("after_minion_added", minion)
+            player.trigger("after_added", minion)
             return minion
 
     @abc.abstractmethod
@@ -971,7 +966,7 @@ class Minion(Character):
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
         super().__init__(attack, health, enrage=enrage)
-        from hearthbreaker.tags.action import Charge, Taunt, Stealth, Windfury, NoSpellTarget, DivineShield
+        from hearthbreaker.tags.action import Charge, Taunt, Stealth, Windfury, NoSpellTarget, DivineShield, SpellDamage
         from hearthbreaker.tags.base import Deathrattle, Aura
         from hearthbreaker.tags.selector import SelfSelector
         self.game = None
@@ -980,7 +975,6 @@ class Minion(Character):
         self.charge = 0
         self.taunt = 0
         self.divine_shield = 0
-        self.spell_damage = spell_damage
         self.can_be_targeted_by_spells = True
         self.battlecry = battlecry
         if isinstance(deathrattle, Deathrattle):
@@ -1012,6 +1006,8 @@ class Minion(Character):
             self._auras_to_add.append(Aura(Windfury(), SelfSelector()))
         if not spell_targetable:
             self._auras_to_add.append(Aura(NoSpellTarget(), SelfSelector()))
+        if spell_damage:
+            self._auras_to_add.append(Aura(SpellDamage(spell_damage), SelfSelector()))
 
     def add_to_board(self, index):
         aura_affects = {}
@@ -1024,7 +1020,6 @@ class Minion(Character):
         self.game.minion_counter += 1
         self.player.minions.insert(index, self)
         self.born = self.game.minion_counter
-        self.player.spell_damage += self.spell_damage
         count = 0
         for minion in self.player.minions:
             minion.index = count
@@ -1144,9 +1139,6 @@ class Minion(Character):
 
     def silence(self):
         super().silence()
-        self.player.spell_damage -= self.spell_damage
-        self.spell_damage = 0
-        self.divine_shield = False
         self.battlecry = None
         self.deathrattle = []
 
@@ -1173,7 +1165,6 @@ class Minion(Character):
         new_minion.enraged = self.enraged
         new_minion.enrage = copy.deepcopy(self.enrage)
         new_minion.can_be_targeted_by_spells = self.can_be_targeted_by_spells
-        new_minion.spell_damage = self.spell_damage
         new_minion.immune = self.immune
         new_minion.index = self.index
         new_minion.active = self.active

@@ -180,6 +180,9 @@ from hearthbreaker.cards.minions.neutral import (
     PilotedShredder,
     AntiqueHealbot,
     AnnoyOTron,
+    Blingtron3000,
+    BombLobber,
+    BurlyRockjawTrogg,
 )
 
 from hearthbreaker.cards.minions.druid import (

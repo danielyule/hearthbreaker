@@ -90,6 +90,17 @@ class IsMinion(Condition):
         }
 
 
+class IsWeapon(Condition):
+    def evaluate(self, target, minion, *args):
+        return isinstance(minion, hearthbreaker.game_objects.Weapon) \
+            or isinstance(minion, hearthbreaker.game_objects.WeaponCard)
+
+    def __to_json__(self):
+        return {
+            "name": 'is_weapon'
+        }
+
+
 class MinionIsTarget(Condition):
     def evaluate(self, target, minion, *args):
         return minion is target
@@ -160,13 +171,31 @@ class MinionHasDeathrattle(Condition):
         return len(minion.deathrattle) > 0
 
 
-class OnlyMinion(Condition):
+class MinionCountIs(Condition):
+    def __init__(self, count):
+        self.count = count
+
     def evaluate(self, target, *args):
-        return len(target.player.minions) == 1
+        return len(target.player.minions) == self.count
 
     def __to_json__(self):
         return {
-            'name': 'only_minion',
+            'name': 'minion_count_is',
+            'count': self.count,
+        }
+
+
+class OpponentMinionCountIsGreaterThan(Condition):
+    def __init__(self, count):
+        self.count = count
+
+    def evaluate(self, target, *args):
+        return len(target.player.opponent.minions) > self.count
+
+    def __to_json__(self):
+        return {
+            'name': 'opponent_minion_count_is_greater_than',
+            'count': self.count,
         }
 
 
@@ -198,6 +227,23 @@ class AttackLessThanOrEqualTo(Condition):
             'name': 'attack_less_than_or_equal_to',
             'include_self': self.include_self,
             'attack_max': self.attack_max
+        }
+
+
+class AttackGreaterThan(Condition):
+    def __init__(self, attack_min, include_self=False):
+        super().__init__()
+        self.attack_min = attack_min
+        self.include_self = include_self
+
+    def evaluate(self, target, minion, *args):
+        return (self.include_self or target is not minion) and minion.calculate_attack() > self.attack_min
+
+    def __to_json__(self):
+        return {
+            'name': 'attack_greater_than',
+            'include_self': self.include_self,
+            'attack_min': self.attack_min
         }
 
 

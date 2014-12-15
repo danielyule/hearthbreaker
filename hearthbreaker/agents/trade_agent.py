@@ -3,6 +3,7 @@ from hearthbreaker.agents.trade.possible_play import PlayMixin
 from hearthbreaker.agents.trade.trade import TradeMixin, AttackMixin
 from hearthbreaker.agents.trade.util import Util
 import hearthbreaker.cards.battlecries
+from hearthbreaker.tags.action import ChangeAttack, ChangeHealth, Damage
 
 
 class BattlecryType:
@@ -38,11 +39,19 @@ class BattlecryType:
         else:
             return None
 
+    @staticmethod
     def target_type_for_card(card):
         res = None
         minion = card.create_minion(None)
-        if hasattr(minion, "battlecry"):
-            res = BattlecryType.target_type(minion.battlecry)
+        if minion:
+            if minion.battlecry:
+                res = BattlecryType.target_type(minion.battlecry)
+            elif card.battlecry:
+                for action in card.battlecry.actions:
+                    if isinstance(action, ChangeAttack) or isinstance(action, ChangeHealth):
+                        res = "Friendly"
+                    elif isinstance(action, Damage):
+                        res = "Enemy"
         return res
 
 

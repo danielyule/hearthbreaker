@@ -1,10 +1,10 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.action import ChangeHealth, ManaChange, Summon, Kill, Damage, Discard, DestroyManaCrystal
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
-from hearthbreaker.tags.condition import MinionIsType, OnlyMinion
+from hearthbreaker.tags.condition import MinionIsType, MinionCountIs
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import RandomSelector, MinionSelector, MinionCardSelector, PlayerSelector, \
-    SelfSelector, BothPlayer, HeroSelector, CharacterSelector
+from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.powers import JaraxxusPower
 
@@ -85,7 +85,7 @@ class BloodImp(MinionCard):
 
     def create_minion(self, player):
         return Minion(0, 1, stealth=True,
-                      effects=[Effect(TurnEnded(), ChangeHealth(1), RandomSelector(MinionSelector()))])
+                      effects=[Effect(TurnEnded(), ChangeHealth(1), MinionSelector(picker=RandomPicker()))])
 
 
 class LordJaraxxus(MinionCard):
@@ -156,4 +156,4 @@ class AnimaGolem(MinionCard):
         super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(9, 9, effects=[Effect(TurnEnded(OnlyMinion(), BothPlayer()), Kill(), SelfSelector())])
+        return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()), Kill(), SelfSelector())])

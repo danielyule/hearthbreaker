@@ -32,6 +32,7 @@ class TestTradeAgent(TestCaseMixin, unittest.TestCase):
 
         self.add_minions(game, 0, BloodfenRaptor(), RiverCrocolisk())
         self.make_all_active(game)
+        game.players[0].agent.player = game.players[0]
         self.add_minions(game, 0, AbusiveSergeant())
 
         game.play_single_turn()

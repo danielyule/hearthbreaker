@@ -84,11 +84,12 @@ class CardTest(unittest.TestCase):
                                                                                    overload_re.match(effect).group(1),
                                                      card.overload))
                                 elif spell_damage_re.match(effect) is not None:
-                                    self.assertEqual(int(spell_damage_re.match(effect).group(1)), minion.spell_damage,
+                                    self.assertEqual(int(spell_damage_re.match(effect).group(1)),
+                                                     minion.player.spell_damage,
                                                      ("Expected {:s} to have spell damage of" +
                                                      " {}, but had {}").format(card_info["name"],
                                                                                spell_damage_re.match(effect).group(1),
-                                                     minion.spell_damage))
+                                                     minion.player.spell_damage))
                         minion.silence()
                         self.assertEqual(int(card_info["attack"]), minion.calculate_attack(),
                                          "Expected {} to have attack of {}.  Got {}".format(

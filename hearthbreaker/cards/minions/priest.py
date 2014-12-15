@@ -3,8 +3,8 @@ from hearthbreaker.tags.action import HealAsDamage, ChangeHealth, Heal, Draw, At
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed
-from hearthbreaker.tags.selector import PlayerSelector, RandomSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    SelfSelector, EnemyPlayer, UserPicker
+from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
+    SelfSelector, EnemyPlayer, UserPicker, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
 
@@ -42,7 +42,7 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), RandomSelector(CharacterSelector()))])
+        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(picker=RandomPicker()))])
 
 
 class NorthshireCleric(MinionCard):
@@ -78,4 +78,4 @@ class DarkCultist(MinionCard):
         super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=Deathrattle(ChangeHealth(3), RandomSelector(MinionSelector())))
+        return Minion(3, 4, deathrattle=Deathrattle(ChangeHealth(3), MinionSelector(picker=RandomPicker())))

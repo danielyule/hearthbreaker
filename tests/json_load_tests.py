@@ -9,6 +9,7 @@ import tests.card_tests.rogue_tests
 import tests.card_tests.shaman_tests
 import tests.card_tests.warlock_tests
 import tests.card_tests.warrior_tests
+import tests.card_tests.neutral_tests
 
 
 class JSONTester:
@@ -60,9 +61,6 @@ class JSONTester:
 
             if 'deathrattle' in card_def:
                 create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])
-
-            if 'spell_damage' in card_def:
-                create_dict['spell_damage'] = card_def['spell_damage']
 
             return Minion(**create_dict)
         if card_def['rarity'] != "Special":
@@ -140,3 +138,110 @@ class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
 class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
     def test_WarsongCommander(self):
         pass  # This test uses Bloodsail Corsair, which also can't be implemented (yet)
+
+
+class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
+    def test_Alexstrasza(self):
+        pass
+
+    def test_BloodKnight(self):
+        pass
+
+    def test_BloodsailCorsair(self):
+        pass
+
+    def test_BloodsailRaider(self):
+        pass
+
+    def test_CaptainGreenskin(self):
+        pass
+
+    def test_CaptainsParrot(self):
+        pass
+
+    def test_CrazedAlchemist(self):
+        pass
+
+    def test_Deathwing(self):
+        pass
+
+    def testEchoingOoze_silence(self):
+        pass
+
+    def test_EchoingOoze(self):
+        pass
+
+    def test_EchoingOoze_Faceless(self):
+        pass
+
+    def test_EchoingOoze_buff(self):
+        pass
+
+    def test_EliteTaurenChieftain(self):
+        pass
+
+    def test_FacelessManipulator(self):
+        pass
+
+    def test_FrostElemental(self):
+        pass
+
+    def test_FrostwolfWarlord(self):
+        pass
+
+    def test_GelbinMekkaTwerk(self):
+        pass
+
+    def test_HarrisonJones(self):
+        pass
+
+    def test_HungryCrab(self):
+        pass
+
+    def test_MillhouseManastorm(self):
+        pass
+
+    def test_MindControlTech(self):
+        pass
+
+    def test_Nightblade(self):
+        pass
+
+    def test_OldMurkEye(self):
+        pass
+
+    def test_Onyxia(self):
+        pass
+
+    def test_PriestessOfElune(self):
+        pass
+
+    def test_ShatteredSunCleric(self):
+        pass
+
+    def test_SilverHandKnight(self):
+        pass
+
+    def test_SilvermoonGuardian(self):
+        pass
+
+    def test_SouthseaDeckhand(self):
+        pass
+
+    def test_StampedingKodo(self):
+        pass
+
+    def test_TheBlackKnight(self):
+        pass
+
+    def test_TinkmasterOverspark(self):
+        pass
+
+    def test_TwilightDrake(self):
+        pass
+
+    def test_VoodooDoctor(self):
+        pass
+
+    def test_WailingSoul(self):
+        pass
