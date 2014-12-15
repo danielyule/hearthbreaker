@@ -1462,6 +1462,7 @@ class Hero(Character):
         new_hero.used_windfury = False
         new_hero.frozen = False
         new_hero.frozen_this_turn = False
+        new_hero.active = self.active
         for aura in self.auras:
             new_aura = copy.deepcopy(aura)
             new_hero.add_aura(new_aura)

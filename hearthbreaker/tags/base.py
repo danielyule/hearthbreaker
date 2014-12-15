@@ -164,6 +164,7 @@ class Selector(JSONObject, metaclass=abc.ABCMeta):
 
 
 class Action(JSONObject, metaclass=abc.ABCMeta):
+
     @abc.abstractmethod
     def act(self, actor, target):
         pass
@@ -189,6 +190,35 @@ class ReversibleAction(Action, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def unact(self, actor, target):
         pass
+
+
+class ActionWithAmount(ReversibleAction, metaclass=abc.ABCMeta):
+    def __init__(self, amount, multiplier=1):
+        self.amount = amount
+        self.multipler = multiplier
+
+    def read_amount(self, amount):
+        if isinstance(amount, dict):
+            return Selector.from_json(**amount)
+        else:
+            return amount
+
+    def get_amount(self, source, target):
+        if isinstance(self.amount, Selector):
+            return len(self.amount.get_targets(source, target)) * self.multipler
+        else:
+            return self.amount
+
+    def __to_json__(self, existing):
+        existing['amount'] = self.amount
+        if self.multipler != 1:
+            existing['multiplier'] = self.multipler
+
+        return existing
+
+    def __from_json__(self, amount, **kwargs):
+        kwargs['amount'] = self.read_amount(amount)
+        return super().__from_json__(**kwargs)
 
 
 class MinionAction(ReversibleAction, metaclass=abc.ABCMeta):

@@ -207,9 +207,6 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
     def test_Nightblade(self):
         pass
 
-    def test_OldMurkEye(self):
-        pass
-
     def test_Onyxia(self):
         pass
 
