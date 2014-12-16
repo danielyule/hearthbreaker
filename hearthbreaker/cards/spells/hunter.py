@@ -6,7 +6,7 @@ from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, CurrentPlayer, SpecificCardSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard
+from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard, Hero
 
 
 class HuntersMark(Card):
@@ -81,18 +81,19 @@ class ExplosiveTrap(SecretCard):
         super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("attack", self._reveal)
 
-    def _reveal(self, minion):
-        enemies = copy.copy(minion.game.current_player.minions)
-        enemies.append(minion.game.current_player.hero)
-        for enemy in enemies:
-            enemy.damage(2, None)
-        minion.game.check_delayed()
-        super().reveal()
+    def _reveal(self, minion, target):
+        if isinstance(target, Hero):
+            enemies = copy.copy(minion.game.current_player.minions)
+            enemies.append(minion.game.current_player.hero)
+            for enemy in enemies:
+                enemy.damage(2, None)
+            minion.game.check_delayed()
+            super().reveal()
 
 
 class FreezingTrap(SecretCard):
@@ -100,12 +101,12 @@ class FreezingTrap(SecretCard):
         super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind("pre_attack", self._reveal)
+        player.game.current_player.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("pre_attack", self._reveal)
+        player.game.current_player.unbind("attack", self._reveal)
 
-    def _reveal(self, attacker):
+    def _reveal(self, attacker, target):
         if isinstance(attacker, Minion) and not attacker.removed:
             attacker.bounce()
             attacker.player.add_aura(ManaAura(-2, 0, SpecificCardSelector(attacker.card), True, False))
@@ -117,14 +118,14 @@ class Misdirection(SecretCard):
         super().__init__("Misdirection", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("attack", self._reveal)
 
-    def _reveal(self, character):
-        game = character.player.game
-        if not character.removed:
+    def _reveal(self, character, target):
+        if isinstance(target, Hero) and not character.removed:
+            game = character.player.game
 
             def choose_random(targets):
                 possibilities = copy.copy(game.current_player.minions)

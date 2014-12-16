@@ -100,45 +100,29 @@ class Take(Action):
         return self
 
 
-class ChangeAttack(MinionAction):
-    def __init__(self, amount):
-        self.amount = amount
+class ChangeAttack(ActionWithAmount):
+    def __init__(self, amount, multipier=1):
+        super().__init__(amount, multipier)
 
     def act(self, actor, target):
+        self.amount = self.get_amount(actor, target)
         target.attack_delta += self.amount
 
     def unact(self, actor, target):
         target.attack_delta -= self.amount
 
     def __to_json__(self):
-        return {
+        return super().__to_json__({
             "name": "change_attack",
-            "amount": self.amount
-        }
+        })
 
 
-# class IncreaseTempAttack(MinionAction):
-#     def __init__(self, amount):
-#         self.amount = amount
-#
-#     def act(self, actor, target):
-#         target.temp_attack += self.amount
-#
-#     def unact(self, actor, target):
-#         target.temp_attack -= self.amount
-#
-#     def __to_json__(self):
-#         return {
-#             "name": "increase_temp_attack",
-#             "amount": self.amount
-#         }
-
-
-class ChangeHealth(MinionAction):
-    def __init__(self, amount):
-        self.amount = amount
+class ChangeHealth(ActionWithAmount):
+    def __init__(self, amount, multiplier=1):
+        super().__init__(amount, multiplier)
 
     def act(self, actor, target):
+        self.amount = self.get_amount(actor, target)
         if self.amount > 0:
             target.health_delta += self.amount
             target.health += self.amount
@@ -158,10 +142,9 @@ class ChangeHealth(MinionAction):
             target.health_delta -= self.amount
 
     def __to_json__(self):
-        return {
+        return super().__to_json__({
             "name": "change_health",
-            "amount": self.amount
-        }
+        })
 
 
 class MinimumHealth(MinionAction):
@@ -680,6 +663,7 @@ class ApplySecret(Action):
         secret = self._query.get_card(target)
         if secret:
             target.secrets.append(secret)
+            secret.player = target
             if target is target.game.other_player:
                 secret.player = target
                 secret.activate(target)

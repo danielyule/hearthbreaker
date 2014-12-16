@@ -373,12 +373,10 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         else:
             targets.append(self.player.game.other_player.hero)
 
-        self.player.trigger("pre_attack", self)
         target = self.choose_target(targets)
         self._remove_stealth()
         self.player.trigger("attack", self, target)
         self.trigger("attack", target)
-        target.trigger("attacked", self)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
@@ -1526,7 +1524,7 @@ class Hero(Character):
         self.power = hearthbreaker.powers.powers(self.character_class)(self)
 
     def calculate_attack(self):
-        if self.weapon:
+        if self.player == self.player.game.current_player and self.weapon:
             return super().calculate_attack() + self.weapon.base_attack + self.bonus_attack
         else:
             return super().calculate_attack()
@@ -1541,6 +1539,7 @@ class Hero(Character):
         new_hero.used_windfury = False
         new_hero.frozen = False
         new_hero.frozen_this_turn = False
+        new_hero.active = self.active
         for aura in self.auras:
             new_aura = copy.deepcopy(aura)
             new_hero.add_aura(new_aura)

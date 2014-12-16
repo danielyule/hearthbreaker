@@ -229,7 +229,7 @@ class NobleSacrifice(SecretCard):
         super().__init__("Noble Sacrifice", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, attacker):
+    def _reveal(self, attacker, target):
         player = attacker.game.other_player
         if len(player.minions) < 7 and not attacker.removed:
             class DefenderMinion(MinionCard):
@@ -252,10 +252,10 @@ class NobleSacrifice(SecretCard):
             super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind("pre_attack", self._reveal)
+        player.opponent.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("pre_attack", self._reveal)
+        player.opponent.unbind("attack", self._reveal)
 
 
 class Redemption(SecretCard):

@@ -1627,7 +1627,9 @@ class PintSizedSummoner(MinionCard):
 
 class OldMurkEye(MinionCard):
     def __init__(self):
-        super().__init__("Old Murk-Eye", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MURLOC)
+        super().__init__("Old Murk-Eye", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MURLOC,
+                         battlecry=Battlecry(Give(ChangeAttack(MinionSelector(MinionIsType(MINION_TYPE.MURLOC),
+                                                                              BothPlayer()))), SelfSelector()))
 
     def create_minion(self, player):
         def set_base_attack(m):
@@ -1637,15 +1639,11 @@ class OldMurkEye(MinionCard):
                 if target is not m and target.card.minion_type is MINION_TYPE.MURLOC:
                     m.change_attack(1)
 
-        return Minion(2, 4, battlecry=set_base_attack, charge=True,
+        return Minion(2, 4, charge=True,
                       effects=[Effect(MinionPlaced(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
                                       ChangeAttack(1), SelfSelector()),
-                               Effect(MinionPlaced(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
-                                      ChangeHealth(1), SelfSelector()),
                                Effect(MinionDied(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
-                                      ChangeAttack(-1), SelfSelector()),
-                               Effect(MinionDied(condition=MinionIsType(MINION_TYPE.MURLOC), player=BothPlayer()),
-                                      ChangeHealth(-1), SelfSelector())])
+                                      ChangeAttack(-1), SelfSelector())])
 
 
 class Dream(Card):
