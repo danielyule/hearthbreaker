@@ -1727,7 +1727,7 @@ class GelbinMekkatorque(MinionCard):
         def awesome_invention(m):
             class Emboldener3000(MinionCard):
                 def __init__(self):
-                    super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                    super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
                 def create_minion(self, player):
                     return Minion(0, 4, effects=[Effect(TurnEnded(), Give([Aura(ChangeAttack(1), SelfSelector()),
@@ -1738,7 +1738,7 @@ class GelbinMekkatorque(MinionCard):
 
             class HomingChicken(MinionCard):
                 def __init__(self):
-                    super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                    super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
                 def create_minion(self, player):
                     return Minion(0, 3, effects=[Effect(TurnStarted(), Kill(), SelfSelector()),
@@ -1746,7 +1746,7 @@ class GelbinMekkatorque(MinionCard):
 
             class Poultryizer(MinionCard):
                 def __init__(self):
-                    super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                    super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
                 def create_minion(self, player):
                     return Minion(0, 3, effects=[Effect(TurnStarted(), Transform(Chicken()),
@@ -1754,7 +1754,7 @@ class GelbinMekkatorque(MinionCard):
 
             class RepairBot(MinionCard):
                 def __init__(self):
-                    super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+                    super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
                 def create_minion(self, player):
                     return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(6),
