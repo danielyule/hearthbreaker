@@ -1198,17 +1198,19 @@ class Onyxia(MinionCard):
 
     def create_minion(self, player):
         def summon_whelps(m):
-            class Whelp(MinionCard):
-                def __init__(self):
-                    super().__init__("Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
-
-                def create_minion(self, player):
-                    return Minion(1, 1)
             whelp = Whelp()
             for i in range(len(player.minions), 7):
                 whelp.summon(player, player.game, i)
 
         return Minion(8, 8, battlecry=summon_whelps)
+
+
+class Whelp(MinionCard):
+    def __init__(self):
+        super().__init__("Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
 
 
 class SouthseaCaptain(MinionCard):
@@ -1514,20 +1516,6 @@ class TinkmasterOverspark(MinionCard):
 
     def create_minion(self, player):
         def transform_random(m):
-            class Squirrel(MinionCard):
-                def __init__(self):
-                    super().__init__("Squirrel", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-                def create_minion(self, player):
-                    return Minion(1, 1)
-
-            class Devilsaur(MinionCard):
-                def __init__(self):
-                    super().__init__("Devilsaur", 5, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-                def create_minion(self, player):
-                    return Minion(5, 5)
-
             targets = copy.copy(player.game.other_player.minions)
             targets.extend(player.game.current_player.minions)
             targets.remove(m)
@@ -1538,6 +1526,22 @@ class TinkmasterOverspark(MinionCard):
                 minion.card = choice
                 target.replace(minion)
         return Minion(3, 3, battlecry=transform_random)
+
+
+class Squirrel(MinionCard):
+    def __init__(self):
+        super().__init__("Squirrel", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class Devilsaur(MinionCard):
+    def __init__(self):
+        super().__init__("Devilsaur", 5, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(5, 5)
 
 
 class AlarmoBot(MinionCard):
@@ -1560,13 +1564,6 @@ class EliteTaurenChieftain(MinionCard):
 
                 def use(self, player, game):
                     super().use(player, game)
-
-                    class Murloc(MinionCard):
-                        def __init__(self):
-                            super().__init__("Murloc", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MURLOC)
-
-                        def create_minion(self, p):
-                            return Minion(1, 1)
 
                     for i in range(0, player.game.random_amount(3, 5)):
                         Murloc().summon(player, player.game, len(player.minions))
@@ -1602,6 +1599,14 @@ class EliteTaurenChieftain(MinionCard):
                     self.trigger("card_destroyed", player.game.random_choice(etc_card_list))
 
         return Minion(5, 5, battlecry=both_may_rock)
+
+
+class Murloc(MinionCard):
+    def __init__(self):
+        super().__init__("Murloc", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MURLOC)
+
+    def create_minion(self, p):
+        return Minion(1, 1)
 
 
 class MillhouseManastorm(MinionCard):
@@ -1725,44 +1730,49 @@ class GelbinMekkatorque(MinionCard):
 
     def create_minion(self, player):
         def awesome_invention(m):
-            class Emboldener3000(MinionCard):
-                def __init__(self):
-                    super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
-
-                def create_minion(self, player):
-                    return Minion(0, 4, effects=[Effect(TurnEnded(), Give([Aura(ChangeAttack(1), SelfSelector()),
-                                                                           Aura(ChangeHealth(1), SelfSelector())]),
-                                                        MinionSelector(condition=None,
-                                                                       players=BothPlayer(),
-                                                                       picker=RandomPicker()))])
-
-            class HomingChicken(MinionCard):
-                def __init__(self):
-                    super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
-
-                def create_minion(self, player):
-                    return Minion(0, 3, effects=[Effect(TurnStarted(), Kill(), SelfSelector()),
-                                                 Effect(TurnStarted(), Draw(3), PlayerSelector())])
-
-            class Poultryizer(MinionCard):
-                def __init__(self):
-                    super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
-
-                def create_minion(self, player):
-                    return Minion(0, 3, effects=[Effect(TurnStarted(), Transform(Chicken()),
-                                                        MinionSelector(None, BothPlayer(), RandomPicker()))])
-
-            class RepairBot(MinionCard):
-                def __init__(self):
-                    super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
-
-                def create_minion(self, player):
-                    return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(6),
-                                                        CharacterSelector(IsDamaged(), BothPlayer(), RandomPicker()))])
             invention_list = [Emboldener3000(), HomingChicken(), Poultryizer(), RepairBot()]
             invention = player.game.random_choice(invention_list)
             invention.summon(player, player.game, m.index + 1)
         return Minion(6, 6, battlecry=awesome_invention)
+
+
+class Emboldener3000(MinionCard):
+    def __init__(self):
+        super().__init__("Emboldener 3000", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(0, 4, effects=[Effect(TurnEnded(), Give([Aura(ChangeAttack(1), SelfSelector()),
+                                                               Aura(ChangeHealth(1), SelfSelector())]),
+                                            MinionSelector(condition=None,
+                                                           players=BothPlayer(),
+                                                           picker=RandomPicker()))])
+
+
+class HomingChicken(MinionCard):
+    def __init__(self):
+        super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(0, 3, effects=[Effect(TurnStarted(), Kill(), SelfSelector()),
+                                     Effect(TurnStarted(), Draw(3), PlayerSelector())])
+
+
+class Poultryizer(MinionCard):
+    def __init__(self):
+        super().__init__("Poultryizer", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(0, 3, effects=[Effect(TurnStarted(), Transform(Chicken()),
+                                            MinionSelector(None, BothPlayer(), RandomPicker()))])
+
+
+class RepairBot(MinionCard):
+    def __init__(self):
+        super().__init__("Repair Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(6),
+                                            CharacterSelector(IsDamaged(), BothPlayer(), RandomPicker()))])
 
 
 class LorewalkerCho(MinionCard):
