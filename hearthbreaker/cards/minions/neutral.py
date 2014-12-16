@@ -1417,14 +1417,6 @@ class KingMukla(MinionCard):
         return Minion(5, 5)
 
 
-class Whelp(MinionCard):
-    def __init__(self):
-        super().__init__("Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
-
-    def create_minion(self, player):
-        return Minion(1, 1)
-
-
 class LeeroyJenkins(MinionCard):
     def __init__(self):
         super().__init__("Leeroy Jenkins", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
