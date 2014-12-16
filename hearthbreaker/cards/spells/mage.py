@@ -116,15 +116,16 @@ class IceBarrier(SecretCard):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, attacker):
-        attacker.player.game.other_player.hero.armor += 8
-        super().reveal()
+    def _reveal(self, attacker, target):
+        if target is self.player.hero and not attacker.removed:
+            attacker.player.game.other_player.hero.armor += 8
+            super().reveal()
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("attack", self._reveal)
 
 
 class MirrorEntity(SecretCard):
@@ -191,17 +192,17 @@ class Vaporize(SecretCard):
     def __init__(self):
         super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
-    def _reveal(self, attacker):
-        if type(attacker) is Minion and not attacker.removed:
+    def _reveal(self, attacker, target):
+        if target is self.player.hero and type(attacker) is Minion and not attacker.removed:
             attacker.die(self)
             attacker.game.check_delayed()
             super().reveal()
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("attack", self._reveal)
 
 
 class IceBlock(SecretCard):

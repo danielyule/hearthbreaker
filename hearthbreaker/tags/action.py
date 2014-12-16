@@ -667,6 +667,7 @@ class ApplySecret(Action):
         secret = self._query.get_card(target)
         if secret:
             target.secrets.append(secret)
+            secret.player = target
             if target is target.game.other_player:
                 secret.player = target
                 secret.activate(target)

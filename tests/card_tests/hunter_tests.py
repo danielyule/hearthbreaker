@@ -287,11 +287,11 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(30, game.current_player.hero.health)
-        # self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(0, len(game.players[0].secrets))
 
         game.play_single_turn()  # Should be able to play both Misdirection and Freezing Trap again
 
-        # self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(3, len(game.players[0].hand))
 
     def test_Snipe(self):
         game = generate_game_for([MagmaRager, OasisSnapjaw, FeralSpirit], Snipe, CardTestingAgent, CardTestingAgent)

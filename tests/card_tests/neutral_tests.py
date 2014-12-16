@@ -2810,6 +2810,19 @@ class TestCommon(unittest.TestCase):
         game.current_player.minions[0].die(None)
         self.assertEqual(2, len(game.current_player.secrets))
 
+    def test_MadScientist_and_Snipe(self):
+        game = generate_game_for([IronfurGrizzly, MadScientist, Frostbolt, Snipe], OasisSnapjaw,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(3, game.current_player.minions[0].health)
+
     def test_EchoingOoze(self):
         game = generate_game_for(EchoingOoze, StoneskinGargoyle, OneCardPlayingAgent, DoNothingAgent)
 
