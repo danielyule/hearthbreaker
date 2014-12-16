@@ -1,6 +1,6 @@
 import copy
 from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect
+    CARD_SOURCE, Effect, ActionWithAmount
 from hearthbreaker.tags.condition import IsSecret
 import hearthbreaker.proxies
 
