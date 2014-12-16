@@ -1,12 +1,27 @@
 import copy
+import importlib
 import random
 import abc
 import hearthbreaker.powers
 import hearthbreaker.targeting
 import hearthbreaker.constants
 
-
 card_table = {}
+
+
+def __create_card_table():
+    importlib.import_module("hearthbreaker.cards")
+
+    def __card_lookup_rec(card_type):
+        subclasses = card_type.__subclasses__()
+        if len(subclasses) is 0:
+            c = card_type()
+            card_table[c.ref_name] = card_type
+        for sub_type in subclasses:
+            __card_lookup_rec(sub_type)
+
+    for card_class in Card.__subclasses__()[::-1]:
+        __card_lookup_rec(card_class)
 
 
 def card_lookup(card_name):
@@ -18,18 +33,6 @@ def card_lookup(card_name):
              by that name exists.
     :rtype: hearthbreaker.game_objects.Card
     """
-
-    def card_lookup_rec(card_type):
-        subclasses = card_type.__subclasses__()
-        if len(subclasses) is 0:
-            c = card_type()
-            card_table[c.ref_name] = card_type
-        for sub_type in subclasses:
-            card_lookup_rec(sub_type)
-
-    if len(card_table) == 0:
-        for card_class in Card.__subclasses__()[::-1]:
-            card_lookup_rec(card_class)
 
     card = card_table[card_name]
     if card is not None:
@@ -191,7 +194,67 @@ class Bindable:
                 del (self.events[event])
 
 
-class Character(Bindable, metaclass=abc.ABCMeta):
+class GameObject:
+    """
+    Provides typing for the various game objects in the engine.  Allows for checking the type of an object without
+    needing to know about and import the various objects in the game engine
+    """
+
+    @staticmethod
+    def is_spell():
+        """
+        Checks if this object is a spell card
+        :rtype: bool
+        :returns: True if this is a spell card, false otherwise
+        """
+        return False
+
+    @staticmethod
+    def is_secret():
+        """
+        Checks if this object is a secret
+        :rtype: bool
+        :returns: True if this is a secret, false otherwise
+        """
+        return False
+
+    @staticmethod
+    def is_minion():
+        """
+        Checks if this object is a minion (card or actual minion)
+        :rtype: bool
+        :returns: True if this is a minion, false otherwise
+        """
+        return False
+
+    @staticmethod
+    def is_weapon():
+        """
+        Checks if this object is a weapon (card or actual weapon)
+        :rtype: bool
+        :returns: True if this is a weapon, false otherwise
+        """
+
+    @staticmethod
+    def is_card():
+        """
+        Checks if this object is a card of any kind
+        :rtype: bool
+        :returns: True if this is a card, false otherwise
+        """
+        return False
+
+    @staticmethod
+    def is_hero():
+        """
+        Checks if this object is a hero
+        :rtype: bool
+        :returns: True if this is a hero, false otherwise
+        """
+        return False
+
+
+class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
     """
     A Character in Hearthstone is something that can attack, i.e. a :class:`Hero` or :class:`Minion`.
 
@@ -628,7 +691,7 @@ def _is_spell_targetable(target):
     return target.spell_targetable()
 
 
-class Card(Bindable):
+class Card(Bindable, GameObject):
     """
     Represents a card in Heathstone.  Every card is implemented as a subclass, either directly or through
     :class:`MinionCard`, :class:`SecretCard` or :class:`WeaponCard`.  If it is a direct subclass of this
@@ -748,13 +811,12 @@ class Card(Bindable):
             else:
                 self.target = player.agent.choose_target(self.targets)
 
-    def is_spell(self):
-        """
-        Verifies if this is a spell card (or a secret card)
+    @staticmethod
+    def is_spell():
+        return True
 
-        :return: True if the card is a spell card, false otherwise
-        :rtype: bool
-        """
+    @staticmethod
+    def is_card():
         return True
 
     def __str__(self):  # pragma: no cover
@@ -921,13 +983,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         """
         pass
 
-    def is_spell(self):
-        """
-        Checks if this card is a spell card.  Always returns false
-
-        :rtype: boolean
-        """
+    @staticmethod
+    def is_spell():
         return False
+
+    @staticmethod
+    def is_minion():
+        return True
 
 
 class SecretCard(Card, metaclass=abc.ABCMeta):
@@ -959,6 +1021,10 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def deactivate(self, player):
         pass
+
+    @staticmethod
+    def is_secret():
+        return True
 
 
 class Minion(Character):
@@ -1151,6 +1217,10 @@ class Minion(Character):
     def spell_targetable(self):
         return not self.stealth and self.can_be_targeted_by_spells
 
+    @staticmethod
+    def is_minion():
+        return True
+
     def __str__(self):  # pragma: no cover
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
 
@@ -1290,11 +1360,16 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         """
         pass
 
-    def is_spell(self):
+    @staticmethod
+    def is_spell():
         return False
 
+    @staticmethod
+    def is_weapon():
+        return True
 
-class Weapon(Bindable):
+
+class Weapon(Bindable, GameObject):
     """
     Represents a Hearthstone weapon.  All weapons have attack power and durability.  The logic for handling the
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
@@ -1353,6 +1428,10 @@ class Weapon(Bindable):
             'attack': self.base_attack,
             'durability': self.durability,
         }
+
+    @staticmethod
+    def is_weapon():
+        return True
 
     @staticmethod
     def __from_json__(wd, player):
@@ -1500,6 +1579,10 @@ class Hero(Character):
         target = self.choose_target(targets)
         self.trigger("found_power_target", target)
         return target
+
+    @staticmethod
+    def is_hero():
+        return True
 
     def __to_json__(self):
         if self.frozen_this_turn and self.player is self.player.game.current_player:
@@ -1977,3 +2060,5 @@ class Game(Bindable):
                     minion.enraged = True
             index += 1
         return new_game
+
+__create_card_table()

@@ -1,7 +1,6 @@
 import abc
 import json
 import string
-import hearthbreaker.game_objects
 import hearthbreaker.constants
 
 
@@ -432,11 +431,12 @@ class CardQuery(JSONObject):
         self.make_copy = make_copy
 
     def get_card(self, player):
+        from hearthbreaker.game_objects import card_lookup, get_cards
         if self.name:
-            return hearthbreaker.game_objects.card_lookup(self.name)
+            return card_lookup(self.name)
 
         if self.source == CARD_SOURCE.COLLECTION:
-            card_list = hearthbreaker.game_objects.get_cards()
+            card_list = get_cards()
         elif self.source == CARD_SOURCE.MY_DECK:
             card_list = filter(lambda c: not c.drawn, player.deck.cards)
         elif self.source == CARD_SOURCE.MY_HAND:
@@ -503,6 +503,7 @@ class CardQuery(JSONObject):
 
     @staticmethod
     def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False):
+        from hearthbreaker.game_objects import card_lookup
         query = CardQuery.__new__(CardQuery)
         query.name = name
         query.conditions = []
@@ -512,7 +513,7 @@ class CardQuery(JSONObject):
             query.condition = None
         query.source = CARD_SOURCE.from_str(source)
         if source_list:
-            query.source_list = [hearthbreaker.game_objects.card_lookup(item) for item in source_list]
+            query.source_list = [card_lookup(item) for item in source_list]
         else:
             query.source_list = None
         query.make_copy = make_copy
@@ -570,9 +571,10 @@ class Choice(Battlecry):
 
     @staticmethod
     def from_json(card, actions, selector, condition=None):
+        from hearthbreaker.game_objects import card_lookup
         actions = [Action.from_json(**action) for action in actions]
         selector = Selector.from_json(**selector)
         if condition:
             condition = Condition.from_json(**condition)
-        card = hearthbreaker.game_objects.card_lookup(card)
+        card = card_lookup(card)
         return Choice(card, actions, selector, condition)

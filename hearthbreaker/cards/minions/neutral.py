@@ -1668,9 +1668,7 @@ class YseraAwakens(Card):
         targets.extend(player.game.current_player.minions)
         targets.append(player.game.other_player.hero)
         targets.append(player.game.current_player.hero)
-        for minion in targets:
-            if isinstance(minion, Minion) and minion.card.name == "Ysera":
-                targets.remove(minion)
+        targets = filter(lambda m: not m.is_minion() or m.card.name != "Ysera", targets)
         for minion in targets:
             minion.damage(player.effective_spell_damage(5), self)
 

@@ -1,7 +1,6 @@
 import copy
 from hearthbreaker.tags.base import ReversibleAction, Action, MinionAction, Aura, Condition, AuraUntil, CardQuery, \
     CARD_SOURCE, Effect
-import hearthbreaker.game_objects
 from hearthbreaker.tags.condition import IsSecret
 import hearthbreaker.proxies
 
@@ -260,14 +259,14 @@ class ManaChange(ReversibleAction):
 
 class Summon(Action):
     def __init__(self, card, count=1):
-        if isinstance(card, hearthbreaker.game_objects.Card):
-            self.card = CardQuery(card.ref_name)
-        else:
+        if isinstance(card, CardQuery):
             self.card = card
+        else:
+            self.card = CardQuery(card.ref_name)
         self.count = count
 
     def act(self, actor, target):
-        if isinstance(actor, hearthbreaker.game_objects.Minion):
+        if actor.is_minion():
             if actor.removed:
                 index = actor.index
             else:
@@ -282,7 +281,7 @@ class Summon(Action):
         # TODO add explicit patters for multi minion summoning (if there is ever more than two)
         for summon in range(self.count):
             card.summon(target, target.game, index)
-            if isinstance(actor, hearthbreaker.game_objects.Minion):
+            if actor.is_minion():
                 index = actor.index  # Move the later minions to the left of their originator
 
     def __to_json__(self):
@@ -305,10 +304,10 @@ class Summon(Action):
 
 class Transform(Action):
     def __init__(self, card):
-        if isinstance(card, hearthbreaker.game_objects.Card):
-            self.card = CardQuery(card.ref_name)
-        else:
+        if isinstance(card, CardQuery):
             self.card = card
+        else:
+            self.card = CardQuery(card.ref_name)
 
     def act(self, actor, target):
         card = self.card.get_card(target)
@@ -566,10 +565,10 @@ class Chance(Action):
 
 class AddCard(Action):
     def __init__(self, card, count=1):
-        if isinstance(card, hearthbreaker.game_objects.Card):
-            self.card = CardQuery(card.ref_name)
-        else:
+        if isinstance(card, CardQuery):
             self.card = card
+        else:
+            self.card = CardQuery(card.ref_name)
         self.count = count
 
     def act(self, actor, target):
@@ -645,12 +644,9 @@ class SwapWithHand(Action):
 
     def act(self, actor, target):
         if self.condition:
-            chosen_card = target.game.random_draw(target.hand,
-                                                  lambda c: self.condition.evaluate(c) and
-                                                  isinstance(c, hearthbreaker.game_objects.MinionCard))
+            chosen_card = target.game.random_draw(target.hand, lambda c: self.condition.evaluate(c) and c.is_minion())
         else:
-            chosen_card = target.game.random_draw(target.hand,
-                                                  lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard))
+            chosen_card = target.game.random_draw(target.hand, lambda c: c.is_minion())
         if chosen_card:
             chosen_card.summon(target, target.game, len(target.minions))
             target.hand.remove(chosen_card)
@@ -702,10 +698,10 @@ class ApplySecret(Action):
 
 class Equip(Action):
     def __init__(self, weapon):
-        if isinstance(weapon, hearthbreaker.game_objects.Card):
-            self.weapon = CardQuery(weapon.ref_name)
-        else:
+        if isinstance(weapon, CardQuery):
             self.weapon = weapon
+        else:
+            self.weapon = CardQuery(weapon.ref_name)
 
     def act(self, actor, target):
         card = self.weapon.get_card(target)

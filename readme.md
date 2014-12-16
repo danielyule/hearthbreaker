@@ -64,10 +64,11 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-All cards currently released by Blizzard are implemented.  The engine is complete, and nearly ready for use in machine
-learning.  Work is now being done to make the game copyable and serializable in any state.  See the
-[developer mailing list](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
-for more details.
+All cards released by Blizzard up to Goblins vs Gnomes are implemented.  Goblins and Gnomes cards are in progress.  
+The engine is complete, and can be used to simulate games.  The game state can be copied, or serialized to JSON.
+Replay functionality is included as well.
+
+For an overview of upcoming work, see [the wiki](https://github.com/danielyule/hearthbreaker/wiki/)
 
 Structure
 ---------

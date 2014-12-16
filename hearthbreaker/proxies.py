@@ -1,4 +1,3 @@
-import hearthbreaker.game_objects
 
 
 class ProxyCharacter:
@@ -10,13 +9,13 @@ class ProxyCharacter:
             else:
                 self.player_ref = character_ref
                 self.minion_ref = None
-        elif type(character_ref) is hearthbreaker.game_objects.Hero:
+        elif character_ref.is_hero():
             if character_ref == character_ref.player.game.players[0].hero:
                 self.player_ref = "p1"
             else:
                 self.player_ref = "p2"
             self.minion_ref = None
-        elif type(character_ref) is hearthbreaker.game_objects.Minion:
+        elif character_ref.is_minion():
             if character_ref.player == character_ref.game.players[0]:
                 self.player_ref = "p1"
             else:

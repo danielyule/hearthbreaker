@@ -2,11 +2,11 @@ import curses
 import curses.textpad
 import sys
 
-from hearthbreaker.cards import *
 from hearthbreaker.agents import registry
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game, card_lookup, Deck
 from hearthbreaker.ui.game_printer import GameRender
+from hearthbreaker.cards import *
 
 
 def load_deck(filename):

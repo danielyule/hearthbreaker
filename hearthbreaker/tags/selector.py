@@ -1,5 +1,4 @@
 import abc
-import hearthbreaker.game_objects
 from hearthbreaker.tags.base import Selector, Player, Picker
 import hearthbreaker.tags.condition
 
@@ -109,11 +108,10 @@ class RandomPicker(Picker):
         self.count = count
 
     def pick(self, targets, player):
-        from hearthbreaker.game_objects import Minion
         for i in range(self.count):
             if len(targets) > 0:
                 yield player.game.random_choice(targets)
-            targets = [target for target in filter(lambda t: not (isinstance(t, Minion) and t.dead), targets)]
+            targets = [target for target in filter(lambda t: not (t.is_minion() and t.dead), targets)]
 
     def __to_json__(self):
         return {
@@ -198,7 +196,7 @@ class SpecificCardSelector(CardSelector):
 
 class SecretSelector(CardSelector):
     def match(self, source, obj):
-        return isinstance(obj, hearthbreaker.game_objects.SecretCard)
+        return obj.is_secret()
 
     def __to_json__(self):
         return {
@@ -228,7 +226,7 @@ class SpellSelector(CardSelector):
 
 class BattlecrySelector(CardSelector):
     def match(self, source, obj):
-        return isinstance(obj, hearthbreaker.game_objects.MinionCard) and \
+        return obj.is_minion() and obj.is_card() and \
             obj.battlecry is not None
 
     def __to_json__(self):
@@ -244,7 +242,7 @@ class BattlecrySelector(CardSelector):
 
 class MinionCardSelector(CardSelector):
     def match(self, source, obj):
-        return isinstance(obj, hearthbreaker.game_objects.MinionCard)
+        return obj.is_minion()
 
     def __to_json__(self):
         return {
@@ -318,10 +316,10 @@ class MinionSelector(Selector):
 
     def match(self, source, obj):
         if self.condition:
-            return isinstance(obj, hearthbreaker.game_objects.Minion) and self.players.match(source, obj)\
+            return obj.is_minion() and self.players.match(source, obj)\
                 and self.condition.evaluate(source, obj)
         else:
-            return isinstance(obj, hearthbreaker.game_objects.Minion) and self.players.match(source, obj)
+            return obj.is_minion() and self.players.match(source, obj)
 
     def __to_json__(self):
         if self.condition:
@@ -369,10 +367,10 @@ class CharacterSelector(Selector):
 
     def match(self, source, obj):
         if self.condition:
-            return isinstance(obj, hearthbreaker.game_objects.Character) and self.players.match(source, obj) \
+            return not obj.is_card() and self.players.match(source, obj) \
                 and self.condition.evaluate(source, obj)
         else:
-            return isinstance(obj, hearthbreaker.game_objects.Character) and self.players.match(source, obj)
+            return not obj.is_card() and self.players.match(source, obj)
 
     def __to_json__(self):
         if self.condition:

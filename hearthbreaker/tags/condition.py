@@ -1,6 +1,5 @@
 import hearthbreaker
 from hearthbreaker.constants import MINION_TYPE
-import hearthbreaker.game_objects
 from hearthbreaker.tags.base import Condition
 
 
@@ -16,7 +15,7 @@ class HasSecret(Condition):
 
 class IsSecret(Condition):
     def evaluate(self, target, obj, *args):
-        return isinstance(obj, hearthbreaker.game_objects.SecretCard)
+        return obj.is_secret()
 
     def __to_json__(self):
         return {
@@ -26,7 +25,7 @@ class IsSecret(Condition):
 
 class IsSpell(Condition):
     def evaluate(self, target, obj, *args):
-        return isinstance(obj, hearthbreaker.game_objects.Card) and obj.is_spell()
+        return obj.is_spell()
 
     def __to_json__(self):
         return {
@@ -81,8 +80,7 @@ class ManaCost(Condition):
 
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
-        return isinstance(minion, hearthbreaker.game_objects.Minion) \
-            or isinstance(minion, hearthbreaker.game_objects.MinionCard)
+        return minion.is_minion()
 
     def __to_json__(self):
         return {
@@ -91,9 +89,8 @@ class IsMinion(Condition):
 
 
 class IsWeapon(Condition):
-    def evaluate(self, target, minion, *args):
-        return isinstance(minion, hearthbreaker.game_objects.Weapon) \
-            or isinstance(minion, hearthbreaker.game_objects.WeaponCard)
+    def evaluate(self, target, weapon, *args):
+        return weapon.is_weapon()
 
     def __to_json__(self):
         return {
@@ -138,12 +135,14 @@ class MinionIsType(Condition):
         self.include_self = include_self
 
     def evaluate(self, target, minion, *args):
-        if isinstance(target, hearthbreaker.game_objects.Minion):
-            if self.include_self or target is not minion:
-                return minion.card.minion_type == self.minion_type
-            return False
-        else:
-            return isinstance(minion, hearthbreaker.game_objects.MinionCard) and minion.minion_type == self.minion_type
+        if minion.is_minion():
+            if not minion.is_card():
+                if self.include_self or target is not minion:
+                    return minion.card.minion_type == self.minion_type
+                return False
+            else:
+                return minion.minion_type == self.minion_type
+        return False
 
     def __to_json__(self):
         return {
@@ -259,17 +258,16 @@ class IsDamaged(Condition):
 
 class InGraveyard(Condition):
     def __init__(self, card):
-        self.card = card
+        if isinstance(card, str):
+            self.card = card
+        else:
+            self.card = card.ref_name
 
     def evaluate(self, target, *args):
-        return self.card.name in target.player.graveyard or self.card.name in target.player.opponent.graveyard
+        return self.card in target.player.graveyard or self.card in target.player.opponent.graveyard
 
     def __to_json__(self):
         return {
             'name': 'in_graveyard',
-            'card': self.card.name
+            'card': self.card
         }
-
-    def __from_json__(self, card):
-        self.card = hearthbreaker.game_objects.card_lookup(card)
-        return self

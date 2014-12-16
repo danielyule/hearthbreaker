@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.constants import MINION_TYPE
 from hearthbreaker.tags.action import Stealth
 from hearthbreaker.tags.base import Aura
-import hearthbreaker.game_objects
+from hearthbreaker.tags.selector import SelfSelector
 
 
 def draw_card(minion):
@@ -77,7 +77,7 @@ def give_divine_shield(minion):
 
 def give_stealth(minion):
     if minion.card.target is not None:
-        minion.card.target.add_aura(Aura(Stealth(), hearthbreaker.tags.selector.SelfSelector()))
+        minion.card.target.add_aura(Aura(Stealth(), SelfSelector()))
 
 
 def gain_one_health_for_each_card_in_hand(minion):
@@ -170,9 +170,7 @@ def return_to_hand(minion):
 
 def put_enemy_minion_on_board_from_enemy_deck(minion):
     player = minion.player.opponent
-    chosen_card = player.game.random_draw(player.deck.cards,
-                                          lambda c: not c.drawn and
-                                          isinstance(c, hearthbreaker.game_objects.MinionCard))
+    chosen_card = player.game.random_draw(player.deck.cards, lambda c: not c.drawn and c.is_minion())
     if chosen_card:
         chosen_card.drawn = True
         player.deck.left -= 1
@@ -182,8 +180,7 @@ def put_enemy_minion_on_board_from_enemy_deck(minion):
 def put_demon_on_board_from_hand(minion):
     player = minion.player
     chosen_card = player.game.random_draw(player.hand,
-                                          lambda c: isinstance(c, hearthbreaker.game_objects.MinionCard) and
-                                          c.minion_type == MINION_TYPE.DEMON)
+                                          lambda c: c.is_minion() and c.minion_type == MINION_TYPE.DEMON)
     if chosen_card:
         chosen_card.summon(player, player.game, len(player.minions))
         player.hand.remove(chosen_card)
