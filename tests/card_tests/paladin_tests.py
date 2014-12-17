@@ -318,7 +318,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(29, game.players[1].hero.health)
 
     def test_NobleSacrifice(self):
-        game = generate_game_for(NobleSacrifice, StonetuskBoar, CardTestingAgent, PredictableAgent)
+        game = generate_game_for(NobleSacrifice, StonetuskBoar, CardTestingAgent, PlayAndAttackAgent)
 
         game.play_single_turn()  # NobleSacrifice should be played
         self.assertEqual(1, len(game.players[0].secrets))
@@ -326,11 +326,10 @@ class TestPaladin(unittest.TestCase):
 
         game.play_single_turn()
         # Attack with Stonetusk should happen, and the secret should trigger. Both minions should die.
-        # One boar is left (after being summoned after the coin)
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(1, len(game.players[1].minions))
-        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(30, game.players[0].hero.health)
 
         # Test with 7 minions
         game = playback(Replay("tests/replays/card_tests/NobleSacrifice.hsreplay"))
@@ -384,6 +383,38 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(1, len(game.players[0].secrets))
+
+    def test_RedemptionAoE(self):
+        game = generate_game_for([Redemption, StonetuskBoar, StonetuskBoar, StonetuskBoar], ConeOfCold,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        game.players[1].agent.choose_target = lambda targets: targets[1]
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(3, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(1, len(game.other_player.minions))
+
+    def test_Redemption_NobleSacrifice(self):
+        game = generate_game_for([NobleSacrifice, Redemption], BluegillWarrior, OneCardPlayingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(0, len(game.other_player.secrets))
 
     def test_Repentance(self):
         game = generate_game_for(Repentance, TwilightDrake, CardTestingAgent, OneCardPlayingAgent)

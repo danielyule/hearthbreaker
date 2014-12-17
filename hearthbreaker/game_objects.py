@@ -318,6 +318,9 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         else:
             self.enrage = []
 
+        #: The character that this minion is attacking, while it is carrying out its attack
+        self.current_target = None
+
     def add_aura(self, aura):
         from hearthbreaker.tags.selector import SelfSelector
         self.auras.append(aura)
@@ -375,10 +378,12 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         target = self.choose_target(targets)
         self._remove_stealth()
+        self.current_target = target
         self.player.trigger("attack", self, target)
         self.trigger("attack", target)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
+        target = self.current_target
         my_attack = self.calculate_attack()  # In case the damage causes my attack to grow
         target_attack = target.calculate_attack()
         if target_attack > 0:
@@ -391,6 +396,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         else:
             self.active = False
         self.stealth = False
+        self.current_target = None
 
     def choose_target(self, targets):
         """

@@ -240,15 +240,9 @@ class NobleSacrifice(SecretCard):
                 def create_minion(self, p):
                     return Minion(2, 1)
 
-            def choose_defender(targets):
-                defender = DefenderMinion()
-                defender.summon(player, player.game, len(player.minions))
-                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
-                player.game.current_player.agent.choose_target = old_target
-                return player.minions[-1]
-
-            old_target = player.game.current_player.agent.choose_target
-            player.game.current_player.agent.choose_target = choose_defender
+            defender = DefenderMinion()
+            defender.summon(player, player.game, len(player.minions))
+            attacker.current_target = player.minions[-1]
             super().reveal()
 
     def activate(self, player):
