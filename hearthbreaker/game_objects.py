@@ -169,7 +169,7 @@ class Bindable:
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
-                if not handler.active and handler in self.events[event]:
+                if not handler.active and event in self.events and handler in self.events[event]:
                     handler.active = True
                     handler.function(*args)
                     handler.active = False

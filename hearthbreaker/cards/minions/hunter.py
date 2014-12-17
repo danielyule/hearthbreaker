@@ -20,7 +20,7 @@ class Hyena(MinionCard):
         super().__init__("Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(2, 2, MINION_TYPE.BEAST)
+        return Minion(2, 2)
 
 
 class SavannahHighmane(MinionCard):
