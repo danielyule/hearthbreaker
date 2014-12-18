@@ -1,11 +1,12 @@
-from hearthbreaker.tags.action import Charge, ChangeAttack, IncreaseArmor, Damage, Give, Equip
-from hearthbreaker.tags.base import Effect, Battlecry
+from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip
+from hearthbreaker.tags.base import Effect, Battlecry, Enrage
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
     PlayerSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
+from hearthbreaker.tags.status import ChangeAttack, Charge
 
 
 class BattleAxe(WeaponCard):
@@ -58,7 +59,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 9, charge=True, enrage=[ChangeAttack(6)])
+        return Minion(4, 9, charge=True, enrage=Enrage(ChangeAttack(6), SelfSelector()))
 
 
 class KorkronElite(MinionCard):

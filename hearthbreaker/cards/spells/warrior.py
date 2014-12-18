@@ -1,8 +1,8 @@
 import copy
-from hearthbreaker.tags.action import MinimumHealth
 from hearthbreaker.tags.base import Aura, AuraUntil
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, MinionSelector
+from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth
 import hearthbreaker.targeting
 import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -54,7 +54,7 @@ class Charge(Card):
         super().use(player, game)
 
         self.target.change_attack(2)
-        self.target.add_aura(Aura(hearthbreaker.tags.action.Charge(), SelfSelector()))
+        self.target.add_aura(Aura(_Charge(), SelfSelector()))
 
 
 class Cleave(Card):

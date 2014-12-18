@@ -35,7 +35,6 @@ def do_stuff():
     deck1 = load_deck("example.hsdeck")
     deck2 = load_deck("example.hsdeck")
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
-    game.start()
 
     print(timeit.timeit(play_game, 'gc.enable()', number=1000))
 

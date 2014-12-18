@@ -3,6 +3,7 @@ from hearthbreaker.tags.action import Summon
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Deathrattle, Aura
 from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector, SelfSelector
+from hearthbreaker.tags.status import Windfury as _Windfury
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard
@@ -206,7 +207,7 @@ class Windfury(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_aura(Aura(hearthbreaker.tags.action.Windfury(), SelfSelector()))
+        self.target.add_aura(Aura(_Windfury(), SelfSelector()))
 
 
 class Reincarnate(Card):

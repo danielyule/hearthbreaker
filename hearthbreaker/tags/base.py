@@ -52,7 +52,7 @@ class Aura(JSONObject):
 
     @staticmethod
     def from_json(action, selector):
-        action = Action.from_json(**action)
+        action = Status.from_json(**action)
         selector = Selector.from_json(**selector)
         return Aura(action, selector)
 
@@ -85,7 +85,7 @@ class AuraUntil(Aura):
 
     @staticmethod
     def from_json(action, selector, until):
-        action = Action.from_json(**action)
+        action = Status.from_json(**action)
         selector = Selector.from_json(**selector)
         until = Event.from_json(**until)
         return AuraUntil(action, selector, until)
@@ -185,13 +185,30 @@ class Action(JSONObject, metaclass=abc.ABCMeta):
         pass
 
 
-class ReversibleAction(Action, metaclass=abc.ABCMeta):
+class Status(JSONObject, metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def act(self, actor, target):
+        pass
+
     @abc.abstractmethod
     def unact(self, actor, target):
         pass
 
+    @staticmethod
+    def from_json(name, **kwargs):
+        import hearthbreaker.tags.status as status_mod
 
-class ActionWithAmount(ReversibleAction, metaclass=abc.ABCMeta):
+        cls_name = string.capwords(name, '_').replace("_", "")
+        cls = getattr(status_mod, cls_name)
+        obj = cls.__new__(cls)
+        return obj.__from_json__(**kwargs)
+
+    def __from_json__(self, **kwargs):
+        self.__init__(**kwargs)
+        return self
+
+
+class StatusWithAmount(Status, metaclass=abc.ABCMeta):
     def __init__(self, amount, multiplier=1):
         self.amount = amount
         self.multipler = multiplier
@@ -218,10 +235,6 @@ class ActionWithAmount(ReversibleAction, metaclass=abc.ABCMeta):
     def __from_json__(self, amount, **kwargs):
         kwargs['amount'] = self.read_amount(amount)
         return super().__from_json__(**kwargs)
-
-
-class MinionAction(ReversibleAction, metaclass=abc.ABCMeta):
-    pass
 
 
 class Event(JSONObject, metaclass=abc.ABCMeta):
@@ -326,7 +339,7 @@ class PlayerEvent(Event):
 class Effect(JSONObject):
     def __init__(self, event, action, selector):
         self.event = event
-        if isinstance(action, ReversibleAction):
+        if isinstance(action, Status):
             from hearthbreaker.tags.action import Give
             self.action = Give(action)
         else:
@@ -608,3 +621,36 @@ class Choice(Battlecry):
             condition = Condition.from_json(**condition)
         card = card_lookup(card)
         return Choice(card, actions, selector, condition)
+
+
+class Enrage(JSONObject):
+    def __init__(self, statuses, selector):
+        if isinstance(statuses, Status):
+            self.statuses = [statuses]
+        else:
+            self.statuses = statuses
+        self.selector = selector
+
+    def enrage(self, target):
+        targets = self.selector.get_targets(target, target)
+        for t in targets:
+            for status in self.statuses:
+                status.act(target, t)
+
+    def unenrage(self, target):
+        targets = self.selector.get_targets(target, target)
+        for t in targets:
+            for status in self.statuses:
+                status.unact(target, t)
+
+    def __to_json__(self):
+        return {
+            'statuses': self.statuses,
+            'selector': self.selector
+        }
+
+    @staticmethod
+    def from_json(statuses, selector):
+        statuses = [Status.from_json(**status) for status in statuses]
+        selector = Selector.from_json(**selector)
+        return Enrage(statuses, selector)

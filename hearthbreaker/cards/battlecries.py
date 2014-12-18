@@ -1,8 +1,8 @@
 import copy
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.tags.action import Stealth
 from hearthbreaker.tags.base import Aura
 from hearthbreaker.tags.selector import SelfSelector
+from hearthbreaker.tags.status import Stealth
 
 
 def draw_card(minion):

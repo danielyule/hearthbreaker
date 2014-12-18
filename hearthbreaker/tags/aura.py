@@ -1,8 +1,8 @@
 import hearthbreaker.tags.base
 from hearthbreaker.tags.condition import CardMatches
 from hearthbreaker.tags.event import Either, TurnEnded, CardPlayed
-from hearthbreaker.tags.action import ManaChange
 from hearthbreaker.tags.selector import PlayerSelector
+from hearthbreaker.tags.status import ManaChange
 
 
 class ManaAura(hearthbreaker.tags.base.AuraUntil):

@@ -1,9 +1,10 @@
 import copy
-from hearthbreaker.tags.action import Stealth, Take, AddCard
+from hearthbreaker.tags.action import Take, AddCard
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Aura, Effect
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, SpellSelector, SpecificCardSelector
+from hearthbreaker.tags.status import Stealth
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card

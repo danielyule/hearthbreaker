@@ -1,4 +1,4 @@
-from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth, Damage, Give, Windfury
+from hearthbreaker.tags.action import Draw, Damage, Give
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
@@ -6,6 +6,7 @@ from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSele
     UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
 
 
 class AlAkirTheWindlord(MinionCard):

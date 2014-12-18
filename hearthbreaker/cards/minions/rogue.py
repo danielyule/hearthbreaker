@@ -1,4 +1,4 @@
-from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Stealth, Damage
+from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import DidDamage
@@ -6,6 +6,7 @@ from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSe
     BothPlayer, CharacterSelector, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
+from hearthbreaker.tags.status import Stealth
 
 
 class DefiasBandit(MinionCard):

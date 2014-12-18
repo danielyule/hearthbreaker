@@ -1,9 +1,8 @@
-from hearthbreaker.tags.action import Charge, ChangeAttack, ChangeHealth, Heal, CantAttack, ManaChange, Summon, Draw, \
-    Chance, Kill, Damage, ResurrectFriendly, DoubleDeathrattle,\
-    Steal, Duplicate, Give, Windfury, IncreaseWeaponAttack, SwapWithHand, AddCard, Transform, ApplySecret, Silence, \
-    Bounce, GiveManaCrystal, SpellDamage, Taunt, Equip
+from hearthbreaker.tags.action import Heal, Summon, Draw, \
+    Chance, Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, Silence, \
+    Bounce, GiveManaCrystal, Equip
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE, Battlecry
+from hearthbreaker.tags.base import Aura, Effect, Deathrattle, AuraUntil, CardQuery, CARD_SOURCE, Battlecry, Enrage
 from hearthbreaker.tags.condition import Adjacent, MinionIsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon
@@ -18,6 +17,8 @@ from hearthbreaker.cards.battlecries import draw_card, silence, deal_one_damage,
     destroy_target, nightblade, ssc, deathwing
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Charge, Taunt, Windfury, CantAttack, \
+    SpellDamage, DoubleDeathrattle, IncreaseWeaponAttack
 import hearthbreaker.targeting
 import copy
 
@@ -611,7 +612,7 @@ class AmaniBerserker(MinionCard):
         super().__init__("Amani Berserker", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 3, enrage=[ChangeAttack(3)])
+        return Minion(2, 3, enrage=Enrage(ChangeAttack(3), SelfSelector()))
 
 
 class Squire(MinionCard):
@@ -727,7 +728,7 @@ class AngryChicken(MinionCard):
         super().__init__("Angry Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, enrage=[ChangeAttack(5)])
+        return Minion(1, 1, enrage=Enrage(ChangeAttack(5), SelfSelector()))
 
 
 class RagingWorgen(MinionCard):
@@ -735,7 +736,7 @@ class RagingWorgen(MinionCard):
         super().__init__("Raging Worgen", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 3, enrage=[ChangeAttack(1), Windfury()])
+        return Minion(3, 3, enrage=Enrage([ChangeAttack(1), Windfury()], SelfSelector()))
 
 
 class TaurenWarrior(MinionCard):
@@ -743,7 +744,7 @@ class TaurenWarrior(MinionCard):
         super().__init__("Tauren Warrior", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 3, taunt=True, enrage=[ChangeAttack(3)])
+        return Minion(2, 3, taunt=True, enrage=Enrage(ChangeAttack(3), SelfSelector()))
 
 
 class SpitefulSmith(MinionCard):
@@ -751,7 +752,7 @@ class SpitefulSmith(MinionCard):
         super().__init__("Spiteful Smith", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(4, 6, enrage=[Give(Aura(IncreaseWeaponAttack(2), WeaponSelector()))])
+        return Minion(4, 6, enrage=Enrage(IncreaseWeaponAttack(2), WeaponSelector()))
 
 
 class BloodKnight(MinionCard):

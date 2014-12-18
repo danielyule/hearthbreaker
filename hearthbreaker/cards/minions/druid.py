@@ -1,10 +1,11 @@
-from hearthbreaker.tags.action import Taunt, Give, ChangeHealth, ChangeAttack, Damage, Silence, Transform, Draw, Heal, \
+from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon
 from hearthbreaker.tags.base import Aura, Choice
 from hearthbreaker.tags.selector import SelfSelector, CharacterSelector, MinionSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, Card
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 
 
 class Moonfire(Card):

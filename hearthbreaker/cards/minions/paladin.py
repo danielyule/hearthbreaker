@@ -1,8 +1,9 @@
-from hearthbreaker.tags.action import Equip, Give, DivineShield, SetAttack, Heal
+from hearthbreaker.tags.action import Equip, Give, Heal
 from hearthbreaker.tags.base import Deathrattle, Battlecry
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, EnemyPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
+from hearthbreaker.tags.status import SetAttack, DivineShield
 
 
 class AldorPeacekeeper(MinionCard):

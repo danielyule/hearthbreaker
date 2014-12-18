@@ -1,8 +1,8 @@
 import copy
-from hearthbreaker.tags.action import Stolen
 from hearthbreaker.tags.base import AuraUntil
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import SelfSelector
+from hearthbreaker.tags.status import Stolen
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY

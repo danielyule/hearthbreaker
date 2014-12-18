@@ -1,12 +1,13 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, AddCard, Give
+from hearthbreaker.tags.action import Freeze, AddCard, Give
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
 from hearthbreaker.tags.condition import HasSecret
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, PlayerSelector, SelfSelector, TargetSelector
 from hearthbreaker.game_objects import MinionCard, Minion
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange
 
 
 class ManaWyrm(MinionCard):

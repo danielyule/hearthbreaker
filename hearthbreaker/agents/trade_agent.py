@@ -3,7 +3,8 @@ from hearthbreaker.agents.trade.possible_play import PlayMixin
 from hearthbreaker.agents.trade.trade import TradeMixin, AttackMixin
 from hearthbreaker.agents.trade.util import Util
 import hearthbreaker.cards.battlecries
-from hearthbreaker.tags.action import ChangeAttack, ChangeHealth, Damage
+from hearthbreaker.tags.action import Damage
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth
 
 
 class BattlecryType:

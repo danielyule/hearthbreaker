@@ -1,10 +1,11 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Draw, ChangeAttack, ChangeHealth, Charge, Summon, AddCard, Give, Taunt
+from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry
 from hearthbreaker.tags.condition import MinionIsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
 from hearthbreaker.game_objects import MinionCard, Minion
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt
 
 
 class TimberWolf(MinionCard):
