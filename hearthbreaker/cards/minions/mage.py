@@ -1,5 +1,5 @@
 import hearthbreaker.cards
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.action import ChangeAttack, Freeze, ChangeHealth, ManaChange, AddCard, Give
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
@@ -60,3 +60,11 @@ class ArchmageAntonidas(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 7, effects=[Effect(SpellCast(), AddCard(hearthbreaker.cards.Fireball()), PlayerSelector())])
+
+
+class Snowchugger(MinionCard):
+    def __init__(self):
+        super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(2, 3, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])

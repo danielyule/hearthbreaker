@@ -213,6 +213,7 @@ from hearthbreaker.cards.minions.mage import (
     EtherealArcanist,
     WaterElemental,
     ArchmageAntonidas,
+    Snowchugger,
 )
 
 from hearthbreaker.cards.minions.paladin import (

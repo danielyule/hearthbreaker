@@ -565,3 +565,63 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[4].name)
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
+
+    def test_Snowchugger(self):
+        game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, DoNothingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.other_player.hero.health)
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertFalse(game.other_player.hero.frozen)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual("Snowchugger", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(25, game.other_player.hero.health)
+
+        # Always false after the end of a turn
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertTrue(game.other_player.hero.frozen)
+
+        # Now make sure that attacking the Snowchugger directly will freeze a character
+        random.seed(1857)
+        game = generate_game_for(Snowchugger, IronbarkProtector, OneCardPlayingAgent, PredictableAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].health)
+        # The player should be frozen because of weapon attack
+        self.assertEqual(29, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.frozen)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The player should still be frozen from last turn, and thus shouldn't have attacked
+        self.assertEqual(29, game.current_player.hero.health)
+
+        # If Snowchugger gets 0 attack, and is being attacked so will the minion NOT be frozen since no damage was dealt
+        game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, PredictableAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual("Snowchugger", game.players[1].minions[0].card.name)
+        # Cheat
+        game.players[1].minions[0].base_attack = 0
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
+
+        # Stonetusk should have attacked the Snowchugger, and will NOT be frozen since they didn't take damage
+        game.play_single_turn()
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertFalse(game.players[0].minions[0].frozen_this_turn)
+        self.assertFalse(game.players[0].minions[0].frozen)
