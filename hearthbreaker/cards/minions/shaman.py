@@ -1,4 +1,4 @@
-from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth, Damage, Give, Windfury
+from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth, Damage, Give, Windfury, Heal
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
@@ -73,3 +73,35 @@ class Windspeaker(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 3)
+
+
+class HealingTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Healing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, effects=[Effect(TurnEnded(), Heal(1), MinionSelector(condition=None))])
+
+
+class SearingTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Searing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class StoneclawTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Stoneclaw Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, taunt=True)
+
+
+class WrathOfAirTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Wrath of Air Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, spell_damage=1)

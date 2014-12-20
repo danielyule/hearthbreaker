@@ -253,6 +253,10 @@ from hearthbreaker.cards.minions.shaman import (
     ManaTideTotem,
     UnboundElemental,
     Windspeaker,
+    HealingTotem,
+    SearingTotem,
+    StoneclawTotem,
+    WrathOfAirTotem,
 )
 
 from hearthbreaker.cards.minions.warlock import (
