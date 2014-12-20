@@ -183,6 +183,7 @@ from hearthbreaker.cards.minions.neutral import (
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
+    Mechwarper,
 )
 
 from hearthbreaker.cards.minions.druid import (
