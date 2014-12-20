@@ -3119,7 +3119,7 @@ class TestCommon(unittest.TestCase):
         m = game.players[0].minions[0]
         m.die(None)
         m.activate_delayed()
-        
+
         # Harvest Golem should be back at 3 again
         self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
         self.assertEqual(3, game.players[0].hand[0].mana_cost(game.players[0]))
