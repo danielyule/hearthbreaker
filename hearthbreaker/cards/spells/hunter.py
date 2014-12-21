@@ -300,3 +300,21 @@ class SnakeTrap(SecretCard):
             for i in range(0, 3):
                 snake.summon(player, player.game, len(player.minions))
             super().reveal()
+
+
+class CallPet(Card):
+    def __init__(self):
+        super().__init__("Call Pet", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        def reduce_cost(card):
+            if card.is_minion() and card.minion_type == MINION_TYPE.BEAST:
+                nonlocal aura
+                aura = ManaAura(4, 0, SpecificCardSelector(card), True, False)
+
+        super().use(player, game)
+        aura = None
+        player.bind_once("card_drawn", reduce_cost)
+        player.draw()
+        if aura is not None:
+            player.add_aura(aura)
