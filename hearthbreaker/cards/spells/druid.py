@@ -389,7 +389,7 @@ class Starfire(Card):
         player.draw()
 
 
-class PoisionSeeds(Card):
+class PoisonSeeds(Card):
     def __init__(self):
         super().__init__("Poison Seeds", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 

@@ -183,6 +183,7 @@ from hearthbreaker.cards.minions.neutral import (
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
+    Mechwarper,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -213,6 +214,7 @@ from hearthbreaker.cards.minions.mage import (
     EtherealArcanist,
     WaterElemental,
     ArchmageAntonidas,
+    Snowchugger,
 )
 
 from hearthbreaker.cards.minions.paladin import (
@@ -252,6 +254,10 @@ from hearthbreaker.cards.minions.shaman import (
     ManaTideTotem,
     UnboundElemental,
     Windspeaker,
+    HealingTotem,
+    SearingTotem,
+    StoneclawTotem,
+    WrathOfAirTotem,
 )
 
 from hearthbreaker.cards.minions.warlock import (

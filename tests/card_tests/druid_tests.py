@@ -750,7 +750,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual("Treant", game.current_player.minions[2].card.name)
 
     def test_PoisonSeeds(self):
-        game = generate_game_for([StonetuskBoar, BloodfenRaptor, IronfurGrizzly, PoisionSeeds],
+        game = generate_game_for([StonetuskBoar, BloodfenRaptor, IronfurGrizzly, PoisonSeeds],
                                  HauntedCreeper, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 6):

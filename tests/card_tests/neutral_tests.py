@@ -3098,3 +3098,28 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.other_player.minions[0].calculate_attack())
         self.assertEqual(7, game.other_player.minions[1].calculate_attack())
+
+    def test_Mechwarper(self):
+        game = generate_game_for([Mechwarper, HarvestGolem], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        # Harvest Golem is initial 3 cost
+        self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Mechwarper", game.players[0].minions[0].card.name)
+
+        # Harvest Golem (MECH) should now have a cost of 2
+        self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
+        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+
+        # Kill the Mechwarper
+        m = game.players[0].minions[0]
+        m.die(None)
+        m.activate_delayed()
+
+        # Harvest Golem should be back at 3 again
+        self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
+        self.assertEqual(3, game.players[0].hand[0].mana_cost(game.players[0]))

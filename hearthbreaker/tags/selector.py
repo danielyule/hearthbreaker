@@ -1,6 +1,7 @@
 import abc
 from hearthbreaker.tags.base import Selector, Player, Picker
 import hearthbreaker.tags.condition
+from hearthbreaker.constants import MINION_TYPE
 
 
 class FriendlyPlayer(Player):
@@ -247,6 +248,21 @@ class MinionCardSelector(CardSelector):
     def __to_json__(self):
         return {
             'name': 'minion_card',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self
+
+
+class MechSelector(CardSelector):
+    def match(self, source, obj):
+        return obj.is_minion() and obj.is_card() and obj.minion_type == MINION_TYPE.MECH
+
+    def __to_json__(self):
+        return {
+            'name': 'mech',
             'players': self.players
         }
 

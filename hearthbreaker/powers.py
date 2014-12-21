@@ -182,55 +182,17 @@ class ShamanPower(Power):
         return super().can_use()
 
     def use(self):
-        class HealingTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Healing Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                from hearthbreaker.tags.action import Heal
-                from hearthbreaker.tags.base import Effect
-                from hearthbreaker.tags.event import TurnEnded
-                from hearthbreaker.tags.selector import MinionSelector
-                return hearthbreaker.game_objects.Minion(0, 2, effects=[
-                    Effect(TurnEnded(), Heal(1), MinionSelector(condition=None))
-                ])
-
-        class SearingTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Searing Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(1, 1)
-
-        class StoneclawTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Stoneclaw Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(0, 2, taunt=True)
-
-        class WrathOfAirTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Wrath of Air Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(0, 2, spell_damage=1)
-
         super().use()
 
         totems = []
         if not self.healing_totem:
-            totems.append(HealingTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.HealingTotem())
         if not self.searing_totem:
-            totems.append(SearingTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.SearingTotem())
         if not self.stoneclaw_totem:
-            totems.append(StoneclawTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.StoneclawTotem())
         if not self.wrath_of_air_totem:
-            totems.append(WrathOfAirTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.WrathOfAirTotem())
 
         random_totem = self.hero.player.game.random_choice(totems)
         random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
