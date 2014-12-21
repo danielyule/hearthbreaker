@@ -1,7 +1,7 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry
-from hearthbreaker.tags.condition import MinionIsType
+from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -13,7 +13,7 @@ class TimberWolf(MinionCard):
         super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, auras=[Aura(ChangeAttack(1), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
+        return Minion(1, 1, auras=[Aura(ChangeAttack(1), MinionSelector(IsType(MINION_TYPE.BEAST)))])
 
 
 class Hyena(MinionCard):
@@ -38,7 +38,7 @@ class Houndmaster(MinionCard):
                          battlecry=Battlecry(Give([Aura(ChangeHealth(2), SelfSelector()),
                                                    Aura(ChangeAttack(2), SelfSelector()),
                                                    Aura(Taunt(), SelfSelector())]),
-                                             MinionSelector(MinionIsType(MINION_TYPE.BEAST), picker=UserPicker())))
+                                             MinionSelector(IsType(MINION_TYPE.BEAST), picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(4, 3)
@@ -58,7 +58,7 @@ class StarvingBuzzard(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2,
-                      effects=[Effect(MinionPlaced(MinionIsType(MINION_TYPE.BEAST)), Draw(), PlayerSelector())])
+                      effects=[Effect(MinionPlaced(IsType(MINION_TYPE.BEAST)), Draw(), PlayerSelector())])
 
 
 class TundraRhino(MinionCard):
@@ -67,7 +67,7 @@ class TundraRhino(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 5, charge=True,
-                      auras=[Aura(Charge(), MinionSelector(MinionIsType(MINION_TYPE.BEAST)))])
+                      auras=[Aura(Charge(), MinionSelector(IsType(MINION_TYPE.BEAST)))])
 
 
 class ScavengingHyena(MinionCard):
@@ -76,8 +76,8 @@ class ScavengingHyena(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2,
-                      effects=[Effect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeAttack(2), SelfSelector()),
-                               Effect(MinionDied(MinionIsType(MINION_TYPE.BEAST)), ChangeHealth(1), SelfSelector())])
+                      effects=[Effect(MinionDied(IsType(MINION_TYPE.BEAST)), ChangeAttack(2), SelfSelector()),
+                               Effect(MinionDied(IsType(MINION_TYPE.BEAST)), ChangeHealth(1), SelfSelector())])
 
 
 class Webspinner(MinionCard):
@@ -85,5 +85,5 @@ class Webspinner(MinionCard):
         super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[MinionIsType(MINION_TYPE.BEAST)])),
+        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[IsType(MINION_TYPE.BEAST)])),
                                                     PlayerSelector()))

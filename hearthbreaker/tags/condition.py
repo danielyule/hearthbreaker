@@ -128,7 +128,7 @@ class CardIsNotTarget(Condition):
         }
 
 
-class MinionIsType(Condition):
+class IsType(Condition):
     def __init__(self, minion_type, include_self=False):
         super().__init__()
         self.minion_type = minion_type
@@ -146,7 +146,7 @@ class MinionIsType(Condition):
 
     def __to_json__(self):
         return {
-            'name': 'minion_is_type',
+            'name': 'is_type',
             'include_self': self.include_self,
             'minion_type': MINION_TYPE.to_str(self.minion_type)
         }

@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import DoNothingAgent
+from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.constants import MINION_TYPE
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, WeaponTestingAgent, \
     PlayAndAttackAgent, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
@@ -314,6 +314,20 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
         self.assertEqual(3, game.current_player.minions[2].health)
+
+    def test_ExplosiveTrap_hero(self):
+        game = generate_game_for(ExplosiveTrap, Naturalize, OneCardPlayingAgent, PredictableAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(29, game.current_player.hero.health)
+        self.assertEqual(29, game.other_player.hero.health)
 
     def test_SavannahHighmane(self):
         game = generate_game_for(SavannahHighmane, SiphonSoul, OneCardPlayingAgent, CardTestingAgent)

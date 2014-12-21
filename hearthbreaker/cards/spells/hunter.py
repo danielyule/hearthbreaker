@@ -86,13 +86,14 @@ class ExplosiveTrap(SecretCard):
     def deactivate(self, player):
         player.opponent.unbind("attack", self._reveal)
 
-    def _reveal(self, minion, target):
+    def _reveal(self, attacker, target):
         if isinstance(target, Hero):
-            enemies = copy.copy(minion.game.current_player.minions)
-            enemies.append(minion.game.current_player.hero)
+            game = attacker.player.game
+            enemies = copy.copy(game.current_player.minions)
+            enemies.append(game.current_player.hero)
             for enemy in enemies:
                 enemy.damage(2, None)
-            minion.game.check_delayed()
+            game.check_delayed()
             super().reveal()
 
 

@@ -1,4 +1,4 @@
-from hearthbreaker.tags.action import ChangeAttack, Draw, ChangeHealth, Damage, Give, Windfury, Heal
+from hearthbreaker.tags.action import Draw, Damage, Give, Heal
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
