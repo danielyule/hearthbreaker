@@ -184,6 +184,7 @@ from hearthbreaker.cards.minions.neutral import (
     BombLobber,
     BurlyRockjawTrogg,
     Mechwarper,
+    Frog,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -258,6 +259,7 @@ from hearthbreaker.cards.minions.shaman import (
     SearingTotem,
     StoneclawTotem,
     WrathOfAirTotem,
+    SpiritWolf,
 )
 
 from hearthbreaker.cards.minions.warlock import (

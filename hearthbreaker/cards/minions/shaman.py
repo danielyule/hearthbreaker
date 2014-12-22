@@ -106,3 +106,11 @@ class WrathOfAirTotem(MinionCard):
 
     def create_minion(self, player):
         return Minion(0, 2, spell_damage=1)
+
+
+class SpiritWolf(MinionCard):
+    def __init__(self):
+        super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, p):
+        return Minion(2, 3, taunt=True)

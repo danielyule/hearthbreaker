@@ -79,17 +79,8 @@ class FeralSpirit(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class SpiritWolf(MinionCard):
-            def __init__(self):
-                super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, p):
-                minion = Minion(2, 3)
-                minion.taunt = True
-                return minion
-
         for i in range(0, 2):
-            spirit_wolf = SpiritWolf()
+            spirit_wolf = hearthbreaker.cards.minions.shaman.SpiritWolf()
             spirit_wolf.summon(player, game, len(player.minions))
 
 
@@ -130,14 +121,7 @@ class Hex(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Frog(MinionCard):
-            def __init__(self):
-                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-            def create_minion(self, p):
-                return Minion(0, 1, taunt=True)
-
-        frog = Frog()
+        frog = hearthbreaker.cards.minions.neutral.Frog()
         minion = frog.create_minion(None)
         minion.card = frog
         self.target.replace(minion)
