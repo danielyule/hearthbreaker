@@ -6,7 +6,7 @@ from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector, Se
 from hearthbreaker.tags.status import Windfury as _Windfury
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, Minion, MinionCard
+from hearthbreaker.game_objects import Card
 
 
 class AncestralHealing(Card):

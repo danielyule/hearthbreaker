@@ -1,12 +1,12 @@
 import copy
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Aura, AuraUntil
+from hearthbreaker.tags.base import AuraUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, CurrentPlayer, SpecificCardSelector
-from hearthbreaker.tags.status import ChangeAttack, Immune
+from hearthbreaker.tags.selector import SelfSelector, CurrentPlayer, SpecificCardSelector
+from hearthbreaker.tags.status import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, SecretCard, Minion, MinionCard, Hero
+from hearthbreaker.game_objects import Card, SecretCard, Minion, Hero
 
 
 class HuntersMark(Card):
