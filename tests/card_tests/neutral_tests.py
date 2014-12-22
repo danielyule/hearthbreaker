@@ -3147,3 +3147,20 @@ class TestCommon(unittest.TestCase):
         # Harvest Golem should be back at 3 again
         self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
         self.assertEqual(3, game.players[0].hand[0].mana_cost(game.players[0]))
+
+    def test_ClockworkGiant(self):
+        game = generate_game_for([Mechwarper, ClockworkGiant], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[1].hand))
+        # Initial cost is 12, opponent have 5 cards in hand, 12 - 5 = 7
+        self.assertEqual(7, game.players[0].hand[1].mana_cost(game.players[0]))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[1].hand))
+        self.assertEqual(1, len(game.players[0].minions))
+        # Initial cost is 12, opponent have 6 cards in hand and you have Mechwarper in play, 12 - 6 - 1 = 5
+        self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))

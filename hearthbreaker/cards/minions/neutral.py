@@ -2096,3 +2096,15 @@ class Frog(MinionCard):
 
     def create_minion(self, p):
         return Minion(0, 1, taunt=True)
+
+
+class ClockworkGiant(MinionCard):
+    def __init__(self):
+        super().__init__("Clockwork Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(8, 8)
+
+    def mana_cost(self, player):
+        cost = super().mana_cost(player) - len(player.game.other_player.hand)
+        return cost

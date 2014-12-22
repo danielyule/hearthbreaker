@@ -185,6 +185,7 @@ from hearthbreaker.cards.minions.neutral import (
     BurlyRockjawTrogg,
     Mechwarper,
     Frog,
+    ClockworkGiant,
 )
 
 from hearthbreaker.cards.minions.druid import (
