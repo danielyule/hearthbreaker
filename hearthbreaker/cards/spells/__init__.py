@@ -4,6 +4,7 @@ from hearthbreaker.cards.spells.neutral import (
     FinickyCloakfield,
     ReversingSwitch,
     RustyHorn,
+    TimeRewinder,
 )
 
 from hearthbreaker.cards.spells.druid import (

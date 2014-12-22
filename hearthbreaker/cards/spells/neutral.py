@@ -64,3 +64,13 @@ class RustyHorn(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.taunt = True
+
+
+class TimeRewinder(Card):
+    def __init__(self):
+        super().__init__("Time Rewinder", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.bounce()

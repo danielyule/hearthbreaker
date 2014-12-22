@@ -3220,3 +3220,18 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertTrue(game.players[1].minions[0].taunt)
+
+    def test_TimeRewinder(self):
+        game = generate_game_for([StonetuskBoar, TimeRewinder], StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[0].minions))
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual(0, len(game.players[0].minions))
