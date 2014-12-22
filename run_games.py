@@ -41,8 +41,10 @@ def do_stuff():
             print(json.dumps(new_game.__to_json__(), default=lambda o: o.__to_json__()))
             raise e
 
+        del new_game
+
         if _count % 10 == 0:
-            print("game #{}".format(_count))
+            print("---- game #{} ----".format(_count))
 
     deck1 = load_deck("example.hsdeck")
     deck2 = load_deck("example.hsdeck")

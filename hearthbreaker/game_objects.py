@@ -651,7 +651,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :rtype boolean:
         """
-        return self.calculate_attack() > 0 and self.active and not self.frozen
+        return self.calculate_attack() > 0 and self.active and not self.frozen and not (self.dead or self.removed)
 
     def spell_targetable(self):
         """
@@ -1265,7 +1265,8 @@ class Minion(Character):
         minion.game = game
         minion.player = player
         minion._effects_to_add = [Effect.from_json(game, **effect) for effect in md['effects']]
-        minion._auras_to_add = [Aura.from_json(**aura) for aura in md['auras']]
+        minion._auras_to_add = [AuraUntil.from_json(**aura) if 'until' in aura else Aura.from_json(**aura)
+                                for aura in md['auras']]
         return minion
 
     def bounce(self):

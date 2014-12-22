@@ -381,9 +381,6 @@ def record(game):
 
         def choose_option(self, *options):
             option = self.agent.choose_option(*options)
-            print(options)
-            print(option)
-
             replay._record_option_chosen(options.index(option))
             return option
 
