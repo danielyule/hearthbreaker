@@ -3202,3 +3202,13 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
 
         self.assertFalse(game.players[0].minions[0].stealth)
+
+    def test_ReversingSwitch(self):
+        game = generate_game_for(ReversingSwitch, GoldshireFootman, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_max_health())

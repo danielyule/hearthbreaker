@@ -2,6 +2,7 @@ from hearthbreaker.cards.spells.neutral import (
     ArmorPlating,
     EmergencyCoolant,
     FinickyCloakfield,
+    ReversingSwitch,
 )
 
 from hearthbreaker.cards.spells.druid import (

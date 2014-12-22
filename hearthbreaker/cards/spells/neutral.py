@@ -38,3 +38,19 @@ class FinickyCloakfield(Card):
         aura = Aura(Stealth(), SelfSelector())
         self.target.add_aura(aura)
         self.target.add_effect(Effect(TurnStarted(), Take(aura), SelfSelector()))
+
+
+class ReversingSwitch(Card):
+    def __init__(self):
+        super().__init__("Reversing Switch", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        temp_attack = self.target.calculate_attack()
+        temp_health = self.target.health
+        if temp_attack == 0:
+            self.target.die(None)
+        else:
+            self.target.set_attack_to(temp_health)
+            self.target.set_health_to(temp_attack)
