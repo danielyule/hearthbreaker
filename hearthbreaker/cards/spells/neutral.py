@@ -1,10 +1,9 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
-from hearthbreaker.tags.action import Take
-from hearthbreaker.tags.base import Aura, Effect
+from hearthbreaker.tags.base import Aura, AuraUntil
 from hearthbreaker.tags.event import TurnStarted
 from hearthbreaker.tags.selector import SelfSelector
-from hearthbreaker.tags.status import Stealth
+from hearthbreaker.tags.status import Stealth, Taunt
 import hearthbreaker.targeting
 
 
@@ -35,9 +34,7 @@ class FinickyCloakfield(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        aura = Aura(Stealth(), SelfSelector())
-        self.target.add_aura(aura)
-        self.target.add_effect(Effect(TurnStarted(), Take(aura), SelfSelector()))
+        self.target.add_aura(AuraUntil(Stealth(), SelfSelector(), TurnStarted()))
 
 
 class ReversingSwitch(Card):
@@ -63,7 +60,7 @@ class RustyHorn(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.taunt = True
+        self.target.add_aura(Aura(Taunt(), SelfSelector()))
 
 
 class TimeRewinder(Card):

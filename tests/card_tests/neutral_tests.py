@@ -3221,6 +3221,10 @@ class TestCommon(unittest.TestCase):
 
         self.assertTrue(game.players[1].minions[0].taunt)
 
+        # Test that this spell is being silenced properly as well
+        game.players[1].minions[0].silence()
+        self.assertFalse(game.players[1].minions[0].taunt)
+
     def test_TimeRewinder(self):
         game = generate_game_for([StonetuskBoar, TimeRewinder], StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
 
