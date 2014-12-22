@@ -155,6 +155,7 @@ from hearthbreaker.cards.spells.shaman import (
     TotemicMight,
     Windfury,
     Reincarnate,
+    Crackle,
 )
 
 from hearthbreaker.cards.spells.warlock import (

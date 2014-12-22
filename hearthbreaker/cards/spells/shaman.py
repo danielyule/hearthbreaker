@@ -205,3 +205,14 @@ class Reincarnate(Card):
         self.target.die(self)
         game.check_delayed()
         self.target.card.summon(self.target.player, game, len(self.target.player.minions))
+
+
+class Crackle(Card):
+    def __init__(self):
+        super().__init__("Crackle", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target, overload=1)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(game.random_amount(3, 6)), self)

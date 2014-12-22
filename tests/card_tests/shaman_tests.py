@@ -463,3 +463,12 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
         self.assertEqual(1, game.players[0].overload)
+
+    def test_Crackle(self):
+        game = generate_game_for(Crackle, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(25, game.players[1].hero.health)
+        self.assertEqual(1, game.players[0].overload)
