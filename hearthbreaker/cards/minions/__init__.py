@@ -206,6 +206,11 @@ from hearthbreaker.cards.minions.hunter import (
     TundraRhino,
     ScavengingHyena,
     Webspinner,
+    Hound,
+    Huffer,
+    Misha,
+    Leokk,
+    Snake,
 )
 
 from hearthbreaker.cards.minions.mage import (
