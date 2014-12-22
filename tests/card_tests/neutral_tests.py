@@ -3180,3 +3180,11 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
+
+    def test_EmergencyCoolant(self):
+        game = generate_game_for(EmergencyCoolant, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertTrue(game.players[1].minions[0].frozen)

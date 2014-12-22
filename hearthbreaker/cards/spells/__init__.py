@@ -1,5 +1,6 @@
 from hearthbreaker.cards.spells.neutral import (
     ArmorPlating,
+    EmergencyCoolant,
 )
 
 from hearthbreaker.cards.spells.druid import (
