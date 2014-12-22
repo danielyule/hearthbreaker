@@ -1632,13 +1632,6 @@ class OldMurkEye(MinionCard):
                                                                               BothPlayer()))), SelfSelector()))
 
     def create_minion(self, player):
-        def set_base_attack(m):
-            targets = copy.copy(player.game.current_player.minions)
-            targets.extend(player.game.other_player.minions)
-            for target in targets:
-                if target is not m and target.card.minion_type is MINION_TYPE.MURLOC:
-                    m.change_attack(1)
-
         return Minion(2, 4, charge=True,
                       effects=[Effect(MinionPlaced(condition=IsType(MINION_TYPE.MURLOC), player=BothPlayer()),
                                       ChangeAttack(1), SelfSelector()),
