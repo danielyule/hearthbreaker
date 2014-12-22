@@ -7,6 +7,7 @@ from hearthbreaker.cards.weapons.paladin import (
     LightsJustice,
     SwordOfJustice,
     TruesilverChampion,
+    Coghammer,
 )
 
 from hearthbreaker.cards.weapons.rogue import (

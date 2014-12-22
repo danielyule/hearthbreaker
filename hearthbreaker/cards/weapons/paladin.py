@@ -1,3 +1,7 @@
+import hearthbreaker.targeting
+from hearthbreaker.tags.base import Aura
+from hearthbreaker.tags.selector import SelfSelector
+from hearthbreaker.tags.status import DivineShield, Taunt
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import WeaponCard, Weapon
 
@@ -47,4 +51,20 @@ class TruesilverChampion(WeaponCard):
         weapon = Weapon(4, 2)
         player.hero.bind("attack", heal)
         weapon.bind_once("destroyed", on_destroy)
+        return weapon
+
+
+class Coghammer(WeaponCard):
+    def __init__(self):
+        super().__init__("Coghammer", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
+
+    def create_weapon(self, player):
+        def random_buff(w):
+            targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
+            if targets is not None:
+                target = player.game.random_choice(targets)
+                target.add_aura(Aura(DivineShield(), SelfSelector()))
+                target.add_aura(Aura(Taunt(), SelfSelector()))
+
+        weapon = Weapon(2, 3, battlecry=random_buff)
         return weapon

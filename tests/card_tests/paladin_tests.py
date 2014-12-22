@@ -588,3 +588,21 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertTrue(game.players[0].minions[1].divine_shield)
+
+    def test_Coghammer(self):
+        game = generate_game_for([StonetuskBoar, Coghammer], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].divine_shield)
+        self.assertFalse(game.players[0].minions[0].taunt)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(3, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].divine_shield)
+        self.assertTrue(game.players[0].minions[0].taunt)
