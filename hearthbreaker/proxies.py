@@ -64,30 +64,6 @@ class ProxyCharacter:
         return rval
 
 
-class TrackingProxyCharacter(ProxyCharacter):
-    def __init__(self, character_ref, game):
-        super().__init__(character_ref)
-        if self.minion_ref is not None:
-            if self.player_ref == "p1":
-                player = game.players[0]
-            else:
-                player = game.players[1]
-            player.bind("minion_played", self.__minion_added)
-            player.bind("minion_removed", self.__minion_removed)
-
-    def __minion_added(self, minion):
-        if minion.index < self.minion_ref:
-            self.minion_ref += 1
-
-    def __minion_removed(self, minion):
-        if minion.index == self.minion_ref:
-            self.minion_ref = -1
-            minion.player.unbind("minion_played", self.__minion_added)
-            minion.player.unbind("minion_removed", self.__minion_removed)
-        elif minion.index < self.minion_ref:
-            self.minion_ref -= 1
-
-
 class ProxyCard:
     def __init__(self, card_reference):
         self.option = None

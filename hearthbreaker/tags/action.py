@@ -1,7 +1,6 @@
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
     CARD_SOURCE, Effect
 from hearthbreaker.tags.condition import IsSecret
-import hearthbreaker.proxies
 
 
 class Freeze(Action):
@@ -421,15 +420,14 @@ class Steal(Action):
 class Duplicate(Action):
     def __init__(self, minion):
         super().__init__()
-        self.minion = hearthbreaker.proxies.TrackingProxyCharacter(minion, minion.game)
-        self.__min_ref = None
-
-    def track_changes(self, player):
-        if not self.minion:
-            self.minion = hearthbreaker.proxies.TrackingProxyCharacter(self.__min_ref, player.game)
+        self.minion = minion.born
 
     def act(self, actor, target):
-        minion = self.minion.resolve(target.game)
+        minion = None
+        for player in target.game.players:
+            for m in player.minions:
+                if m.born == self.minion:
+                    minion = m
         if minion:
             dup = minion.copy(minion.player)
             dup.add_to_board(minion.index + 1)
@@ -437,12 +435,11 @@ class Duplicate(Action):
     def __to_json__(self):
         return {
             "name": "duplicate",
-            "minion": str(self.minion)
+            "minion": self.minion
         }
 
     def __from_json__(self, minion):
-        self.__min_ref = minion
-        self.minion = None
+        self.minion = minion
         return self
 
 

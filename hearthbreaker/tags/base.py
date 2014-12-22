@@ -181,9 +181,6 @@ class Action(JSONObject, metaclass=abc.ABCMeta):
         self.__init__(**kwargs)
         return self
 
-    def track_changes(self, player):
-        pass
-
 
 class Status(JSONObject, metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -349,7 +346,6 @@ class Effect(JSONObject):
 
     def apply(self):
         self.event.bind(self.target, self._find_target)
-        self.action.track_changes(self.target.player)
 
     def unapply(self):
         self.event.unbind(self.target, self._find_target)
