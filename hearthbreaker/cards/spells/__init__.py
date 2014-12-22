@@ -172,7 +172,8 @@ from hearthbreaker.cards.spells.warlock import (
     BaneOfDoom,
     Shadowflame,
     Corruption,
-    PowerOverwhelming
+    PowerOverwhelming,
+    Darkbomb,
 )
 
 from hearthbreaker.cards.spells.warrior import (

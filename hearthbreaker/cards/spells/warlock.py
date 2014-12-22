@@ -202,3 +202,13 @@ class PowerOverwhelming(Card):
         self.target.add_effect(Effect(TurnEnded(), Kill(), SelfSelector()))
         self.target.change_attack(4)
         self.target.increase_health(4)
+
+
+class Darkbomb(Card):
+    def __init__(self):
+        super().__init__("Darkbomb", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(player.effective_spell_damage(3), self)

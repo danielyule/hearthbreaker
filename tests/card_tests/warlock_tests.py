@@ -560,3 +560,10 @@ class TestWarlock(unittest.TestCase):
         # The golem is played alone, which results in its death at the end of the turn
         game.play_single_turn()
         self.assertEqual(0, len(game.current_player.minions))
+
+    def test_Darkbomb(self):
+        game = generate_game_for(Darkbomb, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.players[1].hero.health)
