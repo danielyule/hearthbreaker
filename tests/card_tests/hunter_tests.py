@@ -594,3 +594,16 @@ class TestHunter(unittest.TestCase):
 
         # Molten Giant should not be affected since it's not a beast
         self.assertEqual(20, game.players[0].hand[5].mana_cost(game.players[0]))
+
+    def test_CobraShot(self):
+        game = generate_game_for(CobraShot, StonetuskBoar, CardTestingAgent, CardTestingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(7, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(27, game.players[1].hero.health)
+        self.assertEqual(6, len(game.players[1].minions))

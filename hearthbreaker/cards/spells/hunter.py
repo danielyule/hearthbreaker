@@ -285,3 +285,14 @@ class CallPet(Card):
         player.draw()
         if aura is not None:
             player.add_aura(aura)
+
+
+class CobraShot(Card):
+    def __init__(self):
+        super().__init__("Cobra Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(player.effective_spell_damage(3), self)
+        game.other_player.hero.damage(player.effective_spell_damage(3), self)

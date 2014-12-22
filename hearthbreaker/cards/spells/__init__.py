@@ -49,6 +49,7 @@ from hearthbreaker.cards.spells.hunter import (
     AnimalCompanion,
     SnakeTrap,
     CallPet,
+    CobraShot,
 )
 
 from hearthbreaker.cards.spells.mage import (
