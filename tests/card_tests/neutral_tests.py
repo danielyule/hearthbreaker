@@ -3188,3 +3188,17 @@ class TestCommon(unittest.TestCase):
             game.play_single_turn()
 
         self.assertTrue(game.players[1].minions[0].frozen)
+
+    def test_FinickyCloakfield(self):
+        game = generate_game_for([StonetuskBoar, FinickyCloakfield, MoltenGiant], StonetuskBoar, OneCardPlayingAgent,
+                                 DoNothingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertTrue(game.players[0].minions[0].stealth)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertFalse(game.players[0].minions[0].stealth)
