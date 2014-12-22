@@ -212,3 +212,18 @@ class Darkbomb(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(3), self)
+
+
+class Demonheart(Card):
+    def __init__(self):
+        super().__init__("Demonheart", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(player.game.current_player.minions)
+        if self.target.card.minion_type is MINION_TYPE.DEMON and self.target in targets:
+            self.target.change_attack(5)
+            self.target.increase_health(5)
+        else:
+            self.target.damage(player.effective_spell_damage(5), self)

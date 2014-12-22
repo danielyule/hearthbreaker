@@ -174,6 +174,7 @@ from hearthbreaker.cards.spells.warlock import (
     Corruption,
     PowerOverwhelming,
     Darkbomb,
+    Demonheart,
 )
 
 from hearthbreaker.cards.spells.warrior import (
