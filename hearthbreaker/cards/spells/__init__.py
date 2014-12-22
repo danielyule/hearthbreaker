@@ -3,6 +3,7 @@ from hearthbreaker.cards.spells.neutral import (
     EmergencyCoolant,
     FinickyCloakfield,
     ReversingSwitch,
+    RustyHorn,
 )
 
 from hearthbreaker.cards.spells.druid import (

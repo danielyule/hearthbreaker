@@ -54,3 +54,13 @@ class ReversingSwitch(Card):
         else:
             self.target.set_attack_to(temp_health)
             self.target.set_health_to(temp_attack)
+
+
+class RustyHorn(Card):
+    def __init__(self):
+        super().__init__("Rusty Horn", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.taunt = True
