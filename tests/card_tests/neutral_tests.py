@@ -3292,6 +3292,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
 
+        # The boom bot target the second Stonetust boar that was played (two can be played because of the coin)
         game.play_single_turn()
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertNotEqual(30, game.players[1].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
