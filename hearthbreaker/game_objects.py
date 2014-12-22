@@ -1397,8 +1397,7 @@ class Weapon(Bindable, GameObject):
         self.card = None
 
     def copy(self, new_owner):
-        new_weapon = copy.copy(self)
-        new_weapon.events = copy.copy(self.events)
+        new_weapon = Weapon(self.base_attack, self.durability, self.battlecry, copy.deepcopy(self.deathrattle))
         new_weapon.player = new_owner
         return new_weapon
 
@@ -1950,7 +1949,8 @@ class Game(Bindable):
 
     def copy(self):
         copied_game = copy.copy(self)
-        copied_game.cards_played_total = []
+        copied_game.events = {}
+        copied_game.__all_cards_played = []
         copied_game.players = [player.copy(copied_game) for player in self.players]
         if self.current_player is self.players[0]:
             copied_game.current_player = copied_game.players[0]
