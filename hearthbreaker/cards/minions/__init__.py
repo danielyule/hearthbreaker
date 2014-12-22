@@ -276,6 +276,7 @@ from hearthbreaker.cards.minions.warlock import (
     VoidTerror,
     Voidcaller,
     AnimaGolem,
+    WorthlessImp,
 )
 
 from hearthbreaker.cards.minions.warrior import (

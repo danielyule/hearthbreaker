@@ -158,3 +158,11 @@ class AnimaGolem(MinionCard):
 
     def create_minion(self, player):
         return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()), Kill(), SelfSelector())])
+
+
+class WorthlessImp(MinionCard):
+    def __init__(self):
+        super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
+
+    def create_minion(self, p):
+        return Minion(1, 1)

@@ -131,13 +131,6 @@ class SenseDemons(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class WorthlessImp(MinionCard):
-            def __init__(self):
-                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
-
-            def create_minion(self, p):
-                return Minion(1, 1)
-
         for i in range(0, 2):
             demon_card = game.random_draw(game.current_player.deck.cards,
                                           lambda c: not c.drawn and
@@ -153,8 +146,8 @@ class SenseDemons(Card):
                     player.trigger("card_destroyed", demon_card)
             else:
                 if len(player.hand) < 10:
-                    player.hand.append(WorthlessImp())
-                    self.trigger("card_drawn", WorthlessImp())
+                    player.hand.append(hearthbreaker.cards.minions.warlock.WorthlessImp())
+                    self.trigger("card_drawn", hearthbreaker.cards.minions.warlock.WorthlessImp())
 
 
 class BaneOfDoom(Card):
