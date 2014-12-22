@@ -558,3 +558,17 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_NobleSacrifice_hero(self):
+        game = generate_game_for(NobleSacrifice, Naturalize, OneCardPlayingAgent, PredictableAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].secrets))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(29, game.players[1].hero.health)

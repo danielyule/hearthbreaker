@@ -38,6 +38,7 @@ from hearthbreaker.cards.spells.hunter import (
     UnleashTheHounds,
     AnimalCompanion,
     SnakeTrap,
+    CallPet,
 )
 
 from hearthbreaker.cards.spells.mage import (

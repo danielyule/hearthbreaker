@@ -184,6 +184,7 @@ from hearthbreaker.cards.minions.neutral import (
     BombLobber,
     BurlyRockjawTrogg,
     Mechwarper,
+    Frog,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -205,6 +206,11 @@ from hearthbreaker.cards.minions.hunter import (
     TundraRhino,
     ScavengingHyena,
     Webspinner,
+    Hound,
+    Huffer,
+    Misha,
+    Leokk,
+    Snake,
 )
 
 from hearthbreaker.cards.minions.mage import (
@@ -258,6 +264,7 @@ from hearthbreaker.cards.minions.shaman import (
     SearingTotem,
     StoneclawTotem,
     WrathOfAirTotem,
+    SpiritWolf,
 )
 
 from hearthbreaker.cards.minions.warlock import (
@@ -274,6 +281,7 @@ from hearthbreaker.cards.minions.warlock import (
     VoidTerror,
     Voidcaller,
     AnimaGolem,
+    WorthlessImp,
 )
 
 from hearthbreaker.cards.minions.warrior import (

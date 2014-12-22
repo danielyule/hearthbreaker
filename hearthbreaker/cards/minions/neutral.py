@@ -2088,3 +2088,11 @@ class Mechwarper(MinionCard):
     def create_minion(self, player):
         return Minion(2, 3, auras=[Aura(ManaChange(1, 0, MinionCardSelector(IsType(MINION_TYPE.MECH))),
                                         PlayerSelector())])
+
+
+class Frog(MinionCard):
+    def __init__(self):
+        super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, p):
+        return Minion(0, 1, taunt=True)

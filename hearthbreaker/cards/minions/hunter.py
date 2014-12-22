@@ -87,3 +87,43 @@ class Webspinner(MinionCard):
     def create_minion(self, player):
         return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[IsType(MINION_TYPE.BEAST)])),
                                                     PlayerSelector()))
+
+
+class Hound(MinionCard):
+    def __init__(self):
+        super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(1, 1, charge=True)
+
+
+class Huffer(MinionCard):
+    def __init__(self):
+        super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(4, 2, charge=True)
+
+
+class Misha(MinionCard):
+    def __init__(self):
+        super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(4, 4, taunt=True)
+
+
+class Leokk(MinionCard):
+    def __init__(self):
+        super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(2, 4, auras=[Aura(ChangeAttack(1), MinionSelector())])
+
+
+class Snake(MinionCard):
+    def __init__(self):
+        super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(1, 1)

@@ -232,14 +232,8 @@ class UnleashTheHounds(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Hound(MinionCard):
-            def __init__(self):
-                super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
-
-            def create_minion(self, player):
-                return Minion(1, 1, charge=True)
         for target in hearthbreaker.targeting.find_enemy_minion_spell_target(player.game, lambda x: True):
-            hound = Hound()
+            hound = hearthbreaker.cards.minions.hunter.Hound()
             hound.summon(player, game, len(player.minions))
 
 
@@ -250,29 +244,8 @@ class AnimalCompanion(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Huffer(MinionCard):
-            def __init__(self):
-                super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL,
-                                 minion_type=MINION_TYPE.BEAST)
-
-            def create_minion(self, player):
-                return Minion(4, 2, charge=True)
-
-        class Misha(MinionCard):
-            def __init__(self):
-                super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
-
-            def create_minion(self, player):
-                return Minion(4, 4, taunt=True)
-
-        class Leokk(MinionCard):
-            def __init__(self):
-                super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
-
-            def create_minion(self, player):
-                return Minion(2, 4, auras=[Aura(ChangeAttack(1), MinionSelector())])
-
-        beast_list = [Huffer(), Misha(), Leokk()]
+        beast_list = [hearthbreaker.cards.minions.hunter.Huffer(), hearthbreaker.cards.minions.hunter.Misha(),
+                      hearthbreaker.cards.minions.hunter.Leokk()]
         card = game.random_choice(beast_list)
         card.summon(player, player.game, len(player.minions))
 
@@ -289,14 +262,26 @@ class SnakeTrap(SecretCard):
 
     def _reveal(self, attacker, target):
         if isinstance(target, Minion):
-            class Snake(MinionCard):
-                def __init__(self):
-                    super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-                def create_minion(self, player):
-                    return Minion(1, 1)
-            snake = Snake()
+            snake = hearthbreaker.cards.minions.hunter.Snake()
             player = target.player.game.other_player
             for i in range(0, 3):
                 snake.summon(player, player.game, len(player.minions))
             super().reveal()
+
+
+class CallPet(Card):
+    def __init__(self):
+        super().__init__("Call Pet", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        def reduce_cost(card):
+            if card.is_minion() and card.minion_type == MINION_TYPE.BEAST:
+                nonlocal aura
+                aura = ManaAura(4, 0, SpecificCardSelector(card), True, False)
+
+        super().use(player, game)
+        aura = None
+        player.bind_once("card_drawn", reduce_cost)
+        player.draw()
+        if aura is not None:
+            player.add_aura(aura)

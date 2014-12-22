@@ -230,7 +230,7 @@ class NobleSacrifice(SecretCard):
                          CARD_RARITY.COMMON)
 
     def _reveal(self, attacker, target):
-        player = attacker.game.other_player
+        player = attacker.player.game.other_player
         if len(player.minions) < 7 and not attacker.removed:
             class DefenderMinion(MinionCard):
                 def __init__(self):
