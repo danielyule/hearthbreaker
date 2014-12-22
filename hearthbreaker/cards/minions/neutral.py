@@ -2115,3 +2115,12 @@ class ClockworkGnome(MinionCard):
         return Minion(2, 1,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))
+
+
+class BoomBot(MinionCard):
+    def __init__(self):
+        super().__init__("Boom Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 1, deathrattle=Deathrattle(Damage(player.game.random_amount(1, 4)),
+                                                    CharacterSelector(players=EnemyPlayer(), picker=RandomPicker())))

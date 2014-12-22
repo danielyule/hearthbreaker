@@ -3284,3 +3284,14 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual("Rusty Horn", game.players[0].hand[-1].name)
+
+    def test_BoomBot(self):
+        game = generate_game_for(BoomBot, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertNotEqual(30, game.players[1].hero.health)

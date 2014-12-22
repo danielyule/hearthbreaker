@@ -187,6 +187,7 @@ from hearthbreaker.cards.minions.neutral import (
     Frog,
     ClockworkGiant,
     ClockworkGnome,
+    BoomBot,
 )
 
 from hearthbreaker.cards.minions.druid import (
