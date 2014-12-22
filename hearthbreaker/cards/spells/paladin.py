@@ -258,7 +258,7 @@ class Redemption(SecretCard):
                          CARD_RARITY.COMMON)
 
     def _reveal(self, minion, by):
-        resurrection = minion.card.summon(minion.player, minion.game, minion.index)
+        resurrection = minion.card.summon(minion.player, minion.game, min(minion.index, len(minion.player.minions)))
         resurrection.health = 1
         super().reveal()
 

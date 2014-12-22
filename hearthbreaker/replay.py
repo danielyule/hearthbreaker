@@ -95,7 +95,7 @@ class Replay:
         """
         Record that an option was chosen.  This will update whichever is the most recent move
         """
-        self.moves[-1].card.set_option(option)
+        self._moves[-1].card.set_option(option)
 
     def _record_attack(self, attacker, target):
         """
@@ -380,7 +380,9 @@ def record(game):
             return target
 
         def choose_option(self, *options):
-            option = self.agent.choose_option(options)
+            option = self.agent.choose_option(*options)
+            print(options)
+            print(option)
 
             replay._record_option_chosen(options.index(option))
             return option
@@ -478,6 +480,8 @@ def playback(replay):
                 random_index = 0
                 replay._moves[move_index].play(game)
                 move_index += 1
+            if move_index == len(replay._moves):
+                player.game.game_ended = True
 
         def set_game(self, game):
             pass

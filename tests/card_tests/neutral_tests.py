@@ -456,6 +456,29 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[2].health)
         self.assertEqual(1, game.other_player.minions[2].calculate_max_health())
 
+    def test_StormwindChampion_and_Polymorph(self):
+        game = generate_game_for([StormwindChampion, BoulderfistOgre], Polymorph,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(6, game.current_player.minions[0].health)
+        self.assertEqual(6, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].health)
+        self.assertEqual(6, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(1, game.current_player.minions[1].calculate_attack())
+
     def test_VoodooDoctor(self):
         game = generate_game_for(VoodooDoctor, StonetuskBoar, SelfSpellTestingAgent, DoNothingAgent)
 
@@ -2547,7 +2570,8 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(2, len(game.other_player.minions))
 
-        self.assertEqual("Water Elemental", game.other_player.minions[1].card.name)
+        self.assertEqual("Water Elemental", game.other_player.minions[0].card.name)
+        self.assertEqual("Oasis Snapjaw", game.other_player.minions[1].card.name)
 
         for turn in range(0, 2):
             game.play_single_turn()

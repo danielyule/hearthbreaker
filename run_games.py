@@ -1,3 +1,4 @@
+import json
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Game, card_lookup, Deck
@@ -28,12 +29,23 @@ def load_deck(filename):
 
 
 def do_stuff():
-    def play_game():
-        new_game = game.copy()
-        new_game.start()
+    _count = 0
 
-    deck1 = load_deck("example.hsdeck")
-    deck2 = load_deck("example.hsdeck")
+    def play_game():
+        nonlocal _count
+        _count += 1
+        new_game = game.copy()
+        try:
+            new_game.start()
+        except Exception as e:
+            print(json.dumps(new_game.__to_json__(), default=lambda o: o.__to_json__()))
+            raise e
+
+        if _count % 10 == 0:
+            print("game #{}".format(_count))
+
+    deck1 = load_deck("mage.hsdeck")
+    deck2 = load_deck("druid.hsdeck")
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
 
     print(timeit.timeit(play_game, 'gc.enable()', number=1000))

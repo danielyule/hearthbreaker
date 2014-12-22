@@ -263,6 +263,19 @@ class TestPriest(unittest.TestCase):
         # Now the Snapjaw should be dead
         self.assertEqual(0, len(game.current_player.minions))
 
+    def test_ShadowMadness_and_death(self):
+        game = generate_game_for([MagmaRager, SludgeBelcher], ShadowMadness, OneCardPlayingAgent, PlayAndAttackAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Slime", game.current_player.minions[0].card.name)
+
     def test_ShadowWordDeath(self):
         game = generate_game_for([IronfurGrizzly, MagmaRager], ShadowWordDeath, OneCardPlayingAgent, CardTestingAgent)
 

@@ -23,9 +23,9 @@ class JSONObject(metaclass=abc.ABCMeta):
 
 
 class Aura(JSONObject):
-    def __init__(self, action, selector):
+    def __init__(self, status, selector):
         self.target = None
-        self.action = action
+        self.status = status
         self.selector = selector
 
     def set_target(self, target):
@@ -34,32 +34,32 @@ class Aura(JSONObject):
     def apply(self):
         targets = self.selector.get_targets(self.target)
         for target in targets:
-            self.action.act(self.target, target)
+            self.status.act(self.target, target)
 
     def unapply(self):
         targets = self.selector.get_targets(self.target)
         for target in targets:
-            self.action.unact(self.target, target)
+            self.status.unact(self.target, target)
 
     def match(self, obj):
         return self.selector.match(self.target, obj)
 
     def __to_json__(self):
         return {
-            'action': self.action,
+            'status': self.status,
             'selector': self.selector
         }
 
     @staticmethod
-    def from_json(action, selector):
-        action = Status.from_json(**action)
+    def from_json(status, selector):
+        status = Status.from_json(**status)
         selector = Selector.from_json(**selector)
-        return Aura(action, selector)
+        return Aura(status, selector)
 
 
 class AuraUntil(Aura):
-    def __init__(self, action, selector, until):
-        super().__init__(action, selector)
+    def __init__(self, status, selector, until):
+        super().__init__(status, selector)
         self.until = until
 
     def apply(self):
@@ -78,17 +78,17 @@ class AuraUntil(Aura):
 
     def __to_json__(self):
         return {
-            'action': self.action,
+            'status': self.status,
             'selector': self.selector,
             'until': self.until
         }
 
     @staticmethod
-    def from_json(action, selector, until):
-        action = Status.from_json(**action)
+    def from_json(status, selector, until):
+        status = Status.from_json(**status)
         selector = Selector.from_json(**selector)
         until = Event.from_json(**until)
-        return AuraUntil(action, selector, until)
+        return AuraUntil(status, selector, until)
 
 
 class Player(metaclass=abc.ABCMeta):

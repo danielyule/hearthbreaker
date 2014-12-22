@@ -108,7 +108,7 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target):
-        if actor.is_minion():
+        if actor.is_minion() and actor.player is target:
             if actor.removed:
                 index = actor.index
             else:
@@ -408,6 +408,7 @@ class Equip(Action):
 class Steal(Action):
     def act(self, actor, target):
         new_minion = target.copy(actor.player)
+        target._remove_auras_and_effects()
         target.remove_from_board()
         new_minion.add_to_board(len(actor.player.minions))
 

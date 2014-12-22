@@ -324,7 +324,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.current_target = None
 
     def add_aura(self, aura):
-        from hearthbreaker.tags.selector import SelfSelector
         self.auras.append(aura)
         aura.set_target(self)
         if isinstance(aura.selector, SelfSelector):
@@ -333,7 +332,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             self.player.add_aura(aura)
 
     def remove_aura(self, aura):
-        from hearthbreaker.tags.selector import SelfSelector
         self.auras = [au for au in filter(lambda a: not a.eq(aura), self.auras)]
         if isinstance(aura.selector, SelfSelector):
             aura.unapply()
@@ -343,7 +341,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
     def _remove_stealth(self):
         if self.stealth:
             self.auras = [aura for aura in filter(
-                lambda a: not isinstance(a.action, Stealth), self.auras)]
+                lambda a: not isinstance(a.status, Stealth), self.auras)]
             self.stealth = 0
 
     def attack(self):
@@ -542,8 +540,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         diff = new_attack - (self.base_attack + self.attack_delta)
         for player in self.game.players:
             for aura in player.minion_auras:
-                if aura.match(self) and isinstance(aura.action, ChangeAttack):
-                    diff += aura.action.amount
+                if aura.match(self) and isinstance(aura.status, ChangeAttack):
+                    diff += aura.status.amount
         self.change_attack(diff)
 
     def set_health_to(self, new_health):
@@ -556,8 +554,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         for player in self.game.players:
             for aura in player.minion_auras:
-                if aura.match(self) and isinstance(aura.action, ChangeHealth):
-                    diff += aura.action.amount
+                if aura.match(self) and isinstance(aura.status, ChangeHealth):
+                    diff += aura.status.amount
         if diff > 0:
             self.increase_health(diff)
         elif diff < 0:
@@ -600,6 +598,17 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
                 self._do_unenrage()
             self.trigger("health_changed")
 
+    def _remove_auras_and_effects(self):
+        for effect in reversed(self.effects):
+            self.player.effect_count[type(effect)] -= 1
+            effect.unapply()
+        for aura in reversed(self.auras):
+            if isinstance(aura.selector, SelfSelector):
+                if isinstance(aura, AuraUntil):
+                    aura.until.unbind(aura.target, aura.__until__)
+            else:
+                self.player.remove_aura(aura)
+
     def silence(self):
         """
         Silence this :class:`Character`.  This will trigger the silence event, and undo any status tags that have
@@ -609,13 +618,13 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.frozen_this_turn = False
         health_full = self.health == self.calculate_max_health()
         for effect in reversed(self.effects):
-            self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         for aura in reversed(self.auras):
             if isinstance(aura.selector, SelfSelector):
                 aura.unapply()
             else:
                 self.player.remove_aura(aura)
+
         self.effects = []
         self.auras = []
         if self.enraged:
@@ -1085,9 +1094,9 @@ class Minion(Character):
                 for minion in self.player.minions:
                     is_in = minion in aura_affects[aura]
                     if not is_in and aura.match(minion):
-                        aura.action.act(aura.target, minion)
+                        aura.status.act(aura.target, minion)
                     elif is_in and not aura.match(minion):
-                        aura.action.unact(aura.target, minion)
+                        aura.status.unact(aura.target, minion)
         for aura in self._auras_to_add:
             self.add_aura(aura)
 
@@ -1116,18 +1125,18 @@ class Minion(Character):
                 if aura.match(minion):
                     aura_affects[aura].add(minion)
         for minion in self.player.minions:
-
             if minion.index > self.index:
                 minion.index -= 1
-        self.game.remove_minion(self, self.player)
+        self.player.minions.remove(self)
+        self.player.trigger("minion_removed", self)
         self.removed = True
         for aura in self.player.minion_auras:
             for minion in self.player.minions:
                 is_in = minion in aura_affects[aura]
                 if not is_in and aura.match(minion):
-                    aura.action.act(aura.target, minion)
+                    aura.status.act(aura.target, minion)
                 elif is_in and not aura.match(minion):
-                    aura.action.unact(aura.target, minion)
+                    aura.status.unact(aura.target, minion)
 
     def replace(self, new_minion):
         """
@@ -1135,7 +1144,7 @@ class Minion(Character):
 
         :param hearthbreaker.game_objects.Minion new_minion: The minion to replace this minion with
         """
-        self.silence()
+        self._remove_auras_and_effects()
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
@@ -1144,13 +1153,14 @@ class Minion(Character):
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         if self.index >= len(self.player.minions):
+            print("".join([str(minion) for minion in self.player.minions]))
             raise ValueError("What is even happening?")
         self.player.minions[self.index] = new_minion
         for effect in new_minion._effects_to_add:
             new_minion.add_effect(effect)
         for aura in self.player.minion_auras:
             if aura.match(new_minion):
-                aura.action.act(self, new_minion)
+                aura.status.act(self, new_minion)
         for aura in new_minion._auras_to_add:
             new_minion.add_aura(aura)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
@@ -1161,7 +1171,7 @@ class Minion(Character):
     def damage(self, amount, attacker):
         if self.divine_shield:
             self.auras = [aura for aura in filter(
-                lambda a: not isinstance(a.action, DivineShield), self.auras)]
+                lambda a: not isinstance(a.status, DivineShield), self.auras)]
             self.divine_shield = 0
         else:
             super().damage(amount, attacker)
@@ -1181,7 +1191,7 @@ class Minion(Character):
                         rattle.deathrattle(self)
                         if self.player.double_deathrattle:
                             rattle.deathrattle(self)
-                self.silence()
+                self._remove_auras_and_effects()
                 self.player.trigger("minion_died", self, by)
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
@@ -1260,7 +1270,7 @@ class Minion(Character):
 
     def bounce(self):
         if len(self.player.hand) < 10:
-            self.silence()
+            self._remove_auras_and_effects()
             self.remove_from_board()
             self.player.hand.append(self.card)
         else:
@@ -1814,6 +1824,7 @@ class Game(Bindable):
         self.__pre_game_run = False
         self.last_spell = None
         self._has_turn_ended = True
+        self.__all_cards_played = []
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -1938,6 +1949,7 @@ class Game(Bindable):
 
     def copy(self):
         copied_game = copy.copy(self)
+        copied_game.cards_played_total = []
         copied_game.players = [player.copy(copied_game) for player in self.players]
         if self.current_player is self.players[0]:
             copied_game.current_player = copied_game.players[0]
@@ -1974,6 +1986,7 @@ class Game(Bindable):
         self.current_player.hand.pop(card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
         self.current_player.trigger("card_played", card, card_index)
+        self.__all_cards_played.append(card)
 
         if card.is_spell():
             self.last_spell = card
@@ -1984,10 +1997,6 @@ class Game(Bindable):
             self.current_player.trigger("card_used", card)
             self.current_player.cards_played += 1
             self.check_delayed()
-
-    def remove_minion(self, minion, player):
-        player.minions.remove(minion)
-        player.trigger("minion_removed", minion)
 
     def __to_json__(self):
         if self.current_player == self.players[0]:
@@ -2003,6 +2012,7 @@ class Game(Bindable):
     @staticmethod
     def __from_json__(d, agents):
         new_game = Game.__new__(Game)
+        new_game.__all_cards_played = []
         new_game.minion_counter = d["current_sequence_id"]
         new_game.delayed_minions = set()
         new_game.game_ended = False
