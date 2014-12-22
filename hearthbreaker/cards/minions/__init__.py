@@ -230,6 +230,7 @@ from hearthbreaker.cards.minions.paladin import (
     ArgentProtector,
     GuardianOfKings,
     TirionFordring,
+    CobaltGuardian,
 )
 
 from hearthbreaker.cards.minions.priest import (

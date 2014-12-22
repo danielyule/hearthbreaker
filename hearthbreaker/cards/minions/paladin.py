@@ -1,9 +1,11 @@
 from hearthbreaker.tags.action import Equip, Give, Heal
-from hearthbreaker.tags.base import Deathrattle, Battlecry
-from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, EnemyPlayer, HeroSelector
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect
+from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, EnemyPlayer, HeroSelector, SelfSelector
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.tags.status import SetAttack, DivineShield
+from hearthbreaker.tags.condition import IsType
+from hearthbreaker.tags.event import MinionSummoned
 
 
 class AldorPeacekeeper(MinionCard):
@@ -49,3 +51,11 @@ class TirionFordring(MinionCard):
     def create_minion(self, player):
         return Minion(6, 6, divine_shield=True, taunt=True,
                       deathrattle=Deathrattle(Equip(Ashbringer()), PlayerSelector()))
+
+
+class CobaltGuardian(MinionCard):
+    def __init__(self):
+        super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), DivineShield(), SelfSelector())])
