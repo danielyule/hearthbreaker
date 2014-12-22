@@ -3176,7 +3176,7 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].calculate_max_health())
 
         # Test that this spell is being silenced properly as well
-        game.other_player.minions[0].silence()
+        game.players[1].minions[0].silence()
         self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
@@ -3235,3 +3235,19 @@ class TestCommon(unittest.TestCase):
 
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[0].minions))
+
+    def test_WhirlingBlades(self):
+        game = generate_game_for(WhirlingBlades, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
+
+        # Test that this spell is being silenced properly as well
+        game.players[1].minions[0].silence()
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_max_health())

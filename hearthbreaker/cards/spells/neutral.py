@@ -74,3 +74,13 @@ class TimeRewinder(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.bounce()
+
+
+class WhirlingBlades(Card):
+    def __init__(self):
+        super().__init__("Whirling Blades", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.change_attack(1)

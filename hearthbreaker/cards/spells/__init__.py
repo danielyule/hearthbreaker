@@ -5,6 +5,7 @@ from hearthbreaker.cards.spells.neutral import (
     ReversingSwitch,
     RustyHorn,
     TimeRewinder,
+    WhirlingBlades,
 )
 
 from hearthbreaker.cards.spells.druid import (
