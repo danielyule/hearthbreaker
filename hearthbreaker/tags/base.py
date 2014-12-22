@@ -491,7 +491,7 @@ class CardQuery(JSONObject):
         elif self.source == CARD_SOURCE.LIST:
             card_list = self.source_list
         elif self.source == CARD_SOURCE.LAST_SPELL:
-            return player.game.last_spell
+            return type(player.game.last_spell)()
         else:
             card_list = []
         # TODO Throw an exception in any other case?

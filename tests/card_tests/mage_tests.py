@@ -288,7 +288,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
 
     def test_IceBlock(self):
-        game = generate_game_for(IceBlock, Frostbolt, CardTestingAgent, CardTestingAgent)
+        game = generate_game_for([IceBlock, Deathwing], Frostbolt, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -300,6 +300,11 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, game.other_player.hero.health)
         self.assertEqual(0, len(game.other_player.secrets))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.game_ended)
 
     def test_MirrorEntity(self):
         game = generate_game_for([StonetuskBoar, MirrorEntity], IronfurGrizzly, CardTestingAgent, OneCardPlayingAgent)

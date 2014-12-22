@@ -1998,7 +1998,7 @@ class TestMinionCopying(unittest.TestCase):
 
         self.assertEqual(4, len(game.other_player.minions))
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual("Deathwing", game.current_player.minions[0].card.name)
+        self.assertEqual("Faceless Manipulator", game.current_player.minions[0].card.name)
 
     def test_MillhouseManastorm(self):
         game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, CardTestingAgent)

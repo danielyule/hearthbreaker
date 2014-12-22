@@ -2250,6 +2250,21 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(6, len(game.players[1].hand))
         self.assertNotEqual("Magma Rager", game.players[1].hand[5].name)
 
+    def test_Lorewalker_Cho_with_Secrets(self):
+        game = generate_game_for([LorewalkerCho, EyeForAnEye, Hellfire],
+                                 Moonfire, OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.secrets))
+
+        # Hellfire will proc the secret for one player, but not the other
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.secrets))
+
     def test_WildPyromancer(self):
         game = generate_game_for([WildPyromancer, MindBlast, PowerWordShield], Shieldbearer,
                                  CardTestingAgent, DoNothingAgent)
