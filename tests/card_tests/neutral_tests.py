@@ -3251,3 +3251,17 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].calculate_attack())
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertEqual(1, game.players[1].minions[0].calculate_max_health())
+
+    def test_ClockworkGnome(self):
+        game = generate_game_for(ClockworkGnome, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
+
+        for turn in range(0, 1):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual("Rusty Horn", game.players[0].hand[-1].name)

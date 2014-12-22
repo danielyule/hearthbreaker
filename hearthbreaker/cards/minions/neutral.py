@@ -21,6 +21,8 @@ from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Ch
     SpellDamage, DoubleDeathrattle, IncreaseWeaponAttack
 import hearthbreaker.targeting
 import copy
+from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
+    ReversingSwitch, RustyHorn, WhirlingBlades
 
 
 class BloodfenRaptor(MinionCard):
@@ -2108,3 +2110,15 @@ class ClockworkGiant(MinionCard):
     def mana_cost(self, player):
         cost = super().mana_cost(player) - len(player.game.other_player.hand)
         return cost
+
+
+class ClockworkGnome(MinionCard):
+    def __init__(self):
+        super().__init__("Clockwork Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
+                           RustyHorn(), WhirlingBlades()]
+        return Minion(2, 1,
+                      deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                              PlayerSelector()))
