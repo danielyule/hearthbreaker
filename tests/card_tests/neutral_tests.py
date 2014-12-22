@@ -3164,3 +3164,19 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         # Initial cost is 12, opponent have 6 cards in hand and you have Mechwarper in play, 12 - 6 - 1 = 5
         self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
+
+    def test_ArmorPlating(self):
+        game = generate_game_for(ArmorPlating, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[0].calculate_max_health())
+
+        # Test that this spell is being silenced properly as well
+        game.other_player.minions[0].silence()
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_max_health())

@@ -1,3 +1,7 @@
+from hearthbreaker.cards.spells.neutral import (
+    ArmorPlating,
+)
+
 from hearthbreaker.cards.spells.druid import (
     Innervate,
     Moonfire,
