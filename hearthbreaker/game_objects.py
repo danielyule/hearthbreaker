@@ -660,6 +660,9 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
         return True
 
+    def is_valid(self):
+        return not self.dead and not self.removed
+
     def add_effect(self, effect):
         """
         Applies the the given effect to the :class:`Character`.  The effect will be unapplied in the case of silence,
@@ -1753,6 +1756,9 @@ class Player(Bindable):
 
     def choose_target(self, targets):
         return self.agent.choose_target(targets)
+
+    def is_valid(self):
+        return True
 
     def __to_json__(self):
         auras = copy.copy(self.player_auras)

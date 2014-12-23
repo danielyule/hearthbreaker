@@ -146,8 +146,9 @@ class RoguePower(Power):
                 return weapon
 
         super().use()
-
-        knife = WickedKnife().create_weapon(self.hero.player)
+        wicked_knife = WickedKnife()
+        knife = wicked_knife.create_weapon(self.hero.player)
+        knife.card = wicked_knife
         knife.equip(self.hero.player)
 
 

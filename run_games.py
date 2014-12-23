@@ -43,11 +43,11 @@ def do_stuff():
 
         del new_game
 
-        if _count % 1 == 0:
+        if _count % 10 == 0:
             print("---- game #{} ----".format(_count))
 
-    deck1 = load_deck("warlock_tech.hsdeck")
-    deck2 = load_deck("agro_giant_mage.hsdeck")
+    deck1 = load_deck("example.hsdeck")
+    deck2 = load_deck("example.hsdeck")
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
 
     print(timeit.timeit(play_game, 'gc.enable()', number=1000))

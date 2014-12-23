@@ -1943,6 +1943,66 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(12, game.players[0].minions[0].health)
         self.assertEqual(6, len(game.players[0].hand))
 
+    def test_Alarmobot_death(self):
+        game = generate_game_for([AlarmoBot, Sap, Sap, Sap, Sap, Deathwing], Frostbolt,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Alarm-o-Bot", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+
+    def test_Alarmobot_transform(self):
+        game = generate_game_for([AlarmoBot, Sap, Sap, Sap, Sap, Deathwing], Hex,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Alarm-o-Bot", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Frog", game.other_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Frog", game.current_player.minions[0].card.name)
+
+    def test_Alarmobot_Shadowstep(self):
+        game = generate_game_for([AlarmoBot, Preparation, Shadowstep, Deathwing], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+
+    def test_Alarmobot_Doomsayer(self):
+        game = generate_game_for([OasisSnapjaw, Doomsayer, AlarmoBot], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+
     def test_EliteTaurenChieftain(self):
         game = generate_game_for(EliteTaurenChieftain, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
         game.players[0].max_mana = 4

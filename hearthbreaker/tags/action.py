@@ -327,14 +327,16 @@ class SwapWithHand(Action):
         self.condition = condition
 
     def act(self, actor, target):
-        if self.condition:
-            chosen_card = target.game.random_draw(target.hand, lambda c: self.condition.evaluate(c) and c.is_minion())
-        else:
-            chosen_card = target.game.random_draw(target.hand, lambda c: c.is_minion())
-        if chosen_card:
-            chosen_card.summon(target, target.game, len(target.minions))
-            target.hand.remove(chosen_card)
-            actor.bounce()
+        if actor.is_valid():
+            if self.condition:
+                chosen_card = target.game.random_draw(target.hand,
+                                                      lambda c: self.condition.evaluate(c) and c.is_minion())
+            else:
+                chosen_card = target.game.random_draw(target.hand, lambda c: c.is_minion())
+            if chosen_card:
+                chosen_card.summon(target, target.game, len(target.minions))
+                target.hand.remove(chosen_card)
+                actor.bounce()
 
     def __to_json__(self):
         if self.condition:
