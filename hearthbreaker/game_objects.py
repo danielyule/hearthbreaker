@@ -449,15 +449,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         if self.dead:
             return
         if not self.immune:
-            if type(attacker) is Minion:
-                self.trigger("physically_damaged", amount, attacker)
-                self.trigger("damaged_by_minion", amount, attacker)
-            elif type(attacker) is Player:
-                self.trigger("physically_damaged", amount, attacker)
-                self.trigger("damaged_by_player", amount, attacker)
-            elif issubclass(type(attacker), Card):
-                self.trigger("damaged_by_spell", amount, attacker)
-            self.delayed_trigger("damaged", amount, attacker)
+            self.trigger("damaged", amount, attacker)
             self.player.trigger("character_damaged", self, attacker, amount)
             self.health -= amount
             if issubclass(type(attacker), Character):

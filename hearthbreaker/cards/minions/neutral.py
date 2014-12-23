@@ -7,7 +7,7 @@ from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle,
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, BattlecrySelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker
@@ -1250,7 +1250,7 @@ class AcolyteOfPain(MinionCard):
         super().__init__("Acolyte of Pain", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[Effect(CharacterDamaged(), Draw(), PlayerSelector())])
+        return Minion(1, 3, effects=[Effect(Damaged(), Draw(), PlayerSelector())])
 
 
 class CultMaster(MinionCard):

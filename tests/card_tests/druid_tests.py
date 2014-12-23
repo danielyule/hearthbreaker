@@ -300,15 +300,7 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        spell_damage_mock = mock.Mock()
-        game.current_player.minions[0].bind('damaged_by_spell', spell_damage_mock)
-        game.current_player.minions[1].bind('damaged_by_spell', spell_damage_mock)
-        game.current_player.minions[2].bind('damaged_by_spell', spell_damage_mock)
-        swipe_card = game.other_player.hand[0]
         game.play_single_turn()
-
-        self.assertListEqual([mock.call(4, swipe_card), mock.call(1, swipe_card), mock.call(1, swipe_card)],
-                             spell_damage_mock.call_args_list)
 
         # The bloodfen raptor should be left, with one hp
         self.assertEqual(1, len(game.other_player.minions))

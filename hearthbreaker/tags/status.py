@@ -1,10 +1,10 @@
 import copy
-from hearthbreaker.tags.base import StatusWithAmount, Status
+from hearthbreaker.tags.base import Status, Amount
 
 
-class ChangeAttack(StatusWithAmount):
-    def __init__(self, amount, multipier=1):
-        super().__init__(amount, multipier)
+class ChangeAttack(Status, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
 
     def act(self, actor, target):
         self.amount = self.get_amount(actor, target)
@@ -14,14 +14,14 @@ class ChangeAttack(StatusWithAmount):
         target.attack_delta -= self.amount
 
     def __to_json__(self):
-        return super().__to_json__({
+        return {
             "name": "change_attack",
-        })
+        }
 
 
-class ChangeHealth(StatusWithAmount):
-    def __init__(self, amount, multiplier=1):
-        super().__init__(amount, multiplier)
+class ChangeHealth(Status, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
 
     def act(self, actor, target):
         self.amount = self.get_amount(actor, target)
@@ -44,9 +44,9 @@ class ChangeHealth(StatusWithAmount):
             target.health_delta -= self.amount
 
     def __to_json__(self):
-        return super().__to_json__({
+        return {
             "name": "change_health",
-        })
+        }
 
 
 class MinimumHealth(Status):

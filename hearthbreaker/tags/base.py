@@ -205,33 +205,44 @@ class Status(JSONObject, metaclass=abc.ABCMeta):
         return self
 
 
-class StatusWithAmount(Status, metaclass=abc.ABCMeta):
-    def __init__(self, amount, multiplier=1):
-        self.amount = amount
-        self.multipler = multiplier
+class Amount(abc.ABCMeta):
+    def __init__(cls, name, bases, dct):
+        super(Amount, cls).__init__(name, bases, dct)
+        base_init = cls.__init__
+        base_to_json = cls.__to_json__
 
-    def read_amount(self, amount):
-        if isinstance(amount, dict):
-            return Selector.from_json(**amount)
-        else:
-            return amount
+        def init_with_amount(self, amount=None, multiplier=1, **kwargs):
+            self.amount = amount
+            self.multipler = multiplier
+            return base_init(self, **kwargs)
 
-    def get_amount(self, source, target):
-        if isinstance(self.amount, Selector):
-            return len(self.amount.get_targets(source, target)) * self.multipler
-        else:
-            return self.amount
+        def to_json_with_amount(self):
+            js = base_to_json(self)
+            if self.amount:
+                js['amount'] = self.amount
+            if self.multipler != 1:
+                js['multiplier'] = self.multipler
+            return js
 
-    def __to_json__(self, existing):
-        existing['amount'] = self.amount
-        if self.multipler != 1:
-            existing['multiplier'] = self.multipler
+        def from_json_with_amount(self, amount=None, **kwargs):
+            if amount:
+                if isinstance(amount, dict):
+                    kwargs['amount'] = Selector.from_json(**amount)
+                else:
+                    kwargs['amount'] = amount
+            cls.__init__(self, **kwargs)
+            return self
 
-        return existing
+        def get_amount(self, source, target):
+            if isinstance(self.amount, Selector):
+                return len(self.amount.get_targets(source, target)) * self.multipler
+            else:
+                return self.amount
 
-    def __from_json__(self, amount, **kwargs):
-        kwargs['amount'] = self.read_amount(amount)
-        return super().__from_json__(**kwargs)
+        cls.__init__ = init_with_amount
+        cls.__to_json__ = to_json_with_amount
+        cls.__from_json__ = from_json_with_amount
+        cls.get_amount = get_amount
 
 
 class Event(JSONObject, metaclass=abc.ABCMeta):
