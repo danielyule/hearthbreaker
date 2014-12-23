@@ -129,16 +129,10 @@ class Bindable:
         :see: :class:`Bindable`
         """
 
-        class Handler:
-            def __init__(self):
-                self.function = function
-                self.remove = False
-                self.active = False
-
         if event not in self.events:
             self.events[event] = []
 
-        self.events[event].append(Handler())
+        self.events[event].append((function, False))
 
     def bind_once(self, event, function):
         """
@@ -151,16 +145,10 @@ class Bindable:
         :see: :class:`Bindable`
         """
 
-        class Handler:
-            def __init__(self):
-                self.function = function
-                self.remove = True
-                self.active = False
-
         if event not in self.events:
             self.events[event] = []
 
-        self.events[event].append(Handler())
+        self.events[event].append((function, True))
 
     def trigger(self, event, *args):
         """
@@ -174,15 +162,13 @@ class Bindable:
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
-                if not handler.active and event in self.events and handler in self.events[event]:
-                    handler.active = True
-                    handler.function(*args)
-                    handler.active = False
-                    if handler.remove:
+                if event in self.events and handler in self.events[event]:
+                    if handler[1]:
                         self.events[event].remove(handler)
                         # tidy up the events dict so we don't have entries for events with no handlers
                         if len(self.events[event]) is 0:
-                            del (self.events[event])
+                            del(self.events[event])
+                    handler[0](*args)
 
     def unbind(self, event, function):
         """
@@ -194,7 +180,7 @@ class Bindable:
         :param function function: The function to unbind.
         """
         if event in self.events:
-            self.events[event] = [handler for handler in self.events[event] if not handler.function == function]
+            self.events[event] = [handler for handler in self.events[event] if not handler[0] == function]
             if len(self.events[event]) is 0:
                 del (self.events[event])
 
