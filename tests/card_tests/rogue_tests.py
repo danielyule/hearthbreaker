@@ -452,6 +452,26 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(9, len(game.players[1].hand))
 
+    def test_Vanish_and_Death(self):
+        game = generate_game_for([WarGolem, Moonfire, Moonfire, Moonfire, MagmaRager],
+                                 [BoulderfistOgre, Abomination, Vanish],
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(15):
+            game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(6, len(game.current_player.hand))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(9, len(game.other_player.hand))
+        self.assertEqual(30, game.current_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(8, len(game.other_player.hand))
+        self.assertEqual(10, len(game.current_player.hand))
+        self.assertEqual(28, game.current_player.hero.health)
+
     def test_AssassinsBlade(self):
         game = generate_game_for(AssassinsBlade, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 

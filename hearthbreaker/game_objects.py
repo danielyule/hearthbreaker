@@ -1099,25 +1099,26 @@ class Minion(Character):
         return super().calculate_max_health() + self.aura_health
 
     def remove_from_board(self):
-        aura_affects = {}
-        for aura in self.player.minion_auras:
-            aura_affects[aura] = set()
+        if not self.removed:
+            aura_affects = {}
+            for aura in self.player.minion_auras:
+                aura_affects[aura] = set()
+                for minion in self.player.minions:
+                    if aura.match(minion):
+                        aura_affects[aura].add(minion)
             for minion in self.player.minions:
-                if aura.match(minion):
-                    aura_affects[aura].add(minion)
-        for minion in self.player.minions:
-            if minion.index > self.index:
-                minion.index -= 1
-        self.player.minions.remove(self)
-        self.player.trigger("minion_removed", self)
-        self.removed = True
-        for aura in self.player.minion_auras:
-            for minion in self.player.minions:
-                is_in = minion in aura_affects[aura]
-                if not is_in and aura.match(minion):
-                    aura.status.act(aura.target, minion)
-                elif is_in and not aura.match(minion):
-                    aura.status.unact(aura.target, minion)
+                if minion.index > self.index:
+                    minion.index -= 1
+            self.player.minions.remove(self)
+            self.player.trigger("minion_removed", self)
+            self.removed = True
+            for aura in self.player.minion_auras:
+                for minion in self.player.minions:
+                    is_in = minion in aura_affects[aura]
+                    if not is_in and aura.match(minion):
+                        aura.status.act(aura.target, minion)
+                    elif is_in and not aura.match(minion):
+                        aura.status.unact(aura.target, minion)
 
     def replace(self, new_minion):
         """
@@ -1808,7 +1809,7 @@ class Game(Bindable):
         self.__pre_game_run = False
         self.last_spell = None
         self._has_turn_ended = True
-        self.__all_cards_played = []
+        self._all_cards_played = []
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -1934,7 +1935,7 @@ class Game(Bindable):
     def copy(self):
         copied_game = copy.copy(self)
         copied_game.events = {}
-        copied_game.__all_cards_played = []
+        copied_game._all_cards_played = []
         copied_game.players = [player.copy(copied_game) for player in self.players]
         if self.current_player is self.players[0]:
             copied_game.current_player = copied_game.players[0]
@@ -1971,7 +1972,7 @@ class Game(Bindable):
         self.current_player.hand.pop(card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
         self.current_player.trigger("card_played", card, card_index)
-        self.__all_cards_played.append(card)
+        self._all_cards_played.append(card)
 
         if card.is_spell():
             self.last_spell = card
@@ -1997,7 +1998,7 @@ class Game(Bindable):
     @staticmethod
     def __from_json__(d, agents):
         new_game = Game.__new__(Game)
-        new_game.__all_cards_played = []
+        new_game._all_cards_played = []
         new_game.minion_counter = d["current_sequence_id"]
         new_game.delayed_minions = set()
         new_game.game_ended = False
