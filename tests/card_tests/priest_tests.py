@@ -170,6 +170,17 @@ class TestPriest(unittest.TestCase):
         self.assertEqual("Mogu'shan Warden", game.players[0].hand[-1].name)
         self.assertEqual(5, len(game.players[1].hand))
 
+    def test_MindVision_no_cards(self):
+        game = generate_game_for(Wisp, MindVision, CardTestingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn() # All cards should be played
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(5, len(game.players[1].hand))
+
+        game.play_single_turn()  # Mind Vision should be played, nothing is being copied
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(5, len(game.players[1].hand))
+
     def test_Mindgames(self):
         game = generate_game_for(Mindgames, MogushanWarden, CardTestingAgent, DoNothingAgent)
 
