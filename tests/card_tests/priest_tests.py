@@ -173,7 +173,7 @@ class TestPriest(unittest.TestCase):
     def test_MindVision_no_cards(self):
         game = generate_game_for(Wisp, MindVision, CardTestingAgent, OneCardPlayingAgent)
 
-        game.play_single_turn() # All cards should be played
+        game.play_single_turn()  # All cards should be played
         self.assertEqual(0, len(game.players[0].hand))
         self.assertEqual(5, len(game.players[1].hand))
 
