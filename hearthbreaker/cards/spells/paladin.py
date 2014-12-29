@@ -259,8 +259,9 @@ class Redemption(SecretCard):
 
     def _reveal(self, minion, by):
         resurrection = minion.card.summon(minion.player, minion.game, min(minion.index, len(minion.player.minions)))
-        resurrection.health = 1
-        super().reveal()
+        if resurrection:
+            resurrection.health = 1
+            super().reveal()
 
     def activate(self, player):
         player.bind("minion_died", self._reveal)

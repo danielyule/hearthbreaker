@@ -416,6 +416,25 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
 
+    def test_Redemption_full_board(self):
+        game = generate_game_for(Assassinate, [Redemption, Wisp, Wisp, Wisp, Wisp, Wisp, HauntedCreeper],
+                                 OneCardPlayingAgent, CardTestingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual("Spectral Spider", game.other_player.minions[0].card.name)
+        self.assertEqual("Spectral Spider", game.other_player.minions[1].card.name)
+        self.assertEqual("Wisp", game.other_player.minions[2].card.name)
+        self.assertEqual("Wisp", game.other_player.minions[3].card.name)
+        self.assertEqual("Wisp", game.other_player.minions[4].card.name)
+        self.assertEqual("Wisp", game.other_player.minions[5].card.name)
+        self.assertEqual("Wisp", game.other_player.minions[6].card.name)
+
     def test_Repentance(self):
         game = generate_game_for(Repentance, TwilightDrake, CardTestingAgent, OneCardPlayingAgent)
 
