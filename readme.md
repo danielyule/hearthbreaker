@@ -102,6 +102,8 @@ All pull requests will be automatically verified through
 New ideas, and upcoming features are described [on the wiki](https://github.com/danielyule/hearthbreaker/wiki/Roadmap).
 Feel free to get involved with any or all of them.
 
+Developers from this and other hearthstone simulation projectors can be found on IRC on freenode.net, channel #hearthsim.
+
 For more specifics about contributing, see the 
 [contributing page](http://danielyule.github.io/hearthbreaker/contributing.html), 
 or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
@@ -124,7 +126,8 @@ progress.  These will allow for anyone to define new cards, by simply writing a 
 
 ###Fireplace
 Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
-an engine based on that.  His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
+an engine based on that.  It is planned to be a complete simulator, including all collectible and mission cards.
+His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
 
 ###Soot
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
