@@ -1135,8 +1135,7 @@ class Minion(Character):
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
         if self.index >= len(self.player.minions):
-            print("".join([str(minion) for minion in self.player.minions]))
-            raise ValueError("What is even happening?")
+            raise ValueError("Attempting to replace minion with invalid index")
         self.player.minions[self.index] = new_minion
         for effect in new_minion._effects_to_add:
             new_minion.add_effect(effect)

@@ -1805,6 +1805,22 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
 
+    def test_Leeroy_placement(self):
+        game = generate_game_for([MurlocTidehunter, MurlocTidehunter, LeeroyJenkins], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+        game.players[0].agent.choose_index = lambda *minions: len(minions)
+        for turn in range(8):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(0, game.other_player.minions[0].index)
+        self.assertEqual(1, game.other_player.minions[1].index)
+
     def test_MountainGiant(self):
         game = generate_game_for(MountainGiant, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 

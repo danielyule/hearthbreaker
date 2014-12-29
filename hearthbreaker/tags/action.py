@@ -107,23 +107,21 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target):
+        card = self.card.get_card(target)
+        if card is None:
+            return
         if actor.is_minion() and actor.player is target:
             if actor.removed:
                 index = actor.index
             else:
                 index = actor.index + 1
+            for summon in range(self.count):
+                card.summon(target, target.game, index)
+                if actor.is_minion():
+                    index = actor.index
         else:
             for summon in range(self.count):
-                index = len(target.minions)
-        card = self.card.get_card(target)
-        if card is None:
-            return
-
-        # TODO add explicit patters for multi minion summoning (if there is ever more than two)
-        for summon in range(self.count):
-            card.summon(target, target.game, index)
-            if actor.is_minion():
-                index = actor.index  # Move the later minions to the left of their originator
+                card.summon(target, target.game, len(target.minions))
 
     def __to_json__(self):
         if self.count > 1:
