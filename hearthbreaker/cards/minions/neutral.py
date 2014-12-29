@@ -797,7 +797,7 @@ class RaidLeader(MinionCard):
 
 class MechanicalDragonling(MinionCard):
     def __init__(self):
-        super().__init__("Mechanical Dragonling", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("Mechanical Dragonling", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(2, 1)

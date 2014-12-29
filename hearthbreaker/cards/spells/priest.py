@@ -132,17 +132,18 @@ class MindControl(Card):
         new_minion.add_to_board(len(player.minions))
 
 
-# TODO: Can this card be played if opponent has no cards in hand?
 class MindVision(Card):
     def __init__(self):
-        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.COMMON)
+        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
-        card = copy.deepcopy(game.random_choice(game.other_player.hand))
-        player.hand.append(card)
+        # This card can be played even if opponent has no cards in hand
+        # Source: http://www.hearthhead.com/card=1099/mind-vision#comments:id=2073386
+        if (len(game.other_player.hand) > 0):
+            card = copy.deepcopy(game.random_choice(game.other_player.hand))
+            player.hand.append(card)
 
 
 class Mindgames(Card):
