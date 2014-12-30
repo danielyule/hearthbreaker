@@ -1,9 +1,9 @@
 import copy
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
-from hearthbreaker.tags.base import AuraUntil
+from hearthbreaker.tags.base import BuffUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, CurrentPlayer
+from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import Immune
 import hearthbreaker.targeting
 
@@ -217,7 +217,7 @@ class IceBlock(SecretCard):
     def _reveal(self, character, attacker, amount):
         if isinstance(character, Hero):
             if character.health - amount <= 0:
-                character.add_aura(AuraUntil(Immune(), SelfSelector(), TurnEnded(player=CurrentPlayer())))
+                character.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
                 character.health += amount
                 # TODO Check if this spell will also prevent damage to armor.
                 super().reveal()

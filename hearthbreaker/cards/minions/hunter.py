@@ -1,6 +1,6 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
@@ -35,9 +35,7 @@ class SavannahHighmane(MinionCard):
 class Houndmaster(MinionCard):
     def __init__(self):
         super().__init__("Houndmaster", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.NONE,
-                         battlecry=Battlecry(Give([Aura(ChangeHealth(2), SelfSelector()),
-                                                   Aura(ChangeAttack(2), SelfSelector()),
-                                                   Aura(Taunt(), SelfSelector())]),
+                         battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2)), Buff(Taunt())]),
                                              MinionSelector(IsType(MINION_TYPE.BEAST), picker=UserPicker())))
 
     def create_minion(self, player):

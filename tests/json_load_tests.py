@@ -16,7 +16,7 @@ class JSONTester:
     def define_type(self, card_def):
         from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
         from hearthbreaker.game_objects import Minion, MinionCard
-        from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Enrage
+        from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Enrage, Buff
         import hearthbreaker.cards
 
         def __init__(self):
@@ -55,6 +55,9 @@ class JSONTester:
 
             if 'auras' in card_def:
                 create_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+
+            if 'buffs' in card_def:
+                create_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
 
             if 'enrage' in card_def:
                 create_dict['enrage'] = Enrage.from_json(**card_def['enrage'])

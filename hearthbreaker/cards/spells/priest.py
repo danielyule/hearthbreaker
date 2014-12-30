@@ -1,7 +1,6 @@
 import copy
-from hearthbreaker.tags.base import AuraUntil
+from hearthbreaker.tags.base import BuffUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector
 from hearthbreaker.tags.status import Stolen
 
 import hearthbreaker.targeting
@@ -207,7 +206,7 @@ class ShadowMadness(Card):
 
         # When silenced, the minion should immediately come back to its previous
         # owner.  See https://twitter.com/bdbrode/status/510251195173470208
-        minion.add_aura(AuraUntil(Stolen(), SelfSelector(), TurnEnded()))
+        minion.add_buff(BuffUntil(Stolen(), TurnEnded()))
 
 
 class ShadowWordDeath(Card):

@@ -3,9 +3,9 @@ import importlib
 import random
 import abc
 import hearthbreaker.powers
-from hearthbreaker.tags.base import Aura, AuraUntil, Deathrattle, Effect, Enrage
+from hearthbreaker.tags.base import Aura, AuraUntil, Deathrattle, Effect, Enrage, Buff, BuffUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, CurrentPlayer
+from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Stealth, DivineShield, Windfury, \
     SpellDamage, NoSpellTarget
 import hearthbreaker.targeting
@@ -297,37 +297,44 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.effects = []
         #: An integer describing when this character was created.  The lower, the earlier it was created
         self.born = -1
-        #: A list of auras that affect this character
+        #: A list of auras originate with this character
         self.auras = []
+        #: A list of buffs applied to this character
+        self.buffs = []
         #: An integer describing how much the attack of this character has been adjusted
         self.attack_delta = 0
         #: An integer describing how much the health of this character has been adjusted
         self.health_delta = 0
         #: A list of actions that describe what will happen when this character is enraged
         self.enrage = enrage
-
         #: The character that this minion is attacking, while it is carrying out its attack
         self.current_target = None
 
     def add_aura(self, aura):
+        if not isinstance(aura, Aura):
+            raise TypeError("Expected an aura to be added")
         self.auras.append(aura)
         aura.set_target(self)
-        if isinstance(aura.selector, SelfSelector):
-            aura.apply()
-        else:
-            self.player.add_aura(aura)
+        self.player.add_aura(aura)
 
     def remove_aura(self, aura):
-        self.auras = [au for au in filter(lambda a: not a.eq(aura), self.auras)]
-        if isinstance(aura.selector, SelfSelector):
-            aura.unapply()
-        else:
-            self.player.remove_aura(aura)
+        self.auras.remove(aura)
+        self.player.remove_aura(aura)
+
+    def add_buff(self, buff):
+        if not isinstance(buff, Buff):
+            raise TypeError("Expected a buff to be added")
+        self.buffs.append(buff)
+        buff.set_owner(self)
+        buff.apply()
+
+    def remove_buff(self, buff):
+        self.buffs.remove(buff)
+        buff.unapply()
 
     def _remove_stealth(self):
         if self.stealth:
-            self.auras = [aura for aura in filter(
-                lambda a: not isinstance(a.status, Stealth), self.auras)]
+            self.buffs = [buff for buff in self.buffs if not isinstance(buff.status, Stealth)]
             self.stealth = 0
 
     def attack(self):
@@ -470,7 +477,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :param int amount: The amount to change the attack by
         """
-        self.add_aura(Aura(ChangeAttack(amount), SelfSelector()))
+        self.add_buff(Buff(ChangeAttack(amount)))
 
     def change_temp_attack(self, amount):
         """
@@ -479,7 +486,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :param int amount: The amount to change the temporary attack by
         """
-        self.add_aura(AuraUntil(ChangeAttack(amount), SelfSelector(), TurnEnded(player=CurrentPlayer())))
+        self.add_buff(BuffUntil(ChangeAttack(amount), TurnEnded(player=CurrentPlayer())))
         self.trigger("attack_changed", amount)
 
     def increase_health(self, amount):
@@ -491,7 +498,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
 
         self.trigger("health_increased", amount)
-        self.add_aura(Aura(ChangeHealth(amount), SelfSelector()))
+        self.add_buff(Buff(ChangeHealth(amount)))
         self.trigger("health_changed")
 
     def decrease_health(self, amount):
@@ -506,7 +513,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             self.enraged = False
             self.trigger("unenraged")
             self._do_unenrage()
-        self.add_aura(Aura(ChangeHealth(-amount), SelfSelector()))
+        self.add_buff(Buff(ChangeHealth(-amount)))
         self.trigger("health_changed")
         self.trigger("health_decreased", amount)
 
@@ -581,11 +588,10 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         for aura in reversed(self.auras):
-            if isinstance(aura.selector, SelfSelector):
-                if isinstance(aura, AuraUntil):
-                    aura.until.unbind(aura.target, aura.__until__)
-            else:
-                self.player.remove_aura(aura)
+            self.player.remove_aura(aura)
+        for buff in reversed(self.buffs):
+            if isinstance(buff, BuffUntil):
+                buff.until.unbind(buff.owner, buff.__until__)
 
     def silence(self):
         """
@@ -598,13 +604,15 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         for effect in reversed(self.effects):
             effect.unapply()
         for aura in reversed(self.auras):
-            if isinstance(aura.selector, SelfSelector):
-                aura.unapply()
-            else:
-                self.player.remove_aura(aura)
+            self.player.remove_aura(aura)
+        for buff in reversed(self.buffs):
+            if isinstance(buff, BuffUntil):
+                buff.until.unbind(buff.owner, buff.__until__)
+            buff.unapply()
 
         self.effects = []
         self.auras = []
+        self.buffs = []
         if self.enraged:
             self._do_unenrage()
         self.enrage = []
@@ -1008,7 +1016,7 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 class Minion(Character):
     def __init__(self, attack, health, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
-                 windfury=False, spell_targetable=True, effects=None, auras=None, enrage=None):
+                 windfury=False, spell_targetable=True, effects=None, auras=None, buffs=None, enrage=None):
         super().__init__(attack, health, enrage=enrage)
         self.game = None
         self.card = None
@@ -1035,20 +1043,25 @@ class Minion(Character):
             self._auras_to_add = auras
         else:
             self._auras_to_add = []
+
+        if buffs:
+            self._buffs_to_add = buffs
+        else:
+            self._buffs_to_add = []
         if charge:
-            self._auras_to_add.append(Aura(Charge(), SelfSelector()))
+            self._buffs_to_add.append(Buff(Charge()))
         if taunt:
-            self._auras_to_add.append(Aura(Taunt(), SelfSelector()))
+            self._buffs_to_add.append(Buff(Taunt()))
         if stealth:
-            self._auras_to_add.append(Aura(Stealth(), SelfSelector()))
+            self._buffs_to_add.append(Buff(Stealth()))
         if divine_shield:
-            self._auras_to_add.append(Aura(DivineShield(), SelfSelector()))
+            self._buffs_to_add.append(Buff(DivineShield()))
         if windfury:
-            self._auras_to_add.append(Aura(Windfury(), SelfSelector()))
+            self._buffs_to_add.append(Buff(Windfury()))
         if not spell_targetable:
-            self._auras_to_add.append(Aura(NoSpellTarget(), SelfSelector()))
+            self._buffs_to_add.append(Buff(NoSpellTarget()))
         if spell_damage:
-            self._auras_to_add.append(Aura(SpellDamage(spell_damage), SelfSelector()))
+            self._buffs_to_add.append(Buff(SpellDamage(spell_damage)))
 
     def add_to_board(self, index):
         aura_affects = {}
@@ -1070,6 +1083,9 @@ class Minion(Character):
         self.health += self.calculate_max_health() - self.base_health - self.health_delta
         for effect in self._effects_to_add:
             self.add_effect(effect)
+        for buff in self._buffs_to_add:
+            self.add_buff(buff)
+        self._buffs_to_add = []
         for player in self.game.players:
             for aura in player.minion_auras:
                 for minion in self.player.minions:
@@ -1139,6 +1155,8 @@ class Minion(Character):
         self.player.minions[self.index] = new_minion
         for effect in new_minion._effects_to_add:
             new_minion.add_effect(effect)
+        for buff in new_minion._buffs_to_add:
+            new_minion.add_buff(buff)
         for aura in self.player.minion_auras:
             if aura.match(new_minion):
                 aura.status.act(self, new_minion)
@@ -1151,8 +1169,7 @@ class Minion(Character):
 
     def damage(self, amount, attacker):
         if self.divine_shield:
-            self.auras = [aura for aura in filter(
-                lambda a: not isinstance(a.status, DivineShield), self.auras)]
+            self.buffs = [buff for buff in self.buffs if not isinstance(buff, DivineShield)]
             self.divine_shield = 0
         else:
             super().damage(amount, attacker)
@@ -1202,7 +1219,10 @@ class Minion(Character):
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
 
     def copy(self, new_owner, new_game=None):
-        new_minion = Minion(self.base_attack, self.base_health, self.battlecry)
+        new_minion = Minion(self.base_attack, self.base_health, self.battlecry,
+                            effects=copy.deepcopy(self.effects),
+                            auras=copy.deepcopy(self.auras),
+                            buffs=copy.deepcopy(self.buffs))
         new_minion.health = self.base_health - (self.calculate_max_health() - self.health)
         new_minion.deathrattle = copy.deepcopy(self.deathrattle)
         new_minion.divine_shield = 0
@@ -1224,10 +1244,6 @@ class Minion(Character):
             new_minion.game = new_game
         else:
             new_minion.game = new_owner.game
-        new_minion.effects = []
-        new_minion._effects_to_add = [copy.deepcopy(effect) for effect in self.effects]
-        new_minion.auras = []
-        new_minion._auras_to_add = [copy.deepcopy(aura) for aura in self.auras]
         return new_minion
 
     @staticmethod
@@ -1248,6 +1264,8 @@ class Minion(Character):
         minion._effects_to_add = [Effect.from_json(game, **effect) for effect in md['effects']]
         minion._auras_to_add = [AuraUntil.from_json(**aura) if 'until' in aura else Aura.from_json(**aura)
                                 for aura in md['auras']]
+        minion._buffs_to_add = [BuffUntil.from_json(**buff) if 'until' in buff else Buff.from_json(**buff)
+                                for buff in md['buffs']]
         return minion
 
     def bounce(self):
@@ -1281,6 +1299,7 @@ class Minion(Character):
             'frozen_for': frozen_for,
             'effects': self.effects,
             'auras': self.auras,
+            'buffs': self.buffs,
         }
         if self.enrage:
             r_val['enrage'] = self.enrage
@@ -1526,6 +1545,9 @@ class Hero(Character):
         for effect in self.effects:
             new_effect = copy.deepcopy(effect)
             new_hero.add_effect(new_effect)
+        for buff in self.buffs:
+            new_buff = copy.deepcopy(buff)
+            new_hero.add_buff(new_buff)
 
         return new_hero
 
@@ -1584,6 +1606,7 @@ class Hero(Character):
             'already_attacked': not self.active,
             'effects': self.effects,
             'auras': self.auras,
+            'buffs': self.buffs,
         }
 
     @classmethod
@@ -1945,7 +1968,7 @@ class Game(Bindable):
 
         copied_game.current_player.opponent = copied_game.other_player
         copied_game.other_player.opponent = copied_game.current_player
-        copied_game._has_turn_ended = copied_game._has_turn_ended
+        copied_game._has_turn_ended = self._has_turn_ended
 
         for player in copied_game.players:
             for minion in player.minions:
@@ -1955,6 +1978,9 @@ class Game(Bindable):
                 for aura in minion._auras_to_add:
                     minion.add_aura(aura)
                 minion._auras_to_add = []
+                for buff in minion._buffs_to_add:
+                    minion.add_buff(buff)
+                minion._buffs_to_add = []
                 if minion.enraged:
                     minion._do_enrage()
 
@@ -2031,6 +2057,9 @@ class Game(Bindable):
             for aura in d['players'][index]['hero']['auras']:
                 player.hero.add_aura(AuraUntil.from_json(**aura))
 
+            for buff in d['players'][index]['hero']['buffs']:
+                player.hero.add_buff(BuffUntil.from_json(**buff))
+
             for minion in player.minions:
                 for effect in minion._effects_to_add:
                     minion.add_effect(effect)
@@ -2038,6 +2067,9 @@ class Game(Bindable):
                 for aura in minion._auras_to_add:
                     minion.add_aura(aura)
                 minion._auras_to_add = []
+                for buff in minion._buffs_to_add:
+                    minion.add_buff(buff)
+                minion._buffs_to_add = []
                 if minion.health != minion.calculate_max_health():
                     minion.enraged = True
                     minion._do_enrage()

@@ -1,7 +1,7 @@
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon
-from hearthbreaker.tags.base import Aura, Choice
-from hearthbreaker.tags.selector import SelfSelector, CharacterSelector, MinionSelector, UserPicker, BothPlayer, \
+from hearthbreaker.tags.base import Choice, Buff
+from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, Card
@@ -105,9 +105,8 @@ class AncientOfWar(MinionCard):
     def __init__(self):
 
         super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC, choices=[
-            Choice(Health(), Give([Aura(ChangeHealth(5), SelfSelector()), Aura(Taunt(), SelfSelector())]),
-                   SelfSelector()),
-            Choice(Attack(), Give([Aura(ChangeAttack(5), SelfSelector())]), SelfSelector()),
+            Choice(Health(), Give([Buff(ChangeHealth(5)), Buff(Taunt())]), SelfSelector()),
+            Choice(Attack(), Give([Buff(ChangeAttack(5))]), SelfSelector()),
         ])
 
     def create_minion(self, player):
@@ -146,9 +145,9 @@ class SummonTreants(Card):
 class Cenarius(MinionCard):
     def __init__(self):
         super().__init__("Cenarius", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY, choices=[
-            Choice(IncreaseStats(), Give([Aura(ChangeAttack(2), SelfSelector()),
-                                          Aura(ChangeHealth(2), SelfSelector()),
-                                          Aura(Taunt(), SelfSelector())]), MinionSelector()),
+            Choice(IncreaseStats(), Give([Buff(ChangeAttack(2)),
+                                          Buff(ChangeHealth(2)),
+                                          Buff(Taunt())]), MinionSelector()),
             Choice(SummonTreants(), Summon(Treant(), 2), PlayerSelector())
         ])
 
@@ -170,8 +169,8 @@ class AnodizedRoboCub(MinionCard):
     def __init__(self):
         super().__init__("Anodized Robo Cub", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          minion_type=MINION_TYPE.MECH,
-                         choices=[Choice(AttackMode(), Give([Aura(ChangeAttack(1), SelfSelector())]), SelfSelector()),
-                                  Choice(TankMode(), Give([Aura(ChangeHealth(1), SelfSelector())]), SelfSelector())])
+                         choices=[Choice(AttackMode(), Give([Buff(ChangeAttack(1))]), SelfSelector()),
+                                  Choice(TankMode(), Give([Buff(ChangeHealth(1))]), SelfSelector())])
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)

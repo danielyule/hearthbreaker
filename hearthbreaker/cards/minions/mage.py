@@ -1,11 +1,11 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Freeze, AddCard, Give
+from hearthbreaker.tags.action import Freeze, AddCard, Give, GiveAura
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
 from hearthbreaker.tags.condition import HasSecret
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
-from hearthbreaker.tags.selector import SecretSelector, SpellSelector, PlayerSelector, SelfSelector, TargetSelector
+from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange
 
@@ -29,12 +29,9 @@ class SorcerersApprentice(MinionCard):
 class KirinTorMage(MinionCard):
     def __init__(self):
         super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
-                         battlecry=Battlecry(Give([ManaAura(100, 0, SecretSelector(), True)]), PlayerSelector()))
+                         battlecry=Battlecry(GiveAura([ManaAura(100, 0, SecretSelector(), True)]), PlayerSelector()))
 
     def create_minion(self, player):
-        def first_secret_cost_zero(m):
-            m.player.add_aura(ManaAura(100, 0, SecretSelector(), True))
-
         return Minion(4, 3)
 
 
@@ -43,8 +40,8 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[Effect(TurnEnded(HasSecret()), ChangeAttack(2), SelfSelector()),
-                                     Effect(TurnEnded(HasSecret()), ChangeHealth(2), SelfSelector())])
+        return Minion(3, 3, effects=[Effect(TurnEnded(HasSecret()), Give(ChangeAttack(2)), SelfSelector()),
+                                     Effect(TurnEnded(HasSecret()), Give(ChangeHealth(2)), SelfSelector())])
 
 
 class WaterElemental(MinionCard):

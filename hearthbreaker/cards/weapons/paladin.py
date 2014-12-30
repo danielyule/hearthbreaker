@@ -1,6 +1,5 @@
 import hearthbreaker.targeting
-from hearthbreaker.tags.base import Aura
-from hearthbreaker.tags.selector import SelfSelector
+from hearthbreaker.tags.base import Buff
 from hearthbreaker.tags.status import DivineShield, Taunt
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import WeaponCard, Weapon
@@ -63,8 +62,8 @@ class Coghammer(WeaponCard):
             targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
             if targets is not None:
                 target = player.game.random_choice(targets)
-                target.add_aura(Aura(DivineShield(), SelfSelector()))
-                target.add_aura(Aura(Taunt(), SelfSelector()))
+                target.add_buff(Buff(DivineShield()))
+                target.add_buff(Buff(Taunt()))
 
         weapon = Weapon(2, 3, battlecry=random_buff)
         return weapon

@@ -1,8 +1,8 @@
 import copy
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import AuraUntil
+from hearthbreaker.tags.base import BuffUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, CurrentPlayer, SpecificCardSelector
+from hearthbreaker.tags.selector import CurrentPlayer, SpecificCardSelector
 from hearthbreaker.tags.status import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -40,7 +40,7 @@ class BestialWrath(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_aura(AuraUntil(Immune(), SelfSelector(), TurnEnded(player=CurrentPlayer())))
+        self.target.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
         self.target.change_temp_attack(2)
 
 

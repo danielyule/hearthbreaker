@@ -1,9 +1,9 @@
 import copy
 from hearthbreaker.tags.action import AddCard
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Effect, AuraUntil
+from hearthbreaker.tags.base import Effect, BuffUntil
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, SpellSelector, SpecificCardSelector
+from hearthbreaker.tags.selector import PlayerSelector, SpellSelector, SpecificCardSelector
 from hearthbreaker.tags.status import Stealth
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -100,7 +100,7 @@ class Conceal(Card):
         super().use(player, game)
         for minion in player.minions:
             if not minion.stealth:
-                minion.add_aura(AuraUntil(Stealth(), SelfSelector(), TurnStarted()))
+                minion.add_buff(BuffUntil(Stealth(), TurnStarted()))
 
 
 class DeadlyPoison(Card):

@@ -1,5 +1,5 @@
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect
+    CARD_SOURCE, Effect, Buff, BuffUntil
 from hearthbreaker.tags.condition import IsSecret
 
 
@@ -14,6 +14,52 @@ class Freeze(Action):
 
 
 class Give(Action):
+    def __init__(self, buffs):
+
+        if isinstance(buffs, Status):
+            self.buffs = [Buff(buffs)]
+        elif isinstance(buffs, list):
+            self.buffs = buffs
+            if isinstance(buffs[0], Aura):
+                raise TypeError("Aura passed where buff was expected")
+        elif isinstance(buffs, Aura):
+            raise TypeError("Aura passed where buff was expected")
+        else:
+            self.buffs = [buffs]
+
+    def act(self, actor, target):
+        for buff in self.buffs:
+            target.add_buff(buff)
+
+    def unact(self, actor, target):
+        for buff in self.buffs:
+            buff.set_owner(target)
+            target.remove_buff(buff)
+
+    def __to_json__(self):
+        return {
+            'name': 'give',
+            'buffs': self.buffs
+        }
+
+    def __from_json__(self, buffs=None, effects=None, auras=None):
+        if effects:  # To allow for give to work with effects as well, we check at load time
+            return GiveEffect.__new__(GiveEffect).__from_json__(effects)
+
+        if auras:  # To allow for give to work with auras as well, we check at load time
+
+            return GiveAura.__new__(GiveAura).__from_json__(auras)
+
+        self.buffs = []
+        for buff in buffs:
+            if "until" in buff:
+                self.buffs.append(BuffUntil.from_json(**buff))
+            else:
+                self.buffs.append(Buff.from_json(**buff))
+        return self
+
+
+class GiveAura(Action):
     def __init__(self, auras):
 
         if isinstance(auras, Status):
@@ -39,11 +85,7 @@ class Give(Action):
             'auras': self.auras
         }
 
-    def __from_json__(self, auras=None, effects=None):
-        if effects:  # To allow for give to work with effects as well, we check at load time
-            effects = [Effect.from_json(**effect) for effect in effects]
-            return GiveEffect(effects)
-
+    def __from_json__(self, auras=None):
         self.auras = []
         for aura in auras:
             if "until" in aura:
@@ -117,8 +159,7 @@ class Summon(Action):
                 index = actor.index + 1
             for summon in range(self.count):
                 card.summon(target, target.game, index)
-                if actor.is_minion():
-                    index = actor.index
+                index = actor.index  # Move the later minions to the left of their originator
         else:
             for summon in range(self.count):
                 card.summon(target, target.game, len(target.minions))

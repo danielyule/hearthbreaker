@@ -57,6 +57,60 @@ class Aura(JSONObject):
         return Aura(status, selector)
 
 
+class Buff(JSONObject):
+    def __init__(self, status):
+        self.status = status
+        self.owner = None
+
+    def set_owner(self, owner):
+        self.owner = owner
+
+    def apply(self):
+        self.status.act(self.owner, self.owner)
+
+    def unapply(self):
+        self.status.unact(self.owner, self.owner)
+
+    def __to_json__(self):
+        return {
+            'status': self.status,
+        }
+
+    @staticmethod
+    def from_json(status):
+        status = Status.from_json(**status)
+        return Buff(status)
+
+
+class BuffUntil(Buff):
+    def __init__(self, status, until):
+        super().__init__(status)
+        self.until = until
+
+    def apply(self):
+        super().apply()
+        self.until.bind(self.owner, self.__until__)
+
+    def unapply(self):
+        self.until.unbind(self.owner, self.__until__)
+        super().unapply()
+
+    def __until__(self, *args):
+        self.owner.remove_buff(self)
+
+    def __to_json__(self):
+        return {
+            'status': self.status,
+            'until': self.until
+        }
+
+    @staticmethod
+    def from_json(status, until):
+        status = Status.from_json(**status)
+        until = Event.from_json(**until)
+        return BuffUntil(status, until)
+
+
 class AuraUntil(Aura):
     def __init__(self, status, selector, until):
         super().__init__(status, selector)

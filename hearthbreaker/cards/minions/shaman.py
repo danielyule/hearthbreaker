@@ -2,8 +2,8 @@ from hearthbreaker.tags.action import Draw, Damage, Give, Heal
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, CharacterSelector, BothPlayer, \
-    UserPicker
+from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, CharacterSelector, BothPlayer, \
+    UserPicker, SelfSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
@@ -63,8 +63,8 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), ChangeAttack(1), SelfSelector()),
-                                     Effect(CardPlayed(HasOverload()), ChangeHealth(1), SelfSelector())])
+        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), Give(ChangeAttack(1)), SelfSelector()),
+                                     Effect(CardPlayed(HasOverload()), Give(ChangeHealth(1)), SelfSelector())])
 
 
 class Windspeaker(MinionCard):

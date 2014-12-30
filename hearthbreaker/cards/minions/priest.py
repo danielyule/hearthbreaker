@@ -1,9 +1,9 @@
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give
-from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    SelfSelector, EnemyPlayer, UserPicker, RandomPicker
+    EnemyPlayer, UserPicker, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
@@ -35,7 +35,7 @@ class Lightspawn(MinionCard):
         super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(0, 5, auras=[Aura(AttackEqualsHealth(), SelfSelector())])
+        return Minion(0, 5, buffs=[Buff(AttackEqualsHealth())])
 
 
 class Lightwell(MinionCard):
