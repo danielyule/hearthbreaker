@@ -111,7 +111,7 @@ class TestHunter(unittest.TestCase):
 
     def test_Flare(self):
 
-        game = generate_game_for(Vaporize, [WorgenInfiltrator, WorgenInfiltrator, ArcaneShot, Tracking],
+        game = generate_game_for(Vaporize, [WorgenInfiltrator, WorgenInfiltrator],
                                  CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 5):
@@ -119,7 +119,7 @@ class TestHunter(unittest.TestCase):
 
         # Vaporize is in place and two Infiltrators are down
         self.assertEqual(1, len(game.current_player.secrets))
-        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
         self.assertTrue(game.other_player.minions[0].stealth)
         self.assertTrue(game.other_player.minions[1].stealth)
         self.assertEqual(4, len(game.other_player.hand))
@@ -129,16 +129,16 @@ class TestHunter(unittest.TestCase):
         def _play_and_attack(player):
             Flare().use(player, player.game)
             old_play(player)
-            player.minions[2].attack()
+            player.minions[4].attack()
 
-        # The Coin, two Worgens Arcane shot and Tracking are played
-        # Arcane shot kills one of the active Worgens, because Flare has removed its stealth
         game.other_player.agent.do_turn = _play_and_attack
         game.play_single_turn()
+
+        # All of the Worgens should still be alive, because Vaporize is gone.
         self.assertEqual(0, len(game.other_player.secrets))
-        self.assertEqual(3, len(game.current_player.minions))
-        self.assertFalse(game.current_player.minions[2].stealth)
-        self.assertEqual(2, len(game.current_player.hand))
+        self.assertEqual(7, len(game.current_player.minions))
+        for minion in game.current_player.minions[4:]:
+            self.assertFalse(minion.stealth)
 
     def test_EaglehornBow(self):
         game = generate_game_for([Snipe, EaglehornBow], StonetuskBoar, PlayAndAttackAgent,

@@ -3294,6 +3294,38 @@ class TestCommon(unittest.TestCase):
 
         self.assertFalse(game.players[0].minions[0].stealth)
 
+    def test_FinickyCloakfield_silence(self):
+        game = generate_game_for([HauntedCreeper, FinickyCloakfield, IronbeakOwl, BoulderfistOgre], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+        self.assertEqual(0, game.current_player.minions[1].stealth)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_FinickyCloakfield_Faceless(self):
+        game = generate_game_for([Loatheb, FinickyCloakfield, FacelessManipulator], Blizzard,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].stealth)
+        self.assertTrue(game.current_player.minions[1].stealth)
+
+        game.current_player.minions[1].health = 2
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+
     def test_ReversingSwitch(self):
         game = generate_game_for(ReversingSwitch, GoldshireFootman, OneCardPlayingAgent, OneCardPlayingAgent)
 

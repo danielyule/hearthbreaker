@@ -334,8 +334,10 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
     def _remove_stealth(self):
         if self.stealth:
+            for buff in self.buffs:
+                if isinstance(buff.status, Stealth):
+                    buff.unapply()
             self.buffs = [buff for buff in self.buffs if not isinstance(buff.status, Stealth)]
-            self.stealth = 0
 
     def attack(self):
         """
@@ -585,7 +587,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
     def _remove_auras_and_effects(self):
         for effect in reversed(self.effects):
-            self.player.effect_count[type(effect)] -= 1
             effect.unapply()
         for aura in reversed(self.auras):
             self.player.remove_aura(aura)
@@ -656,10 +657,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :param MinionEffect effect: The effect to apply to this :class:`Character
         """
-        if type(effect) not in self.player.effect_count:
-            self.player.effect_count[type(effect)] = 0
-
-        self.player.effect_count[type(effect)] += 1
         effect.set_target(self)
         effect.apply()
         self.effects.append(effect)
@@ -812,6 +809,10 @@ class Card(Bindable, GameObject):
         return self.name + " (" + str(self.mana) + " mana)"
 
 
+def _battlecry_targetable(target):
+    return target.player is target.player.game.current_player or not target.stealth
+
+
 class MinionCard(Card, metaclass=abc.ABCMeta):
     """
     Describes a :class:`Card` for summoning a minion.  This is distinct from the :class:`Minion` that represents the
@@ -822,7 +823,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :meth:`create_minion`
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
-                 targeting_func=None, filter_func=lambda target: not target.stealth, ref_name=None, battlecry=None,
+                 targeting_func=None, filter_func=_battlecry_targetable, ref_name=None, battlecry=None,
                  choices=None, combo=None, overload=0):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
@@ -1209,7 +1210,7 @@ class Minion(Character):
         return not self.stealth
 
     def spell_targetable(self):
-        return not self.stealth and self.can_be_targeted_by_spells
+        return (not self.stealth or self.player is self.player.game.current_player) and self.can_be_targeted_by_spells
 
     @staticmethod
     def is_minion():
@@ -1652,7 +1653,6 @@ class Player(Bindable):
         self.double_deathrattle = 0
         self.mana_filters = []
         self.overload = 0
-        self.effect_count = dict()
         self.opponent = None
         self.cards_played = 0
         self.dead_this_turn = []

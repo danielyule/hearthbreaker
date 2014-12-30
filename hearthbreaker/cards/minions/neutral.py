@@ -1,6 +1,6 @@
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Chance, Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
-    Silence, Bounce, GiveManaCrystal, Equip, GiveAura
+    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Enrage, Aura, \
     BuffUntil, Buff
@@ -1786,15 +1786,10 @@ class WildPyromancer(MinionCard):
 class FacelessManipulator(MinionCard):
     def __init__(self):
         super().__init__("Faceless Manipulator", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
-                         targeting_func=hearthbreaker.targeting.find_minion_battlecry_target)
+                         battlecry=Battlecry(Replace(), MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
-        def copy_minion(minion):
-            if self.target:
-                new_minion = self.target.copy(player)
-                minion.replace(new_minion)
-
-        return Minion(3, 3, battlecry=copy_minion)
+        return Minion(3, 3)
 
 
 class Nerubian(MinionCard):

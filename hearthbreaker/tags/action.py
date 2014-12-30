@@ -484,6 +484,17 @@ class Duplicate(Action):
         return self
 
 
+class Replace(Action):
+    def act(self, actor, target):
+        new_minion = target.copy(actor.player)
+        actor.replace(new_minion)
+
+    def __to_json__(self):
+        return {
+            'name': 'replace'
+        }
+
+
 class Silence(Action):
     def act(self, actor, target):
         target.silence()

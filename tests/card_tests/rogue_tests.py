@@ -268,6 +268,18 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertFalse(game.players[0].minions[0].stealth)
 
+    def test_Conceal_death(self):
+        game = generate_game_for([StonetuskBoar, Conceal, Naturalize], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
     def test_DeadlyPoison(self):
         game = generate_game_for(DeadlyPoison, StonetuskBoar, PredictableAgent, DoNothingAgent)
 
