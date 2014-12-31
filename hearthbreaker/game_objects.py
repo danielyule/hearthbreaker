@@ -1170,7 +1170,7 @@ class Minion(Character):
 
     def damage(self, amount, attacker):
         if self.divine_shield:
-            self.buffs = [buff for buff in self.buffs if not isinstance(buff, DivineShield)]
+            self.buffs = [buff for buff in self.buffs if not isinstance(buff.status, DivineShield)]
             self.divine_shield = 0
         else:
             super().damage(amount, attacker)

@@ -40,7 +40,6 @@ class CruelTaskmaster(MinionCard):
                          battlecry=Battlecry([Damage(1), Give(ChangeAttack(2))], MinionSelector(players=BothPlayer())))
 
     def create_minion(self, player):
-
         return Minion(2, 2)
 
 
@@ -49,9 +48,8 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        minion = Minion(2, 4, effects=[Effect(CharacterDamaged(player=BothPlayer(),
-                                                               condition=IsMinion()), ChangeAttack(1), SelfSelector())])
-        return minion
+        return Minion(2, 4, effects=[Effect(CharacterDamaged(player=BothPlayer(),
+                                                             condition=IsMinion()), ChangeAttack(1), SelfSelector())])
 
 
 class GrommashHellscream(MinionCard):

@@ -47,8 +47,8 @@ def do_stuff():
         if _count % 100 == 0:
             print("---- game #{} ----".format(_count))
 
-    deck1 = load_deck("hunter.hsdeck")
-    deck2 = load_deck("paladin.hsdeck")
+    deck1 = load_deck("example.hsdeck")
+    deck2 = load_deck("example.hsdeck")
     game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
 
     print(timeit.timeit(play_game, 'gc.enable()', number=10000))

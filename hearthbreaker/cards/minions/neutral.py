@@ -597,9 +597,7 @@ class FenCreeper(MinionCard):
         super().__init__("Fen Creeper", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(3, 6)
-        minion.taunt = True
-        return minion
+        return Minion(3, 6, taunt=True)
 
 
 class VentureCoMercenary(MinionCard):
@@ -640,8 +638,7 @@ class StormwindChampion(MinionCard):
         super().__init__("Stormwind Champion", 7, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        minion = Minion(6, 6, auras=[Aura(ChangeAttack(1), MinionSelector()), Aura(ChangeHealth(1), MinionSelector())])
-        return minion
+        return Minion(6, 6, auras=[Aura(ChangeAttack(1), MinionSelector()), Aura(ChangeHealth(1), MinionSelector())])
 
 
 class Deathwing(MinionCard):
@@ -1058,7 +1055,6 @@ class ColdlightOracle(MinionCard):
                          battlecry=Battlecry(Draw(2), PlayerSelector(players=BothPlayer())))
 
     def create_minion(self, player):
-
         return Minion(2, 2)
 
 
@@ -1351,17 +1347,6 @@ class AncientMage(MinionCard):
                          battlecry=Battlecry(Give(SpellDamage(1)), MinionSelector(condition=Adjacent())))
 
     def create_minion(self, player):
-        def give_spell_damage(m):
-            if m.index > 0:
-                minion = m.player.minions[m.index - 1]
-                minion.spell_damage += 1
-                m.player.spell_damage += 1
-
-            if m.index < len(m.player.minions) - 1:
-                minion = m.player.minions[m.index + 1]
-                minion.spell_damage += 1
-                m.player.spell_damage += 1
-
         return Minion(2, 5)
 
 
@@ -1813,7 +1798,7 @@ class Maexxna(MinionCard):
         super().__init__("Maexxna", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-            return Minion(2, 8, effects=[Effect(DidDamage(), Kill(), TargetSelector(IsMinion()))])
+        return Minion(2, 8, effects=[Effect(DidDamage(), Kill(), TargetSelector(IsMinion()))])
 
 
 class SpectralSpider(MinionCard):
@@ -1829,7 +1814,6 @@ class HauntedCreeper(MinionCard):
         super().__init__("Haunted Creeper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-
         return Minion(1, 2, deathrattle=Deathrattle(Summon(SpectralSpider(), 2), PlayerSelector()))
 
 
@@ -1846,11 +1830,6 @@ class UnstableGhoul(MinionCard):
         super().__init__("Unstable Ghoul", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def deal_one_to_minions(minion):
-            for target in hearthbreaker.targeting.find_minion_battlecry_target(minion.game, lambda x: True):
-                target.damage(1, self)
-                minion.game.check_delayed()
-
         return Minion(1, 3, deathrattle=Deathrattle(Damage(1), MinionSelector(players=BothPlayer())), taunt=True)
 
 
@@ -1934,14 +1913,11 @@ class Undertaker(MinionCard):
 
 class WailingSoul(MinionCard):
     def __init__(self):
-        super().__init__("Wailing Soul", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+        super().__init__("Wailing Soul", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Silence(), MinionSelector()))
 
     def create_minion(self, player):
-        def silence_other_minions(minion):
-            for mini in player.minions:
-                if mini is not minion:
-                    mini.silence()
-        return Minion(3, 5, battlecry=silence_other_minions)
+        return Minion(3, 5)
 
 
 class ZombieChow(MinionCard):
