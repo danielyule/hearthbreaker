@@ -2096,3 +2096,12 @@ class BoomBot(MinionCard):
     def create_minion(self, player):
         return Minion(1, 1, deathrattle=Deathrattle(Damage(player.game.random_amount(1, 4)),
                                                     CharacterSelector(players=EnemyPlayer(), picker=RandomPicker())))
+
+
+class DoctorBoom(MinionCard):
+    def __init__(self):
+        super().__init__("Dr. Boom", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
+                         battlecry=Battlecry(Summon(BoomBot(), 2), PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(7, 7)

@@ -3400,7 +3400,20 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
 
-        # The boom bot target the second Stonetust boar that was played (two can be played because of the coin)
+        # The boom bot targets the second Stonetust boar that was played (two can be played because of the coin)
         game.play_single_turn()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
+
+    def test_DoctorBoom(self):
+        game = generate_game_for([BoulderfistOgre, DoctorBoom], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual("Boom Bot", game.current_player.minions[0].card.name)
+        self.assertEqual("Dr. Boom", game.current_player.minions[1].card.name)
+        self.assertEqual("Boom Bot", game.current_player.minions[2].card.name)
+        self.assertEqual("Boulderfist Ogre", game.current_player.minions[3].card.name)
+
