@@ -51,7 +51,7 @@ class JSONTester:
                 'health': card_def['health']
             }
             if 'effects' in card_def:
-                create_dict['effects'] = [Effect.from_json(player.game, **effect) for effect in card_def['effects']]
+                create_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
 
             if 'auras' in card_def:
                 create_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
@@ -144,8 +144,6 @@ class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
 
 
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
-    def test_Alexstrasza(self):
-        pass
 
     def test_BloodKnight(self):
         pass
@@ -180,15 +178,6 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
     def test_EchoingOoze_buff(self):
         pass
 
-    def test_EliteTaurenChieftain(self):
-        pass
-
-    def test_FacelessManipulator(self):
-        pass
-
-    def test_FrostElemental(self):
-        pass
-
     def test_FrostwolfWarlord(self):
         pass
 
@@ -201,47 +190,11 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
     def test_HungryCrab(self):
         pass
 
-    def test_MillhouseManastorm(self):
-        pass
-
-    def test_MindControlTech(self):
-        pass
-
-    def test_Nightblade(self):
-        pass
-
-    def test_Onyxia(self):
-        pass
-
-    def test_PriestessOfElune(self):
-        pass
-
-    def test_ShatteredSunCleric(self):
-        pass
-
-    def test_SilverHandKnight(self):
-        pass
-
-    def test_SilvermoonGuardian(self):
-        pass
-
     def test_SouthseaDeckhand(self):
-        pass
-
-    def test_StampedingKodo(self):
-        pass
-
-    def test_TheBlackKnight(self):
         pass
 
     def test_TinkmasterOverspark(self):
         pass
 
     def test_TwilightDrake(self):
-        pass
-
-    def test_VoodooDoctor(self):
-        pass
-
-    def test_WailingSoul(self):
         pass

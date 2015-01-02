@@ -170,6 +170,20 @@ class MinionHasDeathrattle(Condition):
         return len(minion.deathrattle) > 0
 
 
+class HasStatus(Condition):
+    def __init__(self, status):
+        self.status = status
+
+    def __to_json__(self):
+        return {
+            'name': 'has_status',
+            'status': self.status,
+        }
+
+    def evaluate(self, target, minion, *args):
+        return getattr(minion, self.status)
+
+
 class MinionCountIs(Condition):
     def __init__(self, count):
         self.count = count

@@ -1262,7 +1262,7 @@ class Minion(Character):
         minion.card = card_lookup(md["name"])
         minion.game = game
         minion.player = player
-        minion._effects_to_add = [Effect.from_json(game, **effect) for effect in md['effects']]
+        minion._effects_to_add = [Effect.from_json(**effect) for effect in md['effects']]
         minion._auras_to_add = [AuraUntil.from_json(**aura) if 'until' in aura else Aura.from_json(**aura)
                                 for aura in md['auras']]
         minion._buffs_to_add = [BuffUntil.from_json(**buff) if 'until' in buff else Buff.from_json(**buff)
@@ -2046,13 +2046,13 @@ class Game(Bindable):
         for player in new_game.players:
             player.agent = agents[index]
             for effect_json in d['players'][index]['effects']:
-                player.add_effect(Effect.from_json(new_game, **effect_json))
+                player.add_effect(Effect.from_json(**effect_json))
             player.player_auras = []
             for aura_json in d['players'][index]['auras']:
                 player.add_aura(AuraUntil.from_json(**aura_json))
 
             for effect in d['players'][index]['hero']['effects']:
-                player.hero.add_effect(Effect.from_json(player.game, **effect))
+                player.hero.add_effect(Effect.from_json(**effect))
 
             for aura in d['players'][index]['hero']['auras']:
                 player.hero.add_aura(AuraUntil.from_json(**aura))

@@ -190,7 +190,7 @@ class Picker(JSONObject, metaclass=abc.ABCMeta):
         elif name == "random":
             return RandomPicker(count)
         else:
-            raise TypeError("WHat are you even doing?")
+            raise TypeError("What are you even doing?")
 
 
 class Selector(JSONObject, metaclass=abc.ABCMeta):
@@ -431,7 +431,7 @@ class Effect(JSONObject):
         }
 
     @staticmethod
-    def from_json(game, action, event, selector):
+    def from_json(action, event, selector):
             action = Action.from_json(**action)
             event = Event.from_json(**event)
             selector = Selector.from_json(**selector)

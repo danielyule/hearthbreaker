@@ -167,7 +167,6 @@ class RockbiterWeapon(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
         self.target.change_temp_attack(3)
 
 

@@ -2034,27 +2034,27 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual(10, len(game.players[1].hand))
-        self.assertEqual("Rogues Do It...", game.players[0].hand[0].name)
+        self.assertEqual("Power of the Horde", game.players[0].hand[0].name)
         self.assertEqual("I Am Murloc", game.players[0].hand[2].name)
-        self.assertEqual("I Am Murloc", game.players[0].hand[4].name)
-        self.assertEqual("Rogues Do It...", game.players[0].hand[6].name)
+        self.assertEqual("Rogues Do It...", game.players[0].hand[4].name)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual("Thrallmar Farseer", game.current_player.minions[4].card.name)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(5, len(game.players[0].minions))
-        self.assertEqual("I Am Murloc", game.players[0].hand[8].name)
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual("I Am Murloc", game.players[0].hand[7].name)
 
         game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(7, len(game.players[0].minions))
-        self.assertEqual(9, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[0].hand))
 
         for i in range(0, 9):
             game.players[0].discard()
@@ -2071,35 +2071,13 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual("I Am Murloc", game.players[0].hand[0].name)
-        game.players[0].discard()
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        for minion in game.players[0].minions:
-            minion.damage(10, None)
-            minion.activate_delayed()
         self.assertEqual("Rogues Do It...", game.players[0].hand[0].name)
-        game.players[0].discard()
-
         game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual("I Am Murloc", game.players[0].hand[0].name)
-        game.players[0].discard()
-
-        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].hand))
         game.play_single_turn()
 
-        self.assertEqual("Power of the Horde", game.players[0].hand[0].name)
-        # Finally
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(6, len(game.players[0].minions))
-        self.assertEqual("Sen'jin Shieldmasta", game.players[0].minions[5].card.name)
-        # Ok, that's all 3 cards covered
+        self.assertEqual(1, game.current_player.minions[0].health)
+        self.assertEqual(2, len(game.players[0].hand))
 
     def test_MillhouseManastorm(self):
         game = generate_game_for([MillhouseManastorm, MagmaRager], SiphonSoul, OneCardPlayingAgent, CardTestingAgent)
@@ -3416,4 +3394,3 @@ class TestCommon(unittest.TestCase):
         self.assertEqual("Dr. Boom", game.current_player.minions[1].card.name)
         self.assertEqual("Boom Bot", game.current_player.minions[2].card.name)
         self.assertEqual("Boulderfist Ogre", game.current_player.minions[3].card.name)
-

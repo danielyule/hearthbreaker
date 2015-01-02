@@ -409,6 +409,27 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(27, game.players[1].hero.health)
 
+    def test_RockbiterWeapon_and_Hex(self):
+        game = generate_game_for([IronfurGrizzly, RockbiterWeapon, Hex], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Frog", game.current_player.minions[0].card.name)
+
+    def test_RockbiterWeapon_and_BaronGeddon(self):
+        game = generate_game_for([BaronGeddon, RecklessRocketeer, RockbiterWeapon], StonetuskBoar,
+                                 PlayAndAttackAgent, DoNothingAgent)
+
+        for turn in range(15):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Baron Geddon", game.current_player.minions[0].card.name)
+        self.assertEqual(11, game.other_player.hero.health)
+
     def test_TotemicMight(self):
         game = generate_game_for([TotemicMight, StonetuskBoar], Shieldbearer, PredictableAgent, DoNothingAgent)
 

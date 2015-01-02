@@ -256,11 +256,12 @@ class MinionCardSelector(CardSelector):
 
 
 class HeroSelector(Selector):
-    def __init__(self, players=FriendlyPlayer()):
+    def __init__(self, players=FriendlyPlayer(), picker=AllPicker()):
         self.players = players
+        self.picker = picker
 
     def get_targets(self, source, obj=None):
-        return [p.hero for p in self.players.get_players(source.player)]
+        return self.picker.pick([p.hero for p in self.players.get_players(source.player)], source.player)
 
     def match(self, source, obj):
         return source.player is obj
@@ -268,11 +269,13 @@ class HeroSelector(Selector):
     def __to_json__(self):
         return {
             'name': 'hero',
-            'players': self.players
+            'players': self.players,
+            'picker': self.picker
         }
 
-    def __from_json__(self, players='friendly'):
+    def __from_json__(self, picker, players='friendly'):
         self.players = Player.from_json(players)
+        self.picker = Picker.from_json(**picker)
         return self
 
 

@@ -111,7 +111,7 @@ class TestAgents(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertEqual(0, game.current_player.hero.health)
-        self.assertEqual(3, game.other_player.hero.health)
+        self.assertEqual(-1, game.current_player.hero.health)
+        self.assertEqual(8, game.other_player.hero.health)
 
         self.assertTrue(game.game_ended)

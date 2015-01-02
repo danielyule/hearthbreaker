@@ -1,5 +1,5 @@
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect, Buff, BuffUntil
+    CARD_SOURCE, Effect, Buff, BuffUntil, Amount
 from hearthbreaker.tags.condition import IsSecret
 
 
@@ -47,7 +47,6 @@ class Give(Action):
             return GiveEffect.__new__(GiveEffect).__from_json__(effects)
 
         if auras:  # To allow for give to work with auras as well, we check at load time
-
             return GiveAura.__new__(GiveAura).__from_json__(auras)
 
         self.buffs = []
@@ -85,7 +84,7 @@ class GiveAura(Action):
             'auras': self.auras
         }
 
-    def __from_json__(self, auras=None):
+    def __from_json__(self, auras):
         self.auras = []
         for aura in auras:
             if "until" in aura:
@@ -112,6 +111,10 @@ class GiveEffect(Action):
             'name': 'give',
             'effects': self.effects
         }
+
+    def __from_json__(self, effects):
+        self.effects = [Effect.from_json(**effect) for effect in effects]
+        return self
 
 
 class Take(Action):
@@ -152,14 +155,20 @@ class Summon(Action):
         card = self.card.get_card(target)
         if card is None:
             return
+
         if actor.is_minion() and actor.player is target:
-            if actor.removed:
-                index = actor.index
+            # Cenaurius and Dr. Boom are special snowflakes that summon minions on either side of themselves
+            if self.count == 2:
+                card.summon(target, target.game, actor.index)
+                card.summon(target, target.game, actor.index + 1)
             else:
-                index = actor.index + 1
-            for summon in range(self.count):
-                card.summon(target, target.game, index)
-                index = actor.index  # Move the later minions to the left of their originator
+                if actor.removed:
+                    index = actor.index
+                else:
+                    index = actor.index + 1
+                for summon in range(self.count):
+                    card.summon(target, target.game, index)
+                    index += 1
         else:
             for summon in range(self.count):
                 card.summon(target, target.game, len(target.minions))
@@ -228,6 +237,19 @@ class Heal(Action):
         return {
             'name': 'heal',
             'amount': self.amount
+        }
+
+
+class SetHealth(Action, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
+
+    def act(self, actor, target):
+        target.health = self.get_amount(actor, target)
+
+    def __to_json__(self):
+        return {
+            'name': 'set_health'
         }
 
 
