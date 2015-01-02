@@ -6,7 +6,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.game_objects import Game
 from hearthbreaker.replay import playback, Replay
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, EnemySpellTestingAgent, \
-    MinionAttackingAgent
+    MinionAttackingAgent, PlayAndAttackAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.cards import *
 
@@ -352,6 +352,57 @@ class TestMage(unittest.TestCase):
 
         # The arcane intellect should not have caused the Spellbender to activate
         self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_SpellbenderFullBoard(self):
+        game = generate_game_for([Spellbender, Onyxia], Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(7, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(6, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_Spellbender_full_board_target_hero(self):
+        game = generate_game_for(BaneOfDoom, [Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Spellbender],
+                                 OneCardPlayingAgent, CardTestingAgent)
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+        game.other_player.agent.choose_target = lambda targets: game.players[1].hero
+
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual(28, game.other_player.hero.health)
+        self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_Spellbender_target_hero_and_attack(self):
+        game = generate_game_for([Spellbender, OasisSnapjaw], [LavaBurst, Wisp, Loatheb],
+                                 OneCardPlayingAgent, PlayAndAttackAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.minions))
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(25, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(25, game.other_player.hero.health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(6, game.other_player.minions[0].health)
         self.assertEqual(1, len(game.other_player.secrets))
 
     def test_Vaporize(self):
