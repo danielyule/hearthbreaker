@@ -95,6 +95,7 @@ from hearthbreaker.cards.spells.paladin import (
     Redemption,
     Repentance,
     Avenge,
+    SealOfLight,
 )
 
 from hearthbreaker.cards.spells.priest import (

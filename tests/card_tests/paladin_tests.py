@@ -625,3 +625,15 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertTrue(game.players[0].minions[0].taunt)
+
+    def test_SealOfLight(self):
+        game = generate_game_for(SealOfLight, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
+
+        # Cheat, start with some damage
+        game.players[0].hero.health = 25
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(29, game.players[0].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)

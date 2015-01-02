@@ -285,3 +285,13 @@ class Repentance(SecretCard):
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
+
+
+class SealOfLight(Card):
+    def __init__(self):
+        super().__init__("Seal of Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.heal(player.effective_heal_power(4), self)
+        player.hero.change_temp_attack(2)
