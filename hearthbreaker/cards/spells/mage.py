@@ -208,15 +208,14 @@ class IceBlock(SecretCard):
         if isinstance(character, Hero):
             if character.health - amount <= 0:
                 character.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
-                character.health += amount
                 # TODO Check if this spell will also prevent damage to armor.
                 super().reveal()
 
     def activate(self, player):
-        player.bind("character_damaged", self._reveal)
+        player.bind("pre_damage", self._reveal)
 
     def deactivate(self, player):
-        player.unbind("character_damaged", self._reveal)
+        player.unbind("pre_damage", self._reveal)
 
 
 class ConeOfCold(Card):

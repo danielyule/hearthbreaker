@@ -457,6 +457,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
         if self.dead:
             return
+        self.player.trigger("pre_damage", self, attacker, amount)
         if not self.immune:
             self.trigger("damaged", amount, attacker)
             self.player.trigger("character_damaged", self, attacker, amount)
@@ -1404,8 +1405,6 @@ class Weapon(Bindable, GameObject):
         if self.deathrattle is not None:
             self.deathrattle.deathrattle(self.player.hero)
         self.player.hero.weapon = None
-        if self.player.game.current_player is self.player:
-            self.player.hero.silence()
         self.player.hero.trigger("weapon_destroyed")
 
     def equip(self, player):
