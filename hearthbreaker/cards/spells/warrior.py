@@ -207,3 +207,22 @@ class Whirlwind(Card):
         targets.extend(game.current_player.minions)
         for minion in targets:
             minion.damage(player.effective_spell_damage(1), self)
+
+
+class BouncingBlade(Card):
+    def __init__(self):
+        super().__init__("Bouncing Blade", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        # According to https://www.youtube.com/watch?v=7ij_6_Dx47g, Bouncing Blade bounces at most 80 times
+
+        # TODO Bouncing blade should only target those minions whose health is above minimum
+        # See http://us.battle.net/hearthstone/en/forum/topic/15142084659
+        targets = player.minions[:] + player.opponent.minions[:]
+        if len(targets):
+            for bounces in range(80):
+                target = game.random_choice(targets)
+                target.damage(player.effective_spell_damage(1), self)
+                if target.dead:
+                    break

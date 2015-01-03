@@ -4,7 +4,7 @@ from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
     PlayerSelector
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.tags.status import ChangeAttack, Charge
 
@@ -74,3 +74,11 @@ class WarsongCommander(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 3, effects=[Effect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), TargetSelector())])
+
+
+class Warbot(MinionCard):
+    def __init__(self):
+        super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 3, enrage=Enrage(ChangeAttack(1), SelfSelector()))

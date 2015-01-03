@@ -430,3 +430,42 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
+
+    def test_Warbot(self):
+        game = generate_game_for(Warbot, StonetuskBoar, CardTestingAgent, PlayAndAttackAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+
+    def test_BouncingBlades(self):
+        game = generate_game_for([GoldshireFootman, EchoingOoze, BouncingBlade], [GoldshireFootman, EchoingOoze],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[2].health)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[2].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[2].health)

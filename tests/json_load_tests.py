@@ -142,6 +142,9 @@ class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
     def test_WarsongCommander(self):
         pass  # This test uses Bloodsail Corsair, which also can't be implemented (yet)
 
+    def test_BouncingBlades(self):
+        pass  # This test relies on Echoing Ooze.
+
 
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
 

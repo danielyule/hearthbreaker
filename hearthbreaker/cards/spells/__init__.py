@@ -193,5 +193,6 @@ from hearthbreaker.cards.spells.warrior import (
     ShieldSlam,
     Slam,
     Upgrade,
-    Whirlwind
+    Whirlwind,
+    BouncingBlade
 )

@@ -298,4 +298,5 @@ from hearthbreaker.cards.minions.warrior import (
     GrommashHellscream,
     KorkronElite,
     WarsongCommander,
+    Warbot,
 )
