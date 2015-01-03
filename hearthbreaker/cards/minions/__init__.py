@@ -233,6 +233,7 @@ from hearthbreaker.cards.minions.paladin import (
     GuardianOfKings,
     TirionFordring,
     CobaltGuardian,
+    SilverHandRecruit,
 )
 
 from hearthbreaker.cards.minions.priest import (

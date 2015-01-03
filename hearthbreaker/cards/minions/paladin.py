@@ -60,3 +60,11 @@ class CobaltGuardian(MinionCard):
     def create_minion(self, player):
         return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), Give(DivineShield()),
                                             SelfSelector())])
+
+
+class SilverHandRecruit(MinionCard):
+    def __init__(self):
+        super().__init__("Silver Hand Recruit", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, player):
+        return Minion(1, 1)

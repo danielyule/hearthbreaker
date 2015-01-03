@@ -117,17 +117,9 @@ class PaladinPower(Power):
         super().__init__(hero)
 
     def use(self):
-        class SilverHandRecruit(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Silver Hand Recruit", 1, hearthbreaker.constants.CHARACTER_CLASS.PALADIN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(1, 1)
-
         super().use()
 
-        recruit_card = SilverHandRecruit()
+        recruit_card = hearthbreaker.cards.minions.paladin.SilverHandRecruit()
         recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
