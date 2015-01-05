@@ -214,6 +214,24 @@ class TestPaladin(unittest.TestCase):
         # Holy Wrath should be played that will draw Holy Wrath that costs 5 mana, thus dealing 5 damage
         self.assertEqual(25, game.players[0].hero.health)
 
+    def test_HolyWrath_fatigue(self):
+        game = generate_game_for(ArcaneExplosion, [Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp,
+                                                   Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp,
+                                                   Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, HolyWrath],
+                                 OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(0, 51):
+            game.play_single_turn()
+
+        # Only Holy Wrath left in deck
+        self.assertEqual(1, game.players[1].deck.left)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        # Holy Wrath will be drawn, and played
+        game.play_single_turn()
+        self.assertEqual(0, game.players[1].deck.left)
+        self.assertEqual(29, game.players[1].hero.health)
+
     def test_Humility(self):
         game = generate_game_for(BloodfenRaptor, Humility, OneCardPlayingAgent, CardTestingAgent)
 

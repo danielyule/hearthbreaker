@@ -156,9 +156,14 @@ class HolyWrath(Card):
     def use(self, player, game):
         super().use(player, game)
 
+        fatigue = False
+        if player.deck.left == 0:
+            fatigue = True
+
         player.draw()
-        cost = player.hand[-1].mana
-        self.target.damage(player.effective_spell_damage(cost), self)
+        if not fatigue:
+            cost = player.hand[-1].mana
+            self.target.damage(player.effective_spell_damage(cost), self)
 
 
 class Humility(Card):
