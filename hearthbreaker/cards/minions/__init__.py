@@ -189,6 +189,9 @@ from hearthbreaker.cards.minions.neutral import (
     ClockworkGnome,
     BoomBot,
     DoctorBoom,
+    TargetDummy,
+    ExplosiveSheep,
+    Puddlestomper,
 )
 
 from hearthbreaker.cards.minions.druid import (

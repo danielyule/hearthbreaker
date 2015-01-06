@@ -3394,3 +3394,27 @@ class TestCommon(unittest.TestCase):
         self.assertEqual("Dr. Boom", game.current_player.minions[1].card.name)
         self.assertEqual("Boom Bot", game.current_player.minions[2].card.name)
         self.assertEqual("Boulderfist Ogre", game.current_player.minions[3].card.name)
+
+    def test_ExplosiveSheep(self):
+        game = generate_game_for([GoldshireFootman, MurlocTidehunter, ShadowBolt], [ArgentSquire, ExplosiveSheep],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[2].health)
+
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertTrue(game.players[1].minions[1].divine_shield)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertFalse(game.players[1].minions[0].divine_shield)
+        self.assertEqual("Argent Squire", game.players[1].minions[0].card.name)

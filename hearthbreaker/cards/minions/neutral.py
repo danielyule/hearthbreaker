@@ -2080,3 +2080,27 @@ class DoctorBoom(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 7)
+
+
+class TargetDummy(MinionCard):
+    def __init__(self):
+        super().__init__("Target Dummy", 0, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(0, 2, taunt=True)
+
+
+class ExplosiveSheep(MinionCard):
+    def __init__(self):
+        super().__init__("Explosive Sheep", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 1, deathrattle=Deathrattle(Damage(2), CharacterSelector(players=BothPlayer())), taunt=True)
+
+
+class Puddlestomper(MinionCard):
+    def __init__(self):
+        super().__init__("Puddlestomper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MURLOC)
+
+    def create_minion(self, player):
+        return Minion(3, 2)
