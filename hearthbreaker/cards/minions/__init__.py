@@ -192,6 +192,7 @@ from hearthbreaker.cards.minions.neutral import (
     TargetDummy,
     ExplosiveSheep,
     Puddlestomper,
+    MicroMachine,
 )
 
 from hearthbreaker.cards.minions.druid import (

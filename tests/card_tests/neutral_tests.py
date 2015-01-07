@@ -3418,3 +3418,27 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertFalse(game.players[1].minions[0].divine_shield)
         self.assertEqual("Argent Squire", game.players[1].minions[0].card.name)
+
+    def test_MicroMachine(self):
+        game = generate_game_for([MicroMachine, SeaGiant], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+
+        game.players[0].minions[0].silence()
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
