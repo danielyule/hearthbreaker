@@ -2108,7 +2108,7 @@ class Puddlestomper(MinionCard):
 
 class MicroMachine(MinionCard):
     def __init__(self):
-        super().__init__("Micro Machine", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+        super().__init__("Micro Machine", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(1, 2, effects=[Effect(TurnStarted(player=BothPlayer()), ChangeAttack(1), SelfSelector())])
