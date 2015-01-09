@@ -3,7 +3,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
-from hearthbreaker.constants import MINION_TYPE
+from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent
@@ -2158,6 +2158,40 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].card.mana)
 
+    def test_PilotedSkyGolem(self):
+        game = generate_game_for(PilotedSkyGolem, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Piloted Sky Golem", game.current_player.minions[0].card.name)
+
+        game = game.copy()
+
+        # The assassinate will kill the golem, and leave the other player with a 4 mana card
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].card.mana)
+
+    def test_SneedsOldShredder(self):
+        game = generate_game_for(SneedsOldShredder, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Sneed's Old Shredder", game.current_player.minions[0].card.name)
+
+        game = game.copy()
+
+        # The assassinate will kill the shredder, and leave the other player with a legendary minion
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(CARD_RARITY.LEGENDARY, game.other_player.minions[0].card.rarity)
+
     def test_AntiqueHealbot(self):
         game = generate_game_for(AntiqueHealbot, Frostbolt, OneCardPlayingAgent, OneCardPlayingAgent)
 
@@ -2168,3 +2202,25 @@ class TestMinionCopying(unittest.TestCase):
         game = game.copy()
         game.play_single_turn()
         self.assertEqual(29, game.current_player.hero.health)
+
+    def test_MechanicalYeti(self):
+        game = generate_game_for(MechanicalYeti, Fireball, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[1].hand))
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertIn(game.players[0].hand[-1].name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn",
+                                                      "Armour Plating", "Reversing Switch", "Time Rewinder",
+                                                      "Whirling Blades"])
+        self.assertEqual(9, len(game.players[1].hand))
+        self.assertIn(game.players[1].hand[-1].name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn",
+                                                      "Armour Plating", "Reversing Switch", "Time Rewinder",
+                                                      "Whirling Blades"])

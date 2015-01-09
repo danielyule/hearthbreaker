@@ -6,7 +6,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
     BuffUntil, Buff
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
-    IsWeapon, HasStatus, AttackLessThanOrEqualTo
+    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
@@ -1971,6 +1971,25 @@ class PilotedShredder(MinionCard):
                                                     PlayerSelector()))
 
 
+class PilotedSkyGolem(MinionCard):
+    def __init__(self):
+        super().__init__("Piloted Sky Golem", 6, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(6, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[ManaCost(4), IsMinion()])),
+                                                    PlayerSelector()))
+
+
+class SneedsOldShredder(MinionCard):
+    def __init__(self):
+        super().__init__("Sneed's Old Shredder", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(5, 7, deathrattle=Deathrattle(Summon(CardQuery(conditions=[CardRarity(CARD_RARITY.LEGENDARY),
+                                                                                 IsMinion()])),
+                                                    PlayerSelector()))
+
+
 class AntiqueHealbot(MinionCard):
     def __init__(self):
         super().__init__("Antique Healbot", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH,
@@ -2052,13 +2071,16 @@ class ClockworkGiant(MinionCard):
         return cost
 
 
+spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
+                   RustyHorn(), WhirlingBlades()]
+
+
 class ClockworkGnome(MinionCard):
     def __init__(self):
         super().__init__("Clockwork Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
-                           RustyHorn(), WhirlingBlades()]
+
         return Minion(2, 1,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))
@@ -2112,3 +2134,13 @@ class MicroMachine(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 2, effects=[Effect(TurnStarted(player=BothPlayer()), ChangeAttack(1), SelfSelector())])
+
+
+class MechanicalYeti(MinionCard):
+    def __init__(self):
+        super().__init__("Mechanical Yeti", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(4, 5,
+                      deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                              PlayerSelector(BothPlayer())))

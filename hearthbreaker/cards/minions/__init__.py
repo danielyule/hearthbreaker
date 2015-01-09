@@ -178,6 +178,8 @@ from hearthbreaker.cards.minions.neutral import (
     ShadeOfNaxxramas,
     KelThuzad,
     PilotedShredder,
+    PilotedSkyGolem,
+    SneedsOldShredder,
     AntiqueHealbot,
     AnnoyOTron,
     Blingtron3000,
@@ -193,6 +195,7 @@ from hearthbreaker.cards.minions.neutral import (
     ExplosiveSheep,
     Puddlestomper,
     MicroMachine,
+    MechanicalYeti,
 )
 
 from hearthbreaker.cards.minions.druid import (

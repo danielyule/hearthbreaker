@@ -2,6 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.constants import CARD_RARITY
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
@@ -3119,11 +3120,41 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Piloted Shredder", game.current_player.minions[0].card.name)
 
-        # The assassinate will kill the shredder, and leave the other player with
+        # The assassinate will kill the shredder, and leave the other player with a 2 mana card
         game.play_single_turn()
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].card.mana)
+
+    def test_PilotedSkyGolem(self):
+        game = generate_game_for(PilotedSkyGolem, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Piloted Sky Golem", game.current_player.minions[0].card.name)
+
+        # The assassinate will kill the golem, and leave the other player with a 4 mana card
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].card.mana)
+
+    def test_SneedsOldShredder(self):
+        game = generate_game_for(SneedsOldShredder, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Sneed's Old Shredder", game.current_player.minions[0].card.name)
+
+        # The assassinate will kill the shredder, and leave the other player with a legendary minion
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(CARD_RARITY.LEGENDARY, game.other_player.minions[0].card.rarity)
 
     def test_AntiqueHealbot(self):
         game = generate_game_for(AntiqueHealbot, Frostbolt, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -3442,3 +3473,20 @@ class TestCommon(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+    def test_MechanicalYeti(self):
+        game = generate_game_for(MechanicalYeti, Fireball, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[1].hand))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual("Finicky Cloakfield", game.players[0].hand[-1].name)
+        self.assertEqual(9, len(game.players[1].hand))
+        self.assertEqual("Rusty Horn", game.players[1].hand[-1].name)

@@ -78,6 +78,20 @@ class ManaCost(Condition):
         }
 
 
+class CardRarity(Condition):
+    def __init__(self, rarity):
+        self.rarity = rarity
+
+    def evaluate(self, target, obj, *args):
+        return obj.is_card() and obj.rarity == self.rarity
+
+    def __to_json__(self):
+        return {
+            'name': 'card_rarity',
+            'rarity': self.rarity
+        }
+
+
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
         return minion.is_minion()
