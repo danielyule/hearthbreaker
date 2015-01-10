@@ -196,6 +196,7 @@ from hearthbreaker.cards.minions.neutral import (
     Puddlestomper,
     MicroMachine,
     MechanicalYeti,
+    SpiderTank,
 )
 
 from hearthbreaker.cards.minions.druid import (
