@@ -2,7 +2,7 @@ from hearthbreaker.tags.action import Draw, Damage, Give, Heal
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
 from hearthbreaker.tags.condition import Adjacent, HasOverload
 from hearthbreaker.tags.event import TurnEnded, CardPlayed
-from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, CharacterSelector, BothPlayer, \
+from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
     UserPicker, SelfSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
@@ -114,3 +114,11 @@ class SpiritWolf(MinionCard):
 
     def create_minion(self, p):
         return Minion(2, 3, taunt=True)
+
+
+class VitalityTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Vitality Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(4), HeroSelector())])

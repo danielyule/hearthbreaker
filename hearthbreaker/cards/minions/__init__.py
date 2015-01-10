@@ -278,6 +278,7 @@ from hearthbreaker.cards.minions.shaman import (
     StoneclawTotem,
     WrathOfAirTotem,
     SpiritWolf,
+    VitalityTotem,
 )
 
 from hearthbreaker.cards.minions.warlock import (

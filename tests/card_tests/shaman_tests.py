@@ -323,6 +323,25 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(2, game.players[0].overload)
 
+    def test_VitalityTotem(self):
+        game = generate_game_for(VitalityTotem, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        game.players[0].hero.health = 20
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(24, game.players[0].hero.health)
+        self.assertEqual(0, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # player now has two vitality totems in play
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+
     def test_ForkedLightning(self):
         game = generate_game_for(ForkedLightning, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
