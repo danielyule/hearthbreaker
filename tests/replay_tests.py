@@ -114,9 +114,6 @@ class TestReplay(unittest.TestCase):
         replay.write_json(output)
         f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
         dif = self.__compare_json(output.getvalue(), f.read())
-        with open("bler.hsreplay", "w") as debug_file:
-            replay.write_json(debug_file)
-
         self.assertTrue(dif)
         f.close()
 
