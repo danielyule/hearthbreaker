@@ -3490,3 +3490,13 @@ class TestCommon(unittest.TestCase):
         self.assertEqual("Finicky Cloakfield", game.players[0].hand[-1].name)
         self.assertEqual(9, len(game.players[1].hand))
         self.assertEqual("Rusty Horn", game.players[1].hand[-1].name)
+
+    def test_SpiderTank(self):
+        game = generate_game_for(SpiderTank, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)

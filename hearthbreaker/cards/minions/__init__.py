@@ -196,6 +196,7 @@ from hearthbreaker.cards.minions.neutral import (
     Puddlestomper,
     MicroMachine,
     MechanicalYeti,
+    SpiderTank,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -278,6 +279,7 @@ from hearthbreaker.cards.minions.shaman import (
     StoneclawTotem,
     WrathOfAirTotem,
     SpiritWolf,
+    VitalityTotem,
 )
 
 from hearthbreaker.cards.minions.warlock import (

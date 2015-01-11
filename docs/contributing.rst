@@ -304,7 +304,7 @@ agents:
     hero power)
 
 
-:class:`CardTestingAgent <tests.testing_agents.testing_agents.OneCardTestingAgent>`
+:class:`OneCardPlayingAgent <tests.testing_agents.testing_agents.OneCardPlayingAgent>`
 
     This agent is very similar to `CardTestingAgent` except that it only plays one card per turn, unless that card is
     The Coin, in which case it will play the coin and whichever card comes after it, so long as it has the mana

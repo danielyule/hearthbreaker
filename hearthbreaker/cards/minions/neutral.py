@@ -2144,3 +2144,11 @@ class MechanicalYeti(MinionCard):
         return Minion(4, 5,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector(BothPlayer())))
+
+
+class SpiderTank(MinionCard):
+    def __init__(self):
+        super().__init__("Spider Tank", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 4)
