@@ -34,25 +34,22 @@ class IceLance(Card):
             self.target.freeze()
 
 
+class MirrorImageMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Mirror Image (minion)")
+
+    def create_minion(self, p):
+        return Minion(0, 2, taunt=True)
+
+
 class MirrorImage(Card):
     def __init__(self):
         super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
-
-        class MirrorImageMinion(MinionCard):
-            def __init__(self):
-                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, p):
-                minion = Minion(0, 2)
-                minion.taunt = True
-                return minion
-
         for i in range(0, 2):
-            mirror_image = MirrorImageMinion()
-            mirror_image.summon(player, game, len(player.minions))
+            MirrorImageMinion().summon(player, game, len(player.minions))
 
 
 class ArcaneExplosion(Card):

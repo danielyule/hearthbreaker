@@ -206,17 +206,9 @@ class JaraxxusPower(Power):
         super().__init__(hero)
 
     def use(self):
-        class Infernal(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Infernal", 6, hearthbreaker.constants.CHARACTER_CLASS.LORD_JARAXXUS,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(6, 6, hearthbreaker.constants.MINION_TYPE.DEMON)
-
         super().use()
 
-        infernal_card = Infernal()
+        infernal_card = hearthbreaker.cards.minions.warlock.Infernal()
         infernal_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 

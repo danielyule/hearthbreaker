@@ -118,6 +118,15 @@ class LordJaraxxus(MinionCard):
         return Minion(3, 15, battlecry=summon_jaraxxus)
 
 
+class Infernal(MinionCard):
+    def __init__(self):
+        super().__init__("Infernal", 6, CHARACTER_CLASS.LORD_JARAXXUS, CARD_RARITY.SPECIAL,
+                         minion_type=MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(6, 6)
+
+
 class VoidTerror(MinionCard):
     def __init__(self):
         super().__init__("Void Terror", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)

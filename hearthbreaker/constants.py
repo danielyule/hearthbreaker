@@ -48,6 +48,7 @@ class CHARACTER_CLASS:
         "PALADIN": PALADIN,
         "ROGUE": ROGUE,
         "WARLOCK": WARLOCK,
+        "LORD_JARAXXUS": LORD_JARAXXUS,
         "": ALL,
     }
 
