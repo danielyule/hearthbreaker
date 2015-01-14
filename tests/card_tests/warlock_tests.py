@@ -608,3 +608,40 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
         # Demonheart to kill own Raptor
         self.assertEqual(0, len(game.players[0].minions))
+
+    def test_FelCannon(self):
+        game = generate_game_for([FelCannon, BoulderfistOgre], [BloodfenRaptor, HarvestGolem, Deathwing],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+
+        # Fel Cannon should target the Bloodfen Raptor
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Harvest Golem", game.other_player.minions[0].card.name)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Fel Cannon should target nothing
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Harvest Golem", game.other_player.minions[0].card.name)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Fel Cannon should target ogre
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Harvest Golem", game.other_player.minions[0].card.name)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(5, game.current_player.minions[1].health)

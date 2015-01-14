@@ -1,7 +1,7 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
-from hearthbreaker.tags.condition import IsType, MinionCountIs
+from hearthbreaker.tags.condition import IsType, MinionCountIs, Not
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
     SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
@@ -120,7 +120,7 @@ class LordJaraxxus(MinionCard):
 
 class Infernal(MinionCard):
     def __init__(self):
-        super().__init__("Infernal", 6, CHARACTER_CLASS.LORD_JARAXXUS, CARD_RARITY.SPECIAL,
+        super().__init__("Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
                          minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
@@ -175,3 +175,12 @@ class WorthlessImp(MinionCard):
 
     def create_minion(self, p):
         return Minion(1, 1)
+
+
+class FelCannon(MinionCard):
+    def __init__(self):
+        super().__init__("Fel Cannon", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 5, effects=[Effect(TurnEnded(), Damage(2), MinionSelector(Not(IsType(MINION_TYPE.MECH, True)),
+                                                                                   BothPlayer(), RandomPicker()))])

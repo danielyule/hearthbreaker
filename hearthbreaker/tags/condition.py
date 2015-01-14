@@ -142,6 +142,25 @@ class CardIsNotTarget(Condition):
         }
 
 
+class Not(Condition):
+    def __init__(self, condition):
+        super().__init__()
+        self.condition = condition
+
+    def evaluate(self, target, *args):
+        return not self.condition.evaluate(target, *args)
+
+    def __to_json__(self):
+        return {
+            'name': 'not',
+            'condition': self.condition,
+        }
+
+    def __from_json__(self, condition):
+        self.condition = Condition.from_json(**condition)
+        return self
+
+
 class IsType(Condition):
     def __init__(self, minion_type, include_self=False):
         super().__init__()

@@ -1992,8 +1992,6 @@ class Game(Bindable):
         self.current_player.mana -= card.mana_cost(self.current_player)
         self.current_player.trigger("card_played", card, card_index)
         self._all_cards_played.append(card)
-
-        self.current_player.overload += card.overload
         card.target = None
         if card.targetable and card.targets:
             card.target = self.current_player.agent.choose_target(card.targets)
@@ -2007,6 +2005,9 @@ class Game(Bindable):
             self.current_player.trigger("card_used", card)
             self.current_player.cards_played += 1
             self.check_delayed()
+
+        # overload is applied regardless of counterspell, but after the card is played
+        self.current_player.overload += card.overload
 
     def __to_json__(self):
         if self.current_player == self.players[0]:
