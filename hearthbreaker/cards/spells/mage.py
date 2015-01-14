@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
 from hearthbreaker.tags.base import BuffUntil
@@ -32,14 +33,6 @@ class IceLance(Card):
             self.target.damage(4, self)
         else:
             self.target.freeze()
-
-
-class MirrorImageMinion(MinionCard):
-    def __init__(self):
-        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Mirror Image (minion)")
-
-    def create_minion(self, p):
-        return Minion(0, 2, taunt=True)
 
 
 class MirrorImage(Card):
@@ -146,14 +139,6 @@ class MirrorEntity(SecretCard):
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
         self.player = None
-
-
-class SpellbenderMinion(MinionCard):
-    def __init__(self):
-        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Spellbender (minion)")
-
-    def create_minion(self, p):
-        return Minion(1, 3)
 
 
 class Spellbender(SecretCard):

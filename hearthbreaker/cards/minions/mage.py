@@ -66,3 +66,19 @@ class Snowchugger(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 3, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])
+
+
+class SpellbenderMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Spellbender (minion)")
+
+    def create_minion(self, p):
+        return Minion(1, 3)
+
+
+class MirrorImageMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Mirror Image (minion)")
+
+    def create_minion(self, p):
+        return Minion(0, 2, taunt=True)
