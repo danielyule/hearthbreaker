@@ -148,25 +148,24 @@ class MirrorEntity(SecretCard):
         self.player = None
 
 
+class SpellbenderMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Spellbender (minion)")
+
+    def create_minion(self, p):
+        return Minion(1, 3)
+
+
 class Spellbender(SecretCard):
     def __init__(self):
-        super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.EPIC)
+        super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
         self.player = None
 
     def _reveal(self, card):
+        # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
+        # will not activate if there are too many minions
         if len(self.player.minions) < 7 and isinstance(card.target, Minion):
-            class SpellbenderMinion(MinionCard):
-                def __init__(self):
-                    super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
-
-                def create_minion(self, p):
-                    return Minion(1, 3)
-
-            spell_bender = SpellbenderMinion()
-            # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
-            # will not activate if there are too many minions
-            spell_bender.summon(self.player, self.player.game, len(self.player.minions))
+            SpellbenderMinion().summon(self.player, self.player.game, len(self.player.minions))
             card.target = self.player.minions[-1]
             super().reveal()
 
