@@ -1,3 +1,4 @@
+import copy
 from hearthbreaker.tags.base import MinionEvent, PlayerEvent
 from hearthbreaker.tags.condition import MinionIsNotTarget, CardIsNotTarget
 from hearthbreaker.tags.selector import FriendlyPlayer, Player
@@ -21,6 +22,12 @@ class Either(PlayerEvent):
     def unbind(self, target, func):
         self.event1.unbind(target, func)
         self.event2.unbind(target, func)
+
+    def __deepcopy__(self, memo):
+        new = super().__deepcopy__(memo)
+        new.event1 = copy.deepcopy(self.event1, memo)
+        new.event2 = copy.deepcopy(self.event2, memo)
+        return new
 
     def __to_json__(self):
         return {

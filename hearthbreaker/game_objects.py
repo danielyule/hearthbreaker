@@ -314,7 +314,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         if not isinstance(aura, Aura):
             raise TypeError("Expected an aura to be added")
         self.auras.append(aura)
-        aura.set_target(self)
+        aura.set_owner(self)
         self.player.add_aura(aura)
 
     def remove_aura(self, aura):
@@ -658,7 +658,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :param MinionEffect effect: The effect to apply to this :class:`Character
         """
-        effect.set_target(self)
+        effect.set_owner(self)
         effect.apply()
         self.effects.append(effect)
 
@@ -1088,9 +1088,9 @@ class Minion(Character):
                 for minion in self.player.minions:
                     is_in = minion in aura_affects[aura]
                     if not is_in and aura.match(minion):
-                        aura.status.act(aura.target, minion)
+                        aura.status.act(aura.owner, minion)
                     elif is_in and not aura.match(minion):
-                        aura.status.unact(aura.target, minion)
+                        aura.status.unact(aura.owner, minion)
         for aura in self._auras_to_add:
             self.add_aura(aura)
 
@@ -1129,9 +1129,9 @@ class Minion(Character):
                 for minion in self.player.minions:
                     is_in = minion in aura_affects[aura]
                     if not is_in and aura.match(minion):
-                        aura.status.act(aura.target, minion)
+                        aura.status.act(aura.owner, minion)
                     elif is_in and not aura.match(minion):
-                        aura.status.unact(aura.target, minion)
+                        aura.status.unact(aura.owner, minion)
 
     def replace(self, new_minion):
         """
@@ -1676,11 +1676,11 @@ class Player(Bindable):
             copied_player.secrets.append(new_secret)
         for aura in filter(lambda a: isinstance(a, AuraUntil), self.player_auras):
             aura = copy.deepcopy(aura)
-            aura.target = copied_player.hero
+            aura.owner = copied_player.hero
             copied_player.add_aura(aura)
         for aura in filter(lambda a: isinstance(a, AuraUntil), self.minion_auras):
             aura = copy.deepcopy(aura)
-            aura.target = copied_player.hero
+            aura.owner = copied_player.hero
             copied_player.add_aura(aura)
         copied_player.effect_count = dict()
         return copied_player
@@ -1729,7 +1729,7 @@ class Player(Bindable):
             self.effects.remove(effect)
             effect.event.unbind(self.hero, remove_effect)
         self.effects.append(effect)
-        effect.set_target(self.hero)
+        effect.set_owner(self.hero)
         effect.apply()
         effect.event.bind(self.hero, remove_effect)
 
@@ -1738,8 +1738,8 @@ class Player(Bindable):
             self.minion_auras.append(aura)
         else:
             self.player_auras.append(aura)
-        if not aura.target:
-            aura.set_target(self.hero)
+        if not aura.owner:
+            aura.set_owner(self.hero)
         aura.apply()
 
     def remove_aura(self, aura):

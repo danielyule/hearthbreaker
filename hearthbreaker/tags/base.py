@@ -1,7 +1,7 @@
 import abc
+import copy
 import json
 import string
-import hearthbreaker.constants
 
 
 class JSONObject(metaclass=abc.ABCMeta):
@@ -22,27 +22,40 @@ class JSONObject(metaclass=abc.ABCMeta):
         return json.dumps(self.__to_json__(), default=lambda o: o.__to_json__(), sort_keys=True)
 
 
-class Aura(JSONObject):
+class Tag(JSONObject):
+    def __deepcopy__(self, memo):
+        cls = self.__class__
+        new = cls.__new__(cls)
+        memo[id(self)] = new
+        for attribute, value in self.__dict__.items():
+            if attribute != "owner":
+                setattr(new, attribute, copy.deepcopy(value, memo))
+            else:
+                setattr(new, attribute, None)
+        return new
+
+
+class Aura(Tag):
     def __init__(self, status, selector):
-        self.target = None
+        self.owner = None
         self.status = status
         self.selector = selector
 
-    def set_target(self, target):
-        self.target = target
+    def set_owner(self, owner):
+        self.owner = owner
 
     def apply(self):
-        targets = self.selector.get_targets(self.target)
+        targets = self.selector.get_targets(self.owner)
         for target in targets:
-            self.status.act(self.target, target)
+            self.status.act(self.owner, target)
 
     def unapply(self):
-        targets = self.selector.get_targets(self.target)
+        targets = self.selector.get_targets(self.owner)
         for target in targets:
-            self.status.unact(self.target, target)
+            self.status.unact(self.owner, target)
 
     def match(self, obj):
-        return self.selector.match(self.target, obj)
+        return self.selector.match(self.owner, obj)
 
     def __to_json__(self):
         return {
@@ -57,7 +70,7 @@ class Aura(JSONObject):
         return Aura(status, selector)
 
 
-class Buff(JSONObject):
+class Buff(Tag):
     def __init__(self, status):
         self.status = status
         self.owner = None
@@ -118,17 +131,14 @@ class AuraUntil(Aura):
 
     def apply(self):
         super().apply()
-        self.until.bind(self.target, self.__until__)
+        self.until.bind(self.owner, self.__until__)
 
     def unapply(self):
-        self.until.unbind(self.target, self.__until__)
+        self.until.unbind(self.owner, self.__until__)
         super().unapply()
 
     def __until__(self, *args):
-        if isinstance(self.selector, hearthbreaker.tags.selector.SelfSelector):
-            self.target.remove_aura(self)
-        else:
-            self.target.player.remove_aura(self)
+        self.owner.player.remove_aura(self)
 
     def __to_json__(self):
         return {
@@ -327,6 +337,17 @@ class Event(JSONObject, metaclass=abc.ABCMeta):
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
 
+    def __deepcopy__(self, memo):
+        cls = type(self)
+        new = cls.__new__(cls)
+        memo[id(self)] = new
+        if self.condition:
+            new.condition = copy.deepcopy(self.condition, memo)
+        else:
+            new.condition = None
+        new.event_name = self.event_name
+        return new
+
     def __from_json__(self, condition=None):
         if condition:
             condition = Condition.from_json(**condition)
@@ -383,6 +404,11 @@ class PlayerEvent(Event):
             else:
                 player.unbind(self.event_name, func)
 
+    def __deepcopy__(self, memo):
+        new = super().__deepcopy__(memo)
+        new.player = copy.deepcopy(self.player, memo)
+        return new
+
     def __to_json__(self):
         super_json = super().__to_json__()
         super_json.update({
@@ -398,7 +424,7 @@ class PlayerEvent(Event):
         return self
 
 
-class Effect(JSONObject):
+class Effect(Tag):
     def __init__(self, event, action, selector):
         self.event = event
         if isinstance(action, Status):
@@ -407,21 +433,21 @@ class Effect(JSONObject):
         else:
             self.action = action
         self.selector = selector
-        self.target = None
+        self.owner = None
 
     def apply(self):
-        self.event.bind(self.target, self._find_target)
+        self.event.bind(self.owner, self._find_target)
 
     def unapply(self):
-        self.event.unbind(self.target, self._find_target)
+        self.event.unbind(self.owner, self._find_target)
 
-    def set_target(self, target):
-        self.target = target
+    def set_owner(self, owner):
+        self.owner = owner
 
     def _find_target(self, focus=None, other=None, *args):
-        targets = self.selector.get_targets(self.target, focus)
+        targets = self.selector.get_targets(self.owner, focus)
         for target in targets:
-            self.action.act(self.target, target)
+            self.action.act(self.owner, target)
 
     def __to_json__(self):
         return {
@@ -461,7 +487,7 @@ class Condition(JSONObject, metaclass=abc.ABCMeta):
         pass
 
 
-class Deathrattle(JSONObject):
+class Deathrattle(Tag):
     def __init__(self, action, selector, condition=None):
         self.action = action
         self.selector = selector
@@ -624,7 +650,7 @@ class CardQuery(JSONObject):
         return query
 
 
-class Battlecry(JSONObject):
+class Battlecry(Tag):
     def __init__(self, actions, selector, condition=None):
         if isinstance(actions, Action):
             self.actions = [actions]
@@ -684,7 +710,7 @@ class Choice(Battlecry):
         return Choice(card, actions, selector, condition)
 
 
-class Enrage(JSONObject):
+class Enrage(Tag):
     def __init__(self, statuses, selector):
         if isinstance(statuses, Status):
             self.statuses = [statuses]
