@@ -84,7 +84,7 @@ class AnubarAmbusher(MinionCard):
         return Minion(5, 5, deathrattle=Deathrattle(Bounce(), MinionSelector(picker=RandomPicker())))
 
 
-class OneEyedCheat(MinionCard):
+class OneeyedCheat(MinionCard):
     def __init__(self):
         super().__init__("One-eyed Cheat", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, MINION_TYPE.PIRATE)
 

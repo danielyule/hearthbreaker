@@ -85,9 +85,9 @@ class MirrorImageMinion(MinionCard):
         return Minion(0, 2, taunt=True)
 
 
-class GoblinBlastMage(MinionCard):
+class GoblinBlastmage(MinionCard):
     def __init__(self):
-        super().__init__("Goblin Blast Mage", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
+        super().__init__("Goblin Blastmage", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
                          battlecry=Battlecry(Damage(1), CharacterSelector(None, EnemyPlayer(), RandomPicker(4)),
                                              GreaterThan(MinionSelector(IsType(MINION_TYPE.MECH)), value=0)))
 

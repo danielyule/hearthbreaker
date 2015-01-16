@@ -683,7 +683,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].frozen)
 
     def test_GoblinBlastmage(self):
-        game = generate_game_for([GoblinBlastMage, ClockworkGnome, GoblinBlastMage], [Mechwarper, ClockworkGnome],
+        game = generate_game_for([GoblinBlastmage, ClockworkGnome, GoblinBlastmage], [Mechwarper, ClockworkGnome],
                                  CardTestingAgent, CardTestingAgent)
 
         for turn in range(6):

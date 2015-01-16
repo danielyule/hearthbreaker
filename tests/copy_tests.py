@@ -2265,7 +2265,7 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[1].health)
 
     def test_OneEyedCheat(self):
-        game = generate_game_for([BloodsailCorsair, OneEyedCheat, SouthseaCaptain], BloodsailRaider,
+        game = generate_game_for([BloodsailCorsair, OneeyedCheat, SouthseaCaptain], BloodsailRaider,
                                  OneCardPlayingAgent, OneCardPlayingAgent)
 
         game.play_single_turn()

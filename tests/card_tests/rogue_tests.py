@@ -572,7 +572,7 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(7, len(game.other_player.minions))
 
     def test_OneEyedCheat(self):
-        game = generate_game_for([BloodsailCorsair, OneEyedCheat, SouthseaCaptain], BloodsailRaider,
+        game = generate_game_for([BloodsailCorsair, OneeyedCheat, SouthseaCaptain], BloodsailRaider,
                                  OneCardPlayingAgent, OneCardPlayingAgent)
 
         game.play_single_turn()
