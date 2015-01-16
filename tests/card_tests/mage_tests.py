@@ -681,3 +681,47 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertFalse(game.players[0].minions[0].frozen_this_turn)
         self.assertFalse(game.players[0].minions[0].frozen)
+
+    def test_GoblinBlastmage(self):
+        game = generate_game_for([GoblinBlastMage, ClockworkGnome, GoblinBlastMage], [Mechwarper, ClockworkGnome],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[2].health)
+        self.assertEqual(1, game.current_player.minions[3].health)
+        self.assertEqual(3, game.current_player.minions[4].health)
+        self.assertEqual(1, game.current_player.minions[5].health)
+        self.assertEqual(3, game.current_player.minions[6].health)
+
+        # Blastmage should not go off, as there is no friendly mech down
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(3, game.other_player.minions[2].health)
+        self.assertEqual(1, game.other_player.minions[3].health)
+        self.assertEqual(3, game.other_player.minions[4].health)
+        self.assertEqual(1, game.other_player.minions[5].health)
+        self.assertEqual(3, game.other_player.minions[6].health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Blastmage hits the warper at index 2 twice, and the two gnomes at indices 1 and 3.
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(5, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(1, game.other_player.minions[2].health)
+        self.assertEqual(3, game.other_player.minions[3].health)
+        self.assertEqual(3, game.other_player.minions[4].health)
+        self.assertEqual(30, game.other_player.hero.health)

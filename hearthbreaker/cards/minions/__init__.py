@@ -197,6 +197,7 @@ from hearthbreaker.cards.minions.neutral import (
     MicroMachine,
     MechanicalYeti,
     SpiderTank,
+    GilbinStalker,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -233,6 +234,7 @@ from hearthbreaker.cards.minions.mage import (
     WaterElemental,
     ArchmageAntonidas,
     Snowchugger,
+    GoblinBlastMage,
 )
 
 from hearthbreaker.cards.minions.paladin import (
@@ -263,6 +265,7 @@ from hearthbreaker.cards.minions.rogue import (
     MasterOfDisguise,
     PatientAssassin,
     SI7Agent,
+    OneEyedCheat,
 )
 
 from hearthbreaker.cards.minions.shaman import (

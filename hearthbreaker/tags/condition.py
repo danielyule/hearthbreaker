@@ -1,6 +1,6 @@
 import hearthbreaker
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.tags.base import Condition
+from hearthbreaker.tags.base import Condition, Amount
 
 
 class HasSecret(Condition):
@@ -242,6 +242,20 @@ class OpponentMinionCountIsGreaterThan(Condition):
         return {
             'name': 'opponent_minion_count_is_greater_than',
             'count': self.count,
+        }
+
+
+class GreaterThan(Condition, metaclass=Amount):
+    def __init__(self, value):
+        self.value = value
+
+    def evaluate(self, target, *args):
+        return self.get_amount(target, target, *args) > self.value
+
+    def __to_json__(self):
+        return {
+            'name': 'greater_than',
+            'value': self.value,
         }
 
 

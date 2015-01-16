@@ -1,5 +1,6 @@
 import random
 import unittest
+from hearthbreaker.constants import MINION_TYPE
 
 from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent
 from tests.testing_utils import generate_game_for
@@ -569,3 +570,36 @@ class TestRogue(unittest.TestCase):
         game.check_delayed()
         self.assertEqual(6, len(game.current_player.minions))
         self.assertEqual(7, len(game.other_player.minions))
+
+    def test_OneEyedCheat(self):
+        game = generate_game_for([BloodsailCorsair, OneEyedCheat, SouthseaCaptain], BloodsailRaider,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertFalse(game.players[0].minions[0].stealth)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertFalse(game.players[0].minions[0].stealth)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[1].minions[0].card.minion_type)
+
+        game.play_single_turn()
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[2].card.minion_type)
+        self.assertTrue(game.players[0].minions[1].stealth)

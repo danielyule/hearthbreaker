@@ -1,11 +1,12 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Freeze, AddCard, Give, GiveAura
+from hearthbreaker.tags.action import Freeze, AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
-from hearthbreaker.tags.condition import HasSecret
+from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
-from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector
+from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
+    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange
 
@@ -82,3 +83,13 @@ class MirrorImageMinion(MinionCard):
 
     def create_minion(self, p):
         return Minion(0, 2, taunt=True)
+
+
+class GoblinBlastMage(MinionCard):
+    def __init__(self):
+        super().__init__("Goblin Blast Mage", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Damage(1), CharacterSelector(None, EnemyPlayer(), RandomPicker(4)),
+                                             GreaterThan(MinionSelector(IsType(MINION_TYPE.MECH)), value=0)))
+
+    def create_minion(self, player):
+        return Minion(5, 4)

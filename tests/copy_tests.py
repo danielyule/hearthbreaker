@@ -2263,3 +2263,37 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(5, game.current_player.minions[1].health)
+
+    def test_OneEyedCheat(self):
+        game = generate_game_for([BloodsailCorsair, OneEyedCheat, SouthseaCaptain], BloodsailRaider,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertFalse(game.players[0].minions[0].stealth)
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertFalse(game.players[0].minions[0].stealth)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[1].minions[0].card.minion_type)
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[0].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
+        self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[2].card.minion_type)
+        self.assertTrue(game.players[0].minions[1].stealth)
