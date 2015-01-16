@@ -603,3 +603,19 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
         self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[2].card.minion_type)
         self.assertTrue(game.players[0].minions[1].stealth)
+
+    def test_IronSensei(self):
+        game = generate_game_for(IronSensei, Mechwarper, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(1, len(game.other_player.minions))
+

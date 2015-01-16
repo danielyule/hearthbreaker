@@ -266,6 +266,7 @@ from hearthbreaker.cards.minions.rogue import (
     PatientAssassin,
     SI7Agent,
     OneeyedCheat,
+    IronSensei,
 )
 
 from hearthbreaker.cards.minions.shaman import (
