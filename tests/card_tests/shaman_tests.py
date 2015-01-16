@@ -533,7 +533,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(4, len(game.current_player.hand))
         self.assertEqual(7, len(game.other_player.hand))
 
-        #Hellfire will kill all the murlocs but the siltfin.
+        # Hellfire will kill all the murlocs but the siltfin.
         game.play_single_turn()
 
         self.assertEqual(1, len(game.other_player.minions))
