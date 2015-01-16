@@ -512,3 +512,38 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(25, game.players[1].hero.health)
         self.assertEqual(1, game.players[0].overload)
+
+    def test_SiltfinSpiritwalker(self):
+        game = generate_game_for([MurlocTidecaller, MurlocTidehunter, SiltfinSpiritwalker, Deathwing],
+                                 [MurlocTidecaller, Hellfire, BaneOfDoom], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        # Play Siltfin
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+
+        self.assertEqual(4, len(game.current_player.hand))
+        self.assertEqual(7, len(game.other_player.hand))
+
+        #Hellfire will kill all the murlocs but the siltfin.
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(7, len(game.current_player.hand))
+
+        game.play_single_turn()
+        # Bane of Doom will kill off the Siltfin, but should not draw a card
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(8, len(game.other_player.hand))
