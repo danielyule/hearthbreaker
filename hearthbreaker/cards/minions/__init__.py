@@ -255,6 +255,7 @@ from hearthbreaker.cards.minions.priest import (
     ProphetVelen,
     TempleEnforcer,
     DarkCultist,
+    Shrinkmeister,
 )
 
 from hearthbreaker.cards.minions.rogue import (

@@ -624,3 +624,21 @@ class TestPriest(unittest.TestCase):
         game.check_delayed()
         self.assertEqual(1, game.current_player.minions[0].health)
         self.assertEqual(4, game.current_player.minions[1].health)
+
+    def test_Shrinkmeister(self):
+        game = generate_game_for([StonetuskBoar, Shrinkmeister], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        # Play a turn, but don't end it
+        game._start_turn()
+        game.current_player.agent.do_turn(game.current_player)
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+        self.assertEqual(0, game.players[0].minions[1].calculate_attack())

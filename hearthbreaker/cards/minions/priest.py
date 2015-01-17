@@ -1,13 +1,13 @@
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give
-from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
-from hearthbreaker.tags.event import TurnStarted, CharacterHealed
+from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
     EnemyPlayer, UserPicker, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
-    MultiplyHealAmount
+    MultiplyHealAmount, ChangeAttack
 
 
 class AuchenaiSoulpriest(MinionCard):
@@ -80,3 +80,13 @@ class DarkCultist(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 4, deathrattle=Deathrattle(Give(ChangeHealth(3)), MinionSelector(picker=RandomPicker())))
+
+
+class Shrinkmeister(MinionCard):
+    def __init__(self):
+        super().__init__("Shrinkmeister", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(-2), TurnEnded())),
+                                             MinionSelector(players=BothPlayer(), picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(3, 2)
