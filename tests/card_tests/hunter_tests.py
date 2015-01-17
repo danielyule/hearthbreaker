@@ -607,3 +607,19 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(27, game.players[1].hero.health)
         self.assertEqual(6, len(game.players[1].minions))
+
+    def test_Glaivezooka(self):
+        game = generate_game_for([StonetuskBoar, Glaivezooka], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())

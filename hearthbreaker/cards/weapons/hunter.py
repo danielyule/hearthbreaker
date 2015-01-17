@@ -1,5 +1,8 @@
+import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import WeaponCard, Weapon
+from hearthbreaker.tags.base import Buff
+from hearthbreaker.tags.status import ChangeAttack
 
 
 class EaglehornBow(WeaponCard):
@@ -43,4 +46,19 @@ class GladiatorsLongbow(WeaponCard):
 
         weapon = Weapon(5, 2)
         add_effect(weapon, player)
+        return weapon
+
+
+class Glaivezooka(WeaponCard):
+    def __init__(self):
+        super().__init__("Glaivezooka", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def create_weapon(self, player):
+        def random_buff(w):
+            targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
+            if targets is not None:
+                target = player.game.random_choice(targets)
+                target.add_buff(Buff(ChangeAttack(1)))
+
+        weapon = Weapon(2, 2, battlecry=random_buff)
         return weapon

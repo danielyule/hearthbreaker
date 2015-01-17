@@ -1,6 +1,7 @@
 from hearthbreaker.cards.weapons.hunter import (
     EaglehornBow,
     GladiatorsLongbow,
+    Glaivezooka,
 )
 
 from hearthbreaker.cards.weapons.paladin import (
