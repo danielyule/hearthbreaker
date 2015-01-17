@@ -286,6 +286,7 @@ from hearthbreaker.cards.minions.shaman import (
     SpiritWolf,
     VitalityTotem,
     SiltfinSpiritwalker,
+    WhirlingZapOMatic
 )
 
 from hearthbreaker.cards.minions.warlock import (
