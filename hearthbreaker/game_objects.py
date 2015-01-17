@@ -1349,7 +1349,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
         :param combo: A battlecry that will activate when this weapon is equipped and at least one other card has
                       been played.  If combo activates, battlecry will not
-        :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
+        :type combo: :class:`hearthbreaker.tags.base.Battlecry`
         """
         super().__init__(name, mana, character_class, rarity, target_func, filter_func, overload)
         self.battlecry = battlecry
