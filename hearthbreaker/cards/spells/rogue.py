@@ -1,10 +1,10 @@
 import copy
 from hearthbreaker.tags.action import AddCard
 from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Effect, BuffUntil
+from hearthbreaker.tags.base import Effect, BuffUntil, Buff
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, SpellSelector, SpecificCardSelector
-from hearthbreaker.tags.status import Stealth
+from hearthbreaker.tags.status import Stealth, ChangeAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -234,3 +234,21 @@ class Vanish(Card):
         # Source: http://www.hearthhead.com/card=196/vanish#comments:id=1908549
         for minion in sorted(targets, key=lambda m: m.born):
             minion.bounce()
+
+
+class TinkersSharpswordOil(Card):
+    def __init__(self):
+        super().__init__("Tinker's Sharpsword Oil", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.weapon.base_attack += 3
+        player.hero.change_temp_attack(3)
+        if player.cards_played > 0:
+            targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
+            if targets is not None:
+                target = player.game.random_choice(targets)
+                target.add_buff(Buff(ChangeAttack(3)))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and player.hero.weapon is not None

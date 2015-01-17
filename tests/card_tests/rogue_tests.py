@@ -636,3 +636,23 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(3, game.other_player.minions[0].health)
         self.assertEqual(3, game.other_player.minions[1].health)
+
+    def test_TinkersSharpswordOil(self):
+        game = generate_game_for([StonetuskBoar, Preparation, TinkersSharpswordOil], StonetuskBoar, PredictableAgent,
+                                 DoNothingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        # Stonetusk
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(None, game.players[0].hero.weapon)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        # Hero ability, preparation and tinker's with combo
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
