@@ -406,7 +406,10 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         bonuses for this turn
         """
 
-        return self.base_attack + self.attack_delta
+        attack = self.base_attack + self.attack_delta
+        if attack < 0:
+            attack = 0
+        return attack
 
     def calculate_max_health(self):
         """
