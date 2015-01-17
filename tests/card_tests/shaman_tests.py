@@ -547,3 +547,13 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(8, len(game.other_player.hand))
+
+    def test_WhirlingZapOMatic(self):
+        game = generate_game_for(WhirlingZapOMatic, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Whirling Zap-o-matic", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].windfury)
