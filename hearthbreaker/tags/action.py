@@ -470,7 +470,7 @@ class Equip(Action):
 class Steal(Action):
     def act(self, actor, target):
         new_minion = target.copy(actor.player)
-        target._remove_auras_and_effects()
+        target.unattach()
         target.remove_from_board()
         new_minion.add_to_board(len(actor.player.minions))
 
@@ -554,4 +554,26 @@ class GiveManaCrystal(Action):
             'name': 'give_mana_crystal',
             'count': self.count,
             'empty': self.empty,
+        }
+
+
+class IncreaseDurability(Action):
+    def act(self, actor, target):
+        target.weapon.durability += 1
+
+    def __to_json__(self):
+        return {
+            'name': 'increase_durability',
+        }
+
+
+class DecreaseDurability(Action):
+    def act(self, actor, target):
+        target.weapon.durability -= 1
+        if target.weapon.durability <= 0:
+            target.weapon.destroy()
+
+    def __to_json__(self):
+        return {
+            'name': 'decrease_durability',
         }

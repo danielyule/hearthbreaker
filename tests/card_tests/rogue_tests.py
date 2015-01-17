@@ -502,18 +502,18 @@ class TestRogue(unittest.TestCase):
 
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
-        self.assertEqual(29, game.players[1].hero.health)
+        self.assertEqual(29, game.players[0].hero.health)
 
         for turn in range(0, 5):
             game.play_single_turn()
 
-        self.assertEqual(27, game.players[1].hero.health)
+        self.assertEqual(27, game.players[0].hero.health)
 
         # Test Combo (1 + 2 = 3 damage)
         game.play_single_turn()
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
-        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(24, game.players[0].hero.health)
 
     def test_AnubarAmbusher(self):
         game = generate_game_for(AnubarAmbusher, SiphonSoul, OneCardPlayingAgent, CardTestingAgent)

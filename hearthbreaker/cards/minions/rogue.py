@@ -31,12 +31,11 @@ class EdwinVanCleef(MinionCard):
         super().__init__("Edwin VanCleef", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        minion = Minion(2, 2)
-        for combo in range(0, player.cards_played):
-            minion.increase_health(2)
-            minion.change_attack(2)
-
-        return minion
+        if player.cards_played:
+            buff_amount = player.cards_played * 2
+            return Minion(2, 2, buffs=[Buff(ChangeAttack(buff_amount)), Buff(ChangeHealth(buff_amount))])
+        else:
+            return Minion(2, 2)
 
 
 class Kidnapper(MinionCard):

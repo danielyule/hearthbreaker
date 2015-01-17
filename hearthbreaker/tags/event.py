@@ -94,9 +94,19 @@ class CharacterHealed(PlayerEvent):
         super().__init__("character_healed", condition, player)
 
 
+class SecretRevealed(PlayerEvent):
+    def __init__(self, condition=None, player=FriendlyPlayer()):
+        super().__init__("secret_revealed", condition, player)
+
+
 class Attack(MinionEvent):
+    def __init__(self, condition=None):
+        super().__init__("attack", condition)
+
+
+class AttackCompleted(MinionEvent):
     def __init__(self):
-        super().__init__("attack")
+        super().__init__("attack_completed")
 
 
 class DidDamage(MinionEvent):
