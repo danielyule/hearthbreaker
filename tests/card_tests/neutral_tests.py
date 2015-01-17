@@ -3500,3 +3500,39 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(4, game.players[0].minions[0].health)
+
+    def test_AbusiveSergeant(self):
+        game = generate_game_for([StonetuskBoar, AbusiveSergeant], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        # Play a turn, but don't end it
+        game._start_turn()
+        game.current_player.agent.do_turn(game.current_player)
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[2].card.name)
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+
+    def test_DarkIronDwarf(self):
+        game = generate_game_for([StonetuskBoar, DarkIronDwarf], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        # Play a turn, but don't end it
+        game._start_turn()
+        game.current_player.agent.do_turn(game.current_player)
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
