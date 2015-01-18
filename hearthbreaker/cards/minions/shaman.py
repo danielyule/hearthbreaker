@@ -133,7 +133,7 @@ class SiltfinSpiritwalker(MinionCard):
         return Minion(2, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MURLOC)), Draw(), PlayerSelector())])
 
 
-class WhirlingZapOMatic(MinionCard):
+class WhirlingZapomatic(MinionCard):
     def __init__(self):
         super().__init__("Whirling Zap-o-matic", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 

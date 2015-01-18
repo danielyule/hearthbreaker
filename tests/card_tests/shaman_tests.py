@@ -549,7 +549,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(8, len(game.other_player.hand))
 
     def test_WhirlingZapOMatic(self):
-        game = generate_game_for(WhirlingZapOMatic, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game = generate_game_for(WhirlingZapomatic, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
