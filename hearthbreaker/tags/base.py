@@ -741,3 +741,53 @@ class Enrage(Tag):
         statuses = [Status.from_json(**status) for status in statuses]
         selector = Selector.from_json(**selector)
         return Enrage(statuses, selector)
+
+
+class Context(metaclass=abc.ABCMeta):
+    """
+    Handles computations for actions and statuses that change based on if they are part of a battlecry, hero power
+    or spell.
+    """
+
+    def __init__(self, player):
+        """
+        Creates a context associated with a particular player
+        :param player: The player that this context is associated with
+        :type player: :class:`hearthbreaker.game_objects.Player`
+        """
+        self.player = player
+
+    @abc.abstractmethod
+    def filter_targets(self, targets):
+        """
+        Filter the targets that the user can choose.  Spells cannot target minions who are not spell_targetable,
+        for example.
+
+        :param targets: All the possible target characters
+        :type targets: [:class:`hearthbreaker.game_objects.Character`]
+        :return: A list of targets which has been filtered according to the context
+        :rtype: [:class:`hearthbreaker.game_objects.Character`]
+        """
+        pass
+
+    @abc.abstractmethod
+    def damage(self, amount, target):
+        """
+        Damage the target according to the context.  Spells must include spell_damage, while battlecries and physical
+        attacks do not
+        :param amount: The amount to damage the target
+        :type amount: :class:`hearthbreaker.game_objects.Character`
+        :param target: The character getting damaged
+        """
+        pass
+
+    @abc.abstractmethod
+    def heal(self, amount, target):
+        """
+        Heals the target according to the context.  Spells and hero power include heal_multiplier, while battlecries
+        do not
+        :param amount: The amount to damage the target
+        :type amount: :class:`hearthbreaker.game_objects.Character`
+        :param target: The character getting damaged
+        """
+        pass
