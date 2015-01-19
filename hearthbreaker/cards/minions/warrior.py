@@ -82,3 +82,12 @@ class Warbot(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 3, enrage=Enrage(ChangeAttack(1), SelfSelector()))
+
+
+class Shieldmaiden(MinionCard):
+    def __init__(self):
+        super().__init__("Shieldmaiden", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
+                         battlecry=Battlecry(IncreaseArmor(5), HeroSelector()))
+
+    def create_minion(self, player):
+        return Minion(5, 5)

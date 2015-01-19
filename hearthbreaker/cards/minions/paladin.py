@@ -68,3 +68,12 @@ class SilverHandRecruit(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 1)
+
+
+class ShieldedMinibot(MinionCard):
+    def __init__(self):
+        super().__init__("Shielded Minibot", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(2, 2, divine_shield=True)

@@ -2160,3 +2160,12 @@ class GilblinStalker(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 3, stealth=True)
+
+
+class ShipsCannon(MinionCard):
+    def __init__(self):
+        super().__init__("Ship's Cannon", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(2, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.PIRATE)), Damage(2),
+                                            CharacterSelector(None, EnemyPlayer(), RandomPicker()))])

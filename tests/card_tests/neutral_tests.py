@@ -3536,3 +3536,49 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+
+    def test_ShipsCannon(self):
+        game = generate_game_for([ShipsCannon, OneeyedCheat, ChillwindYeti], BloodsailRaider,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        # The ship's cannon should not go off, since the pirate is summoned for the opponent
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        # The ship's cannon should go off, damaging the enemy hero
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(28, game.other_player.hero.health)
+
+        game.play_single_turn()
+        # The cannon should not go off, so no one's health should have changed
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[2].health)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(3, game.other_player.minions[1].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(28, game.other_player.hero.health)
