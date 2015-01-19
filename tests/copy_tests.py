@@ -2297,3 +2297,24 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[1].card.minion_type)
         self.assertEqual(MINION_TYPE.PIRATE, game.players[0].minions[2].card.minion_type)
         self.assertTrue(game.players[0].minions[1].stealth)
+
+    def test_DunemaulShaman(self):
+        game = generate_game_for(DunemaulShaman,
+                                 [StonetuskBoar, GoldshireFootman, SilverbackPatriarch, MogushanWarden, FenCreeper],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+        game = game.copy()
+        game.play_single_turn()
+        # The shaman's forgetful ability triggers twice.  It hits the boar and and the enemy hero, but not the warden
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual("Mogu'shan Warden", game.other_player.minions[0].card.name)
+        self.assertEqual("Silverback Patriarch", game.other_player.minions[1].card.name)
+        self.assertEqual(25, game.other_player.hero.health)

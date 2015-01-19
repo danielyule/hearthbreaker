@@ -23,9 +23,11 @@ class CardTest(unittest.TestCase):
         file = open("AllSets.enUS.json", "r", encoding="UTF-8")
         card_dict = json.load(file)
         not_implemented = []
+        total_cards = 0
         for card_set in ['Expert', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes"]:
             for card_info in card_dict[card_set]:
                 if 'collectible' in card_info and card_info['collectible'] and card_info["type"] != "Hero":
+                    total_cards += 1
                     try:
                         card = card_lookup(card_info["name"])
                     except KeyError:
@@ -117,7 +119,10 @@ class CardTest(unittest.TestCase):
 
         file.close()
         if len(not_implemented) > 0:
-            print("Cards not implemented: {}".format(str(not_implemented)))
+            print("{} of {} cards implemented".format(total_cards - len(not_implemented), total_cards))
+            print("Cards not implemented:")
+            for card in not_implemented:
+                print("  - {}".format(card))
 
     def test_play_with_one_card(self):
         file = open("AllSets.enUS.json", "r", encoding="UTF-8")

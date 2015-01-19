@@ -7,7 +7,7 @@ from hearthbreaker.tags.base import Aura, AuraUntil, Deathrattle, Effect, Enrage
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Stealth, DivineShield, Windfury, \
-    SpellDamage, NoSpellTarget
+    SpellDamage, NoSpellTarget, Forgetful
 import hearthbreaker.targeting
 import hearthbreaker.constants
 
@@ -373,6 +373,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.dead = False
         #: If this character has windfury
         self.windfury = 0
+        #: If this character has a chance to attack the wrong target
+        self.forgetful = 0
         #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
@@ -441,6 +443,13 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             targets.append(self.player.game.other_player.hero)
 
         target = self.choose_target(targets)
+        if self.forgetful and len(self.player.opponent.minions) > 0:
+            if self.player.game.random_amount(0, 1) == 0:
+                all_targets = self.player.opponent.minions[:]
+                all_targets.append(self.player.opponent.hero)
+                all_targets.remove(target)
+                target = self.player.game.random_choice(all_targets)
+
         self._remove_stealth()
         self.current_target = target
         self.player.trigger("attack", self, target)
@@ -1062,7 +1071,8 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
 class Minion(Character):
     def __init__(self, attack, health, battlecry=None,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
-                 windfury=False, spell_targetable=True, effects=None, auras=None, buffs=None, enrage=None):
+                 windfury=False, spell_targetable=True, forgetful=False, effects=None, auras=None, buffs=None,
+                 enrage=None):
         super().__init__(attack, health, enrage, effects, auras, buffs)
         self.game = None
         self.card = None
@@ -1097,6 +1107,8 @@ class Minion(Character):
             self.buffs.append(Buff(NoSpellTarget()))
         if spell_damage:
             self.buffs.append(Buff(SpellDamage(spell_damage)))
+        if forgetful:
+            self.buffs.append(Buff(Forgetful()))
 
     def add_to_board(self, index):
         aura_affects = {}

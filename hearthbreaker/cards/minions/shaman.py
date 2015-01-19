@@ -139,3 +139,11 @@ class WhirlingZapomatic(MinionCard):
 
     def create_minion(self, p):
         return Minion(3, 2, windfury=True)
+
+
+class DunemaulShaman(MinionCard):
+    def __init__(self):
+        super().__init__("Dunemaul Shaman", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=1)
+
+    def create_minion(self, player):
+        return Minion(5, 4, windfury=True, forgetful=True)

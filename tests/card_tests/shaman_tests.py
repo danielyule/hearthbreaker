@@ -557,3 +557,26 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Whirling Zap-o-matic", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].windfury)
+
+    def test_DunemaulShaman(self):
+        game = generate_game_for(DunemaulShaman,
+                                 [StonetuskBoar, GoldshireFootman, SilverbackPatriarch, MogushanWarden],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+
+        game.play_single_turn()
+        # The shaman's forgetful ability triggers once.  It hits the warden one time (its intended target)
+        # and the footman one time (after triggering forgetful)
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual("Mogu'shan Warden", game.other_player.minions[0].card.name)
+        self.assertEqual("Silverback Patriarch", game.other_player.minions[1].card.name)
+        self.assertEqual("Stonetusk Boar", game.other_player.minions[2].card.name)
+        self.assertEqual(30, game.other_player.hero.health)

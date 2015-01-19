@@ -469,3 +469,24 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
         self.assertEqual(2, game.players[1].minions[1].health)
         self.assertEqual(1, game.players[1].minions[2].health)
+
+    def test_OgreWarmaul(self):
+        game = generate_game_for(OgreWarmaul,
+                                 [StonetuskBoar, GoldshireFootman, SilverbackPatriarch],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertIsNotNone(game.current_player.hero.weapon)
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Stonetusk Boar", game.other_player.minions[0].card.name)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Silverback Patriarch", game.other_player.minions[0].card.name)
+        self.assertEqual(30, game.other_player.hero.health)

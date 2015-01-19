@@ -199,6 +199,8 @@ from hearthbreaker.cards.minions.neutral import (
     SpiderTank,
     GilblinStalker,
     ShipsCannon,
+    OgreBrute,
+    MogorTheOgre,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -270,6 +272,7 @@ from hearthbreaker.cards.minions.rogue import (
     SI7Agent,
     OneeyedCheat,
     IronSensei,
+    OgreNinja,
 )
 
 from hearthbreaker.cards.minions.shaman import (
@@ -289,6 +292,7 @@ from hearthbreaker.cards.minions.shaman import (
     VitalityTotem,
     SiltfinSpiritwalker,
     WhirlingZapomatic,
+    DunemaulShaman,
 )
 
 from hearthbreaker.cards.minions.warlock import (

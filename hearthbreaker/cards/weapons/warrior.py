@@ -1,10 +1,11 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.action import Damage, IncreaseDurability
-from hearthbreaker.tags.base import Deathrattle, Effect
+from hearthbreaker.tags.base import Deathrattle, Effect, Buff
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector
 from hearthbreaker.game_objects import WeaponCard, Weapon
+from hearthbreaker.tags.status import Forgetful
 
 
 class FieryWarAxe(WeaponCard):
@@ -37,3 +38,11 @@ class DeathsBite(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(4, 2, deathrattle=Deathrattle(Damage(1), MinionSelector(players=BothPlayer())))
+
+
+class OgreWarmaul(WeaponCard):
+    def __init__(self):
+        super().__init__("Ogre Warmaul", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def create_weapon(self, player):
+        return Weapon(4, 2, buffs=[Buff(Forgetful())])

@@ -26,4 +26,5 @@ from hearthbreaker.cards.weapons.warrior import (
     ArcaniteReaper,
     Gorehowl,
     DeathsBite,
+    OgreWarmaul,
 )

@@ -99,3 +99,11 @@ class IronSensei(MinionCard):
     def create_minion(self, player):
         return Minion(2, 2, effects=[Effect(TurnEnded(), Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
                                             MinionSelector(IsType(MINION_TYPE.MECH), picker=RandomPicker()))])
+
+
+class OgreNinja(MinionCard):
+    def __init__(self):
+        super().__init__("Ogre Ninja", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(6, 6, stealth=True, forgetful=True)
