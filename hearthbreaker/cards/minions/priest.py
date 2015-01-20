@@ -3,7 +3,7 @@ from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, 
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    EnemyPlayer, UserPicker, RandomPicker
+    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
@@ -85,7 +85,7 @@ class DarkCultist(MinionCard):
 class Shrinkmeister(MinionCard):
     def __init__(self):
         super().__init__("Shrinkmeister", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(-2), TurnEnded())),
+                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(-2), TurnEnded(player=CurrentPlayer()))),
                                              MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):

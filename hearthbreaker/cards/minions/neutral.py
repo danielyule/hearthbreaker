@@ -11,7 +11,7 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
-    HeroSelector, OtherPlayer, UserPicker, RandomPicker
+    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer
 from hearthbreaker.cards.battlecries import gain_one_health_for_each_card_in_hand, deathwing
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
@@ -556,7 +556,7 @@ class TheBlackKnight(MinionCard):
 class AbusiveSergeant(MinionCard):
     def __init__(self):
         super().__init__("Abusive Sergeant", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(2), TurnEnded())),
+                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(2), TurnEnded(player=CurrentPlayer()))),
                                              MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
@@ -566,7 +566,7 @@ class AbusiveSergeant(MinionCard):
 class DarkIronDwarf(MinionCard):
     def __init__(self):
         super().__init__("Dark Iron Dwarf", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(2), TurnEnded())),
+                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(2), TurnEnded(player=CurrentPlayer()))),
                                              MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):

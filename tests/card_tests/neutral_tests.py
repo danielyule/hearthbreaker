@@ -3519,6 +3519,28 @@ class TestCommon(unittest.TestCase):
         self.assertEqual("Stonetusk Boar", game.players[0].minions[2].card.name)
         self.assertEqual(3, game.players[0].minions[2].calculate_attack())
 
+        # Now end the turn and make sure that the buff is gone
+        game._end_turn()
+        self.assertEqual(1, game.players[0].minions[2].calculate_attack())
+
+    def test_AbusiveSergeantEnemy(self):
+        game = generate_game_for(StonetuskBoar, AbusiveSergeant, CardTestingAgent, CardTestingAgent)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
+        game._start_turn()
+        game.current_player.agent.do_turn(game.current_player)
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+
+        # Now end the turn and make sure that the buff is gone
+        game._end_turn()
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
     def test_DarkIronDwarf(self):
         game = generate_game_for([StonetuskBoar, DarkIronDwarf], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
