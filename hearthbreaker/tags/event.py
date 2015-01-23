@@ -99,6 +99,11 @@ class SecretRevealed(PlayerEvent):
         super().__init__("secret_revealed", condition, player)
 
 
+class CharacterAttack(PlayerEvent):
+    def __init__(self, condition=None, player=FriendlyPlayer()):
+        super().__init__("character_attack", condition, player)
+
+
 class Attack(MinionEvent):
     def __init__(self, condition=None):
         super().__init__("attack", condition)

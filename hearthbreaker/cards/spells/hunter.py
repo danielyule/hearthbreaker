@@ -81,10 +81,10 @@ class ExplosiveTrap(SecretCard):
         super().__init__("Explosive Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.opponent.bind("attack", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.opponent.unbind("attack", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
     def _reveal(self, attacker, target):
         if isinstance(target, Hero):
@@ -102,10 +102,10 @@ class FreezingTrap(SecretCard):
         super().__init__("Freezing Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
     def activate(self, player):
-        player.game.current_player.bind("attack", self._reveal)
+        player.game.current_player.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("attack", self._reveal)
+        player.game.current_player.unbind("character_attack", self._reveal)
 
     def _reveal(self, attacker, target):
         if isinstance(attacker, Minion) and not attacker.removed:
@@ -119,10 +119,10 @@ class Misdirection(SecretCard):
         super().__init__("Misdirection", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
     def activate(self, player):
-        player.opponent.bind("attack", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.opponent.unbind("attack", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
     def _reveal(self, character, target):
         if isinstance(target, Hero) and not character.removed:
@@ -255,10 +255,10 @@ class SnakeTrap(SecretCard):
         super().__init__("Snake Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
 
     def activate(self, player):
-        player.game.current_player.bind("attack", self._reveal)
+        player.game.current_player.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("attack", self._reveal)
+        player.game.current_player.unbind("character_attack", self._reveal)
 
     def _reveal(self, attacker, target):
         if isinstance(target, Minion):

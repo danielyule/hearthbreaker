@@ -1,11 +1,11 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.action import Damage, IncreaseDurability
-from hearthbreaker.tags.base import Deathrattle, Effect, Buff
-from hearthbreaker.tags.condition import IsMinion
+from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
+from hearthbreaker.tags.base import Deathrattle, Effect
+from hearthbreaker.tags.condition import IsMinion, NotCurrentTarget, OneIn
 from hearthbreaker.tags.event import Attack
-from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector
+from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
+    RandomPicker, SelfSelector
 from hearthbreaker.game_objects import WeaponCard, Weapon
-from hearthbreaker.tags.status import Forgetful
 
 
 class FieryWarAxe(WeaponCard):
@@ -45,4 +45,7 @@ class OgreWarmaul(WeaponCard):
         super().__init__("Ogre Warmaul", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
     def create_weapon(self, player):
-        return Weapon(4, 2, buffs=[Buff(Forgetful())])
+        return Weapon(4, 2, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                     EnemyPlayer(),
+                                                                                     RandomPicker())),
+                                            SelfSelector(), OneIn(2))])

@@ -452,7 +452,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         self._remove_stealth()
         self.current_target = target
-        self.player.trigger("attack", self, target)
+        self.player.trigger("character_attack", self, target)
         self.trigger("attack", target)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
@@ -1563,6 +1563,7 @@ class Hero(Character):
         self.bonus_attack = 0
         self.character_class = character_class
         self.player = player
+        self.game = player.game
         self.power = hearthbreaker.powers.powers(self.character_class)(self)
 
     def calculate_attack(self):
@@ -1647,7 +1648,7 @@ class Hero(Character):
 
     @classmethod
     def __from_json__(cls, hd, player):
-        hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), None)
+        hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), player)
         GameObject.__from_json__(hero, **hd)
         if hd["frozen_for"] == 3 or hd["frozen_for"] == 2:
             hero.frozen_this_turn = True
@@ -1667,6 +1668,7 @@ class Hero(Character):
 class Player(Bindable):
     def __init__(self, name, deck, agent, game):
         super().__init__()
+        self.game = game
         self.hero = Hero(deck.character_class, self)
         self.name = name
         self.mana = 0
@@ -1680,7 +1682,6 @@ class Player(Bindable):
         self.player_auras = []
         self.fatigue = 0
         self.agent = agent
-        self.game = game
         self.effects = []
         self.secrets = []
         self.spell_multiplier = 1
@@ -1766,7 +1767,7 @@ class Player(Bindable):
             self.trigger("card_discarded", target)
 
     def add_effect(self, effect):
-        def remove_effect():
+        def remove_effect(*args):
             effect.unapply()
             self.effects.remove(effect)
             effect.event.unbind(self.hero, remove_effect)
@@ -1958,7 +1959,7 @@ class Game(Bindable):
         self.current_player.hero.power.used = False
         self.current_player.hero.active = True
         self.current_player.draw()
-        self.current_player.trigger("turn_started")
+        self.current_player.trigger("turn_started", self.current_player)
         self._has_turn_ended = False
 
     def game_over(self):

@@ -312,25 +312,24 @@ class IncreaseArmor(Action):
         }
 
 
-class Chance(Action):
-    def __init__(self, action, one_in=2):
-        self.action = action
-        self.one_in = one_in
+class ChangeTarget(Action):
+    def __init__(self, selector):
+        self.selector = selector
 
     def act(self, actor, target):
-        if 1 == target.game.random_amount(1, self.one_in):
-            self.action.act(actor, target)
+        possible_targets = [t for t in self.selector.get_targets(actor, target)]
+        if len(possible_targets) > 0:
+            actor.current_target = possible_targets[0]
 
     def __to_json__(self):
         return {
-            'name': 'chance',
-            'action': self.action,
-            'one_in': self.one_in
+            'name': 'change_target',
+            'selector': self.selector,
         }
 
-    def __from_json__(self, action, one_in):
-        self.action = Action.from_json(**action)
-        self.one_in = one_in
+    def __from_json__(self, selector):
+        from hearthbreaker.tags.base import Selector
+        self.selector = Selector.from_json(**selector)
         return self
 
 

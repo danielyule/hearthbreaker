@@ -407,7 +407,7 @@ def record(game):
         player.bind("used_power", replay._record_power)
         player.hero.bind("found_power_target", replay._record_target)
         player.bind("card_played", replay._record_card_played)
-        player.bind("attack", replay._record_attack)
+        player.bind("character_attack", replay._record_attack)
 
     _old_random_choice = game.random_choice
     _old_generate_random_between = game._generate_random_between

@@ -425,7 +425,7 @@ class PlayerEvent(Event):
 
 
 class Effect(Tag):
-    def __init__(self, event, action, selector):
+    def __init__(self, event, action, selector, condition=None):
         self.event = event
         if isinstance(action, Status):
             from hearthbreaker.tags.action import Give
@@ -434,6 +434,7 @@ class Effect(Tag):
             self.action = action
         self.selector = selector
         self.owner = None
+        self.condition = condition
 
     def apply(self):
         self.event.bind(self.owner, self._find_target)
@@ -445,11 +446,19 @@ class Effect(Tag):
         self.owner = owner
 
     def _find_target(self, focus=None, other=None, *args):
-        targets = self.selector.get_targets(self.owner, focus)
-        for target in targets:
-            self.action.act(self.owner, target)
+        if not self.condition or self.condition.evaluate(self.owner, focus, other, *args):
+            targets = self.selector.get_targets(self.owner, focus)
+            for target in targets:
+                self.action.act(self.owner, target)
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'event': self.event,
+                'action': self.action,
+                'selector': self.selector,
+                'condition': self.condition,
+            }
         return {
             'event': self.event,
             'action': self.action,
@@ -457,11 +466,13 @@ class Effect(Tag):
         }
 
     @staticmethod
-    def from_json(action, event, selector):
+    def from_json(action, event, selector, condition=None):
             action = Action.from_json(**action)
             event = Event.from_json(**event)
             selector = Selector.from_json(**selector)
-            return Effect(event, action, selector)
+            if condition:
+                condition = Condition.from_json(**condition)
+            return Effect(event, action, selector, condition)
 
 
 class Condition(JSONObject, metaclass=abc.ABCMeta):

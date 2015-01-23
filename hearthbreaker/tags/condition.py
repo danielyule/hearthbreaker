@@ -112,6 +112,16 @@ class IsWeapon(Condition):
         }
 
 
+class NotCurrentTarget(Condition):
+    def evaluate(self, target, minion, *args):
+        return minion is not target.current_target
+
+    def __to_json__(self):
+        return {
+            'name': 'not_current_target'
+        }
+
+
 class MinionIsTarget(Condition):
     def evaluate(self, target, minion, *args):
         return minion is target
@@ -331,4 +341,18 @@ class InGraveyard(Condition):
         return {
             'name': 'in_graveyard',
             'card': self.card
+        }
+
+
+class OneIn(Condition):
+    def __init__(self, amount):
+        self.amount = amount
+
+    def evaluate(self, target, *args):
+        return 0 == target.game.random_amount(0, self.amount - 1)
+
+    def __to_json__(self):
+        return {
+            'name': 'one_in',
+            'amount': self.amount,
         }

@@ -1,14 +1,14 @@
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
-    Chance, Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
-    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, Freeze, GiveEffect
+    Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
+    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, Freeze, GiveEffect, ChangeTarget
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Enrage, Aura, \
     BuffUntil, Buff
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
-    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity
+    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged, Attack, CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer
@@ -16,7 +16,7 @@ from hearthbreaker.cards.battlecries import gain_one_health_for_each_card_in_han
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Charge, Taunt, Windfury, CantAttack, \
-    SpellDamage, DoubleDeathrattle, IncreaseWeaponAttack, Forgetful
+    SpellDamage, DoubleDeathrattle, IncreaseWeaponAttack
 import hearthbreaker.targeting
 import copy
 from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
@@ -1000,7 +1000,7 @@ class NatPagle(MinionCard):
         super().__init__("Nat Pagle", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(0, 4, effects=[Effect(TurnStarted(), Chance(Draw()), PlayerSelector())])
+        return Minion(0, 4, effects=[Effect(TurnStarted(), Draw(), PlayerSelector(), OneIn(2))])
 
 
 class Nozdormu(MinionCard):
@@ -2176,7 +2176,10 @@ class OgreBrute(MinionCard):
         super().__init__("Ogre Brute", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(4, 4, forgetful=True)
+        return Minion(4, 4, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                     EnemyPlayer(),
+                                                                                     RandomPicker())),
+                                            SelfSelector(), OneIn(2))])
 
 
 class MogorTheOgre(MinionCard):
@@ -2184,4 +2187,5 @@ class MogorTheOgre(MinionCard):
         super().__init__("Mogor the Ogre", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 6, auras=[Aura(Forgetful(), MinionSelector(None, BothPlayer()))])
+        return Minion(7, 6, effects=[Effect(CharacterAttack(None, BothPlayer()), ChangeTarget(
+            CharacterSelector(NotCurrentTarget(), EnemyPlayer(), RandomPicker())), TargetSelector(), OneIn(2))])

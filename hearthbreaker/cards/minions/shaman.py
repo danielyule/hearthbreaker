@@ -1,9 +1,9 @@
-from hearthbreaker.tags.action import Draw, Damage, Give, Heal
+from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget
 from hearthbreaker.tags.base import Aura, Effect, Battlecry
-from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType
-from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied
+from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget
+from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
-    UserPicker, SelfSelector
+    UserPicker, SelfSelector, RandomPicker, EnemyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
@@ -146,4 +146,8 @@ class DunemaulShaman(MinionCard):
         super().__init__("Dunemaul Shaman", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=1)
 
     def create_minion(self, player):
-        return Minion(5, 4, windfury=True, forgetful=True)
+        return Minion(5, 4, windfury=True, effects=[Effect(Attack(),
+                                                           ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                          EnemyPlayer(),
+                                                                                          RandomPicker())),
+                                                           SelfSelector(), OneIn(2))])

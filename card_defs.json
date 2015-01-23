@@ -3295,17 +3295,18 @@
           "player": "friendly",
           "event_name": "turn_started"
         },
+
         "action": {
-          "name": "chance",
-          "action": {
-            "name": "draw",
-            "amount": 1
-          },
-          "one_in": 2
+          "name": "draw",
+          "amount": 1
         },
         "selector": {
           "name": "player",
           "players": "friendly"
+        },
+        "condition": {
+          "name": "one_in",
+          "amount": 2
         }
       }
     ],

@@ -116,10 +116,10 @@ class IceBarrier(SecretCard):
             super().reveal()
 
     def activate(self, player):
-        player.opponent.bind("attack", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.opponent.unbind("attack", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
 
 class MirrorEntity(SecretCard):
@@ -174,10 +174,10 @@ class Vaporize(SecretCard):
             super().reveal()
 
     def activate(self, player):
-        player.opponent.bind("attack", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.opponent.unbind("attack", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
 
 class IceBlock(SecretCard):
