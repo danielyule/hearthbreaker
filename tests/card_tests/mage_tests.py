@@ -725,3 +725,19 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[3].health)
         self.assertEqual(3, game.other_player.minions[4].health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Flamecannon(self):
+        game = generate_game_for(Flamecannon, SenjinShieldmasta, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # Flamecannon hasn't been played since there hasn't been an enemy minion until now.
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+
+        # Enemy minion exist, so Flamecannon will be played.
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)

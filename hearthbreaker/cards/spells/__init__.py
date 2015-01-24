@@ -73,6 +73,7 @@ from hearthbreaker.cards.spells.mage import (
     Flamestrike,
     Pyroblast,
     Duplicate,
+    Flamecannon,
 )
 
 from hearthbreaker.cards.spells.paladin import (

@@ -303,3 +303,18 @@ class Duplicate(SecretCard):
             if len(self.player.hand) < 10:
                 self.player.hand.append(type(minion.card)())
         super().reveal()
+
+
+class Flamecannon(Card):
+    def __init__(self):
+        super().__init__("Flamecannon", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
+        target = game.random_choice(targets)
+        target.damage(player.effective_spell_damage(4), self)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1
