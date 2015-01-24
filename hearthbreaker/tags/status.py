@@ -238,19 +238,6 @@ class CantAttack(Status):
         }
 
 
-class Forgetful(Status):
-    def act(self, actor, target):
-        target.forgetful += 1
-
-    def unact(self, actor, target):
-        target.forgetful -= 1
-
-    def __to_json__(self):
-        return {
-            'name': 'forgetful'
-        }
-
-
 class SpellDamage(Status):
     def __init__(self, damage):
         super().__init__()

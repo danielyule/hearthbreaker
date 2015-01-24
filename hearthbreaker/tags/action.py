@@ -317,9 +317,9 @@ class ChangeTarget(Action):
         self.selector = selector
 
     def act(self, actor, target):
-        possible_targets = [t for t in self.selector.get_targets(actor, target)]
+        possible_targets = [t for t in self.selector.get_targets(target, target.current_target)]
         if len(possible_targets) > 0:
-            actor.current_target = possible_targets[0]
+            target.current_target = possible_targets[0]
 
     def __to_json__(self):
         return {

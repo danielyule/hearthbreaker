@@ -1,9 +1,9 @@
-from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage
+from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff
-from hearthbreaker.tags.condition import IsMinion, IsType
-from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded
+from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn
+from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
-    BothPlayer, CharacterSelector, RandomPicker, SelfSelector
+    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
@@ -106,4 +106,7 @@ class OgreNinja(MinionCard):
         super().__init__("Ogre Ninja", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(6, 6, stealth=True, forgetful=True)
+        return Minion(6, 6, stealth=True, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                                   EnemyPlayer(),
+                                                                                                   RandomPicker())),
+                                                          SelfSelector(), OneIn(2))])
