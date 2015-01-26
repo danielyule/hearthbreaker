@@ -5,11 +5,12 @@ from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.constants import CARD_RARITY
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
+from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
 
-class TestCommon(unittest.TestCase):
+class TestCommon(unittest.TestCase, TestUtilities):
     def setUp(self):
         random.seed(1857)
 
@@ -3635,3 +3636,20 @@ class TestCommon(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].health)
         self.assertEqual(25, game.other_player.hero.health)
+
+    def test_Toshley(self):
+        game = generate_game_for(Toshley, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        # The last card in the player's hand should be a spare part.
+
+        self.assertSparePart(game.current_player.hand[-1])
+        self.assertNotSparePart(game.other_player.hand[-1])
+
+        # The assassinate should kill Toshley, resulting in yet another spare part.
+        game.play_single_turn()
+        self.assertSparePart(game.other_player.hand[-1])
+        self.assertSparePart(game.other_player.hand[-2])
+        self.assertNotSparePart(game.current_player.hand[-1])

@@ -7,6 +7,7 @@ from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
 from hearthbreaker.game_objects import MinionCard
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent
+from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -89,7 +90,7 @@ class TestGameCopying(unittest.TestCase):
             game.play_single_turn()
 
 
-class TestMinionCopying(unittest.TestCase):
+class TestMinionCopying(unittest.TestCase, TestUtilities):
     def setUp(self):
         random.seed(1857)
 
@@ -2217,13 +2218,9 @@ class TestMinionCopying(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(7, len(game.players[0].hand))
-        self.assertIn(game.players[0].hand[-1].name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn",
-                                                      "Armour Plating", "Reversing Switch", "Time Rewinder",
-                                                      "Whirling Blades"])
+        self.assertSparePart(game.players[0].hand[-1])
         self.assertEqual(9, len(game.players[1].hand))
-        self.assertIn(game.players[1].hand[-1].name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn",
-                                                      "Armour Plating", "Reversing Switch", "Time Rewinder",
-                                                      "Whirling Blades"])
+        self.assertSparePart(game.players[1].hand[-1])
 
     def test_FelCannon(self):
         game = generate_game_for([FelCannon, BoulderfistOgre], [BloodfenRaptor, HarvestGolem, Deathwing],
@@ -2318,3 +2315,21 @@ class TestMinionCopying(unittest.TestCase):
         self.assertEqual("Mogu'shan Warden", game.other_player.minions[0].card.name)
         self.assertEqual("Silverback Patriarch", game.other_player.minions[1].card.name)
         self.assertEqual(25, game.other_player.hero.health)
+
+    def test_Toshley(self):
+        game = generate_game_for(Toshley, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        # The last card in the player's hand should be a spare part.
+
+        self.assertSparePart(game.current_player.hand[-1])
+        self.assertNotSparePart(game.other_player.hand[-1])
+
+        # The assassinate should kill Toshley, resulting in yet another spare part.
+        game = game.copy()
+        game.play_single_turn()
+        self.assertSparePart(game.other_player.hand[-1])
+        self.assertSparePart(game.other_player.hand[-2])
+        self.assertNotSparePart(game.current_player.hand[-1])

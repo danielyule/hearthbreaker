@@ -201,6 +201,7 @@ from hearthbreaker.cards.minions.neutral import (
     ShipsCannon,
     OgreBrute,
     MogorTheOgre,
+    Toshley,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -260,6 +261,7 @@ from hearthbreaker.cards.minions.priest import (
     TempleEnforcer,
     DarkCultist,
     Shrinkmeister,
+    UpgradedRepairBot
 )
 
 from hearthbreaker.cards.minions.rogue import (

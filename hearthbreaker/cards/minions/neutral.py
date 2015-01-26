@@ -2189,3 +2189,15 @@ class MogorTheOgre(MinionCard):
     def create_minion(self, player):
         return Minion(7, 6, effects=[Effect(CharacterAttack(None, BothPlayer()), ChangeTarget(
             CharacterSelector(NotCurrentTarget(), EnemyPlayer(), RandomPicker())), TargetSelector(), OneIn(2))])
+
+
+class Toshley(MinionCard):
+    def __init__(self):
+        super().__init__("Toshley", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
+                         battlecry=Battlecry(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                             PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(5, 7,
+                      deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                              PlayerSelector()))

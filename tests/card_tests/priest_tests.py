@@ -642,3 +642,28 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
         self.assertEqual(0, game.players[0].minions[1].calculate_attack())
+
+    def test_UpgradedRepairBot(self):
+        game = generate_game_for(UpgradedRepairBot, MechanicalYeti, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(9, game.current_player.minions[1].health)
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        self.assertEqual(5, game.other_player.minions[1].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)

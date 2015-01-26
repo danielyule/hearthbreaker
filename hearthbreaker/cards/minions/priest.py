@@ -1,10 +1,10 @@
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
-from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo
+from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
     EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
     MultiplyHealAmount, ChangeAttack
@@ -90,3 +90,14 @@ class Shrinkmeister(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2)
+
+
+class UpgradedRepairBot(MinionCard):
+    def __init__(self):
+        super().__init__("Upgraded Repair Bot", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.MECH,
+                         battlecry=Battlecry(Give(ChangeHealth(4)), MinionSelector(IsType(MINION_TYPE.MECH),
+                                                                                   picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(5, 5)
