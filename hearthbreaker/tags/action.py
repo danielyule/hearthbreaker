@@ -31,11 +31,6 @@ class Give(Action):
         for buff in self.buffs:
             target.add_buff(buff)
 
-    def unact(self, actor, target):
-        for buff in self.buffs:
-            buff.set_owner(target)
-            target.remove_buff(buff)
-
     def __to_json__(self):
         return {
             'name': 'give',
@@ -60,11 +55,7 @@ class Give(Action):
 
 class GiveAura(Action):
     def __init__(self, auras):
-
-        if isinstance(auras, Status):
-            from hearthbreaker.tags.selector import SelfSelector
-            self.auras = [Aura(auras, SelfSelector())]
-        elif isinstance(auras, list):
+        if isinstance(auras, list):
             self.auras = auras
         else:
             self.auras = [auras]
@@ -72,11 +63,6 @@ class GiveAura(Action):
     def act(self, actor, target):
         for aura in self.auras:
             target.add_aura(aura)
-
-    def unact(self, actor, target):
-        for aura in self.auras:
-            aura.target = target
-            target.remove_aura(aura)
 
     def __to_json__(self):
         return {
@@ -114,32 +100,6 @@ class GiveEffect(Action):
 
     def __from_json__(self, effects):
         self.effects = [Effect.from_json(**effect) for effect in effects]
-        return self
-
-
-class Take(Action):
-    def __init__(self, aura):
-        if isinstance(aura, Action):
-            from hearthbreaker.tags.selector import SelfSelector
-            self.aura = Aura(aura, SelfSelector())
-        else:
-            self.aura = aura
-
-    def act(self, actor, target):
-        aura_json = str(self.aura)
-        for aura in target.auras:
-            if str(aura) == aura_json:
-                target.remove_aura(aura)
-                break
-
-    def __to_json__(self):
-        return {
-            'name': 'take',
-            'aura': self.aura
-        }
-
-    def __from_json__(self, aura):
-        self.aura = Aura.from_json(**aura)
         return self
 
 
