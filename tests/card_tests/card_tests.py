@@ -12,12 +12,12 @@ from hearthbreaker.cards import *
 
 class TestUtilities:
     def assertSparePart(self, card):
-        self.assertIn(card.name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn", "Armour Plating",
+        self.assertIn(card.name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn", "Armor Plating",
                                   "Reversing Switch", "Time Rewinder", "Whirling Blades"],
                       "'{}' was not a spare part card".format(card.name))
 
     def assertNotSparePart(self, card):
-        self.assertNotIn(card.name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn", "Armour Plating",
+        self.assertNotIn(card.name, ["Finicky Cloakfield", "Emergency Coolant", "Rusty Horn", "Armor Plating",
                                      "Reversing Switch", "Time Rewinder", "Whirling Blades"],
                          "'{}' was a spare part card".format(card.name))
 
