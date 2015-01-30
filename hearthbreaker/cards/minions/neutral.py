@@ -2252,3 +2252,11 @@ class SaltyDog(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 4)
+
+
+class GnomereganInfantry(MinionCard):
+    def __init__(self):
+        super().__init__("Gnomeregan Infantry", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 4, charge=True, taunt=True)

@@ -106,7 +106,7 @@ class UpgradedRepairBot(MinionCard):
 class Shadowbomber(MinionCard):
     def __init__(self):
         super().__init__("Shadowbomber", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
-                         battlecry=Battlecry(Damage(3), HeroSelector(players=BothPlayer()))) 
+                         battlecry=Battlecry(Damage(3), HeroSelector(players=BothPlayer())))
 
     def create_minion(self, player):
         return Minion(2, 1)

@@ -208,6 +208,7 @@ from hearthbreaker.cards.minions.neutral import (
     Gazlowe,
     MiniMage,
     SaltyDog,
+    GnomereganInfantry,
 )
 
 from hearthbreaker.cards.minions.druid import (
