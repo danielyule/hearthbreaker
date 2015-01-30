@@ -2260,3 +2260,11 @@ class GnomereganInfantry(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 4, charge=True, taunt=True)
+
+
+class FlyingMachine(MinionCard):
+    def __init__(self):
+        super().__init__("Flying Machine", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 4, windfury=True)
