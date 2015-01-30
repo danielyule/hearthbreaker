@@ -139,6 +139,7 @@ from hearthbreaker.cards.spells.rogue import (
     Sprint,
     Vanish,
     TinkersSharpswordOil,
+    Sabotage,
 )
 
 from hearthbreaker.cards.spells.shaman import (

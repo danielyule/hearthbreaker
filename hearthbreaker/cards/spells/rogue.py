@@ -252,3 +252,20 @@ class TinkersSharpswordOil(Card):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and player.hero.weapon is not None
+
+
+class Sabotage(Card):
+    def __init__(self):
+        super().__init__("Sabotage", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
+        target = game.random_choice(targets)
+        target.die(None)
+        game.check_delayed()
+        if player.cards_played > 0 and game.other_player.hero.weapon is not None:
+            game.other_player.hero.weapon.destroy()
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1

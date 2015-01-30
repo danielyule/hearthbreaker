@@ -2,7 +2,8 @@ import random
 import unittest
 from hearthbreaker.constants import MINION_TYPE
 
-from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent
+from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent,\
+    HeroPowerAndOneCardPlayingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
@@ -656,3 +657,17 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+
+    def test_Sabotage(self):
+        game = generate_game_for([Preparation, Sabotage], [StonetuskBoar, Preparation], CardTestingAgent,
+                                 HeroPowerAndOneCardPlayingAgent)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].hero.weapon.base_attack)
+
+        # Preparation and Sabotage will be played (twice), creating a combo.
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(None, game.players[1].hero.weapon)
