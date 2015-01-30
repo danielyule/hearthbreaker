@@ -268,7 +268,8 @@ from hearthbreaker.cards.minions.priest import (
     TempleEnforcer,
     DarkCultist,
     Shrinkmeister,
-    UpgradedRepairBot
+    UpgradedRepairBot,
+    Shadowbomber,
 )
 
 from hearthbreaker.cards.minions.rogue import (

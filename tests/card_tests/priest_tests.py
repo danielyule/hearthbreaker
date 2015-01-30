@@ -667,3 +667,12 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, game.other_player.minions[1].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Shadowbomber(self):
+        game = generate_game_for(Shadowbomber, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        game.play_single_turn()
+        # Play Shadowbomber, 3 damage to both heroes
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(27, game.players[0].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)

@@ -1,9 +1,9 @@
-from hearthbreaker.tags.action import Heal, Draw, Steal, Give
+from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer
+    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
@@ -101,3 +101,12 @@ class UpgradedRepairBot(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 5)
+
+
+class Shadowbomber(MinionCard):
+    def __init__(self):
+        super().__init__("Shadowbomber", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC,
+                         battlecry=Battlecry(Damage(3), HeroSelector(players=BothPlayer()))) 
+
+    def create_minion(self, player):
+        return Minion(2, 1)
