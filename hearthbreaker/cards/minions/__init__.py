@@ -210,6 +210,7 @@ from hearthbreaker.cards.minions.neutral import (
     SaltyDog,
     GnomereganInfantry,
     FlyingMachine,
+    LostTallstrider,
 )
 
 from hearthbreaker.cards.minions.druid import (

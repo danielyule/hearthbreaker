@@ -2268,3 +2268,11 @@ class FlyingMachine(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 4, windfury=True)
+
+
+class LostTallstrider(MinionCard):
+    def __init__(self):
+        super().__init__("Lost Tallstrider", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(5, 4)
