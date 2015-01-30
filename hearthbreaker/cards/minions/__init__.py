@@ -202,6 +202,8 @@ from hearthbreaker.cards.minions.neutral import (
     OgreBrute,
     MogorTheOgre,
     Toshley,
+    ForceTankMAX,
+    FelReaver,
 )
 
 from hearthbreaker.cards.minions.druid import (

@@ -3653,3 +3653,28 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertSparePart(game.other_player.hand[-1])
         self.assertSparePart(game.other_player.hand[-2])
         self.assertNotSparePart(game.current_player.hand[-1])
+
+    def test_FelReaver(self):
+        game = generate_game_for(FelReaver, [ShadowBolt, Wisp, LightsJustice], OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(22, game.current_player.deck.left)
+        self.assertEqual(7, len(game.current_player.hand))
+        self.assertEqual(22, game.other_player.deck.left)
+        self.assertEqual(9, len(game.other_player.hand))
+
+        game.play_single_turn()
+        self.assertEqual(13, game.other_player.deck.left)
+        self.assertEqual(7, len(game.other_player.hand))
+        self.assertEqual(21, game.current_player.deck.left)
+        self.assertEqual(7, len(game.current_player.hand))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(12, game.current_player.deck.left)
+        self.assertEqual(7, len(game.current_player.hand))
+        self.assertEqual(21, game.other_player.deck.left)
+        self.assertEqual(7, len(game.other_player.hand))

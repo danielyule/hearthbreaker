@@ -57,7 +57,7 @@ class Felguard(MinionCard):
 class Doomguard(MinionCard):
     def __init__(self):
         super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
-                         battlecry=Battlecry(Discard(2), PlayerSelector()))
+                         battlecry=Battlecry(Discard(amount=2), PlayerSelector()))
 
     def create_minion(self, player):
         return Minion(5, 7, charge=True)
@@ -66,7 +66,7 @@ class Doomguard(MinionCard):
 class Succubus(MinionCard):
     def __init__(self):
         super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON,
-                         battlecry=Battlecry(Discard(1), PlayerSelector()))
+                         battlecry=Battlecry(Discard(), PlayerSelector()))
 
     def create_minion(self, player):
         return Minion(4, 3)

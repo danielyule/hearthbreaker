@@ -244,18 +244,27 @@ class Draw(Action):
 
 
 class Discard(Action):
-    def __init__(self, amount=1):
+    def __init__(self, query=CardQuery(source=CARD_SOURCE.MY_HAND), amount=1):
+        self.query = query
         self.amount = amount
 
     def act(self, actor, target):
         for index in range(0, self.amount):
-            target.discard()
+            card = self.query.get_card(actor.player)
+            if card:
+                actor.player.trigger("discard", card)
 
     def __to_json__(self):
         return {
             'name': 'discard',
-            'amount': self.amount
+            'amount': self.amount,
+            'query': self.query,
         }
+
+    def __from_json__(self, query, amount):
+        self.amount = amount
+        self.query = CardQuery.from_json(**query)
+        return self
 
 
 class IncreaseArmor(Action):

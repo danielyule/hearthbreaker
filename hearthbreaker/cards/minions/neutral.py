@@ -1,6 +1,6 @@
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
-    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, Freeze, GiveEffect, ChangeTarget
+    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, Freeze, GiveEffect, ChangeTarget, Discard
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Enrage, Aura, \
     BuffUntil, Buff
@@ -2199,3 +2199,20 @@ class Toshley(MinionCard):
         return Minion(5, 7,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))
+
+
+class ForceTankMAX(MinionCard):
+    def __init__(self):
+        super().__init__("Force-Tank MAX", 8, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(7, 7, divine_shield=True)
+
+
+class FelReaver(MinionCard):
+    def __init__(self):
+        super().__init__("Fel Reaver", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(8, 8, effects=[Effect(CardPlayed(player=EnemyPlayer()),
+                                            Discard(CardQuery(source=CARD_SOURCE.MY_DECK), 3), PlayerSelector())])
