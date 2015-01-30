@@ -204,6 +204,7 @@ from hearthbreaker.cards.minions.neutral import (
     Toshley,
     ForceTankMAX,
     FelReaver,
+    MadderBomber,
 )
 
 from hearthbreaker.cards.minions.druid import (

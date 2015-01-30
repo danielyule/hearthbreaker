@@ -3678,3 +3678,18 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.current_player.hand))
         self.assertEqual(21, game.other_player.deck.left)
         self.assertEqual(7, len(game.other_player.hand))
+
+    def test_MadderBomber(self):
+        game = generate_game_for(MadderBomber, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))  # 4 hits boar
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(28, game.players[0].hero.health)  # 2 hits us
+        self.assertEqual(30, game.players[1].hero.health)  # 0 hits him

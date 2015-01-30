@@ -2216,3 +2216,12 @@ class FelReaver(MinionCard):
     def create_minion(self, player):
         return Minion(8, 8, effects=[Effect(CardPlayed(player=EnemyPlayer()),
                                             Discard(CardQuery(source=CARD_SOURCE.MY_DECK), 3), PlayerSelector())])
+
+class MadderBomber(MinionCard):
+    def __init__(self):
+        super().__init__("Madder Bomber", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Damage(1), CharacterSelector(players=BothPlayer(),
+                                                                          picker=RandomPicker(6))))
+
+    def create_minion(self, player):
+        return Minion(5, 4)
