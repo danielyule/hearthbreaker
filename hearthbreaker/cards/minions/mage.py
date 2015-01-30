@@ -93,3 +93,11 @@ class GoblinBlastmage(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 4)
+
+
+class SootSpewer(MinionCard):
+    def __init__(self):
+        super().__init__("Soot Spewer", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 3, spell_damage=1)

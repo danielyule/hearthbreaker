@@ -243,6 +243,7 @@ from hearthbreaker.cards.minions.mage import (
     ArchmageAntonidas,
     Snowchugger,
     GoblinBlastmage,
+    SootSpewer,
 )
 
 from hearthbreaker.cards.minions.paladin import (
