@@ -334,4 +334,5 @@ from hearthbreaker.cards.minions.warrior import (
     WarsongCommander,
     Warbot,
     Shieldmaiden,
+    SiegeEngine,
 )

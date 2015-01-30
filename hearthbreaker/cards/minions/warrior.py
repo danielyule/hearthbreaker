@@ -1,7 +1,7 @@
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip
 from hearthbreaker.tags.base import Effect, Battlecry, Enrage
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
-from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged
+from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
     PlayerSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -91,3 +91,11 @@ class Shieldmaiden(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 5)
+
+
+class SiegeEngine(MinionCard):
+    def __init__(self):
+        super().__init__("Siege Engine", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(5, 5, effects=[Effect(ArmorIncreased(), ChangeAttack(1), SelfSelector())])

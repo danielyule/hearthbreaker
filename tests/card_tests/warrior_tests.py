@@ -1,7 +1,7 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import DoNothingAgent
+from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from tests.agents.testing_agents import OneCardPlayingAgent, PlayAndAttackAgent, CardTestingAgent,\
     SelfSpellTestingAgent
 from tests.testing_utils import generate_game_for
@@ -490,3 +490,24 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Silverback Patriarch", game.other_player.minions[0].card.name)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_SiegeEngine(self):
+        game = generate_game_for(SiegeEngine, StonetuskBoar, PredictableAgent, DoNothingAgent)
+
+        # Arathi Weaponsmith should be played
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(12, game.players[0].hero.armor)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].health)
+        self.assertEqual("Siege Engine", game.players[0].minions[0].card.name)
+
+        # Hero Power will be used, triggering the Siege Engine
+        for turn in range(0, 2):
+            game.play_single_turn()
+        self.assertEqual(14, game.players[0].hero.armor)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].health)
