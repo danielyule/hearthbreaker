@@ -205,6 +205,7 @@ from hearthbreaker.cards.minions.neutral import (
     ForceTankMAX,
     FelReaver,
     MadderBomber,
+    Gazlowe,
 )
 
 from hearthbreaker.cards.minions.druid import (

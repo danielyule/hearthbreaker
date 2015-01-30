@@ -2217,6 +2217,7 @@ class FelReaver(MinionCard):
         return Minion(8, 8, effects=[Effect(CardPlayed(player=EnemyPlayer()),
                                             Discard(CardQuery(source=CARD_SOURCE.MY_DECK), 3), PlayerSelector())])
 
+
 class MadderBomber(MinionCard):
     def __init__(self):
         super().__init__("Madder Bomber", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
@@ -2225,3 +2226,13 @@ class MadderBomber(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 4)
+
+
+class Gazlowe(MinionCard):
+    def __init__(self):
+        super().__init__("Gazlowe", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(3, 6, effects=[Effect(SpellCast(ManaCost(1)),
+                                            AddCard(CardQuery(conditions=[IsType(MINION_TYPE.MECH)])),
+                                            PlayerSelector())])

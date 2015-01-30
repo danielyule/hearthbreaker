@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from hearthbreaker.constants import CARD_RARITY
+from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities
@@ -3693,3 +3693,17 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(4, game.players[0].minions[0].health)
         self.assertEqual(28, game.players[0].hero.health)  # 2 hits us
         self.assertEqual(30, game.players[1].hero.health)  # 0 hits him
+
+    def test_Gazlowe(self):
+        game = generate_game_for([Gazlowe, BlessingOfWisdom], BlessingOfWisdom,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(8, len(game.players[0].hand))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(9, len(game.players[0].hand))
+        self.assertEqual(MINION_TYPE.MECH, game.players[0].hand[-1].minion_type)
