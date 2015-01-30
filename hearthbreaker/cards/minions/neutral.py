@@ -2244,3 +2244,11 @@ class MiniMage(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 1, stealth=True, spell_damage=1)
+
+
+class SaltyDog(MinionCard):
+    def __init__(self):
+        super().__init__("Salty Dog", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.PIRATE)
+
+    def create_minion(self, player):
+        return Minion(7, 4)

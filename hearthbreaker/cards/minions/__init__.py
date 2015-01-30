@@ -207,6 +207,7 @@ from hearthbreaker.cards.minions.neutral import (
     MadderBomber,
     Gazlowe,
     MiniMage,
+    SaltyDog,
 )
 
 from hearthbreaker.cards.minions.druid import (
