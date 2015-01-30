@@ -2236,3 +2236,11 @@ class Gazlowe(MinionCard):
         return Minion(3, 6, effects=[Effect(SpellCast(ManaCost(1)),
                                             AddCard(CardQuery(conditions=[IsType(MINION_TYPE.MECH)])),
                                             PlayerSelector())])
+
+
+class MiniMage(MinionCard):
+    def __init__(self):
+        super().__init__("Mini-Mage", 4, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(4, 1, stealth=True, spell_damage=1)

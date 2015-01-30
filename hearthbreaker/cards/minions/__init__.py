@@ -206,6 +206,7 @@ from hearthbreaker.cards.minions.neutral import (
     FelReaver,
     MadderBomber,
     Gazlowe,
+    MiniMage,
 )
 
 from hearthbreaker.cards.minions.druid import (
