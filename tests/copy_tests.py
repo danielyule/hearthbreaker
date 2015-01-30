@@ -780,7 +780,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual("Goldshire Footman", new_game.current_player.minions[1].card.name)
         self.assertEqual("Undertaker", new_game.current_player.minions[2].card.name)
         self.assertEqual(2, new_game.current_player.minions[2].calculate_attack())
-        self.assertEqual(3, new_game.current_player.minions[2].calculate_max_health())
+        self.assertEqual(2, new_game.current_player.minions[2].calculate_max_health())
 
         self.assertEqual("Undertaker", game.current_player.minions[1].card.name)
         self.assertEqual(1, game.current_player.minions[1].calculate_attack())
@@ -799,7 +799,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
-        self.assertEqual(3, game.current_player.minions[2].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
 
     def test_ZombieChow(self):
         game = generate_game_for([ZombieChow, ZombieChow, ZombieChow, AuchenaiSoulpriest], StonetuskBoar,

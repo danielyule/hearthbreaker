@@ -2743,7 +2743,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Goldshire Footman", game.current_player.minions[1].card.name)
         self.assertEqual("Undertaker", game.current_player.minions[2].card.name)
         self.assertEqual(2, game.current_player.minions[2].calculate_attack())
-        self.assertEqual(3, game.current_player.minions[2].calculate_max_health())
+        self.assertEqual(2, game.current_player.minions[2].calculate_max_health())
 
         game.current_player.minions[2].silence()
 
