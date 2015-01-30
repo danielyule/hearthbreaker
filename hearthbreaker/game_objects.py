@@ -1595,7 +1595,7 @@ class Hero(Character):
             attacker.trigger("did_damage", self, 0)
 
     def increase_armor(self, amount):
-        self.trigger("armor_increased", amount)
+        self.player.trigger("armor_increased", amount)
         self.armor += amount
 
     def die(self, by):
