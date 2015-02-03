@@ -1453,21 +1453,12 @@ class DreadCorsair(MinionCard):
 
 class CaptainsParrot(MinionCard):
     def __init__(self):
-        super().__init__("Captain's Parrot", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.BEAST)
+        super().__init__("Captain's Parrot", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.BEAST,
+                         battlecry=Battlecry(AddCard(CardQuery(conditions=[IsType(MINION_TYPE.PIRATE)],
+                                                               source=CARD_SOURCE.MY_DECK)), PlayerSelector()))
 
     def create_minion(self, player):
-        def draw_pirate(m):
-            if len(m.player.hand) < 10:
-                card = m.game.random_draw(m.player.deck.cards,
-                                          lambda c: not c.drawn and
-                                          isinstance(c, MinionCard) and c.minion_type == MINION_TYPE.PIRATE)
-                if card:
-                    card.drawn = True
-                    m.player.deck.left -= 1
-                    m.player.hand.append(card)
-                    m.player.trigger("card_drawn")
-
-        return Minion(1, 1, battlecry=draw_pirate)
+        return Minion(1, 1)
 
 
 class TinkmasterOverspark(MinionCard):
