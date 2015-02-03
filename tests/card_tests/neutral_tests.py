@@ -971,6 +971,25 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual("Flame Imp", game.players[0].minions[0].card.name)
 
+    def test_SylvanasPowerOverwhelming(self):
+        game = generate_game_for([GoldshireFootman, PowerOverwhelming, BoulderfistOgre], SylvanasWindrunner,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        game.other_player.max_mana = 5
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual("Goldshire Footman", game.other_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Sylvanas Windrunner", game.current_player.minions[0].card.name)
+
     def test_StampedingKodo(self):
         game = generate_game_for(StampedingKodo, ArgentSquire, OneCardPlayingAgent, OneCardPlayingAgent)
         for turn in range(0, 8):
@@ -985,11 +1004,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(3, len(game.players[1].minions))
 
     def test_FrostElemental(self):
-        game = generate_game_for(FrostElemental, ArgentSquire, SelfSpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(FrostElemental, ArgentSquire, OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 11):
             game.play_single_turn()
 
-        self.assertTrue(game.players[0].hero.frozen)
+        self.assertFalse(game.players[0].hero.frozen)
+        self.assertTrue(game.players[1].hero.frozen)
 
     def test_LeperGnome(self):
         game = generate_game_for(LeperGnome, [MortalCoil, LeperGnome],
@@ -1396,7 +1416,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.calculate_attack())
         self.assertEqual(5, game.players[0].hero.weapon.durability)
 
     def test_HungryCrab(self):
@@ -1457,6 +1477,18 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].calculate_attack())
         self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_MurlocTidecaller_MirrorEntity(self):
+        game = generate_game_for([IronfurGrizzly, MurlocTidecaller], MirrorEntity,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
 
     def test_Onyxia(self):
         game = generate_game_for(Onyxia, MurlocRaider, OneCardPlayingAgent, DoNothingAgent)

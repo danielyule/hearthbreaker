@@ -71,28 +71,37 @@ class Aura(Tag):
 
 
 class Buff(Tag):
-    def __init__(self, status):
+    def __init__(self, status, condition=None):
         self.status = status
+        self.condition = condition
         self.owner = None
 
     def set_owner(self, owner):
         self.owner = owner
 
     def apply(self):
-        self.status.act(self.owner, self.owner)
+        if not self.condition or self.condition.evaluate(self.owner, self.owner):
+            self.status.act(self.owner, self.owner)
 
     def unapply(self):
         self.status.unact(self.owner, self.owner)
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'status': self.status,
+                'condition': self.condition
+            }
         return {
             'status': self.status,
         }
 
     @staticmethod
-    def from_json(status):
+    def from_json(status, condition=None):
         status = Status.from_json(**status)
-        return Buff(status)
+        if condition:
+            condition = Condition(**condition)
+        return Buff(status, condition)
 
 
 class BuffUntil(Buff):
@@ -291,15 +300,15 @@ class Amount(abc.ABCMeta):
         def from_json_with_amount(self, amount=None, **kwargs):
             if amount:
                 if isinstance(amount, dict):
-                    kwargs['amount'] = Selector.from_json(**amount)
+                    kwargs['amount'] = Function.from_json(**amount)
                 else:
                     kwargs['amount'] = amount
             cls.__init__(self, **kwargs)
             return self
 
         def get_amount(self, source, target):
-            if isinstance(self.amount, Selector):
-                return len(self.amount.get_targets(source, target)) * self.multipler
+            if isinstance(self.amount, Function):
+                return self.amount.do(source) * self.multipler
             else:
                 return self.amount
 
@@ -752,6 +761,25 @@ class Enrage(Tag):
         statuses = [Status.from_json(**status) for status in statuses]
         selector = Selector.from_json(**selector)
         return Enrage(statuses, selector)
+
+
+class Function(JSONObject, metaclass=abc.ABCMeta):
+
+    def do(self, target):
+        pass
+
+    @staticmethod
+    def from_json(name, **kwargs):
+        import hearthbreaker.tags.selector as selector_mod
+
+        cls_name = string.capwords(name, '_').replace("_", "")
+        cls = getattr(selector_mod, cls_name)
+        obj = cls.__new__(cls)
+        return obj.__from_json__(**kwargs)
+
+    def __from_json__(self, **kwargs):
+        self.__init__(**kwargs)
+        return self
 
 
 class Context(metaclass=abc.ABCMeta):

@@ -1,22 +1,23 @@
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
-    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, Freeze, GiveEffect, ChangeTarget, Discard
+    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, GiveEffect, ChangeTarget, Discard, \
+    RemoveDivineShields, DecreaseDurability, IncreaseDurability, IncreaseWeaponAttack
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Enrage, Aura, \
     BuffUntil, Buff
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
-    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget
+    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, MinionPlaced, Damaged, Attack, CharacterAttack
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
-    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer
+    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute
 from hearthbreaker.cards.battlecries import gain_one_health_for_each_card_in_hand, deathwing
 from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Charge, Taunt, Windfury, CantAttack, \
-    SpellDamage, DoubleDeathrattle, IncreaseWeaponAttack
+    SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus
 import hearthbreaker.targeting
 import copy
 from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
@@ -739,25 +740,22 @@ class SpitefulSmith(MinionCard):
         super().__init__("Spiteful Smith", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(4, 6, enrage=Enrage(IncreaseWeaponAttack(2), WeaponSelector()))
+        return Minion(4, 6, enrage=Enrage(IncreaseWeaponBonus(2), HeroSelector()))
 
 
 class BloodKnight(MinionCard):
     def __init__(self):
-        super().__init__("Blood Knight", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Blood Knight", 3, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         battlecry=(Battlecry([Give([Buff(ChangeAttack(Count(MinionSelector(HasDivineShield(),
+                                                                                            BothPlayer())), 3)),
+                                                     Buff(ChangeHealth(Count(MinionSelector(HasDivineShield(),
+                                                                                            BothPlayer())), 3))])],
+                                              SelfSelector()),
+                                    Battlecry(RemoveDivineShields(),
+                                              (MinionSelector(HasDivineShield(), BothPlayer())))))
 
     def create_minion(self, player):
-        def collect_divine_shields(minion):
-            shields_stolen = 0
-            targets = hearthbreaker.targeting.find_minion_battlecry_target(player.game, lambda m: m.divine_shield)
-            if targets is not None:
-                for target in targets:
-                    shields_stolen += 1
-                    target.divine_shield = False
-                for i in range(0, shields_stolen):
-                    minion.increase_health(3)
-                    minion.change_attack(3)
-        return Minion(3, 3, battlecry=collect_divine_shields)
+        return Minion(3, 3)
 
 
 class FrostwolfWarlord(MinionCard):
@@ -912,7 +910,8 @@ class StampedingKodo(MinionCard):
 class FrostElemental(MinionCard):
     def __init__(self):
         super().__init__("Frost Elemental", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Freeze(), CharacterSelector(players=BothPlayer())))
+                         battlecry=Battlecry(Give(Frozen()), CharacterSelector(players=BothPlayer(),
+                                                                               picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(5, 5)
@@ -1079,7 +1078,8 @@ class BigGameHunter(MinionCard):
 
 class BloodsailCorsair(MinionCard):
     def __init__(self):
-        super().__init__("Bloodsail Corsair", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.PIRATE)
+        super().__init__("Bloodsail Corsair", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.PIRATE,
+                         battlecry=Battlecry(DecreaseDurability(), HeroSelector(EnemyPlayer())))
 
     def create_minion(self, player):
         def reduce_durability(m):
@@ -1089,24 +1089,27 @@ class BloodsailCorsair(MinionCard):
                 else:
                     player.game.other_player.hero.weapon.destroy()
 
-        return Minion(1, 2, battlecry=reduce_durability)
+        return Minion(1, 2)
 
 
 class BloodsailRaider(MinionCard):
     def __init__(self):
-        super().__init__("Bloodsail Raider", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.PIRATE)
+        super().__init__("Bloodsail Raider", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.PIRATE,
+                         battlecry=Battlecry(Give(Buff(ChangeAttack(Attribute("base_attack", WeaponSelector())))),
+                                             SelfSelector()))
 
     def create_minion(self, player):
         def gain_weapon_attack(m):
             if player.hero.weapon is not None:
                 m.change_attack(player.hero.weapon.base_attack)
 
-        return Minion(2, 3, battlecry=gain_weapon_attack)
+        return Minion(2, 3)
 
 
 class CaptainGreenskin(MinionCard):
     def __init__(self):
-        super().__init__("Captain Greenskin", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.PIRATE)
+        super().__init__("Captain Greenskin", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.PIRATE,
+                         battlecry=Battlecry([IncreaseWeaponAttack(1), IncreaseDurability()], HeroSelector()))
 
     def create_minion(self, player):
         def buff_weapon(m):
@@ -1114,7 +1117,7 @@ class CaptainGreenskin(MinionCard):
                 player.hero.weapon.base_attack += 1
                 player.hero.weapon.durability += 1
 
-        return Minion(5, 4, battlecry=buff_weapon)
+        return Minion(5, 4)
 
 
 class HungryCrab(MinionCard):
@@ -1588,16 +1591,11 @@ class PintSizedSummoner(MinionCard):
 
 class OldMurkEye(MinionCard):
     def __init__(self):
-        super().__init__("Old Murk-Eye", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MURLOC,
-                         battlecry=Battlecry(Give(ChangeAttack(MinionSelector(IsType(MINION_TYPE.MURLOC),
-                                                                              BothPlayer()))), SelfSelector()))
+        super().__init__("Old Murk-Eye", 4, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MURLOC)
 
     def create_minion(self, player):
-        return Minion(2, 4, charge=True,
-                      effects=[Effect(MinionPlaced(condition=IsType(MINION_TYPE.MURLOC), player=BothPlayer()),
-                                      ChangeAttack(1), SelfSelector()),
-                               Effect(MinionDied(condition=IsType(MINION_TYPE.MURLOC), player=BothPlayer()),
-                                      ChangeAttack(-1), SelfSelector())])
+        return Minion(2, 4, charge=True, buffs=[Buff(ChangeAttack(Count(MinionSelector(IsType(MINION_TYPE.MURLOC),
+                                                                                       BothPlayer()))))])
 
 
 class Dream(Card):

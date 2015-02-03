@@ -2,7 +2,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnStarted
-from hearthbreaker.tags.status import Stealth, Taunt
+from hearthbreaker.tags.status import Stealth, Taunt, Frozen
 import hearthbreaker.targeting
 
 
@@ -23,7 +23,7 @@ class EmergencyCoolant(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.freeze()
+        self.target.add_buff(Buff(Frozen()))
 
 
 class FinickyCloakfield(Card):

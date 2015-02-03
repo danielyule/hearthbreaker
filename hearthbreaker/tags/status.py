@@ -7,11 +7,13 @@ class ChangeAttack(Status, metaclass=Amount):
         super().__init__()
 
     def act(self, actor, target):
-        self.amount = self.get_amount(actor, target)
-        target.attack_delta += self.amount
+        pass
 
     def unact(self, actor, target):
-        target.attack_delta -= self.amount
+        pass
+
+    def update(self, owner, prev_atk):
+        return prev_atk + self.get_amount(owner, owner)
 
     def __to_json__(self):
         return {
@@ -78,22 +80,22 @@ class MinimumHealth(Status):
         }
 
 
-class SetAttack(Status):
-    def __init__(self, attack):
-        self.attack = attack
+class SetAttack(ChangeAttack, metaclass=Amount):
+    def __init__(self):
         self._diff = 0
 
     def act(self, actor, target):
-        self._diff = self.attack - target.calculate_attack()
-        target.attack_delta += self._diff
+        pass
 
     def unact(self, actor, target):
-        target.attack_delta -= self._diff
+        pass
+
+    def update(self, owner, prev_atk):
+        return self.get_amount(owner, owner)
 
     def __to_json__(self):
         return {
             'name': 'set_attack',
-            'attack': self.attack
         }
 
 
@@ -191,6 +193,19 @@ class DivineShield(Status):
     def __to_json__(self):
         return {
             'name': 'divine_shield'
+        }
+
+
+class Frozen(Status):
+    def act(self, actor, target):
+        target.frozen += 1
+
+    def unact(self, actor, target):
+        target.frozen -= 1
+
+    def __to_json__(self):
+        return {
+            "name": "frozen"
         }
 
 
@@ -375,7 +390,7 @@ class MultiplyHealAmount(Status):
         }
 
 
-class IncreaseWeaponAttack(Status):
+class IncreaseWeaponBonus(Status):
     def __init__(self, amount):
         self.amount = amount
 
@@ -387,6 +402,6 @@ class IncreaseWeaponAttack(Status):
 
     def __to_json__(self):
         return {
-            'name': 'increase_weapon_attack',
+            'name': 'increase_weapon_bonus',
             'amount': self.amount
         }

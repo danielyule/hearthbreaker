@@ -2,10 +2,10 @@ import copy
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
-from hearthbreaker.tags.base import BuffUntil
+from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
-from hearthbreaker.tags.status import Immune
+from hearthbreaker.tags.status import Immune, Frozen
 import hearthbreaker.targeting
 
 
@@ -32,7 +32,7 @@ class IceLance(Card):
         if self.target.frozen:
             self.target.damage(4, self)
         else:
-            self.target.freeze()
+            self.target.add_buff(Buff(Frozen()))
 
 
 class MirrorImage(Card):
@@ -63,7 +63,7 @@ class Frostbolt(Card):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(3), self)
-        self.target.freeze()
+        self.target.add_buff(Buff(Frozen()))
 
 
 class ArcaneIntellect(Card):
@@ -84,7 +84,7 @@ class FrostNova(Card):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions:
-            minion.freeze()
+            minion.add_buff(Buff(Frozen()))
 
 
 class Counterspell(SecretCard):
@@ -130,6 +130,8 @@ class MirrorEntity(SecretCard):
     def _reveal(self, minion):
         mirror = minion.copy(self.player)
         mirror.add_to_board(len(self.player.minions))
+        minion.player.trigger("minion_summoned", mirror)
+        minion.player.trigger("after_added", mirror)
         super().reveal()
 
     def activate(self, player):
@@ -207,20 +209,20 @@ class ConeOfCold(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.freeze()
+        self.target.add_buff(Buff(Frozen()))
         index = self.target.index
 
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
             minion.damage(player.effective_spell_damage(1), self)
-            minion.freeze()
+            minion.add_buff(Buff(Frozen()))
 
         self.target.damage(player.effective_spell_damage(1), self)
 
         if self.target.index > 0:
             minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(1), self)
-            minion.freeze()
+            minion.add_buff(Buff(Frozen()))
 
 
 class Fireball(Card):
@@ -262,7 +264,7 @@ class Blizzard(Card):
         super().use(player, game)
         for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
-            minion.freeze()
+            minion.add_buff(Buff(Frozen()))
 
 
 class Flamestrike(Card):

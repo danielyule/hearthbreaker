@@ -48,11 +48,12 @@ class BattlecryType:
             if minion.battlecry:
                 res = BattlecryType.target_type(minion.battlecry)
             elif card.battlecry:
-                for action in card.battlecry.actions:
-                    if isinstance(action, ChangeAttack) or isinstance(action, ChangeHealth):
-                        res = "Friendly"
-                    elif isinstance(action, Damage):
-                        res = "Enemy"
+                for battlecry in card.battlecry:
+                    for action in battlecry.actions:
+                        if isinstance(action, ChangeAttack) or isinstance(action, ChangeHealth):
+                            res = "Friendly"
+                        elif isinstance(action, Damage):
+                            res = "Enemy"
         return res
 
 

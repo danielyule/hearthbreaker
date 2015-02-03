@@ -1,14 +1,14 @@
 import hearthbreaker.cards
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.action import Freeze, AddCard, Give, GiveAura, Damage
+from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
 from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
-    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector
+    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count
 from hearthbreaker.game_objects import MinionCard, Minion
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Frozen
 
 
 class ManaWyrm(MinionCard):
@@ -50,7 +50,7 @@ class WaterElemental(MinionCard):
         super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 6, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])
+        return Minion(3, 6, effects=[Effect(DidDamage(), Give(Frozen()), TargetSelector())])
 
 
 class ArchmageAntonidas(MinionCard):
@@ -66,7 +66,7 @@ class Snowchugger(MinionCard):
         super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])
+        return Minion(2, 3, effects=[Effect(DidDamage(), Give(Frozen()), TargetSelector())])
 
 
 class SpellbenderMinion(MinionCard):
@@ -89,7 +89,7 @@ class GoblinBlastmage(MinionCard):
     def __init__(self):
         super().__init__("Goblin Blastmage", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
                          battlecry=Battlecry(Damage(1), CharacterSelector(None, EnemyPlayer(), RandomPicker(4)),
-                                             GreaterThan(MinionSelector(IsType(MINION_TYPE.MECH)), value=0)))
+                                             GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))), value=0)))
 
     def create_minion(self, player):
         return Minion(5, 4)

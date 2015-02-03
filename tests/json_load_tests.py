@@ -37,7 +37,7 @@ class JSONTester:
                 init_dict['minion_type'] = MINION_TYPE.from_str(card_def['minion_type'])
 
             if 'battlecry' in card_def:
-                init_dict['battlecry'] = Battlecry.from_json(**card_def['battlecry'])
+                init_dict['battlecry'] = tuple(Battlecry.from_json(**battlecry) for battlecry in card_def['battlecry'])
 
             if 'choices' in card_def:
                 init_dict['choices'] = [Choice.from_json(**choice) for choice in card_def['choices']]
@@ -201,21 +201,6 @@ class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
 
 
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
-
-    def test_BloodKnight(self):
-        pass
-
-    def test_BloodsailCorsair(self):
-        pass
-
-    def test_BloodsailRaider(self):
-        pass
-
-    def test_CaptainGreenskin(self):
-        pass
-
-    def test_CaptainsParrot(self):
-        pass
 
     def test_CrazedAlchemist(self):
         pass
