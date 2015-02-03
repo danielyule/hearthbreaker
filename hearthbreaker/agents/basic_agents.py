@@ -23,6 +23,26 @@ class DoNothingBot:
         return options[0]
 
 
+class DoNothingAgent:
+    def __init__(self):
+        self.game = None
+
+    def do_card_check(self, cards):
+        return [True, True, True, True]
+
+    def do_turn(self, player):
+        pass
+
+    def choose_target(self, targets):
+        return targets[0]
+
+    def choose_index(self, card, player):
+        return 0
+
+    def choose_option(self, *options):
+        return options[0]
+
+
 class PredictableBot:
     def __init__(self):
         self.game = None

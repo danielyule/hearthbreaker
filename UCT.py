@@ -24,13 +24,13 @@ from hearthbreaker.constants import *
 from tests.testing_utils import generate_game_for
 from hearthbreaker.agents.basic_agents import DoNothingBot
 # from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.cards.spells.mage import Fireball
+from hearthbreaker.cards.spells.mage import ArcaneMissiles
 # from hearthbreaker.cards.minions.neutral import CairneBloodhoof
-deck1 = Fireball
-deck2 = Fireball
+deck1 = ArcaneMissiles
+deck2 = ArcaneMissiles
 game = generate_game_for(deck1, deck2, DoNothingBot, DoNothingBot)
-game.players[0].hero.health = 7
-game.players[1].hero.health = 7
+game.players[0].hero.health = 6
+game.players[1].hero.health = 6
 game._start_turn()
 """ Currently have some issues with both AIs convinced that they are winning
     so one AI will always pass his turn and the other will just kill him
@@ -62,7 +62,7 @@ class HearthState:
         if self.game.players[1].hero.health <= 0 or self.game.players[0].hero.health <= 0:
             return
 
-        def _choose_target(targets):
+        def _choose_target(targets):   # Can this ever be none?
             return targets[move[4]]
 
         def _choose_index(targets, player):
@@ -94,7 +94,7 @@ class HearthState:
 
     def GetMoves(self):
         """ Get all possible moves from this state.
-            Going to return tuples, untargeted_spell, targetted_spell, equip_weapon,
+            Going to return tuples, untargeted_spell, targeted_spell, equip_weapon,
             play_secret, mininion_attack, hero_attack, hero_power, end_turn
         """
         if self.game.players[1].hero.health <= 0 or self.game.players[0].hero.health <= 0:
@@ -207,6 +207,7 @@ class HearthState:
         """ Get the game result from the viewpoint of playerActive.
         """
         assert self.game.players[0].hero.health <= 0 or self.game.players[1].hero.health <= 0
+        assert self.game.game_ended
         if self.game.players[0].hero.health <= 0 and self.game.players[1].hero.health <= 0:
             return .5
         if self.game.players[player].hero.health <= 0:
@@ -215,13 +216,15 @@ class HearthState:
             return 1
 
     def __repr__(self):
-        s = "[" + str(self.game.players[1].hero.health) + " hp:" + str(len(self.game.players[1].hand)) \
-            + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
-        for minion in copy.copy(self.game.players[1].minions):
-            s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
-        s += "\n[" + str(self.game.players[0].hero.health) + " hp:" + str(len(self.game.players[0].hand)) \
-             + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
+        s = "[" + str(self.game.players[0].hero.health) + " hp:(" + str(self.game.players[0].mana) + "/" \
+        + str(self.game.players[0].max_mana) + "):" + str(len(self.game.players[0].hand)) \
+            + " in hand:" + str(self.game.players[0].deck.left) + " in deck] "
         for minion in copy.copy(self.game.players[0].minions):
+            s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
+        s += "\n[" + str(self.game.players[1].hero.health) + " hp:(" +str(self.game.players[1].mana) + "/" \
+        + str(self.game.players[1].max_mana) + "):" + str(len(self.game.players[1].hand)) \
+             + " in hand:" + str(self.game.players[1].deck.left) + " in deck] "
+        for minion in copy.copy(self.game.players[1].minions):
             s += str(minion.calculate_attack()) + "/" + str(minion.health) + ":"
         s += "\n" + "Current Player: " + str(self.activePlayer)
         return s
@@ -282,8 +285,12 @@ class Node:
         self.childNodes = []
         self.wins = 0
         self.visits = 0
-        self.untriedMoves = state.GetMoves()  # future child nodes
+        if not move or move[0] != "end_turn":
+            self.untriedMoves = state.GetMoves()  # future child nodes
+        else:
+            self.untriedMoves = []  # daniel's fix?
         self.activePlayer = state.activePlayer  # the only part of the state that the Node needs later
+        self.state = state
 
     def UCTSelectChild(self):
         """ Use the UCB1 formula to select a child node. Often a constant UCTK is applied so we have
@@ -310,8 +317,29 @@ class Node:
         self.wins += result
 
     def __repr__(self):
-        return "[M:" + str(self.move) + " P:" + str(int(100 * self.wins / self.visits)) + "% W/V:" \
-               + str(int(self.wins)) + "/" + str(self.visits) + " U:" + str(self.untriedMoves) + "]"
+        t = ""
+        a = ""
+        if self.move == None:
+            return "None"
+        if self.move[2] == None:
+            a += "!!!HOLD ON THIS IS WRONG!!!"
+        elif self.move[2] == self.state.game.other_player.hero:  # Are copies messing this up?
+            a += "Enemy Hero"
+        elif self.move[2] == self.state.game.current_player.hero:
+            a += "Own Hero"
+        else:
+            a += str(self.move[2]) + str(self.state.game.other_player.hero) + str(self.state.game.current_player.hero)
+
+        if self.move[0] == "end_turn":
+            t += "End Turn"
+        elif self.move[0] == "targeted_spell":
+            t += "Cast [" + str(self.move[1].name) + "] on " + a
+        elif self.move[0] == "untargeted_spell":
+            t += "Cast [" + str(self.move[1].name) + "]"
+        
+            
+        return str(int(100 * self.wins / self.visits)) + "% " + t + "     W/V:" \
+               + str(int(self.wins)) + "/" + str(self.visits) + " U:" + str(self.untriedMoves)
 
     def TreeToString(self, indent):
         s = self.IndentString(indent) + str(self)
@@ -331,6 +359,12 @@ class Node:
             s += str(c) + "\n"
         return s
 
+    def clean(self):
+        for child in self.childNodes:
+            child.clean()
+        del self.childNodes
+        del self.parentNode
+        del self.untriedMoves
 
 def UCT(rootstate, itermax, verbose=False):
     """ Conduct a UCT search for itermax iterations starting from rootstate.
@@ -371,8 +405,11 @@ def UCT(rootstate, itermax, verbose=False):
     else:
         print(rootnode.ChildrenToString())
 
-    return sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
-
+    bestmove = sorted(rootnode.childNodes, key=lambda c: c.visits)[-1].move  # return the move that was most visited
+    rootnode.clean()
+    del rootnode
+    
+    return bestmove
 
 def UCTPlayGame():
     """ Play a sample game between two UCT players where each player gets a different number
@@ -383,9 +420,9 @@ def UCTPlayGame():
     while (state.GetMoves() != []):
         print(str(state))
         if state.activePlayer == 1:
-            m = UCT(rootstate=state, itermax=50, verbose=False)  # play with values for itermax and verbose = True
+            m = UCT(rootstate=state, itermax=1000, verbose=False)
         else:
-            m = UCT(rootstate=state, itermax=50, verbose=False)
+            m = UCT(rootstate=state, itermax=1000, verbose=False)
         print("Best Move: " + str(m) + "\n")
         state.DoMove(m)
     if state.GetResult(state.activePlayer) == 1:
