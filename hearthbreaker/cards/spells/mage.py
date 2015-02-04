@@ -1,6 +1,11 @@
 import copy
+from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard
+from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
+from hearthbreaker.tags.base import BuffUntil
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import CurrentPlayer
+from hearthbreaker.tags.status import Immune
 import hearthbreaker.targeting
 
 
@@ -13,7 +18,7 @@ class ArcaneMissiles(Card):
         for i in range(0, player.effective_spell_damage(3)):
             targets = copy.copy(game.other_player.minions)
             targets.append(game.other_player.hero)
-            target = targets[game.random(0, len(targets) - 1)]
+            target = game.random_choice(targets)
             target.damage(1, self)
 
 
@@ -36,19 +41,8 @@ class MirrorImage(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class MirrorImageMinion(MinionCard):
-            def __init__(self):
-                super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, p):
-                minion = Minion(0, 2)
-                minion.taunt = True
-                return minion
-
         for i in range(0, 2):
-            mirror_image = MirrorImageMinion()
-            mirror_image.summon(player, game, len(player.minions))
+            MirrorImageMinion().summon(player, game, len(player.minions))
 
 
 class ArcaneExplosion(Card):
@@ -116,15 +110,16 @@ class IceBarrier(SecretCard):
         super().__init__("Ice Barrier", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, attacker):
-        attacker.player.game.other_player.hero.armor += 8
-        super().reveal()
+    def _reveal(self, attacker, target):
+        if target is self.player.hero and not attacker.removed:
+            attacker.player.game.other_player.hero.armor += 8
+            super().reveal()
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
 
 class MirrorEntity(SecretCard):
@@ -148,35 +143,16 @@ class MirrorEntity(SecretCard):
 
 class Spellbender(SecretCard):
     def __init__(self):
-        super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE,
-                         CARD_RARITY.EPIC)
+        super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
         self.player = None
 
     def _reveal(self, card):
-        if len(self.player.minions) < 7 and card.targetable:
-            class SpellbenderMinion(MinionCard):
-                def __init__(self):
-                    super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL)
-
-                def create_minion(self, p):
-                    return Minion(1, 3)
-
-            def choose_bender(targets):
-                target = old_target(targets)
-                if isinstance(target, Minion):
-                    spell_bender = SpellbenderMinion()
-                    # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
-                    # will not activate if there are too many minions
-                    spell_bender.summon(self.player, self.player.game, len(self.player.minions))
-                    self.player.game.current_player.agent.choose_target = old_target
-                    bender = self.player.minions[-1]
-                    super(Spellbender, self).reveal()
-                    return bender
-                else:
-                    return target
-
-            old_target = self.player.game.current_player.agent.choose_target
-            self.player.game.current_player.agent.choose_target = choose_bender
+        # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
+        # will not activate if there are too many minions
+        if len(self.player.minions) < 7 and isinstance(card.target, Minion):
+            SpellbenderMinion().summon(self.player, self.player.game, len(self.player.minions))
+            card.target = self.player.minions[-1]
+            super().reveal()
 
     def activate(self, player):
         player.game.current_player.bind("spell_cast", self._reveal)
@@ -191,17 +167,17 @@ class Vaporize(SecretCard):
     def __init__(self):
         super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
-    def _reveal(self, attacker):
-        if type(attacker) is Minion and not attacker.removed:
+    def _reveal(self, attacker, target):
+        if target is self.player.hero and type(attacker) is Minion and not attacker.removed:
             attacker.die(self)
             attacker.game.check_delayed()
             super().reveal()
 
     def activate(self, player):
-        player.hero.bind("attacked", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("attacked", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
 
 class IceBlock(SecretCard):
@@ -209,21 +185,18 @@ class IceBlock(SecretCard):
         super().__init__("Ice Block", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
         self.player = None
 
-    def _reveal(self, amount, attacker):
-        hero = self.player.hero
-        if hero.health - amount <= 0:
-            hero.immune = True
-            hero.health += amount
-            # TODO Check if this spell will also prevent damage to armor.
-            super().reveal()
+    def _reveal(self, character, attacker, amount):
+        if isinstance(character, Hero):
+            if character.health - amount <= 0:
+                character.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
+                # TODO Check if this spell will also prevent damage to armor.
+                super().reveal()
 
     def activate(self, player):
-        player.hero.bind("hero_damaged", self._reveal)
-        self.player = player
+        player.bind("pre_damage", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("hero_damaged", self._reveal)
-        self.player = None
+        player.unbind("pre_damage", self._reveal)
 
 
 class ConeOfCold(Card):
@@ -330,3 +303,18 @@ class Duplicate(SecretCard):
             if len(self.player.hand) < 10:
                 self.player.hand.append(type(minion.card)())
         super().reveal()
+
+
+class Flamecannon(Card):
+    def __init__(self):
+        super().__init__("Flamecannon", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
+        target = game.random_choice(targets)
+        target.damage(player.effective_spell_damage(4), self)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1

@@ -1,0 +1,211 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "target": {
+        "player": "p1"
+      },
+      "random": [],
+      "name": "power"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play"
+    },
+    {
+      "target": {
+        "player": "p2"
+      },
+      "random": [],
+      "name": "power"
+    },
+    {
+      "random": [],
+      "name": "concede"
+    },
+    {
+      "random": [],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Priest",
+        "cards": [
+          "Shadowform"
+        ]
+      },
+      {
+        "class": "Priest",
+        "cards": [
+          "Stonetusk Boar"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

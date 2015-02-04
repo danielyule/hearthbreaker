@@ -1,8 +1,9 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import DoNothingBot, PredictableBot
-from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent
+from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
+from hearthbreaker.cards.minions.rogue import AnubarAmbusher
+from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
 from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
@@ -72,8 +73,8 @@ class TestGame(unittest.TestCase):
         deck1 = Deck(card_set1, CHARACTER_CLASS.DRUID)
         deck2 = Deck(card_set2, CHARACTER_CLASS.MAGE)
 
-        agent1 = mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
-        agent2 = mock.Mock(spec=DoNothingBot(), wraps=DoNothingBot())
+        agent1 = mock.Mock(spec=DoNothingAgent(), wraps=DoNothingAgent())
+        agent2 = mock.Mock(spec=DoNothingAgent(), wraps=DoNothingAgent())
         game = Game([deck1, deck2], [agent1, agent2])
 
         game.start()
@@ -82,7 +83,7 @@ class TestGame(unittest.TestCase):
         for secret_type in SecretCard.__subclasses__():
             random.seed(1857)
             secret = secret_type()
-            game = generate_game_for(secret_type, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+            game = generate_game_for(secret_type, StonetuskBoar, CardTestingAgent, DoNothingAgent)
             for turn in range(0, secret.mana * 2 - 2):
                 game.play_single_turn()
 
@@ -124,7 +125,7 @@ class TestGame(unittest.TestCase):
             game.play_single_turn()
 
     def test_physical_hero_attacks(self):
-        game = generate_game_for(Naturalize, ArcaneIntellect, PredictableBot, PredictableBot)
+        game = generate_game_for(Naturalize, ArcaneIntellect, PredictableAgent, PredictableAgent)
         for turn in range(0, 4):
             game.play_single_turn()
 
@@ -132,8 +133,22 @@ class TestGame(unittest.TestCase):
         self.assertEqual(0, game.other_player.hero.armor)
         self.assertEqual(29, game.current_player.hero.health)
 
+    def test_hero_weapon_sheath(self):
+        game = generate_game_for(AnubarAmbusher, StonetuskBoar, PredictableAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)
+
     def test_deathrattle_ordering(self):
-        game = generate_game_for(SylvanasWindrunner, [Abomination, NerubianEgg], MinionPlayingAgent, MinionPlayingAgent)
+        game = generate_game_for(SylvanasWindrunner, [Abomination, NerubianEgg],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()

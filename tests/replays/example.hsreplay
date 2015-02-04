@@ -1,0 +1,118 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "target": {
+        "minion": 0,
+        "player": "p1"
+      },
+      "name": "play",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p1"
+      },
+      "target": {
+        "player": "p2"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "concede"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Mage",
+        "cards": [
+          "Stonetusk Boar"
+        ]
+      },
+      {
+        "class": "Druid",
+        "cards": [
+          "Naturalize"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        1,
+        3
+      ]
+    ]
+  }
+}

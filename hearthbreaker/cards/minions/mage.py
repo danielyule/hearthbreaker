@@ -1,6 +1,14 @@
 import hearthbreaker.cards
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import MinionCard, Minion, SecretCard
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.tags.action import Freeze, AddCard, Give, GiveAura, Damage
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Effect, Aura, Battlecry
+from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType
+from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
+from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
+    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector
+from hearthbreaker.game_objects import MinionCard, Minion
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange
 
 
 class ManaWyrm(MinionCard):
@@ -8,13 +16,7 @@ class ManaWyrm(MinionCard):
         super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def increase_attack(card):
-            minion.change_attack(1)
-
-        minion = Minion(1, 3)
-        player.bind("spell_cast", increase_attack)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast", increase_attack))
-        return minion
+        return Minion(1, 3, effects=[Effect(SpellCast(), ChangeAttack(1), SelfSelector())])
 
 
 class SorcerersApprentice(MinionCard):
@@ -22,49 +24,16 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = 1
-                self.filter = lambda c: c.is_spell()
-                self.min = 0
-
-        mana_filter = Filter()
-        minion = Minion(3, 2)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
-        player.mana_filters.append(mana_filter)
-        return minion
+        return Minion(3, 2, auras=[Aura(ManaChange(1, 0, SpellSelector()), PlayerSelector())])
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
-        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+        super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
+                         battlecry=Battlecry(GiveAura([ManaAura(100, 0, SecretSelector(), True)]), PlayerSelector()))
 
     def create_minion(self, player):
-        def first_secret_cost_zero(m):
-            class Filter:
-                def __init__(self):
-                    # To make sure that no matter what the cost of a secret, it
-                    # will be 0
-                    self.amount = 100
-                    self.filter = lambda c: type(c) in SecretCard.__subclasses__()
-                    self.min = 0
-
-            def card_used(card):
-                if type(card) in SecretCard.__subclasses__():
-                    player.unbind("card_used", card_used)
-                    player.unbind("turn_ended", turn_ended)
-                    player.mana_filters.remove(mana_filter)
-
-            def turn_ended():
-                player.unbind("card_used", card_used)
-                player.mana_filters.remove(mana_filter)
-
-            mana_filter = Filter()
-            player.bind("card_used", card_used)
-            player.bind_once("turn_ended", turn_ended)
-            player.mana_filters.append(mana_filter)
-
-        return Minion(4, 3, battlecry=first_secret_cost_zero)
+        return Minion(4, 3)
 
 
 class EtherealArcanist(MinionCard):
@@ -72,18 +41,8 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def increase_stats():
-            if len(player.secrets) > 0:
-                minion.change_attack(2)
-                minion.increase_health(2)
-
-        def silence():
-            player.unbind("turn_ended", increase_stats)
-
-        minion = Minion(3, 3)
-        player.bind("turn_ended", increase_stats)
-        minion.bind_once("silenced", silence)
-        return minion
+        return Minion(3, 3, effects=[Effect(TurnEnded(HasSecret()), Give(ChangeAttack(2)), SelfSelector()),
+                                     Effect(TurnEnded(HasSecret()), Give(ChangeHealth(2)), SelfSelector())])
 
 
 class WaterElemental(MinionCard):
@@ -91,12 +50,7 @@ class WaterElemental(MinionCard):
         super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def did_damage(amount, target):
-            target.freeze()
-
-        minion = Minion(3, 6)
-        minion.bind("did_damage", did_damage)
-        return minion
+        return Minion(3, 6, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])
 
 
 class ArchmageAntonidas(MinionCard):
@@ -104,11 +58,46 @@ class ArchmageAntonidas(MinionCard):
         super().__init__("Archmage Antonidas", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def add_fireball(c):
-            if len(player.hand) < 10:
-                player.hand.append(hearthbreaker.cards.Fireball())
+        return Minion(5, 7, effects=[Effect(SpellCast(), AddCard(hearthbreaker.cards.Fireball()), PlayerSelector())])
 
-        minion = Minion(5, 7)
-        player.bind("spell_cast", add_fireball)
-        minion.bind_once("silenced", lambda: player.unbind("spell_cast", add_fireball))
-        return minion
+
+class Snowchugger(MinionCard):
+    def __init__(self):
+        super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(2, 3, effects=[Effect(DidDamage(), Freeze(), TargetSelector())])
+
+
+class SpellbenderMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Spellbender (minion)")
+
+    def create_minion(self, p):
+        return Minion(1, 3)
+
+
+class MirrorImageMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Mirror Image (minion)")
+
+    def create_minion(self, p):
+        return Minion(0, 2, taunt=True)
+
+
+class GoblinBlastmage(MinionCard):
+    def __init__(self):
+        super().__init__("Goblin Blastmage", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Damage(1), CharacterSelector(None, EnemyPlayer(), RandomPicker(4)),
+                                             GreaterThan(MinionSelector(IsType(MINION_TYPE.MECH)), value=0)))
+
+    def create_minion(self, player):
+        return Minion(5, 4)
+
+
+class SootSpewer(MinionCard):
+    def __init__(self):
+        super().__init__("Soot Spewer", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 3, spell_damage=1)

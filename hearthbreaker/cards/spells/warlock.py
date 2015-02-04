@@ -1,10 +1,12 @@
 import copy
-
+from hearthbreaker.tags.action import Kill
+from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.event import TurnStarted, TurnEnded
+from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, Minion, MinionCard, Hero
-from hearthbreaker.cards.minions.warlock import VoidWalker, FlameImp, DreadInfernal, \
-    Succubus, Felguard, BloodImp
+from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
 
 
 class MortalCoil(Card):
@@ -60,7 +62,7 @@ class DrainLife(Card):
 
 class Soulfire(Card):
     def __init__(self):
-        super().__init__("Soulfire", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+        super().__init__("Soulfire", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -129,33 +131,23 @@ class SenseDemons(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class WorthlessImp(MinionCard):
-            def __init__(self):
-                super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
-
-            def create_minion(self, p):
-                return Minion(1, 1)
-
-        minions = []
-        for i in range(0, 30):
-            if (not game.current_player.deck.used[i] and isinstance(game.current_player.deck.cards[i], MinionCard) and
-                    game.current_player.deck.cards[i].minion_type == MINION_TYPE.DEMON):
-                minions.append(i)
-
         for i in range(0, 2):
-            if len(minions) > 0:
-                index = minions.pop(game.random(0, len(minions) - 1))
-                player.deck.used[index] = True
+            demon_card = game.random_draw(game.current_player.deck.cards,
+                                          lambda c: not c.drawn and
+                                          isinstance(c, MinionCard) and
+                                          c.minion_type == MINION_TYPE.DEMON)
+            if demon_card:
+                demon_card.drawn = True
                 player.deck.left -= 1
                 if len(player.hand) < 10:
-                    player.hand.append(player.deck.cards[index])
-                    self.trigger("card_drawn", player.deck.cards[index])
+                    player.hand.append(demon_card)
+                    self.trigger("card_drawn", demon_card)
                 else:
-                    player.trigger("card_destroyed", player.deck.cards[index])
+                    player.trigger("card_destroyed", demon_card)
             else:
                 if len(player.hand) < 10:
-                    player.hand.append(WorthlessImp())
-                    self.trigger("card_drawn", WorthlessImp())
+                    player.hand.append(hearthbreaker.cards.minions.warlock.WorthlessImp())
+                    self.trigger("card_drawn", hearthbreaker.cards.minions.warlock.WorthlessImp())
 
 
 class BaneOfDoom(Card):
@@ -165,8 +157,8 @@ class BaneOfDoom(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        demon_list = [BloodImp, VoidWalker, FlameImp, DreadInfernal, Succubus, Felguard]
-        card = demon_list[game.random(0, len(demon_list) - 1)]
+        demon_list = [BloodImp, Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard]
+        card = game.random_choice(demon_list)
         if self.target.health <= player.effective_spell_damage(2) and \
                 (isinstance(self.target, Minion) and not self.target.divine_shield):
             self.target.damage(player.effective_spell_damage(2), self)
@@ -182,7 +174,7 @@ class Shadowflame(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        shadowflame_damage = self.target.calculate_attack() + self.target.temp_attack
+        shadowflame_damage = self.target.calculate_attack()
         self.target.die(self)
         for minion in game.other_player.minions:
             minion.damage(player.effective_spell_damage(shadowflame_damage),
@@ -196,13 +188,7 @@ class Corruption(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        def death():
-            self.target.die(None)
-            game.check_delayed()
-
-        player.bind("turn_started", death)
-        self.target.bind_once("silenced", lambda: player.unbind("turn_started", death))
+        self.target.add_effect(Effect(TurnStarted(player=EnemyPlayer()), Kill(), SelfSelector()))
 
 
 class PowerOverwhelming(Card):
@@ -213,10 +199,31 @@ class PowerOverwhelming(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        def death():
-            self.target.die(None)
-
-        player.bind_once("turn_ended", death)
-        self.target.bind_once("silenced", lambda: player.unbind("turn_ended", death))
+        self.target.add_effect(Effect(TurnEnded(), Kill(), SelfSelector()))
         self.target.change_attack(4)
         self.target.increase_health(4)
+
+
+class Darkbomb(Card):
+    def __init__(self):
+        super().__init__("Darkbomb", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(player.effective_spell_damage(3), self)
+
+
+class Demonheart(Card):
+    def __init__(self):
+        super().__init__("Demonheart", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(player.game.current_player.minions)
+        if self.target.card.minion_type is MINION_TYPE.DEMON and self.target in targets:
+            self.target.change_attack(5)
+            self.target.increase_health(5)
+        else:
+            self.target.damage(player.effective_spell_damage(5), self)

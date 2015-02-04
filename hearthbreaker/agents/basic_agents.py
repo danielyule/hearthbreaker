@@ -1,9 +1,33 @@
+import abc
 import copy
 
 import random
 
 
-class DoNothingBot:
+class Agent(metaclass=abc.ABCMeta):
+
+    @abc.abstractmethod
+    def do_card_check(self, cards):
+        pass
+
+    @abc.abstractmethod
+    def do_turn(self, player):
+        pass
+
+    @abc.abstractmethod
+    def choose_target(self, targets):
+        pass
+
+    @abc.abstractmethod
+    def choose_index(self, card, player):
+        pass
+
+    @abc.abstractmethod
+    def choose_option(self, *options):
+        pass
+
+
+class DoNothingAgent(Agent):
     def __init__(self):
         self.game = None
 
@@ -23,30 +47,7 @@ class DoNothingBot:
         return options[0]
 
 
-class DoNothingAgent:
-    def __init__(self):
-        self.game = None
-
-    def do_card_check(self, cards):
-        return [True, True, True, True]
-
-    def do_turn(self, player):
-        pass
-
-    def choose_target(self, targets):
-        return targets[0]
-
-    def choose_index(self, card, player):
-        return 0
-
-    def choose_option(self, *options):
-        return options[0]
-
-
-class PredictableBot:
-    def __init__(self):
-        self.game = None
-
+class PredictableAgent(Agent):
     def do_card_check(self, cards):
         return [True, True, True, True]
 
@@ -61,10 +62,11 @@ class PredictableBot:
 
         while done_something:
             done_something = False
-            for card in copy.copy(player.hand):
+            for card in player.hand:
                 if card.can_use(player, player.game):
                     player.game.play_card(card)
                     done_something = True
+                    break
 
         for minion in copy.copy(player.minions):
             if minion.can_attack():
@@ -80,7 +82,7 @@ class PredictableBot:
         return options[0]
 
 
-class RandomAgent(DoNothingBot):
+class RandomAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()
 
@@ -113,53 +115,6 @@ class RandomAgent(DoNothingBot):
 
     def choose_index(self, card, player):
         return random.randint(0, len(player.minions))
-
-    def choose_option(self, *options):
-        return options[random.randint(0, len(options) - 1)]
-
-
-class RandomBot:
-    def __init__(self):
-        self.game = None
-
-    def do_card_check(self, cards):
-        return [True, True, True, True]
-
-    def do_turn(self, player):
-        def get_move_list():
-            if player.hero.power.can_use():
-                move_list.append(player.hero.power.use())
-
-            if player.hero.can_attack():
-                move_list.append(player.hero.attack())
-
-            for minion in copy.copy(player.minions):
-                if minion.can_attack():
-                    move_list.append(minion.attack())
-
-            for card in copy.copy(player.hand):
-                if card.can_use(player, self.game):
-                    move_list.append(self.game.play_card(card))
-
-        move_list = []
-        turn_ended = True
-        while turn_ended:
-            get_move_list()
-            if len(move_list) == 0:
-                turn_ended = False
-            if random.randint(0, len(move_list)) == 0:
-                turn_ended = False
-            if len(move_list) > 0:
-                move_list.pop(random.randint(0, len(move_list) - 1))
-
-    def set_game(self, game):
-        self.game = game
-
-    def choose_target(self, targets):
-        return targets[random.randint(0, len(targets) - 1)]
-
-    def choose_index(self, card):
-        return 0
 
     def choose_option(self, *options):
         return options[random.randint(0, len(options) - 1)]

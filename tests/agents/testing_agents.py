@@ -1,28 +1,21 @@
 import copy
-from hearthbreaker.agents.basic_agents import DoNothingBot
+from hearthbreaker.agents.basic_agents import DoNothingAgent
 
 
-class SpellTestingAgent(DoNothingBot):
+class CardTestingAgent(DoNothingAgent):
     def __init__(self, play_on=1):
         super().__init__()
-        self.play_on = play_on
-        self.turn = 0
+
         self.player = None
 
     def do_turn(self, player):
-        self.turn += 1
+
         self.player = player
-        while self.turn >= self.play_on and len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
+        while len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
             player.game.play_card(player.hand[0])
 
 
-class OneSpellTestingAgent(DoNothingBot):
-    def do_turn(self, player):
-        if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
-            player.game.play_card(player.hand[0])
-
-
-class SelfSpellTestingAgent(SpellTestingAgent):
+class SelfSpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 
@@ -30,7 +23,7 @@ class SelfSpellTestingAgent(SpellTestingAgent):
         return self.player.game.current_player.hero
 
 
-class EnemySpellTestingAgent(SpellTestingAgent):
+class EnemySpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 
@@ -38,7 +31,7 @@ class EnemySpellTestingAgent(SpellTestingAgent):
         return self.player.game.other_player.hero
 
 
-class EnemyMinionSpellTestingAgent(SpellTestingAgent):
+class EnemyMinionSpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()
 
@@ -46,7 +39,7 @@ class EnemyMinionSpellTestingAgent(SpellTestingAgent):
         return self.player.game.other_player.minions[0]
 
 
-class MinionPlayingAgent(DoNothingBot):
+class OneCardPlayingAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()
 
@@ -57,7 +50,21 @@ class MinionPlayingAgent(DoNothingBot):
             player.game.play_card(player.hand[0])
 
 
-class MinionAttackingAgent(MinionPlayingAgent):
+class HeroPowerAndOneCardPlayingAgent(DoNothingAgent):
+    def __init__(self):
+        super().__init__()
+
+    def do_turn(self, player):
+        if player.hero.power.can_use():
+            player.hero.power.use()
+
+        if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
+            if player.hand[0].name == "The Coin":
+                player.game.play_card(player.hand[0])
+            player.game.play_card(player.hand[0])
+
+
+class MinionAttackingAgent(OneCardPlayingAgent):
     def do_turn(self, player):
         super().do_turn(player)
         for minion in copy.copy(player.minions):
@@ -65,7 +72,7 @@ class MinionAttackingAgent(MinionPlayingAgent):
                 minion.attack()
 
 
-class WeaponTestingAgent(DoNothingBot):
+class WeaponTestingAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()
         self.played_card = False
@@ -79,7 +86,7 @@ class WeaponTestingAgent(DoNothingBot):
             player.hero.attack()
 
 
-class PredictableAgentWithoutHeroPower(DoNothingBot):
+class PlayAndAttackAgent(DoNothingAgent):
     def do_turn(self, player):
 
         while len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
@@ -88,6 +95,11 @@ class PredictableAgentWithoutHeroPower(DoNothingBot):
         while player.hero.can_attack():
             player.hero.attack()
 
-        for minion in copy.copy(player.minions):
-            if minion.can_attack():
-                minion.attack()
+        done_something = True
+        while done_something:
+            done_something = False
+            for minion in player.minions:
+                if minion.can_attack():
+                    done_something = True
+                    minion.attack()
+                    break

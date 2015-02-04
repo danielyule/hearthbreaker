@@ -1,7 +1,12 @@
 import copy
+from hearthbreaker.tags.action import Summon
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Deathrattle, Buff
+from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector
+from hearthbreaker.tags.status import Windfury as _Windfury
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, Minion, MinionCard
+from hearthbreaker.game_objects import Card
 
 
 class AncestralHealing(Card):
@@ -23,20 +28,8 @@ class AncestralSpirit(Card):
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        def apply_deathrattle(minion):
-            def resurrection(*args):
-                if old_death_rattle is not None:
-                    old_death_rattle(*args)
-
-                minion = self.target.card
-                minion.summon(player, game, len(player.minions))
-
-            old_death_rattle = minion.deathrattle
-            minion.deathrattle = resurrection
-
         super().use(player, game)
-
-        apply_deathrattle(self.target)
+        self.target.deathrattle.append(Deathrattle(Summon(self.target.card), PlayerSelector()))
 
 
 class Bloodlust(Card):
@@ -47,7 +40,7 @@ class Bloodlust(Card):
         super().use(player, game)
 
         for minion in player.minions:
-            minion.temp_attack += 3
+            minion.change_temp_attack(3)
 
 
 class EarthShock(Card):
@@ -67,24 +60,16 @@ class FarSight(Card):
         super().__init__("Far Sight", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self, card):
-                self.amount = 3
-                self.filter = lambda c: c is card
-                self.min = 0
-
         def reduce_cost(card):
-            nonlocal filter
-            filter = Filter(card)
-            player.unbind("card_drawn", reduce_cost)
+            nonlocal aura
+            aura = ManaAura(3, 0, SpecificCardSelector(card), True, False)
 
         super().use(player, game)
-
-        filter = None
-        player.bind("card_drawn", reduce_cost)
+        aura = None
+        player.bind_once("card_drawn", reduce_cost)
         player.draw()
-        if filter is not None:
-            player.mana_filters.append(filter)
+        if aura is not None:
+            player.add_aura(aura)
 
 
 class FeralSpirit(Card):
@@ -94,17 +79,8 @@ class FeralSpirit(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class SpiritWolf(MinionCard):
-            def __init__(self):
-                super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, p):
-                minion = Minion(2, 3)
-                minion.taunt = True
-                return minion
-
         for i in range(0, 2):
-            spirit_wolf = SpiritWolf()
+            spirit_wolf = hearthbreaker.cards.minions.shaman.SpiritWolf()
             spirit_wolf.summon(player, game, len(player.minions))
 
 
@@ -115,10 +91,11 @@ class ForkedLightning(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        targets = copy.copy(game.other_player.minions)
+        minions = copy.copy(game.other_player.minions)
         for i in range(0, 2):
-            target = targets.pop(game.random(0, len(targets) - 1))
-            target.damage(player.effective_spell_damage(2), self)
+            minion = game.random_choice(minions)
+            minions.remove(minion)
+            minion.damage(player.effective_spell_damage(3), self)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
@@ -144,14 +121,7 @@ class Hex(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Frog(MinionCard):
-            def __init__(self):
-                super().__init__("Frog", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-            def create_minion(self, p):
-                return Minion(0, 1, taunt=True)
-
-        frog = Frog()
+        frog = hearthbreaker.cards.minions.neutral.Frog()
         minion = frog.create_minion(None)
         minion.card = frog
         self.target.replace(minion)
@@ -187,7 +157,7 @@ class LightningStorm(Card):
         super().use(player, game)
 
         for minion in copy.copy(game.other_player.minions):
-            minion.damage(player.effective_spell_damage(game.random(2, 3)), self)
+            minion.damage(player.effective_spell_damage(game.random_amount(2, 3)), self)
 
 
 class RockbiterWeapon(Card):
@@ -197,7 +167,6 @@ class RockbiterWeapon(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
         self.target.change_temp_attack(3)
 
 
@@ -221,7 +190,7 @@ class Windfury(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.windfury = True
+        self.target.add_buff(Buff(_Windfury()))
 
 
 class Reincarnate(Card):
@@ -235,3 +204,14 @@ class Reincarnate(Card):
         self.target.die(self)
         game.check_delayed()
         self.target.card.summon(self.target.player, game, len(self.target.player.minions))
+
+
+class Crackle(Card):
+    def __init__(self):
+        super().__init__("Crackle", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_spell_target, overload=1)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.damage(player.effective_spell_damage(game.random_amount(3, 6)), self)

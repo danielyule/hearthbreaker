@@ -1,12 +1,12 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import PredictableBot, DoNothingBot
+from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.game_objects import Game
-from hearthbreaker.replay import SavedGame
-from tests.agents.testing_agents import SpellTestingAgent, MinionPlayingAgent, MinionAttackingAgent,\
-    OneSpellTestingAgent, EnemySpellTestingAgent
+from hearthbreaker.replay import playback, Replay
+from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, EnemySpellTestingAgent, \
+    MinionAttackingAgent, PlayAndAttackAgent
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.cards import *
 
@@ -16,7 +16,7 @@ class TestMage(unittest.TestCase):
         random.seed(1857)
 
     def test_ArcaneMissiles(self):
-        game = generate_game_for(MogushanWarden, ArcaneMissiles, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, ArcaneMissiles, OneCardPlayingAgent, CardTestingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -38,7 +38,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(4, game.other_player.minions[0].health)
 
     def test_ArcaneMissilesWithSpellPower(self):
-        game = SavedGame("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.rep")
+        game = playback(Replay("tests/replays/card_tests/ArcaneMissilesWithSpellDamage.hsreplay"))
         game.start()
 
         self.assertEqual(1, len(game.current_player.minions))
@@ -50,7 +50,7 @@ class TestMage(unittest.TestCase):
         return game
 
     def test_WaterElemental(self):
-        game = generate_game_for(WaterElemental, StonetuskBoar, PredictableBot, DoNothingBot)
+        game = generate_game_for(WaterElemental, StonetuskBoar, PredictableAgent, DoNothingAgent)
 
         for turn in range(0, 11):
             game.play_single_turn()
@@ -74,24 +74,24 @@ class TestMage(unittest.TestCase):
 
         # Now make sure that attacking the Water Elemental directly will freeze a character
         random.seed(1857)
-        game = generate_game_for(WaterElemental, IronbarkProtector, MinionPlayingAgent, PredictableBot)
+        game = generate_game_for(WaterElemental, IronbarkProtector, OneCardPlayingAgent, PredictableAgent)
         for turn in range(0, 8):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.minions[0].health)
-        # The player won't have taken damage because of armor, and so shouldn't be frozen
+        # The player won't have taken damage because of armor, but should still be frozen
         self.assertEqual(30, game.current_player.hero.health)
-        self.assertFalse(game.current_player.hero.frozen)
-
-        game.play_single_turn()
-        game.play_single_turn()
-
-        self.assertEqual(28, game.current_player.hero.health)
         self.assertTrue(game.current_player.hero.frozen)
 
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The player should still be frozen from last turn, and so shouldn't have attacked
+        self.assertEqual(30, game.current_player.hero.health)
+
     def test_IceLance(self):
-        game = generate_game_for(IceLance, OasisSnapjaw, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(IceLance, OasisSnapjaw, CardTestingAgent, OneCardPlayingAgent)
         game.play_single_turn()
 
         self.assertTrue(game.other_player.hero.frozen)
@@ -114,7 +114,7 @@ class TestMage(unittest.TestCase):
         deck1 = StackedDeck([ManaWyrm(), IceLance(), ManaWyrm(), IceLance(), IceLance(), IceLance()],
                             CHARACTER_CLASS.MAGE)
         deck2 = StackedDeck([IronbeakOwl()], CHARACTER_CLASS.PALADIN)
-        game = Game([deck1, deck2], [SpellTestingAgent(), MinionPlayingAgent()])
+        game = Game([deck1, deck2], [CardTestingAgent(), OneCardPlayingAgent()])
         game.pre_game()
         game.current_player = 1
 
@@ -146,7 +146,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[1].calculate_max_health())
 
     def test_MirrorImage(self):
-        game = generate_game_for(MirrorImage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(MirrorImage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(0, game.current_player.minions[0].calculate_attack())
@@ -162,7 +162,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, game.current_player.minions[1].card.mana)
 
     def test_ArcaneExplosion(self):
-        game = generate_game_for(BloodfenRaptor, ArcaneExplosion, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(BloodfenRaptor, ArcaneExplosion, OneCardPlayingAgent, CardTestingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -181,7 +181,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
 
     def test_Frostbolt(self):
-        game = generate_game_for(OasisSnapjaw, Frostbolt, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(OasisSnapjaw, Frostbolt, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -199,7 +199,7 @@ class TestMage(unittest.TestCase):
 
     def test_SorcerersApprentice(self):
         game = generate_game_for([SorcerersApprentice, ArcaneMissiles, SorcerersApprentice, Frostbolt, Frostbolt,
-                                  Frostbolt], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+                                  Frostbolt], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -227,14 +227,14 @@ class TestMage(unittest.TestCase):
         self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
 
     def test_ArcaneIntellect(self):
-        game = generate_game_for(ArcaneIntellect, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(ArcaneIntellect, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
         self.assertEqual(7, len(game.current_player.hand))
 
     def test_FrostNova(self):
-        game = generate_game_for(FrostNova, StonetuskBoar, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(FrostNova, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -244,7 +244,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.hero.frozen)
 
     def test_Counterspell(self):
-        game = generate_game_for(Counterspell, Frostbolt, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(Counterspell, Frostbolt, CardTestingAgent, CardTestingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -259,7 +259,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.secrets))
 
     def test_IceBarrier(self):
-        game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, PredictableBot)
+        game = generate_game_for(IceBarrier, StonetuskBoar, CardTestingAgent, PredictableAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -267,7 +267,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
 
         game.play_single_turn()
-        # only one minion because PredictableBot will shoot its own minions if there isn't anything else to shoot.
+        # only one minion because PredictableAgent will shoot its own minions if there isn't anything else to shoot.
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(7, game.other_player.hero.armor)
 
@@ -276,7 +276,7 @@ class TestMage(unittest.TestCase):
 
         # Make sure we can't have two identical secrets at the same time
         random.seed(1857)
-        game = generate_game_for(IceBarrier, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(IceBarrier, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 6):
             game.play_single_turn()
 
@@ -288,7 +288,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Ice Barrier", game.current_player.secrets[0].name)
 
     def test_IceBlock(self):
-        game = generate_game_for(IceBlock, Frostbolt, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for([IceBlock, Deathwing], Frostbolt, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 12):
             game.play_single_turn()
@@ -301,8 +301,13 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.other_player.hero.health)
         self.assertEqual(0, len(game.other_player.secrets))
 
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertTrue(game.game_ended)
+
     def test_MirrorEntity(self):
-        game = generate_game_for([StonetuskBoar, MirrorEntity], IronfurGrizzly, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for([StonetuskBoar, MirrorEntity], IronfurGrizzly, CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 5):
             game.play_single_turn()
@@ -316,7 +321,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[1].index)
 
     def test_Spellbender(self):
-        game = generate_game_for([Spellbender, Wisp], Moonfire, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for([Spellbender, Wisp], Moonfire, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -329,7 +334,7 @@ class TestMage(unittest.TestCase):
 
         # Now make sure it won't work when the hero is targeted
         random.seed(1857)
-        game = generate_game_for(Spellbender, Moonfire, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(Spellbender, Moonfire, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -340,7 +345,7 @@ class TestMage(unittest.TestCase):
 
         # Now make sure it doesn't activate when a non-targeted spell is used
         random.seed(1857)
-        game = generate_game_for(Spellbender, ArcaneIntellect, SpellTestingAgent, SpellTestingAgent)
+        game = generate_game_for(Spellbender, ArcaneIntellect, CardTestingAgent, CardTestingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -349,8 +354,59 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(1, len(game.other_player.secrets))
 
+    def test_SpellbenderFullBoard(self):
+        game = generate_game_for([Spellbender, Onyxia], Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(7, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(6, len(game.other_player.minions))
+        self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_Spellbender_full_board_target_hero(self):
+        game = generate_game_for(BaneOfDoom, [Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Wisp, Spellbender],
+                                 OneCardPlayingAgent, CardTestingAgent)
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+        game.other_player.agent.choose_target = lambda targets: game.players[1].hero
+
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual(28, game.other_player.hero.health)
+        self.assertEqual(1, len(game.other_player.secrets))
+
+    def test_Spellbender_target_hero_and_attack(self):
+        game = generate_game_for([Spellbender, OasisSnapjaw], [LavaBurst, Wisp, Loatheb],
+                                 OneCardPlayingAgent, PlayAndAttackAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.minions))
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(25, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(25, game.other_player.hero.health)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(6, game.other_player.minions[0].health)
+        self.assertEqual(1, len(game.other_player.secrets))
+
     def test_Vaporize(self):
-        game = generate_game_for(Vaporize, FaerieDragon, SpellTestingAgent, MinionAttackingAgent)
+        game = generate_game_for(Vaporize, FaerieDragon, CardTestingAgent, MinionAttackingAgent)
         for turn in range(0, 6):
             game.play_single_turn()
 
@@ -359,7 +415,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(30, game.other_player.hero.health)
 
         random.seed(1857)
-        game = generate_game_for(Vaporize, Swipe, SpellTestingAgent, PredictableBot)
+        game = generate_game_for(Vaporize, Swipe, CardTestingAgent, PredictableAgent)
         for turn in range(0, 6):
             game.play_single_turn()
 
@@ -369,7 +425,8 @@ class TestMage(unittest.TestCase):
 
     def test_KirinTorMage(self):
 
-        game = generate_game_for([KirinTorMage, Vaporize, Spellbender], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for([KirinTorMage, Vaporize, Spellbender], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -381,7 +438,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Spellbender", game.current_player.hand[0].name)
 
         random.seed(1857)
-        game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        game = generate_game_for([KirinTorMage, Vaporize], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 5):
             game.play_single_turn()
 
@@ -392,7 +449,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Vaporize", game.current_player.hand[2].name)
 
     def test_EtherealArcanist(self):
-        game = generate_game_for([Spellbender, EtherealArcanist], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for([Spellbender, EtherealArcanist], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -426,7 +483,7 @@ class TestMage(unittest.TestCase):
 
         # Test when the player has no secrets at all
         random.seed(1857)
-        game = generate_game_for(EtherealArcanist, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(EtherealArcanist, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -437,8 +494,8 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.current_player.minions[0].calculate_max_health())
 
     def test_ConeOfCold(self):
-        game = generate_game_for(ConeOfCold, [StonetuskBoar, BloodfenRaptor, BloodfenRaptor], SpellTestingAgent,
-                                 MinionPlayingAgent)
+        game = generate_game_for(ConeOfCold, [StonetuskBoar, BloodfenRaptor, BloodfenRaptor], CardTestingAgent,
+                                 OneCardPlayingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -467,7 +524,7 @@ class TestMage(unittest.TestCase):
         self.assertFalse(game.other_player.minions[1].frozen)
 
     def test_Fireball(self):
-        game = generate_game_for([Fireball, KoboldGeomancer], StonetuskBoar, EnemySpellTestingAgent, DoNothingBot)
+        game = generate_game_for([Fireball, KoboldGeomancer], StonetuskBoar, EnemySpellTestingAgent, DoNothingAgent)
         for turn in range(0, 7):
             game.play_single_turn()
 
@@ -479,7 +536,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(17, game.other_player.hero.health)
 
     def test_Polymorph(self):
-        game = generate_game_for(MogushanWarden, Polymorph, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for(MogushanWarden, Polymorph, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -499,7 +556,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)
 
     def test_Blizzard(self):
-        game = generate_game_for(Blizzard, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(Blizzard, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 10):
             game.play_single_turn()
 
@@ -517,7 +574,7 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.other_player.minions[1].frozen)
 
     def test_Flamestrike(self):
-        game = generate_game_for(Flamestrike, MogushanWarden, SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(Flamestrike, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
         for turn in range(0, 12):
             game.play_single_turn()
 
@@ -533,7 +590,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[2].health)
 
     def test_Pyroblast(self):
-        game = generate_game_for(Pyroblast, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(Pyroblast, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 18):
             game.play_single_turn()
 
@@ -542,7 +599,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(20, game.other_player.hero.health)
 
     def test_ArchmageAntonidas(self):
-        game = generate_game_for([ArchmageAntonidas, Vaporize], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for([ArchmageAntonidas, Vaporize], StonetuskBoar, CardTestingAgent, DoNothingAgent)
         for turn in range(0, 12):
             game.play_single_turn()
 
@@ -555,7 +612,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Fireball", game.current_player.hand[9].name)
 
     def test_Duplicate(self):
-        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, MinionPlayingAgent, SpellTestingAgent)
+        game = generate_game_for([BloodfenRaptor, Duplicate], ShadowBolt, OneCardPlayingAgent, CardTestingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -564,3 +621,123 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[4].name)
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
+
+    def test_Snowchugger(self):
+        game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, DoNothingAgent)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.other_player.hero.health)
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertFalse(game.other_player.hero.frozen)
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual("Snowchugger", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(25, game.other_player.hero.health)
+
+        # Always false after the end of a turn
+        self.assertFalse(game.other_player.hero.frozen_this_turn)
+        self.assertTrue(game.other_player.hero.frozen)
+
+        # Now make sure that attacking the Snowchugger directly will freeze a character
+        random.seed(1857)
+        game = generate_game_for(Snowchugger, IronbarkProtector, OneCardPlayingAgent, PredictableAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].health)
+        # The player should be frozen because of weapon attack
+        self.assertEqual(29, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.frozen)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The player should still be frozen from last turn, and thus shouldn't have attacked
+        self.assertEqual(29, game.current_player.hero.health)
+
+        # If Snowchugger gets 0 attack, and is being attacked so will the minion NOT be frozen since no damage was dealt
+        game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, PredictableAgent)
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual("Snowchugger", game.players[1].minions[0].card.name)
+        # Cheat
+        game.players[1].minions[0].base_attack = 0
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
+
+        # Stonetusk should have attacked the Snowchugger, and will NOT be frozen since they didn't take damage
+        game.play_single_turn()
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertFalse(game.players[0].minions[0].frozen_this_turn)
+        self.assertFalse(game.players[0].minions[0].frozen)
+
+    def test_GoblinBlastmage(self):
+        game = generate_game_for([GoblinBlastmage, ClockworkGnome, GoblinBlastmage], [Mechwarper, ClockworkGnome],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].health)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[2].health)
+        self.assertEqual(1, game.current_player.minions[3].health)
+        self.assertEqual(3, game.current_player.minions[4].health)
+        self.assertEqual(1, game.current_player.minions[5].health)
+        self.assertEqual(3, game.current_player.minions[6].health)
+
+        # Blastmage should not go off, as there is no friendly mech down
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(3, game.other_player.minions[2].health)
+        self.assertEqual(1, game.other_player.minions[3].health)
+        self.assertEqual(3, game.other_player.minions[4].health)
+        self.assertEqual(1, game.other_player.minions[5].health)
+        self.assertEqual(3, game.other_player.minions[6].health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Blastmage hits the warper at index 2 twice, and the two gnomes at indices 1 and 3.
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(5, len(game.other_player.minions))
+        self.assertEqual(3, game.other_player.minions[0].health)
+        self.assertEqual(1, game.other_player.minions[1].health)
+        self.assertEqual(1, game.other_player.minions[2].health)
+        self.assertEqual(3, game.other_player.minions[3].health)
+        self.assertEqual(3, game.other_player.minions[4].health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Flamecannon(self):
+        game = generate_game_for(Flamecannon, SenjinShieldmasta, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # Flamecannon hasn't been played since there hasn't been an enemy minion until now.
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(5, game.players[1].minions[0].health)
+
+        # Enemy minion exist, so Flamecannon will be played.
+        game.play_single_turn()
+        self.assertEqual(7, len(game.players[0].hand))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)

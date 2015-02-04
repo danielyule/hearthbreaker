@@ -5,7 +5,7 @@ A Hearthstone Simulator
 
 Hearthbreaker is an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  It implements every 
-collectible card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs
+card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs.
 The results of playing simulated games can be used to determine cards which work well together and cards which do not.  
 Hearthbreaker is not designed to allow player to play Hearthstone against each other, nor is it designed to play against
 human opponents within Hearthstone itself.  It is designed to be used as a library for analysis.
@@ -18,16 +18,17 @@ human opponents within Hearthstone itself.  It is designed to be used as a libra
 Usage
 -----
 
-Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+
+Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+ on any
+operating system that supports them.
 
 ###Console Application
 
 ![Console Screenshot](http://danielyule.github.io/hearthbreaker/_static/console_screenshot.png)
 
-There is a basic console that you can use for playing against a bot.  The bot you are playing against chooses its moves
-at random.
+There is a basic console that you can use for playing against a bot.  There are two bots to choose from: a random bot
+that plays completely randomly or a trading bot which tries to trade efficiently with your minions.
 
-Start the console with ``python hearthbreaker/ui/text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
+Start the console with ``python text_runner.py deck1.hsdeck deck2.hsdeck``.  The two deck files are
 in cockatrice format, with a card name in English on each line, preceded by a number to specify how many.  For example:
 
     2 Goldshire Footman
@@ -63,16 +64,17 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-All cards currently released by Blizzard are implemented.  Curse of Naxxramas cards will be implemented as they are
-released.  The engine is complete, and nearly ready for use in machine learning.  See the 
-[developer mailing list](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
-for more details.
+All cards released by Blizzard up to Goblins vs Gnomes are implemented.  Goblins and Gnomes cards are in progress.  
+The engine is complete, and can be used to simulate games.  The game state can be copied, or serialized to JSON.
+Replay functionality is included as well.
+
+For an overview of upcoming work, see [the wiki](https://github.com/danielyule/hearthbreaker/wiki/)
 
 Structure
 ---------
 Almost all of the game logic is found in [hearthbreaker.game_objects](hearthbreker/game_objects.py).  The game functions
-largely on an event based system. The events use a bind/trigger mechanism.  For an overview of the events and the 
-parameters they  receive, see [events.md](events.md).
+largely on a tag based system.  See [the wiki](https://github.com/danielyule/hearthbreaker/wiki/Tag-Format) for more
+details.
 
 The game is made up of players, each of which has a hand of cards, a hero, secrets and minions.  Decisions are made
 by agents, which can either by computer controlled or human controlled.  The system is callback based, in that
@@ -82,8 +84,8 @@ dictating how the game is run.
 The cards themselves are each a class, and can be found in the [hearthbreaker/cards](hearthbreaker/cards) directory, 
 organized by type (spell/minion/secret/weapon) and by class.
 
-This project also includes a replay facility, which allows for games to be recorded and played back.  The format for
-the replay syntax is documented in [replay_format.md](replay_format.md).
+The project defines a number of interesting formats, which are described 
+[on the wiki](https://github.com/danielyule/hearthbreaker/wiki/Formats)
 
 Contributing
 ------------
@@ -97,12 +99,20 @@ All pull requests will be automatically verified through
 [travis-ci.org](https://travis-ci.org/danielyule/hearthbreaker), and a coverage report generated through
  [coveralls.io](https://coveralls.io/r/danielyule/hearthbreaker)
 
+New ideas, and upcoming features are described [on the wiki](https://github.com/danielyule/hearthbreaker/wiki/Roadmap).
+Feel free to get involved with any or all of them.
+
+Developers from this and other hearthstone simulation projectors can be found on IRC on freenode.net, channel #hearthsim.
+
 For more specifics about contributing, see the 
 [contributing page](http://danielyule.github.io/hearthbreaker/contributing.html), 
 or join the [Developer Mailing List](https://groups.google.com/forum/#!forum/hearthstone-simulator-dev)
 
 Related Projects
 ----------------
+
+A collection of Hearthstone AI related projects can be found at [hs-ai.com](http://hs-ai.com)
+
 
 ###HearthSim
 Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
@@ -116,11 +126,17 @@ progress.  These will allow for anyone to define new cards, by simply writing a 
 
 ###Fireplace
 Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
-an engine based on that.  His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
+an engine based on that.  It is planned to be a complete simulator, including all collectible and mission cards.
+His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
 
 ###Soot
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
 implementations work.  It is interesting for its functional implementation of the cards.
+
+### Hearthstone JSON
+
+[Hearthstone JSON](http://hearthstonejson.com/) is a JSON file containing all cards in Hearthstone, extracted from the executable.  Hearthbreaker
+uses this data to verify that its cards are implemented correctly
 
 _Hearthstone: Heroes of WarCraft_ and _Blizzard_ are trademarks of Blizzard Entertainment.
 

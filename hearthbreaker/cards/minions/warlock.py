@@ -1,28 +1,34 @@
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
+from hearthbreaker.tags.condition import IsType, MinionCountIs, Not
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
-from hearthbreaker.cards.battlecries import deal_one_damage_all_characters, \
-    destroy_own_crystal, discard_one, discard_two, flame_imp, pit_lord, put_minion_on_board_from_hand
-import copy
 from hearthbreaker.powers import JaraxxusPower
+from hearthbreaker.tags.status import ChangeHealth, ManaChange
 
 
 class FlameImp(MinionCard):
     def __init__(self):
-        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(3), HeroSelector()))
 
     def create_minion(self, player):
-        return Minion(3, 2, battlecry=flame_imp)
+        return Minion(3, 2)
 
 
 class PitLord(MinionCard):
     def __init__(self):
-        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.DEMON)
+        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(5), HeroSelector()))
 
     def create_minion(self, player):
-        return Minion(5, 6, battlecry=pit_lord)
+        return Minion(5, 6)
 
 
-class VoidWalker(MinionCard):
+class Voidwalker(MinionCard):
     def __init__(self):
         super().__init__("Voidwalker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON)
 
@@ -32,34 +38,38 @@ class VoidWalker(MinionCard):
 
 class DreadInfernal(MinionCard):
     def __init__(self):
-        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Damage(1), CharacterSelector(players=BothPlayer())))
 
     def create_minion(self, player):
-        return Minion(6, 6, battlecry=deal_one_damage_all_characters)
+        return Minion(6, 6)
 
 
 class Felguard(MinionCard):
     def __init__(self):
-        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(DestroyManaCrystal(), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(3, 5, battlecry=destroy_own_crystal, taunt=True)
+        return Minion(3, 5, taunt=True)
 
 
 class Doomguard(MinionCard):
     def __init__(self):
-        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Discard(amount=2), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(5, 7, battlecry=discard_two, charge=True)
+        return Minion(5, 7, charge=True)
 
 
 class Succubus(MinionCard):
     def __init__(self):
-        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON)
+        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON,
+                         battlecry=Battlecry(Discard(), PlayerSelector()))
 
     def create_minion(self, player):
-        return Minion(4, 3, battlecry=discard_one)
+        return Minion(4, 3)
 
 
 class SummoningPortal(MinionCard):
@@ -67,17 +77,7 @@ class SummoningPortal(MinionCard):
         super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        class Filter:
-            def __init__(self):
-                self.amount = 2
-                self.filter = lambda c: isinstance(c, MinionCard)
-                self.min = 1
-
-        mana_filter = Filter()
-        minion = Minion(0, 4)
-        minion.bind_once("silenced", lambda: player.mana_filters.remove(mana_filter))
-        player.mana_filters.append(mana_filter)
-        return minion
+        return Minion(0, 4, auras=[Aura(ManaChange(2, 1, MinionCardSelector()), PlayerSelector())])
 
 
 class BloodImp(MinionCard):
@@ -85,18 +85,8 @@ class BloodImp(MinionCard):
         super().__init__("Blood Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        def buff_ally_health():
-            targets = copy.copy(player.game.current_player.minions)
-            targets.remove(minion)
-            if len(targets) > 0:
-                target = targets[player.game.random(0, len(targets) - 1)]
-                target.increase_health(1)
-
-        minion = Minion(0, 1)
-        minion.stealth = True
-        player.bind("turn_ended", buff_ally_health)
-        minion.bind_once("silenced", lambda: player.unbind("turn_ended", buff_ally_health))
-        return minion
+        return Minion(0, 1, stealth=True,
+                      effects=[Effect(TurnEnded(), ChangeHealth(1), MinionSelector(picker=RandomPicker()))])
 
 
 class LordJaraxxus(MinionCard):
@@ -115,7 +105,7 @@ class LordJaraxxus(MinionCard):
             minion.remove_from_board()
             player.trigger("minion_played", minion)
             player.hero.health = minion.health
-            player.hero.base_health = 15
+            player.hero.base_health = minion.base_health + minion.health_delta
             player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS
             player.hero.power = JaraxxusPower(player.hero)
             blood_fury = BloodFury()
@@ -126,6 +116,15 @@ class LordJaraxxus(MinionCard):
             weapon.equip(player)
 
         return Minion(3, 15, battlecry=summon_jaraxxus)
+
+
+class Infernal(MinionCard):
+    def __init__(self):
+        super().__init__("Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
+                         minion_type=MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(6, 6)
 
 
 class VoidTerror(MinionCard):
@@ -158,4 +157,30 @@ class Voidcaller(MinionCard):
         super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=put_minion_on_board_from_hand)
+        return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[IsType(MINION_TYPE.DEMON)],
+                                                                     source=CARD_SOURCE.MY_HAND)), PlayerSelector()))
+
+
+class AnimaGolem(MinionCard):
+    def __init__(self):
+        super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()), Kill(), SelfSelector())])
+
+
+class WorthlessImp(MinionCard):
+    def __init__(self):
+        super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
+
+    def create_minion(self, p):
+        return Minion(1, 1)
+
+
+class FelCannon(MinionCard):
+    def __init__(self):
+        super().__init__("Fel Cannon", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 5, effects=[Effect(TurnEnded(), Damage(2), MinionSelector(Not(IsType(MINION_TYPE.MECH, True)),
+                                                                                   BothPlayer(), RandomPicker()))])

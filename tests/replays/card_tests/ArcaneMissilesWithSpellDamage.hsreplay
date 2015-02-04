@@ -1,0 +1,126 @@
+{
+  "moves": [
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [
+        1,
+        1,
+        1,
+        0
+      ],
+      "name": "play"
+    },
+    {
+      "random": [],
+      "name": "concede"
+    },
+    {
+      "random": [],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "decks": [
+      {
+        "class": "Mage",
+        "cards": [
+          "Kobold Geomancer",
+          "Arcane Missiles"
+        ]
+      },
+      {
+        "class": "Druid",
+        "cards": [
+          "Faerie Dragon"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

@@ -176,6 +176,41 @@ from hearthbreaker.cards.minions.neutral import (
     MadScientist,
     EchoingOoze,
     ShadeOfNaxxramas,
+    KelThuzad,
+    PilotedShredder,
+    PilotedSkyGolem,
+    SneedsOldShredder,
+    AntiqueHealbot,
+    AnnoyOTron,
+    Blingtron3000,
+    BombLobber,
+    BurlyRockjawTrogg,
+    Mechwarper,
+    Frog,
+    ClockworkGiant,
+    ClockworkGnome,
+    BoomBot,
+    DoctorBoom,
+    TargetDummy,
+    ExplosiveSheep,
+    Puddlestomper,
+    MicroMachine,
+    MechanicalYeti,
+    SpiderTank,
+    GilblinStalker,
+    ShipsCannon,
+    OgreBrute,
+    MogorTheOgre,
+    Toshley,
+    ForceTankMAX,
+    FelReaver,
+    MadderBomber,
+    Gazlowe,
+    MiniMage,
+    SaltyDog,
+    GnomereganInfantry,
+    FlyingMachine,
+    LostTallstrider,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -184,7 +219,8 @@ from hearthbreaker.cards.minions.druid import (
     AncientOfLore,
     AncientOfWar,
     IronbarkProtector,
-    Cenarius
+    Cenarius,
+    AnodizedRoboCub,
 )
 
 from hearthbreaker.cards.minions.hunter import (
@@ -196,6 +232,11 @@ from hearthbreaker.cards.minions.hunter import (
     TundraRhino,
     ScavengingHyena,
     Webspinner,
+    Hound,
+    Huffer,
+    Misha,
+    Leokk,
+    Snake,
 )
 
 from hearthbreaker.cards.minions.mage import (
@@ -204,14 +245,20 @@ from hearthbreaker.cards.minions.mage import (
     KirinTorMage,
     EtherealArcanist,
     WaterElemental,
-    ArchmageAntonidas
+    ArchmageAntonidas,
+    Snowchugger,
+    GoblinBlastmage,
+    SootSpewer,
 )
 
 from hearthbreaker.cards.minions.paladin import (
     AldorPeacekeeper,
     ArgentProtector,
     GuardianOfKings,
-    TirionFordring
+    TirionFordring,
+    CobaltGuardian,
+    SilverHandRecruit,
+    ShieldedMinibot,
 )
 
 from hearthbreaker.cards.minions.priest import (
@@ -223,6 +270,9 @@ from hearthbreaker.cards.minions.priest import (
     ProphetVelen,
     TempleEnforcer,
     DarkCultist,
+    Shrinkmeister,
+    UpgradedRepairBot,
+    Shadowbomber,
 )
 
 from hearthbreaker.cards.minions.rogue import (
@@ -233,6 +283,9 @@ from hearthbreaker.cards.minions.rogue import (
     MasterOfDisguise,
     PatientAssassin,
     SI7Agent,
+    OneeyedCheat,
+    IronSensei,
+    OgreNinja,
 )
 
 from hearthbreaker.cards.minions.shaman import (
@@ -243,13 +296,22 @@ from hearthbreaker.cards.minions.shaman import (
     FlametongueTotem,
     ManaTideTotem,
     UnboundElemental,
-    Windspeaker
+    Windspeaker,
+    HealingTotem,
+    SearingTotem,
+    StoneclawTotem,
+    WrathOfAirTotem,
+    SpiritWolf,
+    VitalityTotem,
+    SiltfinSpiritwalker,
+    WhirlingZapomatic,
+    DunemaulShaman,
 )
 
 from hearthbreaker.cards.minions.warlock import (
     FlameImp,
     PitLord,
-    VoidWalker,
+    Voidwalker,
     DreadInfernal,
     Felguard,
     Doomguard,
@@ -259,6 +321,9 @@ from hearthbreaker.cards.minions.warlock import (
     LordJaraxxus,
     VoidTerror,
     Voidcaller,
+    AnimaGolem,
+    WorthlessImp,
+    FelCannon
 )
 
 from hearthbreaker.cards.minions.warrior import (
@@ -268,5 +333,8 @@ from hearthbreaker.cards.minions.warrior import (
     FrothingBerserker,
     GrommashHellscream,
     KorkronElite,
-    WarsongCommander
+    WarsongCommander,
+    Warbot,
+    Shieldmaiden,
+    SiegeEngine,
 )

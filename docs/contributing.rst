@@ -65,8 +65,7 @@ So, when implementing a new card, follow these steps:
  4. Add the method which performs the action of the card (:meth:`use <hearthbreaker.game_objects.Card.use>` for spells, :meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` for minions, :meth:`create_weapon <hearthbreaker.game_objects.WeaponCard.create_weapon>` for
     weapons, and :meth:`activate <hearthbreaker.game_objects.SecretCard.activate>`, :meth:`deactivate <hearthbreaker.game_objects.SecretCard.deactivate>` and :meth:`_reveal <hearthbreaker.game_objects.SecretCard._reveal>` for secrets -- see the section for each type of card)
  5. Add an entry to the appropriate ``__init__.py``
- 6. Change the card's entry in ``cards.csv`` to 'yes' in the first column
- 7. Run ``flake8`` in the project's root folder to ensure proper formatting.
+ 6. Run ``flake8`` in the project's root folder to ensure proper formatting.
 
 Creating a Constructor
 ''''''''''''''''''''''
@@ -78,10 +77,9 @@ with information about the card.  Details can be found in the documentation for
  - The card's basic mana cost
  - The character class associated with the card
  - The card's rarity
- - (optional) a function for finding targets for the card (e.g. only enemy minions).  This is typically taken from the
-    targeting module
- - (optional) a function for filtering targets (e.g. minions with less than three attack).  This is typically a lambda
-    function that takes a possible target as input and returns a boolean
+ - (optional) a function for finding targets for the card (e.g. only enemy minions).  This is typically taken from the targeting module
+ - (optional) a function for filtering targets (e.g. minions with less than three attack).  This is typically a lambda function that takes a possible target as input and returns a boolean
+ - (optional) The card's minion type, from the :class:`MINION_TYPE <hearthbreaker.constants.MINION_TYPE>` class (i.e. Beast, Mech, Totem, etc.)
 
 For example, here is the implementation of Cabal Shadow Priest, with comments for clarity:
 
@@ -120,7 +118,7 @@ implementing `Barrel Toss <http://hearthstone.gamepedia.com/Barrel_Toss>`_ the c
                              1,                                         # The card's mana cost
                              CHARACTER_CLASS.MUKLA,                     # Which character can use this card
                              CARD_RARITY.COMMON,                        # How rare the card is
-                             hearthbreaker.targeting.find_spell_target         # This spell can target any character
+                             hearthbreaker.targeting.find_spell_target  # This spell can target any character
                              )
 
         def use(self, player, game):
@@ -180,14 +178,13 @@ Creating a new minion
 
 Minions are created through the :meth:`create_minion <hearthbreaker.game_objects.MinionCard.create_minion>` method of
 :class:`MinionCard <hearthbreaker.game_objects.MinionCard>`.  This method should create the
-:class:`Minion <hearthbreaker.game_objects.Minion>` object, attach any handlers that are needed, and return the created minion.
+:class:`Minion <hearthbreaker.game_objects.Minion>` object, state any effects and auras that are needed and return the created minion.
 
 The Minion object only requires two parameters in its constructor: ``attack`` and ``health``, but can optionally include
-the minion's race (Murloc, Giant, Dragon, etc) or its battlecry or deathrattle if necessary.
+the various minion attributes, such as taunt or stealth, as well as its battlecry or deathrattle if necessary.
 
 If the battlecry requires targeting, then the function used for selecting targets should be included in the call
-to ``super().__init__()``.  Battlecries and deathrattles are functions with one parameter: minion, meaning the
-minion doing the battlecry or deathrattle.
+to ``super().__init__()``.  A Battlecry is a function with one parameter: minion, meaning the minion performing the battlecry.
 
 For example, if we were creating a card for `Crazy Monkey <http://hearthstone.gamepedia.com/Crazy_Monkey>`_ we might
 implement it as follows:
@@ -203,8 +200,8 @@ implement it as follows:
                           1,                        # The minion has 1 attack
                           2,                        # The minion has 2 health
                           battlecry=throw_bananas)  # The battlecry is to throw bananas. This
-                                                    # assumes that throw_bananas is defined somewhere
-                                                    # else, most likely in hearthbreaker/cards/battlecries.py
+                                                    # assumes that throw_bananas is defined
+                                                    #  in hearthbreaker/cards/battlecries.py
 
 
 
@@ -218,7 +215,34 @@ In ``hearthbreaker/cards/battlecries.py`` meanwhile, ``throw_bananas`` might be 
                  .game                              # Get the game the player is a part of
                  .other_player                      # other_player always refers to the non-active player
                  .hand                              # Player.hand is a list of cards
-                 .append(Banana()))                 # Add a new instance of the banana card (defined elsewhere)
+                 .append(Banana()))                 # Add a new instance of the banana card
+
+
+When creating the minion, its behaviour can be determined by its tags: :class:`effects <hearthbreaker.tags.base.Effect>`,
+:class:`auras <hearthbreaker.tags.base.Aura>`, enrage and :class:`deathrattle <hearthbreaker.tags.base.Deathrattle>`.
+There is some documentation on these tags `on the wiki <https://github.com/danielyule/hearthbreaker/wiki/Tag-Format>`_,
+but essentially, an aura is an object which causes an ongoing change to the board, while an effect is an action that is
+triggered at by a certain event.  Deathrattle and enrage are clear.  Minion creation should all be handled in a single constructor call.
+
+So, the implementation for Young Priestess looks like
+
+::
+
+    class YoungPriestess(MinionCard):
+        def __init__(self):
+            super().__init__("Young Priestess", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+        def create_minion(self, player):
+            return Minion(                       # Create a new Minion
+                2,                               # The minion has 2 attack
+                1,                               # The minion has 1 health
+                effects=[                        # Could have multiple effects, so use an array
+                    Effect(                      # Create a new Effect object to describe what happens
+                        TurnEnded(),             # The first parameter is when the effect should happen
+                        ChangeHealth(1),         # The second parameter is what should happen
+                        RandomSelector(          # The final parameter specifies who it should happen to
+                            MinionSelector()     # What should the random selector select from?
+                            ))])
 
 Creating a new weapon
 .....................
@@ -247,9 +271,8 @@ must be at minimum one test for each card, or possibly more if the card is espec
 interactions with other cards.
 
 The basic attributes for each card (mana cost, rarity, health if it's a minion, etc) are tested automatically against
-the data in `cards.csv <https://github.com/danielyule/hearthstone-simulator/blob/master/cards.csv>`_, so you do not need
-to test these things yourself.  Any card which has a yes in its implemented column in cards.csv will be automatically
-tested.
+the data in `AllSets.enUs.json <https://github.com/danielyule/hearthstone-simulator/blob/master/AllSets.enUS.json>`_, so you do not need
+to test these things yourself.
 
 Each card unit tests consists of a game played with that card and some others.  The decks used in unit testing are not
 constrained by the two copies of any card limitation, so any number can be used.
@@ -261,26 +284,45 @@ repeated until a deck of thirty is made up.  If only a single card is passed in 
 copies of that card.  The method will choose a character class based on the makeup of the cards passed in, or default to
 Mage if none of the cards are class specific.
 
-The second two parameters are the computerized agents to use for testing the cards.  There are three most commonly used
+The second two parameters are the computerized agents to use for testing the cards.  There are five most commonly used
 agents:
 
-:class:`DoNothingBot <hearthbreaker.agents.basic_agents.DoNothingBot>`
+:class:`DoNothingAgent <hearthbreaker.agents.basic_agents.DoNothingAgent>`
 
     As its name implies, this bot does nothing.  It does not play a card, or use its hero power.  This bot is used if
     the enemy player doesn't need to do anything.
 
-:class:`SpellTestingAgent <tests.testing_agents.testing_agents.SpellTestingAgent>`
+:class:`CardTestingAgent <tests.testing_agents.testing_agents.CardTestingAgent>`
 
     This agent will play as many cards on its turn as it has the mana for, in the order they are presented in the deck.
+    This agent will not play cards out of sequence, so if there is an Oasis Snapjaw card on the top of the deck, no cards
+    will be played until turn four, when the Snapjaw is, even if the player has other, lower cost cards in hand.
     For targeting this agents will select the first elements in the list of targets presented to it, which means an
     enemy minion if one is down, then a friendly minion if one is present, or if there are no minions, the enemy hero.
     There are variations on this agent, which will target specific groups, such as EnemySpellTestingAgent, which will
     only ever target an enemy.  Aside from playing cards, this minion will not do anything (such as attack or use the
     hero power)
 
-:class:`PredictableBot <tests.agents.basic_agents.PredictableBot>`
 
-    PredictableBot tries to do everything it can in a very particular order:
+:class:`OneCardPlayingAgent <tests.testing_agents.testing_agents.OneCardPlayingAgent>`
+
+    This agent is very similar to `CardTestingAgent` except that it only plays one card per turn, unless that card is
+    The Coin, in which case it will play the coin and whichever card comes after it, so long as it has the mana
+
+
+:class:`PlayAndAttackAgent <tests.testing_agents.testing_agents.PlayAndAttackAgent>`
+
+    This agent tries to do everything it can in a very particular order:
+
+     1. Play as many cards as it has mana for, in the order they are in the deck.  Unlike `CardTestingAgent`, this agent
+     will look for any playable cards in the hand, rather than only the first.
+     2. Attack with any active minions.
+
+
+:class:`PredictableAgent <tests.agents.basic_agents.PredictableAgent>`
+
+    PredictableAgent extends `PlayAndAttackAgent` with the ability to use the hero's power.  So it will:
+
      1. Use the hero ability
      2. Play as many cards as it has mana for, in the order they are in the deck.
      3. Attack with the hero if possible (The targeting works similar to spell testing agent above)
@@ -295,8 +337,8 @@ card is a spell that does four damage to its target.
         game = generate_game_for(                         # We use generate_game_for to create a test game
                                  HoggerSmash,             # The first player will have 30 Hogger SMASH!es
                                  MogushanWarden,          # The second player will have 30 Wardens
-                                 SpellTestingAgent,       # The first player will try to play SMASH!
-                                 DoNothingBot)            # The second player needs only get hit with the smash
+                                 CardTestingAgent,        # The first player will try to play SMASH!
+                                 DoNothingAgent)          # The second player needs only get hit with the smash
         for turn in range(0, 4):                          # Advance the game to the turn before smash is played
             game.play_single_turn()
         self.assertEqual(30, game.players[1].hero.health) # Ensure the second player's health hasn't been affected

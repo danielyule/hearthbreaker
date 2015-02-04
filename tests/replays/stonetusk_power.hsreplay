@@ -1,0 +1,155 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p1"
+      },
+      "target": {
+        "player": "p2"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p1"
+      },
+      "target": {
+        "player": "p2"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "character": {
+        "minion": 1,
+        "player": "p1"
+      },
+      "target": {
+        "player": "p2"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "option": 1,
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "option": 0,
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "concede"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Mage",
+        "cards": [
+          "Stonetusk Boar"
+        ]
+      },
+      {
+        "class": "Druid",
+        "cards": [
+          "Power of the Wild"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

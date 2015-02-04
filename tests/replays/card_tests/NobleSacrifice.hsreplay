@@ -1,0 +1,207 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "target": {
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "concede"
+    },
+    {
+      "random": [],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Paladin",
+        "cards": [
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Noble Sacrifice"
+        ]
+      },
+      {
+        "class": "Priest",
+        "cards": [
+          "Stonetusk Boar"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

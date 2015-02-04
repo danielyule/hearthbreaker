@@ -1,34 +1,47 @@
-import hearthbreaker.targeting
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.action import Equip, Give, Heal
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect
+from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
-from hearthbreaker.cards.battlecries import change_attack_to_one, give_divine_shield, guardian_of_kings
+from hearthbreaker.tags.status import SetAttack, DivineShield
+from hearthbreaker.tags.condition import IsType
+from hearthbreaker.tags.event import MinionSummoned
 
 
 class AldorPeacekeeper(MinionCard):
     def __init__(self):
         super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
-                         targeting_func=hearthbreaker.targeting.find_enemy_minion_battlecry_target)
+                         battlecry=Battlecry(Give(SetAttack(1)), MinionSelector(condition=None, players=EnemyPlayer())))
 
     def create_minion(self, player):
-        return Minion(3, 3, battlecry=change_attack_to_one)
+        return Minion(3, 3)
 
 
 class ArgentProtector(MinionCard):
     def __init__(self):
         super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         battlecry=Battlecry(Give(DivineShield()), MinionSelector()))
 
     def create_minion(self, player):
-        return Minion(2, 2, battlecry=give_divine_shield)
+        return Minion(2, 2)
 
 
 class GuardianOfKings(MinionCard):
     def __init__(self):
-        super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+        super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Heal(6), HeroSelector()))
 
     def create_minion(self, player):
-        minion = Minion(5, 6, battlecry=guardian_of_kings)
-        return minion
+        return Minion(5, 6)
+
+
+class Ashbringer(WeaponCard):
+    def __init__(self):
+        super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
+
+    def create_weapon(self, player):
+        weapon = Weapon(5, 3)
+        return weapon
 
 
 class TirionFordring(MinionCard):
@@ -36,16 +49,31 @@ class TirionFordring(MinionCard):
         super().__init__("Tirion Fordring", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        class Ashbringer(WeaponCard):
-            def __init__(self):
-                super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
+        return Minion(6, 6, divine_shield=True, taunt=True,
+                      deathrattle=Deathrattle(Equip(Ashbringer()), PlayerSelector()))
 
-            def create_weapon(self, player):
-                weapon = Weapon(5, 3)
-                return weapon
 
-        def equip_ashbringer(minion):
-            ashbringer = Ashbringer().create_weapon(minion.player)
-            ashbringer.equip(minion.player)
+class CobaltGuardian(MinionCard):
+    def __init__(self):
+        super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, MINION_TYPE.MECH)
 
-        return Minion(6, 6, divine_shield=True, taunt=True, deathrattle=equip_ashbringer)
+    def create_minion(self, player):
+        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), Give(DivineShield()),
+                                            SelfSelector())])
+
+
+class SilverHandRecruit(MinionCard):
+    def __init__(self):
+        super().__init__("Silver Hand Recruit", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class ShieldedMinibot(MinionCard):
+    def __init__(self):
+        super().__init__("Shielded Minibot", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(2, 2, divine_shield=True)

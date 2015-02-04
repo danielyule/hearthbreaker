@@ -1,8 +1,11 @@
 import copy
-from hearthbreaker.effects.minion import DrawOnAttack
+from hearthbreaker.tags.action import Draw
+from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.event import Attack
+from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard
+from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
 
 
 class AvengingWrath(Card):
@@ -15,7 +18,7 @@ class AvengingWrath(Card):
         for i in range(0, player.effective_spell_damage(8)):
             targets = copy.copy(game.other_player.minions)
             targets.append(game.other_player.hero)
-            target = targets[game.random(0, len(targets) - 1)]
+            target = game.random_choice(targets)
             target.damage(1, self)
 
 
@@ -61,7 +64,11 @@ class BlessingOfWisdom(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_effect(DrawOnAttack(amount=1, first_player=player is game.players[0]))
+        if player is game.players[0]:
+            draw_player = PlayerOne()
+        else:
+            draw_player = PlayerTwo()
+        self.target.add_effect(Effect(Attack(), Draw(), PlayerSelector(draw_player)))
 
 
 class Consecration(Card):
@@ -99,7 +106,7 @@ class Equality(Card):
         targets.extend(player.minions)
 
         for minion in targets:
-            minion.decrease_health(minion.base_health - 1)
+            minion.set_health_to(1)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
@@ -149,9 +156,14 @@ class HolyWrath(Card):
     def use(self, player, game):
         super().use(player, game)
 
+        fatigue = False
+        if player.deck.left == 0:
+            fatigue = True
+
         player.draw()
-        cost = player.hand[-1].mana
-        self.target.damage(player.effective_spell_damage(cost), self)
+        if not fatigue:
+            cost = player.hand[-1].mana
+            self.target.damage(player.effective_spell_damage(cost), self)
 
 
 class Humility(Card):
@@ -188,7 +200,7 @@ class Avenge(SecretCard):
 
     def _reveal(self, dead_minion, attacker):
         if len(self.player.minions) > 0:
-            target = self.player.minions[self.player.game.random(0, len(self.player.minions) - 1)]
+            target = self.player.game.random_choice(self.player.minions)
             target.change_attack(3)
             target.increase_health(2)
             super().reveal()
@@ -205,15 +217,16 @@ class EyeForAnEye(SecretCard):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, amount, what):
-        self.player.game.current_player.hero.damage(amount, self)
+    def _reveal(self, character, attacker, amount):
+        if isinstance(character, Hero):
+            character.player.opponent.hero.damage(amount, self)
         super().reveal()
 
     def activate(self, player):
-        player.hero.bind("hero_damaged", self._reveal)
+        player.bind("character_damaged", self._reveal)
 
     def deactivate(self, player):
-        player.hero.unbind("hero_damaged", self._reveal)
+        player.unbind("character_damaged", self._reveal)
 
 
 class NobleSacrifice(SecretCard):
@@ -221,8 +234,8 @@ class NobleSacrifice(SecretCard):
         super().__init__("Noble Sacrifice", 1, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.COMMON)
 
-    def _reveal(self, attacker):
-        player = attacker.game.other_player
+    def _reveal(self, attacker, target):
+        player = attacker.player.game.other_player
         if len(player.minions) < 7 and not attacker.removed:
             class DefenderMinion(MinionCard):
                 def __init__(self):
@@ -232,22 +245,16 @@ class NobleSacrifice(SecretCard):
                 def create_minion(self, p):
                     return Minion(2, 1)
 
-            def choose_defender(targets):
-                defender = DefenderMinion()
-                defender.summon(player, player.game, len(player.minions))
-                old_target(targets)  # Called to allow the player to choose a target, although it will be ignored
-                player.game.current_player.agent.choose_target = old_target
-                return player.minions[-1]
-
-            old_target = player.game.current_player.agent.choose_target
-            player.game.current_player.agent.choose_target = choose_defender
+            defender = DefenderMinion()
+            defender.summon(player, player.game, len(player.minions))
+            attacker.current_target = player.minions[-1]
             super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind("pre_attack", self._reveal)
+        player.opponent.bind("character_attack", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("pre_attack", self._reveal)
+        player.opponent.unbind("character_attack", self._reveal)
 
 
 class Redemption(SecretCard):
@@ -256,15 +263,10 @@ class Redemption(SecretCard):
                          CARD_RARITY.COMMON)
 
     def _reveal(self, minion, by):
-        player = minion.player
-        resurrection = minion.card.create_minion(player)
-        resurrection.index = len(player.minions)
-        resurrection.health = 1
-        resurrection.player = player
-        resurrection.game = player.game
-        player.minions.append(resurrection)
-        player.game.trigger("minion_added", resurrection)
-        super().reveal()
+        resurrection = minion.card.summon(minion.player, minion.game, min(minion.index, len(minion.player.minions)))
+        if resurrection:
+            resurrection.health = 1
+            super().reveal()
 
     def activate(self, player):
         player.bind("minion_died", self._reveal)
@@ -280,7 +282,7 @@ class Repentance(SecretCard):
 
     def _reveal(self, minion):
 
-        minion.decrease_health(minion.calculate_max_health() - 1)
+        minion.set_health_to(1)
         super().reveal()
 
     def activate(self, player):
@@ -288,3 +290,13 @@ class Repentance(SecretCard):
 
     def deactivate(self, player):
         player.game.current_player.unbind("minion_played", self._reveal)
+
+
+class SealOfLight(Card):
+    def __init__(self):
+        super().__init__("Seal of Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.heal(player.effective_heal_power(4), self)
+        player.hero.change_temp_attack(2)

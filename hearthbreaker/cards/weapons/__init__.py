@@ -1,12 +1,14 @@
 from hearthbreaker.cards.weapons.hunter import (
     EaglehornBow,
     GladiatorsLongbow,
+    Glaivezooka,
 )
 
 from hearthbreaker.cards.weapons.paladin import (
     LightsJustice,
     SwordOfJustice,
     TruesilverChampion,
+    Coghammer,
 )
 
 from hearthbreaker.cards.weapons.rogue import (
@@ -24,4 +26,5 @@ from hearthbreaker.cards.weapons.warrior import (
     ArcaniteReaper,
     Gorehowl,
     DeathsBite,
+    OgreWarmaul,
 )

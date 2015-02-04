@@ -1,39 +1,95 @@
+import json
 import unittest
 from io import StringIO
 from os import listdir
+from os.path import isdir
 import re
 import random
+from hearthbreaker.game_objects import Game, Deck
 
-from hearthbreaker.replay import Replay, RecordingGame, SavedGame
-from hearthbreaker.agents.basic_agents import PredictableBot
+from hearthbreaker.replay import Replay, record, playback
+from hearthbreaker.agents.basic_agents import PredictableAgent, RandomAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.cards import *
 import hearthbreaker.game_objects
+from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent
+from tests.testing_utils import StackedDeck
 
 
 class TestReplay(unittest.TestCase):
-    def test_reading_and_writing(self):
+
+    def __compare_json(self, json1, json2):
+        return json.loads(json1) == json.loads(json2)
+
+    def test_reading_and_writing_compact(self):
+        file_match = re.compile(r'.*\.rep')
+        files = []
+
         def process_line(line):
             line = re.sub(r'\s*,\s*', ',', line)
             line = re.sub(r'\s*\(\s*', '(', line)
             line = re.sub(r'\s+\)', ')', line)
             return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
 
-        self.maxDiff = None
-        for rfile in filter(lambda file: re.compile(r'.*\.rep$').match(file), listdir("tests/replays")):
+        def get_files_from(folder_name):
+            for file in listdir(folder_name):
+                if file_match.match(file):
+                    files.append(folder_name + "/" + file)
+                elif isdir(folder_name + "/" + file):
+                    get_files_from(folder_name + "/" + file)
+
+        get_files_from("tests/replays/compact")
+
+        for rfile in files:
             replay = Replay()
-            replay.parse_replay("tests/replays/" + rfile)
+            replay.read(rfile)
             output = StringIO()
-            replay.write_replay(output)
-            f = open("tests/replays/" + rfile, 'r')
+            replay.write(output)
+            f = open(rfile, 'r')
             file_string = f.read()
             f.close()
             file_string = "\n".join(map(process_line, file_string.split("\n")))
 
-            self.assertEqual(output.getvalue(), file_string)
+            self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
+
+    def test_compact_to_json_conversion(self):
+        file_match = re.compile(r'.*\.rep')
+        files = []
+
+        def process_line(line):
+            line = re.sub(r'\s*,\s*', ',', line)
+            line = re.sub(r'\s*\(\s*', '(', line)
+            line = re.sub(r'\s+\)', ')', line)
+            return re.sub(r'(^\s+)|(\s*(;.*)?$)', '', line)
+
+        def get_files_from(folder_name):
+            for file in listdir(folder_name):
+                if file_match.match(file):
+                    files.append(folder_name + "/" + file)
+                elif isdir(folder_name + "/" + file):
+                    get_files_from(folder_name + "/" + file)
+
+        get_files_from("tests/replays/compact")
+
+        for rfile in files:
+            replay = Replay()
+            replay.read(rfile)
+            json_output = StringIO()
+            replay.write_json(json_output)
+            json_replay = Replay()
+            json_input = StringIO(json_output.getvalue())
+            json_replay.read_json(json_input)
+            output = StringIO()
+            json_replay.write(output)
+            f = open(rfile, 'r')
+            file_string = f.read()
+            f.close()
+            file_string = "\n".join(map(process_line, file_string.split("\n")))
+
+            self.assertEqual(output.getvalue(), file_string, "File '" + rfile + "' did not match")
 
     def test_loading_game(self):
-        game = SavedGame("tests/replays/example.rep")
+        game = playback(Replay("tests/replays/example.hsreplay"))
 
         game.start()
 
@@ -46,23 +102,90 @@ class TestReplay(unittest.TestCase):
     def test_recording_game(self):
         self.maxDiff = None
         random.seed(9876)
-        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar()] * 30, CHARACTER_CLASS.MAGE)
-        deck2 = hearthbreaker.game_objects.Deck([Naturalize()] * 30, CHARACTER_CLASS.DRUID)
-        agent1 = PredictableBot()
-        agent2 = PredictableBot()
-        game = RecordingGame([deck1, deck2], [agent1, agent2])
+        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        agent1 = PredictableAgent()
+        agent2 = PredictableAgent()
+
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
         game.start()
         output = StringIO()
-        game.replay.write_replay(output)
-        f = open("tests/replays/stonetusk_innervate.rep", 'r')
-        self.assertEqual(output.getvalue(), f.read())
+        replay.write_json(output)
+        f = open("tests/replays/stonetusk_innervate.hsreplay", 'r')
+        dif = self.__compare_json(output.getvalue(), f.read())
+        self.assertTrue(dif)
         f.close()
 
     def test_option_replay(self):
-        game = SavedGame("tests/replays/stonetusk_power.rep")
+        game = playback(Replay("tests/replays/stonetusk_power.hsreplay"))
         game.start()
+        self.assertEqual(1, len(game.other_player.minions))
         panther = game.other_player.minions[0]
         self.assertEqual(panther.card.name, "Panther")
         self.assertEqual(panther.health, 3)
         self.assertEqual(panther.calculate_attack(), 4)
         self.assertEqual(panther.index, 0)
+
+    def test_random_character_saving(self):
+        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        agent1 = PlayAndAttackAgent()
+        agent2 = OneCardPlayingAgent()
+        random.seed(4879)
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
+        game.pre_game()
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        output = StringIO()
+        replay.write_json(output)
+        random.seed(4879)
+        new_game = playback(Replay(StringIO(output.getvalue())))
+        new_game.pre_game()
+        for turn in range(0, 17):
+            new_game.play_single_turn()
+
+        self.assertEqual(2, len(new_game.current_player.minions))
+        self.assertEqual(30, new_game.other_player.hero.health)
+        self.assertEqual(5, len(new_game.other_player.minions))
+
+    def test_json_saving(self):
+        self.maxDiff = 6000
+        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        agent1 = PlayAndAttackAgent()
+        agent2 = OneCardPlayingAgent()
+        random.seed(4879)
+        game = Game([deck1, deck2], [agent1, agent2])
+        replay = record(game)
+        game.pre_game()
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        output = StringIO()
+        replay.write_json(output)
+        inp = StringIO(output.getvalue())
+        new_replay = Replay()
+        new_replay.read_json(inp)
+        old_output = output.getvalue()
+        other_output = StringIO()
+        new_replay.write_json(other_output)
+        self.assertEqual(other_output.getvalue(), old_output)
+
+    # Due to bug #55 (thanks to dur3x)
+    def test_deck_shortening(self):
+        deck1 = Deck([RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(), RagnarosTheFirelord(),
+                      GoldshireFootman(), GoldshireFootman()], CHARACTER_CLASS.DRUID)
+        deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.HUNTER)
+        game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
+        replay = record(game)
+        game.start()
+        replay.write(StringIO())

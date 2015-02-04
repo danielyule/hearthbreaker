@@ -1,7 +1,7 @@
 import copy
 import collections
 import sys
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.game_objects import Deck, Game
 
 if sys.version_info.major is 3:
@@ -24,13 +24,13 @@ class StackedDeck(Deck):
 
     def draw(self, random_func):
         for card_index in range(0, 30):
-            if not self.used[card_index]:
-                self.used[card_index] = True
+            if not self.cards[card_index].drawn:
+                self.cards[card_index].drawn = True
                 self.left -= 1
                 return self.cards[card_index]
 
 
-def generate_game_for(card1, card2, first_agent_type, second_agent_type):
+def generate_game_for(card1, card2, first_agent_type, second_agent_type, run_pre_game=True):
     if not isinstance(card1, collections.Sequence):
         card_set1 = [card1()]
     else:
@@ -57,33 +57,6 @@ def generate_game_for(card1, card2, first_agent_type, second_agent_type):
     game = Game([deck1, deck2], [first_agent_type(), second_agent_type()])
     game.current_player = game.players[1]
     game.other_player = game.players[0]
-    game.pre_game()
+    if run_pre_game:
+        game.pre_game()
     return game
-
-
-def legal_deck(card_list):
-    if len(card_list) > 30 or len(card_list) < 15:
-        return False
-
-    class1 = CHARACTER_CLASS.ALL
-    for card in card_list:
-        if card.character_class != CHARACTER_CLASS.ALL:
-            class1 = card.character_class
-            break
-    for card in card_list:
-        if card.character_class != class1 and card.character_class != CHARACTER_CLASS.ALL:
-            return False
-
-    cards = []
-    while len(cards) + len(card_list) < 30:
-        cards.extend(copy.deepcopy(card_list))
-
-    cards.extend(card_list[:30 - len(cards)])
-
-    for card in card_list:
-        if card.RARITY == CARD_RARITY.LEGENDARY and card_list.count(card) > 1:
-            return False
-        if card_list.count(card) > 2:
-            return False
-
-    return True

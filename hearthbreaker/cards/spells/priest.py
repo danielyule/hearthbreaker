@@ -1,4 +1,7 @@
 import copy
+from hearthbreaker.tags.base import BuffUntil
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.status import Stolen
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -128,18 +131,18 @@ class MindControl(Card):
         new_minion.add_to_board(len(player.minions))
 
 
-# TODO: Can this card be played if opponent has no cards in hand?
 class MindVision(Card):
     def __init__(self):
-        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.COMMON)
+        super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
-        card = copy.deepcopy(game.other_player.hand[game.random(0,
-                                                                len(game.other_player.hand) - 1)])
-        player.hand.append(card)
+        # This card can be played even if opponent has no cards in hand
+        # Source: http://www.hearthhead.com/card=1099/mind-vision#comments:id=2073386
+        if (len(game.other_player.hand) > 0):
+            card = copy.deepcopy(game.random_choice(game.other_player.hand))
+            player.hand.append(card)
 
 
 class Mindgames(Card):
@@ -159,17 +162,14 @@ class Mindgames(Card):
                 minion = Minion(0, 1)
                 return minion
 
-        minions = []
-
-        for index in range(0, 30):
-            if not game.other_player.deck.used[index] and not game.other_player.deck.cards[index].is_spell():
-                minions.append(game.other_player.deck.cards[index])
-
-        if len(minions) == 0:
-            minions.append(ShadowOfNothing())
-
-        minion_card = copy.copy(minions[game.random(0, len(minions) - 1)])
+        minion_card = game.random_draw(game.other_player.deck.cards,
+                                       lambda c: not c.drawn and isinstance(c, MinionCard))
+        if not minion_card:
+            minion_card = ShadowOfNothing()
+        else:
+            minion_card = copy.copy(minion_card)
         minion_card.summon(player, game, 0)
+        minion_card.drawn = True
 
 
 class PowerWordShield(Card):
@@ -193,27 +193,20 @@ class ShadowMadness(Card):
                          lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
-        def unbind_turn_ended():
-            player.unbind("turn_ended", switch_side)
-
-        def switch_side(*args):
-            minion.unbind("silenced", unbind_turn_ended)
-            m = minion.copy(self.target.player)
-
-            minion.remove_from_board()
-            m.add_to_board(len(self.target.player.minions))
 
         super().use(player, game)
 
         minion = self.target.copy(player)
         minion.active = True
         minion.exhausted = False
-        minion.bind_once("silenced", unbind_turn_ended)
+
         # What happens if there are already 7 minions?
         self.target.remove_from_board()
         minion.add_to_board(len(player.minions))
 
-        player.bind_once("turn_ended", switch_side)
+        # When silenced, the minion should immediately come back to its previous
+        # owner.  See https://twitter.com/bdbrode/status/510251195173470208
+        minion.add_buff(BuffUntil(Stolen(), TurnEnded()))
 
 
 class ShadowWordDeath(Card):
@@ -276,18 +269,13 @@ class Thoughtsteal(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        cards = []
-
-        for index in range(0, 30):
-            if not game.other_player.deck.used[index]:
-                cards.append(game.other_player.deck.cards[index])
-
         for i in range(0, 2):
-            if not len(cards) == 0 and not len(player.hand) == 10:
-                # TODO: We are assuming nothing will happen if you have 10
-                # cards in hand. Will you even see the card go up in flames?
-                rand = game.random(0, len(cards) - 1)
-                # TODO: We are assuming you can't copy the same card twice
-                card = copy.copy(cards.pop(rand))
-                player.hand.append(card)
+            new_card = game.random_draw(game.other_player.deck.cards, lambda c: not c.drawn)
+            if new_card:
+                new_card = copy.copy(new_card)
+                new_card.drawn = True
+                if len(player.hand) < 10:
+                    player.hand.append(new_card)
+                    self.trigger("card_drawn", new_card)
+                else:
+                    player.trigger("card_destroyed", new_card)

@@ -13,7 +13,7 @@ them.  The results from these games can be used to determine cards which work we
 possibly discover new deck types.
 The goal is not to create a clone of Hearthstone which players can use to replace the game itself with.
 
-The project is currently under construction.  A list of cards and their implementation status is available at :doc:`cards`
+All cards prior to Goblins vs Gnomes have been implemented.  GvG cards are in the process of being implemented
 
 Contents:
 
@@ -21,7 +21,6 @@ Contents:
    :titlesonly:
 
    hearthbreaker
-   cards
    contributing
 
 

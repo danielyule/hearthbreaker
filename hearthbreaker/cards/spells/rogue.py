@@ -1,4 +1,10 @@
 import copy
+from hearthbreaker.tags.action import AddCard
+from hearthbreaker.tags.aura import ManaAura
+from hearthbreaker.tags.base import Effect, BuffUntil, Buff
+from hearthbreaker.tags.event import TurnStarted, TurnEnded
+from hearthbreaker.tags.selector import PlayerSelector, SpellSelector, SpecificCardSelector
+from hearthbreaker.tags.status import Stealth, ChangeAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Card
@@ -91,19 +97,10 @@ class Conceal(Card):
         super().__init__("Conceal", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
 
     def use(self, player, game):
-        def create_remove_stealth(minion):
-            def remove_stealth():
-                minion.stealth = False
-            return remove_stealth
-
         super().use(player, game)
-
         for minion in player.minions:
             if not minion.stealth:
-                minion.stealth = True
-                remove_stealth = create_remove_stealth(minion)
-                player.bind_once("turn_started", remove_stealth)
-                minion.bind_once("silenced", lambda: player.unbind("turn_started", remove_stealth))
+                minion.add_buff(BuffUntil(Stealth(), TurnStarted()))
 
 
 class DeadlyPoison(Card):
@@ -152,18 +149,10 @@ class Headcrack(Card):
         super().__init__("Headcrack", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE)
 
     def use(self, player, game):
-        def return_card():
-            if len(player.hand) < 10:
-                player.hand.append(self)
-            else:
-                player.trigger("card_destroyed", self)
-
         super().use(player, game)
-
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
-
         if player.cards_played > 0:
-            player.bind_once("turn_ended", return_card)
+            player.add_effect(Effect(TurnEnded(), AddCard(self), PlayerSelector()))
 
 
 class Preparation(Card):
@@ -171,28 +160,8 @@ class Preparation(Card):
         super().__init__("Preparation", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self):
-                self.amount = 3
-                self.filter = lambda c: c.is_spell()
-                self.min = 0
-
-        def card_used(card):
-            if card is not self and card.is_spell():
-                player.unbind("card_used", card_used)
-                player.unbind("turn_ended", turn_ended)
-                player.mana_filters.remove(mana_filter)
-
-        def turn_ended():
-            player.unbind("card_used", card_used)
-            player.mana_filters.remove(mana_filter)
-
         super().use(player, game)
-
-        mana_filter = Filter()
-        player.bind("card_used", card_used)
-        player.bind_once("turn_ended", turn_ended)
-        player.mana_filters.append(mana_filter)
+        player.add_aura(ManaAura(100, 0, SpellSelector(), True))
 
 
 class Sap(Card):
@@ -212,23 +181,10 @@ class Shadowstep(Card):
                          hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
-        class Filter:
-            def __init__(self, card):
-                self.amount = 2
-                self.filter = lambda c: c is card
-                self.min = 0
-
-        def card_used(card):
-            if card is self.target.card:
-                player.unbind("card_used", card_used)
-                player.mana_filters.remove(mana_filter)
-
         super().use(player, game)
 
         self.target.bounce()
-        mana_filter = Filter(self.target.card)
-        player.bind("card_used", card_used)
-        player.mana_filters.append(mana_filter)
+        player.add_aura(ManaAura(3, 0, SpecificCardSelector(self.target.card), True, False))
 
 
 class Shiv(Card):
@@ -278,3 +234,38 @@ class Vanish(Card):
         # Source: http://www.hearthhead.com/card=196/vanish#comments:id=1908549
         for minion in sorted(targets, key=lambda m: m.born):
             minion.bounce()
+
+
+class TinkersSharpswordOil(Card):
+    def __init__(self):
+        super().__init__("Tinker's Sharpsword Oil", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.hero.weapon.base_attack += 3
+        player.hero.change_temp_attack(3)
+        if player.cards_played > 0:
+            targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
+            if targets is not None:
+                target = player.game.random_choice(targets)
+                target.add_buff(Buff(ChangeAttack(3)))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and player.hero.weapon is not None
+
+
+class Sabotage(Card):
+    def __init__(self):
+        super().__init__("Sabotage", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = hearthbreaker.targeting.find_enemy_minion_battlecry_target(player.game, lambda x: True)
+        target = game.random_choice(targets)
+        target.die(None)
+        game.check_delayed()
+        if player.cards_played > 0 and game.other_player.hero.weapon is not None:
+            game.other_player.hero.weapon.destroy()
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1

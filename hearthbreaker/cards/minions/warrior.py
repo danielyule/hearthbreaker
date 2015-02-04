@@ -1,26 +1,29 @@
-from hearthbreaker.effects.minion import Buff
-import hearthbreaker.targeting
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip
+from hearthbreaker.tags.base import Effect, Battlecry, Enrage
+from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
+from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
+from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
+    PlayerSelector
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
+from hearthbreaker.tags.status import ChangeAttack, Charge
+
+
+class BattleAxe(WeaponCard):
+    def __init__(self):
+        super().__init__("Battle Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.SPECIAL)
+
+    def create_weapon(self, player):
+        return Weapon(2, 2)
 
 
 class ArathiWeaponsmith(MinionCard):
     def __init__(self):
-        super().__init__("Arathi Weaponsmith", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+        super().__init__("Arathi Weaponsmith", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Equip(BattleAxe()), PlayerSelector()))
 
     def create_minion(self, player):
-        class BattleAxe(WeaponCard):
-            def __init__(self):
-                super().__init__("Battle Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.SPECIAL)
-
-            def create_weapon(self, player):
-                return Weapon(2, 2)
-
-        def equip_battle_axe(minion):
-            battle_axe = BattleAxe().create_weapon(player)
-            battle_axe.equip(player)
-
-        return Minion(3, 3, battlecry=equip_battle_axe)
+        return Minion(3, 3)
 
 
 class Armorsmith(MinionCard):
@@ -28,30 +31,16 @@ class Armorsmith(MinionCard):
         super().__init__("Armorsmith", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def gain_one_armor(minion):
-            if minion.player is player:
-                player.hero.increase_armor(1)
-
-        minion = Minion(1, 4)
-        player.bind("minion_damaged", gain_one_armor)
-        player.opponent.bind("minion_damaged", gain_one_armor)
-        minion.bind_once("silenced", lambda: player.unbind("minion_damaged", gain_one_armor))
-        minion.bind_once("silenced", lambda: player.opponent.unbind("minion_damaged", gain_one_armor))
-        return minion
+        return Minion(1, 4, effects=[Effect(CharacterDamaged(condition=IsMinion()), IncreaseArmor(), HeroSelector())])
 
 
 class CruelTaskmaster(MinionCard):
     def __init__(self):
         super().__init__("Cruel Taskmaster", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_minion_battlecry_target)
+                         battlecry=Battlecry([Damage(1), Give(ChangeAttack(2))], MinionSelector(players=BothPlayer())))
 
     def create_minion(self, player):
-        def deal_one_damage_and_give_two_attack(minion):
-            if minion.card.target is not None:
-                minion.card.target.damage(1, self)
-                minion.card.target.change_attack(2)
-
-        return Minion(2, 2, battlecry=deal_one_damage_and_give_two_attack)
+        return Minion(2, 2)
 
 
 class FrothingBerserker(MinionCard):
@@ -59,11 +48,8 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        def gain_one_attack(m):
-            minion.change_attack(1)
-
-        minion = Minion(2, 4, effects=[Buff("damaged", "minion", "self", 1, 0, "both")])
-        return minion
+        return Minion(2, 4, effects=[Effect(CharacterDamaged(player=BothPlayer(),
+                                                             condition=IsMinion()), ChangeAttack(1), SelfSelector())])
 
 
 class GrommashHellscream(MinionCard):
@@ -71,21 +57,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        def increase_attack():
-            minion.change_attack(6)
-
-        def decrease_attack():
-            minion.change_attack(-6)
-
-        def silenced():
-            minion.unbind("enraged", increase_attack)
-            minion.unbind("unenraged", decrease_attack)
-
-        minion = Minion(4, 9, charge=True)
-        minion.bind("enraged", increase_attack)
-        minion.bind("unenraged", decrease_attack)
-        minion.bind("silenced", silenced)
-        return minion
+        return Minion(4, 9, charge=True, enrage=Enrage(ChangeAttack(6), SelfSelector()))
 
 
 class KorkronElite(MinionCard):
@@ -101,15 +73,29 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
-        def give_charge(m):
-            if m is not minion and m.calculate_attack() <= 3:
-                m.charge = True
-                m.exhausted = False
+        return Minion(2, 3, effects=[Effect(MinionPlaced(AttackLessThanOrEqualTo(3)), Charge(), TargetSelector())])
 
-        def silence():
-            player.unbind("minion_placed", give_charge)
 
-        minion = Minion(2, 3)
-        player.bind("minion_placed", give_charge)
-        minion.bind_once("silenced", silence)
-        return minion
+class Warbot(MinionCard):
+    def __init__(self):
+        super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 3, enrage=Enrage(ChangeAttack(1), SelfSelector()))
+
+
+class Shieldmaiden(MinionCard):
+    def __init__(self):
+        super().__init__("Shieldmaiden", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
+                         battlecry=Battlecry(IncreaseArmor(5), HeroSelector()))
+
+    def create_minion(self, player):
+        return Minion(5, 5)
+
+
+class SiegeEngine(MinionCard):
+    def __init__(self):
+        super().__init__("Siege Engine", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(5, 5, effects=[Effect(ArmorIncreased(), ChangeAttack(1), SelfSelector())])

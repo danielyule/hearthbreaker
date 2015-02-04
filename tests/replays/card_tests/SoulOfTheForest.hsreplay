@@ -1,0 +1,197 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 1
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 2
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "target": {
+        "minion": 0,
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "target": {
+        "minion": 1,
+        "player": "p1"
+      },
+      "name": "play",
+      "index": 1,
+      "random": []
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "target": {
+        "minion": 1,
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "concede"
+    },
+    {
+      "random": [],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Druid",
+        "cards": [
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Soul of the Forest"
+        ]
+      },
+      {
+        "class": "Priest",
+        "cards": [
+          "Stonetusk Boar",
+          "Ironbeak Owl"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

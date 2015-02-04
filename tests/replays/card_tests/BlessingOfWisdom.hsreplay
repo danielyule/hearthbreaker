@@ -1,0 +1,171 @@
+{
+  "moves": [
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "character": {
+        "minion": 1,
+        "player": "p2"
+      },
+      "target": {
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "target": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "name": "play",
+      "random": []
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "target": {
+        "minion": 1,
+        "player": "p2"
+      },
+      "name": "play",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "target": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "name": "play",
+      "index": 2,
+      "random": []
+    },
+    {
+      "character": {
+        "minion": 0,
+        "player": "p2"
+      },
+      "target": {
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "character": {
+        "minion": 1,
+        "player": "p2"
+      },
+      "target": {
+        "player": "p1"
+      },
+      "name": "attack",
+      "random": []
+    },
+    {
+      "random": [],
+      "name": "concede"
+    },
+    {
+      "random": [],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [],
+    "decks": [
+      {
+        "class": "Paladin",
+        "cards": [
+          "Blessing of Wisdom"
+        ]
+      },
+      {
+        "class": "Priest",
+        "cards": [
+          "Stonetusk Boar",
+          "Stonetusk Boar",
+          "Ironbeak Owl"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

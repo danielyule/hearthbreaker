@@ -1,3 +1,8 @@
+from hearthbreaker.tags.action import Give, DecreaseDurability, Heal
+from hearthbreaker.tags.event import MinionSummoned, Attack
+from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker
+from hearthbreaker.tags.base import Buff, Effect, Battlecry
+from hearthbreaker.tags.status import DivineShield, Taunt, ChangeAttack, ChangeHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import WeaponCard, Weapon
 
@@ -7,8 +12,7 @@ class LightsJustice(WeaponCard):
         super().__init__("Light's Justice", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE)
 
     def create_weapon(self, player):
-        weapon = Weapon(1, 4)
-        return weapon
+        return Weapon(1, 4)
 
 
 class SwordOfJustice(WeaponCard):
@@ -16,21 +20,9 @@ class SwordOfJustice(WeaponCard):
         super().__init__("Sword of Justice", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
-        def buff_minion(minion):
-            if minion.player is player:
-                minion.increase_health(1)
-                minion.change_attack(1)
-                weapon.durability -= 1
-                if weapon.durability == 0:
-                    weapon.destroy()
-
-        def on_destroy():
-            player.unbind("minion_summoned", buff_minion)
-
-        weapon = Weapon(1, 5)
-        player.bind("minion_summoned", buff_minion)
-        weapon.bind_once("destroyed", on_destroy)
-        return weapon
+        return Weapon(1, 5, effects=[Effect(MinionSummoned(), Give([Buff(ChangeAttack(1)), Buff(ChangeHealth(1))]),
+                                            TargetSelector()),
+                                     Effect(MinionSummoned(), DecreaseDurability(), HeroSelector())])
 
 
 class TruesilverChampion(WeaponCard):
@@ -38,13 +30,14 @@ class TruesilverChampion(WeaponCard):
         super().__init__("Truesilver Champion", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def create_weapon(self, player):
-        def heal(attacker):
-            player.hero.heal(player.effective_heal_power(2), self)
+        return Weapon(4, 2, effects=[Effect(Attack(), Heal(2), HeroSelector())])
 
-        def on_destroy():
-            player.hero.unbind("attack", heal)
 
-        weapon = Weapon(4, 2)
-        player.hero.bind("attack", heal)
-        weapon.bind_once("destroyed", on_destroy)
-        return weapon
+class Coghammer(WeaponCard):
+    def __init__(self):
+        super().__init__("Coghammer", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
+                         battlecry=Battlecry(Give([Buff(DivineShield()), Buff(Taunt())]),
+                                             MinionSelector(picker=RandomPicker())))
+
+    def create_weapon(self, player):
+        return Weapon(2, 3)

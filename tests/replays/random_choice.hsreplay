@@ -1,0 +1,124 @@
+{
+  "moves": [
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "card": {
+        "card_index": 0
+      },
+      "random": [],
+      "name": "play",
+      "index": 0
+    },
+    {
+      "random": [],
+      "name": "end"
+    },
+    {
+      "random": [
+        0
+      ],
+      "name": "start"
+    },
+    {
+      "random": [
+        {
+          "minion": 0,
+          "player": "p1"
+        }
+      ],
+      "name": "end"
+    }
+  ],
+  "header": {
+    "random": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "decks": [
+      {
+        "class": "Mage",
+        "cards": [
+          "Demolisher"
+        ]
+      },
+      {
+        "class": "Druid",
+        "cards": [
+          "Stonetusk Boar"
+        ]
+      }
+    ],
+    "keep": [
+      [
+        0,
+        1,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        3
+      ]
+    ]
+  }
+}

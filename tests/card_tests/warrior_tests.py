@@ -1,9 +1,9 @@
 import random
 import unittest
 
-from hearthbreaker.agents.basic_agents import DoNothingBot
-from tests.agents.testing_agents import MinionPlayingAgent, PredictableAgentWithoutHeroPower, SpellTestingAgent, \
-    OneSpellTestingAgent, SelfSpellTestingAgent
+from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
+from tests.agents.testing_agents import OneCardPlayingAgent, PlayAndAttackAgent, CardTestingAgent,\
+    SelfSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -13,7 +13,7 @@ class TestWarrior(unittest.TestCase):
         random.seed(1857)
 
     def test_ArathiWeaponsmith(self):
-        game = generate_game_for(ArathiWeaponsmith, StonetuskBoar, MinionPlayingAgent, DoNothingBot)
+        game = generate_game_for(ArathiWeaponsmith, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
         # Arathi Weaponsmith should be played
         for turn in range(0, 7):
@@ -27,7 +27,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, game.players[0].hero.weapon.durability)
 
     def test_Armorsmith(self):
-        game = generate_game_for(Armorsmith, StonetuskBoar, MinionPlayingAgent, PredictableAgentWithoutHeroPower)
+        game = generate_game_for(Armorsmith, StonetuskBoar, OneCardPlayingAgent, PlayAndAttackAgent)
 
         # Armorsmith should be played
         for turn in range(0, 3):
@@ -45,7 +45,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[0].hero.armor)
 
     def test_CruelTaskmaster(self):
-        game = generate_game_for(CruelTaskmaster, Shieldbearer, MinionPlayingAgent, MinionPlayingAgent)
+        game = generate_game_for(CruelTaskmaster, Shieldbearer, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -65,14 +65,14 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[1].minions[0].health)
 
     def test_FrothingBerserker(self):
-        game = generate_game_for(FrothingBerserker, AngryChicken, MinionPlayingAgent, PredictableAgentWithoutHeroPower)
+        game = generate_game_for(FrothingBerserker, AngryChicken, OneCardPlayingAgent, PlayAndAttackAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
 
         self.assertEqual(3, len(game.players[1].minions))
 
-        # FrothingBerserker should be played
+        # Frothing Berserker should be played
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
@@ -85,7 +85,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, game.players[0].minions[0].health)
 
     def test_GrommashHellscream(self):
-        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PredictableAgentWithoutHeroPower, SpellTestingAgent)
+        game = generate_game_for(GrommashHellscream, ExplosiveTrap, PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 14):
             game.play_single_turn()
@@ -111,7 +111,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
 
     def test_KorkronElite(self):
-        game = generate_game_for(KorkronElite, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        game = generate_game_for(KorkronElite, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -124,7 +124,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(26, game.players[1].hero.health)
 
     def test_WarsongCommander(self):
-        game = generate_game_for(WarsongCommander, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        game = generate_game_for(WarsongCommander, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
 
         # Super special test cases - http://www.hearthhead.com/card=1009/warsong-commander#comments:id=1935295
         game.players[0].mana = 100
@@ -188,7 +188,7 @@ class TestWarrior(unittest.TestCase):
         self.assertFalse(game.players[0].minions[0].charge)
 
     def test_BattleRage(self):
-        game = generate_game_for(BattleRage, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(BattleRage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.players[0].mana = 100
 
@@ -210,7 +210,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].hand))
 
     def test_Brawl(self):
-        game = generate_game_for(Brawl, StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for(Brawl, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         game.players[0].mana = 100
 
@@ -236,7 +236,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
 
     def test_Charge(self):
-        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, SpellTestingAgent, DoNothingBot)
+        game = generate_game_for([Shieldbearer, Charge], StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.players[0].agent.play_on = 4
 
         for turn in range(0, 6):
@@ -248,7 +248,7 @@ class TestWarrior(unittest.TestCase):
         self.assertTrue(game.players[0].minions[0].charge)
 
     def test_Cleave(self):
-        game = generate_game_for(Cleave, SenjinShieldmasta, OneSpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(Cleave, SenjinShieldmasta, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 10):
             game.play_single_turn()
@@ -266,7 +266,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[1].minions[1].health)
 
     def test_WhirlwindExecute(self):
-        game = generate_game_for(Execute, [GoldshireFootman, Whirlwind], SpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(Execute, [GoldshireFootman, Whirlwind], CardTestingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -279,7 +279,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_HeroicStrike(self):
-        game = generate_game_for(HeroicStrike, StonetuskBoar, PredictableAgentWithoutHeroPower, DoNothingBot)
+        game = generate_game_for(HeroicStrike, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -287,7 +287,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(26, game.players[1].hero.health)
 
     def test_InnerRageRampage(self):
-        game = generate_game_for([InnerRage, Rampage], GoldshireFootman, OneSpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for([InnerRage, Rampage], GoldshireFootman, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()
@@ -307,7 +307,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[1].minions[1].health)
 
     def test_ShieldBlockShieldSlam(self):
-        game = generate_game_for([ShieldBlock, ShieldSlam], Doomsayer, OneSpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for([ShieldBlock, ShieldSlam], Doomsayer, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 6):
             game.play_single_turn()
@@ -324,7 +324,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].health)
 
     def test_Slam(self):
-        game = generate_game_for(Slam, [GoldshireFootman, Doomsayer], OneSpellTestingAgent, MinionPlayingAgent)
+        game = generate_game_for(Slam, [GoldshireFootman, Doomsayer], OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(0, 4):
             game.play_single_turn()  # Slam to kill Footman, no draw
@@ -338,7 +338,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
 
     def test_Upgrade(self):
-        game = generate_game_for(Upgrade, StonetuskBoar, OneSpellTestingAgent, DoNothingBot)
+        game = generate_game_for(Upgrade, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
         for turn in range(0, 2):
             game.play_single_turn()
@@ -352,7 +352,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.weapon.durability)
 
     def test_MortalStrike(self):
-        game = generate_game_for(MortalStrike, StonetuskBoar, SelfSpellTestingAgent, DoNothingBot)
+        game = generate_game_for(MortalStrike, StonetuskBoar, SelfSpellTestingAgent, DoNothingAgent)
         game.players[0].hero.health = 14
         for turn in range(0, 8):
             game.play_single_turn()
@@ -364,18 +364,28 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(4, game.players[0].hero.health)
 
     def test_CommandingShout(self):
-        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar,
-                                  StonetuskBoar, StonetuskBoar, CommandingShout], Abomination,
-                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
-        for turn in range(0, 11):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, StonetuskBoar,
+                                  CommandingShout], UnstableGhoul,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Unstable Ghoul", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(0, len(game.current_player.minions))
 
     def test_Gorehowl(self):
         game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
-                                 PredictableAgentWithoutHeroPower, SpellTestingAgent)
+                                 PlayAndAttackAgent, CardTestingAgent)
 
         for turn in range(0, 13):
             game.play_single_turn()
@@ -390,7 +400,7 @@ class TestWarrior(unittest.TestCase):
 
     def test_FieryWarAxe(self):
         game = generate_game_for(FieryWarAxe, BoulderfistOgre,
-                                 PredictableAgentWithoutHeroPower, DoNothingBot)
+                                 PlayAndAttackAgent, DoNothingAgent)
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -401,7 +411,7 @@ class TestWarrior(unittest.TestCase):
 
     def test_DeathsBite(self):
         game = generate_game_for([IronfurGrizzly, DeathsBite], Deathlord,
-                                 PredictableAgentWithoutHeroPower, MinionPlayingAgent)
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
 
         for turn in range(0, 7):
             game.play_single_turn()
@@ -420,3 +430,84 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].health)
         self.assertEqual(3, game.current_player.minions[1].health)
+
+    def test_Warbot(self):
+        game = generate_game_for(Warbot, StonetuskBoar, CardTestingAgent, PlayAndAttackAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+
+    def test_BouncingBlades(self):
+        game = generate_game_for([GoldshireFootman, EchoingOoze, BouncingBlade], [GoldshireFootman, EchoingOoze],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[0].minions[2].health)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[2].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[2].health)
+
+    def test_OgreWarmaul(self):
+        game = generate_game_for(OgreWarmaul,
+                                 [StonetuskBoar, GoldshireFootman, SilverbackPatriarch],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertIsNotNone(game.current_player.hero.weapon)
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Stonetusk Boar", game.other_player.minions[0].card.name)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Silverback Patriarch", game.other_player.minions[0].card.name)
+        self.assertEqual(30, game.other_player.hero.health)
+
+    def test_SiegeEngine(self):
+        game = generate_game_for(SiegeEngine, StonetuskBoar, PredictableAgent, DoNothingAgent)
+
+        # Arathi Weaponsmith should be played
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(12, game.players[0].hero.armor)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].health)
+        self.assertEqual("Siege Engine", game.players[0].minions[0].card.name)
+
+        # Hero Power will be used, triggering the Siege Engine
+        for turn in range(0, 2):
+            game.play_single_turn()
+        self.assertEqual(14, game.players[0].hero.armor)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[-1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[-1].health)

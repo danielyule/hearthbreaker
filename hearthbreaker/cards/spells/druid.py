@@ -1,5 +1,8 @@
 import copy
-from hearthbreaker.effects.minion import KillMinion, SummonOnDeath
+from hearthbreaker.tags.action import Summon, Kill
+from hearthbreaker.tags.base import Effect, Deathrattle
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Card, MinionCard, Minion
@@ -60,7 +63,7 @@ class Savagery(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.damage(player.effective_spell_damage(player.hero.temp_attack), self)
+        self.target.damage(player.effective_spell_damage(player.hero.calculate_attack()), self)
 
 
 class MarkOfTheWild(Card):
@@ -244,6 +247,14 @@ class Bite(Card):
         player.hero.increase_armor(4)
 
 
+class Treant(MinionCard):
+    def __init__(self):
+        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+    def create_minion(self, _):
+        return Minion(2, 2)
+
+
 class SoulOfTheForest(Card):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID,
@@ -252,16 +263,10 @@ class SoulOfTheForest(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def create_minion(self, _):
-                return Minion(2, 2)
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
-            minion.add_effect(SummonOnDeath(Treant))
+            minion.deathrattle.append(Deathrattle(Summon(Treant()), PlayerSelector()))
 
 
 class Swipe(Card):
@@ -366,7 +371,7 @@ class ForceOfNature(Card):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[KillMinion("turn_ended")])
+                return Minion(2, 2, charge=True, effects=[Effect(TurnEnded(), Kill(), SelfSelector())])
 
         for i in [0, 1, 2]:
             treant_card = Treant()
@@ -384,7 +389,7 @@ class Starfire(Card):
         player.draw()
 
 
-class PoisionSeeds(Card):
+class PoisonSeeds(Card):
     def __init__(self):
         super().__init__("Poison Seeds", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 

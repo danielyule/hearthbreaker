@@ -1,7 +1,12 @@
-import hearthbreaker.targeting
+from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget
+from hearthbreaker.tags.base import Aura, Effect, Battlecry
+from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget
+from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
+from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
+    UserPicker, SelfSelector, RandomPicker, EnemyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import MinionCard, Minion
-from hearthbreaker.cards.battlecries import deal_three_damage, give_windfury
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
 
 
 class AlAkirTheWindlord(MinionCard):
@@ -31,10 +36,10 @@ class EarthElemental(MinionCard):
 class FireElemental(MinionCard):
     def __init__(self):
         super().__init__("Fire Elemental", 6, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_battlecry_target)
+                         battlecry=Battlecry(Damage(3), CharacterSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(6, 5, battlecry=deal_three_damage)
+        return Minion(6, 5)
 
 
 class FlametongueTotem(MinionCard):
@@ -42,9 +47,7 @@ class FlametongueTotem(MinionCard):
         super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        minion = Minion(0, 3)
-        minion.add_adjacency_aura(2, 0, player)
-        return minion
+        return Minion(0, 3, auras=[Aura(ChangeAttack(2), MinionSelector(Adjacent()))])
 
 
 class ManaTideTotem(MinionCard):
@@ -52,13 +55,7 @@ class ManaTideTotem(MinionCard):
         super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        def draw_card():
-            player.draw()
-
-        minion = Minion(0, 3)
-        player.bind("turn_ended", draw_card)
-        minion.bind_once("silenced", lambda: player.unbind("turn_ended", draw_card))
-        return minion
+        return Minion(0, 3, effects=[Effect(TurnEnded(), Draw(), PlayerSelector())])
 
 
 class UnboundElemental(MinionCard):
@@ -66,20 +63,91 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        def buff_minion():
-            minion.increase_health(1)
-            minion.change_attack(1)
-
-        minion = Minion(2, 4)
-        player.bind("overloaded", buff_minion)
-        minion.bind_once("silenced", lambda: player.unbind("overloaded", buff_minion))
-        return minion
+        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), Give(ChangeAttack(1)), SelfSelector()),
+                                     Effect(CardPlayed(HasOverload()), Give(ChangeHealth(1)), SelfSelector())])
 
 
 class Windspeaker(MinionCard):
     def __init__(self):
         super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         targeting_func=hearthbreaker.targeting.find_friendly_minion_battlecry_target)
+                         battlecry=Battlecry(Give(Windfury()), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
-        return Minion(3, 3, battlecry=give_windfury)
+        return Minion(3, 3)
+
+
+class HealingTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Healing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, effects=[Effect(TurnEnded(), Heal(1), MinionSelector(condition=None))])
+
+
+class SearingTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Searing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class StoneclawTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Stoneclaw Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, taunt=True)
+
+
+class WrathOfAirTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Wrath of Air Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 2, spell_damage=1)
+
+
+class SpiritWolf(MinionCard):
+    def __init__(self):
+        super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, p):
+        return Minion(2, 3, taunt=True)
+
+
+class VitalityTotem(MinionCard):
+    def __init__(self):
+        super().__init__("Vitality Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
+
+    def create_minion(self, player):
+        return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(4), HeroSelector())])
+
+
+class SiltfinSpiritwalker(MinionCard):
+    def __init__(self):
+        super().__init__("Siltfin Spiritwalker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC, MINION_TYPE.MURLOC,
+                         overload=1)
+
+    def create_minion(self, player):
+        return Minion(2, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MURLOC)), Draw(), PlayerSelector())])
+
+
+class WhirlingZapomatic(MinionCard):
+    def __init__(self):
+        super().__init__("Whirling Zap-o-matic", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+
+    def create_minion(self, p):
+        return Minion(3, 2, windfury=True)
+
+
+class DunemaulShaman(MinionCard):
+    def __init__(self):
+        super().__init__("Dunemaul Shaman", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=1)
+
+    def create_minion(self, player):
+        return Minion(5, 4, windfury=True, effects=[Effect(Attack(),
+                                                           ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                          EnemyPlayer(),
+                                                                                          RandomPicker())),
+                                                           SelfSelector(), OneIn(2))])

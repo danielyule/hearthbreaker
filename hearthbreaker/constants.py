@@ -19,6 +19,11 @@ class CARD_RARITY:
     def from_str(rarity_name):
         return CARD_RARITY.__rarities[rarity_name.upper()]
 
+    @staticmethod
+    def to_str(class_number):
+        classes = dict(zip(CARD_RARITY.__rarities.values(), CARD_RARITY.__rarities.keys()))
+        return classes[class_number].capitalize()
+
 
 class CHARACTER_CLASS:
     ALL = 0
@@ -43,6 +48,7 @@ class CHARACTER_CLASS:
         "PALADIN": PALADIN,
         "ROGUE": ROGUE,
         "WARLOCK": WARLOCK,
+        "LORD_JARAXXUS": LORD_JARAXXUS,
         "": ALL,
     }
 
@@ -66,6 +72,7 @@ class MINION_TYPE:
     DEMON = 5
     PIRATE = 6
     TOTEM = 7
+    MECH = 8
 
     __types = {
         "": NONE,
@@ -76,6 +83,7 @@ class MINION_TYPE:
         "DEMON": DEMON,
         "PIRATE": PIRATE,
         "TOTEM": TOTEM,
+        "MECH": MECH,
     }
 
     @staticmethod

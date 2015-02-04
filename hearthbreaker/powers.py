@@ -62,8 +62,8 @@ class MagePower(Power):
         super().__init__(hero)
 
     def use(self):
-        super().use()
         target = self.hero.find_power_target()
+        super().use()
         target.damage(1 * self.hero.player.spell_multiplier, None)
         self.hero.player.game.check_delayed()
 
@@ -73,8 +73,8 @@ class PriestPower(Power):
         super().__init__(hero)
 
     def use(self):
-        super().use()
         target = self.hero.find_power_target()
+        super().use()
         if self.hero.player.heal_does_damage:
             target.damage(2 * self.hero.player.spell_multiplier, None)
         else:
@@ -117,17 +117,9 @@ class PaladinPower(Power):
         super().__init__(hero)
 
     def use(self):
-        class SilverHandRecruit(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Silver Hand Recruit", 1, hearthbreaker.constants.CHARACTER_CLASS.PALADIN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(1, 1)
-
         super().use()
 
-        recruit_card = SilverHandRecruit()
+        recruit_card = hearthbreaker.cards.minions.paladin.SilverHandRecruit()
         recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
@@ -146,8 +138,9 @@ class RoguePower(Power):
                 return weapon
 
         super().use()
-
-        knife = WickedKnife().create_weapon(self.hero.player)
+        wicked_knife = WickedKnife()
+        knife = wicked_knife.create_weapon(self.hero.player)
+        knife.card = wicked_knife
         knife.equip(self.hero.player)
 
 
@@ -182,61 +175,19 @@ class ShamanPower(Power):
         return super().can_use()
 
     def use(self):
-        class HealingTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Healing Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                def heal_friendly_minions():
-                    for m in player.minions:
-                        m.heal(player.effective_heal_power(1), self)
-
-                def silence():
-                    player.unbind("turn_ended", heal_friendly_minions)
-
-                minion = hearthbreaker.game_objects.Minion(0, 2)
-                player.bind("turn_ended", heal_friendly_minions)
-                minion.bind_once("silenced", silence)
-                return minion
-
-        class SearingTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Searing Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(1, 1)
-
-        class StoneclawTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Stoneclaw Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(0, 2, taunt=True)
-
-        class WrathOfAirTotem(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Wrath of Air Totem", 1, hearthbreaker.constants.CHARACTER_CLASS.SHAMAN,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL, hearthbreaker.constants.MINION_TYPE.TOTEM)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(0, 2, spell_damage=1)
-
         super().use()
 
         totems = []
         if not self.healing_totem:
-            totems.append(HealingTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.HealingTotem())
         if not self.searing_totem:
-            totems.append(SearingTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.SearingTotem())
         if not self.stoneclaw_totem:
-            totems.append(StoneclawTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.StoneclawTotem())
         if not self.wrath_of_air_totem:
-            totems.append(WrathOfAirTotem())
+            totems.append(hearthbreaker.cards.minions.shaman.WrathOfAirTotem())
 
-        random_totem = totems[self.hero.player.game.random(0, len(totems) - 1)]
+        random_totem = self.hero.player.game.random_choice(totems)
         random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
@@ -255,17 +206,9 @@ class JaraxxusPower(Power):
         super().__init__(hero)
 
     def use(self):
-        class Infernal(hearthbreaker.game_objects.MinionCard):
-            def __init__(self):
-                super().__init__("Infernal", 6, hearthbreaker.constants.CHARACTER_CLASS.LORD_JARAXXUS,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL)
-
-            def create_minion(self, player):
-                return hearthbreaker.game_objects.Minion(6, 6, hearthbreaker.constants.MINION_TYPE.DEMON)
-
         super().use()
 
-        infernal_card = Infernal()
+        infernal_card = hearthbreaker.cards.minions.warlock.Infernal()
         infernal_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
