@@ -15,6 +15,10 @@ class JSONObject(metaclass=abc.ABCMeta):
     def from_json(action, selector):
         pass
 
+    def __from_json__(self, **kwargs):
+        self.__init__(**kwargs)
+        return self
+
     def eq(self, other):
         return str(self) == str(other)
 
@@ -230,10 +234,6 @@ class Selector(JSONObject, metaclass=abc.ABCMeta):
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
 
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
-
 
 class Action(JSONObject, metaclass=abc.ABCMeta):
 
@@ -249,10 +249,6 @@ class Action(JSONObject, metaclass=abc.ABCMeta):
         cls = getattr(action_mod, cls_name)
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
-
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
 
 
 class Status(JSONObject, metaclass=abc.ABCMeta):
@@ -273,18 +269,15 @@ class Status(JSONObject, metaclass=abc.ABCMeta):
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
 
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
-
 
 class Amount(abc.ABCMeta):
     def __init__(cls, name, bases, dct):
         super(Amount, cls).__init__(name, bases, dct)
         base_init = cls.__init__
         base_to_json = cls.__to_json__
+        base_from_json = cls.__from_json__
 
-        def init_with_amount(self, amount=None, multiplier=1, **kwargs):
+        def init_with_amount(self, amount=1, multiplier=1, **kwargs):
             self.amount = amount
             self.multipler = multiplier
             return base_init(self, **kwargs)
@@ -297,14 +290,17 @@ class Amount(abc.ABCMeta):
                 js['multiplier'] = self.multipler
             return js
 
-        def from_json_with_amount(self, amount=None, **kwargs):
+        def from_json_with_amount(self, amount=1, multiplier=1, **kwargs):
             if amount:
                 if isinstance(amount, dict):
-                    kwargs['amount'] = Function.from_json(**amount)
+                    self.amount = Function.from_json(**amount)
                 else:
-                    kwargs['amount'] = amount
-            cls.__init__(self, **kwargs)
-            return self
+                    self.amount = amount
+            self.multipler = multiplier
+            if base_from_json is JSONObject.__from_json__:
+                base_init(self, **kwargs)
+                return self
+            return base_from_json(self, **kwargs)
 
         def get_amount(self, source, target):
             if isinstance(self.amount, Function):
@@ -497,10 +493,6 @@ class Condition(JSONObject, metaclass=abc.ABCMeta):
         cls = getattr(action_mod, cls_name)
         obj = cls.__new__(cls)
         return obj.__from_json__(**kwargs)
-
-    def __from_json__(self, **kwargs):
-        self.__init__(**kwargs)
-        return self
 
     @abc.abstractmethod
     def __to_json__(self):

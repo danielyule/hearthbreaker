@@ -193,9 +193,6 @@ class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
 
 
 class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
-    def test_WarsongCommander(self):
-        pass  # This test uses Bloodsail Corsair, which also can't be implemented (yet)
-
     def test_BouncingBlades(self):
         pass  # This test relies on Echoing Ooze.
 
@@ -203,9 +200,6 @@ class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
 
     def test_CrazedAlchemist(self):
-        pass
-
-    def test_Deathwing(self):
         pass
 
     def testEchoingOoze_silence(self):
@@ -220,13 +214,7 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
     def test_EchoingOoze_buff(self):
         pass
 
-    def test_FrostwolfWarlord(self):
-        pass
-
     def test_GelbinMekkaTwerk(self):
-        pass
-
-    def test_HarrisonJones(self):
         pass
 
     def test_HungryCrab(self):
@@ -236,7 +224,4 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
         pass
 
     def test_TinkmasterOverspark(self):
-        pass
-
-    def test_TwilightDrake(self):
         pass

@@ -220,28 +220,27 @@ class Damage(Action):
         }
 
 
-class Draw(Action):
-    def __init__(self, amount=1):
-        self.amount = amount
+class Draw(Action, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
 
     def act(self, actor, target):
-        for draw in range(0, self.amount):
+        for draw in range(0, self.get_amount(actor, target)):
             target.draw()
 
     def __to_json__(self):
         return {
             'name': 'draw',
-            'amount': self.amount
         }
 
 
-class Discard(Action):
-    def __init__(self, query=CardQuery(source=CARD_SOURCE.MY_HAND), amount=1):
+class Discard(Action, metaclass=Amount):
+    def __init__(self, query=CardQuery(source=CARD_SOURCE.MY_HAND)):
+        super().__init__()
         self.query = query
-        self.amount = amount
 
     def act(self, actor, target):
-        for index in range(0, self.amount):
+        for index in range(0, self.get_amount(actor, target)):
             card = self.query.get_card(actor.player)
             if card:
                 actor.player.trigger("discard", card)
@@ -249,12 +248,10 @@ class Discard(Action):
     def __to_json__(self):
         return {
             'name': 'discard',
-            'amount': self.amount,
             'query': self.query,
         }
 
-    def __from_json__(self, query, amount):
-        self.amount = amount
+    def __from_json__(self, query):
         self.query = CardQuery.from_json(**query)
         return self
 
@@ -425,6 +422,16 @@ class Equip(Action):
     def __from_json__(self, weapon):
         self.weapon = CardQuery.from_json(**weapon)
         return self
+
+
+class Destroy(Action):
+    def act(self, actor, target):
+        target.destroy()
+
+    def __to_json__(self):
+        return {
+            'name': 'destroy'
+        }
 
 
 class Steal(Action):

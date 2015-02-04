@@ -134,15 +134,14 @@ class CardSelector(Selector, metaclass=abc.ABCMeta):
         players = self.players.get_players(source.player)
         targets = []
         for p in players:
-            for card in p.cards:
+            for card in p.hand:
                 if self.match(source, card):
                     targets.append(card)
 
         return targets
 
-    @abc.abstractmethod
     def match(self, source, obj):
-        pass
+        return True
 
     def __to_json__(self):
         return {
@@ -449,7 +448,7 @@ class WeaponSelector(Selector):
         self.players = players
 
     def get_targets(self, source, obj=None):
-        return [p.hero.weapon for p in self.players.get_players(source.player)]
+        return [p.hero.weapon for p in self.players.get_players(source.player) if p.hero.weapon]
 
     def match(self, source, obj):
         return source.player is obj

@@ -876,11 +876,11 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.current_player.hero.weapon is not None)
+        self.assertIsNotNone(game.current_player.hero.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.other_player.hero.weapon)
 
     def test_AcidicSwampOozeWithNoWeapon(self):
         game = generate_game_for(AcidicSwampOoze, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -891,7 +891,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.other_player.hero.weapon)
 
     def test_KnifeJuggler(self):
         game = generate_game_for([KnifeJuggler, KnifeJuggler, MasterOfDisguise], [StonetuskBoar, GoldshireFootman],
@@ -1804,11 +1804,30 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNotNone(game.players[1].hero.weapon)
+        self.assertEqual(4, game.players[1].hero.weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(8, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
+
+    def test_HarrisonJones_no_weapon(self):
+        game = generate_game_for(HarrisonJones, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game.players[0].max_mana = 3  # Cheat so player 1 has room to draw 4
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
 
     def test_KingMukla(self):
         game = generate_game_for([KingMukla, MindControl], LightsJustice, OneCardPlayingAgent, OneCardPlayingAgent)
