@@ -1,4 +1,5 @@
 import copy
+from functools import reduce
 import importlib
 import random
 import abc
@@ -7,7 +8,7 @@ from hearthbreaker.tags.base import Aura, AuraUntil, Deathrattle, Effect, Enrage
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Stealth, DivineShield, Windfury, \
-    SpellDamage, NoSpellTarget
+    SpellDamage, NoSpellTarget, SetAttack
 import hearthbreaker.targeting
 import hearthbreaker.constants
 
@@ -376,9 +377,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
-        self.frozen = False
-        #: If the character was frozen this turn (and so won't be unfrozen before the next turn)
-        self.frozen_this_turn = False
+        self.frozen = 0
         #: The :class:`Player` that owns this character
         self.player = None
         #: Whether or not this character is immune to damage (but not other tags)
@@ -475,7 +474,26 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         Calculates the amount of attack this :class:`Character` has, including the base attack, any temporary attack
         bonuses for this turn
         """
-        return max(0, self.base_attack + self.attack_delta)
+
+        # Add together all the attack amounts from buffs
+        attack = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
+                                                         if isinstance(buff.status, ChangeAttack) and
+                                                         (not buff.condition or buff.condition(self, self))],
+                        self.base_attack)
+        attack = reduce(lambda a, b: b.update(self, a), [aura.status for aura in self.player.minion_auras
+                                                         if aura.match(self) and
+                                                         isinstance(aura.status, ChangeAttack)],
+                        attack)
+        attack = reduce(lambda a, b: b.update(self, a), [aura.status for aura in self.player.opponent.minion_auras
+                                                         if aura.match(self)
+                                                         and isinstance(aura.status, ChangeAttack)],
+                        attack)
+
+        if self.enrage and self.enraged:
+            attack = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
+                                                             if self.enrage.selector.match(self, self) and
+                                                             isinstance(status, ChangeAttack)], attack)
+        return max(0, attack)
 
     def calculate_max_health(self):
         """
@@ -594,12 +612,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         Sets the amount of total attack this :class:`Character` has.
         :param new_attack: An integer specifying what this character's new attack should be
         """
-        diff = new_attack - (self.base_attack + self.attack_delta)
-        for player in self.game.players:
-            for aura in player.minion_auras:
-                if aura.match(self) and isinstance(aura.status, ChangeAttack):
-                    diff += aura.status.amount
-        self.change_attack(diff)
+        self.buffs.append(Buff(SetAttack(new_attack)))
 
     def set_health_to(self, new_health):
         """
@@ -621,15 +634,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         if was_enraged:
             self._do_unenrage()
             self.trigger('unenraged')
-
-    def freeze(self):
-        """
-        Causes this :class:`Character` to be frozen.  If this character is frozen on its opponent's turn, it
-        will not be able to attack on the next turn.  If frozen on its owner's turn, it will not be able
-        to attack this turn or its owner's next turn.
-        """
-        self.frozen_this_turn = True
-        self.frozen = True
 
     def heal(self, amount, source):
         """
@@ -660,8 +664,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         Silence this :class:`Character`.  This will trigger the silence event, and undo any status tags that have
         affected this character (immune, attack & health increases, frozen, windfury)
         """
-        self.frozen = False
-        self.frozen_this_turn = False
         health_full = self.health == self.calculate_max_health()
         for effect in reversed(self.effects):
             effect.unapply()
@@ -899,7 +901,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         """
         super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name)
         self.minion_type = minion_type
-        self.battlecry = battlecry
+        if battlecry:
+            if isinstance(battlecry, tuple):
+                self.battlecry = battlecry
+            else:
+                self.battlecry = (battlecry,)
+        else:
+            self.battlecry = ()
         self.choices = choices
         self.combo = combo
 
@@ -953,7 +961,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             self.combo.battlecry(minion)
         else:
             if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
-                self.battlecry.battlecry(minion)
+                for battlecry in self.battlecry:
+                    battlecry.battlecry(minion)
             elif minion.battlecry is not None:
                 minion.battlecry(minion)
         if not minion.removed:
@@ -1294,14 +1303,7 @@ class Minion(Character):
             self.game.check_delayed()
 
     def __to_json__(self):
-        if self.frozen_this_turn and self.player is self.player.game.current_player:
-            frozen_for = 3
-        elif self.frozen_this_turn:
-            frozen_for = 2
-        elif self.frozen:
-            frozen_for = 1
-        else:
-            frozen_for = 0
+
         r_val = super().__to_json__()
         r_val.update({
             'name': self.card.name,
@@ -1313,7 +1315,6 @@ class Minion(Character):
             "exhausted": self.exhausted,
             "already_attacked": not self.active,
             'deathrattles': self.deathrattle,
-            'frozen_for': frozen_for,
         })
         if self.enrage:
             r_val['enrage'] = self.enrage
@@ -1569,8 +1570,6 @@ class Hero(Character):
         new_hero.armor = self.armor
         new_hero.bonus_attack = 0
         new_hero.used_windfury = False
-        new_hero.frozen = False
-        new_hero.frozen_this_turn = False
         new_hero.active = self.active
         new_hero.effects = copy.deepcopy(self.effects)
         new_hero.auras = copy.deepcopy(self.auras)
@@ -1613,14 +1612,7 @@ class Hero(Character):
         return True
 
     def __to_json__(self):
-        if self.frozen_this_turn and self.player is self.player.game.current_player:
-            frozen_for = 3
-        elif self.frozen_this_turn:
-            frozen_for = 2
-        elif self.frozen:
-            frozen_for = 1
-        else:
-            frozen_for = 0
+
         r_val = super().__to_json__()
         r_val.update({
             'character': hearthbreaker.constants.CHARACTER_CLASS.to_str(self.character_class),
@@ -1629,7 +1621,6 @@ class Hero(Character):
             'armor': self.armor,
             'attack': self.base_attack,
             'immune': self.immune,
-            'frozen_for': frozen_for,
             'used_windfury': self.used_windfury,
             'already_attacked': not self.active,
         })
@@ -1639,10 +1630,6 @@ class Hero(Character):
     def __from_json__(cls, hd, player):
         hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), player)
         GameObject.__from_json__(hero, **hd)
-        if hd["frozen_for"] == 3 or hd["frozen_for"] == 2:
-            hero.frozen_this_turn = True
-        elif hd["frozen_for"] > 0:
-            hero.frozen = True
         hero.health = hd["health"]
         hero.base_attack = hd["attack"]
         hero.armor = hd["armor"]
@@ -1955,24 +1942,20 @@ class Game(Bindable):
         self.game_ended = True
 
     def _end_turn(self):
+        from hearthbreaker.tags.status import Frozen
         self.current_player.trigger("turn_ended")
-        if self.current_player.hero.frozen_this_turn:
-            self.current_player.hero.frozen_this_turn = False
-        else:
-            self.current_player.hero.frozen = False
-
-        self.other_player.hero.frozen_this_turn = False
-        for minion in self.other_player.minions:
-            minion.frozen_this_turn = False
+        if self.current_player.hero.frozen and self.current_player.hero.active:
+            self.current_player.hero.frozen = 0
+            self.current_player.hero.buffs = \
+                [buff for buff in self.current_player.hero.buffs if not isinstance(buff, Frozen)]
 
         for minion in self.current_player.minions:
-            minion.active = False
+            if minion.active and minion.frozen:
+                minion.frozen = False
+                minion.buffs = [buff for buff in minion.buffs if not isinstance(buff, Frozen)]
             minion.exhausted = False
             minion.used_windfury = False
-            if minion.frozen_this_turn:
-                minion.frozen_this_turn = False
-            else:
-                minion.frozen = False
+            minion.active = False
 
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)

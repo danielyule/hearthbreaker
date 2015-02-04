@@ -356,3 +356,13 @@ class OneIn(Condition):
             'name': 'one_in',
             'amount': self.amount,
         }
+
+
+class HasDivineShield(Condition):
+    def evaluate(self, target, minion, *args):
+        return minion.divine_shield
+
+    def __to_json__(self):
+        return {
+            'name': 'has_divine_shield',
+        }

@@ -1,5 +1,5 @@
 import abc
-from hearthbreaker.tags.base import Selector, Player, Picker
+from hearthbreaker.tags.base import Selector, Player, Picker, Function
 import hearthbreaker.tags.condition
 
 
@@ -227,7 +227,7 @@ class SpellSelector(CardSelector):
 class BattlecrySelector(CardSelector):
     def match(self, source, obj):
         return obj.is_minion() and obj.is_card() and \
-            obj.battlecry is not None
+            obj.battlecry is not ()
 
     def __to_json__(self):
         return {
@@ -449,7 +449,7 @@ class WeaponSelector(Selector):
         self.players = players
 
     def get_targets(self, source, obj=None):
-        return [p.hero for p in self.players.get_players(source.player)]
+        return [p.hero.weapon for p in self.players.get_players(source.player)]
 
     def match(self, source, obj):
         return source.player is obj
@@ -462,4 +462,46 @@ class WeaponSelector(Selector):
 
     def __from_json__(self, players='friendly'):
         self.players = Player.from_json(players)
+        return self
+
+
+class Count(Function):
+    def __init__(self, selector):
+        self.selector = selector
+
+    def do(self, target):
+        return len(self.selector.get_targets(target))
+
+    def __to_json__(self):
+        return {
+            'name': 'count',
+            'selector': self.selector
+        }
+
+    def __from_json__(self, selector):
+        self.selector = Selector.from_json(**selector)
+        return self
+
+
+class Attribute(Function):
+    def __init__(self, attribute, selector):
+        self.attribute = attribute
+        self.selector = selector
+
+    def do(self, target):
+        targets = self.selector.get_targets(target)
+        if len(targets) > 0 and targets[0]:
+            return getattr(targets[0], self.attribute)
+        return 0
+
+    def __to_json__(self):
+        return {
+            'name': 'attribute',
+            'attribute': self.attribute,
+            'selector': self.selector
+        }
+
+    def __from_json__(self, attribute, selector):
+        self.attribute = attribute
+        self.selector = Selector.from_json(**selector)
         return self

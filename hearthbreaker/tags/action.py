@@ -3,16 +3,6 @@ from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, 
 from hearthbreaker.tags.condition import IsSecret
 
 
-class Freeze(Action):
-    def act(self, actor, target):
-        target.freeze()
-
-    def __to_json__(self):
-        return {
-            "name": "freeze"
-        }
-
-
 class Give(Action):
     def __init__(self, buffs):
 
@@ -29,6 +19,8 @@ class Give(Action):
 
     def act(self, actor, target):
         for buff in self.buffs:
+            if hasattr(buff.status, "amount"):
+                buff.status.amount = buff.status.get_amount(target, target)
             target.add_buff(buff)
 
     def __to_json__(self):
@@ -527,7 +519,8 @@ class GiveManaCrystal(Action):
 
 class IncreaseDurability(Action):
     def act(self, actor, target):
-        target.weapon.durability += 1
+        if target.weapon:
+            target.weapon.durability += 1
 
     def __to_json__(self):
         return {
@@ -537,11 +530,40 @@ class IncreaseDurability(Action):
 
 class DecreaseDurability(Action):
     def act(self, actor, target):
-        target.weapon.durability -= 1
-        if target.weapon.durability <= 0:
-            target.weapon.destroy()
+        if target.weapon:
+            target.weapon.durability -= 1
+            if target.weapon.durability <= 0:
+                target.weapon.destroy()
 
     def __to_json__(self):
         return {
             'name': 'decrease_durability',
+        }
+
+
+class IncreaseWeaponAttack(Action):
+    def __init__(self, amount):
+        self.amount = amount
+
+    def act(self, actor, target):
+        if target.weapon:
+            target.weapon.base_attack += self.amount
+
+    def __to_json__(self):
+        return {
+            'name': 'increase_weapon_attack',
+            'amount': self.amount
+        }
+
+
+class RemoveDivineShields(Action):
+    def act(self, actor, target):
+        from hearthbreaker.tags.status import DivineShield
+        if target.divine_shield:
+            target.buffs = [buff for buff in target.buffs if not isinstance(buff.status, DivineShield)]
+            target.divine_shield = 0
+
+    def __to_json__(self):
+        return {
+            "name": "remove_divine_shields"
         }
