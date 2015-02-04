@@ -1,10 +1,11 @@
+from hearthbreaker.cards.base import WeaponCard
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, DecreaseDurability, Heal
 from hearthbreaker.tags.event import MinionSummoned, Attack
 from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker
 from hearthbreaker.tags.base import Buff, Effect, Battlecry
 from hearthbreaker.tags.status import DivineShield, Taunt, ChangeAttack, ChangeHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import WeaponCard, Weapon
 
 
 class LightsJustice(WeaponCard):

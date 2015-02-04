@@ -1,8 +1,9 @@
+from hearthbreaker.cards.base import WeaponCard
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage
 from hearthbreaker.tags.base import Battlecry
 from hearthbreaker.tags.selector import CharacterSelector, UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import WeaponCard, Weapon
 
 
 class AssassinsBlade(WeaponCard):

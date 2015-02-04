@@ -1,7 +1,8 @@
 import copy
+from hearthbreaker.cards.base import Card, MinionCard, SecretCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
+from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer

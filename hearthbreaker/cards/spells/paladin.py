@@ -1,11 +1,12 @@
 import copy
+from hearthbreaker.cards.base import Card, MinionCard, SecretCard
+from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.action import Draw
 from hearthbreaker.tags.base import Effect
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, Minion, MinionCard, SecretCard, Hero
 
 
 class AvengingWrath(Card):

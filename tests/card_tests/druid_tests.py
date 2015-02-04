@@ -2,10 +2,10 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
+from hearthbreaker.engine import Game
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
     EnemyMinionSpellTestingAgent, CardTestingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Game
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hearthbreaker.cards import *

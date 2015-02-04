@@ -3,8 +3,8 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
+from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
-from hearthbreaker.game_objects import MinionCard
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities

@@ -1,11 +1,12 @@
 import copy
+from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.base import BuffUntil
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.status import Stolen
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, Minion, MinionCard
 
 
 class CircleOfHealing(Card):

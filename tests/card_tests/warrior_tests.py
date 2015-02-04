@@ -513,7 +513,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(5, game.players[0].minions[-1].health)
 
     def test_Crush(self):
-        game = generate_game_for([Crush, ChillwindYeti], DreadInfernal, EnemyMinionSpellTestingAgent, 
+        game = generate_game_for([Crush, ChillwindYeti], DreadInfernal, EnemyMinionSpellTestingAgent,
                                  CardTestingAgent)
 
         # Player 2 plays a Dread Infernal
@@ -547,7 +547,6 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(4, game.players[0].minions[-1].health)
-
 
         # Player 1 pays 3 mana to use Crush and 4 the play a 2nd Yeti
         game.play_single_turn()

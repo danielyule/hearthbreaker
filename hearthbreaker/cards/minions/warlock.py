@@ -1,12 +1,12 @@
+from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
     SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
-from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
-from hearthbreaker.powers import JaraxxusPower
 from hearthbreaker.tags.status import ChangeHealth, ManaChange
 
 
@@ -95,6 +95,8 @@ class LordJaraxxus(MinionCard):
 
     def create_minion(self, player):
         def summon_jaraxxus(minion):
+            from hearthbreaker.powers import JaraxxusPower
+
             class BloodFury(WeaponCard):
                 def __init__(self):
                     super().__init__("Blood Fury", 3, CHARACTER_CLASS.LORD_JARAXXUS, CARD_RARITY.SPECIAL)

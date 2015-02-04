@@ -4,7 +4,7 @@ import sys
 
 from hearthbreaker.agents import registry
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Game, card_lookup, Deck
+from hearthbreaker.engine import Game, Deck, card_lookup
 from hearthbreaker.ui.game_printer import GameRender
 from hearthbreaker.cards import *
 

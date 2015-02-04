@@ -1,3 +1,5 @@
+from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
     Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, GiveEffect, ChangeTarget, Discard, \
@@ -13,7 +15,6 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector
-from hearthbreaker.game_objects import Minion, MinionCard, Card
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus
@@ -682,9 +683,6 @@ class AcidicSwampOoze(MinionCard):
                          battlecry=Battlecry(Destroy(), WeaponSelector(EnemyPlayer())))
 
     def create_minion(self, player):
-        def destroy_enemy_weapon(player):
-            if player.game.other_player.hero.weapon is not None:
-                player.game.other_player.hero.weapon.destroy()
         return Minion(3, 2)
 
 
@@ -1084,13 +1082,6 @@ class BloodsailCorsair(MinionCard):
                          battlecry=Battlecry(DecreaseDurability(), HeroSelector(EnemyPlayer())))
 
     def create_minion(self, player):
-        def reduce_durability(m):
-            if player.game.other_player.hero.weapon is not None:
-                if player.game.other_player.hero.weapon.durability > 1:
-                    player.game.other_player.hero.weapon.durability -= 1
-                else:
-                    player.game.other_player.hero.weapon.destroy()
-
         return Minion(1, 2)
 
 
@@ -1101,10 +1092,6 @@ class BloodsailRaider(MinionCard):
                                              SelfSelector()))
 
     def create_minion(self, player):
-        def gain_weapon_attack(m):
-            if player.hero.weapon is not None:
-                m.change_attack(player.hero.weapon.base_attack)
-
         return Minion(2, 3)
 
 
@@ -1114,11 +1101,6 @@ class CaptainGreenskin(MinionCard):
                          battlecry=Battlecry([IncreaseWeaponAttack(1), IncreaseDurability()], HeroSelector()))
 
     def create_minion(self, player):
-        def buff_weapon(m):
-            if player.hero.weapon is not None:
-                player.hero.weapon.base_attack += 1
-                player.hero.weapon.durability += 1
-
         return Minion(5, 4)
 
 
@@ -2066,7 +2048,6 @@ class ClockworkGnome(MinionCard):
         super().__init__("Clockwork Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-
         return Minion(2, 1,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))

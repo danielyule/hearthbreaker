@@ -1,10 +1,11 @@
+from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
-from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt
 
 

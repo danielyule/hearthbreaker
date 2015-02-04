@@ -1,5 +1,5 @@
+from hearthbreaker.cards.base import Card
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnStarted
 from hearthbreaker.tags.status import Stealth, Taunt, Frozen

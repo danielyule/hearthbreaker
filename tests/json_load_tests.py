@@ -1,6 +1,7 @@
 import json
 import re
-from hearthbreaker.game_objects import WeaponCard, Weapon
+from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.game_objects import Weapon, Minion
 import tests.card_tests.druid_tests
 import tests.card_tests.mage_tests
 import tests.card_tests.hunter_tests
@@ -20,7 +21,6 @@ with open("card_defs.json", "r") as file:
 class JSONTester:
     def define_type(self, card_def):
         from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
-        from hearthbreaker.game_objects import Minion, MinionCard
         from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Enrage, Buff
         import hearthbreaker.cards
 

@@ -1,6 +1,6 @@
 import json
 from hearthbreaker.cards import FlameImp, LightsJustice, EyeForAnEye
-from hearthbreaker.game_objects import Game
+from hearthbreaker.engine import Game
 from tests.agents.testing_agents import CardTestingAgent
 from tests.testing_utils import generate_game_for
 
@@ -30,7 +30,7 @@ def deserialize(json_string, agents):
     Decode the given game instance from a JSON formatted string.
 
     :param string json_string: The string representation of the game
-    :rtype: :class:`hearthbreaker.game_objects.Game`
+    :rtype: :class:`hearthbreaker.engine.Game`
     """
     d = json.loads(json_string)
     return Game.__from_json__(d, agents)

@@ -1,5 +1,7 @@
 import hearthbreaker.cards
+from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
@@ -7,7 +9,6 @@ from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
     CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count
-from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Frozen
 
 

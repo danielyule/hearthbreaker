@@ -2,8 +2,10 @@ import random
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.agents.trade_agent import TradeAgent
 from hearthbreaker.cards import WarGolem, TheCoin
-from hearthbreaker.game_objects import Game, MinionCard, Minion, Player
+from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.engine import Game, Player
 import re
+from hearthbreaker.game_objects import Minion
 from tests.testing_utils import generate_game_for
 
 

@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
-from hearthbreaker.game_objects import Game
+from hearthbreaker.engine import Game
 from hearthbreaker.replay import playback, Replay
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, EnemySpellTestingAgent, \
     MinionAttackingAgent, PlayAndAttackAgent

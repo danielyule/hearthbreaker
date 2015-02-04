@@ -7,7 +7,7 @@ from hearthbreaker.cards import GoldshireFootman, MurlocRaider, BloodfenRaptor, 
     Voidwalker, HarvestGolem, KnifeJuggler, ShatteredSunCleric, ArgentSquire, Doomguard, Soulfire, DefenderOfArgus, \
     AbusiveSergeant, NerubianEgg, KeeperOfTheGrove
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Deck, Game
+from hearthbreaker.engine import Game, Deck
 
 
 class TestAgents(unittest.TestCase):

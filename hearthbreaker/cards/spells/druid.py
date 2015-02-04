@@ -1,11 +1,12 @@
 import copy
+from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill
 from hearthbreaker.tags.base import Effect, Deathrattle
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, MinionCard, Minion
 
 
 class Innervate(Card):

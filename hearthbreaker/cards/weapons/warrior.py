@@ -1,11 +1,12 @@
+from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
 from hearthbreaker.tags.base import Deathrattle, Effect
 from hearthbreaker.tags.condition import IsMinion, NotCurrentTarget, OneIn
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
     RandomPicker, SelfSelector
-from hearthbreaker.game_objects import WeaponCard, Weapon
 
 
 class FieryWarAxe(WeaponCard):

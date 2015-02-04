@@ -4,9 +4,9 @@ import json
 import hearthbreaker
 import hearthbreaker.constants
 from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.engine import Game, card_lookup, Deck
 import hearthbreaker.game_objects
 import hearthbreaker.cards
-import hearthbreaker.game_objects
 import hearthbreaker.proxies
 from hearthbreaker.serialization.move import Move, AttackMove, PowerMove, TurnEndMove, \
     TurnStartMove, ConcedeMove, PlayMove
@@ -255,9 +255,9 @@ class Replay:
         self.decks = []
         for deck in jd['header']['decks']:
             deck_size = len(deck['cards'])
-            cards = [hearthbreaker.game_objects.card_lookup(deck['cards'][index % deck_size]) for index in range(0, 30)]
+            cards = [card_lookup(deck['cards'][index % deck_size]) for index in range(0, 30)]
             self.decks.append(
-                hearthbreaker.game_objects.Deck(cards, CHARACTER_CLASS.from_str(deck['class'])))
+                Deck(cards, CHARACTER_CLASS.from_str(deck['class'])))
 
         self.random = jd['header']['random']
         self.keeps = jd['header']['keep']
@@ -333,9 +333,9 @@ class Replay:
                 if len(self.decks) > 1:
                     raise Exception("Maximum of two decks per file")
                 deck_size = len(args) - 1
-                cards = [hearthbreaker.game_objects.card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
+                cards = [card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
                 self.decks.append(
-                    hearthbreaker.game_objects.Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
+                    Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
 
             elif move == 'keep':
                 if len(self.keeps) > 1:
@@ -491,7 +491,7 @@ def playback(replay):
 
         def choose_option(self, *options):
             return options[self.next_option]
-    game = hearthbreaker.game_objects.Game.__new__(hearthbreaker.game_objects.Game)
+    game = Game.__new__(Game)
     _old_random_choice = game.random_choice
     _old_start_turn = game._start_turn
     _old_end_turn = game._end_turn

@@ -2,7 +2,7 @@ import copy
 import collections
 import sys
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Deck, Game
+from hearthbreaker.engine import Game, Deck
 
 if sys.version_info.major is 3:
     if sys.version_info.minor <= 2:

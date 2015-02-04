@@ -1,5 +1,5 @@
 import json
-from hearthbreaker.game_objects import Game
+from hearthbreaker.engine import Game
 import tests.copy_tests
 
 

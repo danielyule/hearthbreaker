@@ -2,9 +2,9 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.engine import Game
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Game
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.replay import playback, Replay
 from hearthbreaker.cards import *

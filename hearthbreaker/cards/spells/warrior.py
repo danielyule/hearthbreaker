@@ -1,4 +1,6 @@
 import copy
+from hearthbreaker.cards.base import Card, WeaponCard
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.base import AuraUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector
@@ -6,7 +8,6 @@ from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth
 import hearthbreaker.targeting
 import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, WeaponCard, Weapon
 
 
 class BattleRage(Card):

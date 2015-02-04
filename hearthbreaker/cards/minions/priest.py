@@ -1,3 +1,5 @@
+from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType
@@ -5,7 +7,6 @@ from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
     EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
     MultiplyHealAmount, ChangeAttack
 

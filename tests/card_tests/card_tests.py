@@ -4,7 +4,7 @@ import re
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
-from hearthbreaker.game_objects import card_lookup
+from hearthbreaker.engine import card_lookup
 from tests.agents.testing_agents import PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *

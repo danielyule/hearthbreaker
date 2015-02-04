@@ -1,8 +1,9 @@
+from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import Equip, Give, Heal
 from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, Minion, WeaponCard, Weapon
 from hearthbreaker.tags.status import SetAttack, DivineShield
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionSummoned

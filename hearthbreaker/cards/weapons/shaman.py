@@ -1,5 +1,6 @@
+from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import WeaponCard, Weapon
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.base import Buff
 from hearthbreaker.tags.status import Windfury
 

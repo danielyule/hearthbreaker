@@ -1,3 +1,5 @@
+from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff
 from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn
@@ -5,7 +7,6 @@ from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attac
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
     BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, Minion
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
 

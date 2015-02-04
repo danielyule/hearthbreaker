@@ -573,7 +573,7 @@ class CardQuery(JSONObject):
         self.make_copy = make_copy
 
     def get_card(self, player):
-        from hearthbreaker.game_objects import card_lookup, get_cards
+        from hearthbreaker.engine import card_lookup, get_cards
         if self.name:
             return card_lookup(self.name)
 
@@ -645,7 +645,7 @@ class CardQuery(JSONObject):
 
     @staticmethod
     def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False):
-        from hearthbreaker.game_objects import card_lookup
+        from hearthbreaker.engine import card_lookup
         query = CardQuery.__new__(CardQuery)
         query.name = name
         query.conditions = []
@@ -713,7 +713,7 @@ class Choice(Battlecry):
 
     @staticmethod
     def from_json(card, actions, selector, condition=None):
-        from hearthbreaker.game_objects import card_lookup
+        from hearthbreaker.engine import card_lookup
         actions = [Action.from_json(**action) for action in actions]
         selector = Selector.from_json(**selector)
         if condition:
@@ -784,7 +784,7 @@ class Context(metaclass=abc.ABCMeta):
         """
         Creates a context associated with a particular player
         :param player: The player that this context is associated with
-        :type player: :class:`hearthbreaker.game_objects.Player`
+        :type player: :class:`hearthbreaker.engine.Player`
         """
         self.player = player
 

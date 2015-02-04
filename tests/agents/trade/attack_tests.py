@@ -2,7 +2,8 @@ import unittest
 from hearthbreaker.cards import Wisp, WarGolem, BloodfenRaptor, GoldshireFootman, RiverCrocolisk, MagmaRager, \
     ChillwindYeti, Voidwalker, AmaniBerserker, AbusiveSergeant, DarkIronDwarf, ShatteredSunCleric, ImpMaster, \
     ElvenArcher, Shieldbearer, StormpikeCommando
-from hearthbreaker.game_objects import Hero, MinionCard
+from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.game_objects import Hero
 from tests.agents.trade.test_helpers import TestHelpers, TempCard
 from tests.agents.trade.test_case_mixin import TestCaseMixin
 

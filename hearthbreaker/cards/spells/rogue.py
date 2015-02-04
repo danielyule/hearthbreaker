@@ -1,4 +1,5 @@
 import copy
+from hearthbreaker.cards.base import Card
 from hearthbreaker.tags.action import AddCard
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, BuffUntil, Buff
@@ -7,7 +8,6 @@ from hearthbreaker.tags.selector import PlayerSelector, SpellSelector, SpecificC
 from hearthbreaker.tags.status import Stealth, ChangeAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card
 
 
 class Assassinate(Card):

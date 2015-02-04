@@ -1,10 +1,11 @@
+from hearthbreaker.cards.base import MinionCard, Card
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon
 from hearthbreaker.tags.base import Choice, Buff
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, Minion, Card
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 
 
