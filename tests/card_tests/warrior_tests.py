@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from tests.agents.testing_agents import OneCardPlayingAgent, PlayAndAttackAgent, CardTestingAgent,\
-    SelfSpellTestingAgent
+    SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -511,3 +511,47 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(6, game.players[0].minions[-1].calculate_attack())
         self.assertEqual(5, game.players[0].minions[-1].health)
+
+    def test_Crush(self):
+        game = generate_game_for([Crush, ChillwindYeti], DreadInfernal, EnemyMinionSpellTestingAgent, 
+                                 CardTestingAgent)
+
+        # Player 2 plays a Dread Infernal
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Player 1 pays 7 mana to use Crush
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(0, game.players[0].mana)
+
+        # Player 2 plays another Dread Infernal
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Player 1 plays Yeti, can't afford Crush
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Player 2 plays another Dread Infernal, damaging the Yeti
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(4, game.players[0].minions[-1].health)
+
+
+        # Player 1 pays 3 mana to use Crush and 4 the play a 2nd Yeti
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].mana)

@@ -226,3 +226,23 @@ class BouncingBlade(Card):
                 target.damage(player.effective_spell_damage(1), self)
                 if target.dead:
                     break
+
+
+class Crush(Card):
+    def __init__(self):
+        super().__init__("Crush", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def mana_cost(self, player):
+        damaged_minion_discount = 0
+        for minion in player.game.current_player.minions:
+            if minion.health != minion.calculate_max_health():
+                damaged_minion_discount = 4
+                break
+        cost = super().mana_cost(player) - damaged_minion_discount
+        return cost
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)
