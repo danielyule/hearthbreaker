@@ -1,4 +1,4 @@
-from hearthbreaker.cards.base import Card, _battlecry_targetable
+from hearthbreaker.cards.base import Card
 from hearthbreaker.cards.minions import *
 from hearthbreaker.cards.spells import *
 from hearthbreaker.cards.weapons import *

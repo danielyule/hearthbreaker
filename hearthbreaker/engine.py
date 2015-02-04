@@ -310,7 +310,7 @@ class Player(Bindable):
         self.minions = []
         self.graveyard = set()
         self.hand = []
-        self.minion_auras = []
+        self.object_auras = []
         self.player_auras = []
         self.fatigue = 0
         self.agent = agent
@@ -353,7 +353,7 @@ class Player(Bindable):
             aura = copy.deepcopy(aura)
             aura.owner = copied_player.hero
             copied_player.add_aura(aura)
-        for aura in filter(lambda a: isinstance(a, AuraUntil), self.minion_auras):
+        for aura in filter(lambda a: isinstance(a, AuraUntil), self.object_auras):
             aura = copy.deepcopy(aura)
             aura.owner = copied_player.hero
             copied_player.add_aura(aura)
@@ -410,7 +410,7 @@ class Player(Bindable):
 
     def add_aura(self, aura):
         if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.minion_auras.append(aura)
+            self.object_auras.append(aura)
         else:
             self.player_auras.append(aura)
         if not aura.owner:
@@ -419,7 +419,7 @@ class Player(Bindable):
 
     def remove_aura(self, aura):
         if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.minion_auras = [au for au in filter(lambda a: not a.eq(aura), self.minion_auras)]
+            self.object_auras = [au for au in filter(lambda a: not a.eq(aura), self.object_auras)]
         else:
             self.player_auras = [au for au in filter(lambda a: not a.eq(aura), self.player_auras)]
         aura.unapply()
@@ -432,7 +432,7 @@ class Player(Bindable):
 
     def __to_json__(self):
         auras = copy.copy(self.player_auras)
-        auras.extend(self.minion_auras)
+        auras.extend(self.object_auras)
         return {
             'hero': self.hero,
             'deck': self.deck,

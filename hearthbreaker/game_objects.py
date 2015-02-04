@@ -439,7 +439,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
                         self.base_attack)
         attack = reduce(lambda a, b: b.update(self, a), [aura.status
                                                          for player in self.player.game.players
-                                                         for aura in player.minion_auras
+                                                         for aura in player.object_auras
                                                          if aura.match(self) and isinstance(aura.status, ChangeAttack)],
                         attack)
 
@@ -577,7 +577,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         diff = new_health - (self.base_health + self.health_delta)
 
         for player in self.game.players:
-            for aura in player.minion_auras:
+            for aura in player.object_auras:
                 if aura.match(self) and isinstance(aura.status, ChangeHealth):
                     diff += aura.status.amount
         if diff > 0:
@@ -797,7 +797,7 @@ class Minion(Character):
     def add_to_board(self, index):
         aura_affects = {}
         for player in self.game.players:
-            for aura in player.minion_auras:
+            for aura in player.object_auras:
                 aura_affects[aura] = set()
                 for minion in self.player.minions:
                     if aura.match(minion):
@@ -814,7 +814,7 @@ class Minion(Character):
         self.health += self.calculate_max_health() - self.base_health - self.health_delta
         self.attach(self, self.player)
         for player in self.game.players:
-            for aura in player.minion_auras:
+            for aura in player.object_auras:
                 for minion in self.player.minions:
                     if aura in aura_affects:
                         is_in = minion in aura_affects[aura]
@@ -842,7 +842,7 @@ class Minion(Character):
     def remove_from_board(self):
         if not self.removed:
             aura_affects = {}
-            for aura in self.player.minion_auras:
+            for aura in self.player.object_auras:
                 aura_affects[aura] = set()
                 for minion in self.player.minions:
                     if aura.match(minion):
@@ -853,7 +853,7 @@ class Minion(Character):
             self.player.minions.remove(self)
             self.player.trigger("minion_removed", self)
             self.removed = True
-            for aura in self.player.minion_auras:
+            for aura in self.player.object_auras:
                 for minion in self.player.minions:
                     is_in = minion in aura_affects[aura]
                     if not is_in and aura.match(minion):
@@ -879,7 +879,7 @@ class Minion(Character):
             raise ValueError("Attempting to replace minion with invalid index")
         self.player.minions[self.index] = new_minion
         new_minion.attach(new_minion, self.player)
-        for aura in self.player.minion_auras:
+        for aura in self.player.object_auras:
             if aura.match(new_minion):
                 aura.status.act(self, new_minion)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health

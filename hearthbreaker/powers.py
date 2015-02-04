@@ -1,7 +1,4 @@
-from hearthbreaker.cards.base import WeaponCard
 import hearthbreaker.constants
-import hearthbreaker.game_objects
-from hearthbreaker.game_objects import Weapon
 
 
 def powers(character_class):
@@ -130,6 +127,9 @@ class RoguePower(Power):
         super().__init__(hero)
 
     def use(self):
+        from hearthbreaker.game_objects import Weapon
+        from hearthbreaker.cards.base import WeaponCard
+
         class WickedKnife(WeaponCard):
             def __init__(self):
                 super().__init__("Wicked Knife", 1, hearthbreaker.constants.CHARACTER_CLASS.ROGUE,

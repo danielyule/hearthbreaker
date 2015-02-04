@@ -33,6 +33,9 @@ class Brawl(Card):
     def __init__(self):
         super().__init__("Brawl", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) + len(player.opponent.minions) >= 2
+
     def use(self, player, game):
         super().use(player, game)
 
@@ -213,6 +216,9 @@ class Whirlwind(Card):
 class BouncingBlade(Card):
     def __init__(self):
         super().__init__("Bouncing Blade", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) + len(player.opponent.minions) >= 1
 
     def use(self, player, game):
         super().use(player, game)
