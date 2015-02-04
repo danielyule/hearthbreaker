@@ -2245,3 +2245,13 @@ class LostTallstrider(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 4)
+
+
+class HemetNesingwary(MinionCard):
+    def __init__(self):
+        super().__init__("Hemet Nesingwary", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
+                         battlecry=Battlecry(Kill(), MinionSelector(IsType(MINION_TYPE.BEAST), players=BothPlayer(),
+                                                                    picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(6, 3)

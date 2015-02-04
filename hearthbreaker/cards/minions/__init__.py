@@ -211,6 +211,7 @@ from hearthbreaker.cards.minions.neutral import (
     GnomereganInfantry,
     FlyingMachine,
     LostTallstrider,
+    HemetNesingwary,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -323,7 +324,7 @@ from hearthbreaker.cards.minions.warlock import (
     Voidcaller,
     AnimaGolem,
     WorthlessImp,
-    FelCannon
+    FelCannon,
 )
 
 from hearthbreaker.cards.minions.warrior import (

@@ -3758,3 +3758,33 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(9, len(game.players[0].hand))
         self.assertEqual(MINION_TYPE.MECH, game.players[0].hand[-1].minion_type)
+
+    def test_HemetNesingary(self):
+        game = generate_game_for([ScavengingHyena, HemetNesingwary, HemetNesingwary],
+                                 StarvingBuzzard, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # Player 1 has a Hyena on the field, Player 2 has nothing
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Scavenging Hyena", game.players[0].minions[0].card.name)
+
+        # Kills Hyena with Hemet
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Hemet Nesingwary", game.players[0].minions[0].card.name)
+
+        # Player 2 play Buzzard
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Kills Buzzard with Hemet
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))

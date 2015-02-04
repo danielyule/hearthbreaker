@@ -117,7 +117,7 @@ from hearthbreaker.cards.spells.priest import (
     ShadowWordPain,
     Shadowform,
     Silence,
-    Thoughtsteal
+    Thoughtsteal,
 )
 
 from hearthbreaker.cards.spells.rogue import (
@@ -198,5 +198,5 @@ from hearthbreaker.cards.spells.warrior import (
     Upgrade,
     Whirlwind,
     BouncingBlade,
-    Crush
+    Crush,
 )
