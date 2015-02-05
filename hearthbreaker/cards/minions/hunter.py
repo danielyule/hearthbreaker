@@ -126,3 +126,11 @@ class Snake(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 1)
+
+
+class MetaltoothLeaper(MinionCard):
+    def __init__(self):
+        super().__init__("Metaltooth Leaper", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(3, 3, auras=[Aura(ChangeAttack(2), MinionSelector(IsType(MINION_TYPE.MECH)))])

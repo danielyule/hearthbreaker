@@ -623,3 +623,23 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(2, game.players[0].hero.weapon.durability)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+    def test_MetaltoothLeaper(self):
+        game = generate_game_for([MetaltoothLeaper, Wisp], SpiderTank, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].calculate_attack())
+
+        # Mech-Timbers buff each other but not Wisp
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())

@@ -241,6 +241,7 @@ from hearthbreaker.cards.minions.hunter import (
     Misha,
     Leokk,
     Snake,
+    MetaltoothLeaper,
 )
 
 from hearthbreaker.cards.minions.mage import (
