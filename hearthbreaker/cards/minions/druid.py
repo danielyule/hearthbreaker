@@ -186,7 +186,9 @@ spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), Time
 
 class MechBearCat(MinionCard):
     def __init__(self):
-        super().__init__("Mech-Bear-Cat", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
+        super().__init__("Mech-Bear-Cat", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(7, 6, effects=[Effect(Damaged(), AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)), PlayerSelector())])
+        return Minion(7, 6, effects=[Effect(Damaged(),
+                                     AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                     PlayerSelector())])

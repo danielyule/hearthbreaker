@@ -11,7 +11,8 @@ from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle,
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, \
+    EnemyMinionDied
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector
@@ -2263,3 +2264,11 @@ class Illuminator(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 4, effects=[Effect(TurnEnded(HasSecret()), Heal(4), HeroSelector())])
+
+
+class MekgineerThermaplugg(MinionCard):
+    def __init__(self):
+        super().__init__("Mekgineer Thermaplugg", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(9, 7, effects=[Effect(EnemyMinionDied(), Summon(LeperGnome()), PlayerSelector())])

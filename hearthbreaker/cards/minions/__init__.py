@@ -213,6 +213,7 @@ from hearthbreaker.cards.minions.neutral import (
     LostTallstrider,
     HemetNesingwary,
     Illuminator,
+    MekgineerThermaplugg,
 )
 
 from hearthbreaker.cards.minions.druid import (

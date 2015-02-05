@@ -3814,3 +3814,24 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(2, len(game.players[0].minions))
+
+    def test_MekgineerThermaplugg(self):
+        game = generate_game_for([MekgineerThermaplugg, Flamestrike], SaltyDog, OneCardPlayingAgent,
+                                 OneCardPlayingAgent)
+        for turn in range(0, 18):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[1].minions))
+
+        # Flamestrikes to kill 6 Salty Dogs and summon 6 Leper Gnomes
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Mekgineer Thermaplugg", game.players[0].minions[0].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[1].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[2].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[3].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[4].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[5].card.name)

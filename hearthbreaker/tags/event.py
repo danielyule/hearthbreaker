@@ -1,7 +1,7 @@
 import copy
 from hearthbreaker.tags.base import MinionEvent, PlayerEvent
 from hearthbreaker.tags.condition import MinionIsNotTarget, CardIsNotTarget
-from hearthbreaker.tags.selector import FriendlyPlayer, Player
+from hearthbreaker.tags.selector import FriendlyPlayer, Player, EnemyPlayer
 
 
 class SpellCast(PlayerEvent):
@@ -71,6 +71,11 @@ class TurnStarted(PlayerEvent):
 
 class MinionDied(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
+        super().__init__("minion_died", condition, player)
+
+
+class EnemyMinionDied(PlayerEvent):
+    def __init__(self, condition=None, player=EnemyPlayer()):
         super().__init__("minion_died", condition, player)
 
 
