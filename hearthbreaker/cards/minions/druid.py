@@ -1,12 +1,15 @@
 from hearthbreaker.cards.base import MinionCard, Card
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
-    Summon
-from hearthbreaker.tags.base import Choice, Buff
+    Summon, AddCard
+from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.event import Damaged
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
+from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
+    ReversingSwitch, RustyHorn, WhirlingBlades
 
 
 class Moonfire(Card):
@@ -175,3 +178,15 @@ class AnodizedRoboCub(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)
+
+
+spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
+                   RustyHorn(), WhirlingBlades()]
+
+
+class MechBearCat(MinionCard):
+    def __init__(self):
+        super().__init__("Mech-Bear-Cat", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(7, 6, effects=[Effect(Damaged(), AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)), PlayerSelector())])

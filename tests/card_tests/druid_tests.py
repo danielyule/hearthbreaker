@@ -819,3 +819,18 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(2, game.other_player.minions[0].calculate_attack())
         self.assertFalse(game.other_player.minions[0].taunt)
+
+    def test_MechBearCat(self):
+        game = generate_game_for(MechBearCat, Whirlwind, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        # Whirlwind damages Mech-Bear-Cat drawing a Spare Part
+        game.play_single_turn()
+
+        self.assertEqual(9, len(game.players[0].hand))
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual("Rusty Horn", game.players[0].hand[8].name)
