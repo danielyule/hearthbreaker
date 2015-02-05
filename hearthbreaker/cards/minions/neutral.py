@@ -21,8 +21,7 @@ from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Ch
     SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus
 import hearthbreaker.targeting
 import copy
-from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
-    ReversingSwitch, RustyHorn, WhirlingBlades
+from hearthbreaker.cards.spells.neutral import spare_part_list
 
 
 class BloodfenRaptor(MinionCard):
@@ -2038,10 +2037,6 @@ class ClockworkGiant(MinionCard):
     def mana_cost(self, player):
         cost = super().mana_cost(player) - len(player.game.other_player.hand)
         return cost
-
-
-spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
-                   RustyHorn(), WhirlingBlades()]
 
 
 class ClockworkGnome(MinionCard):

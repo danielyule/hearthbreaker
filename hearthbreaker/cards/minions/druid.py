@@ -8,8 +8,7 @@ from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfS
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
-from hearthbreaker.cards.spells.neutral import ArmorPlating, EmergencyCoolant, FinickyCloakfield, TimeRewinder,\
-    ReversingSwitch, RustyHorn, WhirlingBlades
+from hearthbreaker.cards.spells.neutral import spare_part_list
 
 
 class Moonfire(Card):
@@ -178,10 +177,6 @@ class AnodizedRoboCub(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)
-
-
-spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
-                   RustyHorn(), WhirlingBlades()]
 
 
 class MechBearCat(MinionCard):

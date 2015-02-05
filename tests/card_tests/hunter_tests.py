@@ -636,10 +636,10 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.players[1].minions[1].calculate_attack())
         self.assertEqual(3, game.players[1].minions[0].calculate_attack())
 
-        # Mech-Timbers buff each other but not Wisp
+        # The second leaper will buff the first, but won't be buffed by anything
         game.play_single_turn()
 
         self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(5, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())
-        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[2].calculate_attack())
