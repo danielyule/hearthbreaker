@@ -3788,3 +3788,29 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Illuminator(self):
+        game = generate_game_for([Illuminator, Duplicate], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Hit with 3 Sinister Strikes and no heal from Illuminator
+        self.assertEqual(21, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Illuminator heals for 4
+        game.play_single_turn()
+
+        self.assertEqual(25, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(22, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # 2 Illuminators heal for 8
+        game.play_single_turn()
+
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))

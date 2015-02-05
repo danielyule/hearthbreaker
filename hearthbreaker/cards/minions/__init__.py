@@ -212,6 +212,7 @@ from hearthbreaker.cards.minions.neutral import (
     FlyingMachine,
     LostTallstrider,
     HemetNesingwary,
+    Illuminator,
 )
 
 from hearthbreaker.cards.minions.druid import (

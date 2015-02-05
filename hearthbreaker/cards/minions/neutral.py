@@ -9,7 +9,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
     BuffUntil, Buff
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
-    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield
+    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
@@ -2255,3 +2255,11 @@ class HemetNesingwary(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 3)
+
+
+class Illuminator(MinionCard):
+    def __init__(self):
+        super().__init__("Illuminator", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(2, 4, effects=[Effect(TurnEnded(HasSecret()), Heal(4), HeroSelector())])
