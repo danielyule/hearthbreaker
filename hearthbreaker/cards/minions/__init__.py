@@ -214,6 +214,8 @@ from hearthbreaker.cards.minions.neutral import (
     HemetNesingwary,
     Illuminator,
     MekgineerThermaplugg,
+    StonesplinterTrogg,
+    TroggzorTheEarthinator,
 )
 
 from hearthbreaker.cards.minions.druid import (

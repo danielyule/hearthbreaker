@@ -3835,3 +3835,47 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Leper Gnome", game.players[0].minions[3].card.name)
         self.assertEqual("Leper Gnome", game.players[0].minions[4].card.name)
         self.assertEqual("Leper Gnome", game.players[0].minions[5].card.name)
+
+    def test_StonesplinterTrogg(self):
+        game = generate_game_for(StonesplinterTrogg, [BattleRage, Silence], OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.other_player.minions[1].calculate_attack())
+
+    def test_TroggzorTheEarthinator(self):
+        game = generate_game_for([TroggzorTheEarthinator, Innervate], [Silence], OneCardPlayingAgent,
+                                 OneCardPlayingAgent)
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+
+        # Troggzor is silenced but first summons a Burly Rockjaw Trogg who gets buffed by the spell?
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+
+        # 2nd silence on Troggzor summons nothing but buffs Rockjaw
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())

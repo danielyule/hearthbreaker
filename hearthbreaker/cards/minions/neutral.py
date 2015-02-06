@@ -2267,3 +2267,20 @@ class MekgineerThermaplugg(MinionCard):
 
     def create_minion(self, player):
         return Minion(9, 7, effects=[Effect(EnemyMinionDied(), Summon(LeperGnome()), PlayerSelector())])
+
+
+class StonesplinterTrogg(MinionCard):
+    def __init__(self):
+        super().__init__("Stonesplinter Trogg", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(2, 3, effects=[Effect(SpellCast(player=EnemyPlayer()), Give(ChangeAttack(1)), SelfSelector())])
+
+
+class TroggzorTheEarthinator(MinionCard):
+    def __init__(self):
+        super().__init__("Troggzor the Earthinator", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(6, 6, effects=[Effect(SpellCast(player=EnemyPlayer()), Summon(BurlyRockjawTrogg()),
+                                            PlayerSelector())])
