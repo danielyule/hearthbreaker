@@ -1675,6 +1675,31 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
         self.assertTrue(game.current_player.minions[1].taunt)
 
+    def test_many_Illidans(self):
+        game = generate_game_for(IllidanStormrage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        for turn in range(16):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[1].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[5].card.name)
+
+        game.play_single_turn()
+
+        # The flames should not be summoned, because the board is already full with the incoming Illidan
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[6].card.name)
+
     def test_Lightwarden(self):
         game = generate_game_for([Lightwarden, MindControl],
                                  [StonetuskBoar, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre],
@@ -1880,7 +1905,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
     def test_Leeroy_placement(self):
         game = generate_game_for([MurlocTidehunter, MurlocTidehunter, LeeroyJenkins], StonetuskBoar,
                                  OneCardPlayingAgent, DoNothingAgent)
-        game.players[0].agent.choose_index = lambda *minions: len(minions)
+        game.players[0].agent.choose_index = lambda card, player: len(player.minions)
         for turn in range(8):
             game.play_single_turn()
 

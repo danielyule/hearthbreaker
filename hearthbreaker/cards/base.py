@@ -1,8 +1,6 @@
 import abc
 import hearthbreaker.constants
-from hearthbreaker.game_objects import Bindable, GameObject
-
-__author__ = 'Daniel'
+from hearthbreaker.game_objects import Bindable, GameObject, GameException
 
 
 def _battlecry_targetable(target):
@@ -193,6 +191,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             self.battlecry = ()
         self.choices = choices
         self.combo = combo
+        self._placeholder = None
 
     def can_use(self, player, game):
         """
@@ -228,15 +227,18 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Game game: The game this card will be played in.
         """
         super().use(player, game)
-        if len(player.minions) >= 7:
-            # TODO: Need to investigate if this is the correct behaviour, or if any minions spawning as part of
-            # card_played (i.e. Illidan) should not spawn if the board is going to be full
-            return
+        if (len(player.minions) >= 7 and not self._placeholder) or len(player.minions) >= 8:
+            raise GameException("Cannot place a minion on a board with more than 7 minons on it")
         minion = self.create_minion(player)
         minion.card = self
         minion.player = player
         minion.game = game
-        minion.index = player.agent.choose_index(self, player)
+        # TODO Add a test to make sure that this is a valid index, or things shall explode
+        if self._placeholder:
+            minion.index = self._placeholder.index
+            player.minions.remove(self._placeholder)
+        else:
+            minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
         player.trigger("minion_placed", minion)
         if self.choices:

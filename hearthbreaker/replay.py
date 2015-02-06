@@ -57,6 +57,7 @@ class Replay:
         """
         self._moves = []
         self.__next_target = None
+        self.__next_index = -1
         self.decks = []
         self.keeps = []
         self.random = []
@@ -89,7 +90,9 @@ class Replay:
         Record that a card has been played.  This will add a new PlayMove to the moves array
         """
         self._moves.append(PlayMove(hearthbreaker.proxies.ProxyCard(index), target=card.target))
-        self.__next_target = None
+        if self.__next_index >= 0:
+            self._moves[-1].index = self.__next_index
+            self.__next_index = -1
 
     def _record_option_chosen(self, option):
         """
@@ -122,7 +125,7 @@ class Replay:
         """
         Records the index that a minion is played at.  Will update the most recent move with this index
         """
-        self._moves[-1].index = index
+        self.__next_index = index
 
     def _record_kept_index(self, cards, card_index):
         """

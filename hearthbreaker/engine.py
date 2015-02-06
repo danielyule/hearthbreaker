@@ -66,7 +66,7 @@ class Game(Bindable):
         self.game_ended = False
         self.minion_counter = 0
         self.__pre_game_run = False
-        self.last_spell = None
+        self.last_card = None
         self._has_turn_ended = True
         self._all_cards_played = []
 
@@ -229,8 +229,12 @@ class Game(Bindable):
         if card.targetable and card.targets:
             card.target = self.current_player.agent.choose_target(card.targets)
 
-        if card.is_spell():
-            self.last_spell = card
+        self.last_card = card
+        if card.is_minion():
+            card._placeholder = Minion(0, 0)
+            index = self.current_player.agent.choose_index(card, self.current_player)
+            self.current_player.minions.insert(index, card._placeholder)
+            card._placeholder.index = index
         self.current_player.trigger("card_played", card, card_index)
 
         if not card.cancel:

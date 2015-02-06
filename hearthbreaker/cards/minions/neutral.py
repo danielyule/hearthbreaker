@@ -1699,7 +1699,7 @@ class LorewalkerCho(MinionCard):
 
     def create_minion(self, player):
         return Minion(0, 4, effects=[Effect(SpellCast(player=BothPlayer()),
-                                            AddCard(CardQuery(source=CARD_SOURCE.LAST_SPELL)),
+                                            AddCard(CardQuery(source=CARD_SOURCE.LAST_CARD)),
                                             PlayerSelector(OtherPlayer()))])
 
 

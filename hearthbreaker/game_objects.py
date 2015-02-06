@@ -805,10 +805,8 @@ class Minion(Character):
         self.game.minion_counter += 1
         self.player.minions.insert(index, self)
         self.born = self.game.minion_counter
-        count = 0
-        for minion in self.player.minions:
-            minion.index = count
-            count += 1
+        for minion in self.player.minions[index + 1:]:
+            minion.index += 1
         self.index = index
         self.active = True
         self.health += self.calculate_max_health() - self.base_health - self.health_delta

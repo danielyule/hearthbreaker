@@ -543,7 +543,7 @@ class CARD_SOURCE:
     OPPONENT_HAND = 3
     OPPONENT_DECK = 4
     LIST = 5
-    LAST_SPELL = 6
+    LAST_CARD = 6
     __sources = {
         "COLLECTION": COLLECTION,
         "MY_HAND": MY_HAND,
@@ -551,7 +551,7 @@ class CARD_SOURCE:
         "OPPONENT_HAND": OPPONENT_HAND,
         "OPPONENT_DECK": OPPONENT_DECK,
         "LIST": LIST,
-        "LAST_SPELL": LAST_SPELL,
+        "LAST_CARD": LAST_CARD,
     }
 
     @staticmethod
@@ -589,8 +589,8 @@ class CardQuery(JSONObject):
             card_list = player.opponent.hand
         elif self.source == CARD_SOURCE.LIST:
             card_list = self.source_list
-        elif self.source == CARD_SOURCE.LAST_SPELL:
-            return type(player.game.last_spell)()
+        elif self.source == CARD_SOURCE.LAST_CARD:
+            return type(player.game.last_card)()
         else:
             card_list = []
         # TODO Throw an exception in any other case?
