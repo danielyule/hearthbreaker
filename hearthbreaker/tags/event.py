@@ -1,7 +1,7 @@
 import copy
 from hearthbreaker.tags.base import MinionEvent, PlayerEvent
 from hearthbreaker.tags.condition import MinionIsNotTarget, CardIsNotTarget
-from hearthbreaker.tags.selector import FriendlyPlayer, Player, EnemyPlayer
+from hearthbreaker.tags.selector import FriendlyPlayer, Player
 
 
 class SpellCast(PlayerEvent):
