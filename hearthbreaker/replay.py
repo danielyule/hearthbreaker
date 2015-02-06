@@ -88,7 +88,7 @@ class Replay:
         """
         Record that a card has been played.  This will add a new PlayMove to the moves array
         """
-        self._moves.append(PlayMove(hearthbreaker.proxies.ProxyCard(index), target=self.__next_target))
+        self._moves.append(PlayMove(hearthbreaker.proxies.ProxyCard(index), target=card.target))
         self.__next_target = None
 
     def _record_option_chosen(self, option):

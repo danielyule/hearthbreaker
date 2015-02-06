@@ -95,15 +95,16 @@ class Counterspell(SecretCard):
     def use(self, player, game):
         super().use(player, game)
 
-    def _reveal(self, card):
-        card.cancel = True
-        super().reveal()
+    def _reveal(self, card, index):
+        if card.is_spell():
+            card.cancel = True
+            super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind("spell_cast", self._reveal)
+        player.game.current_player.bind("card_played", self._reveal)
 
     def deactivate(self, player):
-        player.game.current_player.unbind("spell_cast", self._reveal)
+        player.game.current_player.unbind("card_played", self._reveal)
 
 
 class IceBarrier(SecretCard):
@@ -149,20 +150,20 @@ class Spellbender(SecretCard):
         super().__init__("Spellbender", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
         self.player = None
 
-    def _reveal(self, card):
+    def _reveal(self, card, index):
         # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
         # will not activate if there are too many minions
-        if len(self.player.minions) < 7 and isinstance(card.target, Minion):
+        if card.is_spell() and len(self.player.minions) < 7 and isinstance(card.target, Minion):
             SpellbenderMinion().summon(self.player, self.player.game, len(self.player.minions))
             card.target = self.player.minions[-1]
             super().reveal()
 
     def activate(self, player):
-        player.game.current_player.bind("spell_cast", self._reveal)
+        player.game.current_player.bind("card_played", self._reveal)
         self.player = player
 
     def deactivate(self, player):
-        player.game.current_player.unbind("spell_cast", self._reveal)
+        player.game.current_player.unbind("card_played", self._reveal)
         self.player = None
 
 

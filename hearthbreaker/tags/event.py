@@ -8,6 +8,23 @@ class SpellCast(PlayerEvent):
     def __init__(self, condition=None, player=FriendlyPlayer()):
         super().__init__("spell_cast", condition, player)
 
+    def bind(self, target, func):
+        for player in self.player.get_players(target.player):
+            self.__target__ = target
+            self.__func__ = func
+            player.bind("card_played", self.__action__)
+
+    def unbind(self, target, func):
+        for player in self.player.get_players(target.player):
+            player.unbind("card_played", self.__action__)
+
+    def __action__(self, card, index):
+        if card.is_spell():
+            if self.condition:
+                super().__action__(card, index)
+            else:
+                self.__func__(card, index)
+
 
 class Either(PlayerEvent):
     def __init__(self, event1, event2, player=FriendlyPlayer()):

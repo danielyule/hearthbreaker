@@ -224,7 +224,6 @@ class Game(Bindable):
         card_index = self.current_player.hand.index(card)
         self.current_player.hand.pop(card_index)
         self.current_player.mana -= card.mana_cost(self.current_player)
-        self.current_player.trigger("card_played", card, card_index)
         self._all_cards_played.append(card)
         card.target = None
         if card.targetable and card.targets:
@@ -232,7 +231,7 @@ class Game(Bindable):
 
         if card.is_spell():
             self.last_spell = card
-            self.current_player.trigger("spell_cast", card)
+        self.current_player.trigger("card_played", card, card_index)
 
         if not card.cancel:
             card.use(self.current_player, self)

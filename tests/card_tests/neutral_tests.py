@@ -3865,7 +3865,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
 
-        # Troggzor is silenced but first summons a Burly Rockjaw Trogg who gets buffed by the spell?
+        # Troggzor is silenced but first summons a Burly Rockjaw Trogg who is not buffed by the spell
         game.play_single_turn()
         game.play_single_turn()
 
