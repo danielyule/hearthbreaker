@@ -678,8 +678,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(27, game.players[1].hero.health)
 
     def test_VelensChosen(self):
-        game = generate_game_for([AcidicSwampOoze, MindBlast, VelensChosen, MindBlast, MindBlast], [SoulOfTheForest, MassDispel],
-                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for([AcidicSwampOoze, MindBlast, VelensChosen, MindBlast, MindBlast],
+                                 [SoulOfTheForest, MassDispel], OneCardPlayingAgent, OneCardPlayingAgent)
 
         # Plays Ooze, then Mind Blasts for 5
         for turn in range(0, 6):
@@ -693,7 +693,6 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[0].spell_damage)
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
-
 
         # Mind Blasts for 6
         game.play_single_turn()
@@ -709,8 +708,8 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(14, game.players[1].hero.health)
 
     def test_VelensChosenWithExistingSpellDamage(self):
-        game = generate_game_for([KoboldGeomancer, MindBlast, VelensChosen, MindBlast, MindBlast], [SoulOfTheForest, MassDispel],
-                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for([KoboldGeomancer, MindBlast, VelensChosen, MindBlast, MindBlast],
+                                 [SoulOfTheForest, MassDispel], OneCardPlayingAgent, OneCardPlayingAgent)
 
         # Plays Kobold, then Mind Blasts for 6
         for turn in range(0, 6):
@@ -724,7 +723,6 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[0].spell_damage)
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
-
 
         # Mind Blasts for 7
         game.play_single_turn()

@@ -5,11 +5,11 @@ from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Aura, Battlecry
-from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType
+from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
     CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Frozen
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Frozen, NoSpellTarget
 
 
 class ManaWyrm(MinionCard):
@@ -102,3 +102,11 @@ class SootSpewer(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 3, spell_damage=1)
+
+
+class WeeSpellstopper(MinionCard):
+    def __init__(self):
+        super().__init__("Wee Spellstopper", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(2, 5, auras=[Aura(NoSpellTarget(), MinionSelector(Adjacent()))])

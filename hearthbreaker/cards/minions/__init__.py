@@ -254,6 +254,7 @@ from hearthbreaker.cards.minions.mage import (
     Snowchugger,
     GoblinBlastmage,
     SootSpewer,
+    WeeSpellstopper,
 )
 
 from hearthbreaker.cards.minions.paladin import (
