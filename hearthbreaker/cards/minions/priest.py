@@ -111,3 +111,13 @@ class Shadowbomber(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 1)
+
+
+class Shadowboxer(MinionCard):
+    def __init__(self):
+        super().__init__("Shadowboxer", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(2, 3, effects=[Effect(CharacterHealed(player=BothPlayer()), Damage(1),
+                                            CharacterSelector(players=EnemyPlayer(), picker=RandomPicker(),
+                                                              condition=None))])

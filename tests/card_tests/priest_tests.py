@@ -736,3 +736,21 @@ class TestPriest(unittest.TestCase):
 
         self.assertEqual(0, game.players[0].spell_damage)
         self.assertEqual(12, game.players[1].hero.health)
+
+    def test_Shadowboxer(self):
+        game = generate_game_for([Shadowboxer, CircleOfHealing], Whirlwind, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(29, game.players[1].hero.health)

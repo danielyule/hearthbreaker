@@ -281,6 +281,7 @@ from hearthbreaker.cards.minions.priest import (
     Shrinkmeister,
     UpgradedRepairBot,
     Shadowbomber,
+    Shadowboxer,
 )
 
 from hearthbreaker.cards.minions.rogue import (
