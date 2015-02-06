@@ -1656,6 +1656,25 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
 
+    def test_Illidan_and_Defender(self):
+        game = generate_game_for([IllidanStormrage, DefenderOfArgus], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        game.players[0].max_mana = 9
+        game.players[0].agent.choose_index = lambda card, player: len(player.minions)
+        game.play_single_turn()
+
+        # Illidan should be played, followed by a defender.  The Flame should spawn before the defender
+        # drops, which means the flame gets the buff, and not Illidan
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertFalse(game.current_player.minions[0].taunt)
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertTrue(game.current_player.minions[1].taunt)
+
     def test_Lightwarden(self):
         game = generate_game_for([Lightwarden, MindControl],
                                  [StonetuskBoar, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre],

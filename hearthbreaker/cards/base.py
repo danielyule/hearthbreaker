@@ -1,6 +1,6 @@
 import abc
 import hearthbreaker.constants
-from hearthbreaker.game_objects import Bindable, GameObject, GameException
+from hearthbreaker.game_objects import Bindable, GameObject
 
 __author__ = 'Daniel'
 
@@ -227,9 +227,11 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Player player: The player who wants to play this card
         :param hearthbreaker.game_objects.Game game: The game this card will be played in.
         """
-        if len(player.minions) >= 7:
-            raise GameException("Only 7 minions allowed on the field at a time")
         super().use(player, game)
+        if len(player.minions) >= 7:
+            # TODO: Need to investigate if this is the correct behaviour, or if any minions spawning as part of
+            # card_played (i.e. Illidan) should not spawn if the board is going to be full
+            return
         minion = self.create_minion(player)
         minion.card = self
         minion.player = player

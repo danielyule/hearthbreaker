@@ -1266,7 +1266,7 @@ class IllidanStormrage(MinionCard):
         super().__init__("Illidan Stormrage", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(7, 5, effects=[Effect(CardUsed(), Summon(FlameOfAzzinoth()), PlayerSelector())])
+        return Minion(7, 5, effects=[Effect(CardPlayed(), Summon(FlameOfAzzinoth()), PlayerSelector())])
 
 
 class FlesheatingGhoul(MinionCard):
