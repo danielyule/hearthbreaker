@@ -118,6 +118,7 @@ from hearthbreaker.cards.spells.priest import (
     Shadowform,
     Silence,
     Thoughtsteal,
+    VelensChosen
 )
 
 from hearthbreaker.cards.spells.rogue import (
