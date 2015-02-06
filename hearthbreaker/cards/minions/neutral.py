@@ -11,8 +11,7 @@ from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle,
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
-    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, \
-    EnemyMinionDied
+    SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector
@@ -2266,7 +2265,7 @@ class MekgineerThermaplugg(MinionCard):
         super().__init__("Mekgineer Thermaplugg", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(9, 7, effects=[Effect(EnemyMinionDied(), Summon(LeperGnome()), PlayerSelector())])
+        return Minion(9, 7, effects=[Effect(MinionDied(player=EnemyPlayer()), Summon(LeperGnome()), PlayerSelector())])
 
 
 class StonesplinterTrogg(MinionCard):

@@ -74,11 +74,6 @@ class MinionDied(PlayerEvent):
         super().__init__("minion_died", condition, player)
 
 
-class EnemyMinionDied(PlayerEvent):
-    def __init__(self, condition=None, player=EnemyPlayer()):
-        super().__init__("minion_died", condition, player)
-
-
 class MinionPlaced(PlayerEvent):
     def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
         super().__init__("minion_placed", condition, player)
