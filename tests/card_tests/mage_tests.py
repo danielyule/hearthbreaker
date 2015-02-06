@@ -620,6 +620,22 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
 
+    @unittest.expectedFailure
+    def test_Duplicate_MadScientist(self):
+        game = generate_game_for(Hellfire, [MadScientist, MagmaRager, Duplicate],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.current_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual("Magma Rager", game.other_player.hand[-1].name)
+        self.assertEqual("Magma Rager", game.other_player.hand[-2].name)
+
     def test_Snowchugger(self):
         game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, DoNothingAgent)
 
