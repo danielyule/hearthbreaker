@@ -260,7 +260,11 @@ class HeroSelector(Selector):
         self.picker = picker
 
     def get_targets(self, source, obj=None):
-        return self.picker.pick([p.hero for p in self.players.get_players(source.player)], source.player)
+        return [p.hero for p in self.players.get_players(source.player)]
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         return source.player is obj
@@ -314,7 +318,11 @@ class MinionSelector(Selector):
                 if self.match(source, minion):
                     targets.append(minion)
 
-        return self.picker.pick(targets, source.player)
+        return targets
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         if self.condition:
@@ -365,7 +373,11 @@ class CharacterSelector(Selector):
             if self.match(source, p.hero):
                 targets.append(p.hero)
 
-        return self.picker.pick(targets, source.player)
+        return targets
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         if self.condition:

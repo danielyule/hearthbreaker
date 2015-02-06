@@ -243,13 +243,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         player.trigger("minion_placed", minion)
         if self.choices:
             choice = player.agent.choose_option(*self.choices)
-            choice.battlecry(minion)
+            choice.do(minion)
         if self.combo and player.cards_played > 0:
-            self.combo.battlecry(minion)
+            self.combo.do(minion)
         else:
             if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
                 for battlecry in self.battlecry:
-                    battlecry.battlecry(minion)
+                    battlecry.do(minion)
             elif minion.battlecry is not None:
                 minion.battlecry(minion)
         if not minion.removed:
@@ -404,10 +404,10 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         weapon.player = player
         weapon.game = game
         if self.combo and player.cards_played > 0:
-            self.combo.battlecry(weapon)
+            self.combo.do(weapon)
         else:
             if self.battlecry:
-                self.battlecry.battlecry(weapon)
+                self.battlecry.do(weapon)
             elif weapon.battlecry is not None:
                 weapon.battlecry(weapon)
         weapon.equip(player)

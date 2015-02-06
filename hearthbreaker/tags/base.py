@@ -221,6 +221,9 @@ class Selector(JSONObject, metaclass=abc.ABCMeta):
     def get_targets(self, source, target=None):
         pass
 
+    def choose_targets(self, source, target=None):
+        return self.get_targets(source, target)
+
     @abc.abstractmethod
     def match(self, source, obj):
         pass
@@ -452,7 +455,7 @@ class Effect(Tag):
 
     def _find_target(self, focus=None, other=None, *args):
         if not self.condition or self.condition.evaluate(self.owner, focus, other, *args):
-            targets = self.selector.get_targets(self.owner, focus)
+            targets = self.selector.choose_targets(self.owner, focus)
             for target in targets:
                 self.action.act(self.owner, target)
 
@@ -499,41 +502,54 @@ class Condition(JSONObject, metaclass=abc.ABCMeta):
         pass
 
 
-class Deathrattle(Tag):
-    def __init__(self, action, selector, condition=None):
-        self.action = action
+class ActionTag(Tag):
+    def __init__(self, actions, selector, condition=None):
+        if isinstance(actions, list):
+            self.actions = actions
+        else:
+            self.actions = [actions]
         self.selector = selector
         self.condition = condition
 
-    def deathrattle(self, target):
+    def do(self, target):
         if self.condition:
             if not self.condition.evaluate(target):
                 return
-        targets = self.selector.get_targets(target, target)
+        targets = self.selector.choose_targets(target, target)
         for t in targets:
-            self.action.act(target, t)
-
-        target.player.game.check_delayed()
+            for action in self.actions:
+                action.act(target, t)
 
     def __to_json__(self):
         if self.condition:
             return {
-                'action': self.action,
+                'actions': self.actions,
                 'selector': self.selector,
                 'condition': self.condition,
             }
         return {
-            'action': self.action,
+            'actions': self.actions,
             'selector': self.selector
         }
 
-    @staticmethod
-    def from_json(action, selector, condition=None):
-        action = Action.from_json(**action)
+    @classmethod
+    def from_json(cls, actions, selector, condition=None):
+        action = [Action.from_json(**a) for a in actions]
         selector = Selector.from_json(**selector)
         if condition:
             condition = Condition.from_json(**condition)
-        return Deathrattle(action, selector, condition)
+        return cls(action, selector, condition)
+
+
+class Deathrattle(ActionTag):
+    def do(self, target):
+        super().do(target)
+        target.player.game.check_delayed()
+
+
+class Spell(ActionTag):
+    def __init__(self, actions, selector, condition=None):
+        super().__init__(actions, selector, condition)
 
 
 class CARD_SOURCE:
@@ -662,46 +678,12 @@ class CardQuery(JSONObject):
         return query
 
 
-class Battlecry(Tag):
+class Battlecry(ActionTag):
     def __init__(self, actions, selector, condition=None):
-        if isinstance(actions, Action):
-            self.actions = [actions]
-        else:
-            self.actions = actions
-        self.selector = selector
-        self.condition = condition
-
-    def battlecry(self, target):
-        if self.condition:
-            if not self.condition.evaluate(target):
-                return
-        targets = self.selector.get_targets(target, target)
-        for t in targets:
-            for action in self.actions:
-                action.act(target, t)
-
-    def __to_json__(self):
-        if self.condition:
-            return {
-                'actions': self.actions,
-                'selector': self.selector,
-                'condition': self.condition
-            }
-        return {
-            'actions': self.actions,
-            'selector': self.selector
-        }
-
-    @staticmethod
-    def from_json(actions, selector, condition=None):
-        actions = [Action.from_json(**action) for action in actions]
-        selector = Selector.from_json(**selector)
-        if condition:
-            condition = Condition.from_json(**condition)
-        return Battlecry(actions, selector, condition)
+        super().__init__(actions, selector, condition)
 
 
-class Choice(Battlecry):
+class Choice(ActionTag):
     def __init__(self, card, actions, selector, condition=None):
         self.card = card
         super().__init__(actions, selector, condition)

@@ -275,7 +275,7 @@ class ChangeTarget(Action):
         self.selector = selector
 
     def act(self, actor, target):
-        possible_targets = [t for t in self.selector.get_targets(target, target.current_target)]
+        possible_targets = [t for t in self.selector.choose_targets(target, target.current_target)]
         if len(possible_targets) > 0:
             target.current_target = possible_targets[0]
 

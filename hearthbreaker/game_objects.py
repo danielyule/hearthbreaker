@@ -718,7 +718,7 @@ class Weapon(Bindable, GameObject):
         # Deathrattle is triggered no matter how the weapon is destroyed, see
         # http://www.hearthhead.com/card=1805/deaths-bite#comments:id=1983510
         if self.deathrattle is not None:
-            self.deathrattle.deathrattle(self.player.hero)
+            self.deathrattle.do(self.player.hero)
         self.player.hero.weapon = None
         self.player.hero.trigger("weapon_destroyed")
         self.unattach()
@@ -904,9 +904,9 @@ class Minion(Character):
 
                 if deathrattle is not None:
                     for rattle in deathrattle:
-                        rattle.deathrattle(self)
+                        rattle.do(self)
                         if self.player.double_deathrattle:
-                            rattle.deathrattle(self)
+                            rattle.do(self)
                 self.unattach()
                 self.player.trigger("minion_died", self, by)
                 self.player.graveyard.add(self.card.name)
