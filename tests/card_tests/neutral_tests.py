@@ -3923,3 +3923,73 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
         self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+
+    def test_Hobgoblin(self):
+        game = generate_game_for([Wisp, Hobgoblin], Wisp, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+
+        # 3 Wisps on the field should not get buffed when Hobgoblin played
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+
+        # Enemy Wisp should not be buffed
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[2].health)
+        self.assertEqual(1, game.players[1].minions[2].calculate_attack())
+
+        # Allied Wisp become a 3/3
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+
+        # Nothing new here
+        game.play_single_turn()
+
+        # Hobgoblin should not be buffed
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+        # Nothing new here
+        game.play_single_turn()
+
+        # Allied Wisp buffed to 5/5
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())

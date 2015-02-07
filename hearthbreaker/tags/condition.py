@@ -317,6 +317,23 @@ class AttackGreaterThan(Condition):
         }
 
 
+class BaseAttackEqualTo(Condition):
+    def __init__(self, attack_equal, include_self=False):
+        super().__init__()
+        self.attack_equal = attack_equal
+        self.include_self = include_self
+
+    def evaluate(self, target, minion, *args):
+        return (self.include_self or target is not minion) and minion.base_attack == self.attack_equal
+
+    def __to_json__(self):
+        return {
+            'name': 'attack_equal_to',
+            'include_self': self.include_self,
+            'base_attack_equal': self.attack_equal
+        }
+
+
 class IsDamaged(Condition):
     def evaluate(self, target, minion, *args):
         return minion.health != minion.calculate_max_health()

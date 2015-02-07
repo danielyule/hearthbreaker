@@ -216,6 +216,7 @@ from hearthbreaker.cards.minions.neutral import (
     MekgineerThermaplugg,
     StonesplinterTrogg,
     TroggzorTheEarthinator,
+    Hobgoblin,
 )
 
 from hearthbreaker.cards.minions.druid import (
