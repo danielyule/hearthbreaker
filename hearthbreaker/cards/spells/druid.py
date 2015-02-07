@@ -399,7 +399,7 @@ class DarkWispers(Card):
             def __init__(self):
                 super().__init__("Give a minion +5/+5 and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
-            def can_use(self):
+            def can_use(self, player, game):
                 return hearthbreaker.targeting.find_minion_spell_target(game,
                                                                         lambda t: t.spell_targetable()) is not None
 
@@ -414,7 +414,7 @@ class DarkWispers(Card):
             def __init__(self):
                 super().__init__("Summon 5 Wisps", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
-            def can_use(self):
+            def can_use(self, player, game):
                 return len(player.minions) < 7
 
             def use(self, player, game):

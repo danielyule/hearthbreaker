@@ -673,3 +673,18 @@ class TestPaladin(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(3, len(game.players[0].minions))
+
+    def test_Quartermaster(self):
+        game = generate_game_for([MusterForBattle, Quartermaster], Wisp, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].health)
+        self.assertEqual(3, game.players[0].minions[3].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[3].health)

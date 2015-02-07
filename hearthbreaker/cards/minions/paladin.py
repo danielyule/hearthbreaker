@@ -1,11 +1,11 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import Equip, Give, Heal
-from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import SetAttack, DivineShield
-from hearthbreaker.tags.condition import IsType
+from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack
+from hearthbreaker.tags.condition import IsType, HasCardName
 from hearthbreaker.tags.event import MinionSummoned
 
 
@@ -78,3 +78,13 @@ class ShieldedMinibot(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2, divine_shield=True)
+
+
+class Quartermaster(MinionCard):
+    def __init__(self):
+        super().__init__("Quartermaster", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
+                         battlecry=Battlecry(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
+                                             MinionSelector(HasCardName("Silver Hand Recruit"))))
+
+    def create_minion(self, player):
+        return Minion(2, 5)

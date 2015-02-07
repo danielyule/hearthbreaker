@@ -268,6 +268,7 @@ from hearthbreaker.cards.minions.paladin import (
     CobaltGuardian,
     SilverHandRecruit,
     ShieldedMinibot,
+    Quartermaster,
 )
 
 from hearthbreaker.cards.minions.priest import (

@@ -383,3 +383,17 @@ class HasDivineShield(Condition):
         return {
             'name': 'has_divine_shield',
         }
+
+
+class HasCardName(Condition):
+    def __init__(self, name):
+        self.name = name
+
+    def evaluate(self, target, minion, *args):
+        return minion.card.name == self.name
+
+    def __to_json__(self):
+        return {
+            'name': 'has_card_name',
+            'card_name': self.name,
+        }
