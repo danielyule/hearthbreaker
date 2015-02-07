@@ -72,7 +72,7 @@ class Tracking(Card):
             if player.can_draw():
                 cards.append(player.deck.draw(game))
         if len(cards) > 0:
-            chosen_card = player.agent.choose_option(*cards)
+            chosen_card = player.agent.choose_option(cards, player)
             player.hand.append(chosen_card)
             player.trigger("card_drawn", chosen_card)
 

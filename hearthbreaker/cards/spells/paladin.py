@@ -297,8 +297,8 @@ class MusterForBattle(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        dude = SilverHandRecruit()
         for i in range(0, 3):
+            dude = SilverHandRecruit()
             dude.summon(player, player.game, len(player.minions))
         hammer = LightsJustice().create_weapon(player)
         hammer.equip(player)

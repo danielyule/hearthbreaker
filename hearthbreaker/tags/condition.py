@@ -328,9 +328,9 @@ class BaseAttackEqualTo(Condition):
 
     def __to_json__(self):
         return {
-            'name': 'attack_equal_to',
+            'name': 'base_attack_equal_to',
             'include_self': self.include_self,
-            'base_attack_equal': self.attack_equal
+            'attack_equal': self.attack_equal
         }
 
 
@@ -386,14 +386,14 @@ class HasDivineShield(Condition):
 
 
 class HasCardName(Condition):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, card_name):
+        self.card_name = card_name
 
     def evaluate(self, target, minion, *args):
-        return minion.card.name == self.name
+        return minion.card.name == self.card_name
 
     def __to_json__(self):
         return {
             'name': 'has_card_name',
-            'card_name': self.name,
+            'card_name': self.card_name,
         }

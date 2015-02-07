@@ -2,6 +2,7 @@ import abc
 import copy
 
 import random
+from hearthbreaker.cards.base import Card
 
 
 class Agent(metaclass=abc.ABCMeta):
@@ -23,8 +24,13 @@ class Agent(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def choose_option(self, *options):
+    def choose_option(self, options, player):
         pass
+
+    def filter_options(self, options, player):
+        if isinstance(options[0], Card):
+            return [option for option in options if option.can_choose(player)]
+        return [option for option in options if option.card.can_choose(player)]
 
 
 class DoNothingAgent(Agent):
@@ -43,8 +49,8 @@ class DoNothingAgent(Agent):
     def choose_index(self, card, player):
         return 0
 
-    def choose_option(self, *options):
-        return options[0]
+    def choose_option(self, options, player):
+        return self.filter_options(options, player)[0]
 
 
 class PredictableAgent(Agent):
@@ -78,8 +84,8 @@ class PredictableAgent(Agent):
     def choose_index(self, card, player):
         return 0
 
-    def choose_option(self, *options):
-        return options[0]
+    def choose_option(self, options, player):
+        return self.filter_options(options, player)[0]
 
 
 class RandomAgent(DoNothingAgent):
@@ -116,5 +122,6 @@ class RandomAgent(DoNothingAgent):
     def choose_index(self, card, player):
         return random.randint(0, len(player.minions))
 
-    def choose_option(self, *options):
+    def choose_option(self, options, player):
+        options = self.filter_options(options, player)[0]
         return options[random.randint(0, len(options) - 1)]

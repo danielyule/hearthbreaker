@@ -382,8 +382,8 @@ def record(game):
             replay._record_target(target)
             return target
 
-        def choose_option(self, *options):
-            option = self.agent.choose_option(*options)
+        def choose_option(self, options, player):
+            option = self.agent.choose_option(options, player)
             replay._record_option_chosen(options.index(option))
             return option
 
@@ -492,7 +492,7 @@ def playback(replay):
         def choose_index(self, card, player):
             return self.next_index
 
-        def choose_option(self, *options):
+        def choose_option(self, options, player):
             return options[self.next_option]
     game = Game.__new__(Game)
     _old_random_choice = game.random_choice

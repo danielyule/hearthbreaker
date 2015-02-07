@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.cards.base import Card, MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill
 from hearthbreaker.tags.base import Effect, Deathrattle
@@ -82,7 +82,7 @@ class PowerOfTheWild(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class LeaderOfThePack(Card):
+        class LeaderOfThePack(ChoiceCard):
             def __init__(self):
                 super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -91,7 +91,7 @@ class PowerOfTheWild(Card):
                     minion.change_attack(1)
                     minion.increase_health(1)
 
-        class SummonPanther(Card):
+        class SummonPanther(ChoiceCard):
             def __init__(self):
                 super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -106,7 +106,7 @@ class PowerOfTheWild(Card):
                 panther = Panther()
                 panther.summon(player, game, len(player.minions))
 
-        option = player.agent.choose_option(LeaderOfThePack(), SummonPanther())
+        option = player.agent.choose_option([LeaderOfThePack(), SummonPanther()], player)
         option.use(player, game)
 
 
@@ -138,25 +138,25 @@ class Wrath(Card):
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        class WrathOne(Card):
+        class WrathOne(ChoiceCard):
             def __init__(self):
-                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 1 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.damage(player.effective_spell_damage(1), wrath)
                 player.draw()
 
-        class WrathThree(Card):
+        class WrathThree(ChoiceCard):
             def __init__(self):
-                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 3 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.damage(player.effective_spell_damage(3), wrath)
 
         super().use(player, game)
-        option = game.current_player.agent.choose_option(WrathOne(), WrathThree())
+        option = game.current_player.agent.choose_option([WrathOne(), WrathThree()], player)
         target = self.target
         wrath = self
         option.use(player, game)
@@ -178,7 +178,7 @@ class MarkOfNature(Card):
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
-        class MarkOfNatureAttack(Card):
+        class MarkOfNatureAttack(ChoiceCard):
             def __init__(self):
                 super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
@@ -186,7 +186,7 @@ class MarkOfNature(Card):
             def use(self, player, game):
                 target.change_attack(4)
 
-        class MarkOfNatureHealth(Card):
+        class MarkOfNatureHealth(ChoiceCard):
             def __init__(self):
                 super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
@@ -197,7 +197,7 @@ class MarkOfNature(Card):
 
         super().use(player, game)
         target = self.target
-        option = game.current_player.agent.choose_option(MarkOfNatureAttack(), MarkOfNatureHealth())
+        option = game.current_player.agent.choose_option([MarkOfNatureAttack(), MarkOfNatureHealth()], player)
         option.use(player, game)
 
 
@@ -270,7 +270,7 @@ class Nourish(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Gain2(Card):
+        class Gain2(ChoiceCard):
 
             def __init__(self):
                 super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -283,7 +283,7 @@ class Nourish(Card):
                     player.max_mana = 10
                     player.mana += 2
 
-        class Draw3(Card):
+        class Draw3(ChoiceCard):
 
             def __init__(self):
                 super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -293,7 +293,7 @@ class Nourish(Card):
                 player.draw()
                 player.draw()
 
-        option = player.agent.choose_option(Gain2(), Draw3())
+        option = player.agent.choose_option([Gain2(), Draw3()], player)
         option.use(player, game)
 
 
@@ -307,7 +307,7 @@ class Starfall(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class DamageAll(Card):
+        class DamageAll(ChoiceCard):
             def __init__(self):
                 super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -315,16 +315,20 @@ class Starfall(Card):
                 for minion in copy.copy(game.other_player.minions):
                     minion.damage(player.effective_spell_damage(2), self)
 
-        class DamageOne(Card):
+        class DamageOne(ChoiceCard):
             def __init__(self):
                 super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+            def can_use(self, player, game):
+                return super().can_use(player, game) and len(hearthbreaker.targeting.find_minion_spell_target(
+                    game, lambda t: t.spell_targetable())) > 0
 
             def use(self, player, game):
                 targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
                 target = player.agent.choose_target(targets)
                 target.damage(player.effective_spell_damage(5), self)
 
-        option = player.agent.choose_option(DamageAll(), DamageOne())
+        option = player.agent.choose_option([DamageAll(), DamageOne()], player)
         option.use(player, game)
 
 
@@ -395,7 +399,7 @@ class DarkWispers(Card):
     def use(self, player, game):
         super().use(player, game)
 
-        class Buff5(Card):
+        class Buff5(ChoiceCard):
             def __init__(self):
                 super().__init__("Give a minion +5/+5 and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -410,7 +414,7 @@ class DarkWispers(Card):
                 target.increase_health(5)
                 target.taunt = True
 
-        class Wisps5(Card):
+        class Wisps5(ChoiceCard):
             def __init__(self):
                 super().__init__("Summon 5 Wisps", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -424,11 +428,13 @@ class DarkWispers(Card):
 
                     def create_minion(self, player):
                         return Minion(1, 1)
-                wisp = Wisp()
                 for i in range(0, 5):
+                    wisp = Wisp()
                     wisp.summon(player, game, len(player.minions))
 
-        # Probably not Kosher, but I had to switch the order of these to avoid IndexError in test_play_with_one_card
-        # It works fine in all the tests except that one and seems to function as intended
-        option = player.agent.choose_option(Wisps5(), Buff5())
+        # In the official interface, both options are shown, but only one is highlighted.
+        if len(hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())) == 0:
+            option = Wisps5()
+        else:
+            option = player.agent.choose_option([Wisps5(), Buff5()], player)
         option.use(player, game)

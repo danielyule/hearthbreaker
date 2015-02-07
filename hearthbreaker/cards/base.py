@@ -70,6 +70,15 @@ class Card(Bindable, GameObject):
         self.overload = overload
         self.drawn = True
 
+    def can_choose(self, player):
+        """
+        Verifies if this card can be chosen from a list of options (i.e. in Tracking)
+
+        :return: True if the card can be chosen, false otherwise.
+        :rtype: bool
+        """
+        return True
+
     def can_use(self, player, game):
         """
         Verifies if the card can be used with the game state as it is.
@@ -242,7 +251,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         minion.add_to_board(minion.index)
         player.trigger("minion_placed", minion)
         if self.choices:
-            choice = player.agent.choose_option(*self.choices)
+            choice = player.agent.choose_option(self.choices, player)
             choice.do(minion)
         if self.combo and player.cards_played > 0:
             self.combo.do(minion)
@@ -426,3 +435,8 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
     @staticmethod
     def is_weapon():
         return True
+
+
+class ChoiceCard(Card):
+    def can_choose(self, player):
+        return self.can_use(player, player.game)

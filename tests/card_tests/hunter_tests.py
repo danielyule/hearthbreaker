@@ -184,6 +184,7 @@ class TestHunter(unittest.TestCase):
                                   StonetuskBoar, BloodfenRaptor, KoboldGeomancer],
                                  StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
+        game.players[0].agent.choose_option = lambda options, player: options[0]
         game.play_single_turn()
         self.assertEqual(4, len(game.current_player.hand))
         self.assertEqual("Stonetusk Boar", game.current_player.hand[3].name)

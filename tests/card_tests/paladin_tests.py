@@ -434,6 +434,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
 
+    @unittest.expectedFailure
     def test_Redemption_full_board(self):
         game = generate_game_for(Assassinate, [Redemption, Wisp, Wisp, Wisp, Wisp, Wisp, HauntedCreeper],
                                  OneCardPlayingAgent, CardTestingAgent)
@@ -443,7 +444,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(6, len(game.current_player.minions))
 
         game.play_single_turn()
-
+        # This has been tested locally on patch 2.1.0.7628
         self.assertEqual(7, len(game.other_player.minions))
         self.assertEqual("Spectral Spider", game.other_player.minions[0].card.name)
         self.assertEqual("Spectral Spider", game.other_player.minions[1].card.name)

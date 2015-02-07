@@ -620,7 +620,6 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
 
-    @unittest.expectedFailure
     def test_Duplicate_MadScientist(self):
         game = generate_game_for(Hellfire, [MadScientist, MagmaRager, Duplicate],
                                  OneCardPlayingAgent, OneCardPlayingAgent)

@@ -117,7 +117,7 @@ class TestDruid(unittest.TestCase):
         # This is a test of the "Summon Panther" option of the Power of the Wild Card
 
         agent = OneCardPlayingAgent()
-        agent.choose_option = mock.Mock(side_effect=lambda *options: options[1])
+        agent.choose_option = lambda options, player: options[1]
 
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), PowerOfTheWild()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
@@ -170,7 +170,7 @@ class TestDruid(unittest.TestCase):
 
         random.seed(1857)
         game = generate_game_for(Wrath, MogushanWarden, EnemyMinionSpellTestingAgent, OneCardPlayingAgent)
-        game.players[0].agent.choose_option = lambda one, three: three
+        game.players[0].agent.choose_option = lambda options, player: options[1]
         for turn in range(0, 8):
             game.play_single_turn()
 
@@ -212,7 +212,7 @@ class TestDruid(unittest.TestCase):
         deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), MarkOfNature()], CHARACTER_CLASS.DRUID)
         deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
         agent = OneCardPlayingAgent()
-        agent.choose_option = lambda *options: options[1]
+        agent.choose_option = lambda options, player: options[1]
         game = Game([deck1, deck2], [agent, OneCardPlayingAgent()])
 
         game.current_player = 1
@@ -331,7 +331,7 @@ class TestDruid(unittest.TestCase):
 
         game = generate_game_for(KeeperOfTheGrove, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
 
-        game.players[0].agent.choose_option = lambda moonfire, dispel: dispel
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -383,7 +383,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(4, test_bear.calculate_attack())
         self.assertEqual(4, test_bear.calculate_max_health())
 
-        game.current_player.agent.choose_option = lambda cat, bear: bear
+        game.current_player.agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -430,7 +430,7 @@ class TestDruid(unittest.TestCase):
         # Test drawing three cards
         random.seed(1857)
         game = generate_game_for(Nourish, StonetuskBoar, CardTestingAgent, DoNothingAgent)
-        game.players[0].agent.choose_option = lambda gain2, draw3: draw3
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -467,7 +467,7 @@ class TestDruid(unittest.TestCase):
         # Test damage to one
         random.seed(1857)
         game = generate_game_for(Starfall, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
-        game.players[0].agent.choose_option = lambda damageAll, damageOne: damageOne
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -556,7 +556,7 @@ class TestDruid(unittest.TestCase):
 
         game = generate_game_for(AncientOfLore, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
-        game.players[0].agent.choose_option = lambda heal, draw: draw
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -611,7 +611,7 @@ class TestDruid(unittest.TestCase):
 
         random.seed(1857)
         game = generate_game_for(AncientOfWar, IronbeakOwl, OneCardPlayingAgent, OneCardPlayingAgent)
-        game.players[0].agent.choose_option = lambda health, attack: attack
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -717,7 +717,7 @@ class TestDruid(unittest.TestCase):
             self.assertEqual(9, minion.health)
             self.assertEqual(9, minion.calculate_max_health())
 
-        game.players[1].agent.choose_option = lambda stats, summon: summon
+        game.players[1].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -798,7 +798,7 @@ class TestDruid(unittest.TestCase):
 
         random.seed(1857)
         game = generate_game_for(AnodizedRoboCub, IronbeakOwl, OneCardPlayingAgent, OneCardPlayingAgent)
-        game.players[0].agent.choose_option = lambda health, attack: attack
+        game.players[0].agent.choose_option = lambda options, player: options[1]
 
         game.play_single_turn()
         game.play_single_turn()
@@ -837,7 +837,7 @@ class TestDruid(unittest.TestCase):
 
     def test_DarkWispers(self):
         game = generate_game_for(DarkWispers, SaltyDog, CardTestingAgent, OneCardPlayingAgent)
-        game.players[0].agent.choose_option = lambda wisps5, buff5: buff5
+        game.players[0].agent.choose_option = lambda options, player: options[1]
         for turn in range(0, 10):
             game.play_single_turn()
 
