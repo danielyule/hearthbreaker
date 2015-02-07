@@ -447,7 +447,7 @@ class TestDruid(unittest.TestCase):
 
     def test_Starfall(self):
 
-        # Test gaining two mana
+        # Test damage to all
         game = generate_game_for(Starfall, StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
 
         game.play_single_turn()
@@ -464,7 +464,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(30, game.other_player.hero.health)
 
-        # Test drawing three cards
+        # Test damage to one
         random.seed(1857)
         game = generate_game_for(Starfall, MogushanWarden, CardTestingAgent, OneCardPlayingAgent)
         game.players[0].agent.choose_option = lambda damageAll, damageOne: damageOne
@@ -834,3 +834,60 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(9, len(game.players[0].hand))
         self.assertEqual(5, game.players[0].minions[0].health)
         self.assertEqual("Rusty Horn", game.players[0].hand[8].name)
+
+    def test_DarkWispers(self):
+        game = generate_game_for(DarkWispers, SaltyDog, CardTestingAgent, OneCardPlayingAgent)
+        game.players[0].agent.choose_option = lambda wisps5, buff5: buff5
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # 1 Salty Dog on the field
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[1].minions[0].health)
+        self.assertFalse(game.players[1].minions[0].taunt)
+
+        # Chooses to buff enemy Salty Dog
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(12, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(9, game.players[1].minions[0].health)
+        self.assertTrue(game.players[1].minions[0].taunt)
+
+        random.seed(1857)
+        game = generate_game_for(DarkWispers, SaltyDog, CardTestingAgent, OneCardPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # 1 Salty Dog on the field
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Summons 5 Wisps
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual("Wisp", game.players[0].minions[0].card.name)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual("Wisp", game.players[0].minions[1].card.name)
+        self.assertEqual(1, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[2].health)
+        self.assertEqual("Wisp", game.players[0].minions[2].card.name)
+        self.assertEqual(1, game.players[0].minions[3].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[3].health)
+        self.assertEqual("Wisp", game.players[0].minions[3].card.name)
+        self.assertEqual(1, game.players[0].minions[4].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[4].health)
+        self.assertEqual("Wisp", game.players[0].minions[4].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].minions))

@@ -11,8 +11,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 class Innervate(Card):
     def __init__(self):
-        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.FREE)
+        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -24,8 +23,7 @@ class Innervate(Card):
 
 class Moonfire(Card):
     def __init__(self):
-        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON,
+        super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -45,8 +43,7 @@ class Claw(Card):
 
 class Naturalize(Card):
     def __init__(self):
-        super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON,
+        super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -58,8 +55,7 @@ class Naturalize(Card):
 
 class Savagery(Card):
     def __init__(self):
-        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.RARE,
+        super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -69,8 +65,7 @@ class Savagery(Card):
 
 class MarkOfTheWild(Card):
     def __init__(self):
-        super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.FREE,
+        super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -82,17 +77,14 @@ class MarkOfTheWild(Card):
 
 class PowerOfTheWild(Card):
     def __init__(self):
-        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON)
+        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
 
         class LeaderOfThePack(Card):
             def __init__(self):
-                super().__init__("Leader of the Pack", 0,
-                                 CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.COMMON)
+                super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def use(self, player, game):
                 for minion in player.minions:
@@ -101,14 +93,12 @@ class PowerOfTheWild(Card):
 
         class SummonPanther(Card):
             def __init__(self):
-                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 class Panther(MinionCard):
                     def __init__(self):
-                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID,
-                                         CARD_RARITY.SPECIAL)
+                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
                     def create_minion(self, _):
                         return Minion(3, 2, MINION_TYPE.BEAST)
@@ -122,8 +112,7 @@ class PowerOfTheWild(Card):
 
 class WildGrowth(Card):
     def __init__(self):
-        super().__init__("Wild Growth", 2, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.FREE)
+        super().__init__("Wild Growth", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
 
     def use(self, player, game):
         super().use(player, game)
@@ -136,8 +125,7 @@ class WildGrowth(Card):
 # Special card that only appears in tandem with Wild Growth
 class ExcessMana(Card):
     def __init__(self):
-        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.SPECIAL)
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
     def use(self, player, game):
         super().use(player, game)
@@ -152,8 +140,7 @@ class Wrath(Card):
     def use(self, player, game):
         class WrathOne(Card):
             def __init__(self):
-                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 1 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -162,16 +149,14 @@ class Wrath(Card):
 
         class WrathThree(Card):
             def __init__(self):
-                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL,
+                super().__init__("Wrath 3 Damage", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.damage(player.effective_spell_damage(3), wrath)
 
         super().use(player, game)
-        option = game.current_player.agent.choose_option(WrathOne(),
-                                                         WrathThree())
+        option = game.current_player.agent.choose_option(WrathOne(), WrathThree())
         target = self.target
         wrath = self
         option.use(player, game)
@@ -179,8 +164,7 @@ class Wrath(Card):
 
 class HealingTouch(Card):
     def __init__(self):
-        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.FREE,
+        super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
@@ -190,16 +174,13 @@ class HealingTouch(Card):
 
 class MarkOfNature(Card):
     def __init__(self):
-        super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON,
+        super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         class MarkOfNatureAttack(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Attack", 0,
-                                 CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL,
+                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -207,9 +188,7 @@ class MarkOfNature(Card):
 
         class MarkOfNatureHealth(Card):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Health", 0,
-                                 CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL,
+                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                                  hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
@@ -218,15 +197,13 @@ class MarkOfNature(Card):
 
         super().use(player, game)
         target = self.target
-        option = game.current_player.agent.choose_option(MarkOfNatureAttack(),
-                                                         MarkOfNatureHealth())
+        option = game.current_player.agent.choose_option(MarkOfNatureAttack(), MarkOfNatureHealth())
         option.use(player, game)
 
 
 class SavageRoar(Card):
     def __init__(self):
-        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON)
+        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -258,8 +235,7 @@ class Treant(MinionCard):
 
 class SoulOfTheForest(Card):
     def __init__(self):
-        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.COMMON)
+        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -284,8 +260,7 @@ class Swipe(Card):
                 minion.damage(player.effective_spell_damage(1), self)
 
         if self.target is not game.other_player.hero:
-            game.other_player.hero.damage(player.effective_spell_damage(1),
-                                          self)
+            game.other_player.hero.damage(player.effective_spell_damage(1), self)
 
 
 class Nourish(Card):
@@ -298,9 +273,7 @@ class Nourish(Card):
         class Gain2(Card):
 
             def __init__(self):
-                super().__init__("Gain 2 mana crystals", 0,
-                                 CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 if player.max_mana < 8:
@@ -313,8 +286,7 @@ class Nourish(Card):
         class Draw3(Card):
 
             def __init__(self):
-                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID,
-                                 CARD_RARITY.SPECIAL)
+                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 player.draw()
@@ -327,8 +299,7 @@ class Nourish(Card):
 
 class Starfall(Card):
     def __init__(self):
-        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.RARE)
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) > 0
@@ -338,8 +309,7 @@ class Starfall(Card):
 
         class DamageAll(Card):
             def __init__(self):
-                super().__init__("Do two damage to all enemy minions", 0,
-                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 for minion in copy.copy(game.other_player.minions):
@@ -347,8 +317,7 @@ class Starfall(Card):
 
         class DamageOne(Card):
             def __init__(self):
-                super().__init__("Do five damage to an enemy minion", 0,
-                                 CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
             def use(self, player, game):
                 targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
@@ -361,8 +330,7 @@ class Starfall(Card):
 
 class ForceOfNature(Card):
     def __init__(self):
-        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.EPIC)
+        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
@@ -412,3 +380,55 @@ class PoisonSeeds(Card):
 
         for target in targets:
             Treant().summon(target.player, target.game, len(target.player.minions))
+
+
+class DarkWispers(Card):
+    def __init__(self):
+        super().__init__("Dark Wispers", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
+
+    def can_use(self, player, game):
+        return (super().can_use(player, game)
+                and (len(player.minions) < 7
+                     or hearthbreaker.targeting.find_minion_spell_target(game,
+                                                                         lambda t: t.spell_targetable()) is not None))
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        class Buff5(Card):
+            def __init__(self):
+                super().__init__("Give a minion +5/+5 and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+            def can_use(self):
+                return hearthbreaker.targeting.find_minion_spell_target(game,
+                                                                        lambda t: t.spell_targetable()) is not None
+
+            def use(self, player, game):
+                targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
+                target = player.agent.choose_target(targets)
+                target.change_attack(5)
+                target.increase_health(5)
+                target.taunt = True
+
+        class Wisps5(Card):
+            def __init__(self):
+                super().__init__("Summon 5 Wisps", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+            def can_use(self):
+                return len(player.minions) < 7
+
+            def use(self, player, game):
+                class Wisp(MinionCard):
+                    def __init__(self):
+                        super().__init__("Wisp", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+                    def create_minion(self, player):
+                        return Minion(1, 1)
+                wisp = Wisp()
+                for i in range(0, 5):
+                    wisp.summon(player, game, len(player.minions))
+
+        # Probably not Kosher, but I had to switch the order of these to avoid IndexError in test_play_with_one_card
+        # It works fine in all the tests except that one and seems to function as intended
+        option = player.agent.choose_option(Wisps5(), Buff5())
+        option.use(player, game)

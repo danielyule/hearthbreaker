@@ -29,6 +29,7 @@ from hearthbreaker.cards.spells.druid import (
     ForceOfNature,
     Starfire,
     PoisonSeeds,
+    DarkWispers,
 )
 
 from hearthbreaker.cards.spells.hunter import (
