@@ -541,13 +541,6 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(7, len(game.current_player.hand))
 
-        game.play_single_turn()
-        # Bane of Doom will kill off the Siltfin, but should not draw a card
-        game.play_single_turn()
-
-        self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(8, len(game.other_player.hand))
-
     def test_WhirlingZapOMatic(self):
         game = generate_game_for(WhirlingZapomatic, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
@@ -580,3 +573,20 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Silverback Patriarch", game.other_player.minions[1].card.name)
         self.assertEqual("Stonetusk Boar", game.other_player.minions[2].card.name)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_Powermace(self):
+        game = generate_game_for([Powermace, SpiderTank, SpiderTank], Wisp, PlayAndAttackAgent, DoNothingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(27, game.players[1].hero.health)
+        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].hero.weapon.durability)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)

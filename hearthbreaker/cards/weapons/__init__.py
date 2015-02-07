@@ -19,6 +19,7 @@ from hearthbreaker.cards.weapons.rogue import (
 from hearthbreaker.cards.weapons.shaman import (
     Doomhammer,
     StormforgedAxe,
+    Powermace,
 )
 
 from hearthbreaker.cards.weapons.warrior import (
