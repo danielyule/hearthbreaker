@@ -4,7 +4,7 @@ import sys
 
 from hearthbreaker.agents import registry
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Game, card_lookup, Deck
+from hearthbreaker.engine import Game, Deck, card_lookup
 from hearthbreaker.ui.game_printer import GameRender
 from hearthbreaker.cards import *
 
@@ -298,7 +298,7 @@ def render_game(stdscr):
 
             return index
 
-        def choose_option(self, *options):
+        def choose_option(self, options, player):
             self.window.addstr(0, 0, "Choose option")
             index = 0
             selected = 0
@@ -308,7 +308,10 @@ def render_game(stdscr):
                 else:
                     color = curses.color_pair(3)
 
-                self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
+                if isinstance(option, Card):
+                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
+                else:
+                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.card.name[:19]), color)
                 index += 1
             self.window.refresh()
             self.text_window.refresh()
@@ -316,21 +319,35 @@ def render_game(stdscr):
             while ch != 10 and ch != 27:
                 ch = self.game_window.getch()
                 if ch == curses.KEY_LEFT:
+                    starting_selected = selected
                     selected -= 1
                     if selected < 0:
                         selected = len(options) - 1
+
+                    while not options[selected].can_choose(player) and selected != starting_selected:
+                        selected -= 1
+                        if selected < 0:
+                            selected = len(options) - 1
                 if ch == curses.KEY_RIGHT:
+                    starting_selected = selected
                     selected += 1
                     if selected == len(options):
                         selected = 0
+                    while not options[selected].can_choose(player) and selected != starting_selected:
+                        selected += 1
+                        if selected == len(options):
+                            selected = 0
+
                 index = 0
                 for option in options:
                     if index == selected:
                         color = curses.color_pair(4)
                     else:
                         color = curses.color_pair(3)
-
-                    self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
+                    if isinstance(option, Card):
+                        self.text_window.addstr(0, index * 20, "{0:^19}".format(option.name[:19]), color)
+                    else:
+                        self.text_window.addstr(0, index * 20, "{0:^19}".format(option.card.name[:19]), color)
                     index += 1
                 self.window.refresh()
                 self.text_window.refresh()

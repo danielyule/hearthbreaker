@@ -5,7 +5,7 @@ from os import listdir
 from os.path import isdir
 import re
 import random
-from hearthbreaker.game_objects import Game, Deck
+from hearthbreaker.engine import Game, Deck
 
 from hearthbreaker.replay import Replay, record, playback
 from hearthbreaker.agents.basic_agents import PredictableAgent, RandomAgent
@@ -102,8 +102,8 @@ class TestReplay(unittest.TestCase):
     def test_recording_game(self):
         self.maxDiff = None
         random.seed(9876)
-        deck1 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
-        deck2 = hearthbreaker.game_objects.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        deck1 = hearthbreaker.engine.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.engine.Deck([Naturalize() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
         agent1 = PredictableAgent()
         agent2 = PredictableAgent()
 
@@ -128,8 +128,8 @@ class TestReplay(unittest.TestCase):
         self.assertEqual(panther.index, 0)
 
     def test_random_character_saving(self):
-        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
-        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        deck1 = hearthbreaker.engine.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.engine.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
         agent1 = PlayAndAttackAgent()
         agent2 = OneCardPlayingAgent()
         random.seed(4879)
@@ -153,8 +153,8 @@ class TestReplay(unittest.TestCase):
 
     def test_json_saving(self):
         self.maxDiff = 6000
-        deck1 = hearthbreaker.game_objects.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
-        deck2 = hearthbreaker.game_objects.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
+        deck1 = hearthbreaker.engine.Deck([RagnarosTheFirelord() for i in range(0, 30)], CHARACTER_CLASS.MAGE)
+        deck2 = hearthbreaker.engine.Deck([StonetuskBoar() for i in range(0, 30)], CHARACTER_CLASS.DRUID)
         agent1 = PlayAndAttackAgent()
         agent2 = OneCardPlayingAgent()
         random.seed(4879)

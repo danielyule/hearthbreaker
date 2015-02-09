@@ -4,9 +4,9 @@ import json
 import hearthbreaker
 import hearthbreaker.constants
 from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.engine import Game, card_lookup, Deck
 import hearthbreaker.game_objects
 import hearthbreaker.cards
-import hearthbreaker.game_objects
 import hearthbreaker.proxies
 from hearthbreaker.serialization.move import Move, AttackMove, PowerMove, TurnEndMove, \
     TurnStartMove, ConcedeMove, PlayMove
@@ -57,6 +57,7 @@ class Replay:
         """
         self._moves = []
         self.__next_target = None
+        self.__next_index = -1
         self.decks = []
         self.keeps = []
         self.random = []
@@ -90,8 +91,10 @@ class Replay:
         """
         Record that a card has been played.  This will add a new PlayMove to the moves array
         """
-        self._moves.append(PlayMove(hearthbreaker.proxies.ProxyCard(index), target=self.__next_target))
-        self.__next_target = None
+        self._moves.append(PlayMove(hearthbreaker.proxies.ProxyCard(index), target=card.target))
+        if self.__next_index >= 0:
+            self._moves[-1].index = self.__next_index
+            self.__next_index = -1
 
     def _record_option_chosen(self, option):
         """
@@ -124,7 +127,7 @@ class Replay:
         """
         Records the index that a minion is played at.  Will update the most recent move with this index
         """
-        self._moves[-1].index = index
+        self.__next_index = index
 
     def _record_kept_index(self, cards, card_index):
         """
@@ -259,9 +262,9 @@ class Replay:
         self.decks = []
         for deck in jd['header']['decks']:
             deck_size = len(deck['cards'])
-            cards = [hearthbreaker.game_objects.card_lookup(deck['cards'][index % deck_size]) for index in range(0, 30)]
+            cards = [card_lookup(deck['cards'][index % deck_size]) for index in range(0, 30)]
             self.decks.append(
-                hearthbreaker.game_objects.Deck(cards, CHARACTER_CLASS.from_str(deck['class'])))
+                Deck(cards, CHARACTER_CLASS.from_str(deck['class'])))
 
         self.random = jd['header']['random']
         self.keeps = jd['header']['keep']
@@ -337,9 +340,9 @@ class Replay:
                 if len(self.decks) > 1:
                     raise Exception("Maximum of two decks per file")
                 deck_size = len(args) - 1
-                cards = [hearthbreaker.game_objects.card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
+                cards = [card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
                 self.decks.append(
-                    hearthbreaker.game_objects.Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
+                    Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
 
             elif move == 'keep':
                 if len(self.keeps) > 1:
@@ -383,8 +386,8 @@ def record(game):
             replay._record_target(target)
             return target
 
-        def choose_option(self, *options):
-            option = self.agent.choose_option(*options)
+        def choose_option(self, options, player):
+            option = self.agent.choose_option(options, player)
             replay._record_option_chosen(options.index(option))
             return option
 
@@ -493,9 +496,9 @@ def playback(replay):
         def choose_index(self, card, player):
             return self.next_index
 
-        def choose_option(self, *options):
+        def choose_option(self, options, player):
             return options[self.next_option]
-    game = hearthbreaker.game_objects.Game.__new__(hearthbreaker.game_objects.Game)
+    game = Game.__new__(Game)
     _old_random_choice = game.random_choice
     _old_start_turn = game._start_turn
     _old_end_turn = game._end_turn

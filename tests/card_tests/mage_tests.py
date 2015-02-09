@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
-from hearthbreaker.game_objects import Game
+from hearthbreaker.engine import Game
 from hearthbreaker.replay import playback, Replay
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, EnemySpellTestingAgent, \
     MinionAttackingAgent, PlayAndAttackAgent
@@ -56,7 +56,6 @@ class TestMage(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(25, game.other_player.hero.health)
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertFalse(game.other_player.hero.frozen)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
@@ -69,7 +68,6 @@ class TestMage(unittest.TestCase):
         self.assertEqual(22, game.other_player.hero.health)
 
         # Always false after the end of a turn
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertTrue(game.other_player.hero.frozen)
 
         # Now make sure that attacking the Water Elemental directly will freeze a character
@@ -622,6 +620,21 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
 
+    def test_Duplicate_MadScientist(self):
+        game = generate_game_for(Hellfire, [MadScientist, MagmaRager, Duplicate],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.current_player.secrets))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual("Magma Rager", game.other_player.hand[-1].name)
+        self.assertEqual("Magma Rager", game.other_player.hand[-2].name)
+
     def test_Snowchugger(self):
         game = generate_game_for(Snowchugger, StonetuskBoar, PredictableAgent, DoNothingAgent)
 
@@ -629,7 +642,6 @@ class TestMage(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(27, game.other_player.hero.health)
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertFalse(game.other_player.hero.frozen)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
@@ -642,7 +654,6 @@ class TestMage(unittest.TestCase):
         self.assertEqual(25, game.other_player.hero.health)
 
         # Always false after the end of a turn
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertTrue(game.other_player.hero.frozen)
 
         # Now make sure that attacking the Snowchugger directly will freeze a character
@@ -679,7 +690,6 @@ class TestMage(unittest.TestCase):
         # Stonetusk should have attacked the Snowchugger, and will NOT be frozen since they didn't take damage
         game.play_single_turn()
         self.assertEqual(1, game.players[1].minions[0].health)
-        self.assertFalse(game.players[0].minions[0].frozen_this_turn)
         self.assertFalse(game.players[0].minions[0].frozen)
 
     def test_GoblinBlastmage(self):
@@ -741,3 +751,50 @@ class TestMage(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].hand))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_WeeSpellstopper(self):
+        game = generate_game_for(WeeSpellstopper, ShadowBolt, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # First Spellstopper gets Bolted but lives with 1 hp
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        # Once there are 2 Spellstoppers, they are both spell immune
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+
+        game.play_single_turn()
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].die(None)
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+
+        # Last Spellstopper is not immune and dies to Shadow Bolt
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+
+    def test_WeeSpellstopperSilence(self):
+        game = generate_game_for(WeeSpellstopper, [Silence, ShadowBolt], OneCardPlayingAgent,
+                                 OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # First Spellstopper gets silenced
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        # Once there are 2 Spellstoppers, but only the first receives the aura
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[0].minions[1].health)

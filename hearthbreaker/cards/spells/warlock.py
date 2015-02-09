@@ -1,11 +1,12 @@
 import copy
+from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.action import Kill
 from hearthbreaker.tags.base import Effect
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, Minion, MinionCard, Hero
 from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
 
 

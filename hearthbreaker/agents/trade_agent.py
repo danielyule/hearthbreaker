@@ -2,53 +2,20 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.agents.trade.possible_play import PlayMixin
 from hearthbreaker.agents.trade.trade import TradeMixin, AttackMixin
 from hearthbreaker.agents.trade.util import Util
-import hearthbreaker.cards.battlecries
 from hearthbreaker.tags.action import Damage
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth
 
 
 class BattlecryType:
-    @staticmethod
-    def buff_battlecries():
-        res = []
-        res.append(hearthbreaker.cards.battlecries.heal_two)
-        res.append(hearthbreaker.cards.battlecries.heal_three)
-        res.append(hearthbreaker.cards.battlecries.give_divine_shield)
-        res.append(hearthbreaker.cards.battlecries.give_stealth)
-        res.append(hearthbreaker.cards.battlecries.give_three_health)
-        res.append(hearthbreaker.cards.battlecries.two_temp_attack)
-        res.append(hearthbreaker.cards.battlecries.give_windfury)
-        return res
-
-    @staticmethod
-    def damage_battlecries():
-        res = []
-        res.append(hearthbreaker.cards.battlecries.silence)
-        res.append(hearthbreaker.cards.battlecries.deal_one_damage)
-        res.append(hearthbreaker.cards.battlecries.deal_two_damage)
-        res.append(hearthbreaker.cards.battlecries.deal_three_damage)
-        res.append(hearthbreaker.cards.battlecries.change_attack_to_one)
-        res.append(hearthbreaker.cards.battlecries.take_control_of_minion)
-        return res
-
-    @staticmethod
-    def target_type(cry):
-        if cry in BattlecryType.buff_battlecries():
-            return "Friendly"
-        elif cry in BattlecryType.damage_battlecries():
-            return "Enemy"
-        else:
-            return None
 
     @staticmethod
     def target_type_for_card(card):
         res = None
-        minion = card.create_minion(None)
-        if minion:
-            if minion.battlecry:
-                res = BattlecryType.target_type(minion.battlecry)
-            elif card.battlecry:
-                for action in card.battlecry.actions:
+
+        if hasattr(card, 'battlecry') and card.battlecry:
+            for battlecry in card.battlecry:
+                for action in battlecry.actions:
+                    # TODO add more battlecries here
                     if isinstance(action, ChangeAttack) or isinstance(action, ChangeHealth):
                         res = "Friendly"
                     elif isinstance(action, Damage):

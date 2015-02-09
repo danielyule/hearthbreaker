@@ -1,8 +1,9 @@
+from hearthbreaker.cards.base import Card
 from hearthbreaker.cards.minions import *
 from hearthbreaker.cards.spells import *
 from hearthbreaker.cards.weapons import *
 import hearthbreaker.constants
-from hearthbreaker.game_objects import Card
+
 
 class TheCoin(Card):
     def __init__(self):

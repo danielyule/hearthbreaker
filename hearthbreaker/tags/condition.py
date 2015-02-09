@@ -317,6 +317,23 @@ class AttackGreaterThan(Condition):
         }
 
 
+class BaseAttackEqualTo(Condition):
+    def __init__(self, attack_equal, include_self=False):
+        super().__init__()
+        self.attack_equal = attack_equal
+        self.include_self = include_self
+
+    def evaluate(self, target, minion, *args):
+        return (self.include_self or target is not minion) and minion.base_attack == self.attack_equal
+
+    def __to_json__(self):
+        return {
+            'name': 'base_attack_equal_to',
+            'include_self': self.include_self,
+            'attack_equal': self.attack_equal
+        }
+
+
 class IsDamaged(Condition):
     def evaluate(self, target, minion, *args):
         return minion.health != minion.calculate_max_health()
@@ -355,4 +372,28 @@ class OneIn(Condition):
         return {
             'name': 'one_in',
             'amount': self.amount,
+        }
+
+
+class HasDivineShield(Condition):
+    def evaluate(self, target, minion, *args):
+        return minion.divine_shield
+
+    def __to_json__(self):
+        return {
+            'name': 'has_divine_shield',
+        }
+
+
+class HasCardName(Condition):
+    def __init__(self, card_name):
+        self.card_name = card_name
+
+    def evaluate(self, target, minion, *args):
+        return minion.card.name == self.card_name
+
+    def __to_json__(self):
+        return {
+            'name': 'has_card_name',
+            'card_name': self.card_name,
         }

@@ -29,6 +29,7 @@ from hearthbreaker.cards.spells.druid import (
     ForceOfNature,
     Starfire,
     PoisonSeeds,
+    DarkWispers,
 )
 
 from hearthbreaker.cards.spells.hunter import (
@@ -97,6 +98,7 @@ from hearthbreaker.cards.spells.paladin import (
     Repentance,
     Avenge,
     SealOfLight,
+    MusterForBattle,
 )
 
 from hearthbreaker.cards.spells.priest import (
@@ -117,7 +119,8 @@ from hearthbreaker.cards.spells.priest import (
     ShadowWordPain,
     Shadowform,
     Silence,
-    Thoughtsteal
+    Thoughtsteal,
+    VelensChosen,
 )
 
 from hearthbreaker.cards.spells.rogue import (
@@ -197,5 +200,6 @@ from hearthbreaker.cards.spells.warrior import (
     Slam,
     Upgrade,
     Whirlwind,
-    BouncingBlade
+    BouncingBlade,
+    Crush,
 )

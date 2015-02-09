@@ -1,19 +1,22 @@
+from hearthbreaker.cards.base import MinionCard, ChoiceCard
+from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
-    Summon
-from hearthbreaker.tags.base import Choice, Buff
+    Summon, AddCard
+from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.event import Damaged
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import MinionCard, Minion, Card
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
+from hearthbreaker.cards.spells.neutral import spare_part_list
 
 
-class Moonfire(Card):
+class Moonfire(ChoiceCard):
     def __init__(self):
         super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, ref_name="moonfire_keeper")
 
 
-class Dispel(Card):
+class Dispel(ChoiceCard):
     def __init__(self):
         super().__init__("Dispel", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -29,7 +32,7 @@ class KeeperOfTheGrove(MinionCard):
         return Minion(2, 4)
 
 
-class CatDruid(MinionCard):
+class CatDruid(ChoiceCard):
     def __init__(self):
         super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
                          ref_name="Druid of the Claw (cat)")
@@ -47,12 +50,12 @@ class BearDruid(MinionCard):
         return Minion(4, 6, taunt=True)
 
 
-class CatForm(Card):
+class CatForm(ChoiceCard):
     def __init__(self):
         super().__init__("Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
 
-class BearForm(Card):
+class BearForm(ChoiceCard):
     def __init__(self):
         super().__init__("Bear Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -68,13 +71,13 @@ class DruidOfTheClaw(MinionCard):
         return Minion(4, 4)
 
 
-class AncientSecrets(Card):
+class AncientSecrets(ChoiceCard):
     def __init__(self):
         super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID,
                          CARD_RARITY.SPECIAL)
 
 
-class AncientTeachings(Card):
+class AncientTeachings(ChoiceCard):
     def __init__(self):
         super().__init__("Ancient  Teachings", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -91,12 +94,12 @@ class AncientOfLore(MinionCard):
         return Minion(5, 5)
 
 
-class Health(Card):
+class Health(ChoiceCard):
     def __init__(self):
         super().__init__("+5 Health and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
 
-class Attack(Card):
+class Attack(ChoiceCard):
     def __init__(self):
         super().__init__("+5 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -130,13 +133,13 @@ class Treant(MinionCard):
         return Minion(2, 2, taunt=True)
 
 
-class IncreaseStats(Card):
+class IncreaseStats(ChoiceCard):
     def __init__(self):
         super().__init__("Give your other minions +2/+2 and taunt", 0,
                          CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
 
-class SummonTreants(Card):
+class SummonTreants(ChoiceCard):
     def __init__(self):
         super().__init__("Summon two 2/2 Treants with taunt", 0,
                          CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
@@ -155,12 +158,12 @@ class Cenarius(MinionCard):
         return Minion(5, 8)
 
 
-class AttackMode(Card):
+class AttackMode(ChoiceCard):
     def __init__(self):
         super().__init__("Attack Mode", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
 
-class TankMode(Card):
+class TankMode(ChoiceCard):
     def __init__(self):
         super().__init__("Tank Mode", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -174,3 +177,13 @@ class AnodizedRoboCub(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)
+
+
+class MechBearCat(MinionCard):
+    def __init__(self):
+        super().__init__("Mech-Bear-Cat", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(7, 6, effects=[Effect(Damaged(),
+                                     AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                     PlayerSelector())])

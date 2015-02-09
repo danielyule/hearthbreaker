@@ -1,11 +1,12 @@
 import copy
-from hearthbreaker.tags.base import BuffUntil
+from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.game_objects import Minion
+from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.status import Stolen
+from hearthbreaker.tags.status import Stolen, SpellDamage
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, Minion, MinionCard
 
 
 class CircleOfHealing(Card):
@@ -279,3 +280,16 @@ class Thoughtsteal(Card):
                     self.trigger("card_drawn", new_card)
                 else:
                     player.trigger("card_destroyed", new_card)
+
+
+class VelensChosen(Card):
+    def __init__(self):
+        super().__init__("Velen's Chosen", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.change_attack(2)
+        self.target.increase_health(4)
+        self.target.add_buff(Buff(SpellDamage(1)))

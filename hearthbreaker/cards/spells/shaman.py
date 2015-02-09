@@ -1,12 +1,12 @@
 import copy
+from hearthbreaker.cards.base import Card
 from hearthbreaker.tags.action import Summon
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Deathrattle, Buff
 from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector
-from hearthbreaker.tags.status import Windfury as _Windfury
+from hearthbreaker.tags.status import Windfury as _Windfury, Frozen
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card
 
 
 class AncestralHealing(Card):
@@ -110,7 +110,7 @@ class FrostShock(Card):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(1), self)
-        self.target.freeze()
+        self.target.add_buff(Buff(Frozen()))
 
 
 class Hex(Card):

@@ -1,4 +1,6 @@
 import copy
+from hearthbreaker.cards.base import Card, SecretCard
+from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import BuffUntil
 from hearthbreaker.tags.event import TurnEnded
@@ -6,7 +8,6 @@ from hearthbreaker.tags.selector import CurrentPlayer, SpecificCardSelector
 from hearthbreaker.tags.status import Immune
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Card, SecretCard, Minion, Hero
 
 
 class HuntersMark(Card):
@@ -71,7 +72,7 @@ class Tracking(Card):
             if player.can_draw():
                 cards.append(player.deck.draw(game))
         if len(cards) > 0:
-            chosen_card = player.agent.choose_option(*cards)
+            chosen_card = player.agent.choose_option(cards, player)
             player.hand.append(chosen_card)
             player.trigger("card_drawn", chosen_card)
 

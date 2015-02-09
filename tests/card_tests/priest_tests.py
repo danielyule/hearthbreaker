@@ -2,9 +2,9 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.engine import Game
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
-from hearthbreaker.game_objects import Game
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.replay import playback, Replay
 from hearthbreaker.cards import *
@@ -676,3 +676,81 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(27, game.players[0].hero.health)
         self.assertEqual(27, game.players[1].hero.health)
+
+    def test_VelensChosen(self):
+        game = generate_game_for([AcidicSwampOoze, MindBlast, VelensChosen, MindBlast, MindBlast],
+                                 [SoulOfTheForest, MassDispel], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        # Plays Ooze, then Mind Blasts for 5
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(25, game.players[1].hero.health)
+
+        # Velen's on Ooze
+        game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].spell_damage)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        # Mind Blasts for 6
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(19, game.players[1].hero.health)
+
+        # Mass Dispel, then 5 damage Mind Blast
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, game.players[0].spell_damage)
+        self.assertEqual(14, game.players[1].hero.health)
+
+    def test_VelensChosenWithExistingSpellDamage(self):
+        game = generate_game_for([KoboldGeomancer, MindBlast, VelensChosen, MindBlast, MindBlast],
+                                 [SoulOfTheForest, MassDispel], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        # Plays Kobold, then Mind Blasts for 6
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(24, game.players[1].hero.health)
+
+        # Velen's on Kobold
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].spell_damage)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        # Mind Blasts for 7
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(17, game.players[1].hero.health)
+
+        # Mass Dispel, then 5 damage Mind Blast
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, game.players[0].spell_damage)
+        self.assertEqual(12, game.players[1].hero.health)
+
+    def test_Shadowboxer(self):
+        game = generate_game_for([Shadowboxer, CircleOfHealing], Whirlwind, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(29, game.players[1].hero.health)

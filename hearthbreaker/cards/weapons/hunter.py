@@ -1,8 +1,9 @@
+from hearthbreaker.cards.base import WeaponCard
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, IncreaseDurability
 from hearthbreaker.tags.event import Attack, AttackCompleted, SecretRevealed
 from hearthbreaker.tags.selector import HeroSelector, MinionSelector, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import WeaponCard, Weapon
 from hearthbreaker.tags.base import Effect, BuffUntil, Battlecry
 from hearthbreaker.tags.status import ChangeAttack, Immune
 

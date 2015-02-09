@@ -2,12 +2,14 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
+from hearthbreaker.cards.base import SecretCard
 from hearthbreaker.cards.minions.rogue import AnubarAmbusher
+from hearthbreaker.engine import Game, Deck, card_lookup
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, mock
 from hearthbreaker.cards import StonetuskBoar, ArcaneIntellect, Naturalize, Abomination, NerubianEgg, SylvanasWindrunner
-from hearthbreaker.game_objects import Game, Deck, Bindable, card_lookup, SecretCard
+from hearthbreaker.game_objects import Bindable
 
 
 class TestGame(unittest.TestCase):

@@ -876,11 +876,11 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.current_player.hero.weapon is not None)
+        self.assertIsNotNone(game.current_player.hero.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.other_player.hero.weapon)
 
     def test_AcidicSwampOozeWithNoWeapon(self):
         game = generate_game_for(AcidicSwampOoze, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -891,7 +891,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.other_player.hero.weapon)
 
     def test_KnifeJuggler(self):
         game = generate_game_for([KnifeJuggler, KnifeJuggler, MasterOfDisguise], [StonetuskBoar, GoldshireFootman],
@@ -971,6 +971,25 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual("Flame Imp", game.players[0].minions[0].card.name)
 
+    def test_SylvanasPowerOverwhelming(self):
+        game = generate_game_for([GoldshireFootman, PowerOverwhelming, BoulderfistOgre], SylvanasWindrunner,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        game.other_player.max_mana = 5
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual("Goldshire Footman", game.other_player.minions[0].card.name)
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Sylvanas Windrunner", game.current_player.minions[0].card.name)
+
     def test_StampedingKodo(self):
         game = generate_game_for(StampedingKodo, ArgentSquire, OneCardPlayingAgent, OneCardPlayingAgent)
         for turn in range(0, 8):
@@ -985,11 +1004,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(3, len(game.players[1].minions))
 
     def test_FrostElemental(self):
-        game = generate_game_for(FrostElemental, ArgentSquire, SelfSpellTestingAgent, DoNothingAgent)
+        game = generate_game_for(FrostElemental, ArgentSquire, OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 11):
             game.play_single_turn()
 
-        self.assertTrue(game.players[0].hero.frozen)
+        self.assertFalse(game.players[0].hero.frozen)
+        self.assertTrue(game.players[1].hero.frozen)
 
     def test_LeperGnome(self):
         game = generate_game_for(LeperGnome, [MortalCoil, LeperGnome],
@@ -1396,7 +1416,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].hero.calculate_attack())
         self.assertEqual(5, game.players[0].hero.weapon.durability)
 
     def test_HungryCrab(self):
@@ -1457,6 +1477,18 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[1].minions[0].calculate_attack())
         self.assertEqual(1, game.players[1].minions[0].health)
+
+    def test_MurlocTidecaller_MirrorEntity(self):
+        game = generate_game_for([IronfurGrizzly, MurlocTidecaller], MirrorEntity,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
 
     def test_Onyxia(self):
         game = generate_game_for(Onyxia, MurlocRaider, OneCardPlayingAgent, DoNothingAgent)
@@ -1624,6 +1656,50 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
 
+    def test_Illidan_and_Defender(self):
+        game = generate_game_for([IllidanStormrage, DefenderOfArgus], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        game.players[0].max_mana = 9
+        game.players[0].agent.choose_index = lambda card, player: len(player.minions)
+        game.play_single_turn()
+
+        # Illidan should be played, followed by a defender.  The Flame should spawn before the defender
+        # drops, which means the flame gets the buff, and not Illidan
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual(7, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertFalse(game.current_player.minions[0].taunt)
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[1].calculate_max_health())
+        self.assertTrue(game.current_player.minions[1].taunt)
+
+    def test_many_Illidans(self):
+        game = generate_game_for(IllidanStormrage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        for turn in range(16):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[1].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[5].card.name)
+
+        game.play_single_turn()
+
+        # The flames should not be summoned, because the board is already full with the incoming Illidan
+        self.assertEqual(7, len(game.players[0].minions))
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[6].card.name)
+
     def test_Lightwarden(self):
         game = generate_game_for([Lightwarden, MindControl],
                                  [StonetuskBoar, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre, BoulderfistOgre],
@@ -1772,11 +1848,30 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNotNone(game.players[1].hero.weapon)
+        self.assertEqual(4, game.players[1].hero.weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(8, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
+
+    def test_HarrisonJones_no_weapon(self):
+        game = generate_game_for(HarrisonJones, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game.players[0].max_mana = 3  # Cheat so player 1 has room to draw 4
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertIsNone(game.players[1].hero.weapon)
 
     def test_KingMukla(self):
         game = generate_game_for([KingMukla, MindControl], LightsJustice, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -1810,7 +1905,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
     def test_Leeroy_placement(self):
         game = generate_game_for([MurlocTidehunter, MurlocTidehunter, LeeroyJenkins], StonetuskBoar,
                                  OneCardPlayingAgent, DoNothingAgent)
-        game.players[0].agent.choose_index = lambda *minions: len(minions)
+        game.players[0].agent.choose_index = lambda card, player: len(player.minions)
         for turn in range(8):
             game.play_single_turn()
 
@@ -3707,3 +3802,194 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(9, len(game.players[0].hand))
         self.assertEqual(MINION_TYPE.MECH, game.players[0].hand[-1].minion_type)
+
+    def test_HemetNesingary(self):
+        game = generate_game_for([ScavengingHyena, HemetNesingwary, HemetNesingwary],
+                                 StarvingBuzzard, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        # Player 1 has a Hyena on the field, Player 2 has nothing
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Scavenging Hyena", game.players[0].minions[0].card.name)
+
+        # Kills Hyena with Hemet
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Hemet Nesingwary", game.players[0].minions[0].card.name)
+
+        # Player 2 play Buzzard
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+
+        # Kills Buzzard with Hemet
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+    def test_Illuminator(self):
+        game = generate_game_for([Illuminator, Duplicate], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Hit with 3 Sinister Strikes and no heal from Illuminator
+        self.assertEqual(21, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # Illuminator heals for 4
+        game.play_single_turn()
+
+        self.assertEqual(25, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(22, game.players[0].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+
+        # 2 Illuminators heal for 8
+        game.play_single_turn()
+
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+
+    def test_MekgineerThermaplugg(self):
+        game = generate_game_for([MekgineerThermaplugg, Flamestrike], SaltyDog, OneCardPlayingAgent,
+                                 OneCardPlayingAgent)
+        for turn in range(0, 18):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[1].minions))
+
+        # Flamestrikes to kill 6 Salty Dogs and summon 6 Leper Gnomes
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual("Mekgineer Thermaplugg", game.players[0].minions[0].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[1].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[2].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[3].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[4].card.name)
+        self.assertEqual("Leper Gnome", game.players[0].minions[5].card.name)
+
+    def test_StonesplinterTrogg(self):
+        game = generate_game_for(StonesplinterTrogg, [BattleRage, Silence], OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(3, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.other_player.minions[1].calculate_attack())
+
+    def test_TroggzorTheEarthinator(self):
+        game = generate_game_for([TroggzorTheEarthinator, Innervate], [Silence], OneCardPlayingAgent,
+                                 OneCardPlayingAgent)
+        for turn in range(0, 13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+
+        # Troggzor is silenced but first summons a Burly Rockjaw Trogg who is not buffed by the spell
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+
+        # 2nd silence on Troggzor summons nothing but buffs Rockjaw
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[1].calculate_attack())
+
+    def test_Hobgoblin(self):
+        game = generate_game_for([Wisp, Hobgoblin], Wisp, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+
+        # 3 Wisps on the field should not get buffed when Hobgoblin played
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+
+        # Enemy Wisp should not be buffed
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[2].health)
+        self.assertEqual(1, game.players[1].minions[2].calculate_attack())
+
+        # Allied Wisp become a 3/3
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+
+        # Nothing new here
+        game.play_single_turn()
+
+        # Hobgoblin should not be buffed
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+
+        # Nothing new here
+        game.play_single_turn()
+
+        # Allied Wisp buffed to 5/5
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())

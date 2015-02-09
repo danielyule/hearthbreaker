@@ -3,8 +3,8 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
+from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
-from hearthbreaker.game_objects import MinionCard
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities
@@ -678,7 +678,6 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(25, game.other_player.hero.health)
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertFalse(game.other_player.hero.frozen)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(3, game.current_player.minions[0].calculate_attack())
@@ -693,7 +692,6 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(22, game.other_player.hero.health)
 
         # Always false after the end of a turn
-        self.assertFalse(game.other_player.hero.frozen_this_turn)
         self.assertTrue(game.other_player.hero.frozen)
 
         # Now make sure that attacking the Water Elemental directly will freeze a character

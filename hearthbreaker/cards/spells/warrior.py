@@ -1,4 +1,6 @@
 import copy
+from hearthbreaker.cards.base import Card, WeaponCard
+from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.base import AuraUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector
@@ -6,7 +8,6 @@ from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth
 import hearthbreaker.targeting
 import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.game_objects import Card, WeaponCard, Weapon
 
 
 class BattleRage(Card):
@@ -31,6 +32,9 @@ class BattleRage(Card):
 class Brawl(Card):
     def __init__(self):
         super().__init__("Brawl", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) + len(player.opponent.minions) >= 2
 
     def use(self, player, game):
         super().use(player, game)
@@ -213,6 +217,9 @@ class BouncingBlade(Card):
     def __init__(self):
         super().__init__("Bouncing Blade", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) + len(player.opponent.minions) >= 1
+
     def use(self, player, game):
         super().use(player, game)
         # According to https://www.youtube.com/watch?v=7ij_6_Dx47g, Bouncing Blade bounces at most 80 times
@@ -226,3 +233,23 @@ class BouncingBlade(Card):
                 target.damage(player.effective_spell_damage(1), self)
                 if target.dead:
                     break
+
+
+class Crush(Card):
+    def __init__(self):
+        super().__init__("Crush", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
+                         hearthbreaker.targeting.find_minion_spell_target)
+
+    def mana_cost(self, player):
+        damaged_minion_discount = 0
+        for minion in player.game.current_player.minions:
+            if minion.health != minion.calculate_max_health():
+                damaged_minion_discount = 4
+                break
+        cost = super().mana_cost(player) - damaged_minion_discount
+        return cost
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.die(self)

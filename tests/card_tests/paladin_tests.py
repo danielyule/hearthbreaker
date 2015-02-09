@@ -434,6 +434,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
 
+    @unittest.expectedFailure
     def test_Redemption_full_board(self):
         game = generate_game_for(Assassinate, [Redemption, Wisp, Wisp, Wisp, Wisp, Wisp, HauntedCreeper],
                                  OneCardPlayingAgent, CardTestingAgent)
@@ -443,7 +444,7 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(6, len(game.current_player.minions))
 
         game.play_single_turn()
-
+        # This has been tested locally on patch 2.1.0.7628
         self.assertEqual(7, len(game.other_player.minions))
         self.assertEqual("Spectral Spider", game.other_player.minions[0].card.name)
         self.assertEqual("Spectral Spider", game.other_player.minions[1].card.name)
@@ -655,3 +656,36 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(29, game.players[0].hero.health)
         self.assertEqual(28, game.players[1].hero.health)
+
+    def test_MusterForBattle(self):
+        game = generate_game_for(MusterForBattle, Counterspell, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual("Silver Hand Recruit", game.players[0].minions[0].card.name)
+
+        # Properly gets counterspelled
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+
+    def test_Quartermaster(self):
+        game = generate_game_for([MusterForBattle, Quartermaster], Wisp, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].health)
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].health)
+        self.assertEqual(3, game.players[0].minions[3].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[3].health)

@@ -1,6 +1,7 @@
 import json
 import re
-from hearthbreaker.game_objects import WeaponCard, Weapon
+from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.game_objects import Weapon, Minion
 import tests.card_tests.druid_tests
 import tests.card_tests.mage_tests
 import tests.card_tests.hunter_tests
@@ -20,7 +21,6 @@ with open("card_defs.json", "r") as file:
 class JSONTester:
     def define_type(self, card_def):
         from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
-        from hearthbreaker.game_objects import Minion, MinionCard
         from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Enrage, Buff
         import hearthbreaker.cards
 
@@ -37,7 +37,7 @@ class JSONTester:
                 init_dict['minion_type'] = MINION_TYPE.from_str(card_def['minion_type'])
 
             if 'battlecry' in card_def:
-                init_dict['battlecry'] = Battlecry.from_json(**card_def['battlecry'])
+                init_dict['battlecry'] = tuple(Battlecry.from_json(**battlecry) for battlecry in card_def['battlecry'])
 
             if 'choices' in card_def:
                 init_dict['choices'] = [Choice.from_json(**choice) for choice in card_def['choices']]
@@ -193,34 +193,13 @@ class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
 
 
 class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
-    def test_WarsongCommander(self):
-        pass  # This test uses Bloodsail Corsair, which also can't be implemented (yet)
-
     def test_BouncingBlades(self):
         pass  # This test relies on Echoing Ooze.
 
 
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
 
-    def test_BloodKnight(self):
-        pass
-
-    def test_BloodsailCorsair(self):
-        pass
-
-    def test_BloodsailRaider(self):
-        pass
-
-    def test_CaptainGreenskin(self):
-        pass
-
-    def test_CaptainsParrot(self):
-        pass
-
     def test_CrazedAlchemist(self):
-        pass
-
-    def test_Deathwing(self):
         pass
 
     def testEchoingOoze_silence(self):
@@ -235,13 +214,7 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
     def test_EchoingOoze_buff(self):
         pass
 
-    def test_FrostwolfWarlord(self):
-        pass
-
     def test_GelbinMekkaTwerk(self):
-        pass
-
-    def test_HarrisonJones(self):
         pass
 
     def test_HungryCrab(self):
@@ -251,7 +224,4 @@ class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
         pass
 
     def test_TinkmasterOverspark(self):
-        pass
-
-    def test_TwilightDrake(self):
         pass

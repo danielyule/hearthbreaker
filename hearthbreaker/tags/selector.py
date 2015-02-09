@@ -1,5 +1,5 @@
 import abc
-from hearthbreaker.tags.base import Selector, Player, Picker
+from hearthbreaker.tags.base import Selector, Player, Picker, Function
 import hearthbreaker.tags.condition
 
 
@@ -134,15 +134,14 @@ class CardSelector(Selector, metaclass=abc.ABCMeta):
         players = self.players.get_players(source.player)
         targets = []
         for p in players:
-            for card in p.cards:
+            for card in p.hand:
                 if self.match(source, card):
                     targets.append(card)
 
         return targets
 
-    @abc.abstractmethod
     def match(self, source, obj):
-        pass
+        return True
 
     def __to_json__(self):
         return {
@@ -227,7 +226,7 @@ class SpellSelector(CardSelector):
 class BattlecrySelector(CardSelector):
     def match(self, source, obj):
         return obj.is_minion() and obj.is_card() and \
-            obj.battlecry is not None
+            obj.battlecry is not ()
 
     def __to_json__(self):
         return {
@@ -261,7 +260,11 @@ class HeroSelector(Selector):
         self.picker = picker
 
     def get_targets(self, source, obj=None):
-        return self.picker.pick([p.hero for p in self.players.get_players(source.player)], source.player)
+        return [p.hero for p in self.players.get_players(source.player)]
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         return source.player is obj
@@ -315,7 +318,11 @@ class MinionSelector(Selector):
                 if self.match(source, minion):
                     targets.append(minion)
 
-        return self.picker.pick(targets, source.player)
+        return targets
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         if self.condition:
@@ -366,7 +373,11 @@ class CharacterSelector(Selector):
             if self.match(source, p.hero):
                 targets.append(p.hero)
 
-        return self.picker.pick(targets, source.player)
+        return targets
+
+    def choose_targets(self, source, target=None):
+        possible_targets = self.get_targets(source, target)
+        return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
         if self.condition:
@@ -449,7 +460,7 @@ class WeaponSelector(Selector):
         self.players = players
 
     def get_targets(self, source, obj=None):
-        return [p.hero for p in self.players.get_players(source.player)]
+        return [p.hero.weapon for p in self.players.get_players(source.player) if p.hero.weapon]
 
     def match(self, source, obj):
         return source.player is obj
@@ -462,4 +473,46 @@ class WeaponSelector(Selector):
 
     def __from_json__(self, players='friendly'):
         self.players = Player.from_json(players)
+        return self
+
+
+class Count(Function):
+    def __init__(self, selector):
+        self.selector = selector
+
+    def do(self, target):
+        return len(self.selector.get_targets(target))
+
+    def __to_json__(self):
+        return {
+            'name': 'count',
+            'selector': self.selector
+        }
+
+    def __from_json__(self, selector):
+        self.selector = Selector.from_json(**selector)
+        return self
+
+
+class Attribute(Function):
+    def __init__(self, attribute, selector):
+        self.attribute = attribute
+        self.selector = selector
+
+    def do(self, target):
+        targets = self.selector.get_targets(target)
+        if len(targets) > 0 and targets[0]:
+            return getattr(targets[0], self.attribute)
+        return 0
+
+    def __to_json__(self):
+        return {
+            'name': 'attribute',
+            'attribute': self.attribute,
+            'selector': self.selector
+        }
+
+    def __from_json__(self, attribute, selector):
+        self.attribute = attribute
+        self.selector = Selector.from_json(**selector)
         return self

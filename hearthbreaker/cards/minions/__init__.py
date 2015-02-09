@@ -211,6 +211,12 @@ from hearthbreaker.cards.minions.neutral import (
     GnomereganInfantry,
     FlyingMachine,
     LostTallstrider,
+    HemetNesingwary,
+    Illuminator,
+    MekgineerThermaplugg,
+    StonesplinterTrogg,
+    TroggzorTheEarthinator,
+    Hobgoblin,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -221,6 +227,7 @@ from hearthbreaker.cards.minions.druid import (
     IronbarkProtector,
     Cenarius,
     AnodizedRoboCub,
+    MechBearCat,
 )
 
 from hearthbreaker.cards.minions.hunter import (
@@ -237,6 +244,7 @@ from hearthbreaker.cards.minions.hunter import (
     Misha,
     Leokk,
     Snake,
+    MetaltoothLeaper,
 )
 
 from hearthbreaker.cards.minions.mage import (
@@ -249,6 +257,7 @@ from hearthbreaker.cards.minions.mage import (
     Snowchugger,
     GoblinBlastmage,
     SootSpewer,
+    WeeSpellstopper,
 )
 
 from hearthbreaker.cards.minions.paladin import (
@@ -259,6 +268,7 @@ from hearthbreaker.cards.minions.paladin import (
     CobaltGuardian,
     SilverHandRecruit,
     ShieldedMinibot,
+    Quartermaster,
 )
 
 from hearthbreaker.cards.minions.priest import (
@@ -273,6 +283,7 @@ from hearthbreaker.cards.minions.priest import (
     Shrinkmeister,
     UpgradedRepairBot,
     Shadowbomber,
+    Shadowboxer,
 )
 
 from hearthbreaker.cards.minions.rogue import (
@@ -323,7 +334,7 @@ from hearthbreaker.cards.minions.warlock import (
     Voidcaller,
     AnimaGolem,
     WorthlessImp,
-    FelCannon
+    FelCannon,
 )
 
 from hearthbreaker.cards.minions.warrior import (
