@@ -104,7 +104,7 @@ class Buff(Tag):
     def from_json(status, condition=None):
         status = Status.from_json(**status)
         if condition:
-            condition = Condition(**condition)
+            condition = Condition.from_json(**condition)
         return Buff(status, condition)
 
 
@@ -305,7 +305,7 @@ class Amount(abc.ABCMeta):
                 return self
             return base_from_json(self, **kwargs)
 
-        def get_amount(self, source, target):
+        def get_amount(self, source, target, *args):
             if isinstance(self.amount, Function):
                 return self.amount.do(source) * self.multipler
             else:

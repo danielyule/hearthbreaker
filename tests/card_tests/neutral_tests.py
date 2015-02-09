@@ -3993,3 +3993,20 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(5, len(game.players[1].minions))
         self.assertEqual(5, game.players[0].minions[0].health)
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+
+    def test_Cogmaster(self):
+        game = generate_game_for([Cogmaster, Snowchugger], ClockworkGnome, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())

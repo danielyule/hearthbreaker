@@ -435,7 +435,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         # Add together all the attack amounts from buffs
         attack = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
                                                          if isinstance(buff.status, ChangeAttack) and
-                                                         (not buff.condition or buff.condition(self, self))],
+                                                         (not buff.condition or buff.condition.evaluate(self, self))],
                         self.base_attack)
         attack = reduce(lambda a, b: b.update(self, a), [aura.status
                                                          for player in self.player.game.players

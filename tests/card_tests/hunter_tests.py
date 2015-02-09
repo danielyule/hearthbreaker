@@ -644,3 +644,18 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())
         self.assertEqual(5, game.players[0].minions[2].calculate_attack())
+
+    def test_KingOfBeasts(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, KingOfBeasts], StonetuskBoar,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())

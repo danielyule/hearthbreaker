@@ -10,7 +10,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo
+    BaseAttackEqualTo, GreaterThan
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
@@ -2293,3 +2293,12 @@ class Hobgoblin(MinionCard):
     def create_minion(self, player):
         return Minion(2, 3, effects=[Effect(MinionPlaced(BaseAttackEqualTo(1)),
                                      Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2))]), TargetSelector())])
+
+
+class Cogmaster(MinionCard):
+    def __init__(self):
+        super().__init__("Cogmaster", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 2, buffs=[Buff(ChangeAttack(2), GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))),
+                                                                     value=0))])

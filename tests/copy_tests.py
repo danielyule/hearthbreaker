@@ -2358,3 +2358,38 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.current_player.hand))
         self.assertEqual(21, game.other_player.deck.left)
         self.assertEqual(7, len(game.other_player.hand))
+
+    def test_Cogmaster(self):
+        game = generate_game_for([Cogmaster, Snowchugger], ClockworkGnome, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+    def test_KingOfBeasts(self):
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, KingOfBeasts], StonetuskBoar,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+
+        game = game.copy()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())

@@ -217,6 +217,7 @@ from hearthbreaker.cards.minions.neutral import (
     StonesplinterTrogg,
     TroggzorTheEarthinator,
     Hobgoblin,
+    Cogmaster
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -245,6 +246,7 @@ from hearthbreaker.cards.minions.hunter import (
     Leokk,
     Snake,
     MetaltoothLeaper,
+    KingOfBeasts
 )
 
 from hearthbreaker.cards.minions.mage import (

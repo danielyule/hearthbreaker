@@ -194,6 +194,7 @@ class TestReplay(unittest.TestCase):
         from jsonschema import validate
         file_match = re.compile(r'.*\.hsreplay')
         files = []
+
         def get_files_from(folder_name):
             for file in listdir(folder_name):
                 if file_match.match(file):

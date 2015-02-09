@@ -5,7 +5,7 @@ from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt
 
 
@@ -135,3 +135,13 @@ class MetaltoothLeaper(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 3)
+
+
+class KingOfBeasts(MinionCard):
+    def __init__(self):
+        super().__init__("King of Beasts", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.BEAST,
+                         battlecry=Battlecry(Give(Buff(ChangeAttack(Count(MinionSelector(IsType(
+                             MINION_TYPE.BEAST)))))), SelfSelector()))
+
+    def create_minion(self, player):
+        return Minion(2, 6, taunt=True)
