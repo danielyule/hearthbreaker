@@ -60,6 +60,8 @@ class Replay:
         self.decks = []
         self.keeps = []
         self.random = []
+        schema_file = open("replay.schema.json", "r")
+        self.schema = json.load(schema_file)
         if filename is not None:
             self.read_json(filename)
 
@@ -246,12 +248,14 @@ class Replay:
                      reading.
         :type file: :class:`str` or :class:`io.TextIOBase`
         """
+        from jsonschema import validate
         was_filename = False
         if 'read' not in dir(file):
             was_filename = True
             file = open(file, 'r')
 
         jd = json.load(file)
+        validate(jd, self.schema)
         self.decks = []
         for deck in jd['header']['decks']:
             deck_size = len(deck['cards'])

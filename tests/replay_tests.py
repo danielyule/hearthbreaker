@@ -189,3 +189,21 @@ class TestReplay(unittest.TestCase):
         replay = record(game)
         game.start()
         replay.write(StringIO())
+
+    def test_replay_validation(self):
+        from jsonschema import validate
+        file_match = re.compile(r'.*\.hsreplay')
+        files = []
+        def get_files_from(folder_name):
+            for file in listdir(folder_name):
+                if file_match.match(file):
+                    files.append(folder_name + "/" + file)
+                elif isdir(folder_name + "/" + file):
+                    get_files_from(folder_name + "/" + file)
+        with open("replay.schema.json", "r") as schema_file:
+            schema = json.load(schema_file)
+            get_files_from("tests/replays")
+            for rfile in files:
+                with open(rfile, "r") as replay_file:
+                    replay_json = json.load(replay_file)
+                    validate(replay_json, schema)

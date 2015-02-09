@@ -1,0 +1,227 @@
+{
+  "title": "Schema for HearthBreaker Replay Files",
+  "type": "object",
+  "properties": {
+    "header": {
+      "type": "object",
+      "properties": {
+        "decks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "class": {
+                "type": "string",
+                "enum": ["Mage", "Druid", "Hunter", "Priest", "Paladin", "Warlock", "Rogue", "Shaman", "Warrior"]
+              },
+              "cards": {
+                "type": "array",
+                "items": [{"type": "string"}],
+                "maxItems": 30,
+                "minItems": 1
+              }
+            },
+            "required": ["class", "cards"]
+          }
+        },
+        "keep": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "maximum": 3,
+              "minimum": 0
+            },
+            "uniqueItems": true,
+            "minItems": 0,
+            "maxItems": 4
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "random": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+
+        }
+      },
+      "required": ["decks", "keep", "random"]
+    },
+    "moves": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"title": "Play",    "$ref": "#/definitions/play"},
+          {"title": "Attack",  "$ref": "#/definitions/attack"},
+          {"title": "Power",   "$ref": "#/definitions/power"},
+          {"title": "Start",   "$ref": "#/definitions/start"},
+          {"title": "End",     "$ref": "#/definitions/end"},
+          {"title": "Concede", "$ref": "#/definitions/concede"}
+        ]
+      },
+      "additionalItems": false
+
+    }
+  },
+  "required": ["header", "moves"],
+  "definitions": {
+    "play": {
+      "title": "Play",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^play$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        },
+        "card": {
+          "type": "object",
+          "properties": {
+            "card_index": {
+              "type": "integer",
+              "minumum": 0,
+              "maximum": 9
+            },
+            "option": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": ["card_index"]
+        },
+        "index": {
+          "type": "integer",
+          "minumum": 0,
+          "maximum": 6
+        },
+        "target": {
+          "$ref": "#/definitions/characterRef"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "card"]
+    },
+    "attack": {
+      "title": "Attack",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^attack$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        },
+        "character": {
+          "$ref": "#/definitions/characterRef"
+        },
+        "target": {
+          "$ref": "#/definitions/characterRef"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "character", "target"]
+    },
+    "power": {
+      "name": "Power",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^power$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        },
+        "target": {
+          "$ref": "#/definitions/characterRef"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name"]
+    },
+    "start": {
+      "title": "Start",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^start$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name"]
+    },
+    "end": {
+      "title": "End",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^end$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name"]
+    },
+    "concede": {
+      "title": "Concede",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^concede$"
+        },
+        "random": {
+          "$ref": "#/definitions/random"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name"]
+    },
+    "random": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/definitions/characterRef"
+          },
+          {
+            "type": "integer"
+          }
+        ]
+      }
+    },
+    "characterRef": {
+      "title": "Character Reference",
+      "type": "object",
+      "properties": {
+        "player": {
+          "enum": [
+            "p1",
+            "p2"
+          ],
+          "index": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          }
+        }
+      },
+      "required": ["player"]
+    }
+
+  }
+}
