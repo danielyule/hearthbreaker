@@ -7,7 +7,7 @@ from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
+from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp, Imp
 
 
 class MortalCoil(Card):
@@ -230,15 +230,7 @@ class Demonheart(Card):
             self.target.damage(player.effective_spell_damage(5), self)
 
 
-class Imp(MinionCard):
-    def __init__(self):
-        super().__init__("Imp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
-
-    def create_minion(self, player):
-        return Minion(1, 1)
-
-
-class ImpLosion(Card):
+class Implosion(Card):
     def __init__(self):
         super().__init__("Imp-losion", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_spell_target)

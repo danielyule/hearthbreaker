@@ -647,7 +647,7 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[1].health)
 
     def test_ImpLosion(self):
-        game = generate_game_for([ImpLosion, OgreMagi], [SpiderTank, Whirlwind],
+        game = generate_game_for([Implosion, OgreMagi], [SpiderTank, Whirlwind],
                                  OneCardPlayingAgent, OneCardPlayingAgent)
         for turn in range(0, 7):
             game.play_single_turn()

@@ -182,7 +182,7 @@ from hearthbreaker.cards.spells.warlock import (
     PowerOverwhelming,
     Darkbomb,
     Demonheart,
-    ImpLosion,
+    Implosion,
 )
 
 from hearthbreaker.cards.spells.warrior import (
