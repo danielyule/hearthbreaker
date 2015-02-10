@@ -4010,3 +4010,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+    def test_TinkertownTechnician(self):
+        game = generate_game_for([TinkertownTechnician, SpiderTank], Wisp, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+
+        # 2nd Tinker gets buff and draws
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual("Rusty Horn", game.players[0].hand[-1].name)

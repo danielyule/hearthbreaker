@@ -2302,3 +2302,16 @@ class Cogmaster(MinionCard):
     def create_minion(self, player):
         return Minion(1, 2, buffs=[Buff(ChangeAttack(2), GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))),
                                                                      value=0))])
+
+
+class TinkertownTechnician(MinionCard):
+    def __init__(self):
+        super().__init__("Tinkertown Technician", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         battlecry=(Battlecry(Give([Buff(ChangeAttack(1)), Buff(ChangeHealth(1))]), SelfSelector(),
+                                              GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))), value=0)),
+                                    Battlecry(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                              PlayerSelector(),
+                                              GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))), value=0))))
+
+    def create_minion(self, player):
+        return Minion(3, 3)
