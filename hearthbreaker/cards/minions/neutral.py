@@ -2315,3 +2315,12 @@ class TinkertownTechnician(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 3)
+
+
+class Junkbot(MinionCard):
+    def __init__(self):
+        super().__init__("Junkbot", 5, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MECH)),
+                                     Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]), SelfSelector())])

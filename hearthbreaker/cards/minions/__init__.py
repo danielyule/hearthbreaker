@@ -219,6 +219,7 @@ from hearthbreaker.cards.minions.neutral import (
     Hobgoblin,
     Cogmaster,
     TinkertownTechnician,
+    Junkbot,
 )
 
 from hearthbreaker.cards.minions.druid import (
