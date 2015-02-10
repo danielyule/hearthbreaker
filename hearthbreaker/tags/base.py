@@ -560,6 +560,7 @@ class CARD_SOURCE:
     OPPONENT_DECK = 4
     LIST = 5
     LAST_CARD = 6
+    MINION = 7
     __sources = {
         "COLLECTION": COLLECTION,
         "MY_HAND": MY_HAND,
@@ -568,6 +569,7 @@ class CARD_SOURCE:
         "OPPONENT_DECK": OPPONENT_DECK,
         "LIST": LIST,
         "LAST_CARD": LAST_CARD,
+        "MINION": MINION,
     }
 
     @staticmethod
@@ -581,14 +583,16 @@ class CARD_SOURCE:
 
 
 class CardQuery(JSONObject):
-    def __init__(self, name=None, conditions=[], source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False):
+    def __init__(self, name=None, conditions=[], source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False,
+                 minion=None):
         self.name = name
         self.conditions = conditions
         self.source = source
         self.source_list = source_list
         self.make_copy = make_copy
+        self.minion = minion
 
-    def get_card(self, player):
+    def get_card(self, player, owner):
         from hearthbreaker.engine import card_lookup, get_cards
         if self.name:
             return card_lookup(self.name)
@@ -607,6 +611,8 @@ class CardQuery(JSONObject):
             card_list = self.source_list
         elif self.source == CARD_SOURCE.LAST_CARD:
             return type(player.game.last_card)()
+        elif self.source == CARD_SOURCE.MINION:
+            return self.minion.get_targets(owner, owner)[0].card
         else:
             card_list = []
         # TODO Throw an exception in any other case?
@@ -656,11 +662,13 @@ class CardQuery(JSONObject):
                 json_obj['source_list'] = [card.name for card in self.source_list]
             if self.make_copy:
                 json_obj['make_copy'] = self.make_copy
+            if self.minion:
+                json_obj['minion'] = self.minion
 
         return json_obj
 
     @staticmethod
-    def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False):
+    def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False, minion=None):
         from hearthbreaker.engine import card_lookup
         query = CardQuery.__new__(CardQuery)
         query.name = name
@@ -675,6 +683,10 @@ class CardQuery(JSONObject):
         else:
             query.source_list = None
         query.make_copy = make_copy
+        if minion:
+            query.minion = Selector.from_json(**minion)
+        else:
+            query.minion = None
         return query
 
 

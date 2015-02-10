@@ -232,6 +232,7 @@ from hearthbreaker.cards.minions.druid import (
     AnodizedRoboCub,
     MechBearCat,
     DruidOfTheFang,
+    Malorne,
 )
 
 from hearthbreaker.cards.minions.hunter import (

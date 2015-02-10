@@ -30,6 +30,7 @@ from hearthbreaker.cards.spells.druid import (
     Starfire,
     PoisonSeeds,
     DarkWispers,
+    Recycle,
 )
 
 from hearthbreaker.cards.spells.hunter import (

@@ -438,3 +438,14 @@ class DarkWispers(Card):
         else:
             option = player.agent.choose_option([Wisps5(), Buff5()], player)
         option.use(player, game)
+
+
+class Recycle(Card):
+    def __init__(self):
+        super().__init__("Recycle", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        player.opponent.deck.put_back(self.target)
+        self.target.remove_from_board()

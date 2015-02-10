@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon, AddCard
-from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry
+from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry, Deathrattle
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
@@ -207,3 +207,13 @@ class DruidOfTheFang(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 4)
+
+
+class Malorne(MinionCard):
+    def __init__(self):
+        super().__init__("Malorne", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(9, 7, deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.MINION,
+                                                                      minion=SelfSelector()),
+                                                            add_to_deck=True), PlayerSelector()))

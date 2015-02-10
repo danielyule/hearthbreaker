@@ -912,3 +912,29 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(7, game.other_player.minions[0].calculate_attack())
         self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)
+
+    def test_Recycle(self):
+        game = generate_game_for(Recycle, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(21, game.current_player.deck.left)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(22, game.other_player.deck.left)
+
+    def test_Malorne(self):
+        game = generate_game_for(Malorne, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(20, game.current_player.deck.left)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(21, game.other_player.deck.left)

@@ -6449,7 +6449,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 3, 
+          "amount": 4, 
           "name": "damage"
         }
       ], 
@@ -7823,6 +7823,36 @@
         }
       }
     ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "Malorne", 
+    "minion_type": "Beast", 
+    "character_class": "Druid", 
+    "rarity": "Legendary", 
+    "mana": 7, 
+    "attack": 9, 
+    "deathrattle": {
+      "actions": [
+        {
+          "count": 1, 
+          "add_to_deck": true, 
+          "name": "add_card", 
+          "card": {
+            "minion": {
+              "name": "self"
+            }, 
+            "source": "minion", 
+            "conditions": []
+          }
+        }
+      ], 
+      "selector": {
+        "players": "friendly", 
+        "name": "player"
+      }
+    }, 
+    "health": 7, 
     "type": "minion"
   }, 
   {
