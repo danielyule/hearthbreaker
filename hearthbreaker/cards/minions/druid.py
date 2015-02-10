@@ -2,10 +2,11 @@ from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon, AddCard
-from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry
+from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
-    PlayerSelector, HeroSelector
+    PlayerSelector, HeroSelector, Count
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 from hearthbreaker.cards.spells.neutral import spare_part_list
@@ -187,3 +188,22 @@ class MechBearCat(MinionCard):
         return Minion(7, 6, effects=[Effect(Damaged(),
                                      AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                      PlayerSelector())])
+
+
+class CobraForm(MinionCard):
+    def __init__(self):
+        super().__init__("Druid of the Fang", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST,
+                         ref_name="Druid of the Fang (Cobra)")
+
+    def create_minion(self, player):
+        return Minion(7, 7)
+
+
+class DruidOfTheFang(MinionCard):
+    def __init__(self):
+        super().__init__("Druid of the Fang", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Transform(CobraForm()), SelfSelector(),
+                                             GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.BEAST))), value=0)))
+
+    def create_minion(self, player):
+        return Minion(4, 4)

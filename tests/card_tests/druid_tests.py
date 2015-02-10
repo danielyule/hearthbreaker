@@ -5,7 +5,7 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.engine import Game
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
     EnemyMinionSpellTestingAgent, CardTestingAgent
-from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hearthbreaker.cards import *
@@ -891,3 +891,24 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(7, len(game.players[0].minions))
+
+    def test_DruidOfTheFang(self):
+        game = generate_game_for([StonetuskBoar, DruidOfTheFang], DruidOfTheFang,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(7, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+        game.other_player.minions[0].silence()
+        self.assertEqual(7, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)

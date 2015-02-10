@@ -231,6 +231,7 @@ from hearthbreaker.cards.minions.druid import (
     Cenarius,
     AnodizedRoboCub,
     MechBearCat,
+    DruidOfTheFang,
 )
 
 from hearthbreaker.cards.minions.hunter import (
