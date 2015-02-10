@@ -345,10 +345,18 @@ class ResurrectFriendly(Action):
 
 
 class Bounce(Action):
+    def __init__(self, bounce_to_deck=False):
+        self.bounce_to_deck = bounce_to_deck
+
     def act(self, actor, target):
-        target.bounce()
+        target.bounce(self.bounce_to_deck)
 
     def __to_json__(self):
+        if self.bounce_to_deck:
+            return {
+                'name': 'bounce',
+                'bounce_to_deck': True,
+            }
         return {
             'name': 'bounce'
         }

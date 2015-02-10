@@ -345,6 +345,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.delayed = []
         #: Non zero if this character has stealth
         self.stealth = 0
+        #: Non zero if this character has divine shield
+        self.divine_shield = 0
         #: If this character is enraged
         self.enraged = False
         #: If this character has been removed from the board
@@ -767,7 +769,6 @@ class Minion(Character):
         self.index = -1
         self.charge = 0
         self.taunt = 0
-        self.divine_shield = 0
         self.can_be_targeted_by_spells = True
         self.battlecry = battlecry
         if deathrattle:
@@ -979,14 +980,19 @@ class Minion(Character):
         minion.player = player
         return minion
 
-    def bounce(self):
-        if len(self.player.hand) < 10:
+    def bounce(self, bounce_to_deck=False):
+        if bounce_to_deck:
             self.unattach()
             self.remove_from_board()
-            self.player.hand.append(self.card)
+            self.player.deck.put_back(self.card)
         else:
-            self.die(None)
-            self.game.check_delayed()
+            if len(self.player.hand) < 10:
+                self.unattach()
+                self.remove_from_board()
+                self.player.hand.append(self.card)
+            else:
+                self.die(None)
+                self.game.check_delayed()
 
     def __to_json__(self):
 

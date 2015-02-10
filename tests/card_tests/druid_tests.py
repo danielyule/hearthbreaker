@@ -402,7 +402,7 @@ class TestDruid(unittest.TestCase):
     def test_Nourish(self):
 
         # Test gaining two mana
-        game = generate_game_for(Nourish, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        game = generate_game_for(Nourish, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -421,11 +421,18 @@ class TestDruid(unittest.TestCase):
 
         game.play_single_turn()
         game.play_single_turn()
-        # Nourish is played twice.  The first brings the player to 10, the second only increases the active mana, not
-        # max_mana
+        # Nourish is played.  it brings the player to 10
 
         self.assertEqual(10, game.current_player.max_mana)
-        self.assertEqual(2, game.current_player.mana)
+        self.assertEqual(5, game.current_player.mana)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Nourish is played.  It doesn't affect the max_mana, but it does fill in two crystals.
+        # Tested on patch 2.1.0.7785
+        self.assertEqual(10, game.current_player.max_mana)
+        self.assertEqual(7, game.current_player.mana)
 
         # Test drawing three cards
         random.seed(1857)
