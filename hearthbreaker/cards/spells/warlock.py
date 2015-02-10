@@ -228,3 +228,27 @@ class Demonheart(Card):
             self.target.increase_health(5)
         else:
             self.target.damage(player.effective_spell_damage(5), self)
+
+
+class Imp(MinionCard):
+    def __init__(self):
+        super().__init__("Imp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class ImpLosion(Card):
+    def __init__(self):
+        super().__init__("Imp-losion", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
+                         hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        # This is to get around the case where you kill your own spell damage minion
+        amount = player.effective_spell_damage(game.random_amount(2, 4))
+        self.target.damage(amount, self)
+        for i in range(0, amount):
+            imp = Imp()
+            imp.summon(player, game, len(player.minions))
