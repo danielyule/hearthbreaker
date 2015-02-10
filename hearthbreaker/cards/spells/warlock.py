@@ -240,7 +240,11 @@ class Implosion(Card):
 
         # This is to get around the case where you kill your own spell damage minion
         amount = player.effective_spell_damage(game.random_amount(2, 4))
+        had_shield = self.target.divine_shield
+
         self.target.damage(amount, self)
-        for i in range(0, amount):
-            imp = Imp()
-            imp.summon(player, game, len(player.minions))
+
+        if not had_shield:
+            for i in range(0, amount):
+                imp = Imp()
+                imp.summon(player, game, len(player.minions))
