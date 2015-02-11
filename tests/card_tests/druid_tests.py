@@ -5,7 +5,7 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.engine import Game
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
     EnemyMinionSpellTestingAgent, CardTestingAgent
-from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hearthbreaker.cards import *
@@ -402,7 +402,7 @@ class TestDruid(unittest.TestCase):
     def test_Nourish(self):
 
         # Test gaining two mana
-        game = generate_game_for(Nourish, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        game = generate_game_for(Nourish, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
         game.play_single_turn()
         game.play_single_turn()
@@ -421,11 +421,18 @@ class TestDruid(unittest.TestCase):
 
         game.play_single_turn()
         game.play_single_turn()
-        # Nourish is played twice.  The first brings the player to 10, the second only increases the active mana, not
-        # max_mana
+        # Nourish is played.  it brings the player to 10
 
         self.assertEqual(10, game.current_player.max_mana)
-        self.assertEqual(2, game.current_player.mana)
+        self.assertEqual(5, game.current_player.mana)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Nourish is played.  It doesn't affect the max_mana, but it does fill in two crystals.
+        # Tested on patch 2.1.0.7785
+        self.assertEqual(10, game.current_player.max_mana)
+        self.assertEqual(7, game.current_player.mana)
 
         # Test drawing three cards
         random.seed(1857)
@@ -891,3 +898,50 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(7, len(game.players[0].minions))
+
+    def test_DruidOfTheFang(self):
+        game = generate_game_for([StonetuskBoar, DruidOfTheFang], DruidOfTheFang,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(7, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+        game.other_player.minions[0].silence()
+        self.assertEqual(7, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(MINION_TYPE.BEAST, game.other_player.minions[0].card.minion_type)
+
+    def test_Recycle(self):
+        game = generate_game_for(Recycle, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(21, game.current_player.deck.left)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(22, game.other_player.deck.left)
+
+    def test_Malorne(self):
+        game = generate_game_for(Malorne, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(20, game.current_player.deck.left)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(21, game.other_player.deck.left)

@@ -645,3 +645,33 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(5, game.current_player.minions[1].health)
+
+    def test_ImpLosion(self):
+        game = generate_game_for([Implosion, OgreMagi], [SpiderTank, Whirlwind],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        # Rolls 4, killing Spider
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        # Whirlwind clears, Ogre, Spider, Implosion
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Rolls 3 + 1 spell damage, killing Spider
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+
+        # Whirlwind clears except Ogre, Ogre, Spider, Implosion
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # Rolls 2 + 2 spell damage, rip Spider
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))

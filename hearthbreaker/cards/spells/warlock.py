@@ -7,7 +7,7 @@ from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp
+from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp, Imp
 
 
 class MortalCoil(Card):
@@ -228,3 +228,23 @@ class Demonheart(Card):
             self.target.increase_health(5)
         else:
             self.target.damage(player.effective_spell_damage(5), self)
+
+
+class Implosion(Card):
+    def __init__(self):
+        super().__init__("Imp-losion", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
+                         hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        # This is to get around the case where you kill your own spell damage minion
+        amount = player.effective_spell_damage(game.random_amount(2, 4))
+        had_shield = self.target.divine_shield
+
+        self.target.damage(amount, self)
+
+        if not had_shield:
+            for i in range(0, amount):
+                imp = Imp()
+                imp.summon(player, game, len(player.minions))

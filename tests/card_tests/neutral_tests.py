@@ -4024,3 +4024,39 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+
+    def test_TinkertownTechnician(self):
+        game = generate_game_for([TinkertownTechnician, SpiderTank], Wisp, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+
+        # 2nd Tinker gets buff and draws
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[0].minions[2].calculate_attack())
+        self.assertEqual("Rusty Horn", game.players[0].hand[-1].name)
+
+    def test_Junkbot(self):
+        game = generate_game_for([BloodKnight, Junkbot, ClockworkGnome], Whirlwind,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 11):
+            game.play_single_turn()
+
+        # Blood Knight doesn't buff Junkbot
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+
+        # Clockwork Gnome dies buffing Junkbot
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())

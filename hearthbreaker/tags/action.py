@@ -104,7 +104,7 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target):
-        card = self.card.get_card(target)
+        card = self.card.get_card(target, actor)
         if card is None:
             return
 
@@ -151,7 +151,7 @@ class Transform(Action):
             self.card = CardQuery(card.ref_name)
 
     def act(self, actor, target):
-        card = self.card.get_card(target)
+        card = self.card.get_card(target, actor)
         minion = card.create_minion(target.player)
         minion.card = card
         target.replace(minion)
@@ -241,7 +241,7 @@ class Discard(Action, metaclass=Amount):
 
     def act(self, actor, target):
         for index in range(0, self.get_amount(actor, target)):
-            card = self.query.get_card(actor.player)
+            card = self.query.get_card(actor.player, actor)
             if card:
                 actor.player.trigger("discard", card)
 
@@ -292,28 +292,42 @@ class ChangeTarget(Action):
 
 
 class AddCard(Action):
-    def __init__(self, card, count=1):
+    def __init__(self, card, count=1, add_to_deck=False):
         if isinstance(card, CardQuery):
             self.card = card
         else:
             self.card = CardQuery(card.ref_name)
+        self.add_to_deck = add_to_deck
         self.count = count
 
     def act(self, actor, target):
-        for i in range(self.count):
-            if len(target.hand) < 10:
-                target.hand.append(self.card.get_card(target))
+        if self.add_to_deck:
+            for i in range(self.count):
+                target.deck.put_back(self.card.get_card(target, actor))
+
+        else:
+            for i in range(self.count):
+                if len(target.hand) < 10:
+                    target.hand.append(self.card.get_card(target, actor))
 
     def __to_json__(self):
+        if self.add_to_deck:
+            return {
+                'name': 'add_card',
+                'card': self.card,
+                'count': self.count,
+                'add_to_deck': self.add_to_deck,
+            }
         return {
             'name': 'add_card',
             'card': self.card,
             'count': self.count
         }
 
-    def __from_json__(self, card, count=1):
+    def __from_json__(self, card, count=1, add_to_deck=False):
         self.card = CardQuery.from_json(**card)
         self.count = count
+        self.add_to_deck = add_to_deck
         return self
 
 
@@ -331,10 +345,18 @@ class ResurrectFriendly(Action):
 
 
 class Bounce(Action):
+    def __init__(self, bounce_to_deck=False):
+        self.bounce_to_deck = bounce_to_deck
+
     def act(self, actor, target):
-        target.bounce()
+        target.bounce(self.bounce_to_deck)
 
     def __to_json__(self):
+        if self.bounce_to_deck:
+            return {
+                'name': 'bounce',
+                'bounce_to_deck': True,
+            }
         return {
             'name': 'bounce'
         }
@@ -381,7 +403,7 @@ class ApplySecret(Action):
         self._query = CardQuery(conditions=[IsSecret()], source=source)
 
     def act(self, actor, target):
-        secret = self._query.get_card(target)
+        secret = self._query.get_card(target, actor)
         if secret:
             target.secrets.append(secret)
             secret.player = target
@@ -409,7 +431,7 @@ class Equip(Action):
             self.weapon = CardQuery(weapon.ref_name)
 
     def act(self, actor, target):
-        card = self.weapon.get_card(target)
+        card = self.weapon.get_card(target, actor)
         weapon = card.create_weapon(target)
         weapon.equip(target)
 

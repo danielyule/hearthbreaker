@@ -516,21 +516,22 @@ class Deck:
         return card
 
     def put_back(self, card):
-        for index in range(0, 30):
-            if self.cards[index] == card:
+        for deck_card in self.cards:
+            if deck_card == card:
                 if not card.drawn:
                     raise GameException("Tried to put back a card that hadn't been used yet")
-                self.cards[index].drawn = False
+                deck_card.drawn = False
                 self.left += 1
                 return
-        raise GameException("Tried to put back a card that didn't come from this deck")
+        self.cards.append(card)
+        self.left += 1
 
     def __to_json__(self):
         card_list = []
-        for index in range(0, 30):
+        for card in self.cards:
             card_list.append({
-                'name': self.cards[index].name,
-                'used': self.cards[index].drawn
+                'name': card.name,
+                'used': card.drawn
             })
         return card_list
 

@@ -219,6 +219,8 @@ from hearthbreaker.cards.minions.neutral import (
     Hobgoblin,
     Cogmaster,
     GoblinSapper,
+    TinkertownTechnician,
+    Junkbot,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -230,6 +232,8 @@ from hearthbreaker.cards.minions.druid import (
     Cenarius,
     AnodizedRoboCub,
     MechBearCat,
+    DruidOfTheFang,
+    Malorne,
 )
 
 from hearthbreaker.cards.minions.hunter import (

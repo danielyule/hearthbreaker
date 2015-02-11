@@ -30,6 +30,7 @@ from hearthbreaker.cards.spells.druid import (
     Starfire,
     PoisonSeeds,
     DarkWispers,
+    Recycle,
 )
 
 from hearthbreaker.cards.spells.hunter import (
@@ -182,6 +183,7 @@ from hearthbreaker.cards.spells.warlock import (
     PowerOverwhelming,
     Darkbomb,
     Demonheart,
+    Implosion,
 )
 
 from hearthbreaker.cards.spells.warrior import (

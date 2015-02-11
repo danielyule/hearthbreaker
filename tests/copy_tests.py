@@ -2393,3 +2393,17 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[1].calculate_attack())
+
+    def test_Malorne(self):
+        game = generate_game_for(Malorne, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(20, game.current_player.deck.left)
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(21, game.other_player.deck.left)

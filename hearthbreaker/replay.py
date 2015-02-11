@@ -63,6 +63,7 @@ class Replay:
         self.random = []
         schema_file = open("replay.schema.json", "r")
         self.schema = json.load(schema_file)
+        schema_file.close()
         if filename is not None:
             self.read_json(filename)
 
