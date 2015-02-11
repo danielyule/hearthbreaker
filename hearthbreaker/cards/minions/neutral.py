@@ -2302,3 +2302,11 @@ class Cogmaster(MinionCard):
     def create_minion(self, player):
         return Minion(1, 2, buffs=[Buff(ChangeAttack(2), GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))),
                                                                      value=0))])
+
+
+class GoblinSapper(MinionCard):
+    def __init__(self):
+        super().__init__("Goblin Sapper", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(2, 4, buffs=[Buff(ChangeAttack(4), GreaterThan(Count(CardSelector(EnemyPlayer())), value=5))])

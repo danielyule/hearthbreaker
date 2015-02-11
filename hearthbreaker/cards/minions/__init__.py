@@ -217,7 +217,8 @@ from hearthbreaker.cards.minions.neutral import (
     StonesplinterTrogg,
     TroggzorTheEarthinator,
     Hobgoblin,
-    Cogmaster
+    Cogmaster,
+    GoblinSapper,
 )
 
 from hearthbreaker.cards.minions.druid import (
