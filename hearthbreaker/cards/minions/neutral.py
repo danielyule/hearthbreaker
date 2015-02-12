@@ -1973,7 +1973,7 @@ class AntiqueHealbot(MinionCard):
         return Minion(3, 3)
 
 
-class AnnoyOTron(MinionCard):
+class AnnoyoTron(MinionCard):
     def __init__(self):
         super().__init__("Annoy-o-Tron", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 

@@ -181,7 +181,7 @@ from hearthbreaker.cards.minions.neutral import (
     PilotedSkyGolem,
     SneedsOldShredder,
     AntiqueHealbot,
-    AnnoyOTron,
+    AnnoyoTron,
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
