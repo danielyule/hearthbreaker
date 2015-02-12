@@ -6449,7 +6449,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 4, 
+          "amount": 1, 
           "name": "damage"
         }
       ], 
@@ -7241,6 +7241,34 @@
     "type": "minion"
   }, 
   {
+    "name": "Goblin Sapper", 
+    "character_class": "", 
+    "buffs": [
+      {
+        "status": {
+          "amount": 4, 
+          "name": "change_attack"
+        }, 
+        "condition": {
+          "amount": {
+            "name": "count", 
+            "selector": {
+              "players": "enemy", 
+              "name": "card"
+            }
+          }, 
+          "name": "greater_than", 
+          "value": 5
+        }
+      }
+    ], 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "attack": 2, 
+    "health": 4, 
+    "type": "minion"
+  }, 
+  {
     "name": "Tinkertown Technician", 
     "character_class": "", 
     "rarity": "Common", 
@@ -7856,6 +7884,44 @@
     "type": "minion"
   }, 
   {
+    "name": "Grove Tender", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "attack": 2, 
+    "health": 4, 
+    "choices": [
+      {
+        "card": "Gift of Mana", 
+        "actions": [
+          {
+            "count": 1, 
+            "name": "give_mana_crystal", 
+            "empty": false
+          }
+        ], 
+        "selector": {
+          "players": "both", 
+          "name": "player"
+        }
+      }, 
+      {
+        "card": "Gift of Cards", 
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "both", 
+          "name": "player"
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
     "name": "Timber Wolf", 
     "minion_type": "Beast", 
     "character_class": "Hunter", 
@@ -8319,6 +8385,37 @@
             ]
           }
         ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "Gahz'rilla", 
+    "minion_type": "Beast", 
+    "character_class": "Hunter", 
+    "rarity": "Legendary", 
+    "mana": 7, 
+    "attack": 6, 
+    "health": 9, 
+    "effects": [
+      {
+        "action": {
+          "name": "give", 
+          "buffs": [
+            {
+              "status": {
+                "amount": 1, 
+                "name": "double_attack"
+              }
+            }
+          ]
+        }, 
+        "event": {
+          "event_name": "damaged"
+        }, 
         "selector": {
           "name": "self"
         }

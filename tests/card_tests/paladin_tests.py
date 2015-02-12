@@ -46,6 +46,21 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(1, game.other_player.minions[0].calculate_max_health())
 
+    def test_BlessedChampion_and_Cogmaster(self):
+        game = generate_game_for([Cogmaster, MechBearCat], BlessedChampion, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        # The Cogmaster's attack should be doubled, leaving it at 2 attack
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, game.other_player.minions[0].calculate_attack())
+
+        # The Mech-Bear-Cat should be played, bringing the Cogmaster's attack up to 6 (= (1 + 2) * 2)
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(6, game.current_player.minions[1].calculate_attack())
+
     def test_BlessingOfKings(self):
         game = generate_game_for(BlessingOfKings, StonetuskBoar, EnemyMinionSpellTestingAgent, OneCardPlayingAgent)
 

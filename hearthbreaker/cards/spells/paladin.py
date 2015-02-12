@@ -2,9 +2,10 @@ import copy
 from hearthbreaker.cards.base import Card, MinionCard, SecretCard
 from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.action import Draw
-from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.base import Effect, Buff
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
+from hearthbreaker.tags.status import DoubleAttack
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.cards.minions.paladin import SilverHandRecruit
@@ -31,7 +32,7 @@ class BlessedChampion(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.change_attack(self.target.calculate_attack())
+        self.target.add_buff(Buff(DoubleAttack()))
 
 
 class BlessingOfKings(Card):

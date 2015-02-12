@@ -252,7 +252,8 @@ from hearthbreaker.cards.minions.hunter import (
     Leokk,
     Snake,
     MetaltoothLeaper,
-    KingOfBeasts
+    KingOfBeasts,
+    Gahzrilla,
 )
 
 from hearthbreaker.cards.minions.mage import (

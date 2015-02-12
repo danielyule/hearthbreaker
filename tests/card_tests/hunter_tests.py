@@ -659,3 +659,55 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(5, len(game.current_player.minions))
         self.assertEqual(5, game.current_player.minions[1].calculate_attack())
+
+    def test_Gahzrilla(self):
+        game = generate_game_for([Gahzrilla, ShatteredSunCleric, RaidLeader], ArcaneExplosion,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(6, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+
+        # Arcane explosion damages the Gahz'rilla, doubling its attack
+        self.assertEqual(12, game.other_player.minions[0].calculate_attack())
+
+        # The buff from the cleric is applies after the double, increases by 1
+        game.play_single_turn()
+        self.assertEqual(13, game.current_player.minions[1].calculate_attack())
+
+        # Should double exactly the current attack
+        game.play_single_turn()
+        self.assertEqual(26, game.other_player.minions[1].calculate_attack())
+
+        # Raid leader gives a +1 Bonus
+        game.play_single_turn()
+        self.assertEqual(27, game.current_player.minions[2].calculate_attack())
+
+        # The raid leader's aura is not included in the double, but is applied afterwards
+        # Tested by @jleclanche for patch 2.1.0.7785
+        game.play_single_turn()
+        self.assertEqual(53, game.other_player.minions[1].calculate_attack())
+
+    def testGahzrilla_temp_buff(self):
+        env = self
+
+        class TestAgent(CardTestingAgent):
+            def do_turn(self, player):
+                super().do_turn(player)
+                if turn == 14:
+                    # Gahz'rilla's double comes after the buff from abusive, so total attack is
+                    # (6 + 2) * 2 = 16
+                    env.assertEqual(16, game.current_player.minions[0].calculate_attack())
+
+        game = generate_game_for([Gahzrilla, AbusiveSergeant, Hellfire], StonetuskBoar,
+                                 TestAgent, DoNothingAgent)
+
+        for turn in range(15):
+            game.play_single_turn()
+
+        # After the buff wears off, the double no longer includes it, so the total attack is
+        # 6 * 2 = 12
+        # Tested by @jleclanche for patch 2.1.0.7785
+        self.assertEqual(12, game.current_player.minions[0].calculate_attack())

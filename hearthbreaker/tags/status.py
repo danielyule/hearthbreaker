@@ -99,6 +99,23 @@ class SetAttack(ChangeAttack, metaclass=Amount):
         }
 
 
+class DoubleAttack(ChangeAttack):
+
+    def act(self, actor, target):
+        pass
+
+    def unact(self, actor, target):
+        pass
+
+    def update(self, owner, prev_atk):
+        return prev_atk * 2
+
+    def __to_json__(self):
+        return {
+            'name': 'double_attack',
+        }
+
+
 class ManaChange(Status):
     def __init__(self, amount, minimum, card_selector):
         self.amount = amount
