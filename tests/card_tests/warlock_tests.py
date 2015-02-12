@@ -318,7 +318,7 @@ class TestWarlock(unittest.TestCase):
 
     def test_SenseDemonsOverflow(self):
         game = generate_game_for([SenseDemons, SenseDemons, SenseDemons, FlameImp, FlameImp], Wisp,
-                                  OneCardPlayingAgent, DoNothingAgent)
+                                 OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 4):
             game.play_single_turn()
         self.assertEqual(5, len(game.players[0].hand))

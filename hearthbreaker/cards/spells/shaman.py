@@ -83,6 +83,9 @@ class FeralSpirit(Card):
             spirit_wolf = hearthbreaker.cards.minions.shaman.SpiritWolf()
             spirit_wolf.summon(player, game, len(player.minions))
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
 
 class ForkedLightning(Card):
     def __init__(self):

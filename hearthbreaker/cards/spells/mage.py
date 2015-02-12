@@ -45,6 +45,9 @@ class MirrorImage(Card):
         for i in range(0, 2):
             MirrorImageMinion().summon(player, game, len(player.minions))
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
 
 class ArcaneExplosion(Card):
     def __init__(self):
@@ -130,11 +133,12 @@ class MirrorEntity(SecretCard):
         self.player = None
 
     def _reveal(self, minion):
-        mirror = minion.copy(self.player)
-        mirror.add_to_board(len(self.player.minions))
-        minion.player.trigger("minion_summoned", mirror)
-        minion.player.trigger("after_added", mirror)
-        super().reveal()
+        if len(self.player.minions) < 7:
+            mirror = minion.copy(self.player)
+            mirror.add_to_board(len(self.player.minions))
+            minion.player.trigger("minion_summoned", mirror)
+            minion.player.trigger("after_added", mirror)
+            super().reveal()
 
     def activate(self, player):
         player.game.current_player.bind("minion_played", self._reveal)

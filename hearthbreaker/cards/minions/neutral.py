@@ -1494,6 +1494,9 @@ class IAmMurloc(Card):
         for i in range(0, player.game.random_amount(3, 5)):
             Murloc().summon(player, player.game, len(player.minions))
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
 
 class PowerOfTheHorde(Card):
     def __init__(self):
@@ -1506,6 +1509,9 @@ class PowerOfTheHorde(Card):
                       SilvermoonGuardian(), SenjinShieldmasta(), CairneBloodhoof()]
         horde_summon = game.random_choice(horde_list)
         horde_summon.summon(player, player.game, len(player.minions))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
 
 
 class RoguesDoIt(Card):

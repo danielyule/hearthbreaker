@@ -106,6 +106,9 @@ class PowerOfTheWild(Card):
                 panther = Panther()
                 panther.summon(player, game, len(player.minions))
 
+            def can_use(self, player, game):
+                return super().can_use(player, game) and len(player.minions) < 7
+
         option = player.agent.choose_option([LeaderOfThePack(), SummonPanther()], player)
         option.use(player, game)
 
@@ -210,9 +213,6 @@ class SavageRoar(Card):
         for minion in player.minions:
             minion.change_temp_attack(2)
         player.hero.change_temp_attack(2)
-
-    def can_use(self, player, game):
-        return super().can_use(player, game) and len(player.minions) > 0
 
 
 class Bite(Card):
@@ -349,6 +349,9 @@ class ForceOfNature(Card):
         for i in [0, 1, 2]:
             treant_card = Treant()
             treant_card.summon(player, game, len(player.minions))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
 
 
 class Starfire(Card):

@@ -36,7 +36,7 @@ class BestialWrath(Card):
     def __init__(self):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_minion_spell_target,
+                         hearthbreaker.targeting.find_friendly_minion_spell_target,
                          lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
 
     def use(self, player, game):
@@ -237,6 +237,9 @@ class UnleashTheHounds(Card):
             hound = hearthbreaker.cards.minions.hunter.Hound()
             hound.summon(player, game, len(player.minions))
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) >= 1 and len(player.minions) < 7
+
 
 class AnimalCompanion(Card):
     def __init__(self):
@@ -249,6 +252,9 @@ class AnimalCompanion(Card):
                       hearthbreaker.cards.minions.hunter.Leokk()]
         card = game.random_choice(beast_list)
         card.summon(player, player.game, len(player.minions))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
 
 
 class SnakeTrap(SecretCard):

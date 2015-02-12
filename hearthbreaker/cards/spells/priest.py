@@ -131,6 +131,9 @@ class MindControl(Card):
         self.target.remove_from_board()
         new_minion.add_to_board(len(player.minions))
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
 
 class MindVision(Card):
     def __init__(self):
@@ -172,6 +175,9 @@ class Mindgames(Card):
         minion_card.summon(player, game, 0)
         minion_card.drawn = True
 
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
 
 class PowerWordShield(Card):
     def __init__(self):
@@ -208,6 +214,9 @@ class ShadowMadness(Card):
         # When silenced, the minion should immediately come back to its previous
         # owner.  See https://twitter.com/bdbrode/status/510251195173470208
         minion.add_buff(BuffUntil(Stolen(), TurnEnded()))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
 
 
 class ShadowWordDeath(Card):

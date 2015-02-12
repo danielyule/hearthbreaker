@@ -4,7 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.constants import MINION_TYPE
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, WeaponTestingAgent, \
-    PlayAndAttackAgent, SelfSpellTestingAgent, EnemyMinionSpellTestingAgent
+    PlayAndAttackAgent, SelfSpellTestingAgent
 from tests.testing_utils import generate_game_for, mock
 from hearthbreaker.cards import *
 
@@ -85,29 +85,34 @@ class TestHunter(unittest.TestCase):
     def test_BestialWrath(self):
 
         def verify_bwrath():
-            self.assertEqual(3, game.other_player.minions[0].calculate_attack())
-            self.assertTrue(game.other_player.minions[0].immune)
+            self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+            self.assertTrue(game.players[0].minions[0].immune)
 
         def verify_silence():
-            self.assertFalse(game.other_player.minions[0].immune)
-            self.assertEqual(1, game.other_player.minions[0].calculate_attack())
+            self.assertFalse(game.players[0].minions[0].immune)
+            self.assertEqual(1, game.players[0].minions[0].calculate_attack())
 
-        game = generate_game_for(StonetuskBoar, [BestialWrath, BestialWrath, BestialWrath, Silence, BoulderfistOgre],
-                                 OneCardPlayingAgent, EnemyMinionSpellTestingAgent)
+        game = generate_game_for([StonetuskBoar, BestialWrath, BestialWrath, BestialWrath, Silence, Archmage], Wisp,
+                                 CardTestingAgent, DoNothingAgent)
         game.play_single_turn()
-        game.other_player.bind_once("turn_ended", verify_bwrath)
         game.play_single_turn()
-        self.assertEqual(1, len(game.other_player.minions))
-        self.assertFalse(game.other_player.minions[0].immune)
-        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
+
+        game.players[0].bind_once("turn_ended", verify_bwrath)
 
         game.play_single_turn()
-        game.other_player.bind_once("turn_ended", verify_silence)
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].immune)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+
         game.play_single_turn()
-        self.assertEqual(2, len(game.other_player.minions))
-        self.assertFalse(game.other_player.minions[0].immune)
-        self.assertEqual(1, game.other_player.minions[0].calculate_attack())
-        self.assertEqual(2, len(game.players[1].hand))
+        game.players[0].bind_once("turn_ended", verify_silence)
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].immune)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, len(game.players[0].hand))
 
     def test_Flare(self):
 
