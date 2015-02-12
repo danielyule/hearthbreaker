@@ -9,4 +9,5 @@ omit =
     */mock.py
     ui/*
     /opt/*
+    /home/*
     jsonschema/*
