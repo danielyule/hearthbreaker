@@ -150,10 +150,10 @@ class TestDruid(unittest.TestCase):
         card_draw_mock = mock.Mock(side_effect=game.other_player.draw)
         game.other_player.draw = card_draw_mock
         game.play_single_turn()
-        # Each time the player draws, they will draw another wild growth, which will turn into excess mana, which will
-        # draw another card.  However, because of the ordering of the cards, the last excess mana will be after
-        # a wild growth, which prevents SpellTestingAgent from playing the card, so only 5 draws are made instead of the
-        # possible 6
+        # Each time the player draws, they will draw another wild growth, which will turn into excess mana,
+        # which will draw another card.  However, because of the ordering of the cards, the last excess mana
+        # will be after a wild growth, which prevents SpellTestingAgent from playing the card, so only
+        # 5 draws are made instead of the possible 6
         self.assertEqual(5, card_draw_mock.call_count)
 
     def test_Wrath(self):
@@ -945,3 +945,38 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(21, game.other_player.deck.left)
+
+    def test_GroveTender(self):
+        game = generate_game_for(GroveTender, Wisp, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        # Before Gift of Mana
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].max_mana)
+        self.assertEqual(2, game.players[1].max_mana)
+
+        game.play_single_turn()
+
+        # Both players have 1 more full mana crystal
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].mana)
+        self.assertEqual(4, game.players[0].max_mana)
+        self.assertEqual(3, game.players[1].mana)
+        self.assertEqual(3, game.players[1].max_mana)
+
+        game.players[0].agent.choose_option = lambda options, player: options[1]
+
+        # Before Gift of Cards
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[0].hand))
+        self.assertEqual(8, len(game.players[1].hand))
+
+        # Both players draw 1
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(6, len(game.players[0].hand))
+        self.assertEqual(9, len(game.players[1].hand))

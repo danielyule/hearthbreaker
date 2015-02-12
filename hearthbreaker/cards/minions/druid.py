@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
-    Summon, AddCard
+    Summon, AddCard, GiveManaCrystal
 from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry, Deathrattle
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged
@@ -217,3 +217,24 @@ class Malorne(MinionCard):
         return Minion(9, 7, deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.MINION,
                                                                       minion=SelfSelector()),
                                                             add_to_deck=True), PlayerSelector()))
+
+
+class GiftOfMana(ChoiceCard):
+    def __init__(self):
+        super().__init__("Gift of Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+
+class GiftOfCards(ChoiceCard):
+    def __init__(self):
+        super().__init__("Gift of Cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+
+class GroveTender(MinionCard):
+    def __init__(self):
+        super().__init__("Grove Tender", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, choices=[
+            Choice(GiftOfMana(), GiveManaCrystal(), PlayerSelector(players=BothPlayer())),
+            Choice(GiftOfCards(), Draw(), PlayerSelector(players=BothPlayer()))
+        ])
+
+    def create_minion(self, player):
+        return Minion(2, 4)

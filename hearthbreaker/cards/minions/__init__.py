@@ -234,6 +234,7 @@ from hearthbreaker.cards.minions.druid import (
     MechBearCat,
     DruidOfTheFang,
     Malorne,
+    GroveTender,
 )
 
 from hearthbreaker.cards.minions.hunter import (
