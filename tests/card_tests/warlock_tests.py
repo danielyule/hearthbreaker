@@ -316,6 +316,30 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual("Worthless Imp", game.players[0].minions[0].card.name)
         self.assertEqual("Worthless Imp", game.players[0].minions[1].card.name)
 
+    def test_SenseDemonsOverflow(self):
+        game = generate_game_for([SenseDemons, SenseDemons, SenseDemons, FlameImp, FlameImp], Wisp,
+                                  OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+        self.assertEqual(5, len(game.players[0].hand))
+
+        # Sense Demons to draw 2 Flame Imps
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].hand))
+
+        # Sense Demons to draw 2 more Flame Imps
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(9, len(game.players[0].hand))
+
+        # Sense Demons to draw 2 more Flame Imps, but 1 gets destroyed
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(10, len(game.players[0].hand))
+
     def test_BaneOfDoom(self):
         game = generate_game_for(BaneOfDoom, StonetuskBoar, EnemyMinionSpellTestingAgent, DoNothingAgent)
         imp = FlameImp()
