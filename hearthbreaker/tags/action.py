@@ -409,7 +409,7 @@ class ApplySecret(Action):
             secret.player = target
             if target is target.game.other_player:
                 secret.player = target
-                secret.activate(target)
+                target.bind_once("minion_dead", secret.activate)
 
     def __to_json__(self):
         return {

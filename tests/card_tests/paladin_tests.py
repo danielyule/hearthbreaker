@@ -434,7 +434,6 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(0, len(game.other_player.secrets))
 
-    @unittest.expectedFailure
     def test_Redemption_full_board(self):
         game = generate_game_for(Assassinate, [Redemption, Wisp, Wisp, Wisp, Wisp, Wisp, HauntedCreeper],
                                  OneCardPlayingAgent, CardTestingAgent)
