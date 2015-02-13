@@ -436,6 +436,15 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual('Wisp', game.players[0].hand[0].name)
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
 
+    def test_SummoningPortal_Mechwarper(self):
+        game = generate_game_for([SummoningPortal, Mechwarper, SpiderTank], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+
     def test_BloodImp(self):
         game = generate_game_for(BloodImp, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 2):

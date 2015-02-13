@@ -1,10 +1,9 @@
 import copy
 from hearthbreaker.cards.base import Card
 from hearthbreaker.tags.action import Summon
-from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Deathrattle, Buff
-from hearthbreaker.tags.selector import PlayerSelector, SpecificCardSelector
-from hearthbreaker.tags.status import Windfury as _Windfury, Frozen
+from hearthbreaker.tags.selector import PlayerSelector
+from hearthbreaker.tags.status import Windfury as _Windfury, Frozen, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
@@ -61,15 +60,11 @@ class FarSight(Card):
 
     def use(self, player, game):
         def reduce_cost(card):
-            nonlocal aura
-            aura = ManaAura(3, 0, SpecificCardSelector(card), True, False)
+            card.add_buff(Buff(ManaChange(-3)))
 
         super().use(player, game)
-        aura = None
         player.bind_once("card_drawn", reduce_cost)
         player.draw()
-        if aura is not None:
-            player.add_aura(aura)
 
 
 class FeralSpirit(Card):

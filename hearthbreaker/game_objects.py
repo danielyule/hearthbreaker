@@ -168,17 +168,21 @@ class GameObject:
             self.buffs = []
         #: The player associated with this Game Object
         self.player = None
+        self._attached = False
 
     def attach(self, obj, player):
-        for effect in self.effects:
-            effect.set_owner(obj)
-            effect.apply()
-        for buff in self.buffs:
-            buff.set_owner(obj)
-            buff.apply()
-        for aura in self.auras:
-            aura.set_owner(obj)
-            player.add_aura(aura)
+        if not self._attached:
+            self.player = player
+            for effect in self.effects:
+                effect.set_owner(obj)
+                effect.apply()
+            for buff in self.buffs:
+                buff.set_owner(obj)
+                buff.apply()
+            for aura in self.auras:
+                aura.set_owner(obj)
+                player.add_aura(aura)
+            self._attached = True
 
     def __to_json__(self):
         jsn = {}
@@ -294,13 +298,15 @@ class GameObject:
         buff.unapply()
 
     def unattach(self):
-        for effect in reversed(self.effects):
-            effect.unapply()
-        for aura in reversed(self.auras):
-            self.player.remove_aura(aura)
-        for buff in reversed(self.buffs):
-            if isinstance(buff, BuffUntil):
-                buff.until.unbind(buff.owner, buff.__until__)
+        if self._attached:
+            for effect in reversed(self.effects):
+                effect.unapply()
+            for aura in reversed(self.auras):
+                self.player.remove_aura(aura)
+            for buff in reversed(self.buffs):
+                if isinstance(buff, BuffUntil):
+                    buff.until.unbind(buff.owner, buff.__until__)
+            self._attached = False
 
 
 class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
@@ -435,20 +441,22 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
 
         # Add together all the attack amounts from buffs
+        if self.enrage and self.enraged:
+            attack = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
+                                                             if self.enrage.selector.match(self, self) and
+                                                             isinstance(status, ChangeAttack)], self.base_attack)
+        else:
+            attack = self.base_attack
         attack = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
                                                          if isinstance(buff.status, ChangeAttack) and
                                                          (not buff.condition or buff.condition.evaluate(self, self))],
-                        self.base_attack)
+                        attack)
         attack = reduce(lambda a, b: b.update(self, a), [aura.status
                                                          for player in self.player.game.players
                                                          for aura in player.object_auras
                                                          if aura.match(self) and isinstance(aura.status, ChangeAttack)],
                         attack)
 
-        if self.enrage and self.enraged:
-            attack = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
-                                                             if self.enrage.selector.match(self, self) and
-                                                             isinstance(status, ChangeAttack)], attack)
         return max(0, attack)
 
     def calculate_max_health(self):
@@ -961,6 +969,7 @@ class Minion(Character):
             new_minion.game = new_game
         else:
             new_minion.game = new_owner.game
+
         return new_minion
 
     @staticmethod
@@ -991,6 +1000,7 @@ class Minion(Character):
             if len(self.player.hand) < 10:
                 self.unattach()
                 self.remove_from_board()
+                self.card.attach(self.card, self.player)
                 self.player.hand.append(self.card)
             else:
                 self.die(None)

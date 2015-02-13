@@ -1,4 +1,5 @@
 import abc
+from functools import reduce
 import hearthbreaker.constants
 from hearthbreaker.game_objects import Bindable, GameObject, GameException
 
@@ -23,7 +24,7 @@ class Card(Bindable, GameObject):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable, overload=0, ref_name=None):
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None, buffs=None):
         """
             Creates a new :class:`Card`.
 
@@ -50,8 +51,12 @@ class Card(Bindable, GameObject):
                                          for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a
                                          function which returns true if the target's attack is less than 3.
             :param int overload: The amount of overload on the card
+
+            :param buffs:  The buffs that will be applied directly to this card
+            :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__()
+        Bindable.__init__(self)
+        GameObject.__init__(self, buffs=buffs)
         self.name = name
         if ref_name:
             self.ref_name = ref_name
@@ -110,16 +115,18 @@ class Card(Bindable, GameObject):
         :return: representing the actual mana cost of this card.
         :rtype: int
         """
-        calc_mana = self.mana
-        for mana_filter in player.mana_filters:
-            if mana_filter.filter(self):
-                temp_mana = calc_mana
-                calc_mana -= mana_filter.amount
-                if temp_mana < mana_filter.min:  # Extra logic to handle 0 cost creatures with Summoning portal
-                    return temp_mana
-                if calc_mana < mana_filter.min:
-                    return mana_filter.min
-        return calc_mana
+        from hearthbreaker.tags.status import ManaChange
+        mana = reduce(lambda a, b: b.update(self, a), [aura.status
+                                                       for p in player.game.players
+                                                       for aura in p.player_auras
+                                                       if aura.match(self) and isinstance(aura.status, ManaChange)],
+                      self.mana)
+        mana = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
+                                                       if isinstance(buff.status, ManaChange) and
+                                                       (not buff.condition or buff.condition.evaluate(self, self))],
+                      mana)
+
+        return mana
 
     def use(self, player, game):
         """
@@ -143,6 +150,11 @@ class Card(Bindable, GameObject):
     def is_card():
         return True
 
+    def __to_json__(self):
+        r_val = super().__to_json__()
+        r_val['name'] = self.name
+        return r_val
+
     def __str__(self):  # pragma: no cover
         """
         Outputs a description of the card for debugging purposes.
@@ -161,7 +173,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
                  targeting_func=None, filter_func=_battlecry_targetable, ref_name=None, battlecry=None,
-                 choices=None, combo=None, overload=0):
+                 choices=None, combo=None, overload=0, buffs=None):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -188,8 +200,10 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param combo: Describes the battlecry this minion will have if played after another card.  Note that this
                       does not count as a battlecry for cards such as Nerub'ar Weblord.
         :type combo: :class:`hearthbreaker.tags.base.Battlecry`
+        :param buffs:  The buffs that will be applied directly to this card (as opposed to the minion this card creates)
+            :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name)
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name, buffs)
         self.minion_type = minion_type
         if battlecry:
             if isinstance(battlecry, tuple):

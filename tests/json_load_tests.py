@@ -48,6 +48,9 @@ class JSONTester:
             if 'overload' in card_def:
                 init_dict['overload'] = card_def['overload']
 
+            if 'buffs' in card_def:
+                init_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+
             MinionCard.__init__(self, **init_dict)
 
         def __init_weapon__(self):
@@ -75,14 +78,16 @@ class JSONTester:
                 'attack': card_def['attack'],
                 'health': card_def['health']
             }
-            if 'effects' in card_def:
-                create_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
+            if "impl" in card_def:
+                impl = card_def['impl']
+                if 'effects' in impl:
+                    create_dict['effects'] = [Effect.from_json(**effect) for effect in impl['effects']]
 
-            if 'auras' in card_def:
-                create_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+                if 'auras' in impl:
+                    create_dict['auras'] = [Aura.from_json(**aura) for aura in impl['auras']]
 
-            if 'buffs' in card_def:
-                create_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+                if 'buffs' in impl:
+                    create_dict['buffs'] = [Buff.from_json(**buff) for buff in impl['buffs']]
 
             if 'enrage' in card_def:
                 create_dict['enrage'] = Enrage.from_json(**card_def['enrage'])
@@ -97,14 +102,16 @@ class JSONTester:
                 'attack_power': card_def['attack'],
                 'durability': card_def['durability']
             }
-            if 'effects' in card_def:
-                create_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
+            if "impl" in card_def:
+                impl = card_def['impl']
+                if 'effects' in impl:
+                    create_dict['effects'] = [Effect.from_json(**effect) for effect in impl['effects']]
 
-            if 'auras' in card_def:
-                create_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+                if 'auras' in impl:
+                    create_dict['auras'] = [Aura.from_json(**aura) for aura in impl['auras']]
 
-            if 'buffs' in card_def:
-                create_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+                if 'buffs' in impl:
+                    create_dict['buffs'] = [Buff.from_json(**buff) for buff in impl['buffs']]
 
             if 'deathrattle' in card_def:
                 create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])

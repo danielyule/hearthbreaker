@@ -3,13 +3,12 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
-from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Effect, Aura, Battlecry
-from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent
-from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded
+from hearthbreaker.tags.base import Effect, Aura, Battlecry, AuraUntil
+from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent, IsSecret
+from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded, CardPlayed
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
     CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Frozen, NoSpellTarget
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Frozen, NoSpellTarget, ManaChange
 
 
 class ManaWyrm(MinionCard):
@@ -25,13 +24,14 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 2, auras=[Aura(ManaChange(1, 0, SpellSelector()), PlayerSelector())])
+        return Minion(3, 2, auras=[Aura(ManaChange(-1), SpellSelector())])
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
         super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
-                         battlecry=Battlecry(GiveAura([ManaAura(100, 0, SecretSelector(), True)]), PlayerSelector()))
+                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-100), SecretSelector(),
+                                                                 CardPlayed(IsSecret()))]), PlayerSelector()))
 
     def create_minion(self, player):
         return Minion(4, 3)

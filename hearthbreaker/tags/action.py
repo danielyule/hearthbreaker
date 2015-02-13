@@ -308,7 +308,9 @@ class AddCard(Action):
         else:
             for i in range(self.count):
                 if len(target.hand) < 10:
-                    target.hand.append(self.card.get_card(target, actor))
+                    card = self.card.get_card(target, actor)
+                    card.attach(card, target)
+                    target.hand.append(card)
 
     def __to_json__(self):
         if self.add_to_deck:
@@ -375,6 +377,7 @@ class SwapWithHand(Action):
                 chosen_card = target.game.random_draw(target.hand, lambda c: c.is_minion())
             if chosen_card:
                 chosen_card.summon(target, target.game, len(target.minions))
+                chosen_card.unattach()
                 target.hand.remove(chosen_card)
                 actor.bounce()
 

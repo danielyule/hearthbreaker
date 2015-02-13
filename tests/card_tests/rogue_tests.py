@@ -2,8 +2,8 @@ import random
 import unittest
 from hearthbreaker.constants import MINION_TYPE
 
-from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent,\
-    HeroPowerAndOneCardPlayingAgent
+from tests.agents.testing_agents import PlayAndAttackAgent, OneCardPlayingAgent, CardTestingAgent, \
+    HeroPowerAndCardPlayingAgent
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
@@ -639,35 +639,35 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(3, game.other_player.minions[1].health)
 
     def test_TinkersSharpswordOil(self):
-        game = generate_game_for([StonetuskBoar, Preparation, TinkersSharpswordOil], StonetuskBoar, PredictableAgent,
-                                 DoNothingAgent)
+        game = generate_game_for([LightsJustice, ChillwindYeti, SinisterStrike, TinkersSharpswordOil, Deathwing],
+                                 StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
-        for turn in range(0, 2):
+        for turn in range(0, 8):
             game.play_single_turn()
 
-        # Stonetusk
+        # Yeti
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(None, game.players[0].hero.weapon)
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertIsNotNone(game.players[0].hero.weapon)
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
 
-        for turn in range(0, 2):
-            game.play_single_turn()
+        game.play_single_turn()
 
         # Hero ability, preparation and tinker's with combo
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
         self.assertEqual(4, game.players[0].hero.weapon.base_attack)
 
     def test_Sabotage(self):
-        game = generate_game_for([Preparation, Sabotage], [StonetuskBoar, Preparation], CardTestingAgent,
-                                 HeroPowerAndOneCardPlayingAgent)
+        game = generate_game_for([Preparation, Sabotage], [SI7Agent, Wisp], CardTestingAgent,
+                                 HeroPowerAndCardPlayingAgent)
 
-        for turn in range(0, 6):
+        for turn in range(0, 10):
             game.play_single_turn()
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].hero.weapon.base_attack)
 
-        # Preparation and Sabotage will be played (twice), creating a combo.
+        # Sabotage, Preparation and Sabotage will be played, creating a combo.
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(None, game.players[1].hero.weapon)

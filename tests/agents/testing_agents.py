@@ -50,7 +50,7 @@ class OneCardPlayingAgent(DoNothingAgent):
             player.game.play_card(player.hand[0])
 
 
-class HeroPowerAndOneCardPlayingAgent(DoNothingAgent):
+class HeroPowerAndCardPlayingAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()
 
@@ -58,9 +58,7 @@ class HeroPowerAndOneCardPlayingAgent(DoNothingAgent):
         if player.hero.power.can_use():
             player.hero.power.use()
 
-        if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
-            if player.hand[0].name == "The Coin":
-                player.game.play_card(player.hand[0])
+        while len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
             player.game.play_card(player.hand[0])
 
 

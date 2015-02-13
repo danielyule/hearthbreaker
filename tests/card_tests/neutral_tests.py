@@ -1434,13 +1434,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
-        self.assertEqual(2, game.players[1].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(2, game.players[1].hand[0].mana_cost(game.players[1]))
 
         game.play_single_turn()
 
         self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
         self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
-        self.assertEqual(1, game.players[1].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(1, game.players[1].hand[0].mana_cost(game.players[1]))
 
     def test_MindControlTech(self):
         game = generate_game_for(MindControlTech, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -2199,6 +2199,26 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
 
         self.assertEqual(3, len(game.players[0].minions))  # 1st costs 1, 2nd costs 2
+
+    def test_PintSizeSummoner_without_summoning(self):
+        game = generate_game_for(PintSizedSummoner, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.players[0].agent = DoNothingAgent()
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+
+        # Make sure the summoner's buff is being removed at the end of each turn
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
 
     def test_OldMurkEye(self):
         game = generate_game_for([OldMurkEye, ArcaneExplosion], BluegillWarrior,

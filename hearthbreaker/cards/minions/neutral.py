@@ -2,11 +2,10 @@ from hearthbreaker.cards.base import Card, MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
-    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, GiveEffect, ChangeTarget, Discard, \
+    Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, ChangeTarget, Discard, \
     RemoveDivineShields, DecreaseDurability, IncreaseDurability, IncreaseWeaponAttack, Destroy
-from hearthbreaker.tags.aura import ManaAura
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Enrage, Aura, \
-    BuffUntil, Buff
+    BuffUntil, Buff, AuraUntil
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
@@ -15,10 +14,10 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
-    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector
+    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, MechCardSelector
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, ManaChange, Charge, Taunt, Windfury, CantAttack, \
-    SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
+    SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus, ManaChange
 import hearthbreaker.targeting
 import copy
 from hearthbreaker.cards.spells.neutral import spare_part_list
@@ -596,7 +595,7 @@ class VentureCoMercenary(MinionCard):
         super().__init__("Venture Co. Mercenary", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(7, 6, auras=[Aura(ManaChange(-3, 0, MinionCardSelector()), PlayerSelector())])
+        return Minion(7, 6, auras=[Aura(ManaChange(3), MinionCardSelector())])
 
 
 class AmaniBerserker(MinionCard):
@@ -1135,7 +1134,7 @@ class ManaWraith(MinionCard):
         super().__init__("Mana Wraith", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 2, auras=[Aura(ManaChange(-1, 0, MinionCardSelector()), PlayerSelector(players=BothPlayer()))])
+        return Minion(2, 2, auras=[Aura(ManaChange(1), MinionCardSelector(BothPlayer()))])
 
 
 class MindControlTech(MinionCard):
@@ -1377,42 +1376,29 @@ class LeeroyJenkins(MinionCard):
 
 class MountainGiant(MinionCard):
     def __init__(self):
-        super().__init__("Mountain Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Mountain Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         buffs=[Buff(ManaChange(Count(CardSelector()), -1))])
 
     def create_minion(self, player):
         return Minion(8, 8)
-
-    def mana_cost(self, player):
-        cost = super().mana_cost(player) - len(player.hand)
-        return cost
 
 
 class MoltenGiant(MinionCard):
     def __init__(self):
-        super().__init__("Molten Giant", 20, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Molten Giant", 20, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         buffs=[Buff(ManaChange(Attribute("damage", HeroSelector()), -1))])
 
     def create_minion(self, player):
         return Minion(8, 8)
-
-    def mana_cost(self, player):
-        cost = super().mana_cost(player) - player.hero.calculate_max_health() + player.hero.health
-        if cost < 0:
-            return 0
-        return cost
 
 
 class SeaGiant(MinionCard):
     def __init__(self):
-        super().__init__("Sea Giant", 10, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC)
+        super().__init__("Sea Giant", 10, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         buffs=[Buff(ManaChange(Count(MinionSelector(None, BothPlayer())), -1))])
 
     def create_minion(self, player):
         return Minion(8, 8)
-
-    def mana_cost(self, player):
-        cost = super().mana_cost(player) - len(player.game.players[0].minions) - len(player.game.players[1].minions)
-        if cost < 0:
-            return 0
-        return cost
 
 
 class DreadCorsair(MinionCard):
@@ -1550,9 +1536,8 @@ class Murloc(MinionCard):
 class MillhouseManastorm(MinionCard):
     def __init__(self):
         super().__init__("Millhouse Manastorm", 2, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
-                         battlecry=Battlecry(GiveEffect(Effect(TurnStarted(),
-                                                               GiveAura(ManaAura(100, 0, SpellSelector(), False, True)),
-                                                               PlayerSelector())), PlayerSelector(EnemyPlayer())))
+                         battlecry=Battlecry(GiveAura(AuraUntil(ManaChange(-100), SpellSelector(), TurnEnded())),
+                                             PlayerSelector(players=EnemyPlayer())))
 
     def create_minion(self, player):
         return Minion(4, 4)
@@ -1563,7 +1548,8 @@ class PintSizedSummoner(MinionCard):
         super().__init__("Pint-Sized Summoner", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[Effect(TurnStarted(), GiveAura(ManaAura(1, 0, MinionCardSelector(), True, True)),
+        return Minion(2, 2, effects=[Effect(TurnStarted(), GiveAura(AuraUntil(ManaChange(-1), MinionCardSelector(),
+                                                                              MinionPlaced())),
                                             PlayerSelector())])
 
 
@@ -1773,7 +1759,7 @@ class NerubarWeblord(MinionCard):
         super().__init__("Nerub'ar Weblord", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 4, auras=[Aura(ManaChange(-2, 0, BattlecrySelector()), PlayerSelector(BothPlayer()))])
+        return Minion(1, 4, auras=[Aura(ManaChange(2), BattlecrySelector(BothPlayer()))])
 
 
 class UnstableGhoul(MinionCard):
@@ -1787,7 +1773,7 @@ class UnstableGhoul(MinionCard):
 class Loatheb(MinionCard):
     def __init__(self):
         super().__init__("Loatheb", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
-                         battlecry=Battlecry(GiveAura(ManaAura(-5, 0, SpellSelector(), False)),
+                         battlecry=Battlecry(GiveAura(AuraUntil(ManaChange(5), SpellSelector(), TurnEnded())),
                                              PlayerSelector(players=EnemyPlayer())))
 
     def create_minion(self, player):
@@ -2021,8 +2007,7 @@ class Mechwarper(MinionCard):
         super().__init__("Mechwarper", 2, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(2, 3, auras=[Aura(ManaChange(1, 0, MinionCardSelector(IsType(MINION_TYPE.MECH))),
-                                        PlayerSelector())])
+        return Minion(2, 3, auras=[Aura(ManaChange(-1), MechCardSelector())])
 
 
 class Frog(MinionCard):
@@ -2035,14 +2020,11 @@ class Frog(MinionCard):
 
 class ClockworkGiant(MinionCard):
     def __init__(self):
-        super().__init__("Clockwork Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+        super().__init__("Clockwork Giant", 12, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH,
+                         buffs=[Buff(ManaChange(Count(CardSelector(EnemyPlayer())), -1))])
 
     def create_minion(self, player):
         return Minion(8, 8)
-
-    def mana_cost(self, player):
-        cost = super().mana_cost(player) - len(player.game.other_player.hand)
-        return cost
 
 
 class ClockworkGnome(MinionCard):

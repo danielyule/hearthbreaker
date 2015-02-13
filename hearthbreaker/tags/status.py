@@ -1,4 +1,3 @@
-import copy
 from hearthbreaker.tags.base import Status, Amount
 
 
@@ -116,49 +115,30 @@ class DoubleAttack(ChangeAttack):
         }
 
 
-class ManaChange(Status):
-    def __init__(self, amount, minimum, card_selector):
-        self.amount = amount
+class ManaChange(Status, metaclass=Amount):
+    def __init__(self, minimum=0):
+        super().__init__()
         self.minimum = minimum
-        self.card_selector = card_selector
-        self.filters = {}
 
     def act(self, actor, target):
-        class Filter:
-            def __init__(self, amount, minimum, filter):
-                self.amount = amount
-                self.min = minimum
-                self.filter = filter
-
-        self.card_selector.track_cards(target)
-        self.filters[target] = Filter(self.amount, self.minimum, lambda c: self.card_selector.match(target, c))
-        target.mana_filters.append(self.filters[target])
+        pass
 
     def unact(self, actor, target):
-        target.mana_filters.remove(self.filters[target])
-        self.card_selector.untrack_cards(target)
+        pass
 
-    def __deep_copy__(self, memo):
-        return ManaChange(self.amount, self.minimum, copy.deepcopy(self.card_selector, memo))
-
-    def __copy__(self):
-        return ManaChange(self.amount, self.minimum, self.card_selector)
+    def update(self, owner, prev_mana):
+        minimum = min(prev_mana, self.minimum)
+        return max(minimum, prev_mana + self.get_amount(owner, owner))
 
     def __to_json__(self):
+        if self.minimum:
+            return {
+                "name": "mana_change",
+                "minimum": self.minimum
+            }
         return {
             'name': 'mana_change',
-            'amount': self.amount,
-            'minimum': self.minimum,
-            'card_selector': self.card_selector,
         }
-
-    def __from_json__(self, amount, minimum, card_selector):
-        from hearthbreaker.tags.base import Selector
-        self.amount = amount
-        self.minimum = minimum
-        self.card_selector = Selector.from_json(**card_selector)
-        self.filters = {}
-        return self
 
 
 class Charge(Status):

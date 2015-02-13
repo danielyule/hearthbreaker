@@ -1,11 +1,10 @@
 import copy
 from hearthbreaker.cards.base import Card, SecretCard
 from hearthbreaker.game_objects import Minion, Hero
-from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import BuffUntil
+from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import CurrentPlayer, SpecificCardSelector
-from hearthbreaker.tags.status import Immune
+from hearthbreaker.tags.selector import CurrentPlayer
+from hearthbreaker.tags.status import Immune, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
@@ -111,7 +110,7 @@ class FreezingTrap(SecretCard):
     def _reveal(self, attacker, target):
         if isinstance(attacker, Minion) and not attacker.removed:
             attacker.bounce()
-            attacker.player.add_aura(ManaAura(-2, 0, SpecificCardSelector(attacker.card), True, False))
+            attacker.card.add_buff(Buff(ManaChange(2)))
             super().reveal()
 
 
@@ -283,15 +282,11 @@ class CallPet(Card):
     def use(self, player, game):
         def reduce_cost(card):
             if card.is_minion() and card.minion_type == MINION_TYPE.BEAST:
-                nonlocal aura
-                aura = ManaAura(4, 0, SpecificCardSelector(card), True, False)
+                card.add_buff(Buff(ManaChange(-4)))
 
         super().use(player, game)
-        aura = None
         player.bind_once("card_drawn", reduce_cost)
         player.draw()
-        if aura is not None:
-            player.add_aura(aura)
 
 
 class CobraShot(Card):

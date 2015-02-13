@@ -75,6 +75,14 @@ class TempleEnforcer(MinionCard):
         return Minion(6, 6)
 
 
+class ShadowOfNothing(MinionCard):
+    def __init__(self):
+        super().__init__("Shadow of Nothing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, p):
+        return Minion(0, 1)
+
+
 class DarkCultist(MinionCard):
     def __init__(self):
         super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)

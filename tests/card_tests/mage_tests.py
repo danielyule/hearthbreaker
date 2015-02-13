@@ -218,7 +218,7 @@ class TestMage(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        # Both Sorcer's Apprentices are killed by friendly Frostbolts.
+        # Both Sorcerer's Apprentices are killed by friendly Frostbolts.
         self.assertEqual(0, len(game.current_player.minions))
 
         # Make sure that the cards in hand are no longer reduced

@@ -1,6 +1,6 @@
 import copy
 from hearthbreaker.cards.base import Card, MinionCard
-from hearthbreaker.game_objects import Minion
+from hearthbreaker.cards.minions.priest import ShadowOfNothing
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.status import Stolen, SpellDamage
@@ -156,15 +156,6 @@ class Mindgames(Card):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class ShadowOfNothing(MinionCard):
-            def __init__(self):
-                super().__init__("Shadow of Nothing", 0,
-                                 CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, p):
-                minion = Minion(0, 1)
-                return minion
 
         minion_card = game.random_draw(game.other_player.deck.cards,
                                        lambda c: not c.drawn and isinstance(c, MinionCard))

@@ -194,6 +194,7 @@ class TestPriest(unittest.TestCase):
         # Cheat
         for index in range(0, 30):
             game.players[1].deck.cards[index].drawn = True
+        game.players[1].deck.left = 0
 
         game.play_single_turn()
         game.play_single_turn()

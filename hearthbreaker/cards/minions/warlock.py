@@ -77,7 +77,7 @@ class SummoningPortal(MinionCard):
         super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(0, 4, auras=[Aura(ManaChange(2, 1, MinionCardSelector()), PlayerSelector())])
+        return Minion(0, 4, auras=[Aura(ManaChange(-2, 1, minimum=1), MinionCardSelector())])
 
 
 class BloodImp(MinionCard):

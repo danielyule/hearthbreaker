@@ -644,9 +644,11 @@ class CardQuery(JSONObject):
             return chosen_card
         elif self.source == CARD_SOURCE.MY_HAND:
             player.hand.remove(chosen_card)
+            chosen_card.unattach()
             return chosen_card
         elif self.source == CARD_SOURCE.OPPONENT_HAND:
             player.opponent.hand.remove(chosen_card)
+            chosen_card.unattach()
             return chosen_card
 
     def __to_json__(self):

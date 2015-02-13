@@ -1,11 +1,10 @@
 import copy
 from hearthbreaker.cards.base import Card
 from hearthbreaker.tags.action import AddCard
-from hearthbreaker.tags.aura import ManaAura
-from hearthbreaker.tags.base import Effect, BuffUntil, Buff
-from hearthbreaker.tags.event import TurnStarted, TurnEnded
-from hearthbreaker.tags.selector import PlayerSelector, SpellSelector, SpecificCardSelector
-from hearthbreaker.tags.status import Stealth, ChangeAttack
+from hearthbreaker.tags.base import Effect, BuffUntil, Buff, AuraUntil
+from hearthbreaker.tags.event import TurnStarted, TurnEnded, SpellCast
+from hearthbreaker.tags.selector import PlayerSelector, SpellSelector
+from hearthbreaker.tags.status import Stealth, ChangeAttack, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
@@ -161,7 +160,7 @@ class Preparation(Card):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_aura(ManaAura(100, 0, SpellSelector(), True))
+        player.add_aura(AuraUntil(ManaChange(-3), SpellSelector(), SpellCast()))
 
 
 class Sap(Card):
@@ -184,7 +183,7 @@ class Shadowstep(Card):
         super().use(player, game)
 
         self.target.bounce()
-        player.add_aura(ManaAura(3, 0, SpecificCardSelector(self.target.card), True, False))
+        self.target.card.add_buff(Buff(ManaChange(-3)))
 
 
 class Shiv(Card):

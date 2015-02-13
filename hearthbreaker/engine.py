@@ -123,7 +123,9 @@ class Game(Bindable):
         for card in put_back_cards:
             self.players[1].put_back(card)
 
-        self.players[1].hand.append(card_lookup("The Coin"))
+        coin = card_lookup("The Coin")
+        coin.player = self.players[1]
+        self.players[1].hand.append(coin)
 
     def start(self):
         self.pre_game()
@@ -181,6 +183,11 @@ class Game(Bindable):
             minion.used_windfury = False
             minion.active = False
 
+        for aura in copy.copy(self.current_player.player_auras):
+            if isinstance(aura, AuraUntil):
+                self.current_player.player_auras.remove(aura)
+                aura.unapply()
+
         for secret in self.other_player.secrets:
             secret.deactivate(self.other_player)
 
@@ -223,6 +230,7 @@ class Game(Bindable):
             raise GameException("That card cannot be used")
         card_index = self.current_player.hand.index(card)
         self.current_player.hand.pop(card_index)
+        card.unattach()
         self.current_player.mana -= card.mana_cost(self.current_player)
         self._all_cards_played.append(card)
         card.target = None
@@ -338,7 +346,10 @@ class Player(Bindable):
         copied_player.hero = self.hero.copy(copied_player, new_game)
         copied_player.graveyard = copy.copy(self.graveyard)
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
-        copied_player.hand = [type(card)() for card in self.hand]
+        copied_player.hand = [copy.copy(card) for card in self.hand]
+        for card in copied_player.hand:
+            card._attached = False
+            card.attach(card, copied_player)
         copied_player.spell_damage = self.spell_damage
         copied_player.mana = self.mana
         copied_player.max_mana = self.max_mana
@@ -369,6 +380,7 @@ class Player(Bindable):
             self.trigger("card_drawn", card)
             if len(self.hand) < 10:
                 self.hand.append(card)
+                card.attach(card, self)
             else:
                 self.trigger("card_destroyed", card)
         else:
@@ -390,6 +402,7 @@ class Player(Bindable):
             return base_heal * self.heal_multiplier
 
     def put_back(self, card):
+        card.unattach()
         self.hand.remove(card)
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
@@ -422,9 +435,9 @@ class Player(Bindable):
 
     def remove_aura(self, aura):
         if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.object_auras = [au for au in filter(lambda a: not a.eq(aura), self.object_auras)]
+            self.object_auras = [au for au in filter(lambda a: a is not aura, self.object_auras)]
         else:
-            self.player_auras = [au for au in filter(lambda a: not a.eq(aura), self.player_auras)]
+            self.player_auras = [au for au in filter(lambda a: a is not aura, self.player_auras)]
         aura.unapply()
 
     def choose_target(self, targets):
@@ -440,7 +453,7 @@ class Player(Bindable):
             'hero': self.hero,
             'deck': self.deck,
             'graveyard': [card for card in self.graveyard],
-            'hand': [card.name for card in self.hand],
+            'hand': self.hand,
             'secrets': [secret.name for secret in self.secrets],
             'effects': self.effects,
             'auras': [aura for aura in filter(lambda a: isinstance(a, AuraUntil), auras)],
@@ -463,7 +476,12 @@ class Player(Bindable):
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
         player.name = pd['name']
-        player.hand = [card_lookup(name) for name in pd["hand"]]
+        player.hand = []
+        for card_def in pd['hand']:
+            card = card_lookup(card_def['name'])
+            card.__from_json__(card, **card_def)
+            card.attach(card, player)
+            player.hand.append(card)
         player.graveyard = set()
         for card_name in pd["graveyard"]:
             player.graveyard.add(card_name)
