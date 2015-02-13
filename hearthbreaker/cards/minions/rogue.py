@@ -1,11 +1,12 @@
 from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.cards.spells.rogue import GallywixsCoin
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget
-from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff
-from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn
-from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack
+from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard
+from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName
+from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
-    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer
+    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
@@ -111,3 +112,16 @@ class OgreNinja(MinionCard):
                                                                                                    EnemyPlayer(),
                                                                                                    RandomPicker())),
                                                           SelfSelector(), OneIn(2))])
+
+
+class TradePrinceGallywix(MinionCard):
+    def __init__(self):
+        super().__init__("Trade Prince Gallywix", 6, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(5, 8, effects=[Effect(SpellCast(Not(HasCardName("Gallywix's Coin")), EnemyPlayer()),
+                                            AddCard(CardQuery(source=CARD_SOURCE.LAST_CARD)),
+                                            PlayerSelector(FriendlyPlayer())),
+                                     Effect(SpellCast(Not(HasCardName("Gallywix's Coin")), EnemyPlayer()),
+                                            AddCard(GallywixsCoin()),
+                                            PlayerSelector(EnemyPlayer()))])

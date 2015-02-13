@@ -390,6 +390,8 @@ class HasCardName(Condition):
         self.card_name = card_name
 
     def evaluate(self, target, minion, *args):
+        if minion.is_card():
+            return minion.name == self.card_name
         return minion.card.name == self.card_name
 
     def __to_json__(self):

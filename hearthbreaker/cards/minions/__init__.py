@@ -306,6 +306,7 @@ from hearthbreaker.cards.minions.rogue import (
     OneeyedCheat,
     IronSensei,
     OgreNinja,
+    TradePrinceGallywix,
 )
 
 from hearthbreaker.cards.minions.shaman import (

@@ -268,3 +268,13 @@ class Sabotage(Card):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1
+
+
+class GallywixsCoin(Card):
+    def __init__(self):
+        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.mana < 10:
+            player.mana += 1

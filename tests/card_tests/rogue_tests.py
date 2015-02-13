@@ -671,3 +671,35 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(None, game.players[1].hero.weapon)
+
+    def test_TradePrinceGallywix(self):
+        game = generate_game_for([Wisp, Wisp, Wisp, TradePrinceGallywix, SinisterStrike], ArcaneExplosion,
+                                 OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        game.other_player.max_mana += 2
+        game.play_single_turn()
+
+        # The opponent played Arcane Explosion Twice, so we should have two copies of it (and none of Gallywix's coin)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-1].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-2].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-3].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-4].name)
+        self.assertEqual("Trade Prince Gallywix", game.other_player.hand[-5].name)
+
+        self.assertEqual(0, len(game.current_player.hand))
+
+        game.play_single_turn()
+
+        # The other player should not recieve anything for my spell_cast
+        self.assertEqual(0, len(game.other_player.hand))
+
+    def test_TradePrince_Gallywix_and_coin(self):
+        game = generate_game_for(TradePrinceGallywix, Blizzard, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        self.assertEqual("Gallywix's Coin", game.current_player.hand[-1].name)

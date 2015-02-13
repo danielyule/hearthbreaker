@@ -2407,3 +2407,28 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(21, game.other_player.deck.left)
+
+    def test_TradePrinceGallywix(self):
+        game = generate_game_for([Wisp, Wisp, Wisp, TradePrinceGallywix, SinisterStrike], ArcaneExplosion,
+                                 OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        game.other_player.max_mana += 2
+        game = game.copy()
+        game.play_single_turn()
+
+        # The opponent played Arcane Explosion Twice, so we should have two copies of it (and none of Gallywix's coin)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-1].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-2].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-3].name)
+        self.assertEqual("Arcane Explosion", game.other_player.hand[-4].name)
+        self.assertEqual("Trade Prince Gallywix", game.other_player.hand[-5].name)
+
+        self.assertEqual(0, len(game.current_player.hand))
+
+        game.play_single_turn()
+
+        # The other player should not recieve anything for my spell_cast
+        self.assertEqual(0, len(game.other_player.hand))
