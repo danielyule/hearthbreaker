@@ -903,13 +903,15 @@ class Minion(Character):
 
             def delayed_death(c):
                 self.unattach()
-                self.player.trigger("minion_died", self, by)
                 if deathrattle is not None:
                     for rattle in deathrattle:
                         rattle.do(self)
 
                         if self.player.double_deathrattle:
                             rattle.do(self)
+                self.player.trigger("minion_died", self, by)
+                # Used to activate any secrets applied during the death phase
+                self.player.trigger("after_death", self.player)
 
                 self.player.graveyard.add(self.card.name)
             self.bind_once("died", delayed_death)
