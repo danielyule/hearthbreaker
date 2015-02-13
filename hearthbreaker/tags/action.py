@@ -409,7 +409,13 @@ class ApplySecret(Action):
             secret.player = target
             if target is target.game.other_player:
                 secret.player = target
-                target.bind_once("minion_dead", secret.activate)
+                # To allow for Mad Scientist not to be redeemed or duplicated as a result of its death,
+                # but still allow other minions that die during the same cycle to be duplicated.
+                # Based on testing for patch 2.1.0.7785
+                if actor.dead:
+                    target.bind_once("after_death", secret.activate)
+                else:
+                    secret.activate(target)
 
     def __to_json__(self):
         return {
