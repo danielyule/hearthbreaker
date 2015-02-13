@@ -1496,10 +1496,20 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(7, len(game.players[0].minions))
-        self.assertEqual(8, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(8, game.players[0].minions[0].health)
+        self.assertEqual(8, game.players[0].minions[3].calculate_attack())
+        self.assertEqual(8, game.players[0].minions[3].health)
+        self.assertEqual(1, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())
         self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[2].health)
+        self.assertEqual(1, game.players[0].minions[4].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[4].health)
+        self.assertEqual(1, game.players[0].minions[5].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[5].health)
+        self.assertEqual(1, game.players[0].minions[6].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[6].health)
 
     def test_SouthseaCaptain(self):
         game = generate_game_for(SouthseaCaptain, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)

@@ -109,18 +109,17 @@ class Summon(Action):
             return
 
         if actor.is_minion() and actor.player is target:
-            # Cenaurius and Dr. Boom are special snowflakes that summon minions on either side of themselves
-            if self.count == 2:
-                card.summon(target, target.game, actor.index)
-                card.summon(target, target.game, actor.index + 1)
+            # When a minion is summoned around another minion, they alternate between left and right,
+            # starting on the right
+            if actor.removed:
+                c = 0
             else:
-                if actor.removed:
-                    index = actor.index
-                else:
-                    index = actor.index + 1
-                for summon in range(self.count):
-                    card.summon(target, target.game, index)
-                    index += 1
+                c = 1
+            for summon in range(self.count):
+                index = actor.index + (c % 2)
+                card.summon(target, target.game, index)
+                if not actor.removed:
+                    c += 1
         else:
             for summon in range(self.count):
                 card.summon(target, target.game, len(target.minions))
