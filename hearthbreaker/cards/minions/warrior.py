@@ -2,13 +2,13 @@ from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.cards.spells.warrior import BurrowingMine
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
-from hearthbreaker.tags.base import Effect, Battlecry, Enrage
-from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
+from hearthbreaker.tags.base import Effect, Battlecry, Enrage, Buff
+from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
-    PlayerSelector, EnemyPlayer
+    PlayerSelector, EnemyPlayer, UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import ChangeAttack, Charge
+from hearthbreaker.tags.status import ChangeAttack, Charge, ChangeHealth
 
 
 class BattleAxe(WeaponCard):
@@ -110,3 +110,13 @@ class IronJuggernaut(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 5)
+
+
+class ScrewjankClunker(MinionCard):
+    def __init__(self):
+        super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, MINION_TYPE.MECH,
+                         battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2))]),
+                                             MinionSelector(IsType(MINION_TYPE.MECH), picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(2, 5)

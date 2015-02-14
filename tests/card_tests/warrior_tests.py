@@ -577,3 +577,33 @@ class TestWarrior(unittest.TestCase):
                 found_mine = True
 
         self.assertTrue(found_mine, "Did not find the burrowing mine in the opponent's deck")
+
+    def test_ScrewjankClunker(self):
+        game = generate_game_for([Wisp, ScrewjankClunker, ScrewjankClunker], [Wisp, MoltenGiant],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(8):
+            game.play_single_turn()
+
+        # Clunker cannot buff anything
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+
+        # Clunker buffs previous Clunker
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(4, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[0].minions[2].health)
+        self.assertEqual(1, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)

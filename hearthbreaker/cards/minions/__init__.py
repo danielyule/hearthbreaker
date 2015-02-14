@@ -361,4 +361,5 @@ from hearthbreaker.cards.minions.warrior import (
     Shieldmaiden,
     SiegeEngine,
     IronJuggernaut,
+    ScrewjankClunker,
 )
