@@ -560,7 +560,8 @@ class CARD_SOURCE:
     OPPONENT_DECK = 4
     LIST = 5
     LAST_CARD = 6
-    MINION = 7
+    LAST_DRAWN = 7
+    MINION = 8
     __sources = {
         "COLLECTION": COLLECTION,
         "MY_HAND": MY_HAND,
@@ -569,6 +570,7 @@ class CARD_SOURCE:
         "OPPONENT_DECK": OPPONENT_DECK,
         "LIST": LIST,
         "LAST_CARD": LAST_CARD,
+        "LAST_DRAWN": LAST_DRAWN,
         "MINION": MINION,
     }
 
@@ -611,8 +613,13 @@ class CardQuery(JSONObject):
             card_list = self.source_list
         elif self.source == CARD_SOURCE.LAST_CARD:
             return type(player.game.last_card)()
+        elif self.source == CARD_SOURCE.LAST_DRAWN:
+            chosen_card = player.hand[-1]
+            player.hand.remove(chosen_card)
+            chosen_card.unattach()
+            return chosen_card
         elif self.source == CARD_SOURCE.MINION:
-            return self.minion.get_targets(owner, owner)[0].card
+            card_list = [minion.card for minion in self.minion.get_targets(owner, owner)]
         else:
             card_list = []
         # TODO Throw an exception in any other case?

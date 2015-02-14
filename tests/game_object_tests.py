@@ -61,8 +61,8 @@ class TestGame(unittest.TestCase):
         self.assertTrue(game.players[0].agent == agent1, "Agent not stored in the hearthbreaker")
         self.assertTrue(game.players[1].agent == agent2, "Agent not stored in the hearthbreaker")
 
-        self.assertListEqual(checked_cards[0][1:], game.players[0].hand[:-1], "Cards not retained after request")
-        self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[:-4], "Cards not retained after request")
+        self.assertListEqual(checked_cards[0][1:], game.players[0].hand[1:], "Cards not retained after request")
+        self.assertListEqual(checked_cards[1][1:2], game.players[1].hand[1:2], "Cards not retained after request")
 
     def test_first_turn(self):
         card_set1 = []

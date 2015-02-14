@@ -50,6 +50,10 @@ class JSONTester:
 
             if 'buffs' in card_def:
                 init_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+            if 'auras' in card_def:
+                init_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+            if 'effects' in card_def:
+                init_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
 
             MinionCard.__init__(self, **init_dict)
 
@@ -70,6 +74,13 @@ class JSONTester:
 
             if 'overload' in card_def:
                 init_dict['overload'] = card_def['overload']
+
+            if 'buffs' in card_def:
+                init_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+            if 'auras' in card_def:
+                init_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+            if 'effects' in card_def:
+                init_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
 
             WeaponCard.__init__(self, **init_dict)
 

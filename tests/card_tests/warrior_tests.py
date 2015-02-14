@@ -554,3 +554,26 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(2, game.players[0].mana)
+
+    def test_BurrowingMine(self):
+        game = generate_game_for(BurrowingMine, StonetuskBoar, DoNothingAgent, DoNothingAgent)
+
+        game.play_single_turn()
+        self.assertEqual(0, game.current_player.hero.health)
+        self.assertEqual(3, len(game.current_player.hand))
+        self.assertEqual(0, game.current_player.deck.left)
+
+    def test_IronJuggernaut(self):
+        game = generate_game_for(IronJuggernaut, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Iron Juggernaut", game.current_player.minions[0].card.name)
+
+        found_mine = False
+        for card in game.other_player.deck.cards:
+            if card.name == "Burrowing Mine":
+                found_mine = True
+
+        self.assertTrue(found_mine, "Did not find the burrowing mine in the opponent's deck")

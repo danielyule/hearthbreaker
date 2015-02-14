@@ -381,6 +381,34 @@
     }
   }, 
   {
+    "name": "Flame Leviathan", 
+    "minion_type": "Mech", 
+    "character_class": "Mage", 
+    "rarity": "Legendary", 
+    "mana": 7, 
+    "attack": 7, 
+    "health": 7, 
+    "effects": [
+      {
+        "action": {
+          "amount": 2, 
+          "name": "damage"
+        }, 
+        "event": {
+          "event_name": "drawn"
+        }, 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "character"
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
     "name": "Aldor Peacekeeper", 
     "character_class": "Paladin", 
     "rarity": "Rare", 
@@ -7050,7 +7078,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 1, 
+          "amount": 2, 
           "name": "damage"
         }
       ], 
@@ -9423,6 +9451,68 @@
     }
   }, 
   {
+    "name": "Trade Prince Gallywix", 
+    "character_class": "Rogue", 
+    "rarity": "Legendary", 
+    "mana": 6, 
+    "attack": 5, 
+    "health": 8, 
+    "type": "minion", 
+    "impl": {
+      "effects": [
+        {
+          "action": {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "source": "last_card", 
+              "conditions": []
+            }
+          }, 
+          "event": {
+            "event_name": "spell_cast", 
+            "player": "enemy", 
+            "condition": {
+              "name": "not", 
+              "condition": {
+                "card_name": "Gallywix's Coin", 
+                "name": "has_card_name"
+              }
+            }
+          }, 
+          "selector": {
+            "players": "friendly", 
+            "name": "player"
+          }
+        }, 
+        {
+          "action": {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "name": "Gallywix's Coin"
+            }
+          }, 
+          "event": {
+            "event_name": "spell_cast", 
+            "player": "enemy", 
+            "condition": {
+              "name": "not", 
+              "condition": {
+                "card_name": "Gallywix's Coin", 
+                "name": "has_card_name"
+              }
+            }
+          }, 
+          "selector": {
+            "players": "enemy", 
+            "name": "player"
+          }
+        }
+      ]
+    }
+  }, 
+  {
     "name": "Al'Akir the Windlord", 
     "character_class": "Shaman", 
     "rarity": "Legendary", 
@@ -10199,6 +10289,34 @@
         }
       ]
     }
+  }, 
+  {
+    "name": "Iron Juggernaut", 
+    "minion_type": "Mech", 
+    "character_class": "Warrior", 
+    "rarity": "Legendary", 
+    "mana": 6, 
+    "attack": 6, 
+    "health": 5, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "add_to_deck": true, 
+            "name": "add_card", 
+            "card": {
+              "name": "Burrowing Mine"
+            }
+          }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
+        }
+      }
+    ], 
+    "type": "minion"
   }, 
   {
     "name": "Ashbringer", 

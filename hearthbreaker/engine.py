@@ -96,32 +96,35 @@ class Game(Bindable):
             return
         self.__pre_game_run = True
 
-        for i in range(0, 3):
-            self.players[0].draw()
+        p1_draw = [self.players[0].deck.draw(self) for i in range(3)]
+        p2_draw = [self.players[1].deck.draw(self) for i in range(4)]
 
-        for i in range(0, 4):
-            self.players[1].draw()
-        card_keep_index = self.players[0].agent.do_card_check(self.players[0].hand)
-        self.trigger("kept_cards", self.players[0].hand, card_keep_index)
+        card_keep_index = self.players[0].agent.do_card_check(p1_draw)
+        self.trigger("kept_cards", p1_draw, card_keep_index)
         put_back_cards = []
         for card_index in range(0, 3):
             if not card_keep_index[card_index]:
-                self.players[0].draw()
-                put_back_cards.append(self.players[0].hand[card_index])
-
+                put_back_cards.append(p1_draw[card_index])
+                p1_draw[card_index] = self.players[0].deck.draw(self)
+        self.players[0].hand = p1_draw
         for card in put_back_cards:
             self.players[0].put_back(card)
+        for card in self.players[0].hand:
+            card.attach(card, self.players[0])
 
-        card_keep_index = self.players[1].agent.do_card_check(self.players[1].hand)
-        self.trigger("kept_cards", self.players[1].hand, card_keep_index)
+        card_keep_index = self.players[1].agent.do_card_check(p2_draw)
+        self.trigger("kept_cards", p2_draw, card_keep_index)
         put_back_cards = []
         for card_index in range(0, 4):
             if not card_keep_index[card_index]:
-                self.players[1].draw()
-                put_back_cards.append(self.players[1].hand[card_index])
-
+                put_back_cards.append(p2_draw[card_index])
+                p2_draw[card_index] = self.players[1].deck.draw(self)
+        self.players[1].hand = p2_draw
         for card in put_back_cards:
             self.players[1].put_back(card)
+
+        for card in self.players[1].hand:
+            card.attach(card, self.players[1])
 
         coin = card_lookup("The Coin")
         coin.player = self.players[1]
@@ -381,6 +384,7 @@ class Player(Bindable):
             if len(self.hand) < 10:
                 self.hand.append(card)
                 card.attach(card, self)
+                card.trigger("drawn")
             else:
                 self.trigger("card_destroyed", card)
         else:
@@ -403,7 +407,6 @@ class Player(Bindable):
 
     def put_back(self, card):
         card.unattach()
-        self.hand.remove(card)
         self.deck.put_back(card)
         self.trigger("card_put_back", card)
 

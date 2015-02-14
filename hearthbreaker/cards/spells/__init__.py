@@ -204,4 +204,5 @@ from hearthbreaker.cards.spells.warrior import (
     Whirlwind,
     BouncingBlade,
     Crush,
+    BurrowingMine,
 )

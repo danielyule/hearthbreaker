@@ -1,7 +1,6 @@
-import copy
 from hearthbreaker.tags.base import MinionEvent, PlayerEvent
 from hearthbreaker.tags.condition import MinionIsNotTarget, CardIsNotTarget
-from hearthbreaker.tags.selector import FriendlyPlayer, Player
+from hearthbreaker.tags.selector import FriendlyPlayer
 
 
 class SpellCast(PlayerEvent):
@@ -24,41 +23,6 @@ class SpellCast(PlayerEvent):
                 super().__action__(card, index)
             else:
                 self.__func__(card, index)
-
-
-class Either(PlayerEvent):
-    def __init__(self, event1, event2, player=FriendlyPlayer()):
-        super().__init__("either", None, player)
-        self.event1 = event1
-        self.event2 = event2
-
-    def bind(self, target, func):
-        self.event1.bind(target, func)
-        self.event2.bind(target, func)
-
-    def unbind(self, target, func):
-        self.event1.unbind(target, func)
-        self.event2.unbind(target, func)
-
-    def __deepcopy__(self, memo):
-        new = super().__deepcopy__(memo)
-        new.event1 = copy.deepcopy(self.event1, memo)
-        new.event2 = copy.deepcopy(self.event2, memo)
-        return new
-
-    def __to_json__(self):
-        return {
-            'event_name': self.event_name,
-            'event1': self.event1,
-            'event2': self.event2,
-            'player': self.player
-        }
-
-    def __from_json__(self, **kwargs):
-        event1 = self.from_json(**kwargs['event1'])
-        event2 = self.from_json(**kwargs['event2'])
-        player = Player.from_json(kwargs['player'])
-        return Either(event1, event2, player)
 
 
 class CardPlayed(PlayerEvent):
@@ -149,3 +113,8 @@ class WeaponDestroyed(MinionEvent):
 class Damaged(MinionEvent):
     def __init__(self):
         super().__init__("damaged")
+
+
+class Drawn(MinionEvent):
+    def __init__(self):
+        super().__init__("drawn")

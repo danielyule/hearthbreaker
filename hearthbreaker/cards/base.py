@@ -24,7 +24,7 @@ class Card(Bindable, GameObject):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable, overload=0, ref_name=None, buffs=None):
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
 
@@ -51,12 +51,13 @@ class Card(Bindable, GameObject):
                                          for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a
                                          function which returns true if the target's attack is less than 3.
             :param int overload: The amount of overload on the card
-
+            :param effects:  The effects that will be triggered for this card
+            :type effects: [:class:`hearthbreaker.tags.base.Effect`]
             :param buffs:  The buffs that will be applied directly to this card
             :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
         Bindable.__init__(self)
-        GameObject.__init__(self, buffs=buffs)
+        GameObject.__init__(self, effects=effects, buffs=buffs)
         self.name = name
         if ref_name:
             self.ref_name = ref_name
@@ -173,7 +174,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
                  targeting_func=None, filter_func=_battlecry_targetable, ref_name=None, battlecry=None,
-                 choices=None, combo=None, overload=0, buffs=None):
+                 choices=None, combo=None, overload=0, effects=None, buffs=None):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -200,10 +201,13 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param combo: Describes the battlecry this minion will have if played after another card.  Note that this
                       does not count as a battlecry for cards such as Nerub'ar Weblord.
         :type combo: :class:`hearthbreaker.tags.base.Battlecry`
+        :param effects:  The effects that will be triggered for this card (as opposed to the minion this card creates)
+            :type effects: [:class:`hearthbreaker.tags.base.Effect`]
         :param buffs:  The buffs that will be applied directly to this card (as opposed to the minion this card creates)
             :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name, buffs)
+        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name,
+                         effects, buffs)
         self.minion_type = minion_type
         if battlecry:
             if isinstance(battlecry, tuple):

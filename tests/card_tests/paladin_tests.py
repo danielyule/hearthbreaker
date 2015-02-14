@@ -272,12 +272,14 @@ class TestPaladin(unittest.TestCase):
         game.players[0].hero.health = 20
         # Put back some cards from hand, for testing purpose
         for putback in range(0, 4):
-            game.players[1].put_back(game.players[1].hand[0])
+            card = game.players[1].hand.pop()
+            game.players[1].put_back(card)
         game.players[1].put_back(game.players[1].hand[1])
+        game.players[1].hand.remove(game.players[1].hand[1])
         self.assertEqual(5, len(game.players[1].hand))
         game.play_single_turn()  # Lay on Hands should be played
         self.assertEqual(28, game.players[0].hero.health)
-        self.assertEqual(7, len(game.players[1].hand))
+        self.assertEqual(8, len(game.players[1].hand))
         game.play_single_turn()
         game.play_single_turn()  # Lay on Hands should be played, and a card be discarded since we have 8 already
         self.assertEqual(30, game.players[0].hero.health)

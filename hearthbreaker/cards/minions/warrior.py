@@ -1,11 +1,12 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.cards.spells.warrior import BurrowingMine
 from hearthbreaker.game_objects import Weapon, Minion
-from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip
+from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
 from hearthbreaker.tags.base import Effect, Battlecry, Enrage
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
-    PlayerSelector
+    PlayerSelector, EnemyPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, Charge
 
@@ -100,3 +101,12 @@ class SiegeEngine(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 5, effects=[Effect(ArmorIncreased(), ChangeAttack(1), SelfSelector())])
+
+
+class IronJuggernaut(MinionCard):
+    def __init__(self):
+        super().__init__("Iron Juggernaut", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY, MINION_TYPE.MECH,
+                         battlecry=Battlecry(AddCard(BurrowingMine(), add_to_deck=True), PlayerSelector(EnemyPlayer())))
+
+    def create_minion(self, player):
+        return Minion(6, 5)

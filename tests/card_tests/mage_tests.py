@@ -798,3 +798,16 @@ class TestMage(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
         self.assertEqual(5, game.players[0].minions[1].health)
+
+    def test_FlameLeviathan(self):
+        game = generate_game_for(Wisp, FlameLeviathan, CardTestingAgent, CardTestingAgent)
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+        self.assertEqual(28, game.other_player.hero.health)

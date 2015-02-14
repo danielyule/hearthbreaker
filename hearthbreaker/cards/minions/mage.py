@@ -5,9 +5,9 @@ from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.base import Effect, Aura, Battlecry, AuraUntil
 from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent, IsSecret
-from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded, CardPlayed
+from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded, CardPlayed, Drawn
 from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
-    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count
+    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count, BothPlayer
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Frozen, NoSpellTarget, ManaChange
 
 
@@ -110,3 +110,13 @@ class WeeSpellstopper(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 5, auras=[Aura(NoSpellTarget(), MinionSelector(Adjacent()))])
+
+
+class FlameLeviathan(MinionCard):
+    def __init__(self):
+        super().__init__("Flame Leviathan", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.LEGENDARY,
+                         minion_type=MINION_TYPE.MECH,
+                         effects=[Effect(Drawn(), Damage(2), CharacterSelector(None, BothPlayer()))])
+
+    def create_minion(self, player):
+        return Minion(7, 7)

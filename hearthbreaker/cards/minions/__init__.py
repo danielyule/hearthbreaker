@@ -267,6 +267,7 @@ from hearthbreaker.cards.minions.mage import (
     GoblinBlastmage,
     SootSpewer,
     WeeSpellstopper,
+    FlameLeviathan,
 )
 
 from hearthbreaker.cards.minions.paladin import (
@@ -358,4 +359,5 @@ from hearthbreaker.cards.minions.warrior import (
     Warbot,
     Shieldmaiden,
     SiegeEngine,
+    IronJuggernaut,
 )
