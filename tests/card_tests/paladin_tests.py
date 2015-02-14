@@ -705,3 +705,17 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[2].health)
         self.assertEqual(3, game.players[0].minions[3].calculate_attack())
         self.assertEqual(3, game.players[0].minions[3].health)
+
+    def test_ScarletPurifier(self):
+        game = generate_game_for([LootHoarder, ScarletPurifier], [StonetuskBoar, NerubianEgg],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+
+        self.assertEqual("Scarlet Purifier", game.current_player.minions[0].card.name)
+        self.assertEqual("Nerubian", game.other_player.minions[0].card.name)
+        self.assertEqual("Stonetusk Boar", game.other_player.minions[1].card.name)

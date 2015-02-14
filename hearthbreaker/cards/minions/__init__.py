@@ -279,6 +279,7 @@ from hearthbreaker.cards.minions.paladin import (
     SilverHandRecruit,
     ShieldedMinibot,
     Quartermaster,
+    ScarletPurifier,
 )
 
 from hearthbreaker.cards.minions.priest import (

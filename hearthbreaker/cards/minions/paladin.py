@@ -1,11 +1,12 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.game_objects import Weapon, Minion
-from hearthbreaker.tags.action import Equip, Give, Heal
+from hearthbreaker.tags.action import Equip, Give, Heal, Damage
 from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff
-from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector
+from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector, \
+    BothPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack
-from hearthbreaker.tags.condition import IsType, HasCardName
+from hearthbreaker.tags.condition import IsType, HasCardName, MinionHasDeathrattle
 from hearthbreaker.tags.event import MinionSummoned
 
 
@@ -88,3 +89,12 @@ class Quartermaster(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 5)
+
+
+class ScarletPurifier(MinionCard):
+    def __init__(self):
+        super().__init__("Scarlet Purifier", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Damage(2), MinionSelector(MinionHasDeathrattle(), BothPlayer())))
+
+    def create_minion(self, player):
+        return Minion(4, 3)
