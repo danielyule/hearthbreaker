@@ -2432,3 +2432,21 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         # The other player should not recieve anything for my spell_cast
         self.assertEqual(0, len(game.other_player.hand))
+
+    def test_MalGanis(self):
+        game = generate_game_for([FlameImp, MalGanis], FlameImp, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertTrue(game.current_player.hero.immune)
+        self.assertFalse(game.other_player.hero.immune)
+        self.assertEqual(5, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(9, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(7, game.current_player.minions[0].calculate_max_health())
+
+        for minion in game.other_player.minions:
+            self.assertEqual(3, minion.calculate_attack())
+            self.assertEqual(2, minion.calculate_max_health())

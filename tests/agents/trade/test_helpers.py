@@ -1,9 +1,7 @@
-import random
 from hearthbreaker.agents.basic_agents import RandomAgent
 from hearthbreaker.agents.trade_agent import TradeAgent
 from hearthbreaker.cards import WarGolem, TheCoin
 from hearthbreaker.cards.base import MinionCard
-from hearthbreaker.engine import Game, Player
 import re
 from hearthbreaker.game_objects import Minion
 from tests.testing_utils import generate_game_for
@@ -39,39 +37,6 @@ class TempCard(MinionCard):
             taunt = True
             h = g.group(1)
         return TempCard(int(a), int(h), taunt=taunt, name=s)
-
-
-class FakePlayer(Player):
-    def __init__(self, name, deck, agent, game):
-        super().__init__(name, deck, agent, game)
-        self.draws_to_prevent = 1
-
-    def draw(self):
-        if self.draws_to_prevent == 0:
-            return super().draw()
-        else:
-            self.draws_to_prevent -= 1
-
-
-class FakeGame(Game):
-    def __init__(self, decks, agents, random_func=random.randint):
-        super(Game, self).__init__()
-        self.delayed_minions = set()
-        self.random_func = random_func
-        self.first_player = random_func(0, 1)
-        if self.first_player is 0:
-            play_order = [0, 1]
-        else:
-            play_order = [1, 0]
-        self.players = [FakePlayer("one", decks[play_order[0]], agents[play_order[0]], self),
-                        FakePlayer("two", decks[play_order[1]], agents[play_order[1]], self)]
-        self.current_player = self.players[0]
-        self.other_player = self.players[1]
-        self.current_player.opponent = self.other_player
-        self.other_player.opponent = self.current_player
-        self.game_ended = False
-        self.minion_counter = 0
-        self.__pre_game_run = False
 
 
 class TestHelpers:

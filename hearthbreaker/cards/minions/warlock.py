@@ -7,7 +7,7 @@ from hearthbreaker.tags.condition import IsType, MinionCountIs, Not
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
     SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
-from hearthbreaker.tags.status import ChangeHealth, ManaChange
+from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
 
 
 class FlameImp(MinionCard):
@@ -195,3 +195,13 @@ class FelCannon(MinionCard):
     def create_minion(self, player):
         return Minion(3, 5, effects=[Effect(TurnEnded(), Damage(2), MinionSelector(Not(IsType(MINION_TYPE.MECH, True)),
                                                                                    BothPlayer(), RandomPicker()))])
+
+
+class MalGanis(MinionCard):
+    def __init__(self):
+        super().__init__("Mal'Ganis", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(9, 7, auras=[Aura(ChangeHealth(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
+                                   Aura(ChangeAttack(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
+                                   Aura(Immune(), HeroSelector())])
