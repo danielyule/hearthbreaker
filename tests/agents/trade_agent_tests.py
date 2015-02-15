@@ -1,8 +1,8 @@
 import unittest
+from hearthbreaker.agents.trade.possible_play import PossiblePlays
 from hearthbreaker.cards import Wisp, WarGolem, BloodfenRaptor, RiverCrocolisk, AbusiveSergeant, ArgentSquire
 from tests.agents.trade.test_helpers import TestHelpers
 from tests.agents.trade.test_case_mixin import TestCaseMixin
-from hearthbreaker.agents.trade.possible_play import PossiblePlays
 
 
 class TestTradeAgent(TestCaseMixin, unittest.TestCase):
@@ -38,7 +38,8 @@ class TestTradeAgent(TestCaseMixin, unittest.TestCase):
         game.play_single_turn()
 
     def test_hero_power(self):
-        cards = [ArgentSquire()]
+        game = self.make_game()
+        cards = self.make_cards(game.current_player, ArgentSquire())
         possible_plays = PossiblePlays(cards, 10, allow_hero_power=True)
 
         self.assertEqual(1, len(possible_plays.plays()))

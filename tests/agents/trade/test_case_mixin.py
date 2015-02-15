@@ -21,6 +21,8 @@ class TestCaseMixin:
             for minion in player.minions:
                 minion.active = True
                 minion.exhausted = False
+            for card in player.hand:
+                card.player = player
 
     def assert_minions(self, player, *names):
         actual = self.card_names(player.minions)
@@ -57,14 +59,17 @@ class TestCaseMixin:
     def make_trades(self, me, opp):
         return self.make_trades2(me, opp)[1]
 
-    def make_cards(self, *cards):
-        return [c for c in cards]
+    def make_cards(self, player, *cards):
+        cards = [c for c in cards]
+        for c in cards:
+            c.player = player
+        return cards
 
     def make_game(self):
         return TestHelpers().make_game()
 
     def set_hand(self, game, player_index, *cards):
-        cards = self.make_cards(*cards)
+        cards = self.make_cards(game.players[player_index], *cards)
         game.players[player_index].hand = cards
 
     def set_mana(self, game, player_index, mana):

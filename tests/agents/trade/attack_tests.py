@@ -71,8 +71,9 @@ class TestTradeAgentAttackBasicTests(TestCaseMixin, unittest.TestCase):
 
 class TestTradeAgentAttackTradesTests(TestCaseMixin, unittest.TestCase):
     def test_trades_smart(self):
-        me = self.make_cards(MagmaRager())
-        opp = self.make_cards(Wisp(), ChillwindYeti())
+        game = self.make_game()
+        me = self.make_cards(game.current_player, MagmaRager())
+        opp = self.make_cards(game.other_player, Wisp(), ChillwindYeti())
 
         trades = self.make_trades(me, opp)
 
@@ -80,8 +81,9 @@ class TestTradeAgentAttackTradesTests(TestCaseMixin, unittest.TestCase):
         self.assertEqual(trades.trades()[0].opp_minion.name, "Chillwind Yeti")
 
     def test_trades_smart2(self):
-        me = self.make_cards(Voidwalker())
-        opp = self.make_cards(Wisp(), ChillwindYeti())
+        game = self.make_game()
+        me = self.make_cards(game.current_player, Voidwalker())
+        opp = self.make_cards(game.other_player, Wisp(), ChillwindYeti())
 
         trades = self.make_trades(me, opp)
 
