@@ -222,6 +222,7 @@ from hearthbreaker.cards.minions.neutral import (
     TinkertownTechnician,
     Junkbot,
     Jeeves,
+    LilExorcist,
 )
 
 from hearthbreaker.cards.minions.druid import (

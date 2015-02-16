@@ -2335,3 +2335,16 @@ class Jeeves(MinionCard):
         return Minion(1, 4, effects=[Effect(TurnEnded(player=BothPlayer()),
                                             Draw(Difference(Count(CardSelector(players=CurrentPlayer())), value=3)),
                                             PlayerSelector(CurrentPlayer()))])
+
+
+class LilExorcist(MinionCard):
+    def __init__(self):
+        super().__init__("Lil' Exorcist", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Give([Buff(ChangeAttack(Count(MinionSelector(MinionHasDeathrattle(),
+                                                                                          BothPlayer())))),
+                                                   Buff(ChangeHealth(Count(MinionSelector(MinionHasDeathrattle(),
+                                                                                          BothPlayer()))))]),
+                                             SelfSelector()))
+
+    def create_minion(self, player):
+        return Minion(2, 3, taunt=True)

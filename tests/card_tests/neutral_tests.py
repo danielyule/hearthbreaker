@@ -4155,3 +4155,26 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(3, len(game.players[0].hand))
         self.assertEqual(3, len(game.players[1].hand))
+
+    def test_LilExorcist(self):
+        game = generate_game_for([LeperGnome, LilExorcist, MassDispel], [LeperGnome],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        # 1 friendly and 2 enemy deathrattles = +3/+3
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].taunt)
+
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        # Original enemy Leper Gnomes silenced.  2 friendly DR + 2 enemy DR + 3 silenced Leper Gnomes = +4/+4
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)
+        self.assertTrue(game.players[0].minions[0].taunt)
