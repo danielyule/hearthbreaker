@@ -103,10 +103,10 @@ class SacrificialPact(Card):
     def __init__(self):
         super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target,
-                         lambda character: (isinstance(character, Minion)
-                                            and character.card.minion_type is MINION_TYPE.DEMON)
-                         or (isinstance(character, Hero)
-                             and character.character_class is CHARACTER_CLASS.LORD_JARAXXUS))
+                         lambda character: (isinstance(character, Minion) and
+                                            character.card.minion_type is MINION_TYPE.DEMON) or
+                         (isinstance(character, Hero) and
+                          character.character_class is CHARACTER_CLASS.LORD_JARAXXUS))
 
     def use(self, player, game):
         super().use(player, game)

@@ -394,10 +394,9 @@ class DarkWispers(Card):
         super().__init__("Dark Wispers", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def can_use(self, player, game):
-        return (super().can_use(player, game)
-                and (len(player.minions) < 7
-                     or hearthbreaker.targeting.find_minion_spell_target(game,
-                                                                         lambda t: t.spell_targetable()) is not None))
+        return (super().can_use(player, game) and
+                (len(player.minions) < 7 or
+                 hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable()) is not None))
 
     def use(self, player, game):
         super().use(player, game)
