@@ -279,6 +279,16 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))  # The boar has been misdirected into another boar
         self.assertEqual(30, game.current_player.hero.health)
 
+    def test_MisdirectionToHero(self):
+        game = generate_game_for(Misdirection, BluegillWarrior, CardTestingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.other_player.hero.health)  # The murloc should be misdirected
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(28, game.current_player.hero.health)
+
     def test_FreezingTrapAndMisdirection(self):
         game = generate_game_for([Misdirection, FreezingTrap], Wolfrider,
                                  CardTestingAgent, PlayAndAttackAgent)

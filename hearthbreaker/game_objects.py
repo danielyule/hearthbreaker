@@ -406,8 +406,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         target = self.choose_target(targets)
         self._remove_stealth()
         self.current_target = target
-        self.player.trigger("character_attack", self, target)
-        self.trigger("attack", target)
+        self.player.trigger("character_attack", self, self.current_target)
+        self.trigger("attack", self.current_target)
         if self.removed or self.dead:  # removed won't be set yet if the Character died during this attack
             return
         target = self.current_target
