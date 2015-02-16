@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.engine import Game
-from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, PlayAndAttackAgent
+from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, PlayAndAttackAgent, SelfSpellTestingAgent
 from hearthbreaker.constants import CHARACTER_CLASS
 from tests.testing_utils import generate_game_for, StackedDeck
 from hearthbreaker.replay import playback, Replay
@@ -778,3 +778,22 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertEqual(1, game.players[1].minions[1].health)
         self.assertFalse(game.players[1].minions[1].divine_shield)
+
+    def test_LightOfTheNaaru(self):
+        game = generate_game_for(MindBlast, LightOfTheNaaru, OneCardPlayingAgent, SelfSpellTestingAgent)
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))
+
+        # Mind Blast
+        game.play_single_turn()
+
+        self.assertEqual(25, game.players[1].hero.health)
+
+        # Double Light of the Naaru but only 1 Lightwarden summoned, 1st Lightwarden buffed by 2nd Light of the Naaru
+        game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(3, game.players[1].minions[0].calculate_attack())

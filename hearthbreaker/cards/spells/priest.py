@@ -1,6 +1,7 @@
 import copy
 from hearthbreaker.cards.base import Card, MinionCard
 from hearthbreaker.cards.minions.priest import ShadowOfNothing
+from hearthbreaker.cards.minions.neutral import Lightwarden
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.status import Stolen, SpellDamage
@@ -307,3 +308,20 @@ class Lightbomb(Card):
 
         for minion in targets:
             minion.damage(player.effective_spell_damage(minion.calculate_attack()), self)
+
+
+class LightOfTheNaaru(Card):
+    def __init__(self):
+        super().__init__("Light of the Naaru", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
+                         hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        self.target.heal(player.effective_heal_power(3), self)
+
+        lightwarden = Lightwarden()
+        if self.target is None:
+            lightwarden.summon(player, game, len(player.minions))
+        elif self.target.health != self.target.calculate_max_health():
+            lightwarden.summon(player, game, len(player.minions))

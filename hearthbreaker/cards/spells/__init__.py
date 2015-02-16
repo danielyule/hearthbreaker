@@ -123,6 +123,7 @@ from hearthbreaker.cards.spells.priest import (
     Thoughtsteal,
     VelensChosen,
     Lightbomb,
+    LightOfTheNaaru,
 )
 
 from hearthbreaker.cards.spells.rogue import (
