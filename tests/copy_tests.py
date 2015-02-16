@@ -6,7 +6,7 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
-    EnemyMinionSpellTestingAgent
+    EnemyMinionSpellTestingAgent, HeroPowerAndCardPlayingAgent
 from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -2451,3 +2451,30 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         for minion in game.other_player.minions:
             self.assertEqual(3, minion.calculate_attack())
             self.assertEqual(2, minion.calculate_max_health())
+
+    def test_FloatingWatcher(self):
+        game = generate_game_for(FloatingWatcher, Hellfire, HeroPowerAndCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(9, game.current_player.hero.health)
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(6, game.other_player.hero.health)
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.other_player.minions[0].calculate_max_health())
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.hero.health)
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(6, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(6, game.current_player.minions[1].calculate_max_health())

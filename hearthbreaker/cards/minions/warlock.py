@@ -1,10 +1,10 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Weapon, Minion
-from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry
-from hearthbreaker.tags.condition import IsType, MinionCountIs, Not
-from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff
+from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And
+from hearthbreaker.tags.event import TurnEnded, CharacterDamaged
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
     SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker
 from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
@@ -205,3 +205,13 @@ class MalGanis(MinionCard):
         return Minion(9, 7, auras=[Aura(ChangeHealth(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
                                    Aura(ChangeAttack(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
                                    Aura(Immune(), HeroSelector())])
+
+
+class FloatingWatcher(MinionCard):
+    def __init__(self):
+        super().__init__("Floating Watcher", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(4, 4, effects=[Effect(CharacterDamaged(And(IsHero(), OwnersTurn())),
+                                            Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
+                                            SelfSelector())])

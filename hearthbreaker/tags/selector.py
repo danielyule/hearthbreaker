@@ -502,3 +502,7 @@ class Difference(Function, metaclass=Amount):
             'name': 'difference',
             'value': self.value,
         }
+
+    def __from_json__(self, value):
+        self.value = value
+        return self

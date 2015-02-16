@@ -171,6 +171,28 @@ class Not(Condition):
         return self
 
 
+class And(Condition):
+    def __init__(self, *conditions):
+        super().__init__()
+        self.conditions = conditions
+
+    def evaluate(self, target, *args):
+        for condition in self.conditions:
+            if not condition.evaluate(target, *args):
+                return False
+        return True
+
+    def __to_json__(self):
+        return {
+            'name': 'and',
+            'conditions': self.conditions
+        }
+
+    def __from_json__(self, conditions):
+        self.conditions = [Condition.from_json(**condition) for condition in conditions]
+        return self
+
+
 class IsType(Condition):
     def __init__(self, minion_type, include_self=False):
         super().__init__()
@@ -398,4 +420,24 @@ class HasCardName(Condition):
         return {
             'name': 'has_card_name',
             'card_name': self.card_name,
+        }
+
+
+class OwnersTurn(Condition):
+    def evaluate(self, target, minion, *args):
+        return minion.player is minion.player.game.current_player
+
+    def __to_json__(self):
+        return {
+            'name': 'owners_turn'
+        }
+
+
+class IsHero(Condition):
+    def evaluate(self, target, character, *args):
+        return character.is_hero()
+
+    def __to_json__(self):
+        return {
+            'name': 'is_hero'
         }

@@ -97,7 +97,7 @@ spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), Time
 
 class GallywixsCoin(Card):
     def __init__(self):
-        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.SPECIAL)
+        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
     def use(self, player, game):
         super().use(player, game)

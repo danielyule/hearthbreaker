@@ -350,6 +350,7 @@ from hearthbreaker.cards.minions.warlock import (
     WorthlessImp,
     FelCannon,
     MalGanis,
+    FloatingWatcher,
 )
 
 from hearthbreaker.cards.minions.warrior import (
