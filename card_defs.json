@@ -649,6 +649,35 @@
     "type": "minion"
   }, 
   {
+    "name": "Scarlet Purifier", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "attack": 4, 
+    "health": 3, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_has_deathrattle"
+          }
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
     "name": "Auchenai Soulpriest", 
     "character_class": "Priest", 
     "rarity": "Rare", 
@@ -1452,6 +1481,68 @@
                 "include_self": true
               }
             }
+          }
+        }
+      ]
+    }
+  }, 
+  {
+    "name": "Mal'Ganis", 
+    "minion_type": "Demon", 
+    "character_class": "Warlock", 
+    "rarity": "Legendary", 
+    "mana": 9, 
+    "attack": 9, 
+    "health": 7, 
+    "type": "minion", 
+    "impl": {
+      "auras": [
+        {
+          "status": {
+            "amount": 2, 
+            "name": "change_health"
+          }, 
+          "selector": {
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "friendly", 
+            "name": "minion", 
+            "condition": {
+              "name": "is_type", 
+              "minion_type": "Demon", 
+              "include_self": false
+            }
+          }
+        }, 
+        {
+          "status": {
+            "amount": 2, 
+            "name": "change_attack"
+          }, 
+          "selector": {
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "friendly", 
+            "name": "minion", 
+            "condition": {
+              "name": "is_type", 
+              "minion_type": "Demon", 
+              "include_self": false
+            }
+          }
+        }, 
+        {
+          "status": {
+            "name": "immune"
+          }, 
+          "selector": {
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "friendly", 
+            "name": "hero"
           }
         }
       ]
@@ -7078,7 +7169,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 2, 
+          "amount": 4, 
           "name": "damage"
         }
       ], 

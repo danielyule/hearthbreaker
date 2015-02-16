@@ -348,6 +348,7 @@ from hearthbreaker.cards.minions.warlock import (
     AnimaGolem,
     WorthlessImp,
     FelCannon,
+    MalGanis,
 )
 
 from hearthbreaker.cards.minions.warrior import (

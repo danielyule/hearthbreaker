@@ -15,12 +15,12 @@ class PossiblePlay:
             if card.name == "The Coin":
                 return -1
             else:
-                return card.mana
+                return card.mana_cost(card.player)
 
         return reduce(lambda s, c: s + eff_mana(c), self.cards, 0)
 
     def sorted_mana(self):
-        return Util.reverse_sorted(map(lambda c: c.mana, self.cards))
+        return Util.reverse_sorted(map(lambda c: c.mana_cost(c.player), self.cards))
 
     def wasted(self):
         return self.available_mana - self.card_mana()
@@ -110,9 +110,13 @@ class HeroPowerCard:
     def __init__(self):
         self.mana = 2
         self.name = "Hero Power"
+        self.player = None
 
     def can_use(self, player, game):
         return True
+
+    def mana_cost(self, player):
+        return 2
 
 
 class PossiblePlays(CoinPlays):
@@ -131,8 +135,15 @@ class PossiblePlays(CoinPlays):
     def raw_plays_without_coin(self):
         res = []
 
+        def valid_card(card):
+            saved_mana = card.player.mana
+            card.player.mana = self.mana
+            usable = card.can_use(card.player, card.player.game)
+            card.player.mana = saved_mana
+            return usable
+
         possible = [card for card in
-                    filter(lambda card: card.mana <= self.mana, self.cards)]
+                    filter(valid_card, self.cards)]
 
         if self.possible_is_pointless_coin(possible):
             possible = []
@@ -148,12 +159,12 @@ class PossiblePlays(CoinPlays):
 
             if card.name == 'Hero Power':
                 f_plays = PossiblePlays(rest,
-                                        self.mana - card.mana,
+                                        self.mana - card.mana_cost(card.player),
                                         allow_hero_power=False).raw_plays()
             else:
                 rest.remove(card)
                 f_plays = PossiblePlays(rest,
-                                        self.mana - card.mana,
+                                        self.mana - card.mana_cost(card.player),
                                         allow_hero_power=self.allow_hero_power).raw_plays()
 
             for following_play in f_plays:
