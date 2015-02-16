@@ -332,6 +332,7 @@ from hearthbreaker.cards.minions.shaman import (
     SiltfinSpiritwalker,
     WhirlingZapomatic,
     DunemaulShaman,
+    Neptulon,
 )
 
 from hearthbreaker.cards.minions.warlock import (

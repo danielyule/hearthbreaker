@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget
-from hearthbreaker.tags.base import Aura, Effect, Battlecry
+from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget, AddCard
+from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
@@ -152,3 +152,19 @@ class DunemaulShaman(MinionCard):
                                                                                           EnemyPlayer(),
                                                                                           RandomPicker())),
                                                            SelfSelector(), OneIn(2))])
+
+
+class Neptulon(MinionCard):
+    def __init__(self):
+        from hearthbreaker.cards.minions.neutral import BluegillWarrior, ColdlightOracle, ColdlightSeer, \
+            GrimscaleOracle, MurlocRaider, MurlocTidecaller, MurlocTidehunter, MurlocWarleader, OldMurkEye, \
+            Puddlestomper
+        murloc_list = [BluegillWarrior(), ColdlightOracle(), ColdlightSeer(), GrimscaleOracle(), MurlocRaider(),
+                       MurlocTidecaller(), MurlocTidehunter(), MurlocWarleader(), OldMurkEye(), Puddlestomper(),
+                       SiltfinSpiritwalker()]
+        super().__init__("Neptulon", 7, CHARACTER_CLASS.SHAMAN, CARD_RARITY.LEGENDARY, overload=3,
+                         battlecry=Battlecry(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=murloc_list), 4),
+                                             PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(7, 7)

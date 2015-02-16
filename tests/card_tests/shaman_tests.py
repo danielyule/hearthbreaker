@@ -590,3 +590,22 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(24, game.players[1].hero.health)
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
+
+    def test_Neptulon(self):
+        game = generate_game_for([TheCoin, TheCoin, TheCoin, TheCoin, TheCoin, TheCoin, TheCoin, TheCoin, TheCoin,
+                                  Neptulon], Wisp, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[0].hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+        self.assertEqual("Siltfin Spiritwalker", game.players[0].hand[0].name)
+        self.assertEqual("Murloc Tidecaller", game.players[0].hand[1].name)
+        self.assertEqual("Grimscale Oracle", game.players[0].hand[2].name)
+        self.assertEqual("Coldlight Seer", game.players[0].hand[3].name)
