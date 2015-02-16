@@ -727,7 +727,6 @@ class TestHunter(unittest.TestCase):
         # Tested by @jleclanche for patch 2.1.0.7785
         self.assertEqual(12, game.current_player.minions[0].calculate_attack())
 
-    @unittest.expectedFailure
     def test_ogre_misdirection(self):
         game = generate_game_for(OgreBrute, Misdirection,
                                  PlayAndAttackAgent, OneCardPlayingAgent)

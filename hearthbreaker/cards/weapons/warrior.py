@@ -3,7 +3,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
 from hearthbreaker.tags.base import Deathrattle, Effect
-from hearthbreaker.tags.condition import IsMinion, NotCurrentTarget, OneIn
+from hearthbreaker.tags.condition import IsMinion, NotCurrentTarget, OneIn, OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
     RandomPicker, SelfSelector
@@ -49,4 +49,5 @@ class OgreWarmaul(WeaponCard):
         return Weapon(4, 2, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
                                                                                      EnemyPlayer(),
                                                                                      RandomPicker())),
-                                            SelfSelector(), OneIn(2))])
+                                            SelfSelector(),
+                                            And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])

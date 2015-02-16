@@ -3,7 +3,8 @@ from hearthbreaker.cards.spells.neutral import GallywixsCoin
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE
-from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName
+from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName, \
+    OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
     BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector
@@ -111,7 +112,8 @@ class OgreNinja(MinionCard):
         return Minion(6, 6, stealth=True, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
                                                                                                    EnemyPlayer(),
                                                                                                    RandomPicker())),
-                                                          SelfSelector(), OneIn(2))])
+                                                          SelfSelector(),
+                                                          And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
 
 
 class TradePrinceGallywix(MinionCard):
