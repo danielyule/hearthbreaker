@@ -2329,5 +2329,5 @@ class Jeeves(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 4, effects=[Effect(TurnEnded(player=BothPlayer()),
-                                            Draw(Difference(3, CardSelector(players=CurrentPlayer()))),
+                                            Draw(Difference(Count(CardSelector(players=CurrentPlayer())), value=3)),
                                             PlayerSelector(CurrentPlayer()))])

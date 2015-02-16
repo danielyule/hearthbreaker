@@ -1,6 +1,6 @@
 import abc
 from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.tags.base import Selector, Player, Picker, Function
+from hearthbreaker.tags.base import Selector, Player, Picker, Function, Amount
 import hearthbreaker.tags.condition
 
 
@@ -490,22 +490,15 @@ class Attribute(Function):
         return self
 
 
-class Difference(Function):
-    def __init__(self, amount, selector):
-        self.amount = amount
-        self.selector = selector
+class Difference(Function, metaclass=Amount):
+    def __init__(self, value):
+        self.value = value
 
     def do(self, target):
-        return max(0, self.amount - len(self.selector.get_targets(target)))
+        return max(0, self.value - self.get_amount(target, target))
 
     def __to_json__(self):
         return {
             'name': 'difference',
-            'amount': self.ammount,
-            'selector': self.selector
+            'value': self.value,
         }
-
-    def __from_json__(self, amount, selector):
-        self.amount = amount
-        self.selector = Selector.from_json(**selector)
-        return self
