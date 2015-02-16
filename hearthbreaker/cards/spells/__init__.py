@@ -122,6 +122,7 @@ from hearthbreaker.cards.spells.priest import (
     Silence,
     Thoughtsteal,
     VelensChosen,
+    Lightbomb,
 )
 
 from hearthbreaker.cards.spells.rogue import (
