@@ -293,3 +293,17 @@ class VelensChosen(Card):
         self.target.change_attack(2)
         self.target.increase_health(4)
         self.target.add_buff(Buff(SpellDamage(1)))
+
+
+class Lightbomb(Card):
+    def __init__(self):
+        super().__init__("Lightbomb", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(player.minions)
+
+        for minion in targets:
+            minion.damage(player.effective_spell_damage(minion.calculate_attack()), self)
