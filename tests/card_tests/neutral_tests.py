@@ -4150,7 +4150,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()
 
-        # Double Whirlwing, Jeeves, 
+        # Double Whirlwing, Jeeves,
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(3, len(game.players[0].hand))

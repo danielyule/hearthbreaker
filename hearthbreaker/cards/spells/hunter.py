@@ -127,19 +127,13 @@ class Misdirection(SecretCard):
     def _reveal(self, character, target):
         if isinstance(target, Hero) and not character.removed:
             game = character.player.game
+            possibilities = copy.copy(game.current_player.minions)
+            possibilities.extend(game.other_player.minions)
+            possibilities.append(game.current_player.hero)
+            possibilities.append(game.other_player.hero)
+            possibilities.remove(character.current_target)
+            character.current_target = game.random_choice(possibilities)
 
-            def choose_random(targets):
-                possibilities = copy.copy(game.current_player.minions)
-                possibilities.extend(game.other_player.minions)
-                possibilities.append(game.current_player.hero)
-                possibilities.append(game.other_player.hero)
-                old_target = old_target_func(targets)
-                possibilities.remove(old_target)
-                game.current_player.agent.choose_target = old_target_func
-                return game.random_choice(possibilities)
-
-            old_target_func = game.current_player.agent.choose_target
-            game.current_player.agent.choose_target = choose_random
             super().reveal()
 
 
