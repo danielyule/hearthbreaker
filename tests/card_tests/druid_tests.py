@@ -980,3 +980,46 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(6, len(game.players[0].hand))
         self.assertEqual(9, len(game.players[1].hand))
+
+    def test_TreeOfLife(self):
+        game = generate_game_for([SpiderTank, Hellfire, TreeOfLife], [SpiderTank, Deathwing],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(27, game.current_player.hero.health)
+        self.assertEqual(27, game.other_player.hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[0].minions[0].health)
+        self.assertEqual(4, game.players[1].minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+
+    def test_TreeOfLifeAuchenai(self):
+        game = generate_game_for([ShieldBlock, AuchenaiSoulpriest, TreeOfLife], [ShieldBlock, Deathwing],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 16):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)
+        self.assertEqual(5, game.current_player.hero.armor)
+        self.assertEqual(5, game.other_player.hero.armor)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(5, game.current_player.hero.health)
+        self.assertEqual(5, game.other_player.hero.health)
+        self.assertEqual(0, game.current_player.hero.armor)
+        self.assertEqual(0, game.other_player.hero.armor)

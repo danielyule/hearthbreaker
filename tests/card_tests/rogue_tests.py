@@ -713,7 +713,6 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertIsNone(game.players[0].hero.weapon)
 
-
         game.play_single_turn()
 
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)

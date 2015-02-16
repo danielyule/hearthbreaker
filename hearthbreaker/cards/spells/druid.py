@@ -451,3 +451,18 @@ class Recycle(Card):
         super().use(player, game)
         player.opponent.deck.put_back(self.target)
         self.target.remove_from_board()
+
+
+class TreeOfLife(Card):
+    def __init__(self):
+        super().__init__("Tree of Life", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(game.current_player.minions)
+        targets.append(game.other_player.hero)
+        targets.append(game.current_player.hero)
+        for target in targets:
+            target.heal(player.effective_heal_power(target.calculate_max_health()), self)

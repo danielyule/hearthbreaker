@@ -31,6 +31,7 @@ from hearthbreaker.cards.spells.druid import (
     PoisonSeeds,
     DarkWispers,
     Recycle,
+    TreeOfLife,
 )
 
 from hearthbreaker.cards.spells.hunter import (
