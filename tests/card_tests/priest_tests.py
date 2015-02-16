@@ -457,6 +457,32 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(2, game.players[0].minions[1].health)
         self.assertEqual(30, game.players[0].hero.health)
 
+    def test_Lightwell2(self):
+        game = generate_game_for([Lightwell, Deathwing], Whirlwind, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 4):
+            game.play_single_turn()
+
+        self.assertEqual(4, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, game.players[0].minions[0].health)
+
     def test_NorthshireCleric(self):
         game = generate_game_for(NorthshireCleric, StonetuskBoar, PredictableAgent, PredictableAgent)
 

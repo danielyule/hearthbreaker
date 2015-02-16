@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
-from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType
+from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
     EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector
@@ -44,7 +44,7 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(picker=RandomPicker()))])
+        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(condition=IsDamaged(), picker=RandomPicker()))])
 
 
 class NorthshireCleric(MinionCard):

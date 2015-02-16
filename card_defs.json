@@ -1301,7 +1301,7 @@
           "picker": {
             "name": "user"
           }, 
-          "players": "both", 
+          "players": "friendly", 
           "name": "minion", 
           "condition": {
             "name": "minion_is_not_target"
@@ -7549,7 +7549,7 @@
             "players": "friendly", 
             "name": "character", 
             "condition": {
-              "name": "minion_is_not_target"
+              "name": "is_damaged"
             }
           }
         }
@@ -10440,7 +10440,7 @@
         ], 
         "selector": {
           "picker": {
-            "name": "all"
+            "name": "user"
           }, 
           "players": "both", 
           "name": "minion", 

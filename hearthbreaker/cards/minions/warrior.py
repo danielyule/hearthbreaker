@@ -39,7 +39,8 @@ class Armorsmith(MinionCard):
 class CruelTaskmaster(MinionCard):
     def __init__(self):
         super().__init__("Cruel Taskmaster", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
-                         battlecry=Battlecry([Damage(1), Give(ChangeAttack(2))], MinionSelector(players=BothPlayer())))
+                         battlecry=Battlecry([Damage(1), Give(ChangeAttack(2))], MinionSelector(players=BothPlayer(),
+                                                                                                picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(2, 2)

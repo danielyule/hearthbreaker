@@ -64,6 +64,20 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(2, game.players[1].minions[0].calculate_attack())
         self.assertEqual(3, game.players[1].minions[0].health)
 
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(2, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[0].health)
+        self.assertEqual(2, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(3, game.players[1].minions[1].health)
+
     def test_FrothingBerserker(self):
         game = generate_game_for(FrothingBerserker, AngryChicken, OneCardPlayingAgent, PlayAndAttackAgent)
 

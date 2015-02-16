@@ -539,7 +539,7 @@ class ShatteredSunCleric(MinionCard):
     def __init__(self):
         super().__init__("Shattered Sun Cleric", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
                          battlecry=Battlecry(Give([Buff(ChangeAttack(1)), Buff(ChangeHealth(1))]),
-                                             MinionSelector(players=BothPlayer(), picker=UserPicker())))
+                                             MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(3, 2)
@@ -2341,9 +2341,9 @@ class LilExorcist(MinionCard):
     def __init__(self):
         super().__init__("Lil' Exorcist", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
                          battlecry=Battlecry(Give([Buff(ChangeAttack(Count(MinionSelector(MinionHasDeathrattle(),
-                                                                                          BothPlayer())))),
+                                                                                          EnemyPlayer())))),
                                                    Buff(ChangeHealth(Count(MinionSelector(MinionHasDeathrattle(),
-                                                                                          BothPlayer()))))]),
+                                                                                          EnemyPlayer()))))]),
                                              SelfSelector()))
 
     def create_minion(self, player):
