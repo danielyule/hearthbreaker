@@ -6,7 +6,7 @@ import hearthbreaker.tags.condition
 
 class FriendlyPlayer(Player):
     def match(self, source, obj):
-        return source.player is obj.player
+        return obj.player is source.player
 
     def get_players(self, target):
         return [target]
@@ -20,7 +20,7 @@ class EnemyPlayer(Player):
         return [target.opponent]
 
     def match(self, source, obj):
-        return source.player is obj.player.opponent
+        return obj.player is source.player.opponent
 
     def __to_json__(self):
         return "enemy"
@@ -39,7 +39,7 @@ class BothPlayer(Player):
 
 class PlayerOne(Player):
     def match(self, source, obj):
-        return source.player is obj.player.game.players[0]
+        return obj.player is source.player.game.players[0]
 
     def get_players(self, target):
         return [target.game.players[0]]
@@ -50,7 +50,7 @@ class PlayerOne(Player):
 
 class PlayerTwo(Player):
     def match(self, source, obj):
-        return source.player is obj.player.game.players[1]
+        return obj.player is source.player.game.players[1]
 
     def get_players(self, target):
         return [target.game.players[1]]
@@ -61,7 +61,7 @@ class PlayerTwo(Player):
 
 class CurrentPlayer(Player):
     def match(self, source, obj):
-        return source.player is obj.player.game.current_player
+        return obj.player is source.player.game.current_player
 
     def get_players(self, target):
         return [target.game.current_player]
@@ -72,7 +72,7 @@ class CurrentPlayer(Player):
 
 class OtherPlayer(Player):
     def match(self, source, obj):
-        return source.player is obj.player.game.other_player
+        return obj.player is source.player.game.other_player
 
     def get_players(self, target):
         return [target.game.other_player]

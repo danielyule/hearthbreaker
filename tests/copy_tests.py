@@ -2439,6 +2439,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         for turn in range(17):
             game.play_single_turn()
 
+        game = game.copy()
         self.assertEqual(2, len(game.current_player.minions))
         self.assertTrue(game.current_player.hero.immune)
         self.assertFalse(game.other_player.hero.immune)
