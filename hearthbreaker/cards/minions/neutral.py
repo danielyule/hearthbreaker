@@ -14,7 +14,8 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
-    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, MechCardSelector
+    HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
+    MechCardSelector, Difference
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus, ManaChange
@@ -2320,3 +2321,13 @@ class Junkbot(MinionCard):
     def create_minion(self, player):
         return Minion(1, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MECH)),
                                      Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]), SelfSelector())])
+
+
+class Jeeves(MinionCard):
+    def __init__(self):
+        super().__init__("Jeeves", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(1, 4, effects=[Effect(TurnEnded(player=BothPlayer()),
+                                            Draw(Difference(3, CardSelector(players=CurrentPlayer()))),
+                                            PlayerSelector(CurrentPlayer()))])

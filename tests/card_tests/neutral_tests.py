@@ -4103,3 +4103,55 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+
+    def test_Jeeves(self):
+        game = generate_game_for([Wisp], [Whirlwind, Whirlwind, Jeeves],
+                                 CardTestingAgent, CardTestingAgent)
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        # Whirlwinds kill the first 2 turns of Wisps, the 2 on turns 3 and 4 survive
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(6, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        # Jeeves leaves 4 cards in hand, so no draws
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(6, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        # Wisp and then draw 3 cards
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(6, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        # Whirlwind Coin Whirlwind Jeeves, already at 3 cards
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(3, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        # Quad wisp, 3 draws (not 6)
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(3, len(game.players[1].hand))
+
+        game.play_single_turn()
+
+        # Double Whirlwing, Jeeves, 
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+        self.assertEqual(3, len(game.players[1].hand))

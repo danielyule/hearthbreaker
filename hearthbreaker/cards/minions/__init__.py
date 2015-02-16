@@ -221,6 +221,7 @@ from hearthbreaker.cards.minions.neutral import (
     GoblinSapper,
     TinkertownTechnician,
     Junkbot,
+    Jeeves,
 )
 
 from hearthbreaker.cards.minions.druid import (

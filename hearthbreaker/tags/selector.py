@@ -488,3 +488,24 @@ class Attribute(Function):
         self.attribute = attribute
         self.selector = Selector.from_json(**selector)
         return self
+
+
+class Difference(Function):
+    def __init__(self, amount, selector):
+        self.amount = amount
+        self.selector = selector
+
+    def do(self, target):
+        return max(0, self.amount - len(self.selector.get_targets(target)))
+
+    def __to_json__(self):
+        return {
+            'name': 'difference',
+            'amount': self.ammount,
+            'selector': self.selector
+        }
+
+    def __from_json__(self, amount, selector):
+        self.amount = amount
+        self.selector = Selector.from_json(**selector)
+        return self
