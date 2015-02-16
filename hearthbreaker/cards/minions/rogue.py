@@ -1,5 +1,5 @@
 from hearthbreaker.cards.base import MinionCard
-from hearthbreaker.cards.spells.rogue import GallywixsCoin
+from hearthbreaker.cards.spells.neutral import GallywixsCoin
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE

@@ -6,6 +6,16 @@ from hearthbreaker.tags.status import Stealth, Taunt, Frozen
 import hearthbreaker.targeting
 
 
+class TheCoin(Card):
+    def __init__(self):
+        super().__init__("The Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.mana < 10:
+            player.mana += 1
+
+
 class ArmorPlating(Card):
     def __init__(self):
         super().__init__("Armor Plating", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
@@ -83,3 +93,13 @@ class WhirlingBlades(Card):
 
 spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), TimeRewinder(), ReversingSwitch(),
                    RustyHorn(), WhirlingBlades()]
+
+
+class GallywixsCoin(Card):
+    def __init__(self):
+        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.SPECIAL)
+
+    def use(self, player, game):
+        super().use(player, game)
+        if player.mana < 10:
+            player.mana += 1

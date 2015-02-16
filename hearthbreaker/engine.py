@@ -12,7 +12,7 @@ card_table = {}
 
 
 def __create_card_table():
-    from hearthbreaker.cards import Card
+    from hearthbreaker.cards.base import Card
 
     def __card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
