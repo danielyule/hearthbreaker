@@ -224,6 +224,7 @@ from hearthbreaker.cards.minions.neutral import (
     Jeeves,
     Recombobulator,
     LilExorcist,
+    EnhanceoMechano,
 )
 
 from hearthbreaker.cards.minions.druid import (

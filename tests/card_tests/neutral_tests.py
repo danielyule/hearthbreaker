@@ -4187,3 +4187,41 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(1, game.current_player.minions[1].card.mana)
         self.assertEqual("Stonetusk Boar", game.other_player.minions[0].card.name)
+
+    def test_EnhanceoMechano(self):
+        game = generate_game_for(EnhanceoMechano, Wisp, OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        for minion in game.other_player.minions:
+            self.assertFalse(minion.taunt)
+            self.assertFalse(minion.divine_shield)
+            self.assertFalse(minion.windfury)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertFalse(game.current_player.minions[1].taunt)
+        self.assertTrue(game.current_player.minions[1].divine_shield)
+        self.assertFalse(game.current_player.minions[1].windfury)
+        for minion in game.other_player.minions:
+            self.assertFalse(minion.taunt)
+            self.assertFalse(minion.divine_shield)
+            self.assertFalse(minion.windfury)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[1].taunt)
+        self.assertFalse(game.current_player.minions[1].divine_shield)
+        self.assertFalse(game.current_player.minions[1].windfury)
+        self.assertFalse(game.current_player.minions[2].taunt)
+        self.assertTrue(game.current_player.minions[2].divine_shield)
+        self.assertTrue(game.current_player.minions[2].windfury)
+        for minion in game.other_player.minions:
+            self.assertFalse(minion.taunt)
+            self.assertFalse(minion.divine_shield)
+            self.assertFalse(minion.windfury)

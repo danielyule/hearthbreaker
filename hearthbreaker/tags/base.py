@@ -90,6 +90,9 @@ class Buff(Tag):
     def unapply(self):
         self.status.unact(self.owner, self.owner)
 
+    def is_minion(self):
+        return False
+
     def __to_json__(self):
         if self.condition:
             return {

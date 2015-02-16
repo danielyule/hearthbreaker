@@ -1,10 +1,11 @@
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect, Buff, BuffUntil, Amount
+    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker
 from hearthbreaker.tags.condition import IsSecret
+from hearthbreaker.tags.selector import AllPicker
 
 
 class Give(Action):
-    def __init__(self, buffs):
+    def __init__(self, buffs, picker=AllPicker()):
 
         if isinstance(buffs, Status):
             self.buffs = [Buff(buffs)]
@@ -16,20 +17,28 @@ class Give(Action):
             raise TypeError("Aura passed where buff was expected")
         else:
             self.buffs = [buffs]
+        self.picker = picker
 
     def act(self, actor, target):
-        for buff in self.buffs:
+        buffs = self.picker.pick(self.buffs, actor.player)
+        for buff in buffs:
             if hasattr(buff.status, "amount"):
                 buff.status.amount = buff.status.get_amount(target, target)
             target.add_buff(buff)
 
     def __to_json__(self):
+        if isinstance(self.picker, AllPicker):
+            return {
+                'name': 'give',
+                'buffs': self.buffs
+            }
         return {
             'name': 'give',
-            'buffs': self.buffs
+            'buffs': self.buffs,
+            'picker': self.picker,
         }
 
-    def __from_json__(self, buffs=None, effects=None, auras=None):
+    def __from_json__(self, buffs=None, effects=None, auras=None, picker=None):
         if effects:  # To allow for give to work with effects as well, we check at load time
             return GiveEffect.__new__(GiveEffect).__from_json__(effects)
 
@@ -42,6 +51,11 @@ class Give(Action):
                 self.buffs.append(BuffUntil.from_json(**buff))
             else:
                 self.buffs.append(Buff.from_json(**buff))
+
+        if not picker:
+            self.picker = AllPicker()
+        else:
+            self.picker = Picker.from_json(**picker)
         return self
 
 

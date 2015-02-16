@@ -44,7 +44,8 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(condition=IsDamaged(), picker=RandomPicker()))])
+        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(condition=IsDamaged(),
+                                                                                      picker=RandomPicker()))])
 
 
 class NorthshireCleric(MinionCard):

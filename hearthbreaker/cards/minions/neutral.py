@@ -18,7 +18,7 @@ from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySel
     MechCardSelector, Difference
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
-    SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus, ManaChange
+    SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus, ManaChange, DivineShield
 import hearthbreaker.targeting
 import copy
 
@@ -2356,6 +2356,20 @@ class Recombobulator(MinionCard):
                          battlecry=Battlecry(Transform(CardQuery(conditions=[
                              ManaCost(Attribute("mana", SelfSelector())), IsMinion()])),
                              MinionSelector(picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(3, 2)
+
+
+class EnhanceoMechano(MinionCard):
+    def __init__(self):
+        super().__init__("Enhance-o Mechano", 4, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC, MINION_TYPE.MECH,
+                         battlecry=Battlecry(Give([
+                                                  Buff(Windfury()),
+                                                  Buff(Taunt()),
+                                                  Buff(DivineShield())],
+                                                  RandomPicker()),
+                                             MinionSelector()))
 
     def create_minion(self, player):
         return Minion(3, 2)

@@ -6681,7 +6681,7 @@
                       "picker": {
                         "name": "all"
                       }, 
-                      "players": "both", 
+                      "players": "enemy", 
                       "name": "minion", 
                       "condition": {
                         "name": "minion_has_deathrattle"
@@ -6699,7 +6699,7 @@
                       "picker": {
                         "name": "all"
                       }, 
-                      "players": "both", 
+                      "players": "enemy", 
                       "name": "minion", 
                       "condition": {
                         "name": "minion_has_deathrattle"
@@ -6763,6 +6763,56 @@
         "selector": {
           "picker": {
             "name": "user"
+          }, 
+          "players": "friendly", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "Enhance-o Mechano", 
+    "minion_type": "Mech", 
+    "character_class": "", 
+    "rarity": "Epic", 
+    "mana": 4, 
+    "attack": 3, 
+    "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "picker": {
+              "count": 1, 
+              "name": "random"
+            }, 
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "name": "windfury"
+                }
+              }, 
+              {
+                "status": {
+                  "name": "taunt"
+                }
+              }, 
+              {
+                "status": {
+                  "name": "divine_shield"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
           }, 
           "players": "friendly", 
           "name": "minion", 
