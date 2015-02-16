@@ -117,8 +117,9 @@ class PaladinPower(Power):
 
     def use(self):
         super().use()
+        from hearthbreaker.cards.minions.paladin import SilverHandRecruit
 
-        recruit_card = hearthbreaker.cards.minions.paladin.SilverHandRecruit()
+        recruit_card = SilverHandRecruit()
         recruit_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 
@@ -178,16 +179,17 @@ class ShamanPower(Power):
 
     def use(self):
         super().use()
+        from hearthbreaker.cards.minions.shaman import HealingTotem, SearingTotem, StoneclawTotem, WrathOfAirTotem
 
         totems = []
         if not self.healing_totem:
-            totems.append(hearthbreaker.cards.minions.shaman.HealingTotem())
+            totems.append(HealingTotem())
         if not self.searing_totem:
-            totems.append(hearthbreaker.cards.minions.shaman.SearingTotem())
+            totems.append(SearingTotem())
         if not self.stoneclaw_totem:
-            totems.append(hearthbreaker.cards.minions.shaman.StoneclawTotem())
+            totems.append(StoneclawTotem())
         if not self.wrath_of_air_totem:
-            totems.append(hearthbreaker.cards.minions.shaman.WrathOfAirTotem())
+            totems.append(WrathOfAirTotem())
 
         random_totem = self.hero.player.game.random_choice(totems)
         random_totem.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
@@ -209,8 +211,9 @@ class JaraxxusPower(Power):
 
     def use(self):
         super().use()
+        from hearthbreaker.cards.minions.warlock import Infernal
 
-        infernal_card = hearthbreaker.cards.minions.warlock.Infernal()
+        infernal_card = Infernal()
         infernal_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
 
 

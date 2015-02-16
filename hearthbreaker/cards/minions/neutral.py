@@ -21,7 +21,6 @@ from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt,
     SpellDamage, DoubleDeathrattle, Frozen, IncreaseWeaponBonus, ManaChange
 import hearthbreaker.targeting
 import copy
-from hearthbreaker.cards.spells.neutral import spare_part_list
 
 
 class BloodfenRaptor(MinionCard):
@@ -2033,6 +2032,7 @@ class ClockworkGnome(MinionCard):
         super().__init__("Clockwork Gnome", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
+        from hearthbreaker.cards.spells.neutral import spare_part_list
         return Minion(2, 1,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))
@@ -2093,6 +2093,7 @@ class MechanicalYeti(MinionCard):
         super().__init__("Mechanical Yeti", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
+        from hearthbreaker.cards.spells.neutral import spare_part_list
         return Minion(4, 5,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector(BothPlayer())))
@@ -2145,11 +2146,13 @@ class MogorTheOgre(MinionCard):
 
 class Toshley(MinionCard):
     def __init__(self):
+        from hearthbreaker.cards.spells.neutral import spare_part_list
         super().__init__("Toshley", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
                          battlecry=Battlecry(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                              PlayerSelector()))
 
     def create_minion(self, player):
+        from hearthbreaker.cards.spells.neutral import spare_part_list
         return Minion(5, 7,
                       deathrattle=Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
                                               PlayerSelector()))
@@ -2303,6 +2306,7 @@ class GoblinSapper(MinionCard):
 
 class TinkertownTechnician(MinionCard):
     def __init__(self):
+        from hearthbreaker.cards.spells.neutral import spare_part_list
         super().__init__("Tinkertown Technician", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
                          battlecry=(Battlecry(Give([Buff(ChangeAttack(1)), Buff(ChangeHealth(1))]), SelfSelector(),
                                               GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))), value=0)),
