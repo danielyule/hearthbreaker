@@ -5257,7 +5257,7 @@
             "source": "collection", 
             "conditions": [
               {
-                "cost": 2, 
+                "amount": 2, 
                 "name": "mana_cost"
               }, 
               {
@@ -5290,7 +5290,7 @@
             "source": "collection", 
             "conditions": [
               {
-                "cost": 4, 
+                "amount": 4, 
                 "name": "mana_cost"
               }, 
               {
@@ -5620,7 +5620,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 1, 
+          "amount": 2, 
           "name": "damage"
         }
       ], 
@@ -6114,7 +6114,7 @@
             "event_name": "spell_cast", 
             "player": "friendly", 
             "condition": {
-              "cost": 1, 
+              "amount": 1, 
               "name": "mana_cost"
             }
           }, 
@@ -6659,6 +6659,120 @@
         }
       ]
     }
+  }, 
+  {
+    "name": "Lil' Exorcist", 
+    "character_class": "", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "attack": 2, 
+    "health": 3, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": {
+                    "name": "count", 
+                    "selector": {
+                      "picker": {
+                        "name": "all"
+                      }, 
+                      "players": "both", 
+                      "name": "minion", 
+                      "condition": {
+                        "name": "minion_has_deathrattle"
+                      }
+                    }
+                  }, 
+                  "name": "change_attack"
+                }
+              }, 
+              {
+                "status": {
+                  "amount": {
+                    "name": "count", 
+                    "selector": {
+                      "picker": {
+                        "name": "all"
+                      }, 
+                      "players": "both", 
+                      "name": "minion", 
+                      "condition": {
+                        "name": "minion_has_deathrattle"
+                      }
+                    }
+                  }, 
+                  "name": "change_health"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "type": "minion", 
+    "impl": {
+      "buffs": [
+        {
+          "status": {
+            "name": "taunt"
+          }
+        }
+      ]
+    }
+  }, 
+  {
+    "name": "Recombobulator", 
+    "character_class": "", 
+    "rarity": "Epic", 
+    "mana": 2, 
+    "attack": 3, 
+    "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "amount": {
+                    "attribute": "mana", 
+                    "name": "attribute", 
+                    "selector": {
+                      "name": "self"
+                    }
+                  }, 
+                  "name": "mana_cost"
+                }, 
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "friendly", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
+        }
+      }
+    ], 
+    "type": "minion"
   }, 
   {
     "name": "Treant", 
@@ -10199,6 +10313,47 @@
         }
       ]
     }
+  }, 
+  {
+    "name": "Neptulon", 
+    "character_class": "Shaman", 
+    "overload": 3, 
+    "rarity": "Legendary", 
+    "mana": 7, 
+    "attack": 7, 
+    "health": 7, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "count": 4, 
+            "name": "add_card", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Bluegill Warrior", 
+                "Coldlight Oracle", 
+                "Coldlight Seer", 
+                "Grimscale Oracle", 
+                "Murloc Raider", 
+                "Murloc Tidecaller", 
+                "Murloc Tidehunter", 
+                "Murloc Warleader", 
+                "Old Murk-Eye", 
+                "Puddlestomper", 
+                "Siltfin Spiritwalker"
+              ]
+            }
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ], 
+    "type": "minion"
   }, 
   {
     "name": "Arathi Weaponsmith", 

@@ -4178,3 +4178,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
         self.assertEqual(7, game.players[0].minions[0].health)
         self.assertTrue(game.players[0].minions[0].taunt)
+
+    def test_Recombobulator(self):
+        game = generate_game_for([StonetuskBoar, Recombobulator], StonetuskBoar, CardTestingAgent, CardTestingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.current_player.minions[1].card.mana)
+        self.assertEqual("Stonetusk Boar", game.other_player.minions[0].card.name)

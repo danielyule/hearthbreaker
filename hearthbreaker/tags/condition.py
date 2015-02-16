@@ -64,18 +64,20 @@ class HasOverload(Condition):
         }
 
 
-class ManaCost(Condition):
-    def __init__(self, cost):
-        self.cost = cost
+class ManaCost(Condition, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
 
     def evaluate(self, target, obj, *args):
-        return obj.mana == self.cost
+        return obj.mana == self.get_amount(target, target)
 
     def __to_json__(self):
         return {
             'name': 'mana_cost',
-            'cost': self.cost
         }
+
+    def __from_json__(self, **kwargs):
+        return self
 
 
 class CardRarity(Condition):

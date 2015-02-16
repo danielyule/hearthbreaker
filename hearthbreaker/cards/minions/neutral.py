@@ -2348,3 +2348,14 @@ class LilExorcist(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 3, taunt=True)
+
+
+class Recombobulator(MinionCard):
+    def __init__(self):
+        super().__init__("Recombobulator", 2, CHARACTER_CLASS.ALL, CARD_RARITY.EPIC,
+                         battlecry=Battlecry(Transform(CardQuery(conditions=[
+                             ManaCost(Attribute("mana", SelfSelector())), IsMinion()])),
+                             MinionSelector(picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(3, 2)

@@ -222,6 +222,7 @@ from hearthbreaker.cards.minions.neutral import (
     TinkertownTechnician,
     Junkbot,
     Jeeves,
+    Recombobulator,
     LilExorcist,
 )
 

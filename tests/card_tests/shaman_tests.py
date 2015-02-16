@@ -1,5 +1,6 @@
 import random
 import unittest
+from hearthbreaker.cards.spells.neutral import TheCoin
 
 from tests.agents.testing_agents import OneCardPlayingAgent, MinionAttackingAgent, CardTestingAgent, \
     PlayAndAttackAgent

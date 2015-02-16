@@ -474,6 +474,8 @@ class Attribute(Function):
         if len(targets) > 0 and targets[0]:
             if self.attribute == "damage":
                 return targets[0].calculate_max_health() - targets[0].health
+            elif self.attribute == 'mana':
+                return targets[0].card.mana
             return getattr(targets[0], self.attribute)
         return 0
 
