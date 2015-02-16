@@ -703,3 +703,18 @@ class TestRogue(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual("Gallywix's Coin", game.current_player.hand[-1].name)
+
+    def test_GoblinAutoBarber(self):
+        game = generate_game_for([GoblinAutoBarber, LightsJustice], Wisp, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertIsNone(game.players[0].hero.weapon)
+
+
+        game.play_single_turn()
+
+        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, len(game.players[0].minions))

@@ -1,12 +1,12 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.cards.spells.rogue import GallywixsCoin
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard
+from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
-    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer
+    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
@@ -125,3 +125,12 @@ class TradePrinceGallywix(MinionCard):
                                      Effect(SpellCast(Not(HasCardName("Gallywix's Coin")), EnemyPlayer()),
                                             AddCard(GallywixsCoin()),
                                             PlayerSelector(EnemyPlayer()))])
+
+
+class GoblinAutoBarber(MinionCard):
+    def __init__(self):
+        super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, MINION_TYPE.MECH,
+                         battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
+
+    def create_minion(self, player):
+        return Minion(3, 2)
