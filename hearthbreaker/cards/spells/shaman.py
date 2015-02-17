@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card
+from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import Summon
 from hearthbreaker.tags.base import Deathrattle, Buff
 from hearthbreaker.tags.selector import PlayerSelector
@@ -8,7 +8,7 @@ import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
-class AncestralHealing(Card):
+class AncestralHealing(SpellCard):
     def __init__(self):
         super().__init__("Ancestral Healing", 0, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -21,7 +21,7 @@ class AncestralHealing(Card):
         self.target.taunt = True
 
 
-class AncestralSpirit(Card):
+class AncestralSpirit(SpellCard):
     def __init__(self):
         super().__init__("Ancestral Spirit", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -31,7 +31,7 @@ class AncestralSpirit(Card):
         self.target.deathrattle.append(Deathrattle(Summon(self.target.card), PlayerSelector()))
 
 
-class Bloodlust(Card):
+class Bloodlust(SpellCard):
     def __init__(self):
         super().__init__("Bloodlust", 5, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
@@ -42,7 +42,7 @@ class Bloodlust(Card):
             minion.change_temp_attack(3)
 
 
-class EarthShock(Card):
+class EarthShock(SpellCard):
     def __init__(self):
         super().__init__("Earth Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -54,7 +54,7 @@ class EarthShock(Card):
         self.target.damage(player.effective_spell_damage(1), self)
 
 
-class FarSight(Card):
+class FarSight(SpellCard):
     def __init__(self):
         super().__init__("Far Sight", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
 
@@ -67,7 +67,7 @@ class FarSight(Card):
         player.draw()
 
 
-class FeralSpirit(Card):
+class FeralSpirit(SpellCard):
     def __init__(self):
         super().__init__("Feral Spirit", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=2)
 
@@ -82,7 +82,7 @@ class FeralSpirit(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class ForkedLightning(Card):
+class ForkedLightning(SpellCard):
     def __init__(self):
         super().__init__("Forked Lightning", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
 
@@ -99,7 +99,7 @@ class ForkedLightning(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
 
 
-class FrostShock(Card):
+class FrostShock(SpellCard):
     def __init__(self):
         super().__init__("Frost Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_enemy_spell_target)
@@ -111,7 +111,7 @@ class FrostShock(Card):
         self.target.add_buff(Buff(Frozen()))
 
 
-class Hex(Card):
+class Hex(SpellCard):
     def __init__(self):
         super().__init__("Hex", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -125,7 +125,7 @@ class Hex(Card):
         self.target.replace(minion)
 
 
-class LavaBurst(Card):
+class LavaBurst(SpellCard):
     def __init__(self):
         super().__init__("Lava Burst", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_spell_target, overload=2)
@@ -136,7 +136,7 @@ class LavaBurst(Card):
         self.target.damage(player.effective_spell_damage(5), self)
 
 
-class LightningBolt(Card):
+class LightningBolt(SpellCard):
     def __init__(self):
         super().__init__("Lightning Bolt", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target, overload=1)
@@ -147,7 +147,7 @@ class LightningBolt(Card):
         self.target.damage(player.effective_spell_damage(3), self)
 
 
-class LightningStorm(Card):
+class LightningStorm(SpellCard):
     def __init__(self):
         super().__init__("Lightning Storm", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, overload=2)
 
@@ -158,7 +158,7 @@ class LightningStorm(Card):
             minion.damage(player.effective_spell_damage(game.random_amount(2, 3)), self)
 
 
-class RockbiterWeapon(Card):
+class RockbiterWeapon(SpellCard):
     def __init__(self):
         super().__init__("Rockbiter Weapon", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_friendly_spell_target)
@@ -168,7 +168,7 @@ class RockbiterWeapon(Card):
         self.target.change_temp_attack(3)
 
 
-class TotemicMight(Card):
+class TotemicMight(SpellCard):
     def __init__(self):
         super().__init__("Totemic Might", 0, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
@@ -180,7 +180,7 @@ class TotemicMight(Card):
                 minion.increase_health(2)
 
 
-class Windfury(Card):
+class Windfury(SpellCard):
     def __init__(self):
         super().__init__("Windfury", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -191,7 +191,7 @@ class Windfury(Card):
         self.target.add_buff(Buff(_Windfury()))
 
 
-class Reincarnate(Card):
+class Reincarnate(SpellCard):
 
     def __init__(self):
         super().__init__("Reincarnate", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
@@ -204,7 +204,7 @@ class Reincarnate(Card):
         self.target.card.summon(self.target.player, game, len(self.target.player.minions))
 
 
-class Crackle(Card):
+class Crackle(SpellCard):
     def __init__(self):
         super().__init__("Crackle", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target, overload=1)

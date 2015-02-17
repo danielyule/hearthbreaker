@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.cards.base import SpellCard, MinionCard
 from hearthbreaker.cards.minions.priest import ShadowOfNothing
 from hearthbreaker.cards.minions.neutral import Lightwarden
 from hearthbreaker.tags.base import BuffUntil, Buff
@@ -10,7 +10,7 @@ import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
 
-class CircleOfHealing(Card):
+class CircleOfHealing(SpellCard):
     def __init__(self):
         super().__init__("Circle of Healing", 0, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON)
@@ -25,7 +25,7 @@ class CircleOfHealing(Card):
             minion.heal(player.effective_heal_power(4), self)
 
 
-class DivineSpirit(Card):
+class DivineSpirit(SpellCard):
     def __init__(self):
         super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
@@ -39,7 +39,7 @@ class DivineSpirit(Card):
         self.target.increase_health(self.target.health)
 
 
-class HolyFire(Card):
+class HolyFire(SpellCard):
     def __init__(self):
         super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE,
@@ -52,7 +52,7 @@ class HolyFire(Card):
         player.hero.heal(player.effective_heal_power(5), self)
 
 
-class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
+class HolyNova(SpellCard):  # TODO: Can this card be cast if no minions is in play?
     def __init__(self):
         super().__init__("Holy Nova", 5, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON)
@@ -67,7 +67,7 @@ class HolyNova(Card):  # TODO: Can this card be cast if no minions is in play?
             minion.heal(player.effective_heal_power(2), self)
 
 
-class HolySmite(Card):
+class HolySmite(SpellCard):
     def __init__(self):
         super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
@@ -78,7 +78,7 @@ class HolySmite(Card):
         self.target.damage(player.effective_spell_damage(2), self)
 
 
-class InnerFire(Card):
+class InnerFire(SpellCard):
     def __init__(self):
         super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
@@ -95,7 +95,7 @@ class InnerFire(Card):
 
 
 # TODO: Can this spell be cast if the enemy have no minions?
-class MassDispel(Card):
+class MassDispel(SpellCard):
     def __init__(self):
         super().__init__("Mass Dispel", 4, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE)
@@ -109,7 +109,7 @@ class MassDispel(Card):
         player.draw()
 
 
-class MindBlast(Card):
+class MindBlast(SpellCard):
     def __init__(self):
         super().__init__("Mind Blast", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE)
@@ -120,7 +120,7 @@ class MindBlast(Card):
         game.other_player.hero.damage(player.effective_spell_damage(5), self)
 
 
-class MindControl(Card):
+class MindControl(SpellCard):
     def __init__(self):
         super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
@@ -136,7 +136,7 @@ class MindControl(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class MindVision(Card):
+class MindVision(SpellCard):
     def __init__(self):
         super().__init__("Mind Vision", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
@@ -150,7 +150,7 @@ class MindVision(Card):
             player.hand.append(card)
 
 
-class Mindgames(Card):
+class Mindgames(SpellCard):
     def __init__(self):
         super().__init__("Mindgames", 4, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.EPIC)
@@ -171,7 +171,7 @@ class Mindgames(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class PowerWordShield(Card):
+class PowerWordShield(SpellCard):
     def __init__(self):
         super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE,
@@ -184,7 +184,7 @@ class PowerWordShield(Card):
         player.draw()
 
 
-class ShadowMadness(Card):
+class ShadowMadness(SpellCard):
     def __init__(self):
         super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE,
@@ -211,7 +211,7 @@ class ShadowMadness(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class ShadowWordDeath(Card):
+class ShadowWordDeath(SpellCard):
     def __init__(self):
         super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
@@ -224,7 +224,7 @@ class ShadowWordDeath(Card):
         self.target.die(self)
 
 
-class ShadowWordPain(Card):
+class ShadowWordPain(SpellCard):
     def __init__(self):
         super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE,
@@ -237,7 +237,7 @@ class ShadowWordPain(Card):
         self.target.die(self)
 
 
-class Shadowform(Card):
+class Shadowform(SpellCard):
     def __init__(self):
         super().__init__("Shadowform", 3, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.EPIC)
@@ -247,12 +247,14 @@ class Shadowform(Card):
 
         if type(player.hero.power) is not hearthbreaker.powers.MindShatter and type(
                 player.hero.power) is not hearthbreaker.powers.MindSpike:
-            player.hero.power = hearthbreaker.powers.MindSpike(player.hero)
+            player.hero.power = hearthbreaker.powers.MindSpike()
+            player.hero.power.hero = player.hero
         elif type(player.hero.power) is hearthbreaker.powers.MindSpike:
-            player.hero.power = hearthbreaker.powers.MindShatter(player.hero)
+            player.hero.power = hearthbreaker.powers.MindShatter()
+            player.hero.power.hero = player.hero
 
 
-class Silence(Card):
+class Silence(SpellCard):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
@@ -264,7 +266,7 @@ class Silence(Card):
         self.target.silence()
 
 
-class Thoughtsteal(Card):
+class Thoughtsteal(SpellCard):
     def __init__(self):
         super().__init__("Thoughtsteal", 3, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON)
@@ -283,7 +285,7 @@ class Thoughtsteal(Card):
                     player.trigger("card_destroyed", new_card)
 
 
-class VelensChosen(Card):
+class VelensChosen(SpellCard):
     def __init__(self):
         super().__init__("Velen's Chosen", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -296,7 +298,7 @@ class VelensChosen(Card):
         self.target.add_buff(Buff(SpellDamage(1)))
 
 
-class Lightbomb(Card):
+class Lightbomb(SpellCard):
     def __init__(self):
         super().__init__("Lightbomb", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC)
 
@@ -310,7 +312,7 @@ class Lightbomb(Card):
             minion.damage(player.effective_spell_damage(minion.calculate_attack()), self)
 
 
-class LightOfTheNaaru(Card):
+class LightOfTheNaaru(SpellCard):
     def __init__(self):
         super().__init__("Light of the Naaru", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_spell_target)

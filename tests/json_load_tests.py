@@ -196,14 +196,7 @@ class TestJSONShaman(JSONTester, tests.card_tests.shaman_tests.TestShaman):
 
 
 class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
-    def test_Jaraxxus(self):
-        pass
-
-    def test_Jaraxxus_with_SacrificialPact(self):
-        pass
-
-    def test_Jaraxxus_with_secrets(self):
-        pass
+    pass
 
 
 class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):

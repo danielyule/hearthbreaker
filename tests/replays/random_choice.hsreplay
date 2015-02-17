@@ -95,13 +95,13 @@
     ],
     "decks": [
       {
-        "class": "Mage",
+        "hero": "Jaina",
         "cards": [
           "Demolisher"
         ]
       },
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Stonetusk Boar"
         ]

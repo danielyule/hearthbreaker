@@ -182,13 +182,13 @@
     "random": [],
     "decks": [
       {
-        "class": "Priest",
+        "hero": "Anduin",
         "cards": [
           "Shadowform"
         ]
       },
       {
-        "class": "Priest",
+        "hero": "Anduin",
         "cards": [
           "Stonetusk Boar"
         ]

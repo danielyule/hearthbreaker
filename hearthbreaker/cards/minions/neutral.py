@@ -1,4 +1,4 @@
-from hearthbreaker.cards.base import Card, MinionCard
+from hearthbreaker.cards.base import SpellCard, MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
@@ -1330,7 +1330,7 @@ class HarrisonJones(MinionCard):
         return Minion(5, 4)
 
 
-class Bananas(Card):
+class Bananas(SpellCard):
     def __init__(self):
         super().__init__("Bananas", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -1448,7 +1448,7 @@ class AlarmoBot(MinionCard):
         return Minion(0, 3, effects=[Effect(TurnStarted(), SwapWithHand(), PlayerSelector())])
 
 
-class IAmMurloc(Card):
+class IAmMurloc(SpellCard):
     def __init__(self):
         super().__init__("I Am Murloc", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
@@ -1462,7 +1462,7 @@ class IAmMurloc(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class PowerOfTheHorde(Card):
+class PowerOfTheHorde(SpellCard):
     def __init__(self):
         super().__init__("Power of the Horde", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
@@ -1478,7 +1478,7 @@ class PowerOfTheHorde(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class RoguesDoIt(Card):
+class RoguesDoIt(SpellCard):
     def __init__(self):
         super().__init__("Rogues Do It...", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_spell_target)
@@ -1540,7 +1540,7 @@ class OldMurkEye(MinionCard):
                                                                                        BothPlayer()))))])
 
 
-class Dream(Card):
+class Dream(SpellCard):
     def __init__(self):
         super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -1550,7 +1550,7 @@ class Dream(Card):
         self.target.bounce()
 
 
-class YseraAwakens(Card):
+class YseraAwakens(SpellCard):
     def __init__(self):
         super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
@@ -1565,7 +1565,7 @@ class YseraAwakens(Card):
             minion.damage(player.effective_spell_damage(5), self)
 
 
-class Nightmare(Card):
+class Nightmare(SpellCard):
     def __init__(self):
         super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)

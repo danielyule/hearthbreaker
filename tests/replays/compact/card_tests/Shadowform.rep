@@ -1,5 +1,5 @@
-deck(Priest, Shadowform)
-deck(Priest, Stonetusk Boar)
+deck(Anduin, Shadowform)
+deck(Anduin, Stonetusk Boar)
 random()
 keep(0,1,2)
 keep(0,1,2,3)

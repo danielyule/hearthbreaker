@@ -1,5 +1,5 @@
-deck(Paladin, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Noble Sacrifice)
-deck(Priest, Stonetusk Boar)
+deck(Uther, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Noble Sacrifice)
+deck(Anduin, Stonetusk Boar)
 random()
 keep(0,1,2)
 keep(0,1,2,3)

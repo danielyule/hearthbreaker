@@ -2,8 +2,8 @@ import re
 import json
 
 import hearthbreaker
+from hearthbreaker.cards.heroes import hero_from_name
 import hearthbreaker.constants
-from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.engine import Game, card_lookup, Deck
 import hearthbreaker.game_objects
 import hearthbreaker.cards
@@ -177,7 +177,7 @@ class Replay:
 
         for deck in self.decks:
             writer.write("deck(")
-            writer.write(hearthbreaker.constants.CHARACTER_CLASS.to_str(deck.character_class))
+            writer.write(deck.hero.short_name)
             writer.write(",")
             writer.write(",".join([card.name for card in self.__shorten_deck(deck.cards)]))
             writer.write(")\n")
@@ -229,7 +229,7 @@ class Replay:
             writer = file
 
         header_cards = [{"cards": [card.name for card in self.__shorten_deck(deck.cards)],
-                         "class": CHARACTER_CLASS.to_str(deck.character_class)} for deck in self.decks]
+                         "hero": deck.hero.short_name} for deck in self.decks]
 
         header = {
             'decks': header_cards,
@@ -265,7 +265,7 @@ class Replay:
             deck_size = len(deck['cards'])
             cards = [card_lookup(deck['cards'][index % deck_size]) for index in range(0, 30)]
             self.decks.append(
-                Deck(cards, CHARACTER_CLASS.from_str(deck['class'])))
+                Deck(cards, hero_from_name(deck['hero'])))
 
         self.random = jd['header']['random']
         self.keeps = jd['header']['keep']
@@ -343,7 +343,7 @@ class Replay:
                 deck_size = len(args) - 1
                 cards = [card_lookup(args[1 + index % deck_size]) for index in range(0, 30)]
                 self.decks.append(
-                    Deck(cards, hearthbreaker.constants.CHARACTER_CLASS.from_str(args[0])))
+                    Deck(cards, hero_from_name(args[0])))
 
             elif move == 'keep':
                 if len(self.keeps) > 1:

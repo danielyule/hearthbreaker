@@ -86,7 +86,7 @@ class TradeSequence:
 
         to = self.current_trades_obj
         trades_obj = Trades(to.player, to.attack_minions,
-                            to.opp_minions, to.opp_hero.copy(to.player, None))
+                            to.opp_minions, to.opp_hero.copy(to.player))
         trades_obj.attack_minions.remove(next_trade.my_minion)
         if next_trade.is_opp_dead():
             trades_obj.opp_minions.remove(next_trade.opp_minion)

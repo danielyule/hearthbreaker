@@ -691,7 +691,7 @@ class Weapon(Bindable, GameObject):
     attacks is handled by :class:`Hero`, but it can be modified through the use of events.
     """
 
-    def __init__(self, attack_power, durability, battlecry=None, deathrattle=None,
+    def __init__(self, attack_power, durability, deathrattle=None,
                  effects=None, auras=None, buffs=None):
         """
         Creates a new weapon with the given attack power and durability.  A battlecry and deathrattle can also
@@ -707,8 +707,6 @@ class Weapon(Bindable, GameObject):
         self.base_attack = attack_power
         # : The number of times this weapon can be used to attack before being discarded
         self.durability = durability
-        #: Called when this weapon is equipped
-        self.battlecry = battlecry
         #: Called when the weapon is destroyed
         self.deathrattle = deathrattle
         #: The :class:`Player` associated with this weapon
@@ -717,7 +715,7 @@ class Weapon(Bindable, GameObject):
         self.card = None
 
     def copy(self, new_owner):
-        new_weapon = Weapon(self.base_attack, self.durability, self.battlecry, copy.deepcopy(self.deathrattle),
+        new_weapon = Weapon(self.base_attack, self.durability, copy.deepcopy(self.deathrattle),
                             copy.deepcopy(self.effects), copy.deepcopy(self.auras), copy.deepcopy(self.buffs))
         new_weapon.player = new_owner
         return new_weapon
@@ -766,7 +764,7 @@ class Weapon(Bindable, GameObject):
 
 
 class Minion(Character):
-    def __init__(self, attack, health, battlecry=None,
+    def __init__(self, attack, health,
                  deathrattle=None, taunt=False, charge=False, spell_damage=0, divine_shield=False, stealth=False,
                  windfury=False, spell_targetable=True, effects=None, auras=None, buffs=None,
                  enrage=None):
@@ -776,7 +774,6 @@ class Minion(Character):
         self.index = -1
         self.taunt = 0
         self.can_be_targeted_by_spells = True
-        self.battlecry = battlecry
         if deathrattle:
             if isinstance(deathrattle, Deathrattle):
                 self.deathrattle = [deathrattle]
@@ -966,7 +963,7 @@ class Minion(Character):
         return "({0}) ({1}) {2} at index {3}".format(self.calculate_attack(), self.health, self.card.name, self.index)
 
     def copy(self, new_owner, new_game=None):
-        new_minion = Minion(self.base_attack, self.base_health, self.battlecry,
+        new_minion = Minion(self.base_attack, self.base_health,
                             effects=copy.deepcopy(self.effects),
                             auras=copy.deepcopy(self.auras),
                             buffs=copy.deepcopy(self.buffs),
@@ -1043,16 +1040,17 @@ class Minion(Character):
 
 
 class Hero(Character):
-    def __init__(self, character_class, player):
-        super().__init__(0, 30)
-        from hearthbreaker.powers import powers
+    def __init__(self, health, character_class, power, player):
+        super().__init__(0, health)
         self.armor = 0
         self.weapon = None
         self.bonus_attack = 0
         self.character_class = character_class
         self.player = player
         self.game = player.game
-        self.power = powers(self.character_class)(self)
+        self.power = power
+        self.power.hero = self
+        self.card = None
 
     def calculate_attack(self):
         if self.player == self.player.game.current_player and self.weapon:
@@ -1060,8 +1058,8 @@ class Hero(Character):
         else:
             return super().calculate_attack()
 
-    def copy(self, new_owner, new_game):
-        new_hero = Hero(self.character_class, new_owner)
+    def copy(self, new_owner):
+        new_hero = Hero(self.base_health, self.character_class, self.power, new_owner)
         if self.weapon:
             new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.health = self.health
@@ -1072,6 +1070,7 @@ class Hero(Character):
         new_hero.effects = copy.deepcopy(self.effects)
         new_hero.auras = copy.deepcopy(self.auras)
         new_hero.buffs = copy.deepcopy(self.buffs)
+        new_hero.card = type(self.card)()
 
         return new_hero
 
@@ -1105,6 +1104,27 @@ class Hero(Character):
         self.trigger("found_power_target", target)
         return target
 
+    def replace(self, new_hero):
+        """
+        Replaces this hero with another one
+
+        :param hearthbreaker.game_objects.Hero new_hero: The hero to replace this hero with
+        """
+        self.unattach()
+        new_hero.player = self.player
+        new_hero.game = self.game
+        new_hero.active = True
+        new_hero.exhausted = False
+        self.game.minion_counter += 1
+        new_hero.born = self.game.minion_counter
+
+        self.player.hero = new_hero
+        new_hero.power.hero = new_hero
+        new_hero.attach(new_hero, self.player)
+        for aura in self.player.object_auras:
+            if aura.match(new_hero):
+                aura.status.act(self, new_hero)
+
     @staticmethod
     def is_hero():
         return True
@@ -1117,6 +1137,7 @@ class Hero(Character):
             'weapon': self.weapon,
             'health': self.health,
             'armor': self.armor,
+            'name': self.card.short_name,
             'attack': self.base_attack,
             'immune': self.immune,
             'used_windfury': self.used_windfury,
@@ -1126,7 +1147,8 @@ class Hero(Character):
 
     @classmethod
     def __from_json__(cls, hd, player):
-        hero = Hero(hearthbreaker.constants.CHARACTER_CLASS.from_str(hd["character"]), player)
+        hero = player.deck.hero.create_hero(player)
+        hero.card = player.deck.hero
         GameObject.__from_json__(hero, **hd)
         hero.health = hd["health"]
         hero.base_attack = hd["attack"]

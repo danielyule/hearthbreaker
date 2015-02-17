@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, WeaponCard
+from hearthbreaker.cards.base import SpellCard, WeaponCard
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, Draw, Discard
 from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE
@@ -11,7 +11,7 @@ import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
 
-class BattleRage(Card):
+class BattleRage(SpellCard):
     def __init__(self):
         super().__init__("Battle Rage", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
@@ -30,7 +30,7 @@ class BattleRage(Card):
             player.draw()
 
 
-class Brawl(Card):
+class Brawl(SpellCard):
     def __init__(self):
         super().__init__("Brawl", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
 
@@ -50,7 +50,7 @@ class Brawl(Card):
                     minion.die(self)
 
 
-class Charge(Card):
+class Charge(SpellCard):
     def __init__(self):
         super().__init__("Charge", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_friendly_minion_spell_target)
@@ -62,7 +62,7 @@ class Charge(Card):
         self.target.add_buff(Buff(_Charge()))
 
 
-class Cleave(Card):
+class Cleave(SpellCard):
     def __init__(self):
         super().__init__("Cleave", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
@@ -80,7 +80,7 @@ class Cleave(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
 
 
-class CommandingShout(Card):
+class CommandingShout(SpellCard):
     def __init__(self):
         super().__init__("Commanding Shout", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
@@ -91,7 +91,7 @@ class CommandingShout(Card):
         player.draw()
 
 
-class Execute(Card):
+class Execute(SpellCard):
     def __init__(self):
         super().__init__("Execute", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_enemy_minion_spell_target,
@@ -103,7 +103,7 @@ class Execute(Card):
         self.target.die(self)
 
 
-class HeroicStrike(Card):
+class HeroicStrike(SpellCard):
     def __init__(self):
         super().__init__("Heroic Strike", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
@@ -112,7 +112,7 @@ class HeroicStrike(Card):
         player.hero.change_temp_attack(4)
 
 
-class InnerRage(Card):
+class InnerRage(SpellCard):
     def __init__(self):
         super().__init__("Inner Rage", 0, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -123,7 +123,7 @@ class InnerRage(Card):
         self.target.change_attack(2)
 
 
-class MortalStrike(Card):
+class MortalStrike(SpellCard):
     def __init__(self):
         super().__init__("Mortal Strike", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_spell_target)
@@ -136,7 +136,7 @@ class MortalStrike(Card):
             self.target.damage(player.effective_spell_damage(4), self)
 
 
-class Rampage(Card):
+class Rampage(SpellCard):
     def __init__(self):
         super().__init__("Rampage", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target,
@@ -148,7 +148,7 @@ class Rampage(Card):
         self.target.increase_health(3)
 
 
-class ShieldBlock(Card):
+class ShieldBlock(SpellCard):
     def __init__(self):
         super().__init__("Shield Block", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
@@ -158,7 +158,7 @@ class ShieldBlock(Card):
         player.draw()
 
 
-class ShieldSlam(Card):
+class ShieldSlam(SpellCard):
     def __init__(self):
         super().__init__("Shield Slam", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -168,7 +168,7 @@ class ShieldSlam(Card):
         self.target.damage(player.effective_spell_damage(player.hero.armor), self)
 
 
-class Slam(Card):
+class Slam(SpellCard):
     def __init__(self):
         super().__init__("Slam", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -182,7 +182,7 @@ class Slam(Card):
             self.target.damage(player.effective_spell_damage(2), self)
 
 
-class Upgrade(Card):
+class Upgrade(SpellCard):
     def __init__(self):
         super().__init__("Upgrade!", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
@@ -202,7 +202,7 @@ class Upgrade(Card):
             heavy_axe.equip(player)
 
 
-class Whirlwind(Card):
+class Whirlwind(SpellCard):
     def __init__(self):
         super().__init__("Whirlwind", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
@@ -214,7 +214,7 @@ class Whirlwind(Card):
             minion.damage(player.effective_spell_damage(1), self)
 
 
-class BouncingBlade(Card):
+class BouncingBlade(SpellCard):
     def __init__(self):
         super().__init__("Bouncing Blade", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
 
@@ -236,7 +236,7 @@ class BouncingBlade(Card):
                     break
 
 
-class Crush(Card):
+class Crush(SpellCard):
     def __init__(self):
         super().__init__("Crush", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -256,7 +256,7 @@ class Crush(Card):
         self.target.die(self)
 
 
-class BurrowingMine(Card):
+class BurrowingMine(SpellCard):
     def __init__(self):
         super().__init__("Burrowing Mine", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
                          effects=[Effect(Drawn(), Damage(10), HeroSelector()),

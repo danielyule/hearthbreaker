@@ -960,13 +960,13 @@
       "cards": [
         "Stonetusk Boar"
       ],
-      "class": "Mage"
+      "hero": "Jaina"
     },
     {
       "cards": [
         "Naturalize"
       ],
-      "class": "Druid"
+      "hero": "Malfurion"
     }
     ],
     "keep": [

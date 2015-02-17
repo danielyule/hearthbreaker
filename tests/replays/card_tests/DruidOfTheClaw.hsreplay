@@ -138,13 +138,13 @@
     "random": [],
     "decks": [
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Druid of the Claw"
         ]
       },
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Druid of the Claw"
         ]

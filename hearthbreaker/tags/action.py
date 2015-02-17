@@ -1,3 +1,4 @@
+import copy
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
     CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker, Selector
 from hearthbreaker.tags.condition import IsSecret
@@ -170,9 +171,17 @@ class Transform(Action):
 
     def act(self, actor, target):
         card = self.card.get_card(target, actor)
-        minion = card.create_minion(target.player)
-        minion.card = card
-        target.replace(minion)
+        if target.is_minion():
+            minion = card.create_minion(target.player)
+            minion.card = card
+            target.replace(minion)
+        elif target.is_hero():
+            hero = card.create_hero(target.player)
+            hero.card = card
+            target.player.trigger("minion_played", actor)
+            hero.buffs = copy.copy(actor.buffs)
+            hero.health = actor.health
+            target.replace(hero)
 
     def __to_json__(self):
         return {
@@ -634,4 +643,15 @@ class SwapStats(Action):
     def __to_json__(self):
         return {
             'name': 'swap_stats',
+        }
+
+
+class Remove(Action):
+    def act(self, actor, target):
+        target.unattach()
+        target.remove_from_board()
+
+    def __to_json__(self):
+        return {
+            'name': 'remove'
         }

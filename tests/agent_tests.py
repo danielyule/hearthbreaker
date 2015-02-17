@@ -6,7 +6,7 @@ from hearthbreaker.cards import GoldshireFootman, MurlocRaider, BloodfenRaptor, 
     FenCreeper, BoulderfistOgre, WarGolem, Shieldbearer, FlameImp, YoungPriestess, DarkIronDwarf, DireWolfAlpha, \
     Voidwalker, HarvestGolem, KnifeJuggler, ShatteredSunCleric, ArgentSquire, Doomguard, Soulfire, DefenderOfArgus, \
     AbusiveSergeant, NerubianEgg, KeeperOfTheGrove
-from hearthbreaker.constants import CHARACTER_CLASS
+from hearthbreaker.cards.heroes import Guldan, Malfurion
 from hearthbreaker.engine import Game, Deck
 
 
@@ -47,7 +47,7 @@ class TestAgents(unittest.TestCase):
             BoulderfistOgre(),
             WarGolem(),
             WarGolem(),
-        ], CHARACTER_CLASS.DRUID)
+        ], Malfurion())
 
         deck2 = Deck([
             Shieldbearer(),
@@ -80,7 +80,7 @@ class TestAgents(unittest.TestCase):
             AbusiveSergeant(),
             NerubianEgg(),
             NerubianEgg(),
-        ], CHARACTER_CLASS.WARLOCK)
+        ], Guldan())
 
         game = Game([deck1, deck2], [RandomAgent(), RandomAgent()])
         game.pre_game()

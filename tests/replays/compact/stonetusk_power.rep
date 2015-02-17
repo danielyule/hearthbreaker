@@ -1,5 +1,5 @@
-deck(Mage,Stonetusk Boar)
-deck(Druid,Power of the Wild)
+deck(Jaina,Stonetusk Boar)
+deck(Malfurion,Power of the Wild)
 random()
 keep(0,1,2)
 keep(0,1,2,3)

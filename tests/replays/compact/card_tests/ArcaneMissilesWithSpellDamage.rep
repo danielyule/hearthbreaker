@@ -1,5 +1,5 @@
-deck(Mage, Kobold Geomancer, Arcane Missiles)
-deck(Druid, Faerie Dragon)
+deck(Jaina, Kobold Geomancer, Arcane Missiles)
+deck(Malfurion, Faerie Dragon)
 random(0, 0, 0, 0, 0, 0, 0, 0)
 keep(0,1,2)
 keep(0,1,2,3)

@@ -10,9 +10,9 @@
           "items": {
             "type": "object",
             "properties": {
-              "class": {
+              "hero": {
                 "type": "string",
-                "enum": ["Mage", "Druid", "Hunter", "Priest", "Paladin", "Warlock", "Rogue", "Shaman", "Warrior"]
+                "enum": ["Jaina", "Malfurion", "Rexxar", "Anduin", "Uther", "Gul'dan", "Valeera", "Thrall", "Garrosh"]
               },
               "cards": {
                 "type": "array",
@@ -21,7 +21,7 @@
                 "minItems": 1
               }
             },
-            "required": ["class", "cards"]
+            "required": ["hero", "cards"]
           }
         },
         "keep": {

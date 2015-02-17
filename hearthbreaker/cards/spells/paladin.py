@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, MinionCard, SecretCard
+from hearthbreaker.cards.base import SpellCard, MinionCard, SecretCard
 from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.action import Draw
 from hearthbreaker.tags.base import Effect, Buff
@@ -12,7 +12,7 @@ from hearthbreaker.cards.minions.paladin import SilverHandRecruit
 from hearthbreaker.cards.weapons.paladin import LightsJustice
 
 
-class AvengingWrath(Card):
+class AvengingWrath(SpellCard):
     def __init__(self):
         super().__init__("Avenging Wrath", 6, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC)
 
@@ -25,7 +25,7 @@ class AvengingWrath(Card):
             target.damage(1, self)
 
 
-class BlessedChampion(Card):
+class BlessedChampion(SpellCard):
     def __init__(self):
         super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -35,7 +35,7 @@ class BlessedChampion(Card):
         self.target.add_buff(Buff(DoubleAttack()))
 
 
-class BlessingOfKings(Card):
+class BlessingOfKings(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -46,7 +46,7 @@ class BlessingOfKings(Card):
         self.target.increase_health(4)
 
 
-class BlessingOfMight(Card):
+class BlessingOfMight(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -56,7 +56,7 @@ class BlessingOfMight(Card):
         self.target.change_attack(3)
 
 
-class BlessingOfWisdom(Card):
+class BlessingOfWisdom(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -70,7 +70,7 @@ class BlessingOfWisdom(Card):
         self.target.add_effect(Effect(Attack(), Draw(), PlayerSelector(draw_player)))
 
 
-class Consecration(Card):
+class Consecration(SpellCard):
     def __init__(self):
         super().__init__("Consecration", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
@@ -81,7 +81,7 @@ class Consecration(Card):
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
 
 
-class DivineFavor(Card):
+class DivineFavor(SpellCard):
     def __init__(self):
         super().__init__("Divine Favor", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE)
 
@@ -92,7 +92,7 @@ class DivineFavor(Card):
             player.draw()
 
 
-class Equality(Card):
+class Equality(SpellCard):
     def __init__(self):
         super().__init__("Equality", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE)
 
@@ -109,7 +109,7 @@ class Equality(Card):
         return super().can_use(player, game) and (len(player.minions) > 0 or len(game.other_player.minions) > 0)
 
 
-class HammerOfWrath(Card):
+class HammerOfWrath(SpellCard):
     def __init__(self):
         super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_spell_target)
@@ -121,7 +121,7 @@ class HammerOfWrath(Card):
         player.draw()
 
 
-class HandOfProtection(Card):
+class HandOfProtection(SpellCard):
     def __init__(self):
         super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -132,7 +132,7 @@ class HandOfProtection(Card):
         self.target.divine_shield = True
 
 
-class HolyLight(Card):
+class HolyLight(SpellCard):
     def __init__(self):
         super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
@@ -143,7 +143,7 @@ class HolyLight(Card):
         self.target.heal(player.effective_heal_power(6), self)
 
 
-class HolyWrath(Card):
+class HolyWrath(SpellCard):
     def __init__(self):
         super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN,
                          CARD_RARITY.RARE, hearthbreaker.targeting.find_spell_target)
@@ -161,7 +161,7 @@ class HolyWrath(Card):
             self.target.damage(player.effective_spell_damage(cost), self)
 
 
-class Humility(Card):
+class Humility(SpellCard):
     def __init__(self):
         super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -173,7 +173,7 @@ class Humility(Card):
         self.target.change_attack(1 - self.target.calculate_attack())
 
 
-class LayOnHands(Card):
+class LayOnHands(SpellCard):
     def __init__(self):
         super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_spell_target)
@@ -281,7 +281,7 @@ class Repentance(SecretCard):
         player.game.current_player.unbind("minion_played", self._reveal)
 
 
-class SealOfLight(Card):
+class SealOfLight(SpellCard):
     def __init__(self):
         super().__init__("Seal of Light", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
@@ -291,7 +291,7 @@ class SealOfLight(Card):
         player.hero.change_temp_attack(2)
 
 
-class MusterForBattle(Card):
+class MusterForBattle(SpellCard):
     def __init__(self):
         super().__init__("Muster for Battle", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE)
 

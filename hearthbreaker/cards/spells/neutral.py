@@ -1,4 +1,4 @@
-from hearthbreaker.cards.base import Card
+from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnStarted
@@ -6,7 +6,7 @@ from hearthbreaker.tags.status import Stealth, Taunt, Frozen
 import hearthbreaker.targeting
 
 
-class TheCoin(Card):
+class TheCoin(SpellCard):
     def __init__(self):
         super().__init__("The Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 
@@ -16,7 +16,7 @@ class TheCoin(Card):
             player.mana += 1
 
 
-class ArmorPlating(Card):
+class ArmorPlating(SpellCard):
     def __init__(self):
         super().__init__("Armor Plating", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -26,7 +26,7 @@ class ArmorPlating(Card):
         self.target.increase_health(1)
 
 
-class EmergencyCoolant(Card):
+class EmergencyCoolant(SpellCard):
     def __init__(self):
         super().__init__("Emergency Coolant", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -36,7 +36,7 @@ class EmergencyCoolant(Card):
         self.target.add_buff(Buff(Frozen()))
 
 
-class FinickyCloakfield(Card):
+class FinickyCloakfield(SpellCard):
     def __init__(self):
         super().__init__("Finicky Cloakfield", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_friendly_minion_spell_target)
@@ -46,7 +46,7 @@ class FinickyCloakfield(Card):
         self.target.add_buff(BuffUntil(Stealth(), TurnStarted()))
 
 
-class ReversingSwitch(Card):
+class ReversingSwitch(SpellCard):
     def __init__(self):
         super().__init__("Reversing Switch", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -62,7 +62,7 @@ class ReversingSwitch(Card):
             self.target.set_health_to(temp_attack)
 
 
-class RustyHorn(Card):
+class RustyHorn(SpellCard):
     def __init__(self):
         super().__init__("Rusty Horn", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -72,7 +72,7 @@ class RustyHorn(Card):
         self.target.add_buff(Buff(Taunt()))
 
 
-class TimeRewinder(Card):
+class TimeRewinder(SpellCard):
     def __init__(self):
         super().__init__("Time Rewinder", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_friendly_minion_spell_target)
@@ -82,7 +82,7 @@ class TimeRewinder(Card):
         self.target.bounce()
 
 
-class WhirlingBlades(Card):
+class WhirlingBlades(SpellCard):
     def __init__(self):
         super().__init__("Whirling Blades", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -95,7 +95,7 @@ spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), Time
                    RustyHorn(), WhirlingBlades()]
 
 
-class GallywixsCoin(Card):
+class GallywixsCoin(SpellCard):
     def __init__(self):
         super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
 

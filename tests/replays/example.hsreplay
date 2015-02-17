@@ -91,13 +91,13 @@
     "random": [],
     "decks": [
       {
-        "class": "Mage",
+        "hero": "Jaina",
         "cards": [
           "Stonetusk Boar"
         ]
       },
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Naturalize"
         ]

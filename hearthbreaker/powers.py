@@ -23,8 +23,8 @@ def powers(character_class):
 
 
 class Power:
-    def __init__(self, hero):
-        self.hero = hero
+    def __init__(self):
+        self.hero = None
         self.used = False
 
     def can_use(self):
@@ -38,9 +38,6 @@ class Power:
 
 
 class DruidPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         self.hero.change_temp_attack(1)
@@ -48,18 +45,12 @@ class DruidPower(Power):
 
 
 class HunterPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         self.hero.player.game.other_player.hero.damage(2, None)
 
 
 class MagePower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         target = self.hero.find_power_target()
         super().use()
@@ -68,9 +59,6 @@ class MagePower(Power):
 
 
 class PriestPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         target = self.hero.find_power_target()
         super().use()
@@ -85,9 +73,6 @@ class PriestPower(Power):
 
 # Special power the priest can obtain via the card Shadowform
 class MindSpike(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         target = self.hero.find_power_target()
@@ -99,9 +84,6 @@ class MindSpike(Power):
 
 # Special power the priest can obtain via the card Shadowform
 class MindShatter(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         target = self.hero.find_power_target()
@@ -112,9 +94,6 @@ class MindShatter(Power):
 
 
 class PaladinPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         from hearthbreaker.cards.minions.paladin import SilverHandRecruit
@@ -124,9 +103,6 @@ class PaladinPower(Power):
 
 
 class RoguePower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         from hearthbreaker.game_objects import Weapon
         from hearthbreaker.cards.base import WeaponCard
@@ -148,13 +124,13 @@ class RoguePower(Power):
 
 
 class ShamanPower(Power):
-    def __init__(self, hero):
+    def __init__(self):
         self.healing_totem = False
         self.searing_totem = False
         self.stoneclaw_totem = False
         self.wrath_of_air_totem = False
 
-        super().__init__(hero)
+        super().__init__()
 
     def can_use(self):
         self.healing_totem = False
@@ -196,9 +172,6 @@ class ShamanPower(Power):
 
 
 class WarlockPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         self.hero.player.game.current_player.hero.damage(2, None)
@@ -206,9 +179,6 @@ class WarlockPower(Power):
 
 
 class JaraxxusPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         from hearthbreaker.cards.minions.warlock import Infernal
@@ -218,9 +188,6 @@ class JaraxxusPower(Power):
 
 
 class WarriorPower(Power):
-    def __init__(self, hero):
-        super().__init__(hero)
-
     def use(self):
         super().use()
         self.hero.increase_armor(2)

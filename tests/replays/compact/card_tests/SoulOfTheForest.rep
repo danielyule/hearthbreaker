@@ -1,5 +1,5 @@
-deck(Druid, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Soul of the Forest)
-deck(Priest, Stonetusk Boar, Ironbeak Owl)
+deck(Malfurion, Stonetusk Boar, Stonetusk Boar, Stonetusk Boar, Soul of the Forest)
+deck(Anduin, Stonetusk Boar, Ironbeak Owl)
 random()
 keep(0,1,2)
 keep(0,1,2,3)

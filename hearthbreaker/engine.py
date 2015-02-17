@@ -1,6 +1,6 @@
 import copy
 import random
-
+from hearthbreaker.cards.heroes import hero_from_name
 import hearthbreaker.constants
 from hearthbreaker.game_objects import Bindable, GameException, Minion, Hero
 import hearthbreaker.tags
@@ -12,17 +12,15 @@ card_table = {}
 
 
 def __create_card_table():
-    from hearthbreaker.cards.base import Card
+    from hearthbreaker.cards.base import WeaponCard, SpellCard, MinionCard, SecretCard, ChoiceCard, HeroCard
 
     def __card_lookup_rec(card_type):
         subclasses = card_type.__subclasses__()
-        if len(subclasses) is 0:
-            c = card_type()
-            card_table[c.ref_name] = card_type
-        for sub_type in subclasses:
-            __card_lookup_rec(sub_type)
+        for sc in subclasses:
+            c = sc()
+            card_table[c.ref_name] = sc
 
-    for card_class in Card.__subclasses__()[::-1]:
+    for card_class in [WeaponCard, SpellCard, MinionCard, SecretCard, ChoiceCard, HeroCard]:
         __card_lookup_rec(card_class)
 
 
@@ -315,7 +313,8 @@ class Player(Bindable):
     def __init__(self, name, deck, agent, game):
         super().__init__()
         self.game = game
-        self.hero = Hero(deck.character_class, self)
+        self.hero = deck.hero.create_hero(self)
+        self.hero.card = deck.hero
         self.name = name
         self.mana = 0
         self.max_mana = 0
@@ -346,7 +345,7 @@ class Player(Bindable):
     def copy(self, new_game):
         copied_player = Player(self.name, self.deck.copy(), self.agent, new_game)
 
-        copied_player.hero = self.hero.copy(copied_player, new_game)
+        copied_player.hero = self.hero.copy(copied_player)
         copied_player.graveyard = copy.copy(self.graveyard)
         copied_player.minions = [minion.copy(copied_player, new_game) for minion in self.minions]
         copied_player.hand = [copy.copy(card) for card in self.hand]
@@ -469,7 +468,7 @@ class Player(Bindable):
     @classmethod
     def __from_json__(cls, pd, game, agent):
         deck = Deck.__from__to_json__(pd["deck"],
-                                      hearthbreaker.constants.CHARACTER_CLASS.from_str(pd["hero"]["character"]))
+                                      hero_from_name(pd["hero"]["name"]))
         player = Player("whatever", deck, agent, game)
         hero = Hero.__from_json__(pd["hero"], player)
         player.hero = hero
@@ -505,11 +504,11 @@ class Player(Bindable):
 
 
 class Deck:
-    def __init__(self, cards, character_class):
+    def __init__(self, cards, hero):
         if len(cards) != 30:
             raise GameException("Deck must have exactly 30 cards in it")
         self.cards = cards
-        self.character_class = character_class
+        self.hero = hero
         for card in cards:
             card.drawn = False
         self.left = 30
@@ -521,7 +520,7 @@ class Deck:
             return new_card
         new_deck = Deck.__new__(Deck)
         new_deck.cards = [copy_card(card) for card in self.cards]
-        new_deck.character_class = self.character_class
+        new_deck.hero = self.hero
         new_deck.left = self.left
         return new_deck
 
@@ -557,7 +556,7 @@ class Deck:
         return card_list
 
     @classmethod
-    def __from__to_json__(cls, dd, character_class):
+    def __from__to_json__(cls, dd, hero):
         cards = []
         used = []
         left = 30
@@ -572,7 +571,7 @@ class Deck:
         deck.cards = cards
         deck.used = used
         deck.left = left
-        deck.character_class = character_class
+        deck.hero = hero
         return deck
 
 

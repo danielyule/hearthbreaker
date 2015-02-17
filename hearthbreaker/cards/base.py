@@ -1,7 +1,8 @@
 import abc
 from functools import reduce
 import hearthbreaker.constants
-from hearthbreaker.game_objects import Bindable, GameObject, GameException
+from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
+from hearthbreaker.game_objects import Bindable, GameObject, GameException, Hero
 
 
 def _battlecry_targetable(target):
@@ -97,11 +98,6 @@ class Card(Bindable, GameObject):
         """
         if game.game_ended:
             return False
-        if self.targetable:
-            self.targets = self.get_targets(game, self.filter_func)
-            if self.targets is not None and len(self.targets) is 0:
-                return False
-
         return player.mana >= self.mana_cost(player)
 
     def mana_cost(self, player):
@@ -144,10 +140,6 @@ class Card(Bindable, GameObject):
         pass
 
     @staticmethod
-    def is_spell():
-        return True
-
-    @staticmethod
     def is_card():
         return True
 
@@ -173,8 +165,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :meth:`create_minion`
     """
     def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
-                 targeting_func=None, filter_func=_battlecry_targetable, ref_name=None, battlecry=None,
-                 choices=None, combo=None, overload=0, effects=None, buffs=None):
+                 ref_name=None, battlecry=None, choices=None, combo=None, overload=0, effects=None, buffs=None):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -185,12 +176,6 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param int rarity: How rare the card is.  Should be a member of :class:`hearthbreaker.constants.CARD_RARITY`
         :param int minion_type: The type that the summoned minion will have.  Should be a member of
                                 :class:`hearthbreaker.constants.MINION_TYPE`
-        :param function targeting_func: The function used to select a list of targets for this minion's battlecry, if it
-                                        has one.  If it does not, then None.  This function should be taken from
-                                        :mod:`hearthbreaker.targeting`, and should return `None` if there are no
-                                        feasible targets.
-        :param function filter_func: Used to filter targets returned from the targeting function for appropriateness.
-                                     Typically used for ensuring that stealthed minions aren't targeted
         :param string ref_name: The name used for reference for this card.  If None (the default), the reference name
                                 will be the same as its name.  Otherwise, this name must be unique across all cards.
         :param battlecry: Describes the battlecry this minion will use when it enters the field, or None for no
@@ -206,7 +191,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param buffs:  The buffs that will be applied directly to this card (as opposed to the minion this card creates)
             :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__(name, mana, character_class, rarity, targeting_func, filter_func, overload, ref_name,
+        super().__init__(name, mana, character_class, rarity, None, None, overload, ref_name,
                          effects, buffs)
         self.minion_type = minion_type
         if battlecry:
@@ -274,12 +259,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         if self.combo and player.cards_played > 0:
             self.combo.do(minion)
         else:
-            if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
-                for battlecry in self.battlecry:
-                    if not battlecry.do(minion):
-                        break
-            elif minion.battlecry is not None:
-                minion.battlecry(minion)
+            for battlecry in self.battlecry:
+                if not battlecry.do(minion):
+                    break
         if not minion.removed:
             # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
             minion = player.minions[minion.index]
@@ -348,6 +330,148 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         return True
 
 
+class HeroCard(Card, metaclass=abc.ABCMeta):
+    def __init__(self, name, character_class, health, power, minion_type=MINION_TYPE.NONE, ref_name=None):
+        super().__init__(name, 0, character_class, CARD_RARITY.SPECIAL, ref_name=ref_name)
+        self.health = health
+        self.power = power
+        self.short_name = name.split(" ")[0]
+        self.minion_type = minion_type
+
+    def use(self, player, game):
+        pass
+
+    def create_hero(self, player):
+        return Hero(self.health, self.character_class, self.power(), player)
+
+
+class SpellCard(Card, metaclass=abc.ABCMeta):
+    """
+    Represents a card in Heathstone.  Every card is implemented as a subclass, either directly or through
+    :class:`MinionCard`, :class:`SecretCard` or :class:`WeaponCard`.  If it is a direct subclass of this
+    class then it is a standard spell, whereas if it is a subclass of one of :class:`MinionCard`, :class:`SecretCard`
+    or :class:`WeaponCard`., then it is a minion, secret or weapon respectively.
+
+    In order to play a card, it should be passed to :meth:`Game.play_card`.  Simply calling :meth:`use` will
+    cause its effect, but not update the game state.
+    """
+
+    def __init__(self, name, mana, character_class, rarity, target_func=None,
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
+        """
+            Creates a new :class:`Card`.
+
+            ``target_func`` and ``filter_func`` have very specific behavior.  In use, the target function is called with
+             the filter function as a parameter to generate the list of possible targets for the card, then ask the
+             agent to choose the appropriate target.  The selected target will be available as the :attr:`target`
+             attribute of :class:`Card`. As such, it is critical to call :meth:`use` in any overriding implementations.
+
+            :param string name: The name of the card in English
+            :param int mana: The base amount of mana this card costs
+            :param int character_class: A constant from :class:`hearthbreaker.constants.CHARACTER_CLASS` denoting
+                                        which character this card belongs to or
+                                        :const:`hearthbreaker.constants.CHARACTER_CLASS.ALL` if neutral
+            :param int rarity: A constant from :class:`hearthbreaker.constants.CARD_RARITY` denoting the rarity of the
+                               card.
+            :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
+                                         the card is assumed not to require a target.  If `target_func` returns
+                                         an empty list, then the card cannot be played.  If it returns None, then the
+                                         card is played, but with no target (i.e. a battlecry which has no valid target
+                                         will not stop the minion from being played).
+
+                                         See :mod:`hearthbreaker.targeting` for more details.
+            :param function filter_func: A boolean function which can be used to filter the list of targets. An example
+                                         for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a
+                                         function which returns true if the target's attack is less than 3.
+            :param int overload: The amount of overload on the card
+            :param effects:  The effects that will be triggered for this card
+            :type effects: [:class:`hearthbreaker.tags.base.Effect`]
+            :param buffs:  The buffs that will be applied directly to this card
+            :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
+        """
+        super().__init__(name, mana, character_class, rarity, target_func, filter_func,
+                         overload, ref_name, effects, buffs)
+
+    def can_choose(self, player):
+        """
+        Verifies if this card can be chosen from a list of options (i.e. in Tracking)
+
+        :return: True if the card can be chosen, false otherwise.
+        :rtype: bool
+        """
+        return True
+
+    def can_use(self, player, game):
+        """
+        Verifies if the card can be used with the game state as it is.
+
+        Checks that the player has enough mana to play the card, and that the card has a valid
+        target if it requires one.
+
+        :return: True if the card can be played, false otherwise.
+        :rtype: bool
+        """
+
+        if self.targetable:
+            self.targets = self.get_targets(game, self.filter_func)
+            if self.targets is not None and len(self.targets) is 0:
+                return False
+
+        return super().can_use(player, game)
+
+    def mana_cost(self, player):
+        """
+        Calculates the mana cost for this card.
+
+        This cost is the base cost for the card, modified by any tags from the card itself, or
+        from other cards (such as :class:`hearthbreaker.cards.minions.neutral.VentureCoMercenary`)
+
+        :param hearthbreaker.game_objects.Player player: The player who is trying to use the card.
+
+        :return: representing the actual mana cost of this card.
+        :rtype: int
+        """
+        from hearthbreaker.tags.status import ManaChange
+        mana = reduce(lambda a, b: b.update(self, a), [aura.status
+                                                       for p in player.game.players
+                                                       for aura in p.player_auras
+                                                       if aura.match(self) and isinstance(aura.status, ManaChange)],
+                      self.mana)
+        mana = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
+                                                       if isinstance(buff.status, ManaChange) and
+                                                       (not buff.condition or buff.condition.evaluate(self, self))],
+                      mana)
+
+        return mana
+
+    def use(self, player, game):
+        """
+        Use the card.
+
+        This method will cause the card's effect, but will not update the game state or trigger any events.
+        To play a card correctly, use :meth:`Game.play_card`.
+
+        Implementations of new cards should override this method, but be sure to call ``super().use(player, game)``
+
+        :param hearthbreaker.game_objects.Player player: The player who is using the card.
+        :param hearthbreaker.game_objects.Game game: The game this card is being used in.
+        """
+        pass
+
+    @staticmethod
+    def is_spell():
+        return True
+
+    @staticmethod
+    def is_card():
+        return True
+
+    def __to_json__(self):
+        r_val = super().__to_json__()
+        r_val['name'] = self.name
+        return r_val
+
+
 class SecretCard(Card, metaclass=abc.ABCMeta):
     def __init__(self, name, mana, character_class, rarity):
         super().__init__(name, mana, character_class, rarity, None)
@@ -382,14 +506,17 @@ class SecretCard(Card, metaclass=abc.ABCMeta):
     def is_secret():
         return True
 
+    @staticmethod
+    def is_spell():
+        return True
+
 
 class WeaponCard(Card, metaclass=abc.ABCMeta):
     """
     Represents a :class:`Card` for creating a :class:`Weapon`
     """
 
-    def __init__(self, name, mana, character_class, rarity, target_func=None, filter_func=lambda t: not t.stealth,
-                 overload=0, battlecry=None, combo=None):
+    def __init__(self, name, mana, character_class, rarity, overload=0, battlecry=None, combo=None):
         """
         Create a new :class:`WeaponCard`
 
@@ -399,15 +526,6 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                                     which character this card belongs to or
                                     :const:`hearthbreaker.constants.CHARACTER_CLASS.ALL` if neutral
         :param int rarity: A constant from :class:`hearthbreaker.constants.CARD_RARITY` denoting the rarity of the card.
-        :param function target_func: A function which takes a game, and returns a list of targets.  If None, then
-                                     the weapon is assumed not to require a target for its battlecry.
-                                     If `target_func` returns None, then the card is played, but with no target (i.e. a
-                                     battlecry which has no valid target will not stop the weapon from being played).
-                                     See :mod:`hearthbreaker.targeting` for more details.
-        :param function filter_func: A boolean function which can be used to filter the list of targets. An example
-                                     for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a function
-                                     which returns true if the target's attack is less than 3.  Currently no weapons
-                                     require anything but the default
         :param int overload: The amount of overload on the card
         :param battlecry: A battlecry that will activate when this weapon is equipped
         :type battlecry: :class:`hearthbreaker.tags.base.Battlecry`
@@ -415,7 +533,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                       been played.  If combo activates, battlecry will not
         :type combo: :class:`hearthbreaker.tags.base.Battlecry`
         """
-        super().__init__(name, mana, character_class, rarity, target_func, filter_func, overload)
+        super().__init__(name, mana, character_class, rarity, None, None, overload)
         self.battlecry = battlecry
         self.combo = combo
 
@@ -436,8 +554,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
         else:
             if self.battlecry:
                 self.battlecry.do(weapon)
-            elif weapon.battlecry is not None:
-                weapon.battlecry(weapon)
+
         weapon.equip(player)
 
     @abc.abstractmethod

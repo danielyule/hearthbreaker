@@ -1,5 +1,5 @@
-deck( Mage,Stonetusk Boar)
-deck(Druid,Naturalize)
+deck( Jaina,Stonetusk Boar)
+deck(Malfurion,Naturalize)
 random()
 keep(0,2)
 keep(0,1,3)

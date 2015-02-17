@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, SecretCard
+from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnEnded
@@ -9,7 +9,7 @@ import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
-class HuntersMark(Card):
+class HuntersMark(SpellCard):
     def __init__(self):
         super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.COMMON,
@@ -20,7 +20,7 @@ class HuntersMark(Card):
         self.target.set_health_to(1)
 
 
-class ArcaneShot(Card):
+class ArcaneShot(SpellCard):
     def __init__(self):
         super().__init__("Arcane Shot", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.FREE,
@@ -31,7 +31,7 @@ class ArcaneShot(Card):
         self.target.damage(player.effective_spell_damage(2), self)
 
 
-class BestialWrath(Card):
+class BestialWrath(SpellCard):
     def __init__(self):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
@@ -44,7 +44,7 @@ class BestialWrath(Card):
         self.target.change_temp_attack(2)
 
 
-class Flare(Card):
+class Flare(SpellCard):
     def __init__(self):
         super().__init__("Flare", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
@@ -60,7 +60,7 @@ class Flare(Card):
         player.draw()
 
 
-class Tracking(Card):
+class Tracking(SpellCard):
     def __init__(self):
         super().__init__("Tracking", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE)
 
@@ -152,7 +152,7 @@ class Snipe(SecretCard):
         super().reveal()
 
 
-class DeadlyShot(Card):
+class DeadlyShot(SpellCard):
     def __init__(self):
         super().__init__("Deadly Shot", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
@@ -167,7 +167,7 @@ class DeadlyShot(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1
 
 
-class MultiShot(Card):
+class MultiShot(SpellCard):
     def __init__(self):
         super().__init__("Multi-Shot", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE)
 
@@ -184,7 +184,7 @@ class MultiShot(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 2
 
 
-class ExplosiveShot(Card):
+class ExplosiveShot(SpellCard):
     def __init__(self):
         super().__init__("Explosive Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -204,7 +204,7 @@ class ExplosiveShot(Card):
             minion.damage(player.effective_spell_damage(2), self)
 
 
-class KillCommand(Card):
+class KillCommand(SpellCard):
     def __init__(self):
         super().__init__("Kill Command", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
@@ -219,7 +219,7 @@ class KillCommand(Card):
             self.target.damage(player.effective_spell_damage(5), self)
 
 
-class UnleashTheHounds(Card):
+class UnleashTheHounds(SpellCard):
     def __init__(self):
         super().__init__("Unleash the Hounds", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
@@ -234,7 +234,7 @@ class UnleashTheHounds(Card):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1 and len(player.minions) < 7
 
 
-class AnimalCompanion(Card):
+class AnimalCompanion(SpellCard):
     def __init__(self):
         super().__init__("Animal Companion", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
 
@@ -269,7 +269,7 @@ class SnakeTrap(SecretCard):
             super().reveal()
 
 
-class CallPet(Card):
+class CallPet(SpellCard):
     def __init__(self):
         super().__init__("Call Pet", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE)
 
@@ -283,7 +283,7 @@ class CallPet(Card):
         player.draw()
 
 
-class CobraShot(Card):
+class CobraShot(SpellCard):
     def __init__(self):
         super().__init__("Cobra Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)

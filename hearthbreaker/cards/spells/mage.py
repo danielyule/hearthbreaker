@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, MinionCard, SecretCard
+from hearthbreaker.cards.base import MinionCard, SecretCard, SpellCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion, Hero
@@ -10,7 +10,7 @@ from hearthbreaker.tags.status import Immune, Frozen
 import hearthbreaker.targeting
 
 
-class ArcaneMissiles(Card):
+class ArcaneMissiles(SpellCard):
     def __init__(self):
         super().__init__("Arcane Missiles", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
@@ -23,7 +23,7 @@ class ArcaneMissiles(Card):
             target.damage(1, self)
 
 
-class IceLance(Card):
+class IceLance(SpellCard):
     def __init__(self):
         super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
@@ -36,7 +36,7 @@ class IceLance(Card):
             self.target.add_buff(Buff(Frozen()))
 
 
-class MirrorImage(Card):
+class MirrorImage(SpellCard):
     def __init__(self):
         super().__init__("Mirror Image", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
@@ -49,7 +49,7 @@ class MirrorImage(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class ArcaneExplosion(Card):
+class ArcaneExplosion(SpellCard):
     def __init__(self):
         super().__init__("Arcane Explosion", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
@@ -59,7 +59,7 @@ class ArcaneExplosion(Card):
             minion.damage(player.effective_spell_damage(1), self)
 
 
-class Frostbolt(Card):
+class Frostbolt(SpellCard):
     def __init__(self):
         super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
@@ -70,7 +70,7 @@ class Frostbolt(Card):
         self.target.add_buff(Buff(Frozen()))
 
 
-class ArcaneIntellect(Card):
+class ArcaneIntellect(SpellCard):
     def __init__(self):
         super().__init__("Arcane Intellect", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE)
 
@@ -80,7 +80,7 @@ class ArcaneIntellect(Card):
             player.draw()
 
 
-class FrostNova(Card):
+class FrostNova(SpellCard):
     def __init__(self):
         super().__init__("Frost Nova", 3, CHARACTER_CLASS.MAGE,
                          CARD_RARITY.COMMON)
@@ -207,7 +207,7 @@ class IceBlock(SecretCard):
         player.unbind("pre_damage", self._reveal)
 
 
-class ConeOfCold(Card):
+class ConeOfCold(SpellCard):
     def __init__(self):
         super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -231,7 +231,7 @@ class ConeOfCold(Card):
             minion.add_buff(Buff(Frozen()))
 
 
-class Fireball(Card):
+class Fireball(SpellCard):
     def __init__(self):
         super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_spell_target)
@@ -241,7 +241,7 @@ class Fireball(Card):
         self.target.damage(player.effective_spell_damage(6), self)
 
 
-class Polymorph(Card):
+class Polymorph(SpellCard):
     def __init__(self):
         super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -262,7 +262,7 @@ class Polymorph(Card):
         self.target.replace(minion)
 
 
-class Blizzard(Card):
+class Blizzard(SpellCard):
     def __init__(self):
         super().__init__("Blizzard", 6, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
@@ -273,7 +273,7 @@ class Blizzard(Card):
             minion.add_buff(Buff(Frozen()))
 
 
-class Flamestrike(Card):
+class Flamestrike(SpellCard):
     def __init__(self):
         super().__init__("Flamestrike", 7, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
@@ -283,7 +283,7 @@ class Flamestrike(Card):
             minion.damage(player.effective_spell_damage(4), self)
 
 
-class Pyroblast(Card):
+class Pyroblast(SpellCard):
     def __init__(self):
         super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC,
                          hearthbreaker.targeting.find_spell_target)
@@ -313,7 +313,7 @@ class Duplicate(SecretCard):
         super().reveal()
 
 
-class Flamecannon(Card):
+class Flamecannon(SpellCard):
     def __init__(self):
         super().__init__("Flamecannon", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 

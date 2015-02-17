@@ -1,5 +1,5 @@
-deck(Mage,Demolisher)
-deck(Druid,Stonetusk Boar)
+deck(Jaina,Demolisher)
+deck(Malfurion,Stonetusk Boar)
 random(0,0,0,0,0,0,0,0)
 keep(0,1,2)
 keep(0,1,2,3)

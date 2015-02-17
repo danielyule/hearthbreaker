@@ -1,5 +1,5 @@
 import copy
-from hearthbreaker.cards.base import Card, MinionCard, ChoiceCard
+from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill
 from hearthbreaker.tags.base import Effect, Deathrattle
@@ -9,7 +9,7 @@ import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
-class Innervate(Card):
+class Innervate(SpellCard):
     def __init__(self):
         super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
 
@@ -21,7 +21,7 @@ class Innervate(Card):
             player.mana = 10
 
 
-class Moonfire(Card):
+class Moonfire(SpellCard):
     def __init__(self):
         super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
@@ -31,7 +31,7 @@ class Moonfire(Card):
         self.target.damage(player.effective_spell_damage(1), self)
 
 
-class Claw(Card):
+class Claw(SpellCard):
     def __init__(self):
         super().__init__("Claw", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
 
@@ -41,7 +41,7 @@ class Claw(Card):
         player.hero.increase_armor(2)
 
 
-class Naturalize(Card):
+class Naturalize(SpellCard):
     def __init__(self):
         super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -53,7 +53,7 @@ class Naturalize(Card):
         game.other_player.draw()
 
 
-class Savagery(Card):
+class Savagery(SpellCard):
     def __init__(self):
         super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -63,7 +63,7 @@ class Savagery(Card):
         self.target.damage(player.effective_spell_damage(player.hero.calculate_attack()), self)
 
 
-class MarkOfTheWild(Card):
+class MarkOfTheWild(SpellCard):
     def __init__(self):
         super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -75,7 +75,7 @@ class MarkOfTheWild(Card):
         self.target.taunt = True
 
 
-class PowerOfTheWild(Card):
+class PowerOfTheWild(SpellCard):
     def __init__(self):
         super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -113,7 +113,7 @@ class PowerOfTheWild(Card):
         option.use(player, game)
 
 
-class WildGrowth(Card):
+class WildGrowth(SpellCard):
     def __init__(self):
         super().__init__("Wild Growth", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
 
@@ -126,7 +126,7 @@ class WildGrowth(Card):
 
 
 # Special card that only appears in tandem with Wild Growth
-class ExcessMana(Card):
+class ExcessMana(SpellCard):
     def __init__(self):
         super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
@@ -135,7 +135,7 @@ class ExcessMana(Card):
         player.draw()
 
 
-class Wrath(Card):
+class Wrath(SpellCard):
     def __init__(self):
         super().__init__("Wrath", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -165,7 +165,7 @@ class Wrath(Card):
         option.use(player, game)
 
 
-class HealingTouch(Card):
+class HealingTouch(SpellCard):
     def __init__(self):
         super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
                          hearthbreaker.targeting.find_spell_target)
@@ -175,7 +175,7 @@ class HealingTouch(Card):
         self.target.heal(player.effective_heal_power(8), self)
 
 
-class MarkOfNature(Card):
+class MarkOfNature(SpellCard):
     def __init__(self):
         super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_minion_spell_target)
@@ -204,7 +204,7 @@ class MarkOfNature(Card):
         option.use(player, game)
 
 
-class SavageRoar(Card):
+class SavageRoar(SpellCard):
     def __init__(self):
         super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -215,7 +215,7 @@ class SavageRoar(Card):
         player.hero.change_temp_attack(2)
 
 
-class Bite(Card):
+class Bite(SpellCard):
     def __init__(self):
         super().__init__("Bite", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
@@ -233,7 +233,7 @@ class Treant(MinionCard):
         return Minion(2, 2)
 
 
-class SoulOfTheForest(Card):
+class SoulOfTheForest(SpellCard):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -246,7 +246,7 @@ class SoulOfTheForest(Card):
             minion.deathrattle.append(Deathrattle(Summon(Treant()), PlayerSelector()))
 
 
-class Swipe(Card):
+class Swipe(SpellCard):
     def __init__(self):
         super().__init__("Swipe", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_enemy_spell_target)
@@ -263,7 +263,7 @@ class Swipe(Card):
             game.other_player.hero.damage(player.effective_spell_damage(1), self)
 
 
-class Nourish(Card):
+class Nourish(SpellCard):
     def __init__(self):
         super().__init__("Nourish", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
@@ -297,7 +297,7 @@ class Nourish(Card):
         option.use(player, game)
 
 
-class Starfall(Card):
+class Starfall(SpellCard):
     def __init__(self):
         super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
 
@@ -332,7 +332,7 @@ class Starfall(Card):
         option.use(player, game)
 
 
-class ForceOfNature(Card):
+class ForceOfNature(SpellCard):
     def __init__(self):
         super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
@@ -354,7 +354,7 @@ class ForceOfNature(Card):
         return super().can_use(player, game) and len(player.minions) < 7
 
 
-class Starfire(Card):
+class Starfire(SpellCard):
     def __init__(self):
         super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          hearthbreaker.targeting.find_spell_target)
@@ -365,7 +365,7 @@ class Starfire(Card):
         player.draw()
 
 
-class PoisonSeeds(Card):
+class PoisonSeeds(SpellCard):
     def __init__(self):
         super().__init__("Poison Seeds", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
@@ -389,7 +389,7 @@ class PoisonSeeds(Card):
             Treant().summon(target.player, target.game, len(target.player.minions))
 
 
-class DarkWispers(Card):
+class DarkWispers(SpellCard):
     def __init__(self):
         super().__init__("Dark Wispers", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
@@ -442,7 +442,7 @@ class DarkWispers(Card):
         option.use(player, game)
 
 
-class Recycle(Card):
+class Recycle(SpellCard):
     def __init__(self):
         super().__init__("Recycle", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
                          hearthbreaker.targeting.find_enemy_minion_spell_target)
@@ -453,7 +453,7 @@ class Recycle(Card):
         self.target.remove_from_board()
 
 
-class TreeOfLife(Card):
+class TreeOfLife(SpellCard):
     def __init__(self):
         super().__init__("Tree of Life", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 

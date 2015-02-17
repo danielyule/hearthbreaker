@@ -140,13 +140,13 @@
     "random": [],
     "decks": [
       {
-        "class": "Paladin",
+        "hero": "Uther",
         "cards": [
           "Blessing of Wisdom"
         ]
       },
       {
-        "class": "Priest",
+        "hero": "Anduin",
         "cards": [
           "Stonetusk Boar",
           "Stonetusk Boar",

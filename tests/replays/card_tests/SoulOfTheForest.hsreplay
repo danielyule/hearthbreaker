@@ -164,7 +164,7 @@
     "random": [],
     "decks": [
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Stonetusk Boar",
           "Stonetusk Boar",
@@ -173,7 +173,7 @@
         ]
       },
       {
-        "class": "Priest",
+        "hero": "Anduin",
         "cards": [
           "Stonetusk Boar",
           "Ironbeak Owl"

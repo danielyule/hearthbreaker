@@ -1,7 +1,10 @@
-from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.cards.heroes import Jaraxxus
+from hearthbreaker.cards.weapons.warlock import BloodFury
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Weapon, Minion
-from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give
+from hearthbreaker.game_objects import Minion
+from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Transform, Equip, \
+    Remove
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent
 from hearthbreaker.tags.event import TurnEnded, CharacterDamaged
@@ -91,33 +94,13 @@ class BloodImp(MinionCard):
 
 class LordJaraxxus(MinionCard):
     def __init__(self):
-        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON)
+        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON,
+                         battlecry=(Battlecry(Transform(Jaraxxus()), HeroSelector()),
+                                    Battlecry(Remove(), SelfSelector()),
+                                    Battlecry(Equip(BloodFury()), PlayerSelector())))
 
     def create_minion(self, player):
-        def summon_jaraxxus(minion):
-            from hearthbreaker.powers import JaraxxusPower
-
-            class BloodFury(WeaponCard):
-                def __init__(self):
-                    super().__init__("Blood Fury", 3, CHARACTER_CLASS.LORD_JARAXXUS, CARD_RARITY.SPECIAL)
-
-                def create_weapon(self, player):
-                    return Weapon(3, 8)
-
-            minion.remove_from_board()
-            player.trigger("minion_played", minion)
-            player.hero.health = minion.health
-            player.hero.base_health = minion.base_health + minion.health_delta
-            player.hero.character_class = CHARACTER_CLASS.LORD_JARAXXUS
-            player.hero.power = JaraxxusPower(player.hero)
-            blood_fury = BloodFury()
-            weapon = blood_fury.create_weapon(player)
-            weapon.card = blood_fury
-            weapon.player = player
-            weapon.game = player.game
-            weapon.equip(player)
-
-        return Minion(3, 15, battlecry=summon_jaraxxus)
+        return Minion(3, 15)
 
 
 class Infernal(MinionCard):

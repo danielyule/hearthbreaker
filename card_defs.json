@@ -5786,7 +5786,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 1, 
+          "amount": 3, 
           "name": "damage"
         }
       ], 
@@ -8351,6 +8351,49 @@
     "mana": 9, 
     "attack": 3, 
     "health": 15, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Lord Jarraxus (hero)"
+            }
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "hero"
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "name": "remove"
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "weapon": {
+              "name": "Blood Fury"
+            }, 
+            "name": "equip"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -11577,6 +11620,15 @@
         }
       ]
     }
+  }, 
+  {
+    "name": "Blood Fury", 
+    "character_class": "Warlock", 
+    "durability": 8, 
+    "rarity": "Special", 
+    "mana": 3, 
+    "attack": 3, 
+    "type": "weapon"
   }, 
   {
     "name": "Battle Axe", 

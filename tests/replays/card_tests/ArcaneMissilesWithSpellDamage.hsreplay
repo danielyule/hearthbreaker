@@ -96,14 +96,14 @@
     ],
     "decks": [
       {
-        "class": "Mage",
+        "hero": "Jaina",
         "cards": [
           "Kobold Geomancer",
           "Arcane Missiles"
         ]
       },
       {
-        "class": "Druid",
+        "hero": "Malfurion",
         "cards": [
           "Faerie Dragon"
         ]
