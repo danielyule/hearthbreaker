@@ -1,27 +1,6 @@
 import hearthbreaker.constants
 
 
-def powers(character_class):
-    if character_class == hearthbreaker.constants.CHARACTER_CLASS.DRUID:
-        return DruidPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.HUNTER:
-        return HunterPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.MAGE:
-        return MagePower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.PRIEST:
-        return PriestPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.PALADIN:
-        return PaladinPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.ROGUE:
-        return RoguePower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.SHAMAN:
-        return ShamanPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.WARLOCK:
-        return WarlockPower
-    elif character_class == hearthbreaker.constants.CHARACTER_CLASS.WARRIOR:
-        return WarriorPower
-
-
 class Power:
     def __init__(self):
         self.hero = None
