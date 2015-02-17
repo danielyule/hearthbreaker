@@ -9,7 +9,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan
+    BaseAttackEqualTo, GreaterThan, And
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
@@ -2132,7 +2132,7 @@ class OgreBrute(MinionCard):
         return Minion(4, 4, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
                                                                                      EnemyPlayer(),
                                                                                      RandomPicker())),
-                                            SelfSelector(), OneIn(2))])
+                                            SelfSelector(), And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
 
 
 class MogorTheOgre(MinionCard):
@@ -2141,7 +2141,8 @@ class MogorTheOgre(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 6, effects=[Effect(CharacterAttack(None, BothPlayer()), ChangeTarget(
-            CharacterSelector(NotCurrentTarget(), EnemyPlayer(), RandomPicker())), TargetSelector(), OneIn(2))])
+            CharacterSelector(NotCurrentTarget(), EnemyPlayer(), RandomPicker())), TargetSelector(),
+            And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
 
 
 class Toshley(MinionCard):

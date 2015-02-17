@@ -2,7 +2,8 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget, AddCard
 from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE
-from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget
+from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget, \
+    OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
     UserPicker, SelfSelector, RandomPicker, EnemyPlayer
@@ -151,7 +152,8 @@ class DunemaulShaman(MinionCard):
                                                            ChangeTarget(CharacterSelector(NotCurrentTarget(),
                                                                                           EnemyPlayer(),
                                                                                           RandomPicker())),
-                                                           SelfSelector(), OneIn(2))])
+                                                           SelfSelector(),
+                                                           And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
 
 
 class Neptulon(MinionCard):

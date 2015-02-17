@@ -5893,9 +5893,18 @@
             "event_name": "attack"
           }, 
           "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
+            "conditions": [
+              {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              {
+                "count": 0,
+                "name": "opponent_minion_count_is_greater_than"
+              }
+            ], 
+            "name": "and"
+          },
           "selector": {
             "name": "self"
           }
@@ -5933,9 +5942,18 @@
             "player": "both"
           }, 
           "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
+            "conditions": [
+              {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              {
+                "count": 0,
+                "name": "opponent_minion_count_is_greater_than"
+              }
+            ], 
+            "name": "and"
+          },
           "selector": {
             "name": "target"
           }
@@ -9777,9 +9795,18 @@
             "event_name": "attack"
           }, 
           "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
+            "conditions": [
+              {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              {
+                "count": 0,
+                "name": "opponent_minion_count_is_greater_than"
+              }
+            ], 
+            "name": "and"
+          },
           "selector": {
             "name": "self"
           }
@@ -10347,9 +10374,18 @@
             "event_name": "attack"
           }, 
           "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
+            "conditions": [
+              {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              {
+                "count": 0,
+                "name": "opponent_minion_count_is_greater_than"
+              }
+            ], 
+            "name": "and"
+          },
           "selector": {
             "name": "self"
           }
@@ -11246,9 +11282,18 @@
             "event_name": "attack"
           }, 
           "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
+            "conditions": [
+              {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              {
+                "count": 0,
+                "name": "opponent_minion_count_is_greater_than"
+              }
+            ], 
+            "name": "and"
+          },
           "selector": {
             "name": "self"
           }

@@ -726,3 +726,14 @@ class TestHunter(unittest.TestCase):
         # 6 * 2 = 12
         # Tested by @jleclanche for patch 2.1.0.7785
         self.assertEqual(12, game.current_player.minions[0].calculate_attack())
+
+    def test_ogre_misdirection(self):
+        game = generate_game_for(OgreBrute, Misdirection,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        random.seed(1850)
+
+        for turn in range(0, 7):
+            game.play_single_turn()
+
+        self.assertEqual(26, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
