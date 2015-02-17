@@ -188,8 +188,7 @@ class TestJSONPriest(JSONTester, tests.card_tests.priest_tests.TestPriest):
 
 
 class TestJSONRogue(JSONTester, tests.card_tests.rogue_tests.TestRogue):
-    def test_EdwinVanCleef(self):
-        pass  # Edwin can't be impemented currently with the new Battlecry mechanic, so we skip his test
+    pass
 
 
 class TestJSONShaman(JSONTester, tests.card_tests.shaman_tests.TestShaman):
@@ -206,40 +205,10 @@ class TestJSONWarlock(JSONTester, tests.card_tests.warlock_tests.TestWarlock):
     def test_Jaraxxus_with_secrets(self):
         pass
 
-    def test_VoidTerror(self):
-        pass
-
 
 class TestJSONWarrior(JSONTester, tests.card_tests.warrior_tests.TestWarrior):
-    def test_BouncingBlades(self):
-        pass  # This test relies on Echoing Ooze.
+    pass
 
 
 class TestJSONNeutral(JSONTester, tests.card_tests.neutral_tests.TestCommon):
-
-    def test_CrazedAlchemist(self):
-        pass
-
-    def testEchoingOoze_silence(self):
-        pass
-
-    def test_EchoingOoze(self):
-        pass
-
-    def test_EchoingOoze_Faceless(self):
-        pass
-
-    def test_EchoingOoze_buff(self):
-        pass
-
-    def test_GelbinMekkaTwerk(self):
-        pass
-
-    def test_HungryCrab(self):
-        pass
-
-    def test_SouthseaDeckhand(self):
-        pass
-
-    def test_TinkmasterOverspark(self):
-        pass
+    pass

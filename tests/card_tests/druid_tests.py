@@ -340,11 +340,11 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.current_player.minions[0].charge)
+        self.assertTrue(game.current_player.minions[0].charge())
 
         game.play_single_turn()
 
-        self.assertFalse(game.other_player.minions[0].charge)
+        self.assertFalse(game.other_player.minions[0].charge())
 
         # Test when there are no targets for the spell
         random.seed(1857)
@@ -375,7 +375,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
-        self.assertTrue(game.current_player.minions[0].charge)
+        self.assertTrue(game.current_player.minions[0].charge())
         self.assertFalse(game.current_player.minions[0].taunt)
 
         test_bear = game.current_player.minions[0].card.create_minion(None)
@@ -391,7 +391,7 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
         self.assertEqual(6, game.current_player.minions[0].calculate_max_health())
-        self.assertFalse(game.current_player.minions[0].charge)
+        self.assertFalse(game.current_player.minions[0].charge())
         self.assertTrue(game.current_player.minions[0].taunt)
 
         test_bear = game.current_player.minions[0].card.create_minion(None)
@@ -502,7 +502,7 @@ class TestDruid(unittest.TestCase):
                 self.assertEqual(2, minion.calculate_attack())
                 self.assertEqual(2, minion.health)
                 self.assertEqual(2, minion.calculate_max_health())
-                self.assertTrue(minion.charge)
+                self.assertTrue(minion.charge())
                 self.assertEqual("Treant", minion.card.name)
 
         game.other_player.bind_once("turn_ended", check_minions)

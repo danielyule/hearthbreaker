@@ -1420,11 +1420,15 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(5, game.players[0].hero.weapon.durability)
 
     def test_HungryCrab(self):
-        game = generate_game_for(HungryCrab, MurlocRaider, OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for(HungryCrab, [MurlocRaider, Deathwing], OneCardPlayingAgent, OneCardPlayingAgent)
         for turn in range(0, 3):
             game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(3, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].calculate_max_health())
+        self.assertEqual(1, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(2, game.players[0].minions[1].calculate_max_health())
         self.assertEqual(0, len(game.players[1].minions))
 
     def test_ManaWraith(self):
@@ -1523,18 +1527,27 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(4, game.players[0].minions[1].health)
 
     def test_SouthseaDeckhand(self):
-        game = generate_game_for([SouthseaDeckhand, LightsJustice], StonetuskBoar,
-                                 PlayAndAttackAgent, DoNothingAgent)
+        game = generate_game_for([SouthseaDeckhand, LightsJustice], AcidicSwampOoze,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
         for turn in range(0, 2):
             game.play_single_turn()
 
         self.assertEqual(30, game.players[1].hero.health)
         self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].charge())
 
         game.play_single_turn()
         # Old minion attacks, equip weapon and attack, new minion gets charge and attacks
         self.assertEqual(25, game.players[1].hero.health)
         self.assertEqual(2, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertTrue(game.players[0].minions[1].charge())
+
+        # Ooze destroys weapon, the deckhands no longer have charge
+        game.play_single_turn()
+
+        self.assertFalse(game.players[0].minions[0].charge())
+        self.assertFalse(game.players[0].minions[1].charge())
 
     def test_YoungPriestess(self):
         game = generate_game_for(YoungPriestess, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -2886,7 +2899,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(4, len(game.current_player.minions))
-        self.assertFalse(game.current_player.minions[3].charge)
+        self.assertFalse(game.current_player.minions[3].charge())
         self.assertEqual(0, len(game.current_player.minions[2].deathrattle))
         self.assertFalse(game.current_player.minions[1].taunt)
         self.assertTrue(game.other_player.minions[0].divine_shield)

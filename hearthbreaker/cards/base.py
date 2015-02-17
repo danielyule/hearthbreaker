@@ -276,7 +276,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         else:
             if self.battlecry:  # There are currently two battlecry systems, hence the weirdness
                 for battlecry in self.battlecry:
-                    battlecry.do(minion)
+                    if not battlecry.do(minion):
+                        break
             elif minion.battlecry is not None:
                 minion.battlecry(minion)
         if not minion.removed:

@@ -143,10 +143,13 @@ class ManaChange(Status, metaclass=Amount):
 
 class Charge(Status):
     def act(self, actor, target):
-        target.charge += 1
+        pass
 
     def unact(self, actor, target):
-        target.charge -= 1
+        pass
+
+    def update(self, owner, prev_charge):
+        return True
 
     def __to_json__(self):
         return {

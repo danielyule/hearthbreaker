@@ -774,7 +774,6 @@ class Minion(Character):
         self.game = None
         self.card = None
         self.index = -1
-        self.charge = 0
         self.taunt = 0
         self.can_be_targeted_by_spells = True
         self.battlecry = battlecry
@@ -844,6 +843,25 @@ class Minion(Character):
         """
 
         return super().calculate_max_health()
+
+    def charge(self):
+        if self.enrage and self.enraged:
+            charge = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
+                                                             if self.enrage.selector.match(self, self) and
+                                                             isinstance(status, Charge)], 0)
+        else:
+            charge = 0
+        charge = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
+                                                         if isinstance(buff.status, Charge) and
+                                                         (not buff.condition or buff.condition.evaluate(self, self))],
+                        charge)
+        charge = reduce(lambda a, b: b.update(self, a), [aura.status
+                                                         for player in self.player.game.players
+                                                         for aura in player.object_auras
+                                                         if aura.match(self) and isinstance(aura.status, Charge)],
+                        charge)
+
+        return max(0, charge)
 
     def remove_from_board(self):
         if not self.removed:
@@ -932,7 +950,7 @@ class Minion(Character):
         self.deathrattle = []
 
     def can_attack(self):
-        return (self.charge or not self.exhausted) and super().can_attack()
+        return (self.charge() or not self.exhausted) and super().can_attack()
 
     def can_be_attacked(self):
         return not self.stealth

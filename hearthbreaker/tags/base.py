@@ -519,9 +519,13 @@ class ActionTag(Tag):
             if not self.condition.evaluate(target):
                 return
         targets = self.selector.choose_targets(target, target)
+        found_target = False
         for t in targets:
+            found_target = True
             for action in self.actions:
                 action.act(target, t)
+
+        return found_target
 
     def __to_json__(self):
         if self.condition:

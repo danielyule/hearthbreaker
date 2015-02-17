@@ -7,7 +7,7 @@ from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, One
     OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
-    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector
+    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector, Attribute
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
@@ -31,14 +31,13 @@ class DefiasRingleader(MinionCard):
 
 class EdwinVanCleef(MinionCard):
     def __init__(self):
-        super().__init__("Edwin VanCleef", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY)
+        super().__init__("Edwin VanCleef", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY,
+                         battlecry=Battlecry(Give([Buff(ChangeAttack(Attribute("cards_played", PlayerSelector()), 2)),
+                                                   Buff(ChangeHealth(Attribute("cards_played", PlayerSelector()), 2))]),
+                                             SelfSelector()))
 
     def create_minion(self, player):
-        if player.cards_played:
-            buff_amount = player.cards_played * 2
-            return Minion(2, 2, buffs=[Buff(ChangeAttack(buff_amount)), Buff(ChangeHealth(buff_amount))])
-        else:
-            return Minion(2, 2)
+        return Minion(2, 2)
 
 
 class Kidnapper(MinionCard):

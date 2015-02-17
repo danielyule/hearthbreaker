@@ -500,12 +500,12 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(21, game.players[1].hero.health)
-        self.assertTrue(game.players[0].minions[0].charge)
-        self.assertTrue(game.players[0].minions[1].charge)
-        self.assertTrue(game.players[0].minions[2].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertTrue(game.players[0].minions[1].charge())
+        self.assertTrue(game.players[0].minions[2].charge())
 
         game.players[0].minions[2].silence()
-        self.assertTrue(game.players[0].minions[2].charge)
+        self.assertTrue(game.players[0].minions[2].charge())
 
     def test_TundraRhino_with_silence(self):
         game = generate_game_for([StonetuskBoar, OasisSnapjaw, TundraRhino, Silence], StonetuskBoar,
@@ -521,9 +521,9 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(3, len(game.players[0].minions))
         self.assertEqual(23, game.players[1].hero.health)
 
-        self.assertFalse(game.players[0].minions[0].charge)
-        self.assertFalse(game.players[0].minions[1].charge)
-        self.assertTrue(game.players[0].minions[2].charge)
+        self.assertFalse(game.players[0].minions[0].charge())
+        self.assertFalse(game.players[0].minions[1].charge())
+        self.assertTrue(game.players[0].minions[2].charge())
 
     def test_AnimalCompanion(self):
         game = generate_game_for(AnimalCompanion, StonetuskBoar, CardTestingAgent, DoNothingAgent)

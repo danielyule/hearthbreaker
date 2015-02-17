@@ -1,7 +1,7 @@
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker
+    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker, Selector
 from hearthbreaker.tags.condition import IsSecret
-from hearthbreaker.tags.selector import AllPicker
+from hearthbreaker.tags.selector import AllPicker, ConstantSelector
 
 
 class Give(Action):
@@ -24,6 +24,8 @@ class Give(Action):
         for buff in buffs:
             if hasattr(buff.status, "amount"):
                 buff.status.amount = buff.status.get_amount(target, target)
+                if buff.status.amount == 0:
+                    break
             target.add_buff(buff)
 
     def __to_json__(self):
@@ -96,6 +98,9 @@ class GiveEffect(Action):
 
     def act(self, actor, target):
         for effect in self.effects:
+            if hasattr(effect.action, "selector"):
+                effect.action.selector = ConstantSelector([obj.born for obj in
+                                                           effect.action.selector.choose_targets(actor, target)])
             target.add_effect(effect)
 
     def __to_json__(self):
@@ -492,28 +497,24 @@ class Steal(Action):
 
 
 class Duplicate(Action):
-    def __init__(self, minion):
+    def __init__(self, selector):
         super().__init__()
-        self.minion = minion.born
+        self.selector = selector
 
     def act(self, actor, target):
-        minion = None
-        for player in target.game.players:
-            for m in player.minions:
-                if m.born == self.minion:
-                    minion = m
-        if minion:
-            dup = minion.copy(minion.player)
-            dup.add_to_board(minion.index + 1)
+        for minion in self.selector.choose_targets(actor, target):
+            if len(minion.player.minions) < 7:
+                dup = minion.copy(minion.player)
+                dup.add_to_board(minion.index + 1)
 
     def __to_json__(self):
         return {
             "name": "duplicate",
-            "minion": self.minion
+            "selector": self.selector,
         }
 
-    def __from_json__(self, minion):
-        self.minion = minion
+    def __from_json__(self, selector):
+        self.selector = Selector.from_json(**selector)
         return self
 
 
@@ -617,4 +618,20 @@ class RemoveDivineShields(Action):
     def __to_json__(self):
         return {
             "name": "remove_divine_shields"
+        }
+
+
+class SwapStats(Action):
+    def act(self, actor, target):
+        temp_attack = target.calculate_attack()
+        temp_health = target.health
+        if temp_attack == 0:
+            target.die(None)
+        else:
+            target.set_attack_to(temp_health)
+            target.set_health_to(temp_attack)
+
+    def __to_json__(self):
+        return {
+            'name': 'swap_stats',
         }

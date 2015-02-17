@@ -146,14 +146,14 @@ class TestWarrior(unittest.TestCase):
         # Play the Warsong Commander
         commander = WarsongCommander()
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[0].charge)  # Should not give charge to itself
+        self.assertFalse(game.players[0].minions[0].charge())  # Should not give charge to itself
 
         # Test so that enrage doesn't remove the charge
         worgen = RagingWorgen()
         worgen.use(game.players[0], game)
         game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
-        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
 
         # Test so that charge gets applied before a battlecry
         weapon = FieryWarAxe().create_weapon(game.players[0])
@@ -163,7 +163,7 @@ class TestWarrior(unittest.TestCase):
         bloodsail = BloodsailRaider()
         bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
-        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
 
         # TODO: Test with Faceless Manipulator here
 
@@ -171,15 +171,15 @@ class TestWarrior(unittest.TestCase):
         game.players[0].minions[-1].die(None)
         game.check_delayed()
         # The previous charged minions should still have charge
-        self.assertTrue(game.players[0].minions[0].charge)
-        self.assertTrue(game.players[0].minions[-1].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertTrue(game.players[0].minions[-1].charge())
 
         # Test so that a minion played before Warsong doesn't get charge
         shield = Shieldbearer()
         shield.summon(game.players[0], game, 0)
-        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[0].charge())
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertFalse(game.players[0].minions[1].charge())
         # Remove the Warsong again
         game.players[0].minions[0].die(None)
         game.players[0].minions[0].activate_delayed()
@@ -187,7 +187,7 @@ class TestWarrior(unittest.TestCase):
         game.players[0].minions[0].change_attack(5)
         # Play Warsong, the buffed minion should not get charge
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertFalse(game.players[0].minions[1].charge())
 
         # Auras!
         stormwind = StormwindChampion()
@@ -199,7 +199,7 @@ class TestWarrior(unittest.TestCase):
         game.players[0].minions[-1].activate_delayed()
         # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
         worgen.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[0].charge())
 
     def test_BattleRage(self):
         game = generate_game_for(BattleRage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -259,7 +259,7 @@ class TestWarrior(unittest.TestCase):
         # Shieldbearer and Charge should be played
         game.play_single_turn()
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
-        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
 
     def test_Cleave(self):
         game = generate_game_for(Cleave, SenjinShieldmasta, OneCardPlayingAgent, OneCardPlayingAgent)

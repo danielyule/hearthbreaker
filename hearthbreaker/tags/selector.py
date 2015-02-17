@@ -393,6 +393,29 @@ class SelfSelector(Selector):
         }
 
 
+class ConstantSelector(Selector):
+    def __init__(self, targets):
+        self.targets = targets
+
+    def match(self, source, obj):
+        return obj.is_character() and obj.born in self.targets
+
+    def get_targets(self, source, target=None):
+        result = []
+        for t in self.targets:
+            for player in target.game.players:
+                for minion in player.minions:
+                    if minion.born == t:
+                        result.append(minion)
+        return result
+
+    def __to_json__(self):
+        return {
+            'name': 'constant',
+            'targets': self.targets
+        }
+
+
 class TargetSelector(Selector):
 
     def __init__(self, condition=None):
@@ -471,13 +494,17 @@ class Attribute(Function):
 
     def do(self, target):
         targets = self.selector.get_targets(target)
-        if len(targets) > 0 and targets[0]:
+        total = 0
+        for t in targets:
             if self.attribute == "damage":
-                return targets[0].calculate_max_health() - targets[0].health
+                total += t.calculate_max_health() - t.health
             elif self.attribute == 'mana':
-                return targets[0].card.mana
-            return getattr(targets[0], self.attribute)
-        return 0
+                total += t.card.mana
+            elif self.attribute == "attack":
+                total += t.calculate_attack()
+            else:
+                total += getattr(t, self.attribute)
+        return total
 
     def __to_json__(self):
         return {

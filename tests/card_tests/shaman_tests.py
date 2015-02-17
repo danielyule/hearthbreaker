@@ -23,7 +23,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Al'Akir the Windlord", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].windfury)
-        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertTrue(game.players[0].minions[0].taunt)
 

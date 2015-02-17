@@ -1709,6 +1709,25 @@
     "mana": 2, 
     "attack": 2, 
     "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "swap_stats"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -3072,6 +3091,51 @@
     "mana": 1, 
     "attack": 1, 
     "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "kill"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "is_type", 
+            "minion_type": "Murloc", 
+            "include_self": false
+          }
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_attack"
+                }
+              }, 
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_health"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -3291,7 +3355,27 @@
     "mana": 1, 
     "attack": 2, 
     "health": 1, 
-    "type": "minion"
+    "type": "minion", 
+    "impl": {
+      "buffs": [
+        {
+          "status": {
+            "name": "charge"
+          }, 
+          "condition": {
+            "amount": {
+              "name": "count", 
+              "selector": {
+                "players": "friendly", 
+                "name": "weapon"
+              }
+            }, 
+            "name": "greater_than", 
+            "value": 0
+          }
+        }
+      ]
+    }
   }, 
   {
     "name": "Young Priestess", 
@@ -4065,6 +4149,34 @@
     "mana": 3, 
     "attack": 3, 
     "health": 3, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Devilsaur", 
+                "Squirrel"
+              ]
+            }
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "count": 1, 
+            "name": "random"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -4362,6 +4474,29 @@
     "mana": 6, 
     "attack": 6, 
     "health": 6, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Emboldener 3000", 
+                "Homing Chicken", 
+                "Poultryizer", 
+                "Repair Bot"
+              ]
+            }
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -5154,6 +5289,37 @@
     "mana": 2, 
     "attack": 1, 
     "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "effects": [
+              {
+                "action": {
+                  "name": "duplicate", 
+                  "selector": {
+                    "name": "self"
+                  }
+                }, 
+                "event": {
+                  "event_name": "turn_ended", 
+                  "player": "friendly"
+                }, 
+                "selector": {
+                  "players": "friendly", 
+                  "name": "player"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -5620,7 +5786,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 2, 
+          "amount": 1, 
           "name": "damage"
         }
       ], 
@@ -5899,12 +6065,12 @@
                 "name": "one_in"
               }, 
               {
-                "count": 0,
+                "count": 0, 
                 "name": "opponent_minion_count_is_greater_than"
               }
             ], 
             "name": "and"
-          },
+          }, 
           "selector": {
             "name": "self"
           }
@@ -5948,12 +6114,12 @@
                 "name": "one_in"
               }, 
               {
-                "count": 0,
+                "count": 0, 
                 "name": "opponent_minion_count_is_greater_than"
               }
             ], 
             "name": "and"
-          },
+          }, 
           "selector": {
             "name": "target"
           }
@@ -8205,6 +8371,75 @@
     "mana": 3, 
     "attack": 3, 
     "health": 3, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": {
+                    "attribute": "health", 
+                    "name": "attribute", 
+                    "selector": {
+                      "picker": {
+                        "name": "all"
+                      }, 
+                      "players": "friendly", 
+                      "name": "minion", 
+                      "condition": {
+                        "name": "adjacent"
+                      }
+                    }
+                  }, 
+                  "name": "change_health"
+                }
+              }, 
+              {
+                "status": {
+                  "amount": {
+                    "attribute": "attack", 
+                    "name": "attribute", 
+                    "selector": {
+                      "picker": {
+                        "name": "all"
+                      }, 
+                      "players": "friendly", 
+                      "name": "minion", 
+                      "condition": {
+                        "name": "adjacent"
+                      }
+                    }
+                  }, 
+                  "name": "change_attack"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "name": "kill"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "minion", 
+          "condition": {
+            "name": "adjacent"
+          }
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -9527,6 +9762,48 @@
     "mana": 3, 
     "attack": 2, 
     "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": {
+                    "attribute": "cards_played", 
+                    "name": "attribute", 
+                    "selector": {
+                      "players": "friendly", 
+                      "name": "player"
+                    }
+                  }, 
+                  "name": "change_attack", 
+                  "multiplier": 2
+                }
+              }, 
+              {
+                "status": {
+                  "amount": {
+                    "attribute": "cards_played", 
+                    "name": "attribute", 
+                    "selector": {
+                      "players": "friendly", 
+                      "name": "player"
+                    }
+                  }, 
+                  "name": "change_health", 
+                  "multiplier": 2
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
     "type": "minion"
   }, 
   {
@@ -9801,12 +10078,12 @@
                 "name": "one_in"
               }, 
               {
-                "count": 0,
+                "count": 0, 
                 "name": "opponent_minion_count_is_greater_than"
               }
             ], 
             "name": "and"
-          },
+          }, 
           "selector": {
             "name": "self"
           }
@@ -10380,12 +10657,12 @@
                 "name": "one_in"
               }, 
               {
-                "count": 0,
+                "count": 0, 
                 "name": "opponent_minion_count_is_greater_than"
               }
             ], 
             "name": "and"
-          },
+          }, 
           "selector": {
             "name": "self"
           }
@@ -11288,12 +11565,12 @@
                 "name": "one_in"
               }, 
               {
-                "count": 0,
+                "count": 0, 
                 "name": "opponent_minion_count_is_greater_than"
               }
             ], 
             "name": "and"
-          },
+          }, 
           "selector": {
             "name": "self"
           }

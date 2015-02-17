@@ -120,7 +120,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
                 self.assertEqual(2, minion.calculate_attack())
                 self.assertEqual(2, minion.health)
                 self.assertEqual(2, minion.calculate_max_health())
-                self.assertTrue(minion.charge)
+                self.assertTrue(minion.charge())
                 self.assertEqual("Treant", minion.card.name)
 
         game.other_player.bind_once("turn_ended", check_minions)
@@ -298,8 +298,8 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(2, len(game.current_player.minions))
-        self.assertTrue(game.current_player.minions[0].charge)
-        self.assertTrue(game.current_player.minions[1].charge)
+        self.assertTrue(game.current_player.minions[0].charge())
+        self.assertTrue(game.current_player.minions[1].charge())
 
     def test_StarvingBuzzard(self):
         game = generate_game_for(StarvingBuzzard, [StonetuskBoar, FacelessManipulator, Maexxna, CoreHound],
@@ -1504,29 +1504,29 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         # Play the Warsong Commander
         commander = WarsongCommander()
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[0].charge)  # Should not give charge to itself
+        self.assertFalse(game.players[0].minions[0].charge())  # Should not give charge to itself
         game = game.copy()
         # Test so that enrage doesn't remove the charge
         worgen = RagingWorgen()
         worgen.use(game.players[0], game)
         game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
-        self.assertTrue(game.players[0].minions[0].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
 
         # Remove the Warsong Commander
         game.players[0].minions[-1].die(None)
         game.check_delayed()
         game = game.copy()
         # The previous charged minions should still have charge
-        self.assertTrue(game.players[0].minions[0].charge)
-        self.assertTrue(game.players[0].minions[-1].charge)
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertTrue(game.players[0].minions[-1].charge())
 
         # Test so that a minion played before Warsong doesn't get charge
         shield = Shieldbearer()
         shield.summon(game.players[0], game, 0)
-        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[0].charge())
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertFalse(game.players[0].minions[1].charge())
         # Remove the Warsong again
         game.players[0].minions[0].die(None)
         game.players[0].minions[0].activate_delayed()
@@ -1535,7 +1535,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         # Play Warsong, the buffed minion should not get charge
         game = game.copy()
         commander.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[1].charge)
+        self.assertFalse(game.players[0].minions[1].charge())
 
         # Auras!
         stormwind = StormwindChampion()
@@ -1548,7 +1548,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game = game.copy()
         # And play it again. It should get the aura FIRST, making it a 4/4 minion, and thus DOES NOT gain charge!
         worgen.use(game.players[0], game)
-        self.assertFalse(game.players[0].minions[0].charge)
+        self.assertFalse(game.players[0].minions[0].charge())
 
     def test_CommandingShout(self):
         game = generate_game_for([StonetuskBoar, StonetuskBoar, StonetuskBoar, BoulderfistOgre,
@@ -2478,3 +2478,28 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(6, game.current_player.minions[1].calculate_attack())
         self.assertEqual(6, game.current_player.minions[1].calculate_max_health())
+
+    def test_SouthseaDeckhand(self):
+        game = generate_game_for([SouthseaDeckhand, LightsJustice], AcidicSwampOoze,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertFalse(game.players[0].minions[0].charge())
+
+        game = game.copy()
+        game.play_single_turn()
+        # Old minion attacks, equip weapon and attack, new minion gets charge and attacks
+        self.assertEqual(25, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertTrue(game.players[0].minions[1].charge())
+
+        # Ooze destroys weapon, the deckhands no longer have charge
+        game = game.copy()
+        game.play_single_turn()
+
+        self.assertFalse(game.players[0].minions[0].charge())
+        self.assertFalse(game.players[0].minions[1].charge())

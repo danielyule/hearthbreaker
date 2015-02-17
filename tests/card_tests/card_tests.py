@@ -81,7 +81,7 @@ class CardTest(unittest.TestCase):
                                     self.assertTrue(minion.windfury,
                                                     "Expected {:s} to have windfury".format(card_info["name"]))
                                 elif effect == "Charge":
-                                    self.assertTrue(minion.charge,
+                                    self.assertTrue(minion.charge(),
                                                     "Expected {:s} to have charge".format(card_info["name"]))
                                 elif battlecry_re.match(effect):
                                     self.assertTrue(minion.battlecry is not None or card.battlecry is not None,
