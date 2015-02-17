@@ -1,7 +1,7 @@
 import copy
 import collections
 import sys
-from hearthbreaker.cards.heroes2 import hero_for_class
+from hearthbreaker.cards.heroes import hero_for_class
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.engine import Game, Deck
 

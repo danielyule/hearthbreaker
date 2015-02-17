@@ -6,7 +6,7 @@ from hearthbreaker.cards import GoldshireFootman, MurlocRaider, BloodfenRaptor, 
     FenCreeper, BoulderfistOgre, WarGolem, Shieldbearer, FlameImp, YoungPriestess, DarkIronDwarf, DireWolfAlpha, \
     Voidwalker, HarvestGolem, KnifeJuggler, ShatteredSunCleric, ArgentSquire, Doomguard, Soulfire, DefenderOfArgus, \
     AbusiveSergeant, NerubianEgg, KeeperOfTheGrove
-from hearthbreaker.cards.heroes2 import Guldan, Malfurion
+from hearthbreaker.cards.heroes import Guldan, Malfurion
 from hearthbreaker.engine import Game, Deck
 
 

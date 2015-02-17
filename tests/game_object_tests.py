@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.cards.base import SecretCard
-from hearthbreaker.cards.heroes2 import Malfurion, Jaina
+from hearthbreaker.cards.heroes import Malfurion, Jaina
 from hearthbreaker.cards.minions.rogue import AnubarAmbusher
 from hearthbreaker.engine import Game, Deck, card_lookup
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent

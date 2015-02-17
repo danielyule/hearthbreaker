@@ -5,7 +5,7 @@ from os import listdir
 from os.path import isdir
 import re
 import random
-from hearthbreaker.cards.heroes2 import Malfurion, Jaina
+from hearthbreaker.cards.heroes import Malfurion, Jaina
 from hearthbreaker.engine import Game, Deck
 
 from hearthbreaker.replay import Replay, record, playback
