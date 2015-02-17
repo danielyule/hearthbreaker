@@ -1,6 +1,6 @@
 import copy
 import random
-from hearthbreaker.cards.heroes import hero_from_name
+from hearthbreaker.cards.heroes2 import hero_from_name
 import hearthbreaker.constants
 from hearthbreaker.game_objects import Bindable, GameException, Minion, Hero
 import hearthbreaker.tags

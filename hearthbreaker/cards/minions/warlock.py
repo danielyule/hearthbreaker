@@ -1,5 +1,5 @@
 from hearthbreaker.cards.base import MinionCard
-from hearthbreaker.cards.heroes import Jaraxxus
+from hearthbreaker.cards.heroes2 import Jaraxxus
 from hearthbreaker.cards.weapons.warlock import BloodFury
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion

@@ -2,7 +2,7 @@ import re
 import json
 
 import hearthbreaker
-from hearthbreaker.cards.heroes import hero_from_name
+from hearthbreaker.cards.heroes2 import hero_from_name
 import hearthbreaker.constants
 from hearthbreaker.engine import Game, card_lookup, Deck
 import hearthbreaker.game_objects
