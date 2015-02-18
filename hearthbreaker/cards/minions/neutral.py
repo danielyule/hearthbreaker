@@ -1174,10 +1174,6 @@ class SouthseaDeckhand(MinionCard):
         super().__init__("Southsea Deckhand", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, MINION_TYPE.PIRATE)
 
     def create_minion(self, player):
-        def charge_if_weapon(m):
-            if player.hero.weapon is not None:
-                m.add_buff(Buff(Charge()))
-
         return Minion(2, 1, buffs=[Buff(Charge(), GreaterThan(Count(WeaponSelector()), value=0))])
 
 
