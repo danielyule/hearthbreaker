@@ -1882,8 +1882,6 @@ class EchoingOoze(MinionCard):
                                              PlayerSelector()))
 
     def create_minion(self, player):
-        def duplicate_at_end(minion):
-            player.add_effect(Effect(TurnEnded(), Duplicate(minion), PlayerSelector()))
         return Minion(1, 2)
 
 
