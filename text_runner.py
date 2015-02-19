@@ -3,6 +3,7 @@ import curses.textpad
 import sys
 
 from hearthbreaker.agents import registry
+from hearthbreaker.cards.heroes import hero_for_class
 from hearthbreaker.constants import CHARACTER_CLASS
 from hearthbreaker.engine import Game, Deck, card_lookup
 from hearthbreaker.ui.game_printer import GameRender
@@ -28,7 +29,7 @@ def load_deck(filename):
     if len(cards) > 30:
         pass
 
-    return Deck(cards, character_class)
+    return Deck(cards, hero_for_class(character_class))
 
 
 def print_usage():
