@@ -728,8 +728,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(12, game.current_player.minions[0].calculate_attack())
 
     def test_ogre_misdirection(self):
-        game = generate_game_for(OgreBrute, Misdirection,
-                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        game = generate_game_for(OgreBrute, Misdirection, PlayAndAttackAgent, OneCardPlayingAgent)
         random.seed(1850)
 
         for turn in range(0, 7):
@@ -737,3 +736,17 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(26, game.players[0].hero.health)
         self.assertEqual(30, game.players[1].hero.health)
+
+    def test_FeignDeath(self):
+        game = generate_game_for([HauntedCreeper, LootHoarder, Malorne, FeignDeath], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(14):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+
+        game.play_single_turn()
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(8, len(game.current_player.hand))

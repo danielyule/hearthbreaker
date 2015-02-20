@@ -53,6 +53,7 @@ from hearthbreaker.cards.spells.hunter import (
     SnakeTrap,
     CallPet,
     CobraShot,
+    FeignDeath,
 )
 
 from hearthbreaker.cards.spells.mage import (

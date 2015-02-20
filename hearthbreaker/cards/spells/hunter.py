@@ -293,3 +293,20 @@ class CobraShot(SpellCard):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(3), self)
         game.other_player.hero.damage(player.effective_spell_damage(3), self)
+
+
+class FeignDeath(SpellCard):
+    def __init__(self):
+        super().__init__("Feign Death", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        # Feign death operates in the same order as standard deathrattles
+        # See http://www.hearthhead.com/card=1991/feign-death#comments:id=2057895
+        for minion in sorted(player.minions, key=lambda m: m.born):
+            for deathrattle in minion.deathrattle:
+                deathrattle.do(minion)
+            if player.double_deathrattle:
+                for deathrattle in minion.deathrattle:
+                    deathrattle.do(minion)

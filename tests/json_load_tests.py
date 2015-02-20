@@ -104,7 +104,8 @@ class JSONTester:
                 create_dict['enrage'] = [Aura.from_json(**enrage) for enrage in card_def['enrage']]
 
             if 'deathrattle' in card_def:
-                create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])
+                create_dict['deathrattle'] = [Deathrattle.from_json(**deathrattle)
+                                              for deathrattle in card_def['deathrattle']]
 
             return Minion(**create_dict)
 

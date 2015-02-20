@@ -448,18 +448,20 @@
     "rarity": "Legendary", 
     "mana": 2, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 1, 
-          "name": "draw"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion", 
     "impl": {
@@ -479,18 +481,20 @@
     "rarity": "Common", 
     "mana": 2, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 1, 
-          "name": "draw"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion"
   }, 
@@ -500,21 +504,23 @@
     "rarity": "Common", 
     "mana": 1, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 2, 
-          "name": "damage"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "enemy", 
+          "name": "hero"
         }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
-        }, 
-        "players": "enemy", 
-        "name": "hero"
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion"
   }, 
@@ -1426,24 +1432,26 @@
     "rarity": "Rare", 
     "mana": 5, 
     "attack": 4, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 2, 
-          "name": "damage"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
-        }, 
-        "players": "both", 
-        "name": "character", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "character", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion", 
     "impl": {
@@ -2261,20 +2269,22 @@
     "rarity": "Legendary", 
     "mana": 6, 
     "attack": 4, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Baine Bloodhoof"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Baine Bloodhoof"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion"
   }, 
@@ -2294,20 +2304,22 @@
     "rarity": "Common", 
     "mana": 3, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Damaged Golem"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Damaged Golem"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 3, 
     "type": "minion"
   }, 
@@ -2327,20 +2339,22 @@
     "rarity": "Legendary", 
     "mana": 6, 
     "attack": 9, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Finkle Einhorn"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Finkle Einhorn"
+            }
           }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "enemy", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 7, 
     "type": "minion"
   }, 
@@ -2350,24 +2364,26 @@
     "rarity": "Legendary", 
     "mana": 6, 
     "attack": 5, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "steal"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "count": 1, 
-          "name": "random"
-        }, 
-        "players": "enemy", 
-        "name": "minion", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "steal"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "count": 1, 
+            "name": "random"
+          }, 
+          "players": "enemy", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion"
   }, 
@@ -4762,20 +4778,22 @@
     "rarity": "Rare", 
     "mana": 2, 
     "attack": 0, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Nerubian"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Nerubian"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 2, 
     "type": "minion"
   }, 
@@ -4823,21 +4841,23 @@
     "rarity": "Common", 
     "mana": 2, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 2, 
-          "name": "summon", 
-          "card": {
-            "name": "Spectral Spider"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 2, 
+            "name": "summon", 
+            "card": {
+              "name": "Spectral Spider"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 2, 
     "type": "minion"
   }, 
@@ -4870,24 +4890,26 @@
     "rarity": "Common", 
     "mana": 2, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 1, 
-          "name": "damage"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
-        }, 
-        "players": "both", 
-        "name": "minion", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 3, 
     "type": "minion", 
     "impl": {
@@ -4988,20 +5010,22 @@
     "rarity": "Rare", 
     "mana": 5, 
     "attack": 3, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Slime"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Slime"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion", 
     "impl": {
@@ -5042,18 +5066,20 @@
     "rarity": "Common", 
     "mana": 3, 
     "attack": 4, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 2, 
-          "name": "draw"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "enemy", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion"
   }, 
@@ -5063,25 +5089,27 @@
     "rarity": "Rare", 
     "mana": 3, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "source": "my_deck", 
-            "conditions": [
-              {
-                "name": "is_minion"
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "my_deck", 
+              "conditions": [
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "enemy", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 8, 
     "type": "minion", 
     "impl": {
@@ -5182,21 +5210,23 @@
     "rarity": "Common", 
     "mana": 1, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 5, 
-          "name": "heal"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 5, 
+            "name": "heal"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "enemy", 
+          "name": "hero"
         }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
-        }, 
-        "players": "enemy", 
-        "name": "hero"
       }
-    }, 
+    ], 
     "health": 3, 
     "type": "minion"
   }, 
@@ -5215,24 +5245,26 @@
     "rarity": "Legendary", 
     "mana": 5, 
     "attack": 4, 
-    "deathrattle": {
-      "condition": {
-        "name": "in_graveyard", 
-        "card": "Stalagg"
-      }, 
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Thaddius"
+    "deathrattle": [
+      {
+        "condition": {
+          "name": "in_graveyard", 
+          "card": "Stalagg"
+        }, 
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Thaddius"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 7, 
     "type": "minion"
   }, 
@@ -5242,24 +5274,26 @@
     "rarity": "Legendary", 
     "mana": 5, 
     "attack": 7, 
-    "deathrattle": {
-      "condition": {
-        "name": "in_graveyard", 
-        "card": "Feugen"
-      }, 
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "name": "Thaddius"
+    "deathrattle": [
+      {
+        "condition": {
+          "name": "in_graveyard", 
+          "card": "Feugen"
+        }, 
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "name": "Thaddius"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion"
   }, 
@@ -5269,18 +5303,20 @@
     "rarity": "Common", 
     "mana": 2, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "source": "my_deck", 
-          "name": "apply_secret"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "source": "my_deck", 
+            "name": "apply_secret"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 2, 
     "type": "minion"
   }, 
@@ -5417,29 +5453,31 @@
     "rarity": "Common", 
     "mana": 4, 
     "attack": 4, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "source": "collection", 
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "mana_cost"
-              }, 
-              {
-                "name": "is_minion"
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "amount": 2, 
+                  "name": "mana_cost"
+                }, 
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 3, 
     "type": "minion"
   }, 
@@ -5450,29 +5488,31 @@
     "rarity": "Epic", 
     "mana": 6, 
     "attack": 6, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "source": "collection", 
-            "conditions": [
-              {
-                "amount": 4, 
-                "name": "mana_cost"
-              }, 
-              {
-                "name": "is_minion"
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "amount": 4, 
+                  "name": "mana_cost"
+                }, 
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion"
   }, 
@@ -5483,29 +5523,31 @@
     "rarity": "Legendary", 
     "mana": 8, 
     "attack": 5, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "source": "collection", 
-            "conditions": [
-              {
-                "name": "card_rarity", 
-                "rarity": 5
-              }, 
-              {
-                "name": "is_minion"
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "name": "card_rarity", 
+                  "rarity": 5
+                }, 
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 7, 
     "type": "minion"
   }, 
@@ -5750,31 +5792,33 @@
     "rarity": "Common", 
     "mana": 1, 
     "attack": 2, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 1, 
-          "name": "add_card", 
-          "card": {
-            "source": "list", 
-            "conditions": [], 
-            "source_list": [
-              "Armor Plating", 
-              "Emergency Coolant", 
-              "Finicky Cloakfield", 
-              "Time Rewinder", 
-              "Reversing Switch", 
-              "Rusty Horn", 
-              "Whirling Blades"
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Armor Plating", 
+                "Emergency Coolant", 
+                "Finicky Cloakfield", 
+                "Time Rewinder", 
+                "Reversing Switch", 
+                "Rusty Horn", 
+                "Whirling Blades"
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion"
   }, 
@@ -5785,25 +5829,27 @@
     "rarity": "Special", 
     "mana": 1, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 2, 
-          "name": "damage"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "count": 1, 
-          "name": "random"
-        }, 
-        "players": "enemy", 
-        "name": "character", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "count": 1, 
+            "name": "random"
+          }, 
+          "players": "enemy", 
+          "name": "character", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion"
   }, 
@@ -5859,24 +5905,26 @@
     "rarity": "Common", 
     "mana": 2, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "amount": 2, 
-          "name": "damage"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
-        }, 
-        "players": "both", 
-        "name": "character", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "character", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion", 
     "impl": {
@@ -5940,31 +5988,33 @@
     "rarity": "Common", 
     "mana": 4, 
     "attack": 4, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 1, 
-          "name": "add_card", 
-          "card": {
-            "source": "list", 
-            "conditions": [], 
-            "source_list": [
-              "Armor Plating", 
-              "Emergency Coolant", 
-              "Finicky Cloakfield", 
-              "Time Rewinder", 
-              "Reversing Switch", 
-              "Rusty Horn", 
-              "Whirling Blades"
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Armor Plating", 
+                "Emergency Coolant", 
+                "Finicky Cloakfield", 
+                "Time Rewinder", 
+                "Reversing Switch", 
+                "Rusty Horn", 
+                "Whirling Blades"
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "both", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "both", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion"
   }, 
@@ -6135,31 +6185,33 @@
     "rarity": "Legendary", 
     "mana": 6, 
     "attack": 5, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 1, 
-          "name": "add_card", 
-          "card": {
-            "source": "list", 
-            "conditions": [], 
-            "source_list": [
-              "Armor Plating", 
-              "Emergency Coolant", 
-              "Finicky Cloakfield", 
-              "Time Rewinder", 
-              "Reversing Switch", 
-              "Rusty Horn", 
-              "Whirling Blades"
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "source": "list", 
+              "conditions": [], 
+              "source_list": [
+                "Armor Plating", 
+                "Emergency Coolant", 
+                "Finicky Cloakfield", 
+                "Time Rewinder", 
+                "Reversing Switch", 
+                "Rusty Horn", 
+                "Whirling Blades"
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 7, 
     "battlecry": [
       {
@@ -7519,20 +7571,22 @@
     "rarity": "Legendary", 
     "mana": 8, 
     "attack": 6, 
-    "deathrattle": {
-      "actions": [
-        {
-          "weapon": {
-            "name": "Ashbringer"
-          }, 
-          "name": "equip"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "weapon": {
+              "name": "Ashbringer"
+            }, 
+            "name": "equip"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 6, 
     "type": "minion", 
     "impl": {
@@ -7937,32 +7991,34 @@
     "rarity": "Common", 
     "mana": 3, 
     "attack": 3, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "give", 
-          "buffs": [
-            {
-              "status": {
-                "amount": 3, 
-                "name": "change_health"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 3, 
+                  "name": "change_health"
+                }
               }
-            }
-          ]
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "count": 1, 
-          "name": "random"
-        }, 
-        "players": "friendly", 
-        "name": "minion", 
-        "condition": {
-          "name": "minion_is_not_target"
+            ]
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "count": 1, 
+            "name": "random"
+          }, 
+          "players": "friendly", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion"
   }, 
@@ -8525,27 +8581,29 @@
     "rarity": "Common", 
     "mana": 4, 
     "attack": 3, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "summon", 
-          "card": {
-            "source": "my_hand", 
-            "conditions": [
-              {
-                "name": "is_type", 
-                "minion_type": "Demon", 
-                "include_self": false
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "my_hand", 
+              "conditions": [
+                {
+                  "name": "is_type", 
+                  "minion_type": "Demon", 
+                  "include_self": false
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 4, 
     "type": "minion"
   }, 
@@ -9214,26 +9272,38 @@
     "rarity": "Legendary", 
     "mana": 7, 
     "attack": 9, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 1, 
-          "add_to_deck": true, 
-          "name": "add_card", 
-          "card": {
-            "minion": {
-              "name": "self"
-            }, 
-            "source": "minion", 
-            "conditions": []
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "add_to_deck": true, 
+            "name": "add_card", 
+            "card": {
+              "minion": {
+                "name": "self"
+              }, 
+              "source": "minion", 
+              "conditions": []
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
+      }, 
+      {
+        "actions": [
+          {
+            "name": "remove"
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
       }
-    }, 
+    ], 
     "health": 7, 
     "type": "minion"
   }, 
@@ -9324,21 +9394,23 @@
     "rarity": "Rare", 
     "mana": 6, 
     "attack": 6, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 2, 
-          "name": "summon", 
-          "card": {
-            "name": "Hyena"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 2, 
+            "name": "summon", 
+            "card": {
+              "name": "Hyena"
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion"
   }, 
@@ -9552,28 +9624,30 @@
     "rarity": "Common", 
     "mana": 1, 
     "attack": 1, 
-    "deathrattle": {
-      "actions": [
-        {
-          "count": 1, 
-          "name": "add_card", 
-          "card": {
-            "source": "collection", 
-            "conditions": [
-              {
-                "name": "is_type", 
-                "minion_type": "Beast", 
-                "include_self": false
-              }
-            ]
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "count": 1, 
+            "name": "add_card", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "name": "is_type", 
+                  "minion_type": "Beast", 
+                  "include_self": false
+                }
+              ]
+            }
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
         }
-      ], 
-      "selector": {
-        "players": "friendly", 
-        "name": "player"
       }
-    }, 
+    ], 
     "health": 1, 
     "type": "minion"
   }, 
@@ -10010,24 +10084,26 @@
     "rarity": "Common", 
     "mana": 4, 
     "attack": 5, 
-    "deathrattle": {
-      "actions": [
-        {
-          "name": "bounce"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "count": 1, 
-          "name": "random"
-        }, 
-        "players": "friendly", 
-        "name": "minion", 
-        "condition": {
-          "name": "minion_is_not_target"
+    "deathrattle": [
+      {
+        "actions": [
+          {
+            "name": "bounce"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "count": 1, 
+            "name": "random"
+          }, 
+          "players": "friendly", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
         }
       }
-    }, 
+    ], 
     "health": 5, 
     "type": "minion"
   }, 

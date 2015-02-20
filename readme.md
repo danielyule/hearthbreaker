@@ -53,6 +53,8 @@ The console application requires ncurses, which should be included with python o
 on windows, you must download it from 
 [http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses](http://www.lfd.uci.edu/~gohlke/pythonlibs/#curses)
 
+*Note:* Curses is not available for PyPy
+
 
 ###Unit Tests
 The tests are located in the [`tests`](tests) package.

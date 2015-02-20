@@ -4067,6 +4067,19 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
         self.assertEqual(3, game.current_player.minions[1].calculate_attack())
 
+    def test_Cogmaster_Warsong(self):
+        game = generate_game_for([Hobgoblin, Hobgoblin, WarsongCommander, ElvenArcher], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+
+        # Test based on video https://www.youtube.com/watch?v=o6txuHJZY2s
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertFalse(game.current_player.minions[0].charge())
+
     def test_GoblinSapper(self):
         game = generate_game_for(GoblinSapper, [Wisp, Wisp, BoulderfistOgre], OneCardPlayingAgent, OneCardPlayingAgent)
 
