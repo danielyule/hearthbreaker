@@ -2,6 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.tags.status import ChangeAttack
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, EnemyMinionSpellTestingAgent, \
     PlayAndAttackAgent
 from tests.testing_utils import generate_game_for
@@ -719,3 +720,41 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual("Scarlet Purifier", game.current_player.minions[0].card.name)
         self.assertEqual("Nerubian", game.other_player.minions[0].card.name)
         self.assertEqual("Stonetusk Boar", game.other_player.minions[1].card.name)
+
+    def test_BolvarFordragon(self):
+        game = generate_game_for([MusterForBattle, BolvarFordragon], [FanOfKnives],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack))
+
+    def test_Bolvar_and_Hobgoblin(self):
+        game = generate_game_for([MusterForBattle, Hobgoblin, BolvarFordragon], [FanOfKnives],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        # Hobgoblin should not buff Bolvar
+        # (see http://www.hearthhead.com/card=2031/bolvar-fordragon#comments:id=2057848)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack))
+
+    def test_Bolvar_and_Warsong(self):
+        game = generate_game_for([MusterForBattle, WarsongCommander, BolvarFordragon], [FanOfKnives],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        # Warsong should not buff Bolvar
+        # (see http://www.hearthhead.com/card=2031/bolvar-fordragon#comments:id=2057848)
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack))
+        self.assertFalse(game.current_player.minions[0].charge())

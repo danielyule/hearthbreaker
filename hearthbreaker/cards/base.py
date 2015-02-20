@@ -238,6 +238,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Player player: The player who wants to play this card
         :param hearthbreaker.game_objects.Game game: The game this card will be played in.
         """
+        from hearthbreaker.tags.status import ChangeAttack
+        from hearthbreaker.tags.base import Buff
         super().use(player, game)
         if (len(player.minions) >= 7 and not self._placeholder) or len(player.minions) >= 8:
             raise GameException("Cannot place a minion on a board with more than 7 minons on it")
@@ -252,6 +254,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         else:
             minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
+        card_attack = self.calculate_stat(ChangeAttack, 0)
+        if card_attack:
+            minion.add_buff(Buff(ChangeAttack(card_attack)))
         player.trigger("minion_placed", minion)
         if self.choices:
             choice = player.agent.choose_option(self.choices, player)

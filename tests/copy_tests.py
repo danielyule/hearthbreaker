@@ -5,6 +5,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent, PredictableAgent
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import MINION_TYPE, CARD_RARITY
+from hearthbreaker.tags.status import ChangeAttack
 from tests.agents.testing_agents import CardTestingAgent, OneCardPlayingAgent, PlayAndAttackAgent, \
     EnemyMinionSpellTestingAgent, HeroPowerAndCardPlayingAgent
 from tests.card_tests.card_tests import TestUtilities
@@ -1503,11 +1504,13 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         # Play the Warsong Commander
         commander = WarsongCommander()
+        commander.player = game.players[0]
         commander.use(game.players[0], game)
         self.assertFalse(game.players[0].minions[0].charge())  # Should not give charge to itself
         game = game.copy()
         # Test so that enrage doesn't remove the charge
         worgen = RagingWorgen()
+        worgen.player = game.players[0]
         worgen.use(game.players[0], game)
         game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
@@ -1539,6 +1542,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         # Auras!
         stormwind = StormwindChampion()
+        stormwind.player = game.players[0]
         stormwind.use(game.players[0], game)
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
         self.assertEqual(4, game.players[0].minions[1].health)
@@ -2504,3 +2508,16 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         self.assertFalse(game.players[0].minions[0].charge())
         self.assertFalse(game.players[0].minions[1].charge())
+
+    def test_BolvarFordragon(self):
+        game = generate_game_for([MusterForBattle, BolvarFordragon], [FanOfKnives],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        game = game.copy()
+        for turn in range(8):
+            game.play_single_turn()
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(4, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack, 0))

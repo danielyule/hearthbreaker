@@ -284,6 +284,7 @@ from hearthbreaker.cards.minions.paladin import (
     ShieldedMinibot,
     Quartermaster,
     ScarletPurifier,
+    BolvarFordragon,
 )
 
 from hearthbreaker.cards.minions.priest import (

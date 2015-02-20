@@ -148,6 +148,7 @@ class MindVision(SpellCard):
         if (len(game.other_player.hand) > 0):
             card = copy.deepcopy(game.random_choice(game.other_player.hand))
             player.hand.append(card)
+            card.player = player
 
 
 class Mindgames(SpellCard):
@@ -280,6 +281,7 @@ class Thoughtsteal(SpellCard):
                 new_card.drawn = True
                 if len(player.hand) < 10:
                     player.hand.append(new_card)
+                    new_card.player = player
                     self.trigger("card_drawn", new_card)
                 else:
                     player.trigger("card_destroyed", new_card)

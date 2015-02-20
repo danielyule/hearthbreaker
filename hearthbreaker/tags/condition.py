@@ -358,7 +358,9 @@ class BaseAttackEqualTo(Condition):
         self.include_self = include_self
 
     def evaluate(self, target, minion, *args):
-        return (self.include_self or target is not minion) and minion.base_attack == self.attack_equal
+        from hearthbreaker.tags.status import ChangeAttack
+        return (self.include_self or target is not minion) and \
+            minion.card.calculate_stat(ChangeAttack, minion.base_attack) == self.attack_equal
 
     def __to_json__(self):
         return {
@@ -400,7 +402,7 @@ class OneIn(Condition):
         self.amount = amount
 
     def evaluate(self, target, *args):
-        return 0 == target.game.random_amount(0, self.amount - 1)
+        return 0 == target.player.game.random_amount(0, self.amount - 1)
 
     def __to_json__(self):
         return {

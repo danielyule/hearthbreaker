@@ -145,11 +145,13 @@ class TestWarrior(unittest.TestCase):
 
         # Play the Warsong Commander
         commander = WarsongCommander()
+        commander.player = game.players[0]
         commander.use(game.players[0], game)
         self.assertFalse(game.players[0].minions[0].charge())  # Should not give charge to itself
 
         # Test so that enrage doesn't remove the charge
         worgen = RagingWorgen()
+        worgen.player = game.players[0]
         worgen.use(game.players[0], game)
         game.players[0].minions[0].damage(1, None)  # Trigger enrage, charge should still be active
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
@@ -161,6 +163,7 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, game.players[0].hero.weapon.durability)
         bloodsail = BloodsailRaider()
+        bloodsail.player = game.players[0]
         bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertTrue(game.players[0].minions[0].charge())
@@ -191,6 +194,7 @@ class TestWarrior(unittest.TestCase):
 
         # Auras!
         stormwind = StormwindChampion()
+        stormwind.player = game.players[0]
         stormwind.use(game.players[0], game)
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
         self.assertEqual(4, game.players[0].minions[1].health)
@@ -207,6 +211,7 @@ class TestWarrior(unittest.TestCase):
         game.players[0].mana = 100
 
         shield = Shieldbearer()
+        shield.player = game.players[0]
         shield.use(game.players[0], game)
         shield.use(game.players[0], game)
         shield.use(game.players[0], game)
@@ -229,9 +234,11 @@ class TestWarrior(unittest.TestCase):
         game.players[0].mana = 100
 
         shield = Shieldbearer()
+        shield.player = game.players[0]
         shield.use(game.players[0], game)
         shield.use(game.players[0], game)
         golem = HarvestGolem()
+        golem.player = game.players[0]
         golem.use(game.players[0], game)
         shield.use(game.players[1], game)
         shield.use(game.players[1], game)

@@ -7,7 +7,7 @@ from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSele
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack
 from hearthbreaker.tags.condition import IsType, HasCardName, MinionHasDeathrattle
-from hearthbreaker.tags.event import MinionSummoned
+from hearthbreaker.tags.event import MinionSummoned, MinionDied
 
 
 class AldorPeacekeeper(MinionCard):
@@ -98,3 +98,12 @@ class ScarletPurifier(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 3)
+
+
+class BolvarFordragon(MinionCard):
+    def __init__(self):
+        super().__init__("Bolvar Fordragon", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY,
+                         effects=[Effect(MinionDied(), Give(ChangeAttack(1)), SelfSelector())])
+
+    def create_minion(self, player):
+        return Minion(1, 7)

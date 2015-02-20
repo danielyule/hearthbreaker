@@ -5788,7 +5788,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 1, 
+          "amount": 2, 
           "name": "damage"
         }
       ], 
@@ -7683,6 +7683,37 @@
           "condition": {
             "name": "minion_has_deathrattle"
           }
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "Bolvar Fordragon", 
+    "character_class": "Paladin", 
+    "rarity": "Legendary", 
+    "mana": 5, 
+    "attack": 1, 
+    "health": 7, 
+    "effects": [
+      {
+        "action": {
+          "name": "give", 
+          "buffs": [
+            {
+              "status": {
+                "amount": 1, 
+                "name": "change_attack"
+              }
+            }
+          ]
+        }, 
+        "event": {
+          "event_name": "minion_died", 
+          "player": "friendly"
+        }, 
+        "selector": {
+          "name": "self"
         }
       }
     ], 

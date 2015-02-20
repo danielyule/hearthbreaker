@@ -349,9 +349,10 @@ class Stolen(Status):
         pass
 
     def unact(self, actor, target):
-        minion = target.copy(target.player.opponent)
-        target.remove_from_board()
-        minion.add_to_board(len(target.player.opponent.minions))
+        if not target.removed:
+            minion = target.copy(target.player.opponent)
+            target.remove_from_board()
+            minion.add_to_board(len(target.player.opponent.minions))
 
     def __to_json__(self):
         return {

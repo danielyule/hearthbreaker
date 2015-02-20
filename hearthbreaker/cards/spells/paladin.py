@@ -301,5 +301,7 @@ class MusterForBattle(SpellCard):
         for i in range(0, 3):
             dude = SilverHandRecruit()
             dude.summon(player, player.game, len(player.minions))
-        hammer = LightsJustice().create_weapon(player)
+        justice = LightsJustice()
+        hammer = justice.create_weapon(player)
+        hammer.card = justice
         hammer.equip(player)

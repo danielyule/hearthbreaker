@@ -179,7 +179,7 @@ class Transform(Action):
             hero = card.create_hero(target.player)
             hero.card = card
             target.player.trigger("minion_played", actor)
-            hero.buffs = copy.copy(actor.buffs)
+            hero.buffs = copy.deepcopy(actor.buffs)
             hero.health = actor.health
             target.replace(hero)
 
@@ -469,6 +469,7 @@ class Equip(Action):
     def act(self, actor, target):
         card = self.weapon.get_card(target, actor)
         weapon = card.create_weapon(target)
+        weapon.card = card
         weapon.equip(target)
 
     def __to_json__(self):

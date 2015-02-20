@@ -11,6 +11,7 @@ class TestCaseMixin:
     def add_minions(self, game, player_index, *minions):
         player = game.players[player_index]
         for minion in minions:
+            minion.player = player
             minion.use(player, game)
 
     def set_board(self, game, player_index, *minions):

@@ -324,11 +324,13 @@ class GameObject:
         if self._attached:
             for effect in reversed(self.effects):
                 effect.unapply()
+            self.effects = []
             for aura in reversed(self.auras):
                 self.player.remove_aura(aura)
+            self.auras = []
             for buff in reversed(self.buffs):
-                if isinstance(buff, BuffUntil):
-                    buff.until.unbind(buff.owner, buff.__until__)
+                buff.unapply()
+            self.buffs = []
             self._attached = False
 
 

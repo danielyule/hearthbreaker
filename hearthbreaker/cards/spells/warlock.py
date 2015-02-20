@@ -139,12 +139,14 @@ class SenseDemons(SpellCard):
                 player.deck.left -= 1
                 if len(player.hand) < 10:
                     player.hand.append(demon_card)
+                    demon_card.player = player
                     self.trigger("card_drawn", demon_card)
                 else:
                     player.trigger("card_destroyed", demon_card)
             else:
                 if len(player.hand) < 10:
                     player.hand.append(hearthbreaker.cards.minions.warlock.WorthlessImp())
+                    player.hand[-1].player = player
                     self.trigger("card_drawn", hearthbreaker.cards.minions.warlock.WorthlessImp())
 
 
