@@ -1,7 +1,8 @@
 from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, IncreaseDurability
-from hearthbreaker.tags.event import Attack, AttackCompleted, SecretRevealed
+from hearthbreaker.tags.condition import IsHero
+from hearthbreaker.tags.event import AttackCompleted, SecretRevealed, CharacterAttack
 from hearthbreaker.tags.selector import HeroSelector, MinionSelector, RandomPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.base import Effect, BuffUntil, Battlecry
@@ -23,7 +24,8 @@ class GladiatorsLongbow(WeaponCard):
                          CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
-        return Weapon(5, 2, effects=[Effect(Attack(), Give(BuffUntil(Immune(), AttackCompleted())), HeroSelector())])
+        return Weapon(5, 2, effects=[Effect(CharacterAttack(IsHero()), Give(BuffUntil(Immune(), AttackCompleted())),
+                                            HeroSelector())])
 
 
 class Glaivezooka(WeaponCard):

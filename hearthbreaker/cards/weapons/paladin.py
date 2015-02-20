@@ -1,7 +1,8 @@
 from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, DecreaseDurability, Heal
-from hearthbreaker.tags.event import MinionSummoned, Attack
+from hearthbreaker.tags.condition import IsHero
+from hearthbreaker.tags.event import MinionSummoned, CharacterAttack
 from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker
 from hearthbreaker.tags.base import Buff, Effect, Battlecry
 from hearthbreaker.tags.status import DivineShield, Taunt, ChangeAttack, ChangeHealth
@@ -31,7 +32,7 @@ class TruesilverChampion(WeaponCard):
         super().__init__("Truesilver Champion", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def create_weapon(self, player):
-        return Weapon(4, 2, effects=[Effect(Attack(), Heal(2), HeroSelector())])
+        return Weapon(4, 2, effects=[Effect(CharacterAttack(IsHero()), Heal(2), HeroSelector())])
 
 
 class Coghammer(WeaponCard):

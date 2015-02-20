@@ -115,7 +115,7 @@ class Card(Bindable, GameObject):
         from hearthbreaker.tags.status import ManaChange
         mana = reduce(lambda a, b: b.update(self, a), [aura.status
                                                        for p in player.game.players
-                                                       for aura in p.player_auras
+                                                       for aura in p.object_auras
                                                        if aura.match(self) and isinstance(aura.status, ManaChange)],
                       self.mana)
         mana = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
@@ -432,17 +432,7 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :rtype: int
         """
         from hearthbreaker.tags.status import ManaChange
-        mana = reduce(lambda a, b: b.update(self, a), [aura.status
-                                                       for p in player.game.players
-                                                       for aura in p.player_auras
-                                                       if aura.match(self) and isinstance(aura.status, ManaChange)],
-                      self.mana)
-        mana = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
-                                                       if isinstance(buff.status, ManaChange) and
-                                                       (not buff.condition or buff.condition.evaluate(self, self))],
-                      mana)
-
-        return mana
+        return self.calculate_stat(ManaChange, self.mana)
 
     def use(self, player, game):
         """

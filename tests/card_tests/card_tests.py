@@ -78,7 +78,7 @@ class CardTest(unittest.TestCase):
                                     self.assertTrue(minion.stealth,
                                                     "Expected {:s} to have stealth".format(card_info["name"]))
                                 elif effect == "Windfury":
-                                    self.assertTrue(minion.windfury,
+                                    self.assertTrue(minion.windfury(),
                                                     "Expected {:s} to have windfury".format(card_info["name"]))
                                 elif effect == "Charge":
                                     self.assertTrue(minion.charge(),
@@ -148,7 +148,10 @@ class CardTest(unittest.TestCase):
                     except KeyError:
                         continue
                     game = generate_game_for(type(card), StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
-
-                    while not game.game_ended:
-                        game.play_single_turn()
+                    try:
+                        while not game.game_ended:
+                            game.play_single_turn()
+                    except Exception as e:
+                        print(card)
+                        raise e
             file.close()

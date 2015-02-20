@@ -104,6 +104,16 @@ class IsMinion(Condition):
         }
 
 
+class TargetIsMinion(Condition):
+    def evaluate(self, owner, minion, target, *args):
+        return target.is_minion()
+
+    def __to_json__(self):
+        return {
+            "name": 'target_is_minion'
+        }
+
+
 class IsWeapon(Condition):
     def evaluate(self, target, weapon, *args):
         return weapon.is_weapon()

@@ -22,7 +22,7 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Al'Akir the Windlord", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[0].windfury)
+        self.assertTrue(game.players[0].minions[0].windfury())
         self.assertTrue(game.players[0].minions[0].charge())
         self.assertTrue(game.players[0].minions[0].divine_shield)
         self.assertTrue(game.players[0].minions[0].taunt)
@@ -33,7 +33,7 @@ class TestShaman(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Dust Devil", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[0].windfury)
+        self.assertTrue(game.players[0].minions[0].windfury())
         self.assertEqual(2, game.players[0].overload)
 
         game.play_single_turn()
@@ -191,13 +191,13 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Stonetusk Boar", game.players[0].minions[0].card.name)
-        self.assertFalse(game.players[0].minions[0].windfury)
+        self.assertFalse(game.players[0].minions[0].windfury())
 
         # Windspeaker should be played, giving the boar windfury
         game.play_single_turn()
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Windspeaker", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[1].windfury)
+        self.assertTrue(game.players[0].minions[1].windfury())
 
     def test_AncestralHealing(self):
         game = generate_game_for([FlametongueTotem, AncestralHealing], StonetuskBoar,
@@ -472,11 +472,11 @@ class TestShaman(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertFalse(game.players[1].minions[0].windfury)
+        self.assertFalse(game.players[1].minions[0].windfury())
 
         # Windfury should be played
         game.play_single_turn()
-        self.assertTrue(game.players[1].minions[0].windfury)
+        self.assertTrue(game.players[1].minions[0].windfury())
 
     def test_Doomhammer(self):
         game = generate_game_for(Doomhammer, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
@@ -485,11 +485,11 @@ class TestShaman(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(30, game.players[1].hero.health)
-        self.assertFalse(game.players[0].hero.windfury)
+        self.assertFalse(game.players[0].hero.windfury())
 
         # Doomhammer should be played
         game.play_single_turn()
-        self.assertTrue(game.players[0].hero.windfury)
+        self.assertTrue(game.players[0].hero.windfury())
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(6, game.players[0].hero.weapon.durability)
         self.assertEqual(2, game.players[0].overload)
@@ -550,7 +550,7 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Whirling Zap-o-matic", game.players[0].minions[0].card.name)
-        self.assertTrue(game.players[0].minions[0].windfury)
+        self.assertTrue(game.players[0].minions[0].windfury())
 
     def test_DunemaulShaman(self):
         game = generate_game_for(DunemaulShaman,

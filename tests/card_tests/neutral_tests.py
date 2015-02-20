@@ -1064,7 +1064,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
         self.assertEqual(2, game.players[0].minions[0].health)
-        self.assertTrue(game.players[0].minions[0].windfury)
+        self.assertTrue(game.players[0].minions[0].windfury())
 
         game.play_single_turn()  # 2nd Raging Worgen
         game.play_single_turn()  # Circle of Healing
@@ -1074,8 +1074,8 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual(3, game.players[0].minions[1].calculate_attack())
         self.assertEqual(3, game.players[0].minions[1].health)
-        self.assertTrue(not game.players[0].minions[0].windfury)
-        self.assertTrue(not game.players[0].minions[1].windfury)
+        self.assertTrue(not game.players[0].minions[0].windfury())
+        self.assertTrue(not game.players[0].minions[1].windfury())
 
     def test_TaurenWarrior(self):
         game = generate_game_for(TaurenWarrior, [ArcaneExplosion, ArcaneExplosion, CircleOfHealing],
@@ -4211,7 +4211,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for minion in game.other_player.minions:
             self.assertFalse(minion.taunt)
             self.assertFalse(minion.divine_shield)
-            self.assertFalse(minion.windfury)
+            self.assertFalse(minion.windfury())
 
         game.play_single_turn()
         game.play_single_turn()
@@ -4219,22 +4219,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(2, len(game.current_player.minions))
         self.assertFalse(game.current_player.minions[1].taunt)
         self.assertTrue(game.current_player.minions[1].divine_shield)
-        self.assertFalse(game.current_player.minions[1].windfury)
+        self.assertFalse(game.current_player.minions[1].windfury())
         for minion in game.other_player.minions:
             self.assertFalse(minion.taunt)
             self.assertFalse(minion.divine_shield)
-            self.assertFalse(minion.windfury)
+            self.assertFalse(minion.windfury())
 
         game.play_single_turn()
         game.play_single_turn()
         self.assertEqual(3, len(game.current_player.minions))
         self.assertTrue(game.current_player.minions[1].taunt)
         self.assertFalse(game.current_player.minions[1].divine_shield)
-        self.assertFalse(game.current_player.minions[1].windfury)
+        self.assertFalse(game.current_player.minions[1].windfury())
         self.assertFalse(game.current_player.minions[2].taunt)
         self.assertTrue(game.current_player.minions[2].divine_shield)
-        self.assertTrue(game.current_player.minions[2].windfury)
+        self.assertTrue(game.current_player.minions[2].windfury())
         for minion in game.other_player.minions:
             self.assertFalse(minion.taunt)
             self.assertFalse(minion.divine_shield)
-            self.assertFalse(minion.windfury)
+            self.assertFalse(minion.windfury())

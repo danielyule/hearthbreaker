@@ -1501,17 +1501,17 @@
     "name": "Amani Berserker", 
     "character_class": "", 
     "rarity": "Common", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 3, 
           "name": "change_attack"
+        }, 
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
       }
-    }, 
+    ], 
     "mana": 2, 
     "attack": 2, 
     "health": 3, 
@@ -1846,17 +1846,17 @@
     "minion_type": "Beast", 
     "character_class": "", 
     "rarity": "Rare", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 5, 
           "name": "change_attack"
+        }, 
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
       }
-    }, 
+    ], 
     "mana": 1, 
     "attack": 1, 
     "health": 1, 
@@ -1866,20 +1866,25 @@
     "name": "Raging Worgen", 
     "character_class": "", 
     "rarity": "Common", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 1, 
           "name": "change_attack"
         }, 
-        {
-          "name": "windfury"
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
+      }, 
+      {
+        "status": {
+          "name": "windfury"
+        }, 
+        "selector": {
+          "name": "self"
+        }
       }
-    }, 
+    ], 
     "mana": 3, 
     "attack": 3, 
     "health": 3, 
@@ -1889,17 +1894,17 @@
     "name": "Tauren Warrior", 
     "character_class": "", 
     "rarity": "Common", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 3, 
           "name": "change_attack"
+        }, 
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
       }
-    }, 
+    ], 
     "mana": 3, 
     "attack": 2, 
     "health": 3, 
@@ -1918,21 +1923,18 @@
     "name": "Spiteful Smith", 
     "character_class": "", 
     "rarity": "Common", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 2, 
-          "name": "increase_weapon_bonus"
-        }
-      ], 
-      "selector": {
-        "picker": {
-          "name": "all"
+          "name": "change_attack"
         }, 
-        "players": "friendly", 
-        "name": "hero"
+        "selector": {
+          "players": "friendly", 
+          "name": "weapon"
+        }
       }
-    }, 
+    ], 
     "mana": 5, 
     "attack": 4, 
     "health": 6, 
@@ -5786,7 +5788,7 @@
     "deathrattle": {
       "actions": [
         {
-          "amount": 3, 
+          "amount": 1, 
           "name": "damage"
         }
       ], 
@@ -10898,17 +10900,17 @@
     "name": "Grommash Hellscream", 
     "character_class": "Warrior", 
     "rarity": "Legendary", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 6, 
           "name": "change_attack"
+        }, 
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
       }
-    }, 
+    ], 
     "mana": 8, 
     "attack": 4, 
     "health": 9, 
@@ -10983,17 +10985,17 @@
     "minion_type": "Mech", 
     "character_class": "Warrior", 
     "rarity": "Common", 
-    "enrage": {
-      "statuses": [
-        {
+    "enrage": [
+      {
+        "status": {
           "amount": 1, 
           "name": "change_attack"
+        }, 
+        "selector": {
+          "name": "self"
         }
-      ], 
-      "selector": {
-        "name": "self"
       }
-    }, 
+    ], 
     "mana": 1, 
     "attack": 1, 
     "health": 3, 
@@ -11194,7 +11196,11 @@
             ]
           }, 
           "event": {
-            "event_name": "attack"
+            "event_name": "character_attack", 
+            "player": "friendly", 
+            "condition": {
+              "name": "is_hero"
+            }
           }, 
           "selector": {
             "picker": {
@@ -11325,7 +11331,11 @@
             "name": "heal"
           }, 
           "event": {
-            "event_name": "attack"
+            "event_name": "character_attack", 
+            "player": "friendly", 
+            "condition": {
+              "name": "is_hero"
+            }
           }, 
           "selector": {
             "picker": {
@@ -11530,9 +11540,18 @@
             "name": "increase_durability"
           }, 
           "event": {
-            "event_name": "attack", 
+            "event_name": "character_attack", 
+            "player": "friendly", 
             "condition": {
-              "name": "is_minion"
+              "conditions": [
+                {
+                  "name": "is_hero"
+                }, 
+                {
+                  "name": "target_is_minion"
+                }
+              ], 
+              "name": "and"
             }
           }, 
           "selector": {
@@ -11599,7 +11618,11 @@
             }
           }, 
           "event": {
-            "event_name": "attack"
+            "event_name": "character_attack", 
+            "player": "friendly", 
+            "condition": {
+              "name": "is_hero"
+            }
           }, 
           "condition": {
             "conditions": [
@@ -11615,7 +11638,11 @@
             "name": "and"
           }, 
           "selector": {
-            "name": "self"
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "friendly", 
+            "name": "hero"
           }
         }
       ]

@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.cards.spells.warrior import BurrowingMine
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
-from hearthbreaker.tags.base import Effect, Battlecry, Enrage, Buff
+from hearthbreaker.tags.base import Effect, Battlecry, Buff, Aura
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
@@ -60,7 +60,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 9, charge=True, enrage=Enrage(ChangeAttack(6), SelfSelector()))
+        return Minion(4, 9, charge=True, enrage=[Aura(ChangeAttack(6), SelfSelector())])
 
 
 class KorkronElite(MinionCard):
@@ -84,7 +84,7 @@ class Warbot(MinionCard):
         super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(1, 3, enrage=Enrage(ChangeAttack(1), SelfSelector()))
+        return Minion(1, 3, enrage=[Aura(ChangeAttack(1), SelfSelector())])
 
 
 class Shieldmaiden(MinionCard):

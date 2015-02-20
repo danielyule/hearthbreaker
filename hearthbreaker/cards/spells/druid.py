@@ -123,6 +123,7 @@ class WildGrowth(SpellCard):
             player.max_mana += 1
         else:
             player.hand.append(ExcessMana())
+            player.hand[-1].player = player
 
 
 # Special card that only appears in tandem with Wild Growth

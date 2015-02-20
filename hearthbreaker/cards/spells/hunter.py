@@ -73,6 +73,7 @@ class Tracking(SpellCard):
         if len(cards) > 0:
             chosen_card = player.agent.choose_option(cards, player)
             player.hand.append(chosen_card)
+            player.hand[-1].player = player
             player.trigger("card_drawn", chosen_card)
 
 

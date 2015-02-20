@@ -136,7 +136,7 @@ class CardSelector(Selector, metaclass=abc.ABCMeta):
         return targets
 
     def match(self, source, obj):
-        return self.players.match(source, obj)
+        return obj.is_card() and self.players.match(source, obj)
 
     def __to_json__(self):
         return {
@@ -237,7 +237,7 @@ class HeroSelector(Selector):
         return self.picker.pick(possible_targets, source.player)
 
     def match(self, source, obj):
-        return source.player is obj
+        return obj.is_hero() and self.players.match(source, obj)
 
     def __to_json__(self):
         return {
@@ -296,7 +296,7 @@ class MinionSelector(Selector):
 
     def match(self, source, obj):
         if self.condition:
-            return obj.is_minion() and self.players.match(source, obj)\
+            return not obj.is_card() and obj.is_minion() and self.players.match(source, obj)\
                 and self.condition.evaluate(source, obj)
         else:
             return obj.is_minion() and self.players.match(source, obj)
@@ -456,7 +456,7 @@ class WeaponSelector(Selector):
         return [p.hero.weapon for p in self.players.get_players(source.player) if p.hero.weapon]
 
     def match(self, source, obj):
-        return source.player is obj
+        return obj.is_weapon() and self.players.match(source, obj)
 
     def __to_json__(self):
         return {

@@ -1773,6 +1773,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(29, game.players[1].hero.health)  # No enrage, only LJ
 
         game.play_single_turn()
+        self.assertEqual(3, game.players[0].hero.calculate_attack())
         self.assertEqual(22, game.players[1].hero.health)  # Enrage LJ for 3 + Smith for 4
 
         game = game.copy()

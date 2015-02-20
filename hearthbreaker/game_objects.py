@@ -3,7 +3,7 @@ import copy
 from functools import reduce
 import hearthbreaker.constants
 
-from hearthbreaker.tags.base import Aura, AuraUntil, Effect, Buff, BuffUntil, Deathrattle, Enrage
+from hearthbreaker.tags.base import Aura, AuraUntil, Effect, Buff, BuffUntil, Deathrattle
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth, SetAttack, Charge, Taunt, DivineShield, \
@@ -183,6 +183,24 @@ class GameObject:
                 player.add_aura(aura)
             self._attached = True
 
+    def calculate_stat(self, stat_class, starting_value=0):
+        """
+        Calculates the amount of a particular stat this :class:`GameObject` has at current time.
+        """
+
+        # Add together all the attack amounts from buffs
+        stat = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
+                                                       if isinstance(buff.status, stat_class) and
+                                                       (not buff.condition or buff.condition.evaluate(self, self))],
+                      starting_value)
+        stat = reduce(lambda a, b: b.update(self, a), [aura.status
+                                                       for player in self.player.game.players
+                                                       for aura in player.object_auras
+                                                       if aura.match(self) and isinstance(aura.status, stat_class)],
+                      stat)
+
+        return max(0, stat)
+
     def __to_json__(self):
         jsn = {}
         if self.effects:
@@ -282,7 +300,10 @@ class GameObject:
         self.player.add_aura(aura)
 
     def remove_aura(self, aura):
-        self.auras.remove(aura)
+        for an_aura in self.auras:
+            if an_aura.eq(aura):
+                self.auras.remove(an_aura)
+                break
         self.player.remove_aura(aura)
 
     def add_buff(self, buff):
@@ -293,7 +314,10 @@ class GameObject:
         buff.apply()
 
     def remove_buff(self, buff):
-        self.buffs.remove(buff)
+        for a_buff in self.buffs:
+            if a_buff.eq(buff):
+                self.buffs.remove(a_buff)
+                break
         buff.unapply()
 
     def unattach(self):
@@ -337,8 +361,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
-        self.windfury = 0
-        #: If this character has used their first windfury attack
         self.used_windfury = False
         #: If this character is currently frozen
         self.frozen = 0
@@ -361,7 +383,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         #: An integer describing how much the health of this character has been adjusted
         self.health_delta = 0
         #: A list of actions that describe what will happen when this character is enraged
-        self.enrage = enrage
+        self.enrage = enrage if enrage else []
         #: The character that this minion is attacking, while it is carrying out its attack
         self.current_target = None
 
@@ -418,7 +440,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         target.damage(my_attack, self)
         self.player.game.check_delayed()
         self.trigger("attack_completed")
-        if self.windfury and not self.used_windfury:
+        if self.windfury() and not self.used_windfury:
             self.used_windfury = True
         else:
             self.active = False
@@ -433,30 +455,21 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
         return self.player.choose_target(targets)
 
+    def calculate_stat(self, stat_class, starting_value=0):
+        """
+        Calculates the amount of attack this :class:`Character` has, including the base attack, any temporary attack
+        bonuses for this turn
+        """
+        stat = starting_value
+
+        return super().calculate_stat(stat_class, stat)
+
     def calculate_attack(self):
         """
         Calculates the amount of attack this :class:`Character` has, including the base attack, any temporary attack
         bonuses for this turn
         """
-
-        # Add together all the attack amounts from buffs
-        if self.enrage and self.enraged:
-            attack = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
-                                                             if self.enrage.selector.match(self, self) and
-                                                             isinstance(status, ChangeAttack)], self.base_attack)
-        else:
-            attack = self.base_attack
-        attack = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
-                                                         if isinstance(buff.status, ChangeAttack) and
-                                                         (not buff.condition or buff.condition.evaluate(self, self))],
-                        attack)
-        attack = reduce(lambda a, b: b.update(self, a), [aura.status
-                                                         for player in self.player.game.players
-                                                         for aura in player.object_auras
-                                                         if aura.match(self) and isinstance(aura.status, ChangeAttack)],
-                        attack)
-
-        return max(0, attack)
+        return self.calculate_stat(ChangeAttack, self.base_attack)
 
     def calculate_max_health(self):
         """
@@ -464,6 +477,12 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         tags
         """
         return self.base_health + self.health_delta
+
+    def windfury(self):
+        """
+        Checks if this character has windfury attached
+        """
+        return self.calculate_stat(Windfury, False)
 
     def delayed_trigger(self, event, *args):
         """
@@ -640,8 +659,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.effects = []
         self.auras = []
         self.buffs = []
-        if self.enraged:
-            self._do_unenrage()
         self.enrage = []
         if self.calculate_max_health() < self.health or health_full:
             self.health = self.calculate_max_health()
@@ -677,12 +694,12 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         return not self.dead and not self.removed
 
     def _do_enrage(self):
-        if self.enrage:
-            self.enrage.enrage(self)
+        for aura in self.enrage:
+            self.add_aura(aura)
 
     def _do_unenrage(self):
-        if self.enrage:
-            self.enrage.unenrage(self)
+        for aura in self.enrage:
+            self.remove_aura(aura)
 
 
 class Weapon(Bindable, GameObject):
@@ -735,7 +752,7 @@ class Weapon(Bindable, GameObject):
         if self.player.hero.weapon is not None:
             self.player.hero.weapon.destroy()
         self.player.hero.weapon = self
-        self.attach(self.player.hero, player)
+        self.attach(self, player)
         self.player.hero.trigger("weapon_equipped")
 
     def __to_json__(self):
@@ -842,23 +859,7 @@ class Minion(Character):
         return super().calculate_max_health()
 
     def charge(self):
-        if self.enrage and self.enraged:
-            charge = reduce(lambda a, b: b.update(self, a), [status for status in self.enrage.statuses
-                                                             if self.enrage.selector.match(self, self) and
-                                                             isinstance(status, Charge)], 0)
-        else:
-            charge = 0
-        charge = reduce(lambda a, b: b.update(self, a), [buff.status for buff in self.buffs
-                                                         if isinstance(buff.status, Charge) and
-                                                         (not buff.condition or buff.condition.evaluate(self, self))],
-                        charge)
-        charge = reduce(lambda a, b: b.update(self, a), [aura.status
-                                                         for player in self.player.game.players
-                                                         for aura in player.object_auras
-                                                         if aura.match(self) and isinstance(aura.status, Charge)],
-                        charge)
-
-        return max(0, charge)
+        return self.calculate_stat(Charge, False)
 
     def remove_from_board(self):
         if not self.removed:
@@ -996,7 +997,7 @@ class Minion(Character):
         minion.active = not md['already_attacked']
         minion.born = md['sequence_id']
         if 'enrage' in md:
-            minion.enrage = Enrage.from_json(**md['enrage'])
+            minion.enrage = [Aura.from_json(**enrage) for enrage in md['enrage']]
         minion.deathrattle = []
         for rattle in md['deathrattles']:
             minion.deathrattle.append(Deathrattle.from_json(**rattle))
@@ -1054,9 +1055,16 @@ class Hero(Character):
 
     def calculate_attack(self):
         if self.player == self.player.game.current_player and self.weapon:
-            return super().calculate_attack() + self.weapon.base_attack + self.bonus_attack
+            base = self.base_attack + self.weapon.base_attack
         else:
-            return super().calculate_attack()
+            base = self.base_attack
+        return self.calculate_stat(ChangeAttack, base)
+
+    def calculate_stat(self, stat_class, starting_value=0):
+        if self.player == self.player.game.current_player and self.weapon:
+            starting_value = self.weapon.calculate_stat(stat_class, starting_value)
+
+        return super().calculate_stat(stat_class, starting_value)
 
     def copy(self, new_owner):
         new_hero = Hero(self.base_health, self.character_class, self.power, new_owner)

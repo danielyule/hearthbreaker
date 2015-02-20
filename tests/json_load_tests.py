@@ -21,7 +21,7 @@ with open("card_defs.json", "r") as file:
 class JSONTester:
     def define_type(self, card_def):
         from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
-        from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Enrage, Buff
+        from hearthbreaker.tags.base import Battlecry, Choice, Deathrattle, Effect, Aura, Buff
         import hearthbreaker.cards
 
         def __init__(self):
@@ -101,7 +101,7 @@ class JSONTester:
                     create_dict['buffs'] = [Buff.from_json(**buff) for buff in impl['buffs']]
 
             if 'enrage' in card_def:
-                create_dict['enrage'] = Enrage.from_json(**card_def['enrage'])
+                create_dict['enrage'] = [Aura.from_json(**enrage) for enrage in card_def['enrage']]
 
             if 'deathrattle' in card_def:
                 create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])

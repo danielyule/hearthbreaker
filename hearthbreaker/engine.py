@@ -184,9 +184,9 @@ class Game(Bindable):
             minion.used_windfury = False
             minion.active = False
 
-        for aura in copy.copy(self.current_player.player_auras):
+        for aura in copy.copy(self.current_player.object_auras):
             if isinstance(aura, AuraUntil):
-                self.current_player.player_auras.remove(aura)
+                self.current_player.object_auras.remove(aura)
                 aura.unapply()
 
         for secret in self.other_player.secrets:
@@ -217,8 +217,6 @@ class Game(Bindable):
                 player.hero.weapon.attach(player.hero, player)
             for minion in player.minions:
                 minion.attach(minion, player)
-                if minion.enraged:
-                    minion._do_enrage()
 
         for secret in copied_game.other_player.secrets:
             secret.activate(copied_game.other_player)
@@ -304,7 +302,6 @@ class Game(Bindable):
                 minion.attach(minion, player)
                 if minion.health != minion.calculate_max_health():
                     minion.enraged = True
-                    minion._do_enrage()
             index += 1
         return new_game
 
@@ -427,19 +424,23 @@ class Player(Bindable):
         effect.event.bind(self.hero, remove_effect)
 
     def add_aura(self, aura):
-        if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.object_auras.append(aura)
-        else:
+        if isinstance(aura.selector, hearthbreaker.tags.selector.PlayerSelector):
             self.player_auras.append(aura)
+        else:
+            self.object_auras.append(aura)
         if not aura.owner:
             aura.set_owner(self.hero)
         aura.apply()
 
     def remove_aura(self, aura):
-        if isinstance(aura.selector, hearthbreaker.tags.selector.MinionSelector):
-            self.object_auras = [au for au in filter(lambda a: a is not aura, self.object_auras)]
-        else:
+        if isinstance(aura.selector, hearthbreaker.tags.selector.PlayerSelector):
             self.player_auras = [au for au in filter(lambda a: a is not aura, self.player_auras)]
+        else:
+            for an_aura in self.object_auras:
+                if an_aura.eq(aura):
+                    self.object_auras.remove(an_aura)
+                    aura = an_aura
+                    break
         aura.unapply()
 
     def choose_target(self, targets):

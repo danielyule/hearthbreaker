@@ -732,39 +732,6 @@ class Choice(ActionTag):
         return Choice(card, actions, selector, condition)
 
 
-class Enrage(Tag):
-    def __init__(self, statuses, selector):
-        if isinstance(statuses, Status):
-            self.statuses = [statuses]
-        else:
-            self.statuses = statuses
-        self.selector = selector
-
-    def enrage(self, target):
-        targets = self.selector.get_targets(target, target)
-        for t in targets:
-            for status in self.statuses:
-                status.act(target, t)
-
-    def unenrage(self, target):
-        targets = self.selector.get_targets(target, target)
-        for t in targets:
-            for status in self.statuses:
-                status.unact(target, t)
-
-    def __to_json__(self):
-        return {
-            'statuses': self.statuses,
-            'selector': self.selector
-        }
-
-    @staticmethod
-    def from_json(statuses, selector):
-        statuses = [Status.from_json(**status) for status in statuses]
-        selector = Selector.from_json(**selector)
-        return Enrage(statuses, selector)
-
-
 class Function(JSONObject, metaclass=abc.ABCMeta):
 
     def do(self, target):

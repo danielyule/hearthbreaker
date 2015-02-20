@@ -3,10 +3,11 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
 from hearthbreaker.tags.base import Deathrattle, Effect
-from hearthbreaker.tags.condition import IsMinion, NotCurrentTarget, OneIn, OpponentMinionCountIsGreaterThan, And
-from hearthbreaker.tags.event import Attack
+from hearthbreaker.tags.condition import NotCurrentTarget, OneIn, OpponentMinionCountIsGreaterThan, And, \
+    IsHero, TargetIsMinion
+from hearthbreaker.tags.event import CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
-    RandomPicker, SelfSelector
+    RandomPicker
 
 
 class FieryWarAxe(WeaponCard):
@@ -30,7 +31,8 @@ class Gorehowl(WeaponCard):
         super().__init__("Gorehowl", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
-        return Weapon(7, 1, effects=[Effect(Attack(IsMinion()), IncreaseDurability(), HeroSelector())])
+        return Weapon(7, 1, effects=[Effect(CharacterAttack(And(IsHero(), TargetIsMinion())),
+                                            IncreaseDurability(), HeroSelector())])
 
 
 class DeathsBite(WeaponCard):
@@ -46,8 +48,7 @@ class OgreWarmaul(WeaponCard):
         super().__init__("Ogre Warmaul", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
 
     def create_weapon(self, player):
-        return Weapon(4, 2, effects=[Effect(Attack(), ChangeTarget(CharacterSelector(NotCurrentTarget(),
-                                                                                     EnemyPlayer(),
-                                                                                     RandomPicker())),
-                                            SelfSelector(),
-                                            And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
+        return Weapon(4, 2, effects=[Effect(CharacterAttack(IsHero()),
+                                            ChangeTarget(CharacterSelector(NotCurrentTarget(), EnemyPlayer(),
+                                                                           RandomPicker())),
+                                            HeroSelector(), And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
