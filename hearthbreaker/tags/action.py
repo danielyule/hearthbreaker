@@ -232,18 +232,16 @@ class SetHealth(Action, metaclass=Amount):
         }
 
 
-class Damage(Action):
-    def __init__(self, amount):
+class Damage(Action, metaclass=Amount):
+    def __init__(self):
         super().__init__()
-        self.amount = amount
 
     def act(self, actor, target):
-        target.damage(self.amount, actor)
+        target.damage(self.get_amount(actor, target), actor)
 
     def __to_json__(self):
         return {
             'name': 'damage',
-            'amount': self.amount
         }
 
 

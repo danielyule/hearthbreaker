@@ -5833,7 +5833,7 @@
       {
         "actions": [
           {
-            "amount": 2, 
+            "amount": 1, 
             "name": "damage"
           }
         ], 
@@ -7061,6 +7061,48 @@
       }
     ], 
     "type": "minion"
+  }, 
+  {
+    "name": "Foe Reaper 4000", 
+    "minion_type": "Mech", 
+    "character_class": "", 
+    "rarity": "Legendary", 
+    "mana": 8, 
+    "attack": 6, 
+    "health": 9, 
+    "type": "minion", 
+    "impl": {
+      "effects": [
+        {
+          "action": {
+            "amount": {
+              "attribute": "attack", 
+              "name": "attribute", 
+              "selector": {
+                "name": "self"
+              }
+            }, 
+            "name": "damage"
+          }, 
+          "event": {
+            "event_name": "attack", 
+            "condition": {
+              "name": "is_minion"
+            }
+          }, 
+          "selector": {
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "enemy", 
+            "name": "minion", 
+            "condition": {
+              "name": "target_adjacent"
+            }
+          }
+        }
+      ]
+    }
   }, 
   {
     "name": "Treant", 

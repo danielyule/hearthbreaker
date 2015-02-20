@@ -2521,3 +2521,20 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(4, game.current_player.minions[0].calculate_attack())
         self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack, 0))
+
+    def test_FoeReaper4000(self):
+        game = generate_game_for(FoeReaper4000, [StonetuskBoar, AncientOfWar, AncientOfWar],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(16):
+            game.play_single_turn()
+        game = game.copy()
+        game.players[0].agent.choose_target = lambda targets: targets[1]
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].health)
+        self.assertEqual(4, game.other_player.minions[1].health)
+        self.assertEqual(4, game.current_player.minions[1].health)
+        self.assertEqual(30, game.current_player.hero.health)
+        self.assertEqual(30, game.other_player.hero.health)

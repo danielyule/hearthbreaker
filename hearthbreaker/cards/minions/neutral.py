@@ -9,7 +9,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
@@ -2350,3 +2350,12 @@ class EnhanceoMechano(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2)
+
+
+class FoeReaper4000(MinionCard):
+    def __init__(self):
+        super().__init__("Foe Reaper 4000", 8, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.MECH)
+
+    def create_minion(self, player):
+        return Minion(6, 9, effects=[Effect(Attack(IsMinion()), Damage(Attribute("attack", SelfSelector())),
+                                            MinionSelector(TargetAdjacent(), EnemyPlayer()))])

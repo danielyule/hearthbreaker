@@ -317,6 +317,20 @@ class Adjacent(Condition):
             (minion.index == target.index - 1) or (minion.index == target.index + 1)
 
 
+class TargetAdjacent(Condition):
+    def __to_json__(self):
+        return {
+            'name': 'target_adjacent'
+        }
+
+    def __init__(self):
+        super().__init__()
+
+    def evaluate(self, target, minion, *args):
+        return target.current_target and target.current_target.player is minion.player and \
+            ((target.current_target.index == minion.index - 1) or (target.current_target.index == minion.index + 1))
+
+
 class AttackLessThanOrEqualTo(Condition):
     def __init__(self, attack_max, include_self=False):
         super().__init__()
