@@ -326,3 +326,14 @@ class Flamecannon(SpellCard):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1
+
+
+class EchoOfMedivh(SpellCard):
+    def __init__(self):
+        super().__init__("Echo of Medivh", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for minion in sorted(copy.copy(player.minions), key=lambda minion: minion.born):
+            if len(player.hand) < 10:
+                player.hand.append(minion.card)

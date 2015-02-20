@@ -78,6 +78,7 @@ from hearthbreaker.cards.spells.mage import (
     Pyroblast,
     Duplicate,
     Flamecannon,
+    EchoOfMedivh,
 )
 
 from hearthbreaker.cards.spells.paladin import (

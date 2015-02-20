@@ -811,3 +811,22 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(28, game.current_player.hero.health)
         self.assertEqual(28, game.other_player.hero.health)
+
+    def test_EchoOfMedivh(self):
+        game = generate_game_for([NoviceEngineer, NoviceEngineer, GnomishInventor, GnomishInventor, EchoOfMedivh], Wisp,
+                                  OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        # Plays first 4 "draw" minions
+        self.assertEqual(8, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual("Novice Engineer", game.players[0].hand[8].name)
+
+        game.play_single_turn()
+
+        # Plays Echo and overflows
+        self.assertEqual(10, len(game.players[0].hand))
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual("Novice Engineer", game.players[0].hand[8].name)
+        self.assertEqual("Novice Engineer", game.players[0].hand[9].name)
