@@ -814,14 +814,13 @@ class TestMage(unittest.TestCase):
 
     def test_EchoOfMedivh(self):
         game = generate_game_for([NoviceEngineer, NoviceEngineer, GnomishInventor, GnomishInventor, EchoOfMedivh], Wisp,
-                                  OneCardPlayingAgent, DoNothingAgent)
+                                 OneCardPlayingAgent, DoNothingAgent)
         for turn in range(0, 10):
             game.play_single_turn()
 
         # Plays first 4 "draw" minions
         self.assertEqual(8, len(game.players[0].hand))
         self.assertEqual(4, len(game.players[0].minions))
-        self.assertEqual("Novice Engineer", game.players[0].hand[8].name)
 
         game.play_single_turn()
 

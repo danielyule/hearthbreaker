@@ -1,9 +1,11 @@
 from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage
-from hearthbreaker.tags.base import Battlecry
-from hearthbreaker.tags.selector import CharacterSelector, UserPicker
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.base import Battlecry, Buff
+from hearthbreaker.tags.condition import GreaterThan, IsType
+from hearthbreaker.tags.selector import CharacterSelector, UserPicker, Count, MinionSelector
+from hearthbreaker.tags.status import ChangeAttack
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
 class AssassinsBlade(WeaponCard):
@@ -22,3 +24,12 @@ class PerditionsBlade(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(2, 2)
+
+
+class CogmastersWrench(WeaponCard):
+    def __init__(self):
+        super().__init__("Cogmaster's Wrench", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.EPIC)
+
+    def create_weapon(self, player):
+        return Weapon(1, 3, buffs=[Buff(ChangeAttack(2), GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH))),
+                                                                     value=0))])

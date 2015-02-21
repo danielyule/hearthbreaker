@@ -717,3 +717,25 @@ class TestRogue(unittest.TestCase):
 
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(2, len(game.players[0].minions))
+
+    def test_CogmastersWrench(self):
+        game = generate_game_for([CogmastersWrench, ClockworkGnome, Deathwing], DeadlyShot,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+        for turn in range(0, 6):
+            game.play_single_turn()
+
+        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(29, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[0].minions))
+
+        # Plays Clockwork Gnome, buffing Wrench
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(26, game.players[1].hero.health)
+
+        # Deadly Shot kills Clockwork Gnome, removing Wrench buff
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(25, game.players[1].hero.health)
