@@ -610,3 +610,18 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Murloc Tidecaller", game.players[0].hand[1].name)
         self.assertEqual("Grimscale Oracle", game.players[0].hand[2].name)
         self.assertEqual("Coldlight Seer", game.players[0].hand[3].name)
+
+    def test_AncestorsCall(self):
+        game = generate_game_for([AncestorsCall, StonetuskBoar], [Doomguard, Soulfire],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Stonetusk Boar", game.current_player.minions[0].card.name)
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Doomguard", game.other_player.minions[0].card.name)
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertEqual(7, len(game.other_player.hand))

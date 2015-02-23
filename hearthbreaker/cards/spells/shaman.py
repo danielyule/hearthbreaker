@@ -213,3 +213,21 @@ class Crackle(SpellCard):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(game.random_amount(3, 6)), self)
+
+
+class AncestorsCall(SpellCard):
+    def __init__(self):
+        super().__init__("Ancestor's Call", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and (len(player.minions) < 7 or len(player.opponent.minions) < 7)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for player in game.players:
+            minions = [card for card in player.hand if card.is_minion()]
+            if len(minions) and len(player.minions) < 7:
+                minion_card = game.random_choice(minions)
+                minion_card.unattach()
+                player.hand.remove(minion_card)
+                minion_card.summon(player, game, len(player.minions))

@@ -169,6 +169,7 @@ from hearthbreaker.cards.spells.shaman import (
     Windfury,
     Reincarnate,
     Crackle,
+    AncestorsCall,
 )
 
 from hearthbreaker.cards.spells.warlock import (
