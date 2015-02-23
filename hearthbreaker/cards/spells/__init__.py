@@ -79,6 +79,7 @@ from hearthbreaker.cards.spells.mage import (
     Duplicate,
     Flamecannon,
     EchoOfMedivh,
+    UnstablePortal,
 )
 
 from hearthbreaker.cards.spells.paladin import (

@@ -113,8 +113,10 @@ class Card(Bindable, GameObject):
         :rtype: int
         """
         from hearthbreaker.tags.status import ManaChange
+        # Mana appears to be calculated in reverse order from other stats (auras first, then buffs)
+
         mana = reduce(lambda a, b: b.update(self, a), [aura.status
-                                                       for p in player.game.players
+                                                       for p in self.player.game.players
                                                        for aura in p.object_auras
                                                        if aura.match(self) and isinstance(aura.status, ManaChange)],
                       self.mana)
@@ -570,4 +572,5 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
 class ChoiceCard(Card):
     def can_choose(self, player):
+        self.player = player
         return self.can_use(player, player.game)

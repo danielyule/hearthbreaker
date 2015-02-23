@@ -829,3 +829,14 @@ class TestMage(unittest.TestCase):
         self.assertEqual(4, len(game.players[0].minions))
         self.assertEqual("Novice Engineer", game.players[0].hand[8].name)
         self.assertEqual("Novice Engineer", game.players[0].hand[9].name)
+
+    def test_UnstablePortal(self):
+        game = generate_game_for(UnstablePortal, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertTrue(game.current_player.hand[-1].is_minion())
+        if game.current_player.hand[-1].mana >= 3:
+            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))

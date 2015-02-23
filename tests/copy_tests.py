@@ -2550,3 +2550,14 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(22, game.other_player.hero.health)
         self.assertEqual(1, game.current_player.minions[1].health)
         self.assertEqual(3, game.current_player.minions[0].health)
+
+    def test_UnstablePortal(self):
+        game = generate_game_for(UnstablePortal, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+        game = game.copy()
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertTrue(game.current_player.hand[-1].is_minion())
+        if game.current_player.hand[-1].mana >= 3:
+            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))

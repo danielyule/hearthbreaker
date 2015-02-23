@@ -3,10 +3,11 @@ from hearthbreaker.cards.base import MinionCard, SecretCard, SpellCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion, Hero
-from hearthbreaker.tags.base import BuffUntil, Buff
+from hearthbreaker.tags.base import BuffUntil, Buff, CardQuery
+from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
-from hearthbreaker.tags.status import Immune, Frozen
+from hearthbreaker.tags.status import Immune, Frozen, ManaChange
 import hearthbreaker.targeting
 
 
@@ -337,3 +338,16 @@ class EchoOfMedivh(SpellCard):
         for minion in sorted(copy.copy(player.minions), key=lambda minion: minion.born):
             if len(player.hand) < 10:
                 player.hand.append(minion.card)
+
+
+class UnstablePortal(SpellCard):
+    def __init__(self):
+        super().__init__("Unstable Portal", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        query = CardQuery(conditions=[IsMinion()])
+        new_minon = query.get_card(player, self)
+        new_minon.add_buff(Buff(ManaChange(-3)))
+        player.hand.append(new_minon)
+        new_minon.attach(new_minon, player)

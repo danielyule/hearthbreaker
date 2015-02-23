@@ -481,6 +481,28 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, game.current_player.minions[1].health)
         self.assertEqual(1, game.current_player.minions[1].calculate_attack())
 
+    def test_Stormwind_and_Sheep(self):
+        game = generate_game_for([StormwindChampion, BloodfenRaptor, ExplosiveSheep], ShadowBolt,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(15):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.current_player.minions))
+        self.assertEqual("Explosive Sheep", game.current_player.minions[0].card.name)
+        self.assertEqual("Bloodfen Raptor", game.current_player.minions[1].card.name)
+        self.assertEqual("Stormwind Champion", game.current_player.minions[2].card.name)
+        self.assertEqual(2, game.current_player.minions[2].health)
+
+        # The shadow bolt should kill the sheep, which should then explode, killing the stormwind.
+        # However, the aura from the Stormwind should allow the raptor to survive
+        # According to Taohinton for build 2.1.0.7628
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual("Bloodfen Raptor", game.other_player.minions[0].card.name)
+
     def test_VoodooDoctor(self):
         game = generate_game_for(VoodooDoctor, StonetuskBoar, SelfSpellTestingAgent, DoNothingAgent)
 
