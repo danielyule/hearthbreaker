@@ -5,8 +5,8 @@ from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, DoubleAttack
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, HeroSelector
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, DoubleAttack, PowerTargetsMinions
 
 
 class TimberWolf(MinionCard):
@@ -153,3 +153,11 @@ class Gahzrilla(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 9, effects=[Effect(Damaged(), Give(Buff(DoubleAttack())), SelfSelector())])
+
+
+class SteamwheedleSniper(MinionCard):
+    def __init__(self):
+        super().__init__("Steamwheedle Sniper", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.EPIC)
+
+    def create_minion(self, player):
+        return Minion(2, 3, auras=[Aura(PowerTargetsMinions(), HeroSelector())])

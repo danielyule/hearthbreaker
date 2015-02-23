@@ -2538,3 +2538,15 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(4, game.current_player.minions[1].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_SteamwheedleSniper(self):
+        game = generate_game_for(SteamwheedleSniper, StonetuskBoar, PredictableAgent, DoNothingAgent)
+        for turn in range(8):
+            game.play_single_turn()
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(22, game.other_player.hero.health)
+        self.assertEqual(1, game.current_player.minions[1].health)
+        self.assertEqual(3, game.current_player.minions[0].health)

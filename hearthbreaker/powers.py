@@ -26,7 +26,13 @@ class DruidPower(Power):
 class HunterPower(Power):
     def use(self):
         super().use()
-        self.hero.player.game.other_player.hero.damage(2, None)
+        if self.hero.power_targets_minions:
+            target = self.hero.find_power_target()
+            super().use()
+            target.damage(2 * self.hero.player.spell_multiplier, None)
+            self.hero.player.game.check_delayed()
+        else:
+            self.hero.player.game.other_player.hero.damage(2 * self.hero.player.spell_multiplier, None)
 
 
 class MagePower(Power):
@@ -55,7 +61,7 @@ class MindSpike(Power):
     def use(self):
         super().use()
         target = self.hero.find_power_target()
-        target.damage(2, None)
+        target.damage(2 * self.hero.player.spell_multiplier, None)
 
     def __str__(self):
         return "Mind Spike"
@@ -66,7 +72,7 @@ class MindShatter(Power):
     def use(self):
         super().use()
         target = self.hero.find_power_target()
-        target.damage(3, None)
+        target.damage(3 * self.hero.player.spell_multiplier, None)
 
     def __str__(self):
         return "Mind Shatter"
@@ -153,7 +159,7 @@ class ShamanPower(Power):
 class WarlockPower(Power):
     def use(self):
         super().use()
-        self.hero.player.game.current_player.hero.damage(2, None)
+        self.hero.player.game.current_player.hero.damage(2 * self.hero.player.spell_multiplier, None)
         self.hero.player.game.current_player.draw()
 
 

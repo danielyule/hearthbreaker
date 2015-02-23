@@ -259,6 +259,7 @@ from hearthbreaker.cards.minions.hunter import (
     MetaltoothLeaper,
     KingOfBeasts,
     Gahzrilla,
+    SteamwheedleSniper,
 )
 
 from hearthbreaker.cards.minions.mage import (

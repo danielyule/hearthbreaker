@@ -1054,6 +1054,7 @@ class Hero(Character):
         self.power = power
         self.power.hero = self
         self.card = None
+        self.power_targets_minions = False
 
     def calculate_attack(self):
         if self.player == self.player.game.current_player and self.weapon:

@@ -2,6 +2,11 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.cards.minions.hunter import SteamwheedleSniper
+from hearthbreaker.cards.minions.neutral import StonetuskBoar
+from hearthbreaker.cards.minions.priest import ProphetVelen
+from hearthbreaker.cards.minions.warlock import DreadInfernal
+from hearthbreaker.cards.spells.mage import Pyroblast
 from tests.agents.testing_agents import CardTestingAgent
 from hearthbreaker.cards import HuntersMark, MogushanWarden, AvengingWrath, CircleOfHealing, AlAkirTheWindlord, \
     Shadowform, DefiasRingleader, Doomguard, ArcaneIntellect, Swipe, ArathiWeaponsmith, MassDispel
@@ -160,3 +165,42 @@ class TestPowers(unittest.TestCase):
         game = generate_game_for(Shadowform, MogushanWarden, PowerTestingAgent, DoNothingAgent)
         for turn in range(0, 13):
             game.play_single_turn()
+
+    def test_Velen_and_Hunter(self):
+        game = generate_game_for(HuntersMark, StonetuskBoar, PredictableAgent, DoNothingAgent)
+        ProphetVelen().summon(game.players[0], game, 0)
+        for turn in range(3):
+            game.play_single_turn()
+
+        # Velen attacks once for 7 damage, and the hero power attacks once for 4 damage
+        self.assertEqual(19, game.other_player.hero.health)
+
+    def test_Velen_SteamwheedleSniper_and_Hunter(self):
+        game = generate_game_for(SteamwheedleSniper, StonetuskBoar, PredictableAgent, DoNothingAgent)
+
+        for turn in range(8):
+            game.play_single_turn()
+        ProphetVelen().summon(game.players[0], game, 0)
+        game.play_single_turn()
+
+        self.assertEqual(22, game.other_player.hero.health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual("Prophet Velen", game.current_player.minions[1].card.name)
+
+    def test_Velen_and_Warlock(self):
+        game = generate_game_for(DreadInfernal, StonetuskBoar, PredictableAgent, DoNothingAgent)
+        ProphetVelen().summon(game.players[0], game, 0)
+        for turn in range(3):
+            game.play_single_turn()
+
+        # The player's hero is damaged for 4 rather than 2 because of Velen
+        self.assertEqual(26, game.current_player.hero.health)
+
+    def test_Velen_and_Mage(self):
+        game = generate_game_for(Pyroblast, StonetuskBoar, PredictableAgent, DoNothingAgent)
+        ProphetVelen().summon(game.players[0], game, 0)
+        for turn in range(3):
+            game.play_single_turn()
+
+        # Velen is Hero powered for two damage
+        self.assertEqual(5, game.current_player.minions[0].health)

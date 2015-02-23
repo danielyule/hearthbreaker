@@ -304,6 +304,19 @@ class DoubleDeathrattle(Status):
         }
 
 
+class PowerTargetsMinions(Status):
+    def act(self, actor, target):
+        target.power_targets_minions += 1
+
+    def unact(self, actor, target):
+        target.power_targets_minions -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'power_targets_minions'
+        }
+
+
 class HealAsDamage(Status):
     def act(self, actor, target):
         target.heal_does_damage += 1
