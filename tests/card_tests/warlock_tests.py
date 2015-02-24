@@ -781,4 +781,3 @@ class TestWarlock(unittest.TestCase):
         # The mistress of pain does no damage, so the hero isn't healed
         # See https://www.youtube.com/watch?v=wakqQSBjDdE
         self.assertEqual(27, game.current_player.hero.health)
-
