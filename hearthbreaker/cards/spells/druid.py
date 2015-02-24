@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill
-from hearthbreaker.tags.base import Effect, Deathrattle
+from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
 import hearthbreaker.targeting
@@ -345,7 +345,7 @@ class ForceOfNature(SpellCard):
                 super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
             def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[Effect(TurnEnded(), Kill(), SelfSelector())])
+                return Minion(2, 2, charge=True, effects=[Effect(TurnEnded(), ActionTag(Kill(), SelfSelector()))])
 
         for i in [0, 1, 2]:
             treant_card = Treant()

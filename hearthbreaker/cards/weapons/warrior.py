@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
-from hearthbreaker.tags.base import Deathrattle, Effect
+from hearthbreaker.tags.base import Deathrattle, Effect, ActionTag
 from hearthbreaker.tags.condition import NotCurrentTarget, OneIn, OpponentMinionCountIsGreaterThan, And, \
     IsHero, TargetIsMinion
 from hearthbreaker.tags.event import CharacterAttack
@@ -32,7 +32,7 @@ class Gorehowl(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(7, 1, effects=[Effect(CharacterAttack(And(IsHero(), TargetIsMinion())),
-                                            IncreaseDurability(), HeroSelector())])
+                                            ActionTag(IncreaseDurability(), HeroSelector()))])
 
 
 class DeathsBite(WeaponCard):
@@ -49,6 +49,6 @@ class OgreWarmaul(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(4, 2, effects=[Effect(CharacterAttack(IsHero()),
-                                            ChangeTarget(CharacterSelector(NotCurrentTarget(), EnemyPlayer(),
-                                                                           RandomPicker())),
-                                            HeroSelector(), And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
+                                            ActionTag(ChangeTarget(CharacterSelector(NotCurrentTarget(), EnemyPlayer(),
+                                                                                     RandomPicker())),
+                                            HeroSelector(), And(OneIn(2), OpponentMinionCountIsGreaterThan(0))))])

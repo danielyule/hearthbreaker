@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.cards.base import SpellCard, WeaponCard
 from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Damage, Draw, Discard
-from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE, ActionTag
 from hearthbreaker.tags.event import TurnEnded, Drawn
 from hearthbreaker.tags.selector import MinionSelector, HeroSelector, PlayerSelector
 from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth
@@ -259,10 +259,10 @@ class Crush(SpellCard):
 class BurrowingMine(SpellCard):
     def __init__(self):
         super().__init__("Burrowing Mine", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
-                         effects=[Effect(Drawn(), Damage(10), HeroSelector()),
-                                  Effect(Drawn(), Discard(query=CardQuery(source=CARD_SOURCE.LAST_DRAWN)),
-                                         PlayerSelector()),
-                                  Effect(Drawn(), Draw(), PlayerSelector())])
+                         effects=[Effect(Drawn(), ActionTag(Damage(10), HeroSelector())),
+                                  Effect(Drawn(), ActionTag(Discard(query=CardQuery(source=CARD_SOURCE.LAST_DRAWN)),
+                                         PlayerSelector())),
+                                  Effect(Drawn(), ActionTag(Draw(), PlayerSelector()))])
 
     def use(self, player, game):
         super().use(player, game)

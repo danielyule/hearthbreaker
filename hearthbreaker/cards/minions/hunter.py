@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff, ActionTag
 from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, HeroSelector
@@ -57,7 +57,7 @@ class StarvingBuzzard(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2,
-                      effects=[Effect(MinionPlaced(IsType(MINION_TYPE.BEAST)), Draw(), PlayerSelector())])
+                      effects=[Effect(MinionPlaced(IsType(MINION_TYPE.BEAST)), ActionTag(Draw(), PlayerSelector()))])
 
 
 class TundraRhino(MinionCard):
@@ -75,8 +75,10 @@ class ScavengingHyena(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2,
-                      effects=[Effect(MinionDied(IsType(MINION_TYPE.BEAST)), ChangeAttack(2), SelfSelector()),
-                               Effect(MinionDied(IsType(MINION_TYPE.BEAST)), ChangeHealth(1), SelfSelector())])
+                      effects=[Effect(MinionDied(IsType(MINION_TYPE.BEAST)),
+                                      ActionTag(Give(ChangeAttack(2)), SelfSelector())),
+                               Effect(MinionDied(IsType(MINION_TYPE.BEAST)),
+                                      ActionTag(Give(ChangeHealth(1)), SelfSelector()))])
 
 
 class Webspinner(MinionCard):
@@ -152,7 +154,7 @@ class Gahzrilla(MinionCard):
         super().__init__("Gahz'rilla", 7, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(6, 9, effects=[Effect(Damaged(), Give(Buff(DoubleAttack())), SelfSelector())])
+        return Minion(6, 9, effects=[Effect(Damaged(), ActionTag(Give(Buff(DoubleAttack())), SelfSelector()))])
 
 
 class SteamwheedleSniper(MinionCard):

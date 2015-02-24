@@ -670,28 +670,34 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }, 
-                "until": {
-                  "event_name": "turn_ended", 
-                  "player": "friendly"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }, 
+                      "until": {
+                        "event_name": "turn_ended", 
+                        "player": "friendly"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -1694,18 +1700,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "did_damage"
           }, 
-          "selector": {
-            "name": "target", 
-            "condition": {
-              "name": "is_minion"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "name": "target", 
+                "condition": {
+                  "name": "is_minion"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -1827,24 +1839,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 2, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "both", 
-            "name": "character", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "both", 
+                "name": "character", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -2231,10 +2249,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "after_added", 
             "player": "friendly", 
@@ -2242,14 +2256,24 @@
               "name": "minion_is_not_target"
             }
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "enemy", 
+                "name": "character"
+              }
+            }
+          ]
         }
       ]
     }
@@ -2466,25 +2490,31 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 2, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "enemy", 
-            "name": "character", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "enemy", 
+                "name": "character", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -2500,20 +2530,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "both", 
-            "name": "minion"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "both", 
+                "name": "minion"
+              }
+            }
+          ]
         }
       ]
     }
@@ -2529,44 +2565,36 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "both"
           }, 
-          "selector": {
-            "name": "self"
-          }
-        }, 
-        {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
                 }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ]
-          }, 
-          "event": {
-            "event_name": "turn_ended", 
-            "player": "both"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ]
     }
@@ -2600,20 +2628,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Gnoll"
-            }
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Gnoll"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -2639,33 +2673,45 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Imp"
-            }
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Imp"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -2703,32 +2749,38 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "friendly", 
-            "name": "minion", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -2744,22 +2796,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "condition": {
-            "amount": 2, 
-            "name": "one_in"
-          }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "condition": {
+                "amount": 2, 
+                "name": "one_in"
+              }, 
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -2785,25 +2843,31 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 8, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "enemy", 
-            "name": "character", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 8, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "enemy", 
+                "name": "character", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ], 
       "buffs": [
@@ -3251,17 +3315,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "both", 
@@ -3271,9 +3324,26 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3406,32 +3476,38 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "friendly", 
-            "name": "minion", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -3447,17 +3523,23 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "damaged"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3473,18 +3555,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3500,17 +3588,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "both", 
@@ -3518,32 +3595,32 @@
               "name": "is_secret"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
-        }, 
-        {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
                 }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ]
-          }, 
-          "event": {
-            "event_name": "spell_cast", 
-            "player": "both", 
-            "condition": {
-              "name": "is_secret"
             }
-          }, 
-          "selector": {
-            "name": "self"
-          }
+          ]
         }
       ]
     }
@@ -3568,20 +3645,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Violet Apprentice"
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Violet Apprentice"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3597,18 +3680,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3634,20 +3723,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Flame of Azzinoth"
-            }
-          }, 
           "event": {
             "event_name": "card_played", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Flame of Azzinoth"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3663,24 +3758,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "both"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3696,24 +3797,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "character_healed", 
             "player": "both"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -3729,44 +3836,36 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "card_played", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
-        }, 
-        {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
                 }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ]
-          }, 
-          "event": {
-            "event_name": "card_played", 
-            "player": "friendly"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ]
     }
@@ -3782,17 +3881,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 3, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "character_damaged", 
             "player": "friendly", 
@@ -3800,9 +3888,26 @@
               "name": "minion_is_target"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 3, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4229,17 +4334,23 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "swap_with_hand"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "swap_with_hand"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4335,36 +4446,42 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "auras": [
-              {
-                "status": {
-                  "amount": -1, 
-                  "name": "mana_change"
-                }, 
-                "until": {
-                  "event_name": "minion_placed", 
-                  "player": "friendly", 
-                  "condition": {
-                    "name": "minion_is_not_target"
-                  }
-                }, 
-                "selector": {
-                  "players": "friendly", 
-                  "name": "minion_card"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "auras": [
+                    {
+                      "status": {
+                        "amount": -1, 
+                        "name": "mana_change"
+                      }, 
+                      "until": {
+                        "event_name": "minion_placed", 
+                        "player": "friendly", 
+                        "condition": {
+                          "name": "minion_is_not_target"
+                        }
+                      }, 
+                      "selector": {
+                        "players": "friendly", 
+                        "name": "minion_card"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4448,29 +4565,35 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "source": "list", 
-              "conditions": [], 
-              "source_list": [
-                "Emerald Drake", 
-                "Laughing Sister", 
-                "Nightmare", 
-                "Ysera Awakens", 
-                "Dream"
-              ]
-            }
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "source": "list", 
+                    "conditions": [], 
+                    "source_list": [
+                      "Emerald Drake", 
+                      "Laughing Sister", 
+                      "Nightmare", 
+                      "Ysera Awakens", 
+                      "Dream"
+                    ]
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4529,35 +4652,41 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "both", 
-            "name": "minion"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "both", 
+                "name": "minion"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4574,30 +4703,42 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "amount": 3, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 3, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4614,24 +4755,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "transform", 
-            "card": {
-              "name": "Chicken"
-            }
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "both", 
-            "name": "minion"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "transform", 
+                  "card": {
+                    "name": "Chicken"
+                  }
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "both", 
+                "name": "minion"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4648,25 +4795,31 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 6, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "both", 
-            "name": "character", 
-            "condition": {
-              "name": "is_damaged"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 6, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "both", 
+                "name": "character", 
+                "condition": {
+                  "name": "is_damaged"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -4682,22 +4835,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "source": "last_card", 
-              "conditions": []
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "both"
           }, 
-          "selector": {
-            "players": "other_player", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "source": "last_card", 
+                    "conditions": []
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "other_player", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4713,10 +4872,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "card_used", 
             "player": "friendly", 
@@ -4724,13 +4879,23 @@
               "name": "is_spell"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "both", 
-            "name": "minion"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "both", 
+                "name": "minion"
+              }
+            }
+          ]
         }
       ]
     }
@@ -4809,18 +4974,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "did_damage"
           }, 
-          "selector": {
-            "name": "target", 
-            "condition": {
-              "name": "is_minion"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "name": "target", 
+                "condition": {
+                  "name": "is_minion"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -4971,17 +5142,23 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 10000, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 10000, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -5151,17 +5328,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -5169,9 +5335,26 @@
               "name": "minion_has_deathrattle"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -5334,20 +5517,26 @@
             "name": "give", 
             "effects": [
               {
-                "action": {
-                  "name": "duplicate", 
-                  "selector": {
-                    "name": "self"
-                  }
-                }, 
                 "event": {
                   "event_name": "turn_ended", 
                   "player": "friendly"
                 }, 
-                "selector": {
-                  "players": "friendly", 
-                  "name": "player"
-                }
+                "tags": [
+                  {
+                    "actions": [
+                      {
+                        "name": "duplicate", 
+                        "selector": {
+                          "name": "self"
+                        }
+                      }
+                    ], 
+                    "selector": {
+                      "players": "friendly", 
+                      "name": "player"
+                    }
+                  }
+                ]
               }
             ]
           }
@@ -5371,44 +5560,36 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
-        }, 
-        {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
                 }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ]
-          }, 
-          "event": {
-            "event_name": "turn_started", 
-            "player": "friendly"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ], 
       "buffs": [
@@ -5431,17 +5612,23 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "resurrect_friendly"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "both"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "resurrect_friendly"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -5695,24 +5882,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "enemy"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -5833,7 +6026,7 @@
       {
         "actions": [
           {
-            "amount": 1, 
+            "amount": 3, 
             "name": "damage"
           }
         ], 
@@ -5959,24 +6152,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "both"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6057,10 +6256,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 2, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -6070,14 +6265,24 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "enemy", 
+                "name": "character"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6093,39 +6298,45 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "change_target", 
-            "selector": {
-              "picker": {
-                "count": 1, 
-                "name": "random"
-              }, 
-              "players": "enemy", 
-              "name": "character", 
-              "condition": {
-                "name": "not_current_target"
-              }
-            }
-          }, 
           "event": {
             "event_name": "attack"
           }, 
-          "condition": {
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "one_in"
+          "tags": [
+            {
+              "condition": {
+                "conditions": [
+                  {
+                    "amount": 2, 
+                    "name": "one_in"
+                  }, 
+                  {
+                    "count": 0, 
+                    "name": "opponent_minion_count_is_greater_than"
+                  }
+                ], 
+                "name": "and"
               }, 
-              {
-                "count": 0, 
-                "name": "opponent_minion_count_is_greater_than"
+              "actions": [
+                {
+                  "name": "change_target", 
+                  "selector": {
+                    "picker": {
+                      "count": 1, 
+                      "name": "random"
+                    }, 
+                    "players": "enemy", 
+                    "name": "character", 
+                    "condition": {
+                      "name": "not_current_target"
+                    }
+                  }
+                }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ], 
-            "name": "and"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ]
     }
@@ -6141,40 +6352,46 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "change_target", 
-            "selector": {
-              "picker": {
-                "count": 1, 
-                "name": "random"
-              }, 
-              "players": "enemy", 
-              "name": "character", 
-              "condition": {
-                "name": "not_current_target"
-              }
-            }
-          }, 
           "event": {
             "event_name": "character_attack", 
             "player": "both"
           }, 
-          "condition": {
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "one_in"
+          "tags": [
+            {
+              "condition": {
+                "conditions": [
+                  {
+                    "amount": 2, 
+                    "name": "one_in"
+                  }, 
+                  {
+                    "count": 0, 
+                    "name": "opponent_minion_count_is_greater_than"
+                  }
+                ], 
+                "name": "and"
               }, 
-              {
-                "count": 0, 
-                "name": "opponent_minion_count_is_greater_than"
+              "actions": [
+                {
+                  "name": "change_target", 
+                  "selector": {
+                    "picker": {
+                      "count": 1, 
+                      "name": "random"
+                    }, 
+                    "players": "enemy", 
+                    "name": "character", 
+                    "condition": {
+                      "name": "not_current_target"
+                    }
+                  }
+                }
+              ], 
+              "selector": {
+                "name": "target"
               }
-            ], 
-            "name": "and"
-          }, 
-          "selector": {
-            "name": "target"
-          }
+            }
+          ]
         }
       ]
     }
@@ -6273,22 +6490,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "query": {
-              "source": "my_deck", 
-              "conditions": []
-            }, 
-            "amount": 3, 
-            "name": "discard"
-          }, 
           "event": {
             "event_name": "card_played", 
             "player": "enemy"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "query": {
+                    "source": "my_deck", 
+                    "conditions": []
+                  }, 
+                  "amount": 3, 
+                  "name": "discard"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6334,20 +6557,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "source": "collection", 
-              "conditions": [
-                {
-                  "name": "is_type", 
-                  "minion_type": "Mech", 
-                  "include_self": false
-                }
-              ]
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly", 
@@ -6356,10 +6565,30 @@
               "name": "mana_cost"
             }
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "source": "collection", 
+                    "conditions": [
+                      {
+                        "name": "is_type", 
+                        "minion_type": "Mech", 
+                        "include_self": false
+                      }
+                    ]
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6491,10 +6720,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 4, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly", 
@@ -6502,13 +6727,23 @@
               "name": "has_secret"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 4, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6525,20 +6760,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Leper Gnome"
-            }
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "enemy"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Leper Gnome"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6554,24 +6795,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "enemy"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6587,20 +6834,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "summon", 
-            "card": {
-              "name": "Burly Rockjaw Trogg"
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "enemy"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Burly Rockjaw Trogg"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6616,23 +6869,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_placed", 
             "player": "friendly", 
@@ -6642,9 +6878,32 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "target"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_health"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "target"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6827,23 +7086,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "friendly", 
@@ -6853,9 +7095,32 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -6872,28 +7137,34 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": {
-              "amount": {
-                "name": "count", 
-                "selector": {
-                  "players": "current_player", 
-                  "name": "card"
-                }
-              }, 
-              "name": "difference", 
-              "value": 3
-            }, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "both"
           }, 
-          "selector": {
-            "players": "current_player", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": {
+                    "amount": {
+                      "name": "count", 
+                      "selector": {
+                        "players": "current_player", 
+                        "name": "card"
+                      }
+                    }, 
+                    "name": "difference", 
+                    "value": 3
+                  }, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "current_player", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7074,32 +7345,159 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": {
-              "attribute": "attack", 
-              "name": "attribute", 
-              "selector": {
-                "name": "self"
-              }
-            }, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "attack", 
             "condition": {
               "name": "is_minion"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "enemy", 
-            "name": "minion", 
-            "condition": {
-              "name": "target_adjacent"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": {
+                    "attribute": "attack", 
+                    "name": "attribute", 
+                    "selector": {
+                      "name": "self"
+                    }
+                  }, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "enemy", 
+                "name": "minion", 
+                "condition": {
+                  "name": "target_adjacent"
+                }
+              }
             }
+          ]
+        }
+      ]
+    }
+  }, 
+  {
+    "name": "Kezan Mystic", 
+    "character_class": "", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "attack": 4, 
+    "health": 3, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "source": "enemy_secrets", 
+            "name": "apply_secret"
           }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "V-07-TR-0N", 
+    "minion_type": "Mech", 
+    "character_class": "", 
+    "rarity": "Special", 
+    "mana": 8, 
+    "attack": 4, 
+    "health": 8, 
+    "type": "minion", 
+    "impl": {
+      "buffs": [
+        {
+          "status": {
+            "name": "mega_windfury"
+          }
+        }, 
+        {
+          "status": {
+            "name": "charge"
+          }
+        }
+      ]
+    }
+  }, 
+  {
+    "name": "Mimiron's Head", 
+    "minion_type": "Mech", 
+    "character_class": "", 
+    "rarity": "Legendary", 
+    "mana": 5, 
+    "attack": 4, 
+    "health": 5, 
+    "type": "minion", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "turn_started", 
+            "player": "friendly"
+          }, 
+          "tags": [
+            {
+              "condition": {
+                "amount": {
+                  "name": "count", 
+                  "selector": {
+                    "picker": {
+                      "name": "all"
+                    }, 
+                    "players": "friendly", 
+                    "name": "minion", 
+                    "condition": {
+                      "name": "is_type", 
+                      "minion_type": "Mech", 
+                      "include_self": true
+                    }
+                  }
+                }, 
+                "name": "greater_than", 
+                "value": 2
+              }, 
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "is_type", 
+                  "minion_type": "Mech", 
+                  "include_self": true
+                }
+              }
+            }, 
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "V-07-TR-0N"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7124,24 +7522,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7221,17 +7625,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly", 
@@ -7239,22 +7632,28 @@
               "name": "has_secret"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly", 
@@ -7262,9 +7661,26 @@
               "name": "has_secret"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7280,22 +7696,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "frozen"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "did_damage"
           }, 
-          "selector": {
-            "name": "target"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "frozen"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "target"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7311,21 +7733,27 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "name": "Fireball"
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "name": "Fireball"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7342,22 +7770,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "frozen"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "did_damage"
           }, 
-          "selector": {
-            "name": "target"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "frozen"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "target"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7495,20 +7929,26 @@
     "health": 7, 
     "effects": [
       {
-        "action": {
-          "amount": 2, 
-          "name": "damage"
-        }, 
         "event": {
           "event_name": "drawn"
         }, 
-        "selector": {
-          "picker": {
-            "name": "all"
-          }, 
-          "players": "both", 
-          "name": "character"
-        }
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 2, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "character"
+            }
+          }
+        ]
       }
     ], 
     "type": "minion"
@@ -7658,16 +8098,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "divine_shield"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -7677,9 +8107,25 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "divine_shield"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -7793,24 +8239,30 @@
     "health": 7, 
     "effects": [
       {
-        "action": {
-          "name": "give", 
-          "buffs": [
-            {
-              "status": {
-                "amount": 1, 
-                "name": "change_attack"
-              }
-            }
-          ]
-        }, 
         "event": {
           "event_name": "minion_died", 
           "player": "friendly"
         }, 
-        "selector": {
-          "name": "self"
-        }
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
+              }
+            ], 
+            "selector": {
+              "name": "self"
+            }
+          }
+        ]
       }
     ], 
     "type": "minion"
@@ -7896,25 +8348,31 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 3, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_started", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "friendly", 
-            "name": "character", 
-            "condition": {
-              "name": "is_damaged"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 3, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "friendly", 
+                "name": "character", 
+                "condition": {
+                  "name": "is_damaged"
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -7930,10 +8388,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "character_healed", 
             "player": "both", 
@@ -7941,10 +8395,20 @@
               "name": "is_minion"
             }
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -8181,22 +8645,28 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "character_healed", 
             "player": "both"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "enemy", 
-            "name": "character"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "enemy", 
+                "name": "character"
+              }
+            }
+          ]
         }
       ]
     }
@@ -8437,32 +8907,38 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "friendly", 
-            "name": "minion", 
-            "condition": {
-              "name": "minion_is_not_target"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "minion_is_not_target"
+                }
+              }
             }
-          }
+          ]
         }
       ], 
       "buffs": [
@@ -8661,9 +9137,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "both", 
@@ -8672,9 +9145,18 @@
               "name": "minion_count_is"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -8712,30 +9194,36 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 2, 
-            "name": "damage"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "both", 
-            "name": "minion", 
-            "condition": {
-              "name": "not", 
-              "condition": {
-                "name": "is_type", 
-                "minion_type": "Mech", 
-                "include_self": true
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "both", 
+                "name": "minion", 
+                "condition": {
+                  "name": "not", 
+                  "condition": {
+                    "name": "is_type", 
+                    "minion_type": "Mech", 
+                    "include_self": true
+                  }
+                }
               }
             }
-          }
+          ]
         }
       ]
     }
@@ -8814,23 +9302,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "character_damaged", 
             "player": "friendly", 
@@ -8846,9 +9317,32 @@
               "name": "and"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -9225,30 +9719,36 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "source": "list", 
-              "conditions": [], 
-              "source_list": [
-                "Armor Plating", 
-                "Emergency Coolant", 
-                "Finicky Cloakfield", 
-                "Time Rewinder", 
-                "Reversing Switch", 
-                "Rusty Horn", 
-                "Whirling Blades"
-              ]
-            }
-          }, 
           "event": {
             "event_name": "damaged"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "source": "list", 
+                    "conditions": [], 
+                    "source_list": [
+                      "Armor Plating", 
+                      "Emergency Coolant", 
+                      "Finicky Cloakfield", 
+                      "Time Rewinder", 
+                      "Reversing Switch", 
+                      "Rusty Horn", 
+                      "Whirling Blades"
+                    ]
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -9536,10 +10036,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "minion_placed", 
             "player": "friendly", 
@@ -9549,10 +10045,20 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -9607,17 +10113,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "friendly", 
@@ -9627,22 +10122,28 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "friendly", 
@@ -9652,9 +10153,26 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -9894,22 +10412,53 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "double_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "damaged"
           }, 
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "double_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  {
+    "name": "Steamwheedle Sniper", 
+    "character_class": "Hunter", 
+    "rarity": "Epic", 
+    "mana": 2, 
+    "attack": 2, 
+    "health": 3, 
+    "type": "minion", 
+    "impl": {
+      "auras": [
+        {
+          "status": {
+            "name": "power_targets_minions"
+          }, 
           "selector": {
-            "name": "self"
+            "picker": {
+              "name": "all"
+            }, 
+            "players": "friendly", 
+            "name": "hero"
           }
         }
       ]
@@ -10070,18 +10619,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "kill"
-          }, 
           "event": {
             "event_name": "did_damage"
           }, 
-          "selector": {
-            "name": "target", 
-            "condition": {
-              "name": "is_minion"
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "kill"
+                }
+              ], 
+              "selector": {
+                "name": "target", 
+                "condition": {
+                  "name": "is_minion"
+                }
+              }
             }
-          }
+          ]
         }
       ], 
       "buffs": [
@@ -10161,16 +10716,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "stealth"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -10180,9 +10725,25 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "stealth"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10199,40 +10760,46 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "count": 1, 
-              "name": "random"
-            }, 
-            "players": "friendly", 
-            "name": "minion", 
-            "condition": {
-              "name": "is_type", 
-              "minion_type": "Mech", 
-              "include_self": false
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 2, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "count": 1, 
+                  "name": "random"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "is_type", 
+                  "minion_type": "Mech", 
+                  "include_self": false
+                }
+              }
             }
-          }
+          ]
         }
       ]
     }
@@ -10248,39 +10815,45 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "change_target", 
-            "selector": {
-              "picker": {
-                "count": 1, 
-                "name": "random"
-              }, 
-              "players": "enemy", 
-              "name": "character", 
-              "condition": {
-                "name": "not_current_target"
-              }
-            }
-          }, 
           "event": {
             "event_name": "attack"
           }, 
-          "condition": {
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "one_in"
+          "tags": [
+            {
+              "condition": {
+                "conditions": [
+                  {
+                    "amount": 2, 
+                    "name": "one_in"
+                  }, 
+                  {
+                    "count": 0, 
+                    "name": "opponent_minion_count_is_greater_than"
+                  }
+                ], 
+                "name": "and"
               }, 
-              {
-                "count": 0, 
-                "name": "opponent_minion_count_is_greater_than"
+              "actions": [
+                {
+                  "name": "change_target", 
+                  "selector": {
+                    "picker": {
+                      "count": 1, 
+                      "name": "random"
+                    }, 
+                    "players": "enemy", 
+                    "name": "character", 
+                    "condition": {
+                      "name": "not_current_target"
+                    }
+                  }
+                }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ], 
-            "name": "and"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ], 
       "buffs": [
@@ -10303,14 +10876,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "source": "last_card", 
-              "conditions": []
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "enemy", 
@@ -10322,19 +10887,26 @@
               }
             }
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "source": "last_card", 
+                    "conditions": []
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "count": 1, 
-            "name": "add_card", 
-            "card": {
-              "name": "Gallywix's Coin"
-            }
-          }, 
           "event": {
             "event_name": "spell_cast", 
             "player": "enemy", 
@@ -10346,10 +10918,23 @@
               }
             }
           }, 
-          "selector": {
-            "players": "enemy", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "count": 1, 
+                  "name": "add_card", 
+                  "card": {
+                    "name": "Gallywix's Coin"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "enemy", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10523,18 +11108,24 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10550,17 +11141,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "card_played", 
             "player": "friendly", 
@@ -10568,22 +11148,28 @@
               "name": "has_overload"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "card_played", 
             "player": "friendly", 
@@ -10591,9 +11177,26 @@
               "name": "has_overload"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10645,21 +11248,27 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "minion"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "minion"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10743,21 +11352,27 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 4, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "turn_ended", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 4, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10775,10 +11390,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 1, 
-            "name": "draw"
-          }, 
           "event": {
             "event_name": "minion_died", 
             "player": "friendly", 
@@ -10788,10 +11399,20 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "players": "friendly", 
-            "name": "player"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 1, 
+                  "name": "draw"
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
         }
       ]
     }
@@ -10827,39 +11448,45 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "change_target", 
-            "selector": {
-              "picker": {
-                "count": 1, 
-                "name": "random"
-              }, 
-              "players": "enemy", 
-              "name": "character", 
-              "condition": {
-                "name": "not_current_target"
-              }
-            }
-          }, 
           "event": {
             "event_name": "attack"
           }, 
-          "condition": {
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "one_in"
+          "tags": [
+            {
+              "condition": {
+                "conditions": [
+                  {
+                    "amount": 2, 
+                    "name": "one_in"
+                  }, 
+                  {
+                    "count": 0, 
+                    "name": "opponent_minion_count_is_greater_than"
+                  }
+                ], 
+                "name": "and"
               }, 
-              {
-                "count": 0, 
-                "name": "opponent_minion_count_is_greater_than"
+              "actions": [
+                {
+                  "name": "change_target", 
+                  "selector": {
+                    "picker": {
+                      "count": 1, 
+                      "name": "random"
+                    }, 
+                    "players": "enemy", 
+                    "name": "character", 
+                    "condition": {
+                      "name": "not_current_target"
+                    }
+                  }
+                }
+              ], 
+              "selector": {
+                "name": "self"
               }
-            ], 
-            "name": "and"
-          }, 
-          "selector": {
-            "name": "self"
-          }
+            }
+          ]
         }
       ], 
       "buffs": [
@@ -10948,9 +11575,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "increase_armor"
-          }, 
           "event": {
             "event_name": "character_damaged", 
             "player": "friendly", 
@@ -10958,13 +11582,22 @@
               "name": "is_minion"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "increase_armor"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11020,17 +11653,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "character_damaged", 
             "player": "both", 
@@ -11038,9 +11660,26 @@
               "name": "is_minion"
             }
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11103,16 +11742,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "charge"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_placed", 
             "player": "friendly", 
@@ -11122,9 +11751,25 @@
               "include_self": false
             }
           }, 
-          "selector": {
-            "name": "target"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "charge"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "target"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11187,24 +11832,30 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "armor_increased", 
             "player": "friendly"
           }, 
-          "selector": {
-            "name": "self"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "self"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11302,20 +11953,26 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "increase_durability"
-          }, 
           "event": {
             "event_name": "secret_revealed", 
             "player": "friendly"
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "increase_durability"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11331,19 +11988,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "name": "immune"
-                }, 
-                "until": {
-                  "event_name": "attack_completed"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "character_attack", 
             "player": "friendly", 
@@ -11351,13 +11995,32 @@
               "name": "is_hero"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "name": "immune"
+                      }, 
+                      "until": {
+                        "event_name": "attack_completed"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11414,23 +12077,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "give", 
-            "buffs": [
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
-              }
-            ]
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -11438,14 +12084,34 @@
               "name": "minion_is_not_target"
             }
           }, 
-          "selector": {
-            "name": "target"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_attack"
+                      }
+                    }, 
+                    {
+                      "status": {
+                        "amount": 1, 
+                        "name": "change_health"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "name": "target"
+              }
+            }
+          ]
         }, 
         {
-          "action": {
-            "name": "decrease_durability"
-          }, 
           "event": {
             "event_name": "minion_summoned", 
             "player": "friendly", 
@@ -11453,13 +12119,22 @@
               "name": "minion_is_not_target"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "decrease_durability"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11475,10 +12150,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "amount": 2, 
-            "name": "heal"
-          }, 
           "event": {
             "event_name": "character_attack", 
             "player": "friendly", 
@@ -11486,13 +12157,23 @@
               "name": "is_hero"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11583,6 +12264,44 @@
       }
     }, 
     "type": "weapon"
+  }, 
+  {
+    "name": "Cogmaster's Wrench", 
+    "character_class": "Rogue", 
+    "durability": 3, 
+    "rarity": "Epic", 
+    "mana": 3, 
+    "attack": 1, 
+    "type": "weapon", 
+    "impl": {
+      "buffs": [
+        {
+          "status": {
+            "amount": 2, 
+            "name": "change_attack"
+          }, 
+          "condition": {
+            "amount": {
+              "name": "count", 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "minion", 
+                "condition": {
+                  "name": "is_type", 
+                  "minion_type": "Mech", 
+                  "include_self": false
+                }
+              }
+            }, 
+            "name": "greater_than", 
+            "value": 0
+          }
+        }
+      ]
+    }
   }, 
   {
     "name": "Doomhammer", 
@@ -11685,9 +12404,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "increase_durability"
-          }, 
           "event": {
             "event_name": "character_attack", 
             "player": "friendly", 
@@ -11703,13 +12419,22 @@
               "name": "and"
             }
           }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "increase_durability"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
         }
       ]
     }
@@ -11752,20 +12477,6 @@
     "impl": {
       "effects": [
         {
-          "action": {
-            "name": "change_target", 
-            "selector": {
-              "picker": {
-                "count": 1, 
-                "name": "random"
-              }, 
-              "players": "enemy", 
-              "name": "character", 
-              "condition": {
-                "name": "not_current_target"
-              }
-            }
-          }, 
           "event": {
             "event_name": "character_attack", 
             "player": "friendly", 
@@ -11773,26 +12484,46 @@
               "name": "is_hero"
             }
           }, 
-          "condition": {
-            "conditions": [
-              {
-                "amount": 2, 
-                "name": "one_in"
+          "tags": [
+            {
+              "condition": {
+                "conditions": [
+                  {
+                    "amount": 2, 
+                    "name": "one_in"
+                  }, 
+                  {
+                    "count": 0, 
+                    "name": "opponent_minion_count_is_greater_than"
+                  }
+                ], 
+                "name": "and"
               }, 
-              {
-                "count": 0, 
-                "name": "opponent_minion_count_is_greater_than"
+              "actions": [
+                {
+                  "name": "change_target", 
+                  "selector": {
+                    "picker": {
+                      "count": 1, 
+                      "name": "random"
+                    }, 
+                    "players": "enemy", 
+                    "name": "character", 
+                    "condition": {
+                      "name": "not_current_target"
+                    }
+                  }
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
               }
-            ], 
-            "name": "and"
-          }, 
-          "selector": {
-            "picker": {
-              "name": "all"
-            }, 
-            "players": "friendly", 
-            "name": "hero"
-          }
+            }
+          ]
         }
       ]
     }

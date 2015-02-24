@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill
-from hearthbreaker.tags.base import Effect
+from hearthbreaker.tags.base import Effect, ActionTag
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
@@ -188,7 +188,7 @@ class Corruption(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_effect(Effect(TurnStarted(player=EnemyPlayer()), Kill(), SelfSelector()))
+        self.target.add_effect(Effect(TurnStarted(player=EnemyPlayer()), ActionTag(Kill(), SelfSelector())))
 
 
 class PowerOverwhelming(SpellCard):
@@ -199,7 +199,7 @@ class PowerOverwhelming(SpellCard):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_effect(Effect(TurnEnded(), Kill(), SelfSelector()))
+        self.target.add_effect(Effect(TurnEnded(), ActionTag(Kill(), SelfSelector())))
         self.target.change_attack(4)
         self.target.increase_health(4)
 

@@ -2,6 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
+from hearthbreaker.cards.minions.neutral import V07TRON
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
@@ -4305,3 +4306,32 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.other_player.secrets))
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
+
+    def test_MimironsHead(self):
+        game = generate_game_for([Mechwarper, SpiderTank, ChillwindYeti, MimironsHead, Deathwing], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("V-07-TR-0N", game.current_player.minions[0].card.name)
+        self.assertEqual("Chillwind Yeti", game.current_player.minions[1].card.name)
+
+    def test_MimironsHead_no_mechs(self):
+        game = generate_game_for(MimironsHead, ClockworkGnome, OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Mimiron's Head", game.current_player.minions[0].card.name)
+        self.assertEqual("Mimiron's Head", game.current_player.minions[1].card.name)
+
+    def test_V07TR0N(self):
+        game = generate_game_for(V07TRON, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
+        for turn in range(15):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(14, game.other_player.hero.health)

@@ -2,7 +2,7 @@ from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon, AddCard, GiveManaCrystal, Remove
-from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry, Deathrattle
+from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry, Deathrattle, ActionTag
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
@@ -186,8 +186,8 @@ class MechBearCat(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 6, effects=[Effect(Damaged(),
-                                     AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
-                                     PlayerSelector())])
+                                     ActionTag(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
+                                     PlayerSelector()))])
 
 
 class CobraForm(MinionCard):

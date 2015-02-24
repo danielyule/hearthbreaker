@@ -1,7 +1,7 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import AddCard
-from hearthbreaker.tags.base import Effect, BuffUntil, Buff, AuraUntil
+from hearthbreaker.tags.base import Effect, BuffUntil, Buff, AuraUntil, ActionTag
 from hearthbreaker.tags.event import TurnStarted, TurnEnded, SpellCast
 from hearthbreaker.tags.selector import PlayerSelector, SpellSelector
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ManaChange
@@ -151,7 +151,7 @@ class Headcrack(SpellCard):
         super().use(player, game)
         game.other_player.hero.damage(player.effective_spell_damage(2), self)
         if player.cards_played > 0:
-            player.add_effect(Effect(TurnEnded(), AddCard(self), PlayerSelector()))
+            player.add_effect(Effect(TurnEnded(), ActionTag(AddCard(self), PlayerSelector())))
 
 
 class Preparation(SpellCard):

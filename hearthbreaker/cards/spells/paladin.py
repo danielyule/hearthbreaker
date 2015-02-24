@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.cards.base import SpellCard, MinionCard, SecretCard
 from hearthbreaker.game_objects import Minion, Hero
 from hearthbreaker.tags.action import Draw
-from hearthbreaker.tags.base import Effect, Buff
+from hearthbreaker.tags.base import Effect, Buff, ActionTag
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
 from hearthbreaker.tags.status import DoubleAttack
@@ -67,7 +67,7 @@ class BlessingOfWisdom(SpellCard):
             draw_player = PlayerOne()
         else:
             draw_player = PlayerTwo()
-        self.target.add_effect(Effect(Attack(), Draw(), PlayerSelector(draw_player)))
+        self.target.add_effect(Effect(Attack(), ActionTag(Draw(), PlayerSelector(draw_player))))
 
 
 class Consecration(SpellCard):

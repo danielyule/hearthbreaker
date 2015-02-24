@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage
-from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil, ActionTag
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
@@ -44,8 +44,9 @@ class Lightwell(MinionCard):
         super().__init__("Lightwell", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(0, 5, effects=[Effect(TurnStarted(), Heal(3), CharacterSelector(condition=IsDamaged(),
-                                                                                      picker=RandomPicker()))])
+        return Minion(0, 5, effects=[Effect(TurnStarted(), ActionTag(Heal(3),
+                                                                     CharacterSelector(condition=IsDamaged(),
+                                                                                       picker=RandomPicker())))])
 
 
 class NorthshireCleric(MinionCard):
@@ -55,7 +56,7 @@ class NorthshireCleric(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 3, effects=[Effect(CharacterHealed(condition=IsMinion(),
-                                                            player=BothPlayer()), Draw(), PlayerSelector())])
+                                                            player=BothPlayer()), ActionTag(Draw(), PlayerSelector()))])
 
 
 class ProphetVelen(MinionCard):
@@ -127,6 +128,6 @@ class Shadowboxer(MinionCard):
         super().__init__("Shadowboxer", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[Effect(CharacterHealed(player=BothPlayer()), Damage(1),
+        return Minion(2, 3, effects=[Effect(CharacterHealed(player=BothPlayer()), ActionTag(Damage(1),
                                             CharacterSelector(players=EnemyPlayer(), picker=RandomPicker(),
-                                                              condition=None))])
+                                                              condition=None)))])

@@ -238,6 +238,22 @@ class Windfury(Status):
         }
 
 
+class MegaWindfury(Windfury):
+    def act(self, actor, target):
+        pass
+
+    def unact(self, actor, target):
+        pass
+
+    def update(self, owner, prev_charge):
+        return prev_charge if prev_charge > 4 else 4
+
+    def __to_json__(self):
+        return {
+            'name': 'mega_windfury'
+        }
+
+
 class CantAttack(Status):
     def __init__(self):
         super().__init__()

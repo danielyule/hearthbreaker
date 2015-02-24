@@ -436,16 +436,13 @@ class PlayerEvent(Event):
 
 
 class Effect(Tag):
-    def __init__(self, event, action, selector, condition=None):
+    def __init__(self, event, tags):
         self.event = event
-        if isinstance(action, Status):
-            from hearthbreaker.tags.action import Give
-            self.action = Give(action)
+        if isinstance(tags, list):
+            self.tags = tags
         else:
-            self.action = action
-        self.selector = selector
+            self.tags = [tags]
         self.owner = None
-        self.condition = condition
 
     def apply(self):
         self.event.bind(self.owner, self._find_target)
@@ -457,33 +454,21 @@ class Effect(Tag):
         self.owner = owner
 
     def _find_target(self, focus=None, other=None, *args):
-        if not self.condition or self.condition.evaluate(self.owner, focus, other, *args):
-            targets = self.selector.choose_targets(self.owner, focus)
-            for target in targets:
-                self.action.act(self.owner, target)
+        for tag in self.tags:
+            if not tag.do(self.owner, focus):
+                break
 
     def __to_json__(self):
-        if self.condition:
-            return {
-                'event': self.event,
-                'action': self.action,
-                'selector': self.selector,
-                'condition': self.condition,
-            }
         return {
             'event': self.event,
-            'action': self.action,
-            'selector': self.selector,
+            'tags': self.tags,
         }
 
     @staticmethod
-    def from_json(action, event, selector, condition=None):
-            action = Action.from_json(**action)
+    def from_json(event, tags):
+            tags = [ActionTag.from_json(**tag) for tag in tags]
             event = Event.from_json(**event)
-            selector = Selector.from_json(**selector)
-            if condition:
-                condition = Condition.from_json(**condition)
-            return Effect(event, action, selector, condition)
+            return Effect(event, tags)
 
 
 class Condition(JSONObject, metaclass=abc.ABCMeta):
@@ -514,16 +499,16 @@ class ActionTag(Tag):
         self.selector = selector
         self.condition = condition
 
-    def do(self, target):
+    def do(self, owner, target=None):
         if self.condition:
-            if not self.condition.evaluate(target):
+            if not self.condition.evaluate(owner):
                 return
-        targets = self.selector.choose_targets(target, target)
+        targets = self.selector.choose_targets(owner, target)
         found_target = False
         for t in targets:
             found_target = True
             for action in self.actions:
-                action.act(target, t)
+                action.act(owner, t)
 
         return found_target
 

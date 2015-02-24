@@ -2561,3 +2561,16 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
             self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
+
+    def test_MimironsHead(self):
+        game = generate_game_for([Mechwarper, SpiderTank, ChillwindYeti, MimironsHead, Deathwing], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        game = game.copy()
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("V-07-TR-0N", game.current_player.minions[0].card.name)
+        self.assertEqual("Chillwind Yeti", game.current_player.minions[1].card.name)

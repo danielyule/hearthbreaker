@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget, AddCard
-from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE
+from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE, ActionTag
 from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget, \
     OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
@@ -57,7 +57,7 @@ class ManaTideTotem(MinionCard):
         super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 3, effects=[Effect(TurnEnded(), Draw(), PlayerSelector())])
+        return Minion(0, 3, effects=[Effect(TurnEnded(), ActionTag(Draw(), PlayerSelector()))])
 
 
 class UnboundElemental(MinionCard):
@@ -65,8 +65,10 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), Give(ChangeAttack(1)), SelfSelector()),
-                                     Effect(CardPlayed(HasOverload()), Give(ChangeHealth(1)), SelfSelector())])
+        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), ActionTag(Give(ChangeAttack(1)),
+                                                                                 SelfSelector())),
+                                     Effect(CardPlayed(HasOverload()), ActionTag(Give(ChangeHealth(1)),
+                                                                                 SelfSelector()))])
 
 
 class Windspeaker(MinionCard):
@@ -83,7 +85,7 @@ class HealingTotem(MinionCard):
         super().__init__("Healing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 2, effects=[Effect(TurnEnded(), Heal(1), MinionSelector(condition=None))])
+        return Minion(0, 2, effects=[Effect(TurnEnded(), ActionTag(Heal(1), MinionSelector(condition=None)))])
 
 
 class SearingTotem(MinionCard):
@@ -123,7 +125,7 @@ class VitalityTotem(MinionCard):
         super().__init__("Vitality Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 3, effects=[Effect(TurnEnded(), Heal(4), HeroSelector())])
+        return Minion(0, 3, effects=[Effect(TurnEnded(), ActionTag(Heal(4), HeroSelector()))])
 
 
 class SiltfinSpiritwalker(MinionCard):
@@ -132,7 +134,8 @@ class SiltfinSpiritwalker(MinionCard):
                          overload=1)
 
     def create_minion(self, player):
-        return Minion(2, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MURLOC)), Draw(), PlayerSelector())])
+        return Minion(2, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MURLOC)),
+                                            ActionTag(Draw(), PlayerSelector()))])
 
 
 class WhirlingZapomatic(MinionCard):
@@ -149,11 +152,11 @@ class DunemaulShaman(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 4, windfury=True, effects=[Effect(Attack(),
-                                                           ChangeTarget(CharacterSelector(NotCurrentTarget(),
-                                                                                          EnemyPlayer(),
-                                                                                          RandomPicker())),
+                                                           ActionTag(ChangeTarget(CharacterSelector(NotCurrentTarget(),
+                                                                                                    EnemyPlayer(),
+                                                                                                    RandomPicker())),
                                                            SelfSelector(),
-                                                           And(OneIn(2), OpponentMinionCountIsGreaterThan(0)))])
+                                                           And(OneIn(2), OpponentMinionCountIsGreaterThan(0))))])
 
 
 class Neptulon(MinionCard):

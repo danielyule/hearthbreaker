@@ -99,9 +99,11 @@ class GiveEffect(Action):
 
     def act(self, actor, target):
         for effect in self.effects:
-            if hasattr(effect.action, "selector"):
-                effect.action.selector = ConstantSelector([obj.born for obj in
-                                                           effect.action.selector.choose_targets(actor, target)])
+            for tag in effect.tags:
+                for action in tag.actions:
+                    if hasattr(action, "selector"):
+                        action.selector = ConstantSelector([obj.born for obj in
+                                                            action.selector.choose_targets(actor, target)])
             target.add_effect(effect)
 
     def __to_json__(self):

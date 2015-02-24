@@ -5,7 +5,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Transform, Equip, \
     Remove
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff, ActionTag
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent
 from hearthbreaker.tags.event import TurnEnded, CharacterDamaged
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
@@ -89,7 +89,8 @@ class BloodImp(MinionCard):
 
     def create_minion(self, player):
         return Minion(0, 1, stealth=True,
-                      effects=[Effect(TurnEnded(), ChangeHealth(1), MinionSelector(picker=RandomPicker()))])
+                      effects=[Effect(TurnEnded(), ActionTag(Give(ChangeHealth(1)),
+                                                             MinionSelector(picker=RandomPicker())))])
 
 
 class LordJaraxxus(MinionCard):
@@ -138,7 +139,8 @@ class AnimaGolem(MinionCard):
         super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()), Kill(), SelfSelector())])
+        return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()),
+                                            ActionTag(Kill(), SelfSelector()))])
 
 
 class Imp(MinionCard):
@@ -163,8 +165,9 @@ class FelCannon(MinionCard):
         super().__init__("Fel Cannon", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(3, 5, effects=[Effect(TurnEnded(), Damage(2), MinionSelector(Not(IsType(MINION_TYPE.MECH, True)),
-                                                                                   BothPlayer(), RandomPicker()))])
+        return Minion(3, 5, effects=[Effect(TurnEnded(), ActionTag(Damage(2),
+                                                                   MinionSelector(Not(IsType(MINION_TYPE.MECH, True)),
+                                                                                  BothPlayer(), RandomPicker())))])
 
 
 class MalGanis(MinionCard):
@@ -183,5 +186,5 @@ class FloatingWatcher(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 4, effects=[Effect(CharacterDamaged(And(IsHero(), OwnersTurn())),
-                                            Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
-                                            SelfSelector())])
+                                            ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
+                                            SelfSelector()))])

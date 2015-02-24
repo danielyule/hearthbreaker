@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import Equip, Give, Heal, Damage
-from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff, ActionTag
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector, \
     BothPlayer
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -60,8 +60,8 @@ class CobaltGuardian(MinionCard):
         super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), Give(DivineShield()),
-                                            SelfSelector())])
+        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), ActionTag(Give(DivineShield()),
+                                            SelfSelector()))])
 
 
 class SilverHandRecruit(MinionCard):
@@ -103,7 +103,7 @@ class ScarletPurifier(MinionCard):
 class BolvarFordragon(MinionCard):
     def __init__(self):
         super().__init__("Bolvar Fordragon", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY,
-                         effects=[Effect(MinionDied(), Give(ChangeAttack(1)), SelfSelector())])
+                         effects=[Effect(MinionDied(), ActionTag(Give(ChangeAttack(1)), SelfSelector()))])
 
     def create_minion(self, player):
         return Minion(1, 7)
