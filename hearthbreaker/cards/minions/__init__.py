@@ -226,6 +226,7 @@ from hearthbreaker.cards.minions.neutral import (
     LilExorcist,
     EnhanceoMechano,
     FoeReaper4000,
+    KezanMystic,
 )
 
 from hearthbreaker.cards.minions.druid import (

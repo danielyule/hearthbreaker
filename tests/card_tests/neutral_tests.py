@@ -4294,3 +4294,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(4, game.current_player.minions[1].health)
         self.assertEqual(30, game.current_player.hero.health)
         self.assertEqual(30, game.other_player.hero.health)
+
+    def test_KezanMystic(self):
+        game = generate_game_for(KezanMystic, MirrorEntity, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))

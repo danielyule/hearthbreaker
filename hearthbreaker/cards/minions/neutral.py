@@ -2359,3 +2359,12 @@ class FoeReaper4000(MinionCard):
     def create_minion(self, player):
         return Minion(6, 9, effects=[Effect(Attack(IsMinion()), Damage(Attribute("attack", SelfSelector())),
                                             MinionSelector(TargetAdjacent(), EnemyPlayer()))])
+
+
+class KezanMystic(MinionCard):
+    def __init__(self):
+        super().__init__("Kezan Mystic", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         battlecry=Battlecry(ApplySecret(CARD_SOURCE.ENEMY_SECRETS), PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(4, 3)

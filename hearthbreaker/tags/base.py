@@ -569,6 +569,8 @@ class CARD_SOURCE:
     LAST_CARD = 6
     LAST_DRAWN = 7
     MINION = 8
+    MY_SECRETS = 9,
+    ENEMY_SECRETS = 10,
     __sources = {
         "COLLECTION": COLLECTION,
         "MY_HAND": MY_HAND,
@@ -579,6 +581,8 @@ class CARD_SOURCE:
         "LAST_CARD": LAST_CARD,
         "LAST_DRAWN": LAST_DRAWN,
         "MINION": MINION,
+        "MY_SECRETS": MY_SECRETS,
+        "ENEMY_SECRETS": ENEMY_SECRETS,
     }
 
     @staticmethod
@@ -627,6 +631,10 @@ class CardQuery(JSONObject):
             return chosen_card
         elif self.source == CARD_SOURCE.MINION:
             card_list = [minion.card for minion in self.minion.get_targets(owner, owner)]
+        elif self.source == CARD_SOURCE.MY_SECRETS:
+            card_list = [secret.card for secret in player.secrets]
+        elif self.source == CARD_SOURCE.ENEMY_SECRETS:
+            card_list = [secret for secret in player.opponent.secrets]
         else:
             card_list = []
         # TODO Throw an exception in any other case?
@@ -663,6 +671,16 @@ class CardQuery(JSONObject):
         elif self.source == CARD_SOURCE.OPPONENT_HAND:
             player.opponent.hand.remove(chosen_card)
             chosen_card.unattach()
+            return chosen_card
+        elif self.source == CARD_SOURCE.MY_SECRETS:
+            if player is player.game.other_player:
+                chosen_card.deactivate(player)
+            player.secrets.remove(chosen_card)
+            return chosen_card
+        elif self.source == CARD_SOURCE.ENEMY_SECRETS:
+            if player.opponent is player.game.other_player:
+                chosen_card.deactivate(player.opponent)
+            player.opponent.secrets.remove(chosen_card)
             return chosen_card
 
     def __to_json__(self):
