@@ -7,7 +7,7 @@ from hearthbreaker.tags.base import Aura, AuraUntil, Effect, Buff, BuffUntil, De
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth, SetAttack, Charge, Taunt, DivineShield, \
-    Windfury, NoSpellTarget, SpellDamage
+    Windfury, NoSpellTarget, SpellDamage, MinimumHealth
 import hearthbreaker.targeting
 
 
@@ -281,6 +281,12 @@ class GameObject:
         """
         return False
 
+    def is_valid(self):
+        """
+        Checks if this object is a valid target for actions and statuses
+        """
+        return True
+
     def add_effect(self, effect):
         """
         Applies the the given effect to the :class:`GameObject`.  The effect will be unapplied in the case of silence,
@@ -536,6 +542,11 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             self.trigger("damaged", amount, attacker)
             self.player.trigger("character_damaged", self, attacker, amount)
             self.health -= amount
+            min_health = self.calculate_stat(MinimumHealth, 0)
+            if self.health < min_health:
+                self.health = min_health
+            if self.health <= 0:
+                self.die(attacker)
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", self, amount)
                 attacker._remove_stealth()
@@ -544,8 +555,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
                 self.enraged = True
                 self.trigger("enraged")
                 self._do_enrage()
-            if self.health <= 0:
-                self.die(attacker)
 
     def change_attack(self, amount):
         """

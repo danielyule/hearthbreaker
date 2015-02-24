@@ -244,7 +244,7 @@ class Selector(JSONObject, metaclass=abc.ABCMeta):
 class Action(JSONObject, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         pass
 
     @staticmethod
@@ -310,7 +310,7 @@ class Amount(abc.ABCMeta):
 
         def get_amount(self, source, target, *args):
             if isinstance(self.amount, Function):
-                return self.amount.do(source) * self.multipler
+                return self.amount.do(source, *args) * self.multipler
             else:
                 return self.amount
 
@@ -443,6 +443,7 @@ class Effect(Tag):
         else:
             self.tags = [tags]
         self.owner = None
+        self.other = None
 
     def apply(self):
         self.event.bind(self.owner, self._find_target)
@@ -455,7 +456,7 @@ class Effect(Tag):
 
     def _find_target(self, focus=None, other=None, *args):
         for tag in self.tags:
-            if not tag.do(self.owner, focus):
+            if not tag.do(self.owner, focus, other):
                 break
 
     def __to_json__(self):
@@ -499,7 +500,7 @@ class ActionTag(Tag):
         self.selector = selector
         self.condition = condition
 
-    def do(self, owner, target=None):
+    def do(self, owner, target=None, other=None):
         if self.condition:
             if not self.condition.evaluate(owner):
                 return
@@ -507,8 +508,9 @@ class ActionTag(Tag):
         found_target = False
         for t in targets:
             found_target = True
-            for action in self.actions:
-                action.act(owner, t)
+            if t.is_valid():
+                for action in self.actions:
+                    action.act(owner, t, other)
 
         return found_target
 
@@ -737,7 +739,7 @@ class Choice(ActionTag):
 
 class Function(JSONObject, metaclass=abc.ABCMeta):
 
-    def do(self, target):
+    def do(self, target, *args):
         pass
 
     @staticmethod

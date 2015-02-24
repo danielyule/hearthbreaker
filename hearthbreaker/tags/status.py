@@ -53,24 +53,15 @@ class ChangeHealth(Status, metaclass=Amount):
 class MinimumHealth(Status):
     def __init__(self, min_health):
         self.min_health = min_health
-        self.__keep_funcs = {}
 
     def act(self, actor, target):
-        def keep_above_one():
-            if target.health < self.min_health:
-                target.health = self.min_health
-
-        target.bind("health_changed", keep_above_one)
-        self.__keep_funcs[target] = keep_above_one
+        pass
 
     def unact(self, actor, target):
-        target.unbind("health_changed", self.__keep_funcs[target])
+        pass
 
-    def __deep_copy__(self, memo):
-        return MinimumHealth(self.min_health)
-
-    def __copy__(self):
-        return MinimumHealth(self.min_health)
+    def update(self, owner, prev_health):
+        return self.min_health
 
     def __to_json__(self):
         return {

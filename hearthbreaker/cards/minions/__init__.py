@@ -360,6 +360,7 @@ from hearthbreaker.cards.minions.warlock import (
     FelCannon,
     MalGanis,
     FloatingWatcher,
+    MistressOfPain,
 )
 
 from hearthbreaker.cards.minions.warrior import (

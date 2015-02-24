@@ -20,7 +20,7 @@ class Give(Action):
             self.buffs = [buffs]
         self.picker = picker
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         buffs = self.picker.pick(self.buffs, actor.player)
         for buff in buffs:
             if hasattr(buff.status, "amount"):
@@ -69,7 +69,7 @@ class GiveAura(Action):
         else:
             self.auras = [auras]
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         for aura in self.auras:
             target.add_aura(aura)
 
@@ -97,7 +97,7 @@ class GiveEffect(Action):
         else:
             self.effects = effects
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         for effect in self.effects:
             for tag in effect.tags:
                 for action in tag.actions:
@@ -125,7 +125,7 @@ class Summon(Action):
             self.card = CardQuery(card.ref_name)
         self.count = count
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         card = self.card.get_card(target, actor)
         if card is None:
             return
@@ -171,7 +171,7 @@ class Transform(Action):
         else:
             self.card = CardQuery(card.ref_name)
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         card = self.card.get_card(target, actor)
         if target.is_minion():
             minion = card.create_minion(target.player)
@@ -197,7 +197,7 @@ class Transform(Action):
 
 
 class Kill(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.die(None)
 
     def __to_json__(self):
@@ -206,18 +206,16 @@ class Kill(Action):
         }
 
 
-class Heal(Action):
-    def __init__(self, amount):
+class Heal(Action, metaclass=Amount):
+    def __init__(self):
         super().__init__()
-        self.amount = amount
 
-    def act(self, actor, target):
-        target.heal(actor.player.effective_heal_power(self.amount), actor)
+    def act(self, actor, target, other=None):
+        target.heal(actor.player.effective_heal_power(self.get_amount(actor, target, other)), actor)
 
     def __to_json__(self):
         return {
             'name': 'heal',
-            'amount': self.amount
         }
 
 
@@ -225,8 +223,8 @@ class SetHealth(Action, metaclass=Amount):
     def __init__(self):
         super().__init__()
 
-    def act(self, actor, target):
-        target.health = self.get_amount(actor, target)
+    def act(self, actor, target, other=None):
+        target.health = self.get_amount(actor, target, other)
 
     def __to_json__(self):
         return {
@@ -238,8 +236,8 @@ class Damage(Action, metaclass=Amount):
     def __init__(self):
         super().__init__()
 
-    def act(self, actor, target):
-        target.damage(self.get_amount(actor, target), actor)
+    def act(self, actor, target, other=None):
+        target.damage(self.get_amount(actor, target, other), actor)
 
     def __to_json__(self):
         return {
@@ -251,8 +249,8 @@ class Draw(Action, metaclass=Amount):
     def __init__(self):
         super().__init__()
 
-    def act(self, actor, target):
-        for draw in range(0, self.get_amount(actor, target)):
+    def act(self, actor, target, other=None):
+        for draw in range(0, self.get_amount(actor, target, other)):
             target.draw()
 
     def __to_json__(self):
@@ -266,8 +264,8 @@ class Discard(Action, metaclass=Amount):
         super().__init__()
         self.query = query
 
-    def act(self, actor, target):
-        for index in range(0, self.get_amount(actor, target)):
+    def act(self, actor, target, other=None):
+        for index in range(0, self.get_amount(actor, target, other)):
             card = self.query.get_card(actor.player, actor)
             if card:
                 actor.player.trigger("discard", card)
@@ -283,13 +281,12 @@ class Discard(Action, metaclass=Amount):
         return self
 
 
-class IncreaseArmor(Action):
-    def __init__(self, amount=1):
+class IncreaseArmor(Action, metaclass=Amount):
+    def __init__(self):
         super().__init__()
-        self.amount = amount
 
-    def act(self, actor, target):
-        target.armor += self.amount
+    def act(self, actor, target, other=None):
+        target.armor += self.get_amount(actor, target, other)
 
     def __to_json__(self):
         return {
@@ -301,7 +298,7 @@ class ChangeTarget(Action):
     def __init__(self, selector):
         self.selector = selector
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         possible_targets = [t for t in self.selector.choose_targets(target, target.current_target)]
         if len(possible_targets) > 0:
             target.current_target = possible_targets[0]
@@ -327,7 +324,7 @@ class AddCard(Action):
         self.add_to_deck = add_to_deck
         self.count = count
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         if self.add_to_deck:
             for i in range(self.count):
                 target.deck.put_back(self.card.get_card(target, actor))
@@ -366,7 +363,7 @@ class ResurrectFriendly(Action):
             'name': 'resurrect_friendly'
         }
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         # Will be called once per Kel'Thuzad on the board
         # http://www.hearthhead.com/card=1794/kelthuzad#comments
         for minion in sorted(target.dead_this_turn, key=lambda m: m.born):
@@ -377,7 +374,7 @@ class Bounce(Action):
     def __init__(self, bounce_to_deck=False):
         self.bounce_to_deck = bounce_to_deck
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.bounce(self.bounce_to_deck)
 
     def __to_json__(self):
@@ -395,7 +392,7 @@ class SwapWithHand(Action):
     def __init__(self, condition=None):
         self.condition = condition
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         if actor.is_valid():
             if self.condition:
                 chosen_card = target.game.random_draw(target.hand,
@@ -432,7 +429,7 @@ class ApplySecret(Action):
         self.source = source
         self._query = CardQuery(conditions=[IsSecret()], source=source)
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         secret = self._query.get_card(target, actor)
         if secret:
             target.secrets.append(secret)
@@ -466,7 +463,7 @@ class Equip(Action):
         else:
             self.weapon = CardQuery(weapon.ref_name)
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         card = self.weapon.get_card(target, actor)
         weapon = card.create_weapon(target)
         weapon.card = card
@@ -484,7 +481,7 @@ class Equip(Action):
 
 
 class Destroy(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.destroy()
 
     def __to_json__(self):
@@ -494,7 +491,7 @@ class Destroy(Action):
 
 
 class Steal(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         new_minion = target.copy(actor.player)
         target.unattach()
         target.remove_from_board()
@@ -511,7 +508,7 @@ class Duplicate(Action):
         super().__init__()
         self.selector = selector
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         for minion in self.selector.choose_targets(actor, target):
             if len(minion.player.minions) < 7:
                 dup = minion.copy(minion.player)
@@ -529,7 +526,7 @@ class Duplicate(Action):
 
 
 class Replace(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         new_minion = target.copy(actor.player)
         actor.replace(new_minion)
 
@@ -540,7 +537,7 @@ class Replace(Action):
 
 
 class Silence(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.silence()
 
     def __to_json__(self):
@@ -550,7 +547,7 @@ class Silence(Action):
 
 
 class DestroyManaCrystal(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.max_mana -= 1
         if target.mana > 0:
             target.mana -= 1
@@ -566,7 +563,7 @@ class GiveManaCrystal(Action):
         self.count = count
         self.empty = empty
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.max_mana = min(self.count + target.max_mana, 10)
         if not self.empty:
             target.mana += self.count
@@ -580,7 +577,7 @@ class GiveManaCrystal(Action):
 
 
 class IncreaseDurability(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         if target.weapon:
             target.weapon.durability += 1
 
@@ -591,7 +588,7 @@ class IncreaseDurability(Action):
 
 
 class DecreaseDurability(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         if target.weapon:
             target.weapon.durability -= 1
             if target.weapon.durability <= 0:
@@ -603,23 +600,22 @@ class DecreaseDurability(Action):
         }
 
 
-class IncreaseWeaponAttack(Action):
-    def __init__(self, amount):
-        self.amount = amount
+class IncreaseWeaponAttack(Action, metaclass=Amount):
+    def __init__(self):
+        pass
 
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         if target.weapon:
-            target.weapon.base_attack += self.amount
+            target.weapon.base_attack += self.get_amount(actor, target, other)
 
     def __to_json__(self):
         return {
-            'name': 'increase_weapon_attack',
-            'amount': self.amount
+            'name': 'increase_weapon_attack'
         }
 
 
 class RemoveDivineShields(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         from hearthbreaker.tags.status import DivineShield
         if target.divine_shield:
             target.buffs = [buff for buff in target.buffs if not isinstance(buff.status, DivineShield)]
@@ -632,7 +628,7 @@ class RemoveDivineShields(Action):
 
 
 class SwapStats(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         temp_attack = target.calculate_attack()
         temp_health = target.health
         if temp_attack == 0:
@@ -648,7 +644,7 @@ class SwapStats(Action):
 
 
 class Remove(Action):
-    def act(self, actor, target):
+    def act(self, actor, target, other=None):
         target.unattach()
         target.remove_from_board()
 

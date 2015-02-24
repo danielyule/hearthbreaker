@@ -473,7 +473,7 @@ class Count(Function):
     def __init__(self, selector):
         self.selector = selector
 
-    def do(self, target):
+    def do(self, target, *args):
         return len(self.selector.get_targets(target))
 
     def __to_json__(self):
@@ -492,7 +492,7 @@ class Attribute(Function):
         self.attribute = attribute
         self.selector = selector
 
-    def do(self, target):
+    def do(self, target, *args):
         targets = self.selector.get_targets(target)
         total = 0
         for t in targets:
@@ -523,8 +523,8 @@ class Difference(Function, metaclass=Amount):
     def __init__(self, value):
         self.value = value
 
-    def do(self, target):
-        return max(0, self.value - self.get_amount(target, target))
+    def do(self, target, *args):
+        return max(0, self.value - self.get_amount(target, target, *args))
 
     def __to_json__(self):
         return {
@@ -535,3 +535,16 @@ class Difference(Function, metaclass=Amount):
     def __from_json__(self, value):
         self.value = value
         return self
+
+
+class EventValue(Function):
+    def __init__(self):
+        pass
+
+    def do(self, target, *args):
+        return args[0]
+
+    def __to_json__(self):
+        return {
+            'name': 'event_value'
+        }

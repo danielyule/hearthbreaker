@@ -4,12 +4,12 @@ from hearthbreaker.cards.weapons.warlock import BloodFury
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Transform, Equip, \
-    Remove
+    Remove, Heal
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff, ActionTag
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent
-from hearthbreaker.tags.event import TurnEnded, CharacterDamaged
+from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage
 from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
-    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue
 from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
 
 
@@ -188,3 +188,11 @@ class FloatingWatcher(MinionCard):
         return Minion(4, 4, effects=[Effect(CharacterDamaged(And(IsHero(), OwnersTurn())),
                                             ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
                                             SelfSelector()))])
+
+
+class MistressOfPain(MinionCard):
+    def __init__(self):
+        super().__init__("Mistress of Pain", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(1, 4, effects=[Effect(DidDamage(), ActionTag(Heal(EventValue()), HeroSelector()))])

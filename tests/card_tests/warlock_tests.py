@@ -751,3 +751,34 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
         self.assertEqual(6, game.current_player.minions[1].calculate_attack())
         self.assertEqual(6, game.current_player.minions[1].calculate_max_health())
+
+    def test_MistressOfPain(self):
+        game = generate_game_for([MistressOfPain, AbusiveSergeant], SinisterStrike,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(27, game.current_player.hero.health)
+
+    def test_MistressOfPain_Auchenai(self):
+        game = generate_game_for([MistressOfPain, AuchenaiSoulpriest], SinisterStrike,
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(0, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.dead)
+
+    def test_MistressOfPain_DivineShield(self):
+        game = generate_game_for(MistressOfPain, [SinisterStrike, ArgentSquire],
+                                 PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        # The mistress of pain does no damage, so the hero isn't healed
+        # See https://www.youtube.com/watch?v=wakqQSBjDdE
+        self.assertEqual(27, game.current_player.hero.health)
+

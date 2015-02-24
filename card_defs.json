@@ -9348,6 +9348,44 @@
     }
   }, 
   {
+    "name": "Mistress of Pain", 
+    "minion_type": "Demon", 
+    "character_class": "Warlock", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "attack": 1, 
+    "health": 4, 
+    "type": "minion", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "did_damage"
+          }, 
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": {
+                    "name": "event_value"
+                  }, 
+                  "name": "heal"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }, 
+  {
     "name": "Keeper of the Grove", 
     "character_class": "Druid", 
     "rarity": "Rare", 
@@ -11586,6 +11624,7 @@
             {
               "actions": [
                 {
+                  "amount": 1, 
                   "name": "increase_armor"
                 }
               ], 
@@ -11806,6 +11845,7 @@
       {
         "actions": [
           {
+            "amount": 5, 
             "name": "increase_armor"
           }
         ], 
