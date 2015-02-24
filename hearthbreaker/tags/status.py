@@ -230,7 +230,7 @@ class Windfury(Status):
         pass
 
     def update(self, owner, prev_charge):
-        return True
+        return prev_charge if prev_charge > 2 else 2
 
     def __to_json__(self):
         return {

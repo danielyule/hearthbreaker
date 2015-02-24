@@ -358,8 +358,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         self.base_health = health
         #: The amount of attack this character has
         self.base_attack = attack_power
-        #: Whether or not this character can attack this turn
-        self.active = False
+        #: How many attacks this character has performed this turn
+        self.attacks_performed = 0
         #: Whether or not this character has died
         self.dead = False
         #: If this character has windfury
@@ -442,10 +442,7 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         target.damage(my_attack, self)
         self.player.game.check_delayed()
         self.trigger("attack_completed")
-        if self.windfury() and not self.used_windfury:
-            self.used_windfury = True
-        else:
-            self.active = False
+        self.attacks_performed += 1
         self.stealth = False
         self.current_target = None
 
@@ -480,11 +477,17 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         """
         return self.base_health + self.health_delta
 
+    def attacks_allowed(self):
+        """
+        Checks the number of attacks this character can make per turn.
+        """
+        return self.calculate_stat(Windfury, 1)
+
     def windfury(self):
         """
         Checks if this character has windfury attached
         """
-        return self.calculate_stat(Windfury, False)
+        return self.calculate_stat(Windfury, 1) > 1
 
     def delayed_trigger(self, event, *args):
         """
@@ -683,7 +686,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :rtype boolean:
         """
-        return self.calculate_attack() > 0 and self.active and not self.frozen and not (self.dead or self.removed)
+        return self.calculate_attack() > 0 and self.attacks_performed < self.attacks_allowed() and \
+            not self.frozen and not (self.dead or self.removed)
 
     def spell_targetable(self):
         """
@@ -831,7 +835,6 @@ class Minion(Character):
         for minion in self.player.minions[index + 1:]:
             minion.index += 1
         self.index = index
-        self.active = True
         self.health += self.calculate_max_health() - self.base_health - self.health_delta
         self.attach(self, self.player)
         for player in self.game.players:
@@ -895,7 +898,6 @@ class Minion(Character):
         new_minion.index = self.index
         new_minion.player = self.player
         new_minion.game = self.game
-        new_minion.active = True
         new_minion.exhausted = True
         self.game.minion_counter += 1
         new_minion.born = self.game.minion_counter
@@ -976,7 +978,7 @@ class Minion(Character):
         new_minion.enraged = self.enraged
         new_minion.immune = self.immune
         new_minion.index = self.index
-        new_minion.active = self.active
+        new_minion.attacks_performed = self.attacks_performed
         new_minion.exhausted = self.exhausted
         new_minion.born = self.born
         card_type = type(self.card)
@@ -996,7 +998,7 @@ class Minion(Character):
         GameObject.__from_json__(minion, **md)
         minion.health = md['max_health'] - md['damage']
         minion.exhausted = md['exhausted']
-        minion.active = not md['already_attacked']
+        minion.attacks_performed = not md['attacks_performed']
         minion.born = md['sequence_id']
         if 'enrage' in md:
             minion.enrage = [Aura.from_json(**enrage) for enrage in md['enrage']]
@@ -1034,7 +1036,7 @@ class Minion(Character):
             'max_health': self.base_health,
             'attack': self.base_attack,
             "exhausted": self.exhausted,
-            "already_attacked": not self.active,
+            "attacks_performed": not self.attacks_performed,
             'deathrattles': self.deathrattle,
         })
         if self.enrage:
@@ -1077,7 +1079,8 @@ class Hero(Character):
         new_hero.armor = self.armor
         new_hero.bonus_attack = 0
         new_hero.used_windfury = False
-        new_hero.active = self.active
+        new_hero.attacks_performed = self.attacks_performed
+
         new_hero.effects = copy.deepcopy(self.effects)
         new_hero.auras = copy.deepcopy(self.auras)
         new_hero.buffs = copy.deepcopy(self.buffs)
@@ -1124,7 +1127,6 @@ class Hero(Character):
         self.unattach()
         new_hero.player = self.player
         new_hero.game = self.game
-        new_hero.active = True
         new_hero.exhausted = False
         self.game.minion_counter += 1
         new_hero.born = self.game.minion_counter
@@ -1152,7 +1154,7 @@ class Hero(Character):
             'attack': self.base_attack,
             'immune': self.immune,
             'used_windfury': self.used_windfury,
-            'already_attacked': not self.active,
+            'attacks_performed': self.attacks_performed,
         })
         return r_val
 
@@ -1166,7 +1168,7 @@ class Hero(Character):
         hero.armor = hd["armor"]
         hero.immune = hd["immune"]
         hero.used_windfury = hd["used_windfury"]
-        hero.active = not hd["already_attacked"]
+        hero.attacks_performed = not hd["attacks_performed"]
         if hd['weapon']:
             hero.weapon = Weapon.__from_json__(hd["weapon"], player)
         return hero

@@ -45,9 +45,10 @@ class CardTest(unittest.TestCase):
                     except KeyError:
                         not_implemented.append(card_info["name"])
                         continue
-                    self.assertEqual(int(card_info["cost"]), card.mana,
-                                     "Expected {} to have cost {}.  Got {}".format(
-                                     card_info["name"], card_info["cost"], card.mana))
+                    if "cost" in card_info:
+                        self.assertEqual(int(card_info["cost"]), card.mana,
+                                         "Expected {} to have cost {}.  Got {}".format(
+                                         card_info["name"], card_info["cost"], card.mana))
                     if "playerClass" in card_info:
                         self.assertEqual(CHARACTER_CLASS.from_str(card_info["playerClass"]), card.character_class,
                                          "Expected {} to have class {}.  Got {}".format(
@@ -57,9 +58,10 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(CHARACTER_CLASS.ALL, card.character_class,
                                          "Expected {} to have no class.  Got {}".format(
                                              card_info["name"], CHARACTER_CLASS.to_str(card.character_class)))
-                    self.assertEqual(CARD_RARITY.from_str(card_info["rarity"]), card.rarity,
-                                     "Expected card {} to have rarity {}.  Got {}".format(
-                                         card_info["name"], card_info["rarity"], CARD_RARITY.to_str(card.rarity)))
+                    if "rarity" in card_info:
+                        self.assertEqual(CARD_RARITY.from_str(card_info["rarity"]), card.rarity,
+                                         "Expected card {} to have rarity {}.  Got {}".format(
+                                             card_info["name"], card_info["rarity"], CARD_RARITY.to_str(card.rarity)))
                     if card_info["type"] == "Minion":
                         minion = card.create_minion(fake_game.current_player)
                         minion.player = fake_game.current_player

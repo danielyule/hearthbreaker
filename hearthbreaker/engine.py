@@ -154,13 +154,13 @@ class Game(Bindable):
         for secret in self.other_player.secrets:
             secret.activate(self.other_player)
         for minion in self.current_player.minions:
-            minion.active = True
+            minion.attacks_performed = 0
         self.current_player.mana = self.current_player.max_mana - self.current_player.overload
         self.current_player.overload = 0
         self.current_player.cards_played = 0
         self.current_player.dead_this_turn = []
         self.current_player.hero.power.used = False
-        self.current_player.hero.active = True
+        self.current_player.hero.attacks_performed = 0
         self.current_player.draw()
         self.current_player.trigger("turn_started", self.current_player)
         self._has_turn_ended = False
@@ -171,18 +171,19 @@ class Game(Bindable):
     def _end_turn(self):
         from hearthbreaker.tags.status import Frozen
         self.current_player.trigger("turn_ended")
-        if self.current_player.hero.frozen and self.current_player.hero.active:
+        if self.current_player.hero.frozen and \
+                self.current_player.hero.attacks_performed < self.current_player.hero.attacks_allowed():
             self.current_player.hero.frozen = 0
             self.current_player.hero.buffs = \
                 [buff for buff in self.current_player.hero.buffs if not isinstance(buff, Frozen)]
 
         for minion in self.current_player.minions:
-            if minion.active and minion.frozen:
+            if minion.attacks_performed < minion.attacks_allowed() and minion.frozen:
                 minion.frozen = False
                 minion.buffs = [buff for buff in minion.buffs if not isinstance(buff, Frozen)]
             minion.exhausted = False
             minion.used_windfury = False
-            minion.active = False
+            minion.attacks_performed = 0
 
         for aura in copy.copy(self.current_player.object_auras):
             if isinstance(aura, AuraUntil):
