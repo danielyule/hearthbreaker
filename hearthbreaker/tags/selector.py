@@ -149,6 +149,18 @@ class CardSelector(Selector, metaclass=abc.ABCMeta):
         return self
 
 
+class LastDrawnSelector(CardSelector):
+    def __init__(self, players=FriendlyPlayer()):
+        super().__init__(players)
+
+    def get_targets(self, source, obj=None):
+        players = self.players.get_players(source.player)
+        return [player.hand[-1] for player in players]
+
+    def match(self, source, obj):
+        return obj in self.get_targets(source, obj)
+
+
 class SecretSelector(CardSelector):
     def match(self, source, obj):
         return super().match(source, obj) and obj.is_secret()

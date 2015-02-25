@@ -156,6 +156,12 @@ class Card(Bindable, GameObject):
         """
         return self.name + " (" + str(self.mana) + " mana)"
 
+    def replace(self, new_card):
+        index = self.player.hand.index(self)
+        self.unattach()
+        new_card.attach(new_card, self.player)
+        self.player.hand[index] = new_card
+
 
 class MinionCard(Card, metaclass=abc.ABCMeta):
     """
@@ -267,7 +273,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             self.combo.do(minion)
         else:
             for battlecry in self.battlecry:
-                if not battlecry.do(minion):
+                if not battlecry.do(minion, minion):
                     break
         if not minion.removed:
             # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)

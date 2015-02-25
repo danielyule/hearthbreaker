@@ -173,7 +173,9 @@ class Transform(Action):
 
     def act(self, actor, target, other=None):
         card = self.card.get_card(target, actor)
-        if target.is_minion():
+        if target.is_card():
+            target.replace(card)
+        elif target.is_minion():
             minion = card.create_minion(target.player)
             minion.card = card
             target.replace(minion)

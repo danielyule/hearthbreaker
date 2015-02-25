@@ -469,3 +469,25 @@ class IsHero(Condition):
         return {
             'name': 'is_hero'
         }
+
+
+class Matches(Condition):
+    def __init__(self, selector, condition):
+        self.selector = selector
+        self.condition = condition
+
+    def evaluate(self, target, *args):
+        return all([self.condition.evaluate(target, t, *args) for t in self.selector.get_targets(target, *args)])
+
+    def __to_json__(self):
+        return {
+            'name': 'matches',
+            'condition': self.condition,
+            'selector': self.selector,
+        }
+
+    def __from_json__(self, selector, condition):
+        from hearthbreaker.tags.base import Selector
+        self.selector = Selector.from_json(**selector)
+        self.condition = Condition.from_json(**condition)
+        return self

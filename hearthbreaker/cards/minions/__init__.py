@@ -228,6 +228,7 @@ from hearthbreaker.cards.minions.neutral import (
     FoeReaper4000,
     KezanMystic,
     MimironsHead,
+    GnomishExperimenter,
 )
 
 from hearthbreaker.cards.minions.druid import (

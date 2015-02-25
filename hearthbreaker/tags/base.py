@@ -502,7 +502,7 @@ class ActionTag(Tag):
 
     def do(self, owner, target=None, other=None):
         if self.condition:
-            if not self.condition.evaluate(owner):
+            if not self.condition.evaluate(owner, target):
                 return
         targets = self.selector.choose_targets(owner, target)
         found_target = False

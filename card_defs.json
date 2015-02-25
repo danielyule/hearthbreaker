@@ -7503,6 +7503,64 @@
     }
   }, 
   {
+    "name": "Chicken", 
+    "minion_type": "Beast", 
+    "character_class": "", 
+    "rarity": "Special", 
+    "mana": 1, 
+    "attack": 1, 
+    "health": 1, 
+    "type": "minion", 
+    "ref_name": "Chicken (Gnomish Experimenter)"
+  }, 
+  {
+    "name": "Gnomish Experimenter", 
+    "character_class": "", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "attack": 3, 
+    "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }, 
+      {
+        "condition": {
+          "name": "matches", 
+          "condition": {
+            "name": "is_minion"
+          }, 
+          "selector": {
+            "players": "friendly", 
+            "name": "card"
+          }
+        }, 
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Chicken (Gnomish Experimenter)"
+            }
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "card"
+        }
+      }
+    ], 
+    "type": "minion"
+  }, 
+  {
     "name": "Treant", 
     "character_class": "Druid", 
     "rarity": "Common", 

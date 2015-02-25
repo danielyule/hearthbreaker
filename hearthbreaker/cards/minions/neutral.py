@@ -9,13 +9,13 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
-    MechCardSelector, Difference
+    MechCardSelector, Difference, LastDrawnSelector
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury
@@ -2408,3 +2408,24 @@ class MimironsHead(MinionCard):
                                             GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH, True))),
                                                         value=2)),
                                             ActionTag(Summon(V07TRON()), PlayerSelector())])])
+
+
+class GnomishChicken(MinionCard):
+    def __init__(self):
+        super().__init__("Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST,
+                         "Chicken (Gnomish Experimenter)")
+
+    def create_minion(self, player):
+        return Minion(1, 1)
+
+
+class GnomishExperimenter(MinionCard):
+    def __init__(self):
+        super().__init__("Gnomish Experimenter", 3, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
+                         battlecry=(Battlecry(Draw(), PlayerSelector()), Battlecry(Transform(GnomishChicken()),
+                                                                                   LastDrawnSelector(),
+                                                                                   Matches(LastDrawnSelector(),
+                                                                                           IsMinion()))))
+
+    def create_minion(self, player):
+        return Minion(3, 2)

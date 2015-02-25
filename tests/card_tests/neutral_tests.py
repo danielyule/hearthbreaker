@@ -4335,3 +4335,29 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(14, game.other_player.hero.health)
+
+    def test_GnomishExperimenter(self):
+        game = generate_game_for(GnomishExperimenter, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual("Chicken", game.current_player.hand[-1].name)
+        self.assertEqual(1, game.current_player.hand[-1].mana)
+        self.assertEqual(MINION_TYPE.BEAST, game.current_player.hand[-1].minion_type)
+        self.assertEqual(6, len(game.current_player.hand))
+
+    def test_GnomishExperimenter_with_spell(self):
+        game = generate_game_for([GnomishExperimenter, ArcaneMissiles, ArcaneMissiles, ArcaneMissiles], StonetuskBoar,
+                                 OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.hand))
+        self.assertEqual("Arcane Missiles", game.current_player.hand[0].name)
+        self.assertEqual("Arcane Missiles", game.current_player.hand[1].name)
+        self.assertEqual("Arcane Missiles", game.current_player.hand[2].name)
+        self.assertEqual("Gnomish Experimenter", game.current_player.hand[3].name)
+        self.assertEqual("Arcane Missiles", game.current_player.hand[4].name)
+        self.assertEqual("Arcane Missiles", game.current_player.hand[5].name)
