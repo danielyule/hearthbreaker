@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from hearthbreaker.cards.minions.neutral import V07TRON
+from hearthbreaker.cards.minions.neutral import V07TR0N
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
@@ -4329,7 +4329,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Mimiron's Head", game.current_player.minions[1].card.name)
 
     def test_V07TR0N(self):
-        game = generate_game_for(V07TRON, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
+        game = generate_game_for(V07TR0N, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
         for turn in range(15):
             game.play_single_turn()
 

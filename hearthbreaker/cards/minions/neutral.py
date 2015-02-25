@@ -2390,7 +2390,7 @@ class KezanMystic(MinionCard):
         return Minion(4, 3)
 
 
-class V07TRON(MinionCard):
+class V07TR0N(MinionCard):
     def __init__(self):
         super().__init__("V-07-TR-0N", 8, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.MECH)
 
@@ -2407,7 +2407,7 @@ class MimironsHead(MinionCard):
                                                                                                     True)),
                                             GreaterThan(Count(MinionSelector(IsType(MINION_TYPE.MECH, True))),
                                                         value=2)),
-                                            ActionTag(Summon(V07TRON()), PlayerSelector())])])
+                                            ActionTag(Summon(V07TR0N()), PlayerSelector())])])
 
 
 class GnomishChicken(MinionCard):
