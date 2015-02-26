@@ -1058,7 +1058,6 @@ class Hero(Character):
         super().__init__(0, health)
         self.armor = 0
         self.weapon = None
-        self.bonus_attack = 0
         self.character_class = character_class
         self.player = player
         self.game = player.game
@@ -1086,7 +1085,6 @@ class Hero(Character):
             new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.health = self.health
         new_hero.armor = self.armor
-        new_hero.bonus_attack = 0
         new_hero.used_windfury = False
         new_hero.attacks_performed = self.attacks_performed
 
@@ -1101,7 +1099,7 @@ class Hero(Character):
         super().attack()
         if self.weapon is not None:
             self.weapon.durability -= 1
-            if self.weapon.durability is 0:
+            if self.weapon.durability == 0 or self.weapon.calculate_stat(ChangeAttack, self.weapon.base_attack) == 0:
                 self.weapon.destroy()
 
     def damage(self, amount, attacker):
