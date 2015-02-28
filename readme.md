@@ -66,9 +66,10 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-All cards released by Blizzard up to Goblins vs Gnomes are implemented.  Goblins and Gnomes cards are in progress.  
+All collectible cards have been implemented.
 The engine is complete, and can be used to simulate games.  The game state can be copied, or serialized to JSON.
-Replay functionality is included as well.
+Replay functionality is included as well.  Furthermore, minions and weapons can be expressed either in python or
+via a JSON declaration.
 
 For an overview of upcoming work, see [the wiki](https://github.com/danielyule/hearthbreaker/wiki/)
 

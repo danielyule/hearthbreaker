@@ -1733,7 +1733,10 @@
       {
         "actions": [
           {
-            "name": "swap_stats"
+            "dest_stat": "attack", 
+            "swap_with_owner": false, 
+            "name": "swap_stats", 
+            "source_stat": "health"
           }
         ], 
         "selector": {
@@ -6026,7 +6029,7 @@
       {
         "actions": [
           {
-            "amount": 3, 
+            "amount": 2, 
             "name": "damage"
           }
         ], 
@@ -8728,6 +8731,37 @@
         }
       ]
     }
+  }, 
+  {
+    "name": "Vol'jin", 
+    "character_class": "Priest", 
+    "rarity": "Legendary", 
+    "mana": 5, 
+    "attack": 6, 
+    "health": 2, 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "dest_stat": "health", 
+            "swap_with_owner": true, 
+            "name": "swap_stats", 
+            "source_stat": "health"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "minion", 
+          "condition": {
+            "name": "minion_is_not_target"
+          }
+        }
+      }
+    ], 
+    "type": "minion"
   }, 
   {
     "name": "Flame Imp", 

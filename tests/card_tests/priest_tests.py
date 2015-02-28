@@ -823,3 +823,15 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(30, game.players[1].hero.health)
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(3, game.players[1].minions[0].calculate_attack())
+
+    def test_Voljin(self):
+        game = generate_game_for(Voljin, ChillwindYeti, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(2, game.other_player.minions[0].health)

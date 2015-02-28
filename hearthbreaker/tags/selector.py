@@ -82,7 +82,7 @@ class OtherPlayer(Player):
 
 
 class AllPicker(Picker):
-    def pick(self, targets, player):
+    def pick(self, source, targets):
         return targets
 
     def __to_json__(self):
@@ -92,10 +92,13 @@ class AllPicker(Picker):
 
 
 class UserPicker(Picker):
-    def pick(self, targets, player):
-        filtered_targets = [target for target in filter(lambda t: t.player is player or not t.stealth, targets)]
+    def pick(self, source, targets):
+        if source.card.current_target:
+            return [source.card.current_target]
+        filtered_targets = [target for target in filter(lambda t: t.player is source.player or not t.stealth, targets)]
         if len(filtered_targets) > 0:
-            return [player.agent.choose_target(filtered_targets)]
+            source.card.current_target = source.player.agent.choose_target(filtered_targets)
+            return [source.card.current_target]
         return filtered_targets
 
     def __to_json__(self):
@@ -108,10 +111,10 @@ class RandomPicker(Picker):
     def __init__(self, count=1):
         self.count = count
 
-    def pick(self, targets, player):
+    def pick(self, source, targets):
         for i in range(self.count):
             if len(targets) > 0:
-                yield player.game.random_choice(targets)
+                yield source.player.game.random_choice(targets)
             targets = [target for target in filter(lambda t: not (t.is_minion() and t.dead), targets)]
 
     def __to_json__(self):
@@ -246,7 +249,7 @@ class HeroSelector(Selector):
 
     def choose_targets(self, source, target=None):
         possible_targets = self.get_targets(source, target)
-        return self.picker.pick(possible_targets, source.player)
+        return self.picker.pick(source, possible_targets)
 
     def match(self, source, obj):
         return obj.is_hero() and self.players.match(source, obj)
@@ -304,7 +307,7 @@ class MinionSelector(Selector):
 
     def choose_targets(self, source, target=None):
         possible_targets = self.get_targets(source, target)
-        return self.picker.pick(possible_targets, source.player)
+        return self.picker.pick(source, possible_targets)
 
     def match(self, source, obj):
         if self.condition:
@@ -359,7 +362,7 @@ class CharacterSelector(Selector):
 
     def choose_targets(self, source, target=None):
         possible_targets = self.get_targets(source, target)
-        return self.picker.pick(possible_targets, source.player)
+        return self.picker.pick(source, possible_targets)
 
     def match(self, source, obj):
         if self.condition:

@@ -661,7 +661,8 @@ class EmperorCobra(MinionCard):
 class CrazedAlchemist(MinionCard):
     def __init__(self):
         super().__init__("Crazed Alchemist", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE,
-                         battlecry=Battlecry(SwapStats(), MinionSelector(players=BothPlayer(), picker=UserPicker())))
+                         battlecry=Battlecry(SwapStats('health', 'attack', False), MinionSelector(players=BothPlayer(),
+                                                                                                  picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(2, 2)

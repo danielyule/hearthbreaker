@@ -305,6 +305,7 @@ from hearthbreaker.cards.minions.priest import (
     UpgradedRepairBot,
     Shadowbomber,
     Shadowboxer,
+    Voljin,
 )
 
 from hearthbreaker.cards.minions.rogue import (

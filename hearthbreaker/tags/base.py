@@ -203,7 +203,7 @@ class Player(metaclass=abc.ABCMeta):
 class Picker(JSONObject, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def pick(self, targets, player):
+    def pick(self, source, targets):
         pass
 
     @staticmethod

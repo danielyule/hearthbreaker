@@ -1,6 +1,6 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage
+from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage, SwapStats
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil, ActionTag
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
@@ -131,3 +131,13 @@ class Shadowboxer(MinionCard):
         return Minion(2, 3, effects=[Effect(CharacterHealed(player=BothPlayer()), ActionTag(Damage(1),
                                             CharacterSelector(players=EnemyPlayer(), picker=RandomPicker(),
                                                               condition=None)))])
+
+
+class Voljin(MinionCard):
+    def __init__(self):
+        super().__init__("Vol'jin", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY,
+                         battlecry=Battlecry(SwapStats("health", "health", True), MinionSelector(players=BothPlayer(),
+                                                                                                 picker=UserPicker())))
+
+    def create_minion(self, player):
+        return Minion(6, 2)

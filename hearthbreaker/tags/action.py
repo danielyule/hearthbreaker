@@ -21,7 +21,7 @@ class Give(Action):
         self.picker = picker
 
     def act(self, actor, target, other=None):
-        buffs = self.picker.pick(self.buffs, actor.player)
+        buffs = self.picker.pick(actor, self.buffs)
         for buff in buffs:
             if hasattr(buff.status, "amount"):
                 buff.status.amount = buff.status.get_amount(target, target)
@@ -630,20 +630,20 @@ class RemoveDivineShields(Action):
         }
 
 
-class SwapStats(Action):
-    def act(self, actor, target, other=None):
-        temp_attack = target.calculate_attack()
-        temp_health = target.health
-        if temp_attack == 0:
-            target.die(None)
-        else:
-            target.set_attack_to(temp_health)
-            target.set_health_to(temp_attack)
-
-    def __to_json__(self):
-        return {
-            'name': 'swap_stats',
-        }
+# class SwapStats(Action):
+#     def act(self, actor, target, other=None):
+#         temp_attack = target.calculate_attack()
+#         temp_health = target.health
+#         if temp_attack == 0:
+#             target.die(None)
+#         else:
+#             target.set_attack_to(temp_health)
+#             target.set_health_to(temp_attack)
+#
+#     def __to_json__(self):
+#         return {
+#             'name': 'swap_stats',
+#         }
 
 
 class Remove(Action):
@@ -654,4 +654,56 @@ class Remove(Action):
     def __to_json__(self):
         return {
             'name': 'remove'
+        }
+
+
+class SwapStats(Action):
+    def __init__(self, source_stat, dest_stat, swap_with_owner):
+        self.source_stat = source_stat
+        self.dest_stat = dest_stat
+        self.swap_with_owner = swap_with_owner
+
+    def act(self, actor, target, other=None):
+        if self.swap_with_owner:
+            source = actor
+        else:
+            source = target
+        temp = self.get_attribute(source, self.source_stat)
+        self.set_attribute(source, self.source_stat, self.get_attribute(target, self.dest_stat))
+        self.set_attribute(target, self.dest_stat, temp)
+        if source.health == 0:
+            source.die(None)
+        if target is not source and target.health == 0:
+            target.die(None)
+        actor.player.game.check_delayed()
+
+    @staticmethod
+    def get_attribute(obj, attribute):
+        if attribute == "damage":
+            return obj.calculate_max_health() - obj.health
+        elif attribute == 'mana':
+            return obj.card.mana
+        elif attribute == "attack":
+            return obj.calculate_attack()
+        elif attribute == "health":
+            return obj.health
+
+    @staticmethod
+    def set_attribute(obj, attribute, value):
+        from hearthbreaker.tags.status import ManaChange, SetAttack
+        if attribute == "damage":
+            obj.health = max(0, obj.calculate_max_health() - value)
+        elif attribute == 'mana':
+            obj.add_buff(Buff(ManaChange(value - obj.mana_cost(None))))
+        elif attribute == "attack":
+            obj.add_buff(Buff(SetAttack(value)))
+        elif attribute == "health":
+            obj.set_health_to(value)
+
+    def __to_json__(self):
+        return {
+            'name': 'swap_stats',
+            'source_stat': self.source_stat,
+            'dest_stat': self.dest_stat,
+            'swap_with_owner': self.swap_with_owner,
         }

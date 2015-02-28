@@ -76,6 +76,7 @@ class Card(Bindable, GameObject):
             self.filter_func = filter_func
         self.overload = overload
         self.drawn = True
+        self.current_target = None
 
     def can_choose(self, player):
         """
