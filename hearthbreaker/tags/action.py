@@ -692,7 +692,12 @@ class SwapStats(Action):
     def set_attribute(obj, attribute, value):
         from hearthbreaker.tags.status import ManaChange, SetAttack
         if attribute == "damage":
-            obj.health = max(0, obj.calculate_max_health() - value)
+            was_enraged = obj.enraged
+            obj.health = max(0, obj.clculate_max_health() - value)
+            if value > 0:
+                obj.enraged = True
+                if not was_enraged:
+                    obj._do_enrage()
         elif attribute == 'mana':
             obj.add_buff(Buff(ManaChange(value - obj.mana_cost(None))))
         elif attribute == "attack":

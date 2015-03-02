@@ -40,18 +40,20 @@ class Tag(JSONObject):
 
 
 class Aura(Tag):
-    def __init__(self, status, selector):
+    def __init__(self, status, selector, condition=None):
         self.owner = None
         self.status = status
         self.selector = selector
+        self.condition = condition
 
     def set_owner(self, owner):
         self.owner = owner
 
     def apply(self):
-        targets = self.selector.get_targets(self.owner)
-        for target in targets:
-            self.status.act(self.owner, target)
+        if not self.condition or self.condition.evaluate(self.owner, self.owner):
+            targets = self.selector.get_targets(self.owner)
+            for target in targets:
+                self.status.act(self.owner, target)
 
     def unapply(self):
         targets = self.selector.get_targets(self.owner)
@@ -59,19 +61,28 @@ class Aura(Tag):
             self.status.unact(self.owner, target)
 
     def match(self, obj):
-        return self.selector.match(self.owner, obj)
+        return (not self.condition or self.condition.evaluate(self.owner, self.owner)) and \
+            self.selector.match(self.owner, obj)
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'status': self.status,
+                'selector': self.selector,
+                'condition': self.condition,
+            }
         return {
             'status': self.status,
-            'selector': self.selector
+            'selector': self.selector,
         }
 
     @staticmethod
-    def from_json(status, selector):
+    def from_json(status, selector, condition=None):
         status = Status.from_json(**status)
         selector = Selector.from_json(**selector)
-        return Aura(status, selector)
+        if condition:
+            condition = Condition.from_json(**condition)
+        return Aura(status, selector, condition)
 
 
 class Buff(Tag):

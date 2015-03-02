@@ -57,10 +57,13 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual(2, game.other_player.minions[0].calculate_attack())
 
-        # The Mech-Bear-Cat should be played, bringing the Cogmaster's attack up to 6 (= (1 + 2) * 2)
+        # based on https://www.youtube.com/watch?v=n88Ex7e7L34
+        # Patch 2.2.0.8036
+
+        # The Mech-Bear-Cat should be played, bringing the Cogmaster's attack up to 4 (= (1 * 2 + 2) )
         game.play_single_turn()
         self.assertEqual(2, len(game.current_player.minions))
-        self.assertEqual(6, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[1].calculate_attack())
 
     def test_BlessingOfKings(self):
         game = generate_game_for(BlessingOfKings, StonetuskBoar, EnemyMinionSpellTestingAgent, OneCardPlayingAgent)

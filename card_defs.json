@@ -6920,7 +6920,7 @@
     "health": 2, 
     "type": "minion", 
     "impl": {
-      "buffs": [
+      "auras": [
         {
           "status": {
             "amount": 2, 
@@ -6944,6 +6944,9 @@
             }, 
             "name": "greater_than", 
             "value": 0
+          }, 
+          "selector": {
+            "name": "self"
           }
         }
       ]

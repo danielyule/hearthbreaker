@@ -738,6 +738,19 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(6, game.other_player.minions[0].calculate_attack())
         self.assertEqual(2, game.other_player.minions[0].health)
 
+    def test_CrazedAlchemist_and_enrage(self):
+        game = generate_game_for([RagingWorgen, HolySmite, CrazedAlchemist], [PowerWordShield, DivineSpirit],
+                                 CardTestingAgent, CardTestingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        # based on https://www.youtube.com/watch?v=n88Ex7e7L34
+        # Patch 2.2.0.8036
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(8, game.current_player.minions[1].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[1].calculate_max_health())
+
     def test_BaronGeddon(self):
         game = generate_game_for(BaronGeddon, MassDispel, OneCardPlayingAgent, CardTestingAgent)
         for turn in range(0, 13):
@@ -4107,6 +4120,18 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(5, game.current_player.minions[0].calculate_attack())
         self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
         self.assertFalse(game.current_player.minions[0].charge())
+
+    def test_Cogmaster_Alchemist(self):
+        game = generate_game_for([TargetDummy, Cogmaster], CrazedAlchemist, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        # based on https://www.youtube.com/watch?v=n88Ex7e7L34
+        # Patch 2.2.0.8036
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(3, game.other_player.minions[0].calculate_max_health())
 
     def test_GoblinSapper(self):
         game = generate_game_for(GoblinSapper, [Wisp, Wisp, BoulderfistOgre], OneCardPlayingAgent, OneCardPlayingAgent)
