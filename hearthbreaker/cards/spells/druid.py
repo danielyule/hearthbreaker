@@ -1,78 +1,54 @@
 import copy
 from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Summon, Kill
-from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag
+from hearthbreaker.tags.action import Summon, Kill, GiveMana, Damage, Give, IncreaseArmor, Draw
+from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag, Buff, BuffUntil
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
+from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, CharacterSelector, BothPlayer, HeroSelector, \
+    MinionSelector, EnemyPlayer, Attribute, UserPicker
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
 class Innervate(SpellCard):
     def __init__(self):
-        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
-
-    def use(self, player, game):
-        super().use(player, game)
-        if player.mana < 8:
-            player.mana += 2
-        else:
-            player.mana = 10
+        super().__init__("Innervate", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
+                         action_tags=[ActionTag(GiveMana(2), PlayerSelector())])
 
 
 class Moonfire(SpellCard):
     def __init__(self):
         super().__init__("Moonfire", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.damage(player.effective_spell_damage(1), self)
+                         action_tags=[ActionTag(Damage(1), CharacterSelector(None, BothPlayer(), UserPicker()))])
 
 
 class Claw(SpellCard):
     def __init__(self):
-        super().__init__("Claw", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE)
-
-    def use(self, player, game):
-        super().use(player, game)
-        player.hero.change_temp_attack(2)
-        player.hero.increase_armor(2)
+        super().__init__("Claw", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
+                         action_tags=[ActionTag([Give(BuffUntil(ChangeAttack(2), TurnEnded())), IncreaseArmor(2)],
+                                                HeroSelector())])
 
 
 class Naturalize(SpellCard):
     def __init__(self):
         super().__init__("Naturalize", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.die(self)
-        game.other_player.draw()
-        game.other_player.draw()
+                         action_tags=[ActionTag(Kill(), MinionSelector(None, BothPlayer(), UserPicker())),
+                                      ActionTag(Draw(2), PlayerSelector(EnemyPlayer()))])
 
 
 class Savagery(SpellCard):
     def __init__(self):
         super().__init__("Savagery", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.damage(player.effective_spell_damage(player.hero.calculate_attack()), self)
+                         action_tags=[ActionTag(Damage(Attribute('attack', HeroSelector())),
+                                                MinionSelector(None, BothPlayer()))])
 
 
 class MarkOfTheWild(SpellCard):
     def __init__(self):
         super().__init__("Mark of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.change_attack(2)
-        self.target.increase_health(2)
-        self.target.taunt = True
+                         action_tags=[ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2)), Buff(Taunt())]),
+                                                MinionSelector(None, BothPlayer(), UserPicker()))])
 
 
 class PowerOfTheWild(SpellCard):

@@ -239,7 +239,10 @@ class Damage(Action, metaclass=Amount):
         super().__init__()
 
     def act(self, actor, target, other=None):
-        target.damage(self.get_amount(actor, target, other), actor)
+        damage_amount = self.get_amount(actor, target, other)
+        if actor.is_spell():
+            damage_amount = actor.player.effective_spell_damage(damage_amount)
+        target.damage(damage_amount, actor)
 
     def __to_json__(self):
         return {
@@ -576,6 +579,20 @@ class GiveManaCrystal(Action):
             'name': 'give_mana_crystal',
             'count': self.count,
             'empty': self.empty,
+        }
+
+
+class GiveMana(Action, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
+
+    def act(self, actor, target, other=None):
+        amount = self.get_amount(actor, target)
+        target.mana = min(target.mana + amount, 10)
+
+    def __to_json__(self):
+        return {
+            'name': 'give_mana'
         }
 
 

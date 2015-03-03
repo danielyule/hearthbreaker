@@ -93,12 +93,12 @@ class AllPicker(Picker):
 
 class UserPicker(Picker):
     def pick(self, source, targets):
-        if source.card.current_target:
-            return [source.card.current_target]
+        if source.target:
+            return [source.target]
         filtered_targets = [target for target in filter(lambda t: t.player is source.player or not t.stealth, targets)]
         if len(filtered_targets) > 0:
-            source.card.current_target = source.player.agent.choose_target(filtered_targets)
-            return [source.card.current_target]
+            source.target = source.player.agent.choose_target(filtered_targets)
+            return [source.target]
         return filtered_targets
 
     def __to_json__(self):

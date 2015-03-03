@@ -233,9 +233,7 @@ class Game(Bindable):
         self.current_player.mana -= card.mana_cost(self.current_player)
         self._all_cards_played.append(card)
         card.target = None
-        card.current_target = None
-        if card.targetable and card.targets:
-            card.target = self.current_player.agent.choose_target(card.targets)
+        card.find_target()
 
         self.last_card = card
         if card.is_minion():

@@ -168,6 +168,7 @@ class GameObject:
         #: The player associated with this Game Object
         self.player = None
         self._attached = False
+        self.target = None
 
     def attach(self, obj, player):
         if not self._attached:

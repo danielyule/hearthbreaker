@@ -1,7 +1,8 @@
 import json
 import re
-from hearthbreaker.cards.base import MinionCard, WeaponCard
+from hearthbreaker.cards.base import MinionCard, WeaponCard, SpellCard
 from hearthbreaker.game_objects import Weapon, Minion
+from hearthbreaker.tags.base import ActionTag
 import tests.card_tests.druid_tests
 import tests.card_tests.mage_tests
 import tests.card_tests.hunter_tests
@@ -129,6 +130,35 @@ class JSONTester:
                 create_dict['deathrattle'] = Deathrattle.from_json(**card_def['deathrattle'])
 
             return Weapon(**create_dict)
+
+        def __init_spell__(self):
+            init_dict = {
+                'name': card_def['name'],
+                'mana': card_def['mana'],
+                'rarity': CARD_RARITY.from_str(card_def['rarity'])
+            }
+            if 'character_class' in card_def:
+                init_dict['character_class'] = CHARACTER_CLASS.from_str(card_def['character_class'])
+
+            if 'choices' in card_def:
+                init_dict['choices'] = [Choice.from_json(**choice) for choice in card_def['choices']]
+
+            if 'combo' in card_def:
+                init_dict['combo'] = Battlecry.from_json(**card_def['combo'])
+
+            if 'overload' in card_def:
+                init_dict['overload'] = card_def['overload']
+
+            if 'buffs' in card_def:
+                init_dict['buffs'] = [Buff.from_json(**buff) for buff in card_def['buffs']]
+            if 'auras' in card_def:
+                init_dict['auras'] = [Aura.from_json(**aura) for aura in card_def['auras']]
+            if 'effects' in card_def:
+                init_dict['effects'] = [Effect.from_json(**effect) for effect in card_def['effects']]
+            if 'action_tags' in card_def:
+                init_dict['action_tags'] = [ActionTag.from_json(**tag) for tag in card_def['action_tags']]
+            SpellCard.__init__(self, **init_dict)
+
         if card_def['rarity'] != "Special":
             name = re.sub("[:'.-]", "", card_def['name'])
             name = "".join([word[0].upper() + word[1:] for word in name.split()])
@@ -148,6 +178,11 @@ class JSONTester:
                     }
                     cls_def.__init__ = __init_weapon__
                     cls_def.create_weapon = create_weapon
+                elif card_def['type'] == 'spell' and 'action_tags' in card_def:
+                    self.old_attrs[name] = {
+                        'init': cls_def.__init__
+                    }
+                    cls_def.__init__ = __init_spell__
 
     def setUp(self):
         super().setUp()
@@ -163,9 +198,11 @@ class JSONTester:
             if 'create_minion' in defn:
                 cls_def.__init__ = defn['init']
                 cls_def.create_minion = defn['create_minion']
-            else:
+            elif 'create_weapon' in defn:
                 cls_def.__init__ = defn['init']
                 cls_def.create_weapon = defn['create_weapon']
+            else:
+                cls_def.__init__ = defn['init']
 
 
 class TestJSONDruid(JSONTester, tests.card_tests.druid_tests.TestDruid):

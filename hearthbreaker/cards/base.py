@@ -3,6 +3,7 @@ from functools import reduce
 import hearthbreaker.constants
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Bindable, GameObject, GameException, Hero
+from hearthbreaker.tags.selector import PlayerSelector, RandomPicker, UserPicker
 
 
 def _battlecry_targetable(target):
@@ -71,12 +72,10 @@ class Card(Bindable, GameObject):
         self.targetable = target_func is not None
         if self.targetable:
             self.targets = []
-            self.target = None
             self.get_targets = target_func
             self.filter_func = filter_func
         self.overload = overload
         self.drawn = True
-        self.current_target = None
 
     def can_choose(self, player):
         """
@@ -127,6 +126,10 @@ class Card(Bindable, GameObject):
                       mana)
 
         return mana
+
+    def find_target(self):
+        if self.targetable and self.targets:
+            self.target = self.player.agent.choose_target(self.targets)
 
     def use(self, player, game):
         """
@@ -371,7 +374,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
     """
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
-                 filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None,
+                 action_tags=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
 
@@ -398,6 +402,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
                                          for :class:`hearthbreaker.cards.spells.priest.ShadowMadness` might be a
                                          function which returns true if the target's attack is less than 3.
             :param int overload: The amount of overload on the card
+            :param action_tags:  The action tags that will get played when this card is used
+            :type effects: [:class:`hearthbreaker.tags.base.Effect`]
             :param effects:  The effects that will be triggered for this card
             :type effects: [:class:`hearthbreaker.tags.base.Effect`]
             :param buffs:  The buffs that will be applied directly to this card
@@ -405,6 +411,10 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         """
         super().__init__(name, mana, character_class, rarity, target_func, filter_func,
                          overload, ref_name, effects, buffs)
+        if action_tags:
+            self.action_tags = action_tags
+        else:
+            self.action_tags = []
 
     def can_choose(self, player):
         """
@@ -426,12 +436,33 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :rtype: bool
         """
 
-        if self.targetable:
-            self.targets = self.get_targets(game, self.filter_func)
-            if self.targets is not None and len(self.targets) is 0:
-                return False
+        if self.action_tags:
+            tag = self.action_tags[0]
+            if isinstance(tag.selector, PlayerSelector):
+                return super().can_use(player, game)
+            elif isinstance(tag.selector.picker, RandomPicker):
+                return len(self.action_tags[0].selector.get_targets(self, self)) >= tag.selector.picker.count and \
+                    super().can_use(player, game)
+            elif isinstance(tag.selector.picker, UserPicker):
+                return len(self.action_tags[0].selector.get_targets(self, self)) > 0 and super().can_use(player, game)
+            else:
+                return super().can_use(player, game)
+        else:
+            if self.targetable:
+                self.targets = self.get_targets(game, self.filter_func)
+                if self.targets is not None and len(self.targets) is 0:
+                    return False
 
-        return super().can_use(player, game)
+            return super().can_use(player, game)
+
+    def find_target(self):
+        if self.action_tags:
+
+            if not isinstance(self.action_tags[0].selector, PlayerSelector) and \
+                    isinstance(self.action_tags[0].selector.picker, UserPicker):
+                return self.action_tags[0].selector.choose_targets(self, self)[0]
+        else:
+            return super().find_target()
 
     def mana_cost(self, player):
         """
@@ -460,7 +491,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Player player: The player who is using the card.
         :param hearthbreaker.game_objects.Game game: The game this card is being used in.
         """
-        pass
+        for tag in self.action_tags:
+            tag.do(self)
 
     @staticmethod
     def is_spell():
@@ -473,6 +505,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
     def __to_json__(self):
         r_val = super().__to_json__()
         r_val['name'] = self.name
+        if self.action_tags:
+            r_val['action_tags'] = self.action_tags
         return r_val
 
 
