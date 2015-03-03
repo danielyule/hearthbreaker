@@ -545,11 +545,11 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             min_health = self.calculate_stat(MinimumHealth, 0)
             if self.health < min_health:
                 self.health = min_health
-            if self.health <= 0:
-                self.die(attacker)
             if issubclass(type(attacker), Character):
                 attacker.trigger("did_damage", self, amount)
                 attacker._remove_stealth()
+            if self.health <= 0:
+                self.die(attacker)
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
