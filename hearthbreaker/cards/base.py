@@ -375,7 +375,7 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
 
     def __init__(self, name, mana, character_class, rarity, target_func=None,
                  filter_func=_is_spell_targetable, overload=0, ref_name=None,
-                 action_tags=None, effects=None, buffs=None):
+                 action_tags=None,choices=None,combo=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
 
@@ -415,6 +415,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
             self.action_tags = action_tags
         else:
             self.action_tags = []
+        self.choices = choices
+        self.combo = combo
 
     def can_choose(self, player):
         """
@@ -435,7 +437,6 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :return: True if the card can be played, false otherwise.
         :rtype: bool
         """
-
         if self.action_tags:
             tag = self.action_tags[0]
             if isinstance(tag.selector, PlayerSelector):
@@ -491,8 +492,14 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Player player: The player who is using the card.
         :param hearthbreaker.game_objects.Game game: The game this card is being used in.
         """
-        for tag in self.action_tags:
-            tag.do(self)
+        if self.choices:
+            choice = player.agent.choose_option(self.choices, player)
+            choice.do(self)
+        if self.combo and player.cards_played > 0:
+            self.combo.do(self)
+        else:
+            for tag in self.action_tags:
+                tag.do(self)
 
     @staticmethod
     def is_spell():

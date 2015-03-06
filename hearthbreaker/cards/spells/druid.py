@@ -2,7 +2,7 @@ import copy
 from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, GiveMana, Damage, Give, IncreaseArmor, Draw
-from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag, Buff, BuffUntil
+from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag, Buff, BuffUntil, Choice
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, CharacterSelector, BothPlayer, HeroSelector, \
     MinionSelector, EnemyPlayer, Attribute, UserPicker
@@ -51,42 +51,34 @@ class MarkOfTheWild(SpellCard):
                                                 MinionSelector(None, BothPlayer(), UserPicker()))])
 
 
+class LeaderOfThePack(ChoiceCard):
+    def __init__(self):
+        super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+
+class SummonPanther(ChoiceCard):
+    def __init__(self):
+        super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
+
+class Panther(MinionCard):
+    def __init__(self):
+        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+    def create_minion(self, _):
+        return Minion(3, 2, MINION_TYPE.BEAST)
+
+
 class PowerOfTheWild(SpellCard):
     def __init__(self):
-        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-    def use(self, player, game):
-        super().use(player, game)
-
-        class LeaderOfThePack(ChoiceCard):
-            def __init__(self):
-                super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def use(self, player, game):
-                for minion in player.minions:
-                    minion.change_attack(1)
-                    minion.increase_health(1)
-
-        class SummonPanther(ChoiceCard):
-            def __init__(self):
-                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-            def use(self, player, game):
-                class Panther(MinionCard):
-                    def __init__(self):
-                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-                    def create_minion(self, _):
-                        return Minion(3, 2, MINION_TYPE.BEAST)
-
-                panther = Panther()
-                panther.summon(player, game, len(player.minions))
-
-            def can_use(self, player, game):
-                return super().can_use(player, game) and len(player.minions) < 7
-
-        option = player.agent.choose_option([LeaderOfThePack(), SummonPanther()], player)
-        option.use(player, game)
+        super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                         choices=[Choice(LeaderOfThePack(), [ActionTag(Give([Buff(ChangeAttack(1)),
+                                                                            Buff(ChangeHealth(1))]),
+                                         MinionSelector(None))]),
+                                  Choice(SummonPanther(), [ActionTag(Summon(Panther()), PlayerSelector())])])
 
 
 class WildGrowth(SpellCard):
@@ -112,34 +104,22 @@ class ExcessMana(SpellCard):
         player.draw()
 
 
+class WrathOne(ChoiceCard):
+    def __init__(self):
+        super().__init__("Wrath 1 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+
+class WrathThree(ChoiceCard):
+    def __init__(self):
+        super().__init__("Wrath 3 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+
+
 class Wrath(SpellCard):
     def __init__(self):
         super().__init__("Wrath", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
-
-    def use(self, player, game):
-        class WrathOne(ChoiceCard):
-            def __init__(self):
-                super().__init__("Wrath 1 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
-                                 hearthbreaker.targeting.find_minion_spell_target)
-
-            def use(self, player, game):
-                target.damage(player.effective_spell_damage(1), wrath)
-                player.draw()
-
-        class WrathThree(ChoiceCard):
-            def __init__(self):
-                super().__init__("Wrath 3 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
-                                 hearthbreaker.targeting.find_minion_spell_target)
-
-            def use(self, player, game):
-                target.damage(player.effective_spell_damage(3), wrath)
-
-        super().use(player, game)
-        option = game.current_player.agent.choose_option([WrathOne(), WrathThree()], player)
-        target = self.target
-        wrath = self
-        option.use(player, game)
+                         choices=[Choice(WrathOne(), [ActionTag(Damage(1), MinionSelector(None, BothPlayer())),
+                                                      ActionTag(Draw(1), PlayerSelector())]),
+                                  Choice(WrathThree(), [ActionTag(Damage(3), MinionSelector(None, BothPlayer()))])])
 
 
 class HealingTouch(SpellCard):

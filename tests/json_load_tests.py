@@ -178,7 +178,8 @@ class JSONTester:
                     }
                     cls_def.__init__ = __init_weapon__
                     cls_def.create_weapon = create_weapon
-                elif card_def['type'] == 'spell' and 'action_tags' in card_def:
+                elif card_def['type'] == 'spell' and ('action_tags' in card_def or
+                                                      'choices' in card_def or 'combo' in card_def):
                     self.old_attrs[name] = {
                         'init': cls_def.__init__
                     }

@@ -25,8 +25,8 @@ class Dispel(ChoiceCard):
 class KeeperOfTheGrove(MinionCard):
     def __init__(self):
         super().__init__("Keeper of the Grove", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, choices=[
-            Choice(Moonfire(), Damage(2), CharacterSelector(players=BothPlayer(), picker=UserPicker())),
-            Choice(Dispel(), Silence(), MinionSelector(players=BothPlayer(), picker=UserPicker()))
+            Choice(Moonfire(), [ActionTag(Damage(2), CharacterSelector(players=BothPlayer(), picker=UserPicker()))]),
+            Choice(Dispel(), [ActionTag(Silence(), MinionSelector(players=BothPlayer(), picker=UserPicker()))])
         ])
 
     def create_minion(self, player):
@@ -64,8 +64,8 @@ class BearForm(ChoiceCard):
 class DruidOfTheClaw(MinionCard):
     def __init__(self):
         super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, choices=[
-            Choice(CatForm(), Transform(CatDruid()), SelfSelector()),
-            Choice(BearForm(), Transform(BearDruid()), SelfSelector())
+            Choice(CatForm(), [ActionTag(Transform(CatDruid()), SelfSelector())]),
+            Choice(BearForm(), [ActionTag(Transform(BearDruid()), SelfSelector())])
         ])
 
     def create_minion(self, player):
@@ -87,8 +87,8 @@ class AncientOfLore(MinionCard):
     def __init__(self):
 
         super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC, choices=[
-            Choice(AncientSecrets(), Heal(5), HeroSelector()),
-            Choice(AncientTeachings(), Draw(3), PlayerSelector())
+            Choice(AncientSecrets(), [ActionTag(Heal(5), HeroSelector())]),
+            Choice(AncientTeachings(), [ActionTag(Draw(3), PlayerSelector())])
         ])
 
     def create_minion(self, player):
@@ -109,8 +109,8 @@ class AncientOfWar(MinionCard):
     def __init__(self):
 
         super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC, choices=[
-            Choice(Health(), Give([Buff(ChangeHealth(5)), Buff(Taunt())]), SelfSelector()),
-            Choice(Attack(), Give([Buff(ChangeAttack(5))]), SelfSelector()),
+            Choice(Health(), [ActionTag(Give([Buff(ChangeHealth(5)), Buff(Taunt())]), SelfSelector())]),
+            Choice(Attack(), [ActionTag(Give([Buff(ChangeAttack(5))]), SelfSelector())])
         ])
 
     def create_minion(self, player):
@@ -149,10 +149,10 @@ class SummonTreants(ChoiceCard):
 class Cenarius(MinionCard):
     def __init__(self):
         super().__init__("Cenarius", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY, choices=[
-            Choice(IncreaseStats(), Give([Buff(ChangeAttack(2)),
-                                          Buff(ChangeHealth(2)),
-                                          Buff(Taunt())]), MinionSelector()),
-            Choice(SummonTreants(), Summon(Treant(), 2), PlayerSelector())
+            Choice(IncreaseStats(), [ActionTag(Give([Buff(ChangeAttack(2)),
+                                                    Buff(ChangeHealth(2)),
+                                                    Buff(Taunt())]), MinionSelector())]),
+            Choice(SummonTreants(), [ActionTag(Summon(Treant(), 2), PlayerSelector())])
         ])
 
     def create_minion(self, player):
@@ -173,8 +173,8 @@ class AnodizedRoboCub(MinionCard):
     def __init__(self):
         super().__init__("Anodized Robo Cub", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          minion_type=MINION_TYPE.MECH,
-                         choices=[Choice(AttackMode(), Give([Buff(ChangeAttack(1))]), SelfSelector()),
-                                  Choice(TankMode(), Give([Buff(ChangeHealth(1))]), SelfSelector())])
+                         choices=[Choice(AttackMode(), [ActionTag(Give([Buff(ChangeAttack(1))]), SelfSelector())]),
+                                  Choice(TankMode(), [ActionTag(Give([Buff(ChangeHealth(1))]), SelfSelector())])])
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)
@@ -233,8 +233,8 @@ class GiftOfCards(ChoiceCard):
 class GroveTender(MinionCard):
     def __init__(self):
         super().__init__("Grove Tender", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE, choices=[
-            Choice(GiftOfMana(), GiveManaCrystal(), PlayerSelector(players=BothPlayer())),
-            Choice(GiftOfCards(), Draw(), PlayerSelector(players=BothPlayer()))
+            Choice(GiftOfMana(), [ActionTag(GiveManaCrystal(), PlayerSelector(players=BothPlayer()))]),
+            Choice(GiftOfCards(), [ActionTag(Draw(), PlayerSelector(players=BothPlayer()))])
         ])
 
     def create_minion(self, player):

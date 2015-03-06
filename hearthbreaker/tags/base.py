@@ -727,25 +727,28 @@ class Battlecry(ActionTag):
         super().__init__(actions, selector, condition)
 
 
-class Choice(ActionTag):
-    def __init__(self, card, actions, selector, condition=None):
+class Choice(JSONObject):
+    def __init__(self, card, tags):
         self.card = card
-        super().__init__(actions, selector, condition)
+        self.tags = tags
+
+    def do(self, target):
+        for tag in self.tags:
+            if not tag.do(target):
+                return
 
     def __to_json__(self):
-        super_json = super().__to_json__()
-        super_json['card'] = self.card.ref_name
-        return super_json
+        return {
+            'card': self.card.name,
+            'tags': self.tags
+        }
 
     @staticmethod
-    def from_json(card, actions, selector, condition=None):
+    def from_json(card, tags):
         from hearthbreaker.engine import card_lookup
-        actions = [Action.from_json(**action) for action in actions]
-        selector = Selector.from_json(**selector)
-        if condition:
-            condition = Condition.from_json(**condition)
+        tags = [ActionTag.from_json(**tag) for tag in tags]
         card = card_lookup(card)
-        return Choice(card, actions, selector, condition)
+        return Choice(card, tags)
 
 
 class Function(JSONObject, metaclass=abc.ABCMeta):

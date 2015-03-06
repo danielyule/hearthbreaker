@@ -6029,7 +6029,7 @@
       {
         "actions": [
           {
-            "amount": 1, 
+            "amount": 4, 
             "name": "damage"
           }
         ], 
@@ -7564,6 +7564,16 @@
         }
       }
     ], 
+    "type": "minion"
+  }, 
+  {
+    "name": "Panther", 
+    "character_class": "Druid", 
+    "rarity": "Special", 
+    "mana": 2, 
+    "attack": 3, 
+    "deathrattle": 1, 
+    "health": 2, 
     "type": "minion"
   }, 
   {
@@ -9489,41 +9499,49 @@
     "health": 4, 
     "choices": [
       {
-        "card": "moonfire_keeper", 
-        "actions": [
+        "card": "Moonfire", 
+        "tags": [
           {
-            "amount": 2, 
-            "name": "damage"
+            "actions": [
+              {
+                "amount": 2, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "user"
+              }, 
+              "players": "both", 
+              "name": "character", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "user"
-          }, 
-          "players": "both", 
-          "name": "character", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }, 
       {
         "card": "Dispel", 
-        "actions": [
+        "tags": [
           {
-            "name": "silence"
+            "actions": [
+              {
+                "name": "silence"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "user"
+              }, 
+              "players": "both", 
+              "name": "minion", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "user"
-          }, 
-          "players": "both", 
-          "name": "minion", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -9557,31 +9575,39 @@
     "choices": [
       {
         "card": "Cat Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Claw (cat)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Claw (cat)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Bear Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Claw (bear)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Claw (bear)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -9596,32 +9622,40 @@
     "choices": [
       {
         "card": "Ancient Secrets", 
-        "actions": [
+        "tags": [
           {
-            "amount": 5, 
-            "name": "heal"
+            "actions": [
+              {
+                "amount": 5, 
+                "name": "heal"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "hero"
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "all"
-          }, 
-          "players": "friendly", 
-          "name": "hero"
-        }
+        ]
       }, 
       {
         "card": "Ancient  Teachings", 
-        "actions": [
+        "tags": [
           {
-            "amount": 3, 
-            "name": "draw"
+            "actions": [
+              {
+                "amount": 3, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "friendly", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -9636,46 +9670,54 @@
     "choices": [
       {
         "card": "+5 Health and Taunt", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 5, 
-                  "name": "change_health"
-                }
-              }, 
-              {
-                "status": {
-                  "name": "taunt"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 5, 
+                      "name": "change_health"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "name": "taunt"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "+5 Attack", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 5, 
-                  "name": "change_attack"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 5, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -9727,56 +9769,64 @@
     "choices": [
       {
         "card": "Give your other minions +2/+2 and taunt", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }, 
-              {
-                "status": {
-                  "name": "taunt"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 2, 
+                      "name": "change_attack"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "amount": 2, 
+                      "name": "change_health"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "name": "taunt"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "minion", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "all"
-          }, 
-          "players": "friendly", 
-          "name": "minion", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }, 
       {
         "card": "Summon two 2/2 Treants with taunt", 
-        "actions": [
+        "tags": [
           {
-            "count": 2, 
-            "name": "summon", 
-            "card": {
-              "name": "Treant (taunt)"
+            "actions": [
+              {
+                "count": 2, 
+                "name": "summon", 
+                "card": {
+                  "name": "Treant (taunt)"
+                }
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
             }
           }
-        ], 
-        "selector": {
-          "players": "friendly", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -9792,41 +9842,49 @@
     "choices": [
       {
         "card": "Attack Mode", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Tank Mode", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_health"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -9992,30 +10050,38 @@
     "choices": [
       {
         "card": "Gift of Mana", 
-        "actions": [
+        "tags": [
           {
-            "count": 1, 
-            "name": "give_mana_crystal", 
-            "empty": false
+            "actions": [
+              {
+                "count": 1, 
+                "name": "give_mana_crystal", 
+                "empty": false
+              }
+            ], 
+            "selector": {
+              "players": "both", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "both", 
-          "name": "player"
-        }
+        ]
       }, 
       {
         "card": "Gift of Cards", 
-        "actions": [
+        "tags": [
           {
-            "amount": 1, 
-            "name": "draw"
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "both", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "both", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion"
@@ -12989,11 +13055,65 @@
     ]
   }, 
   {
-    "mana": 2, 
-    "character_class": "Druid", 
-    "type": "spell", 
     "name": "Power of the Wild", 
-    "rarity": "Common"
+    "character_class": "Druid", 
+    "choices": [
+      {
+        "card": "Leader of the Pack", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_attack"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_health"
+                    }
+                  }
+                ]
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "minion"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Summon a Panther", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "summon", 
+                "card": {
+                  "name": "Panther"
+                }
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }
+    ], 
+    "mana": 2, 
+    "rarity": "Common", 
+    "type": "spell"
   }, 
   {
     "mana": 2, 
@@ -13010,11 +13130,65 @@
     "rarity": "Special"
   }, 
   {
-    "mana": 2, 
-    "character_class": "Druid", 
-    "type": "spell", 
     "name": "Wrath", 
-    "rarity": "Common"
+    "character_class": "Druid", 
+    "choices": [
+      {
+        "card": "Wrath 1 Damage", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }, 
+          {
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Wrath 3 Damage", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 3, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }
+        ]
+      }
+    ], 
+    "mana": 2, 
+    "rarity": "Common", 
+    "type": "spell"
   }, 
   {
     "mana": 3, 
