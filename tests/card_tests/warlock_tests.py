@@ -520,6 +520,18 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Lord Jaraxxus", game.other_player.minions[0].card.name)
 
+    def test_Jaraxxus_Repentance_Snipe(self):
+        game = generate_game_for(LordJaraxxus, [Repentance, Snipe], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        # Based on https://www.youtube.com/watch?v=n8u2Senk_XU
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.dead)
+        self.assertTrue(game.game_ended)
+
     def test_Jaraxxus_with_SacrificialPact(self):
         game = generate_game_for(LordJaraxxus, SacrificialPact, CardTestingAgent, CardTestingAgent)
 
