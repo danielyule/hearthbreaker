@@ -1,12 +1,10 @@
 import copy
-from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
-from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Summon, Kill
-from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag
-from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, PlayerSelector
+from hearthbreaker.cards.base import ChoiceCard, SpellCard
+from hearthbreaker.tags.action import Summon
+from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.selector import PlayerSelector
 import hearthbreaker.targeting
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
 
 class Innervate(SpellCard):
@@ -75,40 +73,35 @@ class MarkOfTheWild(SpellCard):
         self.target.taunt = True
 
 
+class LeaderOfThePack(ChoiceCard):
+    def __init__(self):
+        super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+    def use(self, player, game):
+        for minion in player.minions:
+            minion.change_attack(1)
+            minion.increase_health(1)
+
+
+class SummonPanther(ChoiceCard):
+    def __init__(self):
+        super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
+
+    def use(self, player, game):
+        from hearthbreaker.cards.minions.druid import Panther
+        panther = Panther()
+        panther.summon(player, game, len(player.minions))
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(player.minions) < 7
+
+
 class PowerOfTheWild(SpellCard):
     def __init__(self):
         super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
-
-        class LeaderOfThePack(ChoiceCard):
-            def __init__(self):
-                super().__init__("Leader of the Pack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def use(self, player, game):
-                for minion in player.minions:
-                    minion.change_attack(1)
-                    minion.increase_health(1)
-
-        class SummonPanther(ChoiceCard):
-            def __init__(self):
-                super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-            def use(self, player, game):
-                class Panther(MinionCard):
-                    def __init__(self):
-                        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-                    def create_minion(self, _):
-                        return Minion(3, 2, MINION_TYPE.BEAST)
-
-                panther = Panther()
-                panther.summon(player, game, len(player.minions))
-
-            def can_use(self, player, game):
-                return super().can_use(player, game) and len(player.minions) < 7
-
         option = player.agent.choose_option([LeaderOfThePack(), SummonPanther()], player)
         option.use(player, game)
 
@@ -226,21 +219,13 @@ class Bite(SpellCard):
         player.hero.increase_armor(4)
 
 
-class Treant(MinionCard):
-    def __init__(self):
-        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-    def create_minion(self, _):
-        return Minion(2, 2)
-
-
 class SoulOfTheForest(SpellCard):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
-
+        from hearthbreaker.cards.minions.druid import Treant
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
@@ -298,27 +283,19 @@ class Nourish(SpellCard):
         option.use(player, game)
 
 
-class Starfall(SpellCard):
+class DamageAll(ChoiceCard):
     def __init__(self):
-        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
-
-    def can_use(self, player, game):
-        return super().can_use(player, game) and len(game.other_player.minions) > 0
+        super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
-        super().use(player, game)
+        for minion in copy.copy(game.other_player.minions):
+            minion.damage(player.effective_spell_damage(2), self)
 
-        class DamageAll(ChoiceCard):
+
+class DamageOne(ChoiceCard):
             def __init__(self):
-                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-            def use(self, player, game):
-                for minion in copy.copy(game.other_player.minions):
-                    minion.damage(player.effective_spell_damage(2), self)
-
-        class DamageOne(ChoiceCard):
-            def __init__(self):
-                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
+                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                                 False)
 
             def can_use(self, player, game):
                 return super().can_use(player, game) and len(hearthbreaker.targeting.find_minion_spell_target(
@@ -329,6 +306,16 @@ class Starfall(SpellCard):
                 target = player.agent.choose_target(targets)
                 target.damage(player.effective_spell_damage(5), self)
 
+
+class Starfall(SpellCard):
+    def __init__(self):
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
+
+    def can_use(self, player, game):
+        return super().can_use(player, game) and len(game.other_player.minions) > 0
+
+    def use(self, player, game):
+        super().use(player, game)
         option = player.agent.choose_option([DamageAll(), DamageOne()], player)
         option.use(player, game)
 
@@ -339,16 +326,9 @@ class ForceOfNature(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[Effect(TurnEnded(), ActionTag(Kill(), SelfSelector()))])
-
+        from hearthbreaker.cards.minions.druid import ChargeTreant
         for i in [0, 1, 2]:
-            treant_card = Treant()
+            treant_card = ChargeTreant()
             treant_card.summon(player, game, len(player.minions))
 
     def can_use(self, player, game):
@@ -372,14 +352,7 @@ class PoisonSeeds(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-            def create_minion(self, player):
-                return Minion(2, 2)
-
+        from hearthbreaker.cards.minions.druid import PoisonSeedsTreant
         targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda m: True)
         for target in targets:
             target.die(None)
@@ -387,7 +360,7 @@ class PoisonSeeds(SpellCard):
         game.check_delayed()
 
         for target in targets:
-            Treant().summon(target.player, target.game, len(target.player.minions))
+            PoisonSeedsTreant().summon(target.player, target.game, len(target.player.minions))
 
 
 class DarkWispers(SpellCard):
@@ -425,12 +398,7 @@ class DarkWispers(SpellCard):
                 return len(player.minions) < 7
 
             def use(self, player, game):
-                class Wisp(MinionCard):
-                    def __init__(self):
-                        super().__init__("Wisp", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
-
-                    def create_minion(self, player):
-                        return Minion(1, 1)
+                from hearthbreaker.cards.minions.neutral import Wisp
                 for i in range(0, 5):
                     wisp = Wisp()
                     wisp.summon(player, game, len(player.minions))

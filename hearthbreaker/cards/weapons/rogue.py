@@ -8,6 +8,14 @@ from hearthbreaker.tags.status import ChangeAttack
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 
 
+class WickedKnife(WeaponCard):
+    def __init__(self):
+        super().__init__("Wicked Knife", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE, False)
+
+    def create_weapon(self, player):
+        return Weapon(1, 2)
+
+
 class AssassinsBlade(WeaponCard):
     def __init__(self):
         super().__init__("Assassin's Blade", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON)

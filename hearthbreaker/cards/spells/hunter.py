@@ -36,7 +36,8 @@ class BestialWrath(SpellCard):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
                          target_func=hearthbreaker.targeting.find_friendly_minion_spell_target,
-                         filter_func=lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
+                         filter_func=lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and
+                         minion.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)

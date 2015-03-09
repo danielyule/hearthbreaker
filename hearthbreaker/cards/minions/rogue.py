@@ -133,8 +133,8 @@ class TradePrinceGallywix(MinionCard):
 
 class GoblinAutoBarber(MinionCard):
     def __init__(self):
-        super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH,
-                         battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
+        super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.MECH, battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
 
     def create_minion(self, player):
         return Minion(3, 2)

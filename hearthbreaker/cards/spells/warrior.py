@@ -1,6 +1,5 @@
 import copy
-from hearthbreaker.cards.base import SpellCard, WeaponCard
-from hearthbreaker.game_objects import Weapon
+from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import Damage, Draw, Discard
 from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE, ActionTag
 from hearthbreaker.tags.event import TurnEnded, Drawn
@@ -95,7 +94,8 @@ class Execute(SpellCard):
     def __init__(self):
         super().__init__("Execute", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE,
                          target_func=hearthbreaker.targeting.find_enemy_minion_spell_target,
-                         filter_func=lambda target: target.health != target.calculate_max_health() and target.spell_targetable())
+                         filter_func=lambda target: target.health != target.calculate_max_health() and
+                         target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -140,7 +140,8 @@ class Rampage(SpellCard):
     def __init__(self):
         super().__init__("Rampage", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
                          target_func=hearthbreaker.targeting.find_minion_spell_target,
-                         filter_func=lambda target: target.health != target.calculate_max_health() and target.spell_targetable())
+                         filter_func=lambda target: target.health != target.calculate_max_health() and
+                         target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -188,16 +189,11 @@ class Upgrade(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
+        from hearthbreaker.cards.weapons.warrior import HeavyAxe
         if player.hero.weapon:
             player.hero.weapon.durability += 1
             player.hero.weapon.base_attack += 1
         else:
-            class HeavyAxe(WeaponCard):
-                def __init__(self):
-                    super().__init__("Heavy Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, False)
-
-                def create_weapon(self, player):
-                    return Weapon(1, 3)
             heavy_axe = HeavyAxe().create_weapon(player)
             heavy_axe.equip(player)
 

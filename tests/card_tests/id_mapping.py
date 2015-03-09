@@ -527,7 +527,7 @@ id_mappings = {
     "FP1_014t": "Thaddius",
     "NAX9_03H": "Thane Korth'azz",
     "NAX9_03": "Thane Korth'azz",
-    "FP1_019t": "Treant",
+    "FP1_019t": "Treant (poison seeds)",
     "NAX7_02": "Understudy",
     "FP1_028": "Undertaker",
     "NAX8_05": "Unrelenting Rider",

@@ -9611,7 +9611,7 @@
         }
       }, 
       {
-        "card": "Ancient  Teachings", 
+        "card": "Ancient Teachings",
         "actions": [
           {
             "amount": 3, 
@@ -9635,7 +9635,7 @@
     "health": 5, 
     "choices": [
       {
-        "card": "+5 Health and Taunt", 
+        "card": "Rooted",
         "actions": [
           {
             "name": "give", 
@@ -9659,7 +9659,7 @@
         }
       }, 
       {
-        "card": "+5 Attack", 
+        "card": "Uproot",
         "actions": [
           {
             "name": "give", 

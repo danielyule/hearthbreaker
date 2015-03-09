@@ -28,6 +28,14 @@ class ArgentProtector(MinionCard):
         return Minion(2, 2)
 
 
+class DefenderMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def create_minion(self, p):
+        return Minion(2, 1)
+
+
 class GuardianOfKings(MinionCard):
     def __init__(self):
         super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,

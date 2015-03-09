@@ -44,15 +44,13 @@ class CardTest(unittest.TestCase):
                     try:
                         card = card_lookup(id_mappings[card_info["id"]])
                     except KeyError:
-                        not_implemented.append(card_info["name"])
+                        not_implemented.append("{}: ({})".format(card_info["name"], card_info['id']))
                         continue
                     if "cost" in card_info:
                         self.assertEqual(int(card_info["cost"]), card.mana,
                                          "Expected {} to have cost {}.  Got {}".format(
                                          card_info["name"], card_info["cost"], card.mana))
                     if "playerClass" in card_info:
-                        if card_info['name'] == "Dream":
-                            print(json.dumps(card_info))
                         self.assertEqual(CHARACTER_CLASS.from_str(card_info["playerClass"]), card.character_class,
                                          "Expected {} to have class {}.  Got {}".format(
                                              card_info["name"], card_info["playerClass"],

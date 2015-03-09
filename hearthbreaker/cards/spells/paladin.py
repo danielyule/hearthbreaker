@@ -1,6 +1,5 @@
 import copy
-from hearthbreaker.cards.base import SpellCard, MinionCard, SecretCard
-from hearthbreaker.game_objects import Minion, Hero
+from hearthbreaker.cards.base import SpellCard, SecretCard
 from hearthbreaker.tags.action import Draw
 from hearthbreaker.tags.base import Effect, Buff, ActionTag
 from hearthbreaker.tags.event import Attack
@@ -210,7 +209,7 @@ class EyeForAnEye(SecretCard):
         super().__init__("Eye for an Eye", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def _reveal(self, character, attacker, amount):
-        if isinstance(character, Hero):
+        if character.is_hero():
             character.player.opponent.hero.damage(amount, self)
         super().reveal()
 
@@ -228,14 +227,7 @@ class NobleSacrifice(SecretCard):
     def _reveal(self, attacker, target):
         player = attacker.player.game.other_player
         if len(player.minions) < 7 and not attacker.removed:
-            class DefenderMinion(MinionCard):
-                def __init__(self):
-                    super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN,
-                                     CARD_RARITY.COMMON)
-
-                def create_minion(self, p):
-                    return Minion(2, 1)
-
+            from hearthbreaker.cards.minions.paladin import DefenderMinion
             defender = DefenderMinion()
             defender.summon(player, player.game, len(player.minions))
             attacker.current_target = player.minions[-1]

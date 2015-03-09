@@ -1,6 +1,3 @@
-import hearthbreaker.constants
-
-
 class Power:
     def __init__(self):
         self.hero = None
@@ -89,19 +86,8 @@ class PaladinPower(Power):
 
 class RoguePower(Power):
     def use(self):
-        from hearthbreaker.game_objects import Weapon
-        from hearthbreaker.cards.base import WeaponCard
-
-        class WickedKnife(WeaponCard):
-            def __init__(self):
-                super().__init__("Wicked Knife", 1, hearthbreaker.constants.CHARACTER_CLASS.ROGUE,
-                                 hearthbreaker.constants.CARD_RARITY.FREE)
-
-            def create_weapon(self, player):
-                weapon = Weapon(1, 2)
-                return weapon
-
         super().use()
+        from hearthbreaker.cards.weapons.rogue import WickedKnife
         wicked_knife = WickedKnife()
         knife = wicked_knife.create_weapon(self.hero.player)
         knife.card = wicked_knife

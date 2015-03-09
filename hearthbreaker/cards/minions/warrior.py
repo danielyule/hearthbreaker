@@ -109,7 +109,8 @@ class SiegeEngine(MinionCard):
 
 class IronJuggernaut(MinionCard):
     def __init__(self):
-        super().__init__("Iron Juggernaut", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.MECH,
+        super().__init__("Iron Juggernaut", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY,
+                         minion_type=MINION_TYPE.MECH,
                          battlecry=Battlecry(AddCard(BurrowingMine(), add_to_deck=True), PlayerSelector(EnemyPlayer())))
 
     def create_minion(self, player):
@@ -118,7 +119,8 @@ class IronJuggernaut(MinionCard):
 
 class ScrewjankClunker(MinionCard):
     def __init__(self):
-        super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH,
+        super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.MECH,
                          battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2))]),
                                              MinionSelector(IsType(MINION_TYPE.MECH), picker=UserPicker())))
 

@@ -27,7 +27,8 @@ class Hyena(MinionCard):
 
 class SavannahHighmane(MinionCard):
     def __init__(self):
-        super().__init__("Savannah Highmane", 6, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, minion_type=MINION_TYPE.BEAST)
+        super().__init__("Savannah Highmane", 6, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(6, 5, deathrattle=Deathrattle(Summon(Hyena(), 2), PlayerSelector()))
@@ -53,7 +54,8 @@ class KingKrush(MinionCard):
 
 class StarvingBuzzard(MinionCard):
     def __init__(self):
-        super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, minion_type=MINION_TYPE.BEAST)
+        super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(3, 2,
@@ -71,7 +73,8 @@ class TundraRhino(MinionCard):
 
 class ScavengingHyena(MinionCard):
     def __init__(self):
-        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, minion_type=MINION_TYPE.BEAST)
+        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(2, 2,
