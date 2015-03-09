@@ -258,7 +258,7 @@ class Crush(SpellCard):
 
 class BurrowingMine(SpellCard):
     def __init__(self):
-        super().__init__("Burrowing Mine", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
+        super().__init__("Burrowing Mine", 0, CHARACTER_CLASS.WARRIOR, CARD_RARITY.SPECIAL,
                          effects=[Effect(Drawn(), ActionTag(Damage(10), HeroSelector())),
                                   Effect(Drawn(), ActionTag(Discard(query=CardQuery(source=CARD_SOURCE.LAST_DRAWN)),
                                          PlayerSelector())),

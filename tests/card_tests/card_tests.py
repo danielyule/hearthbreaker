@@ -6,6 +6,7 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
 from hearthbreaker.engine import card_lookup
 from tests.agents.testing_agents import PlayAndAttackAgent
+from tests.card_tests.id_mapping import id_mappings
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -38,10 +39,10 @@ class CardTest(unittest.TestCase):
         total_cards = 0
         for card_set in ['Expert', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Reward", "Promotion"]:
             for card_info in card_dict[card_set]:
-                if 'collectible' in card_info and card_info['collectible'] and card_info["type"] != "Hero":
+                if card_info["type"] in ['Minion', 'Spell', 'Weapon', 'Secret']:
                     total_cards += 1
                     try:
-                        card = card_lookup(card_info["name"])
+                        card = card_lookup(id_mappings[card_info["id"]])
                     except KeyError:
                         not_implemented.append(card_info["name"])
                         continue
@@ -49,7 +50,10 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(int(card_info["cost"]), card.mana,
                                          "Expected {} to have cost {}.  Got {}".format(
                                          card_info["name"], card_info["cost"], card.mana))
+                    print(card_info['name'])
                     if "playerClass" in card_info:
+                        if card_info['name'] == "Dream":
+                            print(json.dumps(card_info))
                         self.assertEqual(CHARACTER_CLASS.from_str(card_info["playerClass"]), card.character_class,
                                          "Expected {} to have class {}.  Got {}".format(
                                              card_info["name"], card_info["playerClass"],
@@ -58,7 +62,7 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(CHARACTER_CLASS.ALL, card.character_class,
                                          "Expected {} to have no class.  Got {}".format(
                                              card_info["name"], CHARACTER_CLASS.to_str(card.character_class)))
-                    if "rarity" in card_info:
+                    if "rarity" in card_info and card.rarity != CARD_RARITY.SPECIAL:
                         self.assertEqual(CARD_RARITY.from_str(card_info["rarity"]), card.rarity,
                                          "Expected card {} to have rarity {}.  Got {}".format(
                                              card_info["name"], card_info["rarity"], CARD_RARITY.to_str(card.rarity)))

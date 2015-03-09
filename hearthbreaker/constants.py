@@ -37,6 +37,7 @@ class CHARACTER_CLASS:
     ROGUE = 8
     WARLOCK = 9
     LORD_JARAXXUS = 10
+    DREAM = 11
 
     __classes = {
         "MAGE": MAGE,
@@ -49,6 +50,7 @@ class CHARACTER_CLASS:
         "ROGUE": ROGUE,
         "WARLOCK": WARLOCK,
         "LORD_JARAXXUS": LORD_JARAXXUS,
+        "DREAM": DREAM,
         "": ALL,
     }
 

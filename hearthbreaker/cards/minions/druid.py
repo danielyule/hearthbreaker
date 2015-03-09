@@ -33,9 +33,9 @@ class KeeperOfTheGrove(MinionCard):
         return Minion(2, 4)
 
 
-class CatDruid(ChoiceCard):
+class CatDruid(MinionCard):
     def __init__(self):
-        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST,
                          ref_name="Druid of the Claw (cat)")
 
     def create_minion(self, p):
@@ -44,7 +44,7 @@ class CatDruid(ChoiceCard):
 
 class BearDruid(MinionCard):
     def __init__(self):
-        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
+        super().__init__("Druid of the Claw", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST,
                          ref_name="Druid of the Claw (bear)")
 
     def create_minion(self, p):
@@ -74,8 +74,7 @@ class DruidOfTheClaw(MinionCard):
 
 class AncientSecrets(ChoiceCard):
     def __init__(self):
-        super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID,
-                         CARD_RARITY.SPECIAL)
+        super().__init__("Ancient Secrets", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
 
 
 class AncientTeachings(ChoiceCard):
@@ -193,7 +192,7 @@ class MechBearCat(MinionCard):
 class CobraForm(MinionCard):
     def __init__(self):
         super().__init__("Druid of the Fang", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST,
-                         ref_name="Druid of the Fang (Cobra)")
+                         ref_name="Druid of the Fang (cobra)")
 
     def create_minion(self, player):
         return Minion(7, 7)

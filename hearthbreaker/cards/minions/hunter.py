@@ -124,7 +124,7 @@ class Leokk(MinionCard):
 
 class Snake(MinionCard):
     def __init__(self):
-        super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Snake", 0, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(1, 1)

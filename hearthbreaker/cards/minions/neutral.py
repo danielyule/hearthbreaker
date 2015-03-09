@@ -850,7 +850,7 @@ class CairneBloodhoof(MinionCard):
 
 class DamagedGolem(MinionCard):
     def __init__(self):
-        super().__init__("Damaged Golem", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("Damaged Golem", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(2, 1)
@@ -1547,7 +1547,7 @@ class OldMurkEye(MinionCard):
 
 class Dream(SpellCard):
     def __init__(self):
-        super().__init__("Dream", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+        super().__init__("Dream", 0, CHARACTER_CLASS.DREAM, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -1557,7 +1557,7 @@ class Dream(SpellCard):
 
 class YseraAwakens(SpellCard):
     def __init__(self):
-        super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("Ysera Awakens", 2, CHARACTER_CLASS.DREAM, CARD_RARITY.SPECIAL)
 
     def use(self, player, game):
         super().use(player, game)
@@ -1572,7 +1572,7 @@ class YseraAwakens(SpellCard):
 
 class Nightmare(SpellCard):
     def __init__(self):
-        super().__init__("Nightmare", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
+        super().__init__("Nightmare", 0, CHARACTER_CLASS.DREAM, CARD_RARITY.SPECIAL,
                          hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
@@ -1584,7 +1584,7 @@ class Nightmare(SpellCard):
 
 class LaughingSister(MinionCard):
     def __init__(self):
-        super().__init__("Laughing Sister", 3, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("Laughing Sister", 3, CHARACTER_CLASS.DREAM, CARD_RARITY.SPECIAL)
 
     def create_minion(self, player):
         return Minion(3, 5, spell_targetable=False)
@@ -1592,7 +1592,7 @@ class LaughingSister(MinionCard):
 
 class EmeraldDrake(MinionCard):
     def __init__(self):
-        super().__init__("Emerald Drake", 4, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
+        super().__init__("Emerald Drake", 4, CHARACTER_CLASS.DREAM, CARD_RARITY.SPECIAL, MINION_TYPE.DRAGON)
 
     def create_minion(self, player):
         return Minion(7, 6)
@@ -1649,7 +1649,7 @@ class HomingChicken(MinionCard):
         super().__init__("Homing Chicken", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(0, 3, effects=[Effect(TurnStarted(), ActionTag(Kill(), SelfSelector())),
+        return Minion(0, 1, effects=[Effect(TurnStarted(), ActionTag(Kill(), SelfSelector())),
                                      Effect(TurnStarted(), ActionTag(Draw(3), PlayerSelector()))])
 
 

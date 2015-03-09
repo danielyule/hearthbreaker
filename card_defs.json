@@ -9895,7 +9895,7 @@
     "attack": 7, 
     "health": 7, 
     "type": "minion", 
-    "ref_name": "Druid of the Fang (Cobra)"
+    "ref_name": "Druid of the Fang (cobra)"
   }, 
   {
     "name": "Druid of the Fang", 
@@ -9929,7 +9929,7 @@
           {
             "name": "transform", 
             "card": {
-              "name": "Druid of the Fang (Cobra)"
+              "name": "Druid of the Fang (cobra)"
             }
           }
         ], 
