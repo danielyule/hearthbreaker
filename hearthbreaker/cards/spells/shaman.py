@@ -11,7 +11,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 class AncestralHealing(SpellCard):
     def __init__(self):
         super().__init__("Ancestral Healing", 0, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -24,7 +24,7 @@ class AncestralHealing(SpellCard):
 class AncestralSpirit(SpellCard):
     def __init__(self):
         super().__init__("Ancestral Spirit", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -45,7 +45,7 @@ class Bloodlust(SpellCard):
 class EarthShock(SpellCard):
     def __init__(self):
         super().__init__("Earth Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -102,7 +102,7 @@ class ForkedLightning(SpellCard):
 class FrostShock(SpellCard):
     def __init__(self):
         super().__init__("Frost Shock", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_enemy_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -114,7 +114,7 @@ class FrostShock(SpellCard):
 class Hex(SpellCard):
     def __init__(self):
         super().__init__("Hex", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -128,7 +128,7 @@ class Hex(SpellCard):
 class LavaBurst(SpellCard):
     def __init__(self):
         super().__init__("Lava Burst", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_spell_target, overload=2)
+                         target_func=hearthbreaker.targeting.find_spell_target, overload=2)
 
     def use(self, player, game):
         super().use(player, game)
@@ -139,7 +139,7 @@ class LavaBurst(SpellCard):
 class LightningBolt(SpellCard):
     def __init__(self):
         super().__init__("Lightning Bolt", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target, overload=1)
+                         target_func=hearthbreaker.targeting.find_spell_target, overload=1)
 
     def use(self, player, game):
         super().use(player, game)
@@ -161,7 +161,7 @@ class LightningStorm(SpellCard):
 class RockbiterWeapon(SpellCard):
     def __init__(self):
         super().__init__("Rockbiter Weapon", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_friendly_spell_target)
+                         target_func=hearthbreaker.targeting.find_friendly_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -183,7 +183,7 @@ class TotemicMight(SpellCard):
 class Windfury(SpellCard):
     def __init__(self):
         super().__init__("Windfury", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -195,7 +195,7 @@ class Reincarnate(SpellCard):
 
     def __init__(self):
         super().__init__("Reincarnate", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -207,7 +207,7 @@ class Reincarnate(SpellCard):
 class Crackle(SpellCard):
     def __init__(self):
         super().__init__("Crackle", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target, overload=1)
+                         target_func=hearthbreaker.targeting.find_spell_target, overload=1)
 
     def use(self, player, game):
         super().use(player, game)

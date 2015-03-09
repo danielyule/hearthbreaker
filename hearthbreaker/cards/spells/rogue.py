@@ -12,7 +12,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 class Assassinate(SpellCard):
     def __init__(self):
         super().__init__("Assassinate", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -23,8 +23,9 @@ class Assassinate(SpellCard):
 class Backstab(SpellCard):
     def __init__(self):
         super().__init__("Backstab", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target,
-                         lambda target: target.health == target.calculate_max_health() and target.spell_targetable())
+                         target_func=hearthbreaker.targeting.find_minion_spell_target,
+                         filter_func=lambda target: target.health == target.calculate_max_health() and
+                         target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -35,7 +36,7 @@ class Backstab(SpellCard):
 class Betrayal(SpellCard):
     def __init__(self):
         super().__init__("Betrayal", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -80,7 +81,7 @@ class BladeFlurry(SpellCard):
 class ColdBlood(SpellCard):
     def __init__(self):
         super().__init__("Cold Blood", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -119,7 +120,7 @@ class DeadlyPoison(SpellCard):
 class Eviscerate(SpellCard):
     def __init__(self):
         super().__init__("Eviscerate", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -166,7 +167,7 @@ class Preparation(SpellCard):
 class Sap(SpellCard):
     def __init__(self):
         super().__init__("Sap", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -177,7 +178,7 @@ class Sap(SpellCard):
 class Shadowstep(SpellCard):
     def __init__(self):
         super().__init__("Shadowstep", 0, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -189,7 +190,7 @@ class Shadowstep(SpellCard):
 class Shiv(SpellCard):
     def __init__(self):
         super().__init__("Shiv", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

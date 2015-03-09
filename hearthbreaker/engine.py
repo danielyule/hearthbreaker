@@ -41,7 +41,7 @@ def card_lookup(card_name):
 
 
 def get_cards():
-    card_list = filter(lambda c: c.rarity != hearthbreaker.constants.CARD_RARITY.SPECIAL,
+    card_list = filter(lambda c: c.collectible,
                        [card() for card in card_table.values()])
     return card_list
 

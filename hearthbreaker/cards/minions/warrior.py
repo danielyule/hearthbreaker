@@ -13,7 +13,7 @@ from hearthbreaker.tags.status import ChangeAttack, Charge, ChangeHealth
 
 class BattleAxe(WeaponCard):
     def __init__(self):
-        super().__init__("Battle Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.SPECIAL)
+        super().__init__("Battle Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, False)
 
     def create_weapon(self, player):
         return Weapon(2, 2)
@@ -84,7 +84,7 @@ class WarsongCommander(MinionCard):
 
 class Warbot(MinionCard):
     def __init__(self):
-        super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+        super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(1, 3, enrage=[Aura(ChangeAttack(1), SelfSelector())])
@@ -101,7 +101,7 @@ class Shieldmaiden(MinionCard):
 
 class SiegeEngine(MinionCard):
     def __init__(self):
-        super().__init__("Siege Engine", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Siege Engine", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(5, 5, effects=[Effect(ArmorIncreased(), ActionTag(Give(ChangeAttack(1)), SelfSelector()))])
@@ -109,7 +109,7 @@ class SiegeEngine(MinionCard):
 
 class IronJuggernaut(MinionCard):
     def __init__(self):
-        super().__init__("Iron Juggernaut", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY, MINION_TYPE.MECH,
+        super().__init__("Iron Juggernaut", 6, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.MECH,
                          battlecry=Battlecry(AddCard(BurrowingMine(), add_to_deck=True), PlayerSelector(EnemyPlayer())))
 
     def create_minion(self, player):
@@ -118,7 +118,7 @@ class IronJuggernaut(MinionCard):
 
 class ScrewjankClunker(MinionCard):
     def __init__(self):
-        super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, MINION_TYPE.MECH,
+        super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH,
                          battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2))]),
                                              MinionSelector(IsType(MINION_TYPE.MECH), picker=UserPicker())))
 

@@ -50,7 +50,6 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(int(card_info["cost"]), card.mana,
                                          "Expected {} to have cost {}.  Got {}".format(
                                          card_info["name"], card_info["cost"], card.mana))
-                    print(card_info['name'])
                     if "playerClass" in card_info:
                         if card_info['name'] == "Dream":
                             print(json.dumps(card_info))
@@ -62,10 +61,17 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(CHARACTER_CLASS.ALL, card.character_class,
                                          "Expected {} to have no class.  Got {}".format(
                                              card_info["name"], CHARACTER_CLASS.to_str(card.character_class)))
-                    if "rarity" in card_info and card.rarity != CARD_RARITY.SPECIAL:
+                    if "rarity" in card_info:
                         self.assertEqual(CARD_RARITY.from_str(card_info["rarity"]), card.rarity,
                                          "Expected card {} to have rarity {}.  Got {}".format(
                                              card_info["name"], card_info["rarity"], CARD_RARITY.to_str(card.rarity)))
+                    if "collectible" in card_info:
+                        if card_info['collectible']:
+                            self.assertTrue(card.collectible, "Expected card {} to be collectible".format(
+                                card_info['name']))
+                        else:
+                            self.assertFalse(card.collectible, "Expected card {} not to be collectible".format(
+                                card_info['name']))
                     if card_info["type"] == "Minion":
                         minion = card.create_minion(fake_game.current_player)
                         minion.player = fake_game.current_player

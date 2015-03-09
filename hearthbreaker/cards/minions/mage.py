@@ -65,7 +65,7 @@ class ArchmageAntonidas(MinionCard):
 
 class Snowchugger(MinionCard):
     def __init__(self):
-        super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+        super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(2, 3, effects=[Effect(DidDamage(), ActionTag(Give(Frozen()), TargetSelector()))])
@@ -73,7 +73,7 @@ class Snowchugger(MinionCard):
 
 class SpellbenderMinion(MinionCard):
     def __init__(self):
-        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Spellbender (minion)")
+        super().__init__("Spellbender", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC, False, ref_name="Spellbender (minion)")
 
     def create_minion(self, p):
         return Minion(1, 3)
@@ -81,7 +81,7 @@ class SpellbenderMinion(MinionCard):
 
 class MirrorImageMinion(MinionCard):
     def __init__(self):
-        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.SPECIAL, ref_name="Mirror Image (minion)")
+        super().__init__("Mirror Image", 0, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, False, ref_name="Mirror Image (minion)")
 
     def create_minion(self, p):
         return Minion(0, 2, taunt=True)
@@ -99,7 +99,7 @@ class GoblinBlastmage(MinionCard):
 
 class SootSpewer(MinionCard):
     def __init__(self):
-        super().__init__("Soot Spewer", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Soot Spewer", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(3, 3, spell_damage=1)

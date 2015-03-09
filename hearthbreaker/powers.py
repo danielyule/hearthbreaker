@@ -95,7 +95,7 @@ class RoguePower(Power):
         class WickedKnife(WeaponCard):
             def __init__(self):
                 super().__init__("Wicked Knife", 1, hearthbreaker.constants.CHARACTER_CLASS.ROGUE,
-                                 hearthbreaker.constants.CARD_RARITY.SPECIAL)
+                                 hearthbreaker.constants.CARD_RARITY.FREE)
 
             def create_weapon(self, player):
                 weapon = Weapon(1, 2)

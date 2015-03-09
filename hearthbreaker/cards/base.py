@@ -24,7 +24,7 @@ class Card(Bindable, GameObject):
     cause its effect, but not update the game state.
     """
 
-    def __init__(self, name, mana, character_class, rarity, target_func=None,
+    def __init__(self, name, mana, character_class, rarity, collectible, target_func=None,
                  filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
@@ -64,6 +64,8 @@ class Card(Bindable, GameObject):
             self.ref_name = ref_name
         else:
             self.ref_name = name
+        if not isinstance(self.ref_name, str) or not isinstance(collectible, bool):
+            raise GameException("PROBLEM WITH " + self.name)
         self.mana = mana
         self.character_class = character_class
         self.rarity = rarity
@@ -77,6 +79,7 @@ class Card(Bindable, GameObject):
         self.overload = overload
         self.drawn = True
         self.current_target = None
+        self.collectible = collectible
 
     def can_choose(self, player):
         """
@@ -173,8 +176,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
     :see: :class:`Card`
     :see: :meth:`create_minion`
     """
-    def __init__(self, name, mana, character_class, rarity, minion_type=hearthbreaker.constants.MINION_TYPE.NONE,
-                 ref_name=None, battlecry=None, choices=None, combo=None, overload=0, effects=None, buffs=None):
+    def __init__(self, name, mana, character_class, rarity, collectible=True,
+                 minion_type=hearthbreaker.constants.MINION_TYPE.NONE, ref_name=None, battlecry=None, choices=None,
+                 combo=None, overload=0, effects=None, buffs=None):
         """
         All parameters are passed directly to the :meth:`superclass's __init__ method <Card.__init__>`.
 
@@ -200,7 +204,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param buffs:  The buffs that will be applied directly to this card (as opposed to the minion this card creates)
             :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__(name, mana, character_class, rarity, None, None, overload, ref_name,
+        super().__init__(name, mana, character_class, rarity, collectible, None, None, overload, ref_name,
                          effects, buffs)
         self.minion_type = minion_type
         if battlecry:
@@ -346,7 +350,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
 
 class HeroCard(Card, metaclass=abc.ABCMeta):
     def __init__(self, name, character_class, health, power, minion_type=MINION_TYPE.NONE, ref_name=None):
-        super().__init__(name, 0, character_class, CARD_RARITY.SPECIAL, ref_name=ref_name)
+        super().__init__(name, 0, character_class, CARD_RARITY.FREE, False, ref_name=ref_name)
         self.health = health
         self.power = power
         self.short_name = name.split(" ")[0]
@@ -370,7 +374,7 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
     cause its effect, but not update the game state.
     """
 
-    def __init__(self, name, mana, character_class, rarity, target_func=None,
+    def __init__(self, name, mana, character_class, rarity, collectible=True, target_func=None,
                  filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
@@ -403,7 +407,7 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
             :param buffs:  The buffs that will be applied directly to this card
             :type buffs: [:class:`hearthbreaker.tags.base.Buff`]
         """
-        super().__init__(name, mana, character_class, rarity, target_func, filter_func,
+        super().__init__(name, mana, character_class, rarity, collectible, target_func, filter_func,
                          overload, ref_name, effects, buffs)
 
     def can_choose(self, player):
@@ -477,8 +481,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
 
 
 class SecretCard(Card, metaclass=abc.ABCMeta):
-    def __init__(self, name, mana, character_class, rarity):
-        super().__init__(name, mana, character_class, rarity, None)
+    def __init__(self, name, mana, character_class, rarity, collectible=True):
+        super().__init__(name, mana, character_class, rarity, collectible, None)
         self.player = None
 
     def can_use(self, player, game):
@@ -520,7 +524,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
     Represents a :class:`Card` for creating a :class:`Weapon`
     """
 
-    def __init__(self, name, mana, character_class, rarity, overload=0, battlecry=None, combo=None):
+    def __init__(self, name, mana, character_class, rarity, collectible=True, overload=0, battlecry=None, combo=None):
         """
         Create a new :class:`WeaponCard`
 
@@ -537,7 +541,7 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
                       been played.  If combo activates, battlecry will not
         :type combo: :class:`hearthbreaker.tags.base.Battlecry`
         """
-        super().__init__(name, mana, character_class, rarity, None, None, overload)
+        super().__init__(name, mana, character_class, rarity, collectible, None, None, overload)
         self.battlecry = battlecry
         self.combo = combo
 
@@ -578,6 +582,11 @@ class WeaponCard(Card, metaclass=abc.ABCMeta):
 
 
 class ChoiceCard(Card):
+    def __init__(self, name, mana, character_class, rarity, collectible=False, target_func=None,
+                 filter_func=_is_spell_targetable, overload=0, ref_name=None, effects=None, buffs=None):
+        super().__init__(name, mana, character_class, rarity, collectible, target_func, filter_func, overload,
+                         ref_name, effects, buffs)
+
     def can_choose(self, player):
         self.player = player
         return self.can_use(player, player.game)

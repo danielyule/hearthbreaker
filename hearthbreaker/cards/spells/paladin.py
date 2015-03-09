@@ -28,7 +28,7 @@ class AvengingWrath(SpellCard):
 class BlessedChampion(SpellCard):
     def __init__(self):
         super().__init__("Blessed Champion", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -38,7 +38,7 @@ class BlessedChampion(SpellCard):
 class BlessingOfKings(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Kings", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -49,7 +49,7 @@ class BlessingOfKings(SpellCard):
 class BlessingOfMight(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Might", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -59,7 +59,7 @@ class BlessingOfMight(SpellCard):
 class BlessingOfWisdom(SpellCard):
     def __init__(self):
         super().__init__("Blessing of Wisdom", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -112,7 +112,7 @@ class Equality(SpellCard):
 class HammerOfWrath(SpellCard):
     def __init__(self):
         super().__init__("Hammer of Wrath", 4, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -124,7 +124,7 @@ class HammerOfWrath(SpellCard):
 class HandOfProtection(SpellCard):
     def __init__(self):
         super().__init__("Hand of Protection", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -135,7 +135,7 @@ class HandOfProtection(SpellCard):
 class HolyLight(SpellCard):
     def __init__(self):
         super().__init__("Holy Light", 2, CHARACTER_CLASS.PALADIN,
-                         CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
+                         CARD_RARITY.FREE, target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -146,7 +146,7 @@ class HolyLight(SpellCard):
 class HolyWrath(SpellCard):
     def __init__(self):
         super().__init__("Holy Wrath", 5, CHARACTER_CLASS.PALADIN,
-                         CARD_RARITY.RARE, hearthbreaker.targeting.find_spell_target)
+                         CARD_RARITY.RARE, target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -164,7 +164,7 @@ class HolyWrath(SpellCard):
 class Humility(SpellCard):
     def __init__(self):
         super().__init__("Humility", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -176,7 +176,7 @@ class Humility(SpellCard):
 class LayOnHands(SpellCard):
     def __init__(self):
         super().__init__("Lay on Hands", 8, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -231,7 +231,7 @@ class NobleSacrifice(SecretCard):
             class DefenderMinion(MinionCard):
                 def __init__(self):
                     super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN,
-                                     CARD_RARITY.SPECIAL)
+                                     CARD_RARITY.COMMON)
 
                 def create_minion(self, p):
                     return Minion(2, 1)

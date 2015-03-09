@@ -15,7 +15,7 @@ from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Im
 
 class FlameImp(MinionCard):
     def __init__(self):
-        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+        super().__init__("Flame Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(Damage(3), HeroSelector()))
 
     def create_minion(self, player):
@@ -24,7 +24,7 @@ class FlameImp(MinionCard):
 
 class PitLord(MinionCard):
     def __init__(self):
-        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.DEMON,
+        super().__init__("Pit Lord", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(Damage(5), HeroSelector()))
 
     def create_minion(self, player):
@@ -33,7 +33,7 @@ class PitLord(MinionCard):
 
 class Voidwalker(MinionCard):
     def __init__(self):
-        super().__init__("Voidwalker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON)
+        super().__init__("Voidwalker", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(1, 3, taunt=True)
@@ -41,7 +41,7 @@ class Voidwalker(MinionCard):
 
 class DreadInfernal(MinionCard):
     def __init__(self):
-        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON,
+        super().__init__("Dread Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(Damage(1), CharacterSelector(players=BothPlayer())))
 
     def create_minion(self, player):
@@ -50,7 +50,7 @@ class DreadInfernal(MinionCard):
 
 class Felguard(MinionCard):
     def __init__(self):
-        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+        super().__init__("Felguard", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(DestroyManaCrystal(), PlayerSelector()))
 
     def create_minion(self, player):
@@ -59,7 +59,7 @@ class Felguard(MinionCard):
 
 class Doomguard(MinionCard):
     def __init__(self):
-        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+        super().__init__("Doomguard", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(Discard(amount=2), PlayerSelector()))
 
     def create_minion(self, player):
@@ -68,7 +68,7 @@ class Doomguard(MinionCard):
 
 class Succubus(MinionCard):
     def __init__(self):
-        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, MINION_TYPE.DEMON,
+        super().__init__("Succubus", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE, minion_type=MINION_TYPE.DEMON,
                          battlecry=Battlecry(Discard(), PlayerSelector()))
 
     def create_minion(self, player):
@@ -85,7 +85,7 @@ class SummoningPortal(MinionCard):
 
 class BloodImp(MinionCard):
     def __init__(self):
-        super().__init__("Blood Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Blood Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(0, 1, stealth=True,
@@ -95,7 +95,7 @@ class BloodImp(MinionCard):
 
 class LordJaraxxus(MinionCard):
     def __init__(self):
-        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON,
+        super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.DEMON,
                          battlecry=(Battlecry(Transform(Jaraxxus()), HeroSelector()),
                                     Battlecry(Remove(), SelfSelector()),
                                     Battlecry(Equip(BloodFury()), PlayerSelector())))
@@ -106,7 +106,7 @@ class LordJaraxxus(MinionCard):
 
 class Infernal(MinionCard):
     def __init__(self):
-        super().__init__("Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL,
+        super().__init__("Infernal", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, False,
                          minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
@@ -115,7 +115,7 @@ class Infernal(MinionCard):
 
 class VoidTerror(MinionCard):
     def __init__(self):
-        super().__init__("Void Terror", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON,
+        super().__init__("Void Terror", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.DEMON,
                          battlecry=(Battlecry(
                              Give([Buff(ChangeHealth(Attribute("health", MinionSelector(Adjacent())))),
                                    Buff(ChangeAttack(Attribute("attack", MinionSelector(Adjacent()))))]),
@@ -127,7 +127,7 @@ class VoidTerror(MinionCard):
 
 class Voidcaller(MinionCard):
     def __init__(self):
-        super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[IsType(MINION_TYPE.DEMON)],
@@ -136,7 +136,7 @@ class Voidcaller(MinionCard):
 
 class AnimaGolem(MinionCard):
     def __init__(self):
-        super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, MINION_TYPE.MECH)
+        super().__init__("Anima Golem", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(9, 9, effects=[Effect(TurnEnded(MinionCountIs(1), BothPlayer()),
@@ -145,7 +145,7 @@ class AnimaGolem(MinionCard):
 
 class Imp(MinionCard):
     def __init__(self):
-        super().__init__("Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON,
+        super().__init__("Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.DEMON,
                          ref_name="Imp (Warlock)")
 
     def create_minion(self, player):
@@ -154,7 +154,7 @@ class Imp(MinionCard):
 
 class WorthlessImp(MinionCard):
     def __init__(self):
-        super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.SPECIAL, MINION_TYPE.DEMON)
+        super().__init__("Worthless Imp", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, p):
         return Minion(1, 1)
@@ -162,7 +162,7 @@ class WorthlessImp(MinionCard):
 
 class FelCannon(MinionCard):
     def __init__(self):
-        super().__init__("Fel Cannon", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Fel Cannon", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(3, 5, effects=[Effect(TurnEnded(), ActionTag(Damage(2),
@@ -172,7 +172,7 @@ class FelCannon(MinionCard):
 
 class MalGanis(MinionCard):
     def __init__(self):
-        super().__init__("Mal'Ganis", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, MINION_TYPE.DEMON)
+        super().__init__("Mal'Ganis", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(9, 7, auras=[Aura(ChangeHealth(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
@@ -182,7 +182,7 @@ class MalGanis(MinionCard):
 
 class FloatingWatcher(MinionCard):
     def __init__(self):
-        super().__init__("Floating Watcher", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, MINION_TYPE.DEMON)
+        super().__init__("Floating Watcher", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(4, 4, effects=[Effect(CharacterDamaged(And(IsHero(), OwnersTurn())),
@@ -192,7 +192,7 @@ class FloatingWatcher(MinionCard):
 
 class MistressOfPain(MinionCard):
     def __init__(self):
-        super().__init__("Mistress of Pain", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, MINION_TYPE.DEMON)
+        super().__init__("Mistress of Pain", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
         return Minion(1, 4, effects=[Effect(DidDamage(), ActionTag(Heal(EventValue()), HeroSelector()))])

@@ -4,7 +4,6 @@ class CARD_RARITY:
     RARE = 3
     EPIC = 4
     LEGENDARY = 5
-    SPECIAL = -1
 
     __rarities = {
         "FREE": FREE,
@@ -12,7 +11,6 @@ class CARD_RARITY:
         "RARE": RARE,
         "EPIC": EPIC,
         "LEGENDARY": LEGENDARY,
-        "SPECIAL": SPECIAL,
     }
 
     @staticmethod

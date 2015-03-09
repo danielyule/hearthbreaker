@@ -79,7 +79,7 @@ class TempleEnforcer(MinionCard):
 
 class ShadowOfNothing(MinionCard):
     def __init__(self):
-        super().__init__("Shadow of Nothing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.SPECIAL)
+        super().__init__("Shadow of Nothing", 0, CHARACTER_CLASS.PRIEST, CARD_RARITY.EPIC, False)
 
     def create_minion(self, p):
         return Minion(0, 1)
@@ -125,7 +125,7 @@ class Shadowbomber(MinionCard):
 
 class Shadowboxer(MinionCard):
     def __init__(self):
-        super().__init__("Shadowboxer", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Shadowboxer", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(2, 3, effects=[Effect(CharacterHealed(player=BothPlayer()), ActionTag(Damage(1),

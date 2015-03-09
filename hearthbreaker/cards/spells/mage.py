@@ -27,7 +27,7 @@ class ArcaneMissiles(SpellCard):
 class IceLance(SpellCard):
     def __init__(self):
         super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -63,7 +63,7 @@ class ArcaneExplosion(SpellCard):
 class Frostbolt(SpellCard):
     def __init__(self):
         super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -211,7 +211,7 @@ class IceBlock(SecretCard):
 class ConeOfCold(SpellCard):
     def __init__(self):
         super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -235,7 +235,7 @@ class ConeOfCold(SpellCard):
 class Fireball(SpellCard):
     def __init__(self):
         super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -245,14 +245,14 @@ class Fireball(SpellCard):
 class Polymorph(SpellCard):
     def __init__(self):
         super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
 
         class Sheep(MinionCard):
             def __init__(self):
-                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, MINION_TYPE.BEAST)
 
             def create_minion(self, p):
                 return Minion(1, 1)
@@ -287,7 +287,7 @@ class Flamestrike(SpellCard):
 class Pyroblast(SpellCard):
     def __init__(self):
         super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
