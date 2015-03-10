@@ -8,7 +8,7 @@ import hearthbreaker.targeting
 
 class TheCoin(SpellCard):
     def __init__(self):
-        super().__init__("The Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("The Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
         super().use(player, game)
@@ -18,8 +18,8 @@ class TheCoin(SpellCard):
 
 class ArmorPlating(SpellCard):
     def __init__(self):
-        super().__init__("Armor Plating", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Armor Plating", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -28,8 +28,8 @@ class ArmorPlating(SpellCard):
 
 class EmergencyCoolant(SpellCard):
     def __init__(self):
-        super().__init__("Emergency Coolant", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Emergency Coolant", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -38,8 +38,8 @@ class EmergencyCoolant(SpellCard):
 
 class FinickyCloakfield(SpellCard):
     def __init__(self):
-        super().__init__("Finicky Cloakfield", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+        super().__init__("Finicky Cloakfield", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -48,8 +48,8 @@ class FinickyCloakfield(SpellCard):
 
 class ReversingSwitch(SpellCard):
     def __init__(self):
-        super().__init__("Reversing Switch", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Reversing Switch", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -64,8 +64,8 @@ class ReversingSwitch(SpellCard):
 
 class RustyHorn(SpellCard):
     def __init__(self):
-        super().__init__("Rusty Horn", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Rusty Horn", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -74,8 +74,8 @@ class RustyHorn(SpellCard):
 
 class TimeRewinder(SpellCard):
     def __init__(self):
-        super().__init__("Time Rewinder", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+        super().__init__("Time Rewinder", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -84,8 +84,8 @@ class TimeRewinder(SpellCard):
 
 class WhirlingBlades(SpellCard):
     def __init__(self):
-        super().__init__("Whirling Blades", 1, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL,
-                         hearthbreaker.targeting.find_minion_spell_target)
+        super().__init__("Whirling Blades", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -97,7 +97,7 @@ spare_part_list = [ArmorPlating(), EmergencyCoolant(), FinickyCloakfield(), Time
 
 class GallywixsCoin(SpellCard):
     def __init__(self):
-        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL)
+        super().__init__("Gallywix's Coin", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
         super().use(player, game)

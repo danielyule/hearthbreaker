@@ -35,6 +35,14 @@ class Gorehowl(WeaponCard):
                                             ActionTag(IncreaseDurability(), HeroSelector()))])
 
 
+class HeavyAxe(WeaponCard):
+    def __init__(self):
+        super().__init__("Heavy Axe", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, False)
+
+    def create_weapon(self, player):
+        return Weapon(1, 3)
+
+
 class DeathsBite(WeaponCard):
     def __init__(self):
         super().__init__("Death's Bite", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)

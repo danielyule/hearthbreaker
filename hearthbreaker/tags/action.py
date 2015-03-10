@@ -186,6 +186,8 @@ class Transform(Action):
             hero.buffs = copy.deepcopy(actor.buffs)
             hero.health = actor.health
             target.replace(hero)
+            if hero.health <= 0:
+                hero.die(None)
 
     def __to_json__(self):
         return {

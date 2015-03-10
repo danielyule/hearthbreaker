@@ -46,7 +46,8 @@ class FireElemental(MinionCard):
 
 class FlametongueTotem(MinionCard):
     def __init__(self):
-        super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.TOTEM)
+        super().__init__("Flametongue Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 3, auras=[Aura(ChangeAttack(2), MinionSelector(Adjacent()))])
@@ -54,7 +55,8 @@ class FlametongueTotem(MinionCard):
 
 class ManaTideTotem(MinionCard):
     def __init__(self):
-        super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
+        super().__init__("Mana Tide Totem", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 3, effects=[Effect(TurnEnded(), ActionTag(Draw(), PlayerSelector()))])
@@ -82,7 +84,7 @@ class Windspeaker(MinionCard):
 
 class HealingTotem(MinionCard):
     def __init__(self):
-        super().__init__("Healing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+        super().__init__("Healing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, False, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 2, effects=[Effect(TurnEnded(), ActionTag(Heal(1), MinionSelector(condition=None)))])
@@ -90,7 +92,7 @@ class HealingTotem(MinionCard):
 
 class SearingTotem(MinionCard):
     def __init__(self):
-        super().__init__("Searing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+        super().__init__("Searing Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, False, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(1, 1)
@@ -98,7 +100,7 @@ class SearingTotem(MinionCard):
 
 class StoneclawTotem(MinionCard):
     def __init__(self):
-        super().__init__("Stoneclaw Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+        super().__init__("Stoneclaw Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, False, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 2, taunt=True)
@@ -106,7 +108,7 @@ class StoneclawTotem(MinionCard):
 
 class WrathOfAirTotem(MinionCard):
     def __init__(self):
-        super().__init__("Wrath of Air Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL, MINION_TYPE.TOTEM)
+        super().__init__("Wrath of Air Totem", 1, CHARACTER_CLASS.SHAMAN, CARD_RARITY.FREE, False, MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 2, spell_damage=1)
@@ -114,7 +116,7 @@ class WrathOfAirTotem(MinionCard):
 
 class SpiritWolf(MinionCard):
     def __init__(self):
-        super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.SPECIAL)
+        super().__init__("Spirit Wolf", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, False)
 
     def create_minion(self, p):
         return Minion(2, 3, taunt=True)
@@ -122,7 +124,7 @@ class SpiritWolf(MinionCard):
 
 class VitalityTotem(MinionCard):
     def __init__(self):
-        super().__init__("Vitality Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, MINION_TYPE.TOTEM)
+        super().__init__("Vitality Totem", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE, minion_type=MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
         return Minion(0, 3, effects=[Effect(TurnEnded(), ActionTag(Heal(4), HeroSelector()))])
@@ -130,8 +132,8 @@ class VitalityTotem(MinionCard):
 
 class SiltfinSpiritwalker(MinionCard):
     def __init__(self):
-        super().__init__("Siltfin Spiritwalker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC, MINION_TYPE.MURLOC,
-                         overload=1)
+        super().__init__("Siltfin Spiritwalker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.EPIC,
+                         minion_type=MINION_TYPE.MURLOC, overload=1)
 
     def create_minion(self, player):
         return Minion(2, 5, effects=[Effect(MinionDied(IsType(MINION_TYPE.MURLOC)),
@@ -140,7 +142,8 @@ class SiltfinSpiritwalker(MinionCard):
 
 class WhirlingZapomatic(MinionCard):
     def __init__(self):
-        super().__init__("Whirling Zap-o-matic", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, MINION_TYPE.MECH)
+        super().__init__("Whirling Zap-o-matic", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, p):
         return Minion(3, 2, windfury=True)

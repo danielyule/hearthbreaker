@@ -14,7 +14,7 @@ from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
 class DefiasBandit(MinionCard):
     def __init__(self):
-        super().__init__("Defias Bandit", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.SPECIAL)
+        super().__init__("Defias Bandit", 1, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, False)
 
     def create_minion(self, player):
         return Minion(2, 1)
@@ -87,7 +87,7 @@ class AnubarAmbusher(MinionCard):
 
 class OneeyedCheat(MinionCard):
     def __init__(self):
-        super().__init__("One-eyed Cheat", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, MINION_TYPE.PIRATE)
+        super().__init__("One-eyed Cheat", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, minion_type=MINION_TYPE.PIRATE)
 
     def create_minion(self, player):
         return Minion(4, 1, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.PIRATE)),
@@ -96,7 +96,7 @@ class OneeyedCheat(MinionCard):
 
 class IronSensei(MinionCard):
     def __init__(self):
-        super().__init__("Iron Sensei", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Iron Sensei", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(2, 2, effects=[Effect(TurnEnded(), ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
@@ -133,8 +133,8 @@ class TradePrinceGallywix(MinionCard):
 
 class GoblinAutoBarber(MinionCard):
     def __init__(self):
-        super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON, MINION_TYPE.MECH,
-                         battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
+        super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.MECH, battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
 
     def create_minion(self, player):
         return Minion(3, 2)

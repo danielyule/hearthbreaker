@@ -28,6 +28,14 @@ class ArgentProtector(MinionCard):
         return Minion(2, 2)
 
 
+class DefenderMinion(MinionCard):
+    def __init__(self):
+        super().__init__("Defender", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
+
+    def create_minion(self, p):
+        return Minion(2, 1)
+
+
 class GuardianOfKings(MinionCard):
     def __init__(self):
         super().__init__("Guardian of Kings", 7, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
@@ -39,7 +47,7 @@ class GuardianOfKings(MinionCard):
 
 class Ashbringer(WeaponCard):
     def __init__(self):
-        super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY)
+        super().__init__("Ashbringer", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY, False)
 
     def create_weapon(self, player):
         weapon = Weapon(5, 3)
@@ -57,7 +65,7 @@ class TirionFordring(MinionCard):
 
 class CobaltGuardian(MinionCard):
     def __init__(self):
-        super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, MINION_TYPE.MECH)
+        super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
         return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), ActionTag(Give(DivineShield()),
@@ -66,7 +74,7 @@ class CobaltGuardian(MinionCard):
 
 class SilverHandRecruit(MinionCard):
     def __init__(self):
-        super().__init__("Silver Hand Recruit", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.SPECIAL)
+        super().__init__("Silver Hand Recruit", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.FREE, False)
 
     def create_minion(self, player):
         return Minion(1, 1)

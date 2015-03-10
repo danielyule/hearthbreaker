@@ -520,6 +520,18 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Lord Jaraxxus", game.other_player.minions[0].card.name)
 
+    def test_Jaraxxus_Repentance_Snipe(self):
+        game = generate_game_for(LordJaraxxus, [Repentance, Snipe], OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        # Based on https://www.youtube.com/watch?v=n8u2Senk_XU
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(0, game.current_player.hero.health)
+        self.assertTrue(game.current_player.hero.dead)
+        self.assertTrue(game.game_ended)
+
     def test_Jaraxxus_with_SacrificialPact(self):
         game = generate_game_for(LordJaraxxus, SacrificialPact, CardTestingAgent, CardTestingAgent)
 
@@ -781,3 +793,16 @@ class TestWarlock(unittest.TestCase):
         # The mistress of pain does no damage, so the hero isn't healed
         # See https://www.youtube.com/watch?v=wakqQSBjDdE
         self.assertEqual(27, game.current_player.hero.health)
+
+    def test_MistressOfPain_saves_hero(self):
+        # based on http://youtu.be/_Z2ZU-cIoG8?t=1m3s
+        game = generate_game_for([MistressOfPain, Demonfire], Misdirection, PlayAndAttackAgent, OneCardPlayingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        game.players[0].hero.health = 2
+
+        game.play_single_turn()
+
+        self.assertFalse(game.game_ended)

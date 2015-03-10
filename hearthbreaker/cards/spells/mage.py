@@ -1,8 +1,7 @@
 import copy
-from hearthbreaker.cards.base import MinionCard, SecretCard, SpellCard
+from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.game_objects import Minion, Hero
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.base import BuffUntil, Buff, CardQuery
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnEnded
@@ -27,7 +26,7 @@ class ArcaneMissiles(SpellCard):
 class IceLance(SpellCard):
     def __init__(self):
         super().__init__("Ice Lance", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -63,7 +62,7 @@ class ArcaneExplosion(SpellCard):
 class Frostbolt(SpellCard):
     def __init__(self):
         super().__init__("Frostbolt", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -158,7 +157,7 @@ class Spellbender(SecretCard):
     def _reveal(self, card, index):
         # According to http://us.battle.net/hearthstone/en/forum/topic/10070927066, Spellbender
         # will not activate if there are too many minions
-        if card.is_spell() and len(self.player.minions) < 7 and isinstance(card.target, Minion):
+        if card.is_spell() and len(self.player.minions) < 7 and card.target and card.target.is_minion():
             SpellbenderMinion().summon(self.player, self.player.game, len(self.player.minions))
             card.target = self.player.minions[-1]
             super().reveal()
@@ -177,7 +176,7 @@ class Vaporize(SecretCard):
         super().__init__("Vaporize", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def _reveal(self, attacker, target):
-        if target is self.player.hero and type(attacker) is Minion and not attacker.removed:
+        if target is self.player.hero and attacker.is_minion() and not attacker.removed:
             attacker.die(self)
             attacker.game.check_delayed()
             super().reveal()
@@ -195,7 +194,7 @@ class IceBlock(SecretCard):
         self.player = None
 
     def _reveal(self, character, attacker, amount):
-        if isinstance(character, Hero):
+        if character.is_hero():
             if character.health - amount <= 0:
                 character.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
                 # TODO Check if this spell will also prevent damage to armor.
@@ -211,7 +210,7 @@ class IceBlock(SecretCard):
 class ConeOfCold(SpellCard):
     def __init__(self):
         super().__init__("Cone of Cold", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -235,7 +234,7 @@ class ConeOfCold(SpellCard):
 class Fireball(SpellCard):
     def __init__(self):
         super().__init__("Fireball", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -245,18 +244,11 @@ class Fireball(SpellCard):
 class Polymorph(SpellCard):
     def __init__(self):
         super().__init__("Polymorph", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
-
-        class Sheep(MinionCard):
-            def __init__(self):
-                super().__init__("Sheep", 0, CHARACTER_CLASS.ALL, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
-
-            def create_minion(self, p):
-                return Minion(1, 1)
-
+        from hearthbreaker.cards.minions.mage import Sheep
         sheep = Sheep()
         minion = sheep.create_minion(None)
         minion.card = sheep
@@ -287,7 +279,7 @@ class Flamestrike(SpellCard):
 class Pyroblast(SpellCard):
     def __init__(self):
         super().__init__("Pyroblast", 10, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

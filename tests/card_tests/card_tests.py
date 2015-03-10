@@ -6,6 +6,7 @@ from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
 from hearthbreaker.engine import card_lookup
 from tests.agents.testing_agents import PlayAndAttackAgent
+from tests.card_tests.id_mapping import id_mappings
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
 
@@ -38,12 +39,12 @@ class CardTest(unittest.TestCase):
         total_cards = 0
         for card_set in ['Expert', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Reward", "Promotion"]:
             for card_info in card_dict[card_set]:
-                if 'collectible' in card_info and card_info['collectible'] and card_info["type"] != "Hero":
+                if card_info["type"] in ['Minion', 'Spell', 'Weapon', 'Secret']:
                     total_cards += 1
                     try:
-                        card = card_lookup(card_info["name"])
+                        card = card_lookup(id_mappings[card_info["id"]])
                     except KeyError:
-                        not_implemented.append(card_info["name"])
+                        not_implemented.append("{}: ({})".format(card_info["name"], card_info['id']))
                         continue
                     if "cost" in card_info:
                         self.assertEqual(int(card_info["cost"]), card.mana,
@@ -62,6 +63,13 @@ class CardTest(unittest.TestCase):
                         self.assertEqual(CARD_RARITY.from_str(card_info["rarity"]), card.rarity,
                                          "Expected card {} to have rarity {}.  Got {}".format(
                                              card_info["name"], card_info["rarity"], CARD_RARITY.to_str(card.rarity)))
+                    if "collectible" in card_info:
+                        if card_info['collectible']:
+                            self.assertTrue(card.collectible, "Expected card {} to be collectible".format(
+                                card_info['name']))
+                        else:
+                            self.assertFalse(card.collectible, "Expected card {} not to be collectible".format(
+                                card_info['name']))
                     if card_info["type"] == "Minion":
                         minion = card.create_minion(fake_game.current_player)
                         minion.player = fake_game.current_player

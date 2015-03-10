@@ -13,7 +13,7 @@ class HuntersMark(SpellCard):
     def __init__(self):
         super().__init__("Hunter's Mark", 0, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -24,7 +24,7 @@ class ArcaneShot(SpellCard):
     def __init__(self):
         super().__init__("Arcane Shot", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -35,8 +35,9 @@ class BestialWrath(SpellCard):
     def __init__(self):
         super().__init__("Bestial Wrath", 1, CHARACTER_CLASS.HUNTER,
                          CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target,
-                         lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and minion.spell_targetable())
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target,
+                         filter_func=lambda minion: minion.card.minion_type is MINION_TYPE.BEAST and
+                         minion.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -188,7 +189,7 @@ class MultiShot(SpellCard):
 class ExplosiveShot(SpellCard):
     def __init__(self):
         super().__init__("Explosive Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -208,7 +209,7 @@ class ExplosiveShot(SpellCard):
 class KillCommand(SpellCard):
     def __init__(self):
         super().__init__("Kill Command", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -287,7 +288,7 @@ class CallPet(SpellCard):
 class CobraShot(SpellCard):
     def __init__(self):
         super().__init__("Cobra Shot", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

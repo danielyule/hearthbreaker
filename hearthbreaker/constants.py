@@ -4,7 +4,6 @@ class CARD_RARITY:
     RARE = 3
     EPIC = 4
     LEGENDARY = 5
-    SPECIAL = -1
 
     __rarities = {
         "FREE": FREE,
@@ -12,7 +11,6 @@ class CARD_RARITY:
         "RARE": RARE,
         "EPIC": EPIC,
         "LEGENDARY": LEGENDARY,
-        "SPECIAL": SPECIAL,
     }
 
     @staticmethod
@@ -37,6 +35,7 @@ class CHARACTER_CLASS:
     ROGUE = 8
     WARLOCK = 9
     LORD_JARAXXUS = 10
+    DREAM = 11
 
     __classes = {
         "MAGE": MAGE,
@@ -49,6 +48,7 @@ class CHARACTER_CLASS:
         "ROGUE": ROGUE,
         "WARLOCK": WARLOCK,
         "LORD_JARAXXUS": LORD_JARAXXUS,
+        "DREAM": DREAM,
         "": ALL,
     }
 

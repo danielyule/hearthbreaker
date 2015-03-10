@@ -288,6 +288,12 @@ class GameObject:
         """
         return True
 
+    def is_character(self):
+        """
+        Checks if this object is a character (minion or hero)
+        """
+        return False
+
     def add_effect(self, effect):
         """
         Applies the the given effect to the :class:`GameObject`.  The effect will be unapplied in the case of silence,
@@ -542,15 +548,23 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
         if not self.immune:
             self.trigger("damaged", amount, attacker)
             self.player.trigger("character_damaged", self, attacker, amount)
-            self.health -= amount
+
+            # This is constructed to avoid infinite recursion when mistress of pain and auchenai soulpriest
+            # are in use.  This will prevent the did_damage event from going off if the character being damaged is
+            # already dead.
+            # We could simply do the check for death before this, but then the Mistress of Pain can't bring a dead
+            # hero back to life after damaging it via misdirection.
+            if attacker and attacker.is_character() and self.health >= 0:
+                self.health -= amount
+                attacker.trigger("did_damage", self, amount)
+                attacker._remove_stealth()
+            else:
+                self.health -= amount
             min_health = self.calculate_stat(MinimumHealth, 0)
             if self.health < min_health:
                 self.health = min_health
             if self.health <= 0:
                 self.die(attacker)
-            if issubclass(type(attacker), Character):
-                attacker.trigger("did_damage", self, amount)
-                attacker._remove_stealth()
             self.trigger("health_changed")
             if not self.enraged and self.health != self.calculate_max_health():
                 self.enraged = True
@@ -708,6 +722,9 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
     def is_valid(self):
         return not self.dead and not self.removed
+
+    def is_character(self):
+        return True
 
     def _do_enrage(self):
         for aura in self.enrage:

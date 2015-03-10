@@ -11,7 +11,7 @@ from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt,
 
 class TimberWolf(MinionCard):
     def __init__(self):
-        super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.BEAST)
+        super().__init__("Timber Wolf", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(1, 1, auras=[Aura(ChangeAttack(1), MinionSelector(IsType(MINION_TYPE.BEAST)))])
@@ -19,7 +19,7 @@ class TimberWolf(MinionCard):
 
 class Hyena(MinionCard):
     def __init__(self):
-        super().__init__("Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, minion_type=MINION_TYPE.BEAST)
+        super().__init__("Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(2, 2)
@@ -27,7 +27,8 @@ class Hyena(MinionCard):
 
 class SavannahHighmane(MinionCard):
     def __init__(self):
-        super().__init__("Savannah Highmane", 6, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.BEAST)
+        super().__init__("Savannah Highmane", 6, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(6, 5, deathrattle=Deathrattle(Summon(Hyena(), 2), PlayerSelector()))
@@ -35,7 +36,7 @@ class SavannahHighmane(MinionCard):
 
 class Houndmaster(MinionCard):
     def __init__(self):
-        super().__init__("Houndmaster", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, MINION_TYPE.NONE,
+        super().__init__("Houndmaster", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.FREE, minion_type=MINION_TYPE.NONE,
                          battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2)), Buff(Taunt())]),
                                              MinionSelector(IsType(MINION_TYPE.BEAST), picker=UserPicker())))
 
@@ -45,7 +46,7 @@ class Houndmaster(MinionCard):
 
 class KingKrush(MinionCard):
     def __init__(self):
-        super().__init__("King Krush", 9, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
+        super().__init__("King Krush", 9, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(8, 8, charge=True)
@@ -53,7 +54,8 @@ class KingKrush(MinionCard):
 
 class StarvingBuzzard(MinionCard):
     def __init__(self):
-        super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+        super().__init__("Starving Buzzard", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(3, 2,
@@ -62,7 +64,7 @@ class StarvingBuzzard(MinionCard):
 
 class TundraRhino(MinionCard):
     def __init__(self):
-        super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+        super().__init__("Tundra Rhino", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(2, 5, charge=True,
@@ -71,7 +73,8 @@ class TundraRhino(MinionCard):
 
 class ScavengingHyena(MinionCard):
     def __init__(self):
-        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+        super().__init__("Scavenging Hyena", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(2, 2,
@@ -83,7 +86,7 @@ class ScavengingHyena(MinionCard):
 
 class Webspinner(MinionCard):
     def __init__(self):
-        super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, MINION_TYPE.BEAST)
+        super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[IsType(MINION_TYPE.BEAST)])),
@@ -92,7 +95,7 @@ class Webspinner(MinionCard):
 
 class Hound(MinionCard):
     def __init__(self):
-        super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Hound", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(1, 1, charge=True)
@@ -100,7 +103,7 @@ class Hound(MinionCard):
 
 class Huffer(MinionCard):
     def __init__(self):
-        super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Huffer", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(4, 2, charge=True)
@@ -108,7 +111,7 @@ class Huffer(MinionCard):
 
 class Misha(MinionCard):
     def __init__(self):
-        super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Misha", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(4, 4, taunt=True)
@@ -116,7 +119,7 @@ class Misha(MinionCard):
 
 class Leokk(MinionCard):
     def __init__(self):
-        super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Leokk", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(2, 4, auras=[Aura(ChangeAttack(1), MinionSelector())])
@@ -124,7 +127,7 @@ class Leokk(MinionCard):
 
 class Snake(MinionCard):
     def __init__(self):
-        super().__init__("Snake", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.SPECIAL, MINION_TYPE.BEAST)
+        super().__init__("Snake", 0, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(1, 1)
@@ -132,7 +135,7 @@ class Snake(MinionCard):
 
 class MetaltoothLeaper(MinionCard):
     def __init__(self):
-        super().__init__("Metaltooth Leaper", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.MECH,
+        super().__init__("Metaltooth Leaper", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH,
                          battlecry=Battlecry(Give(Buff(ChangeAttack(2))), MinionSelector(IsType(MINION_TYPE.MECH))))
 
     def create_minion(self, player):
@@ -141,7 +144,7 @@ class MetaltoothLeaper(MinionCard):
 
 class KingOfBeasts(MinionCard):
     def __init__(self):
-        super().__init__("King of Beasts", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, MINION_TYPE.BEAST,
+        super().__init__("King of Beasts", 5, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, minion_type=MINION_TYPE.BEAST,
                          battlecry=Battlecry(Give(Buff(ChangeAttack(Count(MinionSelector(IsType(
                              MINION_TYPE.BEAST)))))), SelfSelector()))
 
@@ -151,7 +154,7 @@ class KingOfBeasts(MinionCard):
 
 class Gahzrilla(MinionCard):
     def __init__(self):
-        super().__init__("Gahz'rilla", 7, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, MINION_TYPE.BEAST)
+        super().__init__("Gahz'rilla", 7, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
         return Minion(6, 9, effects=[Effect(Damaged(), ActionTag(Give(Buff(DoubleAttack())), SelfSelector()))])

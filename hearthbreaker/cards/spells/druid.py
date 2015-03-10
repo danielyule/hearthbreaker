@@ -1,14 +1,10 @@
 import copy
-from hearthbreaker.cards.base import MinionCard, ChoiceCard, SpellCard
-from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Summon, Kill, GiveMana, Damage, Give, IncreaseArmor, Draw
-from hearthbreaker.tags.base import Effect, Deathrattle, ActionTag, Buff, BuffUntil, Choice
-from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, CharacterSelector, BothPlayer, HeroSelector, \
-    MinionSelector, EnemyPlayer, Attribute, UserPicker
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
+from hearthbreaker.cards.base import ChoiceCard, SpellCard
+from hearthbreaker.tags.action import Summon
+from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.selector import PlayerSelector
 import hearthbreaker.targeting
-from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
+from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
 
 class Innervate(SpellCard):
@@ -58,18 +54,10 @@ class LeaderOfThePack(ChoiceCard):
 
 class SummonPanther(ChoiceCard):
     def __init__(self):
-        super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+        super().__init__("Summon a Panther", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) < 7
-
-
-class Panther(MinionCard):
-    def __init__(self):
-        super().__init__("Panther", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-    def create_minion(self, _):
-        return Minion(3, 2, MINION_TYPE.BEAST)
 
 
 class PowerOfTheWild(SpellCard):
@@ -97,7 +85,7 @@ class WildGrowth(SpellCard):
 # Special card that only appears in tandem with Wild Growth
 class ExcessMana(SpellCard):
     def __init__(self):
-        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+        super().__init__("Excess Mana", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
     def use(self, player, game):
         super().use(player, game)
@@ -106,12 +94,12 @@ class ExcessMana(SpellCard):
 
 class WrathOne(ChoiceCard):
     def __init__(self):
-        super().__init__("Wrath 1 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+        super().__init__("Wrath 1 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
 
 class WrathThree(ChoiceCard):
     def __init__(self):
-        super().__init__("Wrath 3 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+        super().__init__("Wrath 3 Damage", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
 
 class Wrath(SpellCard):
@@ -125,7 +113,7 @@ class Wrath(SpellCard):
 class HealingTouch(SpellCard):
     def __init__(self):
         super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -135,21 +123,21 @@ class HealingTouch(SpellCard):
 class MarkOfNature(SpellCard):
     def __init__(self):
         super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         class MarkOfNatureAttack(ChoiceCard):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
-                                 hearthbreaker.targeting.find_minion_spell_target)
+                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False,
+                                 target_func=hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.change_attack(4)
 
         class MarkOfNatureHealth(ChoiceCard):
             def __init__(self):
-                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL,
-                                 hearthbreaker.targeting.find_minion_spell_target)
+                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False,
+                                 target_func=hearthbreaker.targeting.find_minion_spell_target)
 
             def use(self, player, game):
                 target.increase_health(4)
@@ -182,21 +170,13 @@ class Bite(SpellCard):
         player.hero.increase_armor(4)
 
 
-class Treant(MinionCard):
-    def __init__(self):
-        super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-    def create_minion(self, _):
-        return Minion(2, 2)
-
-
 class SoulOfTheForest(SpellCard):
     def __init__(self):
         super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
     def use(self, player, game):
         super().use(player, game)
-
+        from hearthbreaker.cards.minions.druid import Treant
         # Can stack as many deathrattles as we want, so no need to check if this has already been given
         # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
         for minion in player.minions:
@@ -206,7 +186,7 @@ class SoulOfTheForest(SpellCard):
 class Swipe(SpellCard):
     def __init__(self):
         super().__init__("Swipe", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_enemy_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -230,7 +210,7 @@ class Nourish(SpellCard):
         class Gain2(ChoiceCard):
 
             def __init__(self):
-                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
             def use(self, player, game):
                 if player.max_mana < 8:
@@ -243,7 +223,7 @@ class Nourish(SpellCard):
         class Draw3(ChoiceCard):
 
             def __init__(self):
-                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
             def use(self, player, game):
                 player.draw()
@@ -252,6 +232,30 @@ class Nourish(SpellCard):
 
         option = player.agent.choose_option([Gain2(), Draw3()], player)
         option.use(player, game)
+
+
+class DamageAll(ChoiceCard):
+    def __init__(self):
+        super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
+
+    def use(self, player, game):
+        for minion in copy.copy(game.other_player.minions):
+            minion.damage(player.effective_spell_damage(2), self)
+
+
+class DamageOne(ChoiceCard):
+            def __init__(self):
+                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                                 False)
+
+            def can_use(self, player, game):
+                return super().can_use(player, game) and len(hearthbreaker.targeting.find_minion_spell_target(
+                    game, lambda t: t.spell_targetable())) > 0
+
+            def use(self, player, game):
+                targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
+                target = player.agent.choose_target(targets)
+                target.damage(player.effective_spell_damage(5), self)
 
 
 class Starfall(SpellCard):
@@ -263,28 +267,6 @@ class Starfall(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class DamageAll(ChoiceCard):
-            def __init__(self):
-                super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-            def use(self, player, game):
-                for minion in copy.copy(game.other_player.minions):
-                    minion.damage(player.effective_spell_damage(2), self)
-
-        class DamageOne(ChoiceCard):
-            def __init__(self):
-                super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-            def can_use(self, player, game):
-                return super().can_use(player, game) and len(hearthbreaker.targeting.find_minion_spell_target(
-                    game, lambda t: t.spell_targetable())) > 0
-
-            def use(self, player, game):
-                targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
-                target = player.agent.choose_target(targets)
-                target.damage(player.effective_spell_damage(5), self)
-
         option = player.agent.choose_option([DamageAll(), DamageOne()], player)
         option.use(player, game)
 
@@ -295,16 +277,9 @@ class ForceOfNature(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 1, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-            def create_minion(self, player):
-                return Minion(2, 2, charge=True, effects=[Effect(TurnEnded(), ActionTag(Kill(), SelfSelector()))])
-
+        from hearthbreaker.cards.minions.druid import ChargeTreant
         for i in [0, 1, 2]:
-            treant_card = Treant()
+            treant_card = ChargeTreant()
             treant_card.summon(player, game, len(player.minions))
 
     def can_use(self, player, game):
@@ -314,7 +289,7 @@ class ForceOfNature(SpellCard):
 class Starfire(SpellCard):
     def __init__(self):
         super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -328,14 +303,7 @@ class PoisonSeeds(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-
-        class Treant(MinionCard):
-            def __init__(self):
-                super().__init__("Treant", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
-
-            def create_minion(self, player):
-                return Minion(2, 2)
-
+        from hearthbreaker.cards.minions.druid import PoisonSeedsTreant
         targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda m: True)
         for target in targets:
             target.die(None)
@@ -343,7 +311,7 @@ class PoisonSeeds(SpellCard):
         game.check_delayed()
 
         for target in targets:
-            Treant().summon(target.player, target.game, len(target.player.minions))
+            PoisonSeedsTreant().summon(target.player, target.game, len(target.player.minions))
 
 
 class DarkWispers(SpellCard):
@@ -360,7 +328,7 @@ class DarkWispers(SpellCard):
 
         class Buff5(ChoiceCard):
             def __init__(self):
-                super().__init__("Give a minion +5/+5 and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Give a minion +5/+5 and Taunt", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
             def can_use(self, player, game):
                 return hearthbreaker.targeting.find_minion_spell_target(game,
@@ -375,18 +343,13 @@ class DarkWispers(SpellCard):
 
         class Wisps5(ChoiceCard):
             def __init__(self):
-                super().__init__("Summon 5 Wisps", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.SPECIAL)
+                super().__init__("Summon 5 Wisps", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
             def can_use(self, player, game):
                 return len(player.minions) < 7
 
             def use(self, player, game):
-                class Wisp(MinionCard):
-                    def __init__(self):
-                        super().__init__("Wisp", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
-
-                    def create_minion(self, player):
-                        return Minion(1, 1)
+                from hearthbreaker.cards.minions.neutral import Wisp
                 for i in range(0, 5):
                     wisp = Wisp()
                     wisp.summon(player, game, len(player.minions))
@@ -402,7 +365,7 @@ class DarkWispers(SpellCard):
 class Recycle(SpellCard):
     def __init__(self):
         super().__init__("Recycle", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

@@ -29,7 +29,7 @@ class DivineSpirit(SpellCard):
     def __init__(self):
         super().__init__("Divine Spirit", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -43,7 +43,7 @@ class HolyFire(SpellCard):
     def __init__(self):
         super().__init__("Holy Fire", 6, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -70,7 +70,7 @@ class HolyNova(SpellCard):  # TODO: Can this card be cast if no minions is in pl
 class HolySmite(SpellCard):
     def __init__(self):
         super().__init__("Holy Smite", 1, CHARACTER_CLASS.PRIEST,
-                         CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
+                         CARD_RARITY.FREE, target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -82,7 +82,7 @@ class InnerFire(SpellCard):
     def __init__(self):
         super().__init__("Inner Fire", 1, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -124,7 +124,7 @@ class MindControl(SpellCard):
     def __init__(self):
         super().__init__("Mind Control", 10, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -176,7 +176,7 @@ class PowerWordShield(SpellCard):
     def __init__(self):
         super().__init__("Power Word: Shield", 1, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -189,8 +189,8 @@ class ShadowMadness(SpellCard):
     def __init__(self):
         super().__init__("Shadow Madness", 4, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target,
-                         lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target,
+                         filter_func=lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
 
@@ -216,8 +216,8 @@ class ShadowWordDeath(SpellCard):
     def __init__(self):
         super().__init__("Shadow Word: Death", 3, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target,
-                         lambda target: target.calculate_attack() >= 5 and target.spell_targetable())
+                         target_func=hearthbreaker.targeting.find_minion_spell_target,
+                         filter_func=lambda target: target.calculate_attack() >= 5 and target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -229,8 +229,8 @@ class ShadowWordPain(SpellCard):
     def __init__(self):
         super().__init__("Shadow Word: Pain", 2, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target,
-                         lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
+                         target_func=hearthbreaker.targeting.find_minion_spell_target,
+                         filter_func=lambda target: target.calculate_attack() <= 3 and target.spell_targetable())
 
     def use(self, player, game):
         super().use(player, game)
@@ -259,7 +259,7 @@ class Silence(SpellCard):
     def __init__(self):
         super().__init__("Silence", 0, CHARACTER_CLASS.PRIEST,
                          CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -290,7 +290,7 @@ class Thoughtsteal(SpellCard):
 class VelensChosen(SpellCard):
     def __init__(self):
         super().__init__("Velen's Chosen", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -317,7 +317,7 @@ class Lightbomb(SpellCard):
 class LightOfTheNaaru(SpellCard):
     def __init__(self):
         super().__init__("Light of the Naaru", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)

@@ -13,7 +13,7 @@ from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfer
 class MortalCoil(SpellCard):
     def __init__(self):
         super().__init__("Mortal Coil", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -43,7 +43,7 @@ class Hellfire(SpellCard):
 class ShadowBolt(SpellCard):
     def __init__(self):
         super().__init__("Shadow Bolt", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.FREE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -53,7 +53,7 @@ class ShadowBolt(SpellCard):
 class DrainLife(SpellCard):
     def __init__(self):
         super().__init__("Drain Life", 3, CHARACTER_CLASS.WARLOCK,
-                         CARD_RARITY.FREE, hearthbreaker.targeting.find_spell_target)
+                         CARD_RARITY.FREE, target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -64,7 +64,7 @@ class DrainLife(SpellCard):
 class Soulfire(SpellCard):
     def __init__(self):
         super().__init__("Soulfire", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -87,7 +87,7 @@ class TwistingNether(SpellCard):
 class Demonfire(SpellCard):
     def __init__(self):
         super().__init__("Demonfire", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -102,8 +102,8 @@ class Demonfire(SpellCard):
 class SacrificialPact(SpellCard):
     def __init__(self):
         super().__init__("Sacrificial Pact", 0, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target,
-                         lambda character: character.card.minion_type == MINION_TYPE.DEMON)
+                         target_func=hearthbreaker.targeting.find_spell_target,
+                         filter_func=lambda character: character.card.minion_type == MINION_TYPE.DEMON)
 
     def use(self, player, game):
         super().use(player, game)
@@ -114,7 +114,7 @@ class SacrificialPact(SpellCard):
 class SiphonSoul(SpellCard):
     def __init__(self):
         super().__init__("Siphon Soul", 6, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -153,7 +153,7 @@ class SenseDemons(SpellCard):
 class BaneOfDoom(SpellCard):
     def __init__(self):
         super().__init__("Bane of Doom", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -170,7 +170,7 @@ class BaneOfDoom(SpellCard):
 class Shadowflame(SpellCard):
     def __init__(self):
         super().__init__("Shadowflame", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -184,7 +184,7 @@ class Shadowflame(SpellCard):
 class Corruption(SpellCard):
     def __init__(self):
         super().__init__("Corruption", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_enemy_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_enemy_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -194,7 +194,7 @@ class Corruption(SpellCard):
 class PowerOverwhelming(SpellCard):
     def __init__(self):
         super().__init__("Power Overwhelming", 1, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_friendly_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_friendly_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -207,7 +207,7 @@ class PowerOverwhelming(SpellCard):
 class Darkbomb(SpellCard):
     def __init__(self):
         super().__init__("Darkbomb", 2, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -217,7 +217,7 @@ class Darkbomb(SpellCard):
 class Demonheart(SpellCard):
     def __init__(self):
         super().__init__("Demonheart", 5, CHARACTER_CLASS.WARLOCK, CARD_RARITY.EPIC,
-                         hearthbreaker.targeting.find_minion_spell_target)
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
@@ -232,7 +232,7 @@ class Demonheart(SpellCard):
 class Implosion(SpellCard):
     def __init__(self):
         super().__init__("Imp-losion", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
-                         hearthbreaker.targeting.find_spell_target)
+                         target_func=hearthbreaker.targeting.find_spell_target)
 
     def use(self, player, game):
         super().use(player, game)
