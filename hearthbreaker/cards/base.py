@@ -64,8 +64,6 @@ class Card(Bindable, GameObject):
             self.ref_name = ref_name
         else:
             self.ref_name = name
-        if not isinstance(self.ref_name, str) or not isinstance(collectible, bool):
-            raise GameException("PROBLEM WITH " + self.name)
         self.mana = mana
         self.character_class = character_class
         self.rarity = rarity

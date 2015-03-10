@@ -15,7 +15,7 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, BattlecrySelector, SelfSelector, \
     PlayerSelector, MinionCardSelector, TargetSelector, EnemyPlayer, CharacterSelector, SpellSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
-    MechCardSelector, Difference, LastDrawnSelector
+    MechCardSelector, Difference, LastDrawnSelector, RandomAmount
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury
@@ -2046,7 +2046,7 @@ class BoomBot(MinionCard):
         super().__init__("Boom Bot", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(1, 1, deathrattle=Deathrattle(Damage(player.game.random_amount(1, 4)),
+        return Minion(1, 1, deathrattle=Deathrattle(Damage(RandomAmount(1, 4)),
                                                     CharacterSelector(players=EnemyPlayer(), picker=RandomPicker())))
 
 

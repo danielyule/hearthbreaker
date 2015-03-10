@@ -552,6 +552,22 @@ class Difference(Function, metaclass=Amount):
         return self
 
 
+class RandomAmount(Function):
+    def __init__(self, minimum, maximum):
+        self.minimum = minimum
+        self.maximum = maximum
+
+    def do(self, target, *args):
+        return target.player.game._generate_random_between(self.minimum, self.maximum)
+
+    def __to_json__(self):
+        return {
+            'name': 'random_amount',
+            'minimum': self.minimum,
+            'maximum': self.maximum,
+        }
+
+
 class EventValue(Function):
     def __init__(self):
         pass

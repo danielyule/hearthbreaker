@@ -3591,16 +3591,26 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Rusty Horn", game.players[0].hand[-1].name)
 
     def test_BoomBot(self):
-        game = generate_game_for(BoomBot, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
+        game = generate_game_for(BoomBot, StonetuskBoar, OneCardPlayingAgent, PlayAndAttackAgent)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
 
-        # The boom bot targets the second Stonetust boar that was played (two can be played because of the coin)
+        # The boom bot targets the enemy hero for two damage
         game.play_single_turn()
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[1].minions))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(28, game.players[1].hero.health)
+
+        # The boom bot targets the second boar that was played.
+        game.play_single_turn()
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(28, game.players[1].hero.health)
 
     def test_DoctorBoom(self):
         game = generate_game_for([BoulderfistOgre, DoctorBoom], StonetuskBoar, CardTestingAgent, DoNothingAgent)

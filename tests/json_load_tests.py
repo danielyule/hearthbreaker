@@ -130,7 +130,11 @@ class JSONTester:
 
             return Weapon(**create_dict)
         if card_def['rarity'] != "Special":
-            name = re.sub("[:'.-]", "", card_def['name'])
+            if 'ref_name' in card_def:
+                name = card_def['ref_name']
+            else:
+                name = card_def['name']
+            name = re.sub("[:'. ()-]", "", name)
             name = "".join([word[0].upper() + word[1:] for word in name.split()])
             cls_def = getattr(hearthbreaker.cards, name, None)
             if cls_def:
