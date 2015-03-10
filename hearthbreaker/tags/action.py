@@ -23,11 +23,7 @@ class Give(Action):
     def act(self, actor, target, other=None):
         buffs = self.picker.pick(actor, self.buffs)
         for buff in buffs:
-            if hasattr(buff.status, "amount"):
-                buff.status.amount = buff.status.get_amount(target, target)
-                if buff.status.amount == 0:
-                    break
-            target.add_buff(buff)
+            target.add_buff(buff.to_instance(target))
 
     def __to_json__(self):
         if isinstance(self.picker, AllPicker):

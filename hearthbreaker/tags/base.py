@@ -15,6 +15,9 @@ class JSONObject(metaclass=abc.ABCMeta):
     def from_json(action, selector):
         pass
 
+    def to_instance(self, target):
+        return copy.copy(self)
+
     def __from_json__(self, **kwargs):
         self.__init__(**kwargs)
         return self
@@ -103,6 +106,11 @@ class Buff(Tag):
 
     def is_minion(self):
         return False
+
+    def to_instance(self, target):
+        new_instance = copy.copy(self)
+        new_instance.status = self.status.to_instance(target)
+        return new_instance
 
     def __to_json__(self):
         if self.condition:
@@ -193,7 +201,7 @@ class Player(metaclass=abc.ABCMeta):
 
     @staticmethod
     def from_json(name):
-        from hearthbreaker.tags.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne,\
+        from hearthbreaker.tags.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne, \
             PlayerTwo, CurrentPlayer, OtherPlayer
         if name == "friendly":
             return FriendlyPlayer()
@@ -293,6 +301,7 @@ class Amount(abc.ABCMeta):
         base_init = cls.__init__
         base_to_json = cls.__to_json__
         base_from_json = cls.__from_json__
+        base_to_instance = cls.to_instance
 
         def init_with_amount(self, amount=1, multiplier=1, **kwargs):
             self.amount = amount
@@ -325,10 +334,16 @@ class Amount(abc.ABCMeta):
             else:
                 return self.amount
 
+        def to_instance(self, target):
+            new_instance = base_to_instance(self, target)
+            new_instance.amount = new_instance.get_amount(target, target)
+            return new_instance
+
         cls.__init__ = init_with_amount
         cls.__to_json__ = to_json_with_amount
         cls.__from_json__ = from_json_with_amount
         cls.get_amount = get_amount
+        cls.to_instance = to_instance
 
 
 class Event(JSONObject, metaclass=abc.ABCMeta):
@@ -478,9 +493,9 @@ class Effect(Tag):
 
     @staticmethod
     def from_json(event, tags):
-            tags = [ActionTag.from_json(**tag) for tag in tags]
-            event = Event.from_json(**event)
-            return Effect(event, tags)
+        tags = [ActionTag.from_json(**tag) for tag in tags]
+        event = Event.from_json(**event)
+        return Effect(event, tags)
 
 
 class Condition(JSONObject, metaclass=abc.ABCMeta):
@@ -531,7 +546,7 @@ class ActionTag(Tag):
                 'actions': self.actions,
                 'selector': self.selector,
                 'condition': self.condition,
-            }
+                }
         return {
             'actions': self.actions,
             'selector': self.selector
