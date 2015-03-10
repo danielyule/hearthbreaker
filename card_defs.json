@@ -6235,43 +6235,43 @@
     "type": "minion", 
     "collectible": true, 
     "rarity": "Common"
-  },
+  }, 
   {
-    "mana": 1,
-    "attack": 1,
+    "mana": 1, 
+    "attack": 1, 
     "deathrattle": [
       {
         "actions": [
           {
             "amount": {
-                "name": "random_amount",
-                "minimum": 1,
-                "maximum": 4
-            },
+              "minimum": 1, 
+              "name": "random_amount", 
+              "maximum": 4
+            }, 
             "name": "damage"
           }
-        ],
+        ], 
         "selector": {
           "picker": {
-            "count": 1,
+            "count": 1, 
             "name": "random"
-          },
-          "players": "enemy",
-          "name": "character",
+          }, 
+          "players": "enemy", 
+          "name": "character", 
           "condition": {
             "name": "minion_is_not_target"
           }
         }
       }
-    ],
-    "health": 1,
-    "name": "Boom Bot",
-    "minion_type": "Mech",
-    "character_class": "",
-    "type": "minion",
-    "collectible": false,
+    ], 
+    "health": 1, 
+    "name": "Boom Bot", 
+    "minion_type": "Mech", 
+    "character_class": "", 
+    "type": "minion", 
+    "collectible": false, 
     "rarity": "Common"
-  },
+  }, 
   {
     "mana": 7, 
     "attack": 7, 
@@ -9821,41 +9821,49 @@
     "character_class": "Druid", 
     "choices": [
       {
-        "card": "moonfire_keeper", 
-        "actions": [
+        "card": "Moonfire", 
+        "tags": [
           {
-            "amount": 2, 
-            "name": "damage"
+            "actions": [
+              {
+                "amount": 2, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "user"
+              }, 
+              "players": "both", 
+              "name": "character", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "user"
-          }, 
-          "players": "both", 
-          "name": "character", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }, 
       {
         "card": "Dispel", 
-        "actions": [
+        "tags": [
           {
-            "name": "silence"
+            "actions": [
+              {
+                "name": "silence"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "user"
+              }, 
+              "players": "both", 
+              "name": "minion", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "user"
-          }, 
-          "players": "both", 
-          "name": "minion", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -9913,31 +9921,39 @@
     "choices": [
       {
         "card": "Cat Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Claw (cat)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Claw (cat)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Bear Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Claw (bear)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Claw (bear)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -9953,32 +9969,40 @@
     "choices": [
       {
         "card": "Ancient Secrets", 
-        "actions": [
+        "tags": [
           {
-            "amount": 5, 
-            "name": "heal"
+            "actions": [
+              {
+                "amount": 5, 
+                "name": "heal"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "hero"
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "all"
-          }, 
-          "players": "friendly", 
-          "name": "hero"
-        }
+        ]
       }, 
       {
         "card": "Ancient Teachings", 
-        "actions": [
+        "tags": [
           {
-            "amount": 3, 
-            "name": "draw"
+            "actions": [
+              {
+                "amount": 3, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "friendly", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -9994,46 +10018,54 @@
     "choices": [
       {
         "card": "Rooted", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 5, 
-                  "name": "change_health"
-                }
-              }, 
-              {
-                "status": {
-                  "name": "taunt"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 5, 
+                      "name": "change_health"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "name": "taunt"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Uproot", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 5, 
-                  "name": "change_attack"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 5, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -10161,56 +10193,64 @@
     "choices": [
       {
         "card": "Give your other minions +2/+2 and taunt", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_attack"
-                }
-              }, 
-              {
-                "status": {
-                  "amount": 2, 
-                  "name": "change_health"
-                }
-              }, 
-              {
-                "status": {
-                  "name": "taunt"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 2, 
+                      "name": "change_attack"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "amount": 2, 
+                      "name": "change_health"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "name": "taunt"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "minion", 
+              "condition": {
+                "name": "minion_is_not_target"
+              }
+            }
           }
-        ], 
-        "selector": {
-          "picker": {
-            "name": "all"
-          }, 
-          "players": "friendly", 
-          "name": "minion", 
-          "condition": {
-            "name": "minion_is_not_target"
-          }
-        }
+        ]
       }, 
       {
         "card": "Summon two 2/2 Treants with taunt", 
-        "actions": [
+        "tags": [
           {
-            "count": 2, 
-            "name": "summon", 
-            "card": {
-              "name": "Treant (taunt)"
+            "actions": [
+              {
+                "count": 2, 
+                "name": "summon", 
+                "card": {
+                  "name": "Treant (taunt)"
+                }
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
             }
           }
-        ], 
-        "selector": {
-          "players": "friendly", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -10226,41 +10266,49 @@
     "choices": [
       {
         "card": "Attack Mode", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_attack"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Tank Mode", 
-        "actions": [
+        "tags": [
           {
-            "name": "give", 
-            "buffs": [
+            "actions": [
               {
-                "status": {
-                  "amount": 1, 
-                  "name": "change_health"
-                }
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_health"
+                    }
+                  }
+                ]
               }
-            ]
+            ], 
+            "selector": {
+              "name": "self"
+            }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "mana": 2, 
@@ -10432,30 +10480,38 @@
     "choices": [
       {
         "card": "Gift of Mana", 
-        "actions": [
+        "tags": [
           {
-            "count": 1, 
-            "name": "give_mana_crystal", 
-            "empty": false
+            "actions": [
+              {
+                "count": 1, 
+                "name": "give_mana_crystal", 
+                "empty": false
+              }
+            ], 
+            "selector": {
+              "players": "both", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "both", 
-          "name": "player"
-        }
+        ]
       }, 
       {
         "card": "Gift of Cards", 
-        "actions": [
+        "tags": [
           {
-            "amount": 1, 
-            "name": "draw"
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "both", 
+              "name": "player"
+            }
           }
-        ], 
-        "selector": {
-          "players": "both", 
-          "name": "player"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -13224,5 +13280,1770 @@
     "type": "weapon", 
     "collectible": false, 
     "rarity": "Common"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Bananas", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "I Am Murloc", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Power of the Horde", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Rogues Do It...", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Dream", 
+    "character_class": "Dream", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Ysera Awakens", 
+    "character_class": "Dream", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Nightmare", 
+    "character_class": "Dream", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "The Coin", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Armor Plating", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Emergency Coolant", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Finicky Cloakfield", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Reversing Switch", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Rusty Horn", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Time Rewinder", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Whirling Blades", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Gallywix's Coin", 
+    "character_class": "", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Innervate", 
+    "character_class": "Druid", 
+    "rarity": "Free", 
+    "mana": 0, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "give_mana"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Moonfire", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "character"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Claw", 
+    "character_class": "Druid", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_attack"
+                }, 
+                "until": {
+                  "event_name": "turn_ended", 
+                  "player": "friendly"
+                }
+              }
+            ]
+          }, 
+          {
+            "amount": 2, 
+            "name": "increase_armor"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "hero"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Naturalize", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "name": "kill"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "minion"
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "amount": 2, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Savagery", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 1, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": {
+              "attribute": "attack", 
+              "name": "attribute", 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            }, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "minion"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mark of the Wild", 
+    "character_class": "Druid", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_attack"
+                }
+              }, 
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_health"
+                }
+              }, 
+              {
+                "status": {
+                  "name": "taunt"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "minion"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
+    "name": "Power of the Wild", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "choices": [
+      {
+        "card": "Leader of the Pack", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_attack"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "amount": 1, 
+                      "name": "change_health"
+                    }
+                  }
+                ]
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "minion"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Summon a Panther", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "summon", 
+                "card": {
+                  "name": "Panther"
+                }
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }
+    ], 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Wild Growth", 
+    "character_class": "Druid", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Excess Mana", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Wrath", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "choices": [
+      {
+        "card": "Wrath 1 Damage", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }, 
+          {
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Wrath 3 Damage", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 3, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }
+        ]
+      }
+    ], 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Healing Touch", 
+    "character_class": "Druid", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mark of Nature", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Savage Roar", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Bite", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Soul of the Forest", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Swipe", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Nourish", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Starfall", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Force of Nature", 
+    "character_class": "Druid", 
+    "rarity": "Epic", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Starfire", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Poison Seeds", 
+    "character_class": "Druid", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Dark Wispers", 
+    "character_class": "Druid", 
+    "rarity": "Epic", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Recycle", 
+    "character_class": "Druid", 
+    "rarity": "Rare", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Tree of Life", 
+    "character_class": "Druid", 
+    "rarity": "Epic", 
+    "mana": 9, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Hunter's Mark", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Arcane Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Bestial Wrath", 
+    "character_class": "Hunter", 
+    "rarity": "Epic", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Flare", 
+    "character_class": "Hunter", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Tracking", 
+    "character_class": "Hunter", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Deadly Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Multi-Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Free", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Explosive Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Rare", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Kill Command", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Unleash the Hounds", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Animal Companion", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Call Pet", 
+    "character_class": "Hunter", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Cobra Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Feign Death", 
+    "character_class": "Hunter", 
+    "rarity": "Epic", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Arcane Missiles", 
+    "character_class": "Mage", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Ice Lance", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mirror Image", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Arcane Explosion", 
+    "character_class": "Mage", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Frostbolt", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Arcane Intellect", 
+    "character_class": "Mage", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Frost Nova", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Cone of Cold", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Fireball", 
+    "character_class": "Mage", 
+    "rarity": "Free", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Polymorph", 
+    "character_class": "Mage", 
+    "rarity": "Free", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blizzard", 
+    "character_class": "Mage", 
+    "rarity": "Rare", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Flamestrike", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 7, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Pyroblast", 
+    "character_class": "Mage", 
+    "rarity": "Epic", 
+    "mana": 10, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Flamecannon", 
+    "character_class": "Mage", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Echo of Medivh", 
+    "character_class": "Mage", 
+    "rarity": "Epic", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Unstable Portal", 
+    "character_class": "Mage", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Avenging Wrath", 
+    "character_class": "Paladin", 
+    "rarity": "Epic", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blessed Champion", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blessing of Kings", 
+    "character_class": "Paladin", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blessing of Might", 
+    "character_class": "Paladin", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blessing of Wisdom", 
+    "character_class": "Paladin", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Consecration", 
+    "character_class": "Paladin", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Divine Favor", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Equality", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Hammer of Wrath", 
+    "character_class": "Paladin", 
+    "rarity": "Free", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Hand of Protection", 
+    "character_class": "Paladin", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Holy Light", 
+    "character_class": "Paladin", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Holy Wrath", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Humility", 
+    "character_class": "Paladin", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Lay on Hands", 
+    "character_class": "Paladin", 
+    "rarity": "Epic", 
+    "mana": 8, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Seal of Light", 
+    "character_class": "Paladin", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Muster for Battle", 
+    "character_class": "Paladin", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Circle of Healing", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Divine Spirit", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Holy Fire", 
+    "character_class": "Priest", 
+    "rarity": "Rare", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Holy Nova", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Holy Smite", 
+    "character_class": "Priest", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Inner Fire", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mass Dispel", 
+    "character_class": "Priest", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mind Blast", 
+    "character_class": "Priest", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mind Control", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 10, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mind Vision", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mindgames", 
+    "character_class": "Priest", 
+    "rarity": "Epic", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Power Word: Shield", 
+    "character_class": "Priest", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadow Madness", 
+    "character_class": "Priest", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadow Word: Death", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadow Word: Pain", 
+    "character_class": "Priest", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadowform", 
+    "character_class": "Priest", 
+    "rarity": "Epic", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Silence", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Thoughtsteal", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Velen's Chosen", 
+    "character_class": "Priest", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Lightbomb", 
+    "character_class": "Priest", 
+    "rarity": "Epic", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Light of the Naaru", 
+    "character_class": "Priest", 
+    "rarity": "Rare", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Assassinate", 
+    "character_class": "Rogue", 
+    "rarity": "Free", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Backstab", 
+    "character_class": "Rogue", 
+    "rarity": "Free", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Betrayal", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Blade Flurry", 
+    "character_class": "Rogue", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Cold Blood", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Conceal", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Deadly Poison", 
+    "character_class": "Rogue", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Eviscerate", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Fan of Knives", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Headcrack", 
+    "character_class": "Rogue", 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Preparation", 
+    "character_class": "Rogue", 
+    "rarity": "Epic", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sap", 
+    "character_class": "Rogue", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadowstep", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shiv", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sinister Strike", 
+    "character_class": "Rogue", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sprint", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 7, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Vanish", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Tinker's Sharpsword Oil", 
+    "character_class": "Rogue", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sabotage", 
+    "character_class": "Rogue", 
+    "rarity": "Epic", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Ancestral Healing", 
+    "character_class": "Shaman", 
+    "rarity": "Free", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Ancestral Spirit", 
+    "character_class": "Shaman", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Bloodlust", 
+    "character_class": "Shaman", 
+    "rarity": "Common", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Earth Shock", 
+    "character_class": "Shaman", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Far Sight", 
+    "character_class": "Shaman", 
+    "rarity": "Epic", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Feral Spirit", 
+    "character_class": "Shaman", 
+    "overload": 2, 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Forked Lightning", 
+    "character_class": "Shaman", 
+    "overload": 2, 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Frost Shock", 
+    "character_class": "Shaman", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Hex", 
+    "character_class": "Shaman", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Lava Burst", 
+    "character_class": "Shaman", 
+    "overload": 2, 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Lightning Bolt", 
+    "character_class": "Shaman", 
+    "overload": 1, 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Lightning Storm", 
+    "character_class": "Shaman", 
+    "overload": 2, 
+    "rarity": "Rare", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Rockbiter Weapon", 
+    "character_class": "Shaman", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Totemic Might", 
+    "character_class": "Shaman", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Windfury", 
+    "character_class": "Shaman", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Reincarnate", 
+    "character_class": "Shaman", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Crackle", 
+    "character_class": "Shaman", 
+    "overload": 1, 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Ancestor's Call", 
+    "character_class": "Shaman", 
+    "rarity": "Epic", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mortal Coil", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Hellfire", 
+    "character_class": "Warlock", 
+    "rarity": "Free", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadow Bolt", 
+    "character_class": "Warlock", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Drain Life", 
+    "character_class": "Warlock", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Soulfire", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Twisting Nether", 
+    "character_class": "Warlock", 
+    "rarity": "Epic", 
+    "mana": 8, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Demonfire", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sacrificial Pact", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Siphon Soul", 
+    "character_class": "Warlock", 
+    "rarity": "Rare", 
+    "mana": 6, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Sense Demons", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Bane of Doom", 
+    "character_class": "Warlock", 
+    "rarity": "Epic", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shadowflame", 
+    "character_class": "Warlock", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Corruption", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Power Overwhelming", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Darkbomb", 
+    "character_class": "Warlock", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Demonheart", 
+    "character_class": "Warlock", 
+    "rarity": "Epic", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Imp-losion", 
+    "character_class": "Warlock", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Battle Rage", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Brawl", 
+    "character_class": "Warrior", 
+    "rarity": "Epic", 
+    "mana": 5, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Charge", 
+    "character_class": "Warrior", 
+    "rarity": "Free", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Cleave", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Commanding Shout", 
+    "character_class": "Warrior", 
+    "rarity": "Rare", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Execute", 
+    "character_class": "Warrior", 
+    "rarity": "Free", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Heroic Strike", 
+    "character_class": "Warrior", 
+    "rarity": "Free", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Inner Rage", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Mortal Strike", 
+    "character_class": "Warrior", 
+    "rarity": "Rare", 
+    "mana": 4, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Rampage", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shield Block", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Shield Slam", 
+    "character_class": "Warrior", 
+    "rarity": "Epic", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Slam", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Upgrade!", 
+    "character_class": "Warrior", 
+    "rarity": "Rare", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Whirlwind", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 1, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Bouncing Blade", 
+    "character_class": "Warrior", 
+    "rarity": "Epic", 
+    "mana": 3, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Crush", 
+    "character_class": "Warrior", 
+    "rarity": "Epic", 
+    "mana": 7, 
+    "type": "spell"
+  }, 
+  {
+    "collectible": false, 
+    "name": "Burrowing Mine", 
+    "character_class": "Warrior", 
+    "rarity": "Common", 
+    "mana": 0, 
+    "effects": [
+      {
+        "event": {
+          "event_name": "drawn"
+        }, 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 10, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "friendly", 
+              "name": "hero"
+            }
+          }
+        ]
+      }, 
+      {
+        "event": {
+          "event_name": "drawn"
+        }, 
+        "tags": [
+          {
+            "actions": [
+              {
+                "query": {
+                  "source": "last_drawn", 
+                  "conditions": []
+                }, 
+                "amount": 1, 
+                "name": "discard"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }, 
+      {
+        "event": {
+          "event_name": "drawn"
+        }, 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 1, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }
+    ], 
+    "type": "spell"
   }
 ]

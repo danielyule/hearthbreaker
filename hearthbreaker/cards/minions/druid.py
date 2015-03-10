@@ -184,7 +184,7 @@ class Cenarius(MinionCard):
             Choice(IncreaseStats(), [ActionTag(Give([Buff(ChangeAttack(2)),
                                                     Buff(ChangeHealth(2)),
                                                     Buff(Taunt())]), MinionSelector())]),
-            Choice(SummonTreants(), [ActionTag(Summon(Treant(), 2), PlayerSelector())])
+            Choice(SummonTreants(), [ActionTag(Summon(TauntTreant(), 2), PlayerSelector())])
         ])
 
     def create_minion(self, player):

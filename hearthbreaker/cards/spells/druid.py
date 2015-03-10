@@ -1,8 +1,11 @@
 import copy
 from hearthbreaker.cards.base import ChoiceCard, SpellCard
-from hearthbreaker.tags.action import Summon
-from hearthbreaker.tags.base import Deathrattle
-from hearthbreaker.tags.selector import PlayerSelector
+from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw
+from hearthbreaker.tags.base import Deathrattle, ActionTag, BuffUntil, Buff, Choice
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import PlayerSelector, CharacterSelector, BothPlayer, UserPicker, HeroSelector, \
+    MinionSelector, EnemyPlayer, Attribute
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 
@@ -62,6 +65,7 @@ class SummonPanther(ChoiceCard):
 
 class PowerOfTheWild(SpellCard):
     def __init__(self):
+        from hearthbreaker.cards.minions.druid import Panther
         super().__init__("Power of the Wild", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          choices=[Choice(LeaderOfThePack(), [ActionTag(Give([Buff(ChangeAttack(1)),
                                                                             Buff(ChangeHealth(1))]),
