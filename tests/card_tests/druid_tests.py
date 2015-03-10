@@ -228,32 +228,26 @@ class TestDruid(unittest.TestCase):
         self.assertTrue(game.other_player.minions[0].taunt)
 
     def test_SavageRoar(self):
-        deck1 = StackedDeck([StonetuskBoar(), StonetuskBoar(), SavageRoar()], CHARACTER_CLASS.DRUID)
-        deck2 = StackedDeck([StonetuskBoar()], CHARACTER_CLASS.MAGE)
-        game = Game([deck1, deck2], [OneCardPlayingAgent(), OneCardPlayingAgent()])
+        def check_attacks_and_play(player):
+            old_play_turn(player)
+            for minion in player.minions:
+                self.assertEqual(3, minion.calculate_attack())
 
-        game.current_player = 1
+        game = generate_game_for([StonetuskBoar, StonetuskBoar, SavageRoar], StonetuskBoar,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        old_play_turn = game.players[0].agent.do_turn
+
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
 
-        minion_increase_mock = mock.Mock()
 
-        game.other_player.minions[0].bind("attack_changed", minion_increase_mock)
-        game.other_player.minions[1].bind("attack_changed", minion_increase_mock)
-
-        player_increase_mock = mock.Mock()
-
-        game.other_player.hero.bind("attack_changed", player_increase_mock)
-
+        game.players[0].agent.do_turn = check_attacks_and_play
         game.play_single_turn()
 
         self.assertEqual(0, game.current_player.mana)
 
-        # Make sure the attack got increased
-        self.assertListEqual([mock.call(2), mock.call(2)], minion_increase_mock.call_args_list)
-        self.assertListEqual([mock.call(2)], player_increase_mock.call_args_list)
 
         # And make sure that it went down again
         self.assertEqual(1, game.current_player.minions[0].calculate_attack())

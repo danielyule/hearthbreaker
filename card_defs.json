@@ -13756,7 +13756,24 @@
     "character_class": "Druid", 
     "rarity": "Free", 
     "mana": 3, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 8,
+            "name": "heal"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "both", 
+          "name": "character"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 

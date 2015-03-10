@@ -15,6 +15,9 @@ class JSONObject(metaclass=abc.ABCMeta):
     def from_json(action, selector):
         pass
 
+    def to_instance(self, target):
+        return copy.copy(self)
+
     def __from_json__(self, **kwargs):
         self.__init__(**kwargs)
         return self
@@ -62,7 +65,7 @@ class Aura(Tag):
 
     def match(self, obj):
         return (not self.condition or self.condition.evaluate(self.owner, self.owner)) and \
-            self.selector.match(self.owner, obj)
+               self.selector.match(self.owner, obj)
 
     def __to_json__(self):
         if self.condition:
@@ -70,11 +73,11 @@ class Aura(Tag):
                 'status': self.status,
                 'selector': self.selector,
                 'condition': self.condition,
-            }
+                }
         return {
             'status': self.status,
             'selector': self.selector,
-        }
+            }
 
     @staticmethod
     def from_json(status, selector, condition=None):
@@ -104,6 +107,11 @@ class Buff(Tag):
     def is_minion(self):
         return False
 
+    def to_instance(self, target):
+        new_instance = copy.copy(self)
+        new_instance.status = self.status.to_instance(target)
+        return new_instance
+
     def __to_json__(self):
         if self.condition:
             return {
@@ -112,7 +120,7 @@ class Buff(Tag):
             }
         return {
             'status': self.status,
-        }
+            }
 
     @staticmethod
     def from_json(status, condition=None):
@@ -193,7 +201,7 @@ class Player(metaclass=abc.ABCMeta):
 
     @staticmethod
     def from_json(name):
-        from hearthbreaker.tags.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne,\
+        from hearthbreaker.tags.selector import FriendlyPlayer, EnemyPlayer, BothPlayer, PlayerOne, \
             PlayerTwo, CurrentPlayer, OtherPlayer
         if name == "friendly":
             return FriendlyPlayer()
@@ -294,6 +302,8 @@ class Amount(abc.ABCMeta):
         base_to_json = cls.__to_json__
         base_from_json = cls.__from_json__
 
+        base_to_instance = cls.to_instance
+
         def init_with_amount(self, amount=1, multiplier=1, **kwargs):
             self.amount = amount
             self.multipler = multiplier
@@ -325,10 +335,16 @@ class Amount(abc.ABCMeta):
             else:
                 return self.amount
 
+        def to_instance(self, target):
+            new_instance = base_to_instance(self, target)
+            new_instance.amount = new_instance.get_amount(target, target)
+            return new_instance
+
         cls.__init__ = init_with_amount
         cls.__to_json__ = to_json_with_amount
         cls.__from_json__ = from_json_with_amount
         cls.get_amount = get_amount
+        cls.to_instance = to_instance
 
 
 class Event(JSONObject, metaclass=abc.ABCMeta):
@@ -474,13 +490,13 @@ class Effect(Tag):
         return {
             'event': self.event,
             'tags': self.tags,
-        }
+            }
 
     @staticmethod
     def from_json(event, tags):
-            tags = [ActionTag.from_json(**tag) for tag in tags]
-            event = Event.from_json(**event)
-            return Effect(event, tags)
+        tags = [ActionTag.from_json(**tag) for tag in tags]
+        event = Event.from_json(**event)
+        return Effect(event, tags)
 
 
 class Condition(JSONObject, metaclass=abc.ABCMeta):
@@ -531,7 +547,7 @@ class ActionTag(Tag):
                 'actions': self.actions,
                 'selector': self.selector,
                 'condition': self.condition,
-            }
+                }
         return {
             'actions': self.actions,
             'selector': self.selector
@@ -581,7 +597,7 @@ class CARD_SOURCE:
         "MINION": MINION,
         "MY_SECRETS": MY_SECRETS,
         "ENEMY_SECRETS": ENEMY_SECRETS,
-    }
+        }
 
     @staticmethod
     def from_str(source_name):

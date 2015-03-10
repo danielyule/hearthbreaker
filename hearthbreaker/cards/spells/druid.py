@@ -1,10 +1,10 @@
 import copy
 from hearthbreaker.cards.base import ChoiceCard, SpellCard
-from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw
+from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw, Heal
 from hearthbreaker.tags.base import Deathrattle, ActionTag, BuffUntil, Buff, Choice
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, CharacterSelector, BothPlayer, UserPicker, HeroSelector, \
-    MinionSelector, EnemyPlayer, Attribute
+    MinionSelector, EnemyPlayer, Attribute, CurrentPlayer
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -117,51 +117,33 @@ class Wrath(SpellCard):
 class HealingTouch(SpellCard):
     def __init__(self):
         super().__init__("Healing Touch", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.FREE,
-                         target_func=hearthbreaker.targeting.find_spell_target)
+                         action_tags=[ActionTag(Heal(8), CharacterSelector(None, BothPlayer()))])
 
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.heal(player.effective_heal_power(8), self)
+
+class MarkOfNatureAttack(ChoiceCard):
+    def __init__(self):
+        super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+
+class MarkOfNatureHealth(ChoiceCard):
+    def __init__(self):
+        super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
 
 
 class MarkOfNature(SpellCard):
     def __init__(self):
         super().__init__("Mark of Nature", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         target_func=hearthbreaker.targeting.find_minion_spell_target)
-
-    def use(self, player, game):
-        class MarkOfNatureAttack(ChoiceCard):
-            def __init__(self):
-                super().__init__("Mark of Nature +4 Attack", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False,
-                                 target_func=hearthbreaker.targeting.find_minion_spell_target)
-
-            def use(self, player, game):
-                target.change_attack(4)
-
-        class MarkOfNatureHealth(ChoiceCard):
-            def __init__(self):
-                super().__init__("Mark of Nature +4 Health", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False,
-                                 target_func=hearthbreaker.targeting.find_minion_spell_target)
-
-            def use(self, player, game):
-                target.increase_health(4)
-                target.taunt = True
-
-        super().use(player, game)
-        target = self.target
-        option = game.current_player.agent.choose_option([MarkOfNatureAttack(), MarkOfNatureHealth()], player)
-        option.use(player, game)
+                         choices=[Choice(MarkOfNatureAttack(), [ActionTag(Give(Buff(ChangeAttack(4))),
+                                                                          MinionSelector(None, BothPlayer()))]),
+                                  Choice(MarkOfNatureHealth(), [ActionTag(Give([Buff(ChangeHealth(4)), Buff(Taunt())]),
+                                                                          MinionSelector(None, BothPlayer()))])])
 
 
 class SavageRoar(SpellCard):
     def __init__(self):
-        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-    def use(self, player, game):
-        super().use(player, game)
-        for minion in player.minions:
-            minion.change_temp_attack(2)
-        player.hero.change_temp_attack(2)
+        super().__init__("Savage Roar", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                         action_tags=[ActionTag(Give(BuffUntil(ChangeAttack(2), TurnEnded(player=CurrentPlayer()))),
+                                                MinionSelector(None))])
 
 
 class Bite(SpellCard):
