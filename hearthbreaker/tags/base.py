@@ -301,6 +301,7 @@ class Amount(abc.ABCMeta):
         base_init = cls.__init__
         base_to_json = cls.__to_json__
         base_from_json = cls.__from_json__
+        base_to_instance = cls.to_instance
 
         base_to_instance = cls.to_instance
 
