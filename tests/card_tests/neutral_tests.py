@@ -3091,6 +3091,26 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         self.assertEqual(3, game.current_player.minions[0].health)
 
+    def test_MadScientist_and_SI7(self):
+        game = generate_game_for([SI7Agent, SinisterStrike], [MadScientist, MadScientist, MirrorEntity],
+                                 CardTestingAgent, OneCardPlayingAgent)
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(0, len(game.players[1].secrets))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual("SI:7 Agent", game.players[0].minions[0].card.name)
+        self.assertEqual("SI:7 Agent", game.players[0].minions[1].card.name)
+        self.assertEqual("Mad Scientist", game.players[1].minions[0].card.name)
+        self.assertEqual("SI:7 Agent", game.players[1].minions[1].card.name)
+        self.assertEqual(0, len(game.players[0].secrets))
+        self.assertEqual(0, len(game.players[1].secrets))
+
     def test_EchoingOoze(self):
         game = generate_game_for(EchoingOoze, StoneskinGargoyle, OneCardPlayingAgent, DoNothingAgent)
 
