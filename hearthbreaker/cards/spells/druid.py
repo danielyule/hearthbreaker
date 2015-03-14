@@ -148,12 +148,9 @@ class SavageRoar(SpellCard):
 
 class Bite(SpellCard):
     def __init__(self):
-        super().__init__("Bite", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
-
-    def use(self, player, game):
-        super().use(player, game)
-        player.hero.change_temp_attack(4)
-        player.hero.increase_armor(4)
+        super().__init__("Bite", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         action_tags=[ActionTag([Give(BuffUntil(ChangeAttack(4), TurnEnded())), IncreaseArmor(4)],
+                                                HeroSelector())])
 
 
 class SoulOfTheForest(SpellCard):
