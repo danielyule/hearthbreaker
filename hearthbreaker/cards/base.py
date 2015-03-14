@@ -282,6 +282,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
             for battlecry in self.battlecry:
                 if not battlecry.do(minion, minion):
                     break
+        game.check_delayed()
         if not minion.removed:
             # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
             minion = player.minions[minion.index]

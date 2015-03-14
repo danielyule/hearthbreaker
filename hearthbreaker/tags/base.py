@@ -548,7 +548,7 @@ class ActionTag(Tag):
                 'actions': self.actions,
                 'selector': self.selector,
                 'condition': self.condition,
-                }
+            }
         return {
             'actions': self.actions,
             'selector': self.selector
