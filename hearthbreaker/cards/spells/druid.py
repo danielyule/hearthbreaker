@@ -1,6 +1,7 @@
 import copy
 from hearthbreaker.cards.base import ChoiceCard, SpellCard
-from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw, Heal
+from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw, Heal, GiveDeathrattle, \
+    GiveManaCrystal
 from hearthbreaker.tags.base import Deathrattle, ActionTag, BuffUntil, Buff, Choice
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, CharacterSelector, BothPlayer, UserPicker, HeroSelector, \
@@ -155,15 +156,10 @@ class Bite(SpellCard):
 
 class SoulOfTheForest(SpellCard):
     def __init__(self):
-        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
-
-    def use(self, player, game):
-        super().use(player, game)
         from hearthbreaker.cards.minions.druid import Treant
-        # Can stack as many deathrattles as we want, so no need to check if this has already been given
-        # See http://hearthstone.gamepedia.com/Soul_of_the_Forest
-        for minion in player.minions:
-            minion.deathrattle.append(Deathrattle(Summon(Treant()), PlayerSelector()))
+        super().__init__("Soul of the Forest", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
+                         action_tags=[ActionTag(GiveDeathrattle(Deathrattle(Summon(Treant()), PlayerSelector())),
+                                                MinionSelector(None))])
 
 
 class Swipe(SpellCard):
@@ -183,48 +179,28 @@ class Swipe(SpellCard):
             game.other_player.hero.damage(player.effective_spell_damage(1), self)
 
 
+class Gain2(ChoiceCard):
+
+    def __init__(self):
+        super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
+
+
+class Draw3(ChoiceCard):
+
+    def __init__(self):
+        super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
+
+
 class Nourish(SpellCard):
     def __init__(self):
-        super().__init__("Nourish", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
-
-    def use(self, player, game):
-        super().use(player, game)
-
-        class Gain2(ChoiceCard):
-
-            def __init__(self):
-                super().__init__("Gain 2 mana crystals", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-            def use(self, player, game):
-                if player.max_mana < 8:
-                    player.max_mana += 2
-                    player.mana += 2
-                else:
-                    player.max_mana = 10
-                    player.mana += 2
-
-        class Draw3(ChoiceCard):
-
-            def __init__(self):
-                super().__init__("Draw three cards", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-            def use(self, player, game):
-                player.draw()
-                player.draw()
-                player.draw()
-
-        option = player.agent.choose_option([Gain2(), Draw3()], player)
-        option.use(player, game)
+        super().__init__("Nourish", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         choices=[Choice(Gain2(), [ActionTag(GiveManaCrystal(2), PlayerSelector())]),
+                                  Choice(Draw3(), [ActionTag(Draw(3), PlayerSelector())])])
 
 
 class DamageAll(ChoiceCard):
     def __init__(self):
         super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
-
-    def use(self, player, game):
-        for minion in copy.copy(game.other_player.minions):
-            minion.damage(player.effective_spell_damage(2), self)
-
 
 class DamageOne(ChoiceCard):
             def __init__(self):
@@ -235,35 +211,24 @@ class DamageOne(ChoiceCard):
                 return super().can_use(player, game) and len(hearthbreaker.targeting.find_minion_spell_target(
                     game, lambda t: t.spell_targetable())) > 0
 
-            def use(self, player, game):
-                targets = hearthbreaker.targeting.find_minion_spell_target(game, lambda t: t.spell_targetable())
-                target = player.agent.choose_target(targets)
-                target.damage(player.effective_spell_damage(5), self)
-
 
 class Starfall(SpellCard):
     def __init__(self):
-        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE)
+        super().__init__("Starfall", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         choices=[Choice(DamageAll(), [ActionTag(Damage(2), MinionSelector(None, EnemyPlayer()))]),
+                                  Choice(DamageOne(), [ActionTag(Damage(5), MinionSelector(None, EnemyPlayer(),
+                                                                                           UserPicker()))])])
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) > 0
 
-    def use(self, player, game):
-        super().use(player, game)
-        option = player.agent.choose_option([DamageAll(), DamageOne()], player)
-        option.use(player, game)
-
 
 class ForceOfNature(SpellCard):
     def __init__(self):
-        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
-
-    def use(self, player, game):
-        super().use(player, game)
         from hearthbreaker.cards.minions.druid import ChargeTreant
-        for i in [0, 1, 2]:
-            treant_card = ChargeTreant()
-            treant_card.summon(player, game, len(player.minions))
+        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC,
+                         action_tags=[ActionTag(Summon(ChargeTreant(), 3), PlayerSelector())])
+
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) < 7
@@ -272,12 +237,8 @@ class ForceOfNature(SpellCard):
 class Starfire(SpellCard):
     def __init__(self):
         super().__init__("Starfire", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
-                         target_func=hearthbreaker.targeting.find_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.damage(player.effective_spell_damage(5), self)
-        player.draw()
+                         action_tags=[ActionTag(Damage(5), CharacterSelector(None, EnemyPlayer(), UserPicker())),
+                                      ActionTag(Draw(), PlayerSelector())])
 
 
 class PoisonSeeds(SpellCard):

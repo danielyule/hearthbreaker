@@ -13761,7 +13761,7 @@
       {
         "actions": [
           {
-            "amount": 8,
+            "amount": 8, 
             "name": "heal"
           }
         ], 
@@ -13781,6 +13781,67 @@
     "character_class": "Druid", 
     "rarity": "Common", 
     "mana": 3, 
+    "choices": [
+      {
+        "card": "Mark of Nature +4 Attack", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 4, 
+                      "name": "change_attack"
+                    }
+                  }
+                ]
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Mark of Nature +4 Health", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "name": "give", 
+                "buffs": [
+                  {
+                    "status": {
+                      "amount": 4, 
+                      "name": "change_health"
+                    }
+                  }, 
+                  {
+                    "status": {
+                      "name": "taunt"
+                    }
+                  }
+                ]
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "both", 
+              "name": "minion"
+            }
+          }
+        ]
+      }
+    ], 
     "type": "spell"
   }, 
   {
@@ -13789,7 +13850,35 @@
     "character_class": "Druid", 
     "rarity": "Common", 
     "mana": 3, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 2, 
+                  "name": "change_attack"
+                }, 
+                "until": {
+                  "event_name": "turn_ended", 
+                  "player": "current_player"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "minion"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 
@@ -13797,7 +13886,39 @@
     "character_class": "Druid", 
     "rarity": "Rare", 
     "mana": 4, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 4, 
+                  "name": "change_attack"
+                }, 
+                "until": {
+                  "event_name": "turn_ended", 
+                  "player": "friendly"
+                }
+              }
+            ]
+          }, 
+          {
+            "amount": 4, 
+            "name": "increase_armor"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "hero"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 
@@ -13805,7 +13926,37 @@
     "character_class": "Druid", 
     "rarity": "Common", 
     "mana": 4, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "deathrattle": {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Treant"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }, 
+            "name": "give"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "all"
+          }, 
+          "players": "friendly", 
+          "name": "minion"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 
@@ -13821,6 +13972,43 @@
     "character_class": "Druid", 
     "rarity": "Rare", 
     "mana": 5, 
+    "choices": [
+      {
+        "card": "Gain 2 mana crystals", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "count": 2, 
+                "name": "give_mana_crystal", 
+                "empty": false
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Draw three cards", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 3, 
+                "name": "draw"
+              }
+            ], 
+            "selector": {
+              "players": "friendly", 
+              "name": "player"
+            }
+          }
+        ]
+      }
+    ], 
     "type": "spell"
   }, 
   {
@@ -13829,6 +14017,48 @@
     "character_class": "Druid", 
     "rarity": "Rare", 
     "mana": 5, 
+    "choices": [
+      {
+        "card": "Do two damage to all enemy minions", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 2, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "all"
+              }, 
+              "players": "enemy", 
+              "name": "minion"
+            }
+          }
+        ]
+      }, 
+      {
+        "card": "Do five damage to an enemy minion", 
+        "tags": [
+          {
+            "actions": [
+              {
+                "amount": 5, 
+                "name": "damage"
+              }
+            ], 
+            "selector": {
+              "picker": {
+                "name": "user"
+              }, 
+              "players": "enemy", 
+              "name": "minion"
+            }
+          }
+        ]
+      }
+    ], 
     "type": "spell"
   }, 
   {
@@ -13837,7 +14067,24 @@
     "character_class": "Druid", 
     "rarity": "Epic", 
     "mana": 6, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "count": 3, 
+            "name": "summon", 
+            "card": {
+              "name": "Treant (charge)"
+            }
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 
@@ -13845,7 +14092,36 @@
     "character_class": "Druid", 
     "rarity": "Common", 
     "mana": 6, 
-    "type": "spell"
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 5, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "enemy", 
+          "name": "character"
+        }
+      }, 
+      {
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 

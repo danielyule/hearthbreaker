@@ -1,6 +1,6 @@
 import copy
 from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker, Selector
+    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker, Selector, Deathrattle
 from hearthbreaker.tags.condition import IsSecret
 from hearthbreaker.tags.selector import AllPicker, ConstantSelector
 
@@ -37,12 +37,15 @@ class Give(Action):
             'picker': self.picker,
         }
 
-    def __from_json__(self, buffs=None, effects=None, auras=None, picker=None):
+    def __from_json__(self, buffs=None, effects=None, auras=None, deathrattle=None, picker=None):
         if effects:  # To allow for give to work with effects as well, we check at load time
             return GiveEffect.__new__(GiveEffect).__from_json__(effects)
 
         if auras:  # To allow for give to work with auras as well, we check at load time
             return GiveAura.__new__(GiveAura).__from_json__(auras)
+
+        if deathrattle:  # To allow for give to work with deathrattles as well, we check at load time
+            return GiveDeathrattle.__new__(Deathrattle).__from_json__(deathrattle)
 
         self.buffs = []
         for buff in buffs:
@@ -111,6 +114,26 @@ class GiveEffect(Action):
     def __from_json__(self, effects):
         self.effects = [Effect.from_json(**effect) for effect in effects]
         return self
+
+
+class GiveDeathrattle(Action):
+    def __init__(self, deathrattle):
+        self.deathrattle = deathrattle
+
+    def act(self, actor, target, other=None):
+
+        target.deathrattle.append(self.deathrattle)
+
+    def __to_json__(self):
+        return {
+            'name': 'give',
+            'deathrattle': self.deathrattle
+        }
+
+    def __from_json__(self, deathrattle):
+        self.deathrattle = Deathrattle.from_json(**deathrattle)
+        return self
+
 
 
 class Summon(Action):
