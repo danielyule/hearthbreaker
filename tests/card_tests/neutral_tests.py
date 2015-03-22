@@ -4383,6 +4383,16 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Mimiron's Head", game.current_player.minions[0].card.name)
         self.assertEqual("Mimiron's Head", game.current_player.minions[1].card.name)
 
+    def test_MimironsHead_three_copies(self):
+        game = generate_game_for(MimironsHead, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(15):
+            game.play_single_turn()
+
+        # There should be only one V-07-TR-0N see https://www.youtube.com/watch?v=lY0RIT2f2HE
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Mimiron's Head", game.current_player.minions[0].card.name)
+        self.assertEqual("V-07-TR-0N", game.current_player.minions[1].card.name)
+
     def test_V07TR0N(self):
         game = generate_game_for(V07TR0N, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
         for turn in range(15):
