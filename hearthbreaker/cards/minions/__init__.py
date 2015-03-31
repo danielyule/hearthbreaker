@@ -243,6 +243,7 @@ from hearthbreaker.cards.minions.druid import (
     DruidOfTheFang,
     Malorne,
     GroveTender,
+    DruidOfTheFlame,
 )
 
 from hearthbreaker.cards.minions.hunter import (

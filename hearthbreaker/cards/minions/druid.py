@@ -271,3 +271,42 @@ class GroveTender(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 4)
+
+
+class FlameCat(MinionCard):
+    def __init__(self):
+        super().__init__("Druid of the Flame", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False, MINION_TYPE.BEAST,
+                         ref_name="Druid of the Flame (cat)")
+
+    def create_minion(self, p):
+        return Minion(5, 2)
+
+
+class FlameBird(MinionCard):
+    def __init__(self):
+        super().__init__("Druid of the Flame", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False, MINION_TYPE.BEAST,
+                         ref_name="Druid of the Flame (bird)")
+
+    def create_minion(self, p):
+        return Minion(2, 5)
+
+
+class FlameCatForm(ChoiceCard):
+    def __init__(self):
+        super().__init__("Flame Cat Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+
+class FlameBirdForm(ChoiceCard):
+    def __init__(self):
+        super().__init__("Flame Bird Form", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON)
+
+
+class DruidOfTheFlame(MinionCard):
+    def __init__(self):
+        super().__init__("Druid of the Flame", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, choices=[
+            Choice(FlameCatForm(), Transform(FlameCat()), SelfSelector()),
+            Choice(FlameBirdForm(), Transform(FlameBird()), SelfSelector())
+        ])
+
+    def create_minion(self, player):
+        return Minion(2, 2)
