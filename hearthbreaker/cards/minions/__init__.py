@@ -229,6 +229,7 @@ from hearthbreaker.cards.minions.neutral import (
     KezanMystic,
     MimironsHead,
     GnomishExperimenter,
+    HungryDragon,
 )
 
 from hearthbreaker.cards.minions.druid import (

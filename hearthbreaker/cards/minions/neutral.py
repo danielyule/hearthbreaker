@@ -2443,3 +2443,13 @@ class GnomishExperimenter(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2)
+
+
+class HungryDragon(MinionCard):
+    def __init__(self):
+        super().__init__("Hungry Dragon", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DRAGON,
+                         battlecry=(Battlecry(Summon(CardQuery(conditions=[ManaCost(1), IsMinion()])),
+                                              PlayerSelector(EnemyPlayer()))))
+
+    def create_minion(self, player):
+        return Minion(5, 6)
