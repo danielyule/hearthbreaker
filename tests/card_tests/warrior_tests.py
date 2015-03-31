@@ -205,6 +205,28 @@ class TestWarrior(unittest.TestCase):
         worgen.use(game.players[0], game)
         self.assertFalse(game.players[0].minions[0].charge())
 
+        # Minions summoned by other minions
+        dragonling = DragonlingMechanic()
+        dragonling.player = game.players[0]
+        dragonling.use(game.players[0], game)
+        self.assertTrue(game.players[0].minions[0].charge())
+        self.assertEqual("Mechanical Dragonling", game.players[0].minions[1].card.name)
+        self.assertTrue(game.players[0].minions[1].charge())
+        # Kill them to make room
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        creeper = HauntedCreeper()
+        creeper.player = game.players[0]
+        creeper.use(game.players[0], game)
+        self.assertTrue(game.players[0].minions[0].charge())
+        game.players[0].minions[0].die(None)
+        game.players[0].minions[0].activate_delayed()
+        game.check_delayed()
+        self.assertEqual("Spectral Spider", game.players[0].minions[0].card.name)
+        self.assertTrue(game.players[0].minions[0].charge())
+
     def test_BattleRage(self):
         game = generate_game_for(BattleRage, StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
