@@ -4,7 +4,7 @@ from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
 from hearthbreaker.tags.base import Effect, Battlecry, Buff, Aura, ActionTag
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType
-from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased
+from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased, Damaged
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
     PlayerSelector, EnemyPlayer, UserPicker
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -126,3 +126,11 @@ class ScrewjankClunker(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 5)
+
+
+class AxeFlinger(MinionCard):
+    def __init__(self):
+        super().__init__("Axe Flinger", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(2, 5, effects=[Effect(Damaged(), ActionTag(Damage(2), HeroSelector(EnemyPlayer())))])

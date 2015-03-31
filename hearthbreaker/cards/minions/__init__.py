@@ -378,4 +378,5 @@ from hearthbreaker.cards.minions.warrior import (
     SiegeEngine,
     IronJuggernaut,
     ScrewjankClunker,
+    AxeFlinger,
 )
