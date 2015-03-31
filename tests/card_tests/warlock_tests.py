@@ -355,13 +355,12 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(MINION_TYPE.DEMON, game.players[0].minions[0].card.minion_type)
-        self.assertEqual("Felguard", game.players[0].minions[0].card.name)
-        # Apparently this seed always rolls Dread Infernal
+
+        # Banes the Mogushan but does not kill it
         mogu = MogushanWarden()
         mogu.summon(game.players[1], game, 0)
         game.play_single_turn()
         game.play_single_turn()
-        # Banes the Mogushan but does not kill it
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(5, game.players[1].minions[0].health)
 

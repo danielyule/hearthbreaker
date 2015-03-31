@@ -2,7 +2,8 @@ import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill
-from hearthbreaker.tags.base import Effect, ActionTag
+from hearthbreaker.tags.base import Effect, ActionTag, CardQuery
+from hearthbreaker.tags.condition import IsType
 from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
@@ -157,12 +158,11 @@ class BaneOfDoom(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        demon_list = [BloodImp, Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard]
-        card = game.random_choice(demon_list)
         if self.target.health <= player.effective_spell_damage(2) and \
                 (isinstance(self.target, Minion) and not self.target.divine_shield):
             self.target.damage(player.effective_spell_damage(2), self)
-            card().summon(player, game, len(player.minions))
+            demons = CardQuery(conditions=[IsType(MINION_TYPE.DEMON)])
+            demons.get_card(player, self).summon(player, game, len(player.minions))
         else:
             self.target.damage(player.effective_spell_damage(2), self)
 
