@@ -8,7 +8,7 @@ from hearthbreaker.tags.event import TurnStarted, TurnEnded
 from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.cards.minions.warlock import Voidwalker, FlameImp, DreadInfernal, Succubus, Felguard, BloodImp, Imp
+from hearthbreaker.cards.minions.warlock import Imp
 
 
 class MortalCoil(SpellCard):
