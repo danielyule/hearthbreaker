@@ -643,7 +643,7 @@ class CardQuery(JSONObject):
             chosen_card.unattach()
             return chosen_card
         elif self.source == CARD_SOURCE.MINION:
-            card_list = [minion.card for minion in self.minion.get_targets(owner, owner)]
+            return self.minion.get_targets(owner, owner)[0].card
         elif self.source == CARD_SOURCE.MY_SECRETS:
             card_list = [secret.card for secret in player.secrets]
         elif self.source == CARD_SOURCE.ENEMY_SECRETS:
