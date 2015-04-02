@@ -241,8 +241,12 @@ class Game(Bindable):
         if card.is_minion():
             card._placeholder = Minion(0, 0)
             index = self.current_player.agent.choose_index(card, self.current_player)
+            for minion in self.current_player.minions[index:]:
+                minion.index += 1
             self.current_player.minions.insert(index, card._placeholder)
             card._placeholder.index = index
+            card._placeholder.card = card
+            card._placeholder.player = self.current_player
         self.current_player.trigger("card_played", card, card_index)
 
         if not card.cancel:

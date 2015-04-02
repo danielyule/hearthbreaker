@@ -302,7 +302,9 @@ class Duplicate(SecretCard):
     def _reveal(self, minion, by):
         for c in range(0, 2):
             if len(self.player.hand) < 10:
-                self.player.hand.append(type(minion.card)())
+                new_card = type(minion.card)()
+                self.player.hand.append(new_card)
+                new_card.attach(new_card, self.player)
         super().reveal()
 
 

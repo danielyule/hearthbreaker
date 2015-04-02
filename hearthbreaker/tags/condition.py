@@ -215,6 +215,8 @@ class IsType(Condition):
         if minion.is_minion():
             if not minion.is_card():
                 if self.include_self or target is not minion:
+                    if not minion.card:
+                        print(minion)
                     return minion.card.minion_type == self.minion_type
                 return False
             else:

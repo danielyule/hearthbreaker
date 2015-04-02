@@ -262,6 +262,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         if self._placeholder:
             minion.index = self._placeholder.index
             player.minions.remove(self._placeholder)
+            for m in player.minions[minion.index:]:
+                m.index -= 1
         else:
             minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)

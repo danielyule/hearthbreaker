@@ -1741,11 +1741,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(6, len(game.players[0].minions))
         self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[1].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
         self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[5].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
+
+        for index, minion in enumerate(game.players[0].minions):
+            self.assertEqual(minion.index, index, "{} did not have index {}".format(minion, index))
 
         game.play_single_turn()
 
@@ -1753,11 +1756,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.players[0].minions))
         self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
         self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[4].card.name)
         self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[6].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[6].card.name)
+
+        for index, minion in enumerate(game.players[0].minions):
+            self.assertEqual(minion.index, index, "{} did not have index {}".format(minion, index))
 
     def test_Lightwarden(self):
         game = generate_game_for([Lightwarden, MindControl],
