@@ -551,6 +551,7 @@ class Deck:
                 deck_card.drawn = False
                 self.left += 1
                 return
+        card.drawn = False
         self.cards.append(card)
         self.left += 1
 
