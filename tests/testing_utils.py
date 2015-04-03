@@ -25,7 +25,7 @@ class StackedDeck(Deck):
         super().__init__(cards, hero)
 
     def draw(self, random_func):
-        for card_index in range(0, 30):
+        for card_index in range(0, len(self.cards)):
             if not self.cards[card_index].drawn:
                 self.cards[card_index].drawn = True
                 self.left -= 1

@@ -607,19 +607,25 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(0, game.current_player.deck.left)
 
     def test_IronJuggernaut(self):
-        game = generate_game_for(IronJuggernaut, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game = generate_game_for(IronJuggernaut, CircleOfHealing, OneCardPlayingAgent, PredictableAgent)
         for turn in range(11):
             game.play_single_turn()
 
-        self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual("Iron Juggernaut", game.current_player.minions[0].card.name)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual("Iron Juggernaut", game.players[0].minions[0].card.name)
 
         found_mine = False
-        for card in game.other_player.deck.cards:
+        for card in game.players[1].deck.cards:
             if card.name == "Burrowing Mine":
                 found_mine = True
 
         self.assertTrue(found_mine, "Did not find the burrowing mine in the opponent's deck")
+
+        # Will draw multiple mines in a row
+        self.assertEqual(30, game.players[1].hero.health)
+        for turn in range(43):
+            game.play_single_turn()
+        self.assertEqual(0, game.players[1].hero.health)
 
     def test_ScrewjankClunker(self):
         game = generate_game_for([Wisp, ScrewjankClunker, ScrewjankClunker], [Wisp, MoltenGiant],
