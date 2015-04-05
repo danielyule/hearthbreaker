@@ -157,6 +157,8 @@ class LastDrawnSelector(CardSelector):
         super().__init__(players)
 
     def get_targets(self, source, obj=None):
+        if source.player.fatigue > 0:
+            return []
         players = self.players.get_players(source.player)
         return [player.hand[-1] for player in players]
 

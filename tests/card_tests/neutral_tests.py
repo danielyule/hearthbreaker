@@ -4433,6 +4433,16 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Arcane Missiles", game.current_player.hand[4].name)
         self.assertEqual("Arcane Missiles", game.current_player.hand[5].name)
 
+    def test_GnomishExperimenter_with_empty_deck(self):
+        game = generate_game_for(GnomishExperimenter, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game.players[0].deck.left = 0
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual("Gnomish Experimenter", game.players[0].hand[-1].name)
+        self.assertEqual(2, len(game.players[0].hand))
+
     def test_HungryDragon(self):
         game = generate_game_for(HungryDragon, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
 
