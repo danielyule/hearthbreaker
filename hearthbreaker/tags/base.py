@@ -639,7 +639,7 @@ class CardQuery(JSONObject):
             card_list = self.source_list
         elif self.source == CARD_SOURCE.LAST_CARD:
             chosen_card = type(player.game.last_card)()
-            chosen_card.attach(chosen_card, player) 
+            chosen_card.attach(chosen_card, player)
             return chosen_card
         elif self.source == CARD_SOURCE.LAST_DRAWN:
             chosen_card = player.hand[-1]
