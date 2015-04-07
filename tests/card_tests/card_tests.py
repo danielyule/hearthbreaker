@@ -37,7 +37,8 @@ class CardTest(unittest.TestCase):
         card_dict = json.load(file)
         not_implemented = []
         total_cards = 0
-        for card_set in ['Expert', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Reward", "Promotion"]:
+        for card_set in ['Classic', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Blackrock Mountain", "Reward",
+                         "Promotion"]:
             for card_info in card_dict[card_set]:
                 if card_info["type"] in ['Minion', 'Spell', 'Weapon', 'Secret']:
                     total_cards += 1
@@ -149,7 +150,7 @@ class CardTest(unittest.TestCase):
     def test_play_with_one_card(self):
         file = open("AllSets.enUS.json", "r", encoding="UTF-8")
         card_dict = json.load(file)
-        for card_set in ['Expert', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes"]:
+        for card_set in ['Classic', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Blackrock Mountain"]:
 
             for card_info in card_dict[card_set]:
                 if 'collectible' in card_info and card_info['collectible'] and card_info["type"] != "Hero":
