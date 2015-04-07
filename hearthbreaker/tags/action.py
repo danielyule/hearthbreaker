@@ -328,13 +328,11 @@ class AddCard(Action):
         if self.add_to_deck:
             for i in range(self.count):
                 target.deck.put_back(self.card.get_card(target, actor))
-
         else:
             for i in range(self.count):
                 if len(target.hand) < 10:
                     card = self.card.get_card(target, actor)
                     if card:
-                        card.attach(card, target)
                         target.hand.append(card)
 
     def __to_json__(self):

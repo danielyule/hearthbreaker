@@ -344,4 +344,3 @@ class UnstablePortal(SpellCard):
         new_minon = query.get_card(player, self)
         new_minon.add_buff(Buff(ManaChange(-3)))
         player.hand.append(new_minon)
-        new_minon.attach(new_minon, player)

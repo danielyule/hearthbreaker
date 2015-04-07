@@ -312,7 +312,6 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param int index: The index where the new minion will be added
         """
         if len(player.minions) < 7:
-            self.attach(self, player)
             minion = self.create_minion(player)
             minion.card = self
             minion.player = player
