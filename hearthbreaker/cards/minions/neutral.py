@@ -1587,7 +1587,7 @@ class Nightmare(SpellCard):
         super().use(player, game)
         self.target.add_buff(Buff(ChangeAttack(5)))
         self.target.add_buff(Buff(ChangeHealth(5)))
-        self.target.add_effect(Effect(TurnStarted(), ActionTag(Kill(), SelfSelector())))
+        self.target.add_effect(Effect(TurnStarted(player=CurrentPlayer()), ActionTag(Kill(), SelfSelector())))
 
 
 class LaughingSister(MinionCard):
