@@ -122,13 +122,12 @@ class Bindable:
         """
         if event in self.events:
             for handler in copy.copy(self.events[event]):
-                if handler in self.events[event]:
-                    if handler[1]:
-                        self.events[event].remove(handler)
-                        # tidy up the events dict so we don't have entries for events with no handlers
-                        if len(self.events[event]) is 0:
-                            del(self.events[event])
-                    handler[0](*args)
+                if handler[1]:
+                    self.events[event].remove(handler)
+                    # tidy up the events dict so we don't have entries for events with no handlers
+                    if len(self.events[event]) is 0:
+                        del(self.events[event])
+                handler[0](*args)
 
     def unbind(self, event, function):
         """
