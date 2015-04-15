@@ -10587,31 +10587,39 @@
     "choices": [
       {
         "card": "Flame Cat Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Flame (cat)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Flame (cat)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }, 
       {
         "card": "Flame Bird Form", 
-        "actions": [
+        "tags": [
           {
-            "name": "transform", 
-            "card": {
-              "name": "Druid of the Flame (bird)"
+            "actions": [
+              {
+                "name": "transform", 
+                "card": {
+                  "name": "Druid of the Flame (bird)"
+                }
+              }
+            ], 
+            "selector": {
+              "name": "self"
             }
           }
-        ], 
-        "selector": {
-          "name": "self"
-        }
+        ]
       }
     ], 
     "type": "minion", 
@@ -14405,6 +14413,54 @@
   }, 
   {
     "collectible": true, 
+    "name": "Quick Shot", 
+    "character_class": "Hunter", 
+    "rarity": "Common", 
+    "mana": 2, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 3, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "character"
+        }
+      }, 
+      {
+        "condition": {
+          "amount": {
+            "name": "count", 
+            "selector": {
+              "players": "friendly", 
+              "name": "card"
+            }
+          }, 
+          "name": "equal_to", 
+          "value": 0
+        }, 
+        "actions": [
+          {
+            "amount": 1, 
+            "name": "draw"
+          }
+        ], 
+        "selector": {
+          "players": "friendly", 
+          "name": "player"
+        }
+      }
+    ]
+  }, 
+  {
+    "collectible": true, 
     "name": "Arcane Missiles", 
     "character_class": "Mage", 
     "rarity": "Free", 
@@ -14530,6 +14586,46 @@
     "rarity": "Rare", 
     "mana": 2, 
     "type": "spell"
+  }, 
+  {
+    "collectible": true, 
+    "name": "Dragon's Breath", 
+    "character_class": "Mage", 
+    "buffs": [
+      {
+        "status": {
+          "amount": {
+            "name": "count", 
+            "selector": {
+              "players": "both", 
+              "name": "dead_minion"
+            }
+          }, 
+          "name": "mana_change", 
+          "multiplier": -1
+        }
+      }
+    ], 
+    "rarity": "Common", 
+    "mana": 5, 
+    "type": "spell", 
+    "action_tags": [
+      {
+        "actions": [
+          {
+            "amount": 4, 
+            "name": "damage"
+          }
+        ], 
+        "selector": {
+          "picker": {
+            "name": "user"
+          }, 
+          "players": "both", 
+          "name": "character"
+        }
+      }
+    ]
   }, 
   {
     "collectible": true, 

@@ -305,6 +305,20 @@ class GreaterThan(Condition, metaclass=Amount):
         }
 
 
+class EqualTo(Condition, metaclass=Amount):
+    def __init__(self, value):
+        self.value = value
+
+    def evaluate(self, target, *args):
+        return self.get_amount(target, target, *args) == self.value
+
+    def __to_json__(self):
+        return {
+            'name': 'equal_to',
+            'value': self.value,
+        }
+
+
 class Adjacent(Condition):
     def __to_json__(self):
         return {

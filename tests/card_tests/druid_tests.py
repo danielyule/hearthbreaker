@@ -242,12 +242,10 @@ class TestDruid(unittest.TestCase):
         game.play_single_turn()
         game.play_single_turn()
 
-
         game.players[0].agent.do_turn = check_attacks_and_play
         game.play_single_turn()
 
         self.assertEqual(0, game.current_player.mana)
-
 
         # And make sure that it went down again
         self.assertEqual(1, game.current_player.minions[0].calculate_attack())

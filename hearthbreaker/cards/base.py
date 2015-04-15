@@ -382,7 +382,7 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
 
     def __init__(self, name, mana, character_class, rarity, collectible=True, target_func=None,
                  filter_func=_is_spell_targetable, overload=0, ref_name=None,
-                 action_tags=None,choices=None,combo=None, effects=None, buffs=None):
+                 action_tags=None, choices=None, combo=None, effects=None, buffs=None):
         """
             Creates a new :class:`Card`.
 

@@ -1,9 +1,12 @@
 import copy
 from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.game_objects import Minion, Hero
-from hearthbreaker.tags.base import BuffUntil, Buff
+from hearthbreaker.tags.action import Damage, Draw
+from hearthbreaker.tags.base import BuffUntil, Buff, ActionTag
+from hearthbreaker.tags.condition import EqualTo
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import CurrentPlayer
+from hearthbreaker.tags.selector import CurrentPlayer, CharacterSelector, BothPlayer, UserPicker, PlayerSelector, \
+    CardSelector, Count
 from hearthbreaker.tags.status import Immune, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
@@ -316,10 +319,5 @@ class FeignDeath(SpellCard):
 class QuickShot(SpellCard):
     def __init__(self):
         super().__init__("Quick Shot", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
-                         target_func=hearthbreaker.targeting.find_spell_target)
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.damage(3, self)
-        if len(player.hand) == 0:
-            player.draw()
+                         action_tags=[ActionTag(Damage(3), CharacterSelector(None, BothPlayer(), UserPicker())),
+                                      ActionTag(Draw(), PlayerSelector(), EqualTo(Count(CardSelector()), value=0))])

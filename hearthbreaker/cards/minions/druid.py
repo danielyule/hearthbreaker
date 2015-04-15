@@ -304,8 +304,8 @@ class FlameBirdForm(ChoiceCard):
 class DruidOfTheFlame(MinionCard):
     def __init__(self):
         super().__init__("Druid of the Flame", 3, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, choices=[
-            Choice(FlameCatForm(), Transform(FlameCat()), SelfSelector()),
-            Choice(FlameBirdForm(), Transform(FlameBird()), SelfSelector())
+            Choice(FlameCatForm(), [ActionTag(Transform(FlameCat()), SelfSelector())]),
+            Choice(FlameBirdForm(), [ActionTag(Transform(FlameBird()), SelfSelector())])
         ])
 
     def create_minion(self, player):

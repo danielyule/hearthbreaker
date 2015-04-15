@@ -135,7 +135,6 @@ class GiveDeathrattle(Action):
         return self
 
 
-
 class Summon(Action):
     def __init__(self, card, count=1):
         if isinstance(card, CardQuery):

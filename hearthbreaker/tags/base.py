@@ -65,7 +65,7 @@ class Aura(Tag):
 
     def match(self, obj):
         return (not self.condition or self.condition.evaluate(self.owner, self.owner)) and \
-               self.selector.match(self.owner, obj)
+            self.selector.match(self.owner, obj)
 
     def __to_json__(self):
         if self.condition:
@@ -73,11 +73,11 @@ class Aura(Tag):
                 'status': self.status,
                 'selector': self.selector,
                 'condition': self.condition,
-                }
+            }
         return {
             'status': self.status,
             'selector': self.selector,
-            }
+        }
 
     @staticmethod
     def from_json(status, selector, condition=None):
@@ -120,7 +120,7 @@ class Buff(Tag):
             }
         return {
             'status': self.status,
-            }
+        }
 
     @staticmethod
     def from_json(status, condition=None):
@@ -491,7 +491,7 @@ class Effect(Tag):
         return {
             'event': self.event,
             'tags': self.tags,
-            }
+        }
 
     @staticmethod
     def from_json(event, tags):
@@ -598,7 +598,7 @@ class CARD_SOURCE:
         "MINION": MINION,
         "MY_SECRETS": MY_SECRETS,
         "ENEMY_SECRETS": ENEMY_SECRETS,
-        }
+    }
 
     @staticmethod
     def from_str(source_name):

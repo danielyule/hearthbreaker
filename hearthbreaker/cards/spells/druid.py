@@ -1,7 +1,7 @@
 import copy
 from hearthbreaker.cards.base import ChoiceCard, SpellCard
-from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw, Heal, GiveDeathrattle, \
-    GiveManaCrystal
+from hearthbreaker.tags.action import Summon, GiveMana, Damage, Give, IncreaseArmor, Kill, Draw, Heal,\
+    GiveDeathrattle, GiveManaCrystal
 from hearthbreaker.tags.base import Deathrattle, ActionTag, BuffUntil, Buff, Choice
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, CharacterSelector, BothPlayer, UserPicker, HeroSelector, \
@@ -202,6 +202,7 @@ class DamageAll(ChoiceCard):
     def __init__(self):
         super().__init__("Do two damage to all enemy minions", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON, False)
 
+
 class DamageOne(ChoiceCard):
             def __init__(self):
                 super().__init__("Do five damage to an enemy minion", 0, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
@@ -228,7 +229,6 @@ class ForceOfNature(SpellCard):
         from hearthbreaker.cards.minions.druid import ChargeTreant
         super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC,
                          action_tags=[ActionTag(Summon(ChargeTreant(), 3), PlayerSelector())])
-
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) < 7

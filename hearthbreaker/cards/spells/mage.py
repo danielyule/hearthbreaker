@@ -2,10 +2,12 @@ import copy
 from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.base import BuffUntil, Buff, CardQuery
+from hearthbreaker.tags.action import Damage
+from hearthbreaker.tags.base import BuffUntil, Buff, CardQuery, ActionTag
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import CurrentPlayer, Count, DeadMinionSelector, BothPlayer
+from hearthbreaker.tags.selector import CurrentPlayer, Count, DeadMinionSelector, BothPlayer, CharacterSelector, \
+    UserPicker
 from hearthbreaker.tags.status import Immune, Frozen, ManaChange
 import hearthbreaker.targeting
 
@@ -349,9 +351,5 @@ class UnstablePortal(SpellCard):
 class DragonsBreath(SpellCard):
     def __init__(self):
         super().__init__("Dragon's Breath", 5, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
-                         target_func=hearthbreaker.targeting.find_spell_target,
+                         action_tags=[ActionTag([Damage(4)], CharacterSelector(None, BothPlayer(), UserPicker()))],
                          buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
-
-    def use(self, player, game):
-        super().use(player, game)
-        self.target.damage(4, self)
