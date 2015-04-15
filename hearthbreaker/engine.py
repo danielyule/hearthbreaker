@@ -544,6 +544,8 @@ class Deck:
         return card
 
     def put_back(self, card):
+        if not card:
+            raise TypeError("Expected a card, not None")
         for deck_card in self.cards:
             if deck_card == card:
                 if not card.drawn:

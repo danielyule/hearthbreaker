@@ -74,6 +74,8 @@ def hero_for_class(character_class):
         return Guldan()
     elif character_class == CHARACTER_CLASS.WARRIOR:
         return Garrosh()
+    else:
+        return Jaina()
 
 __hero_lookup = {"Jaina": Jaina,
                  "Malfurion": Malfurion,

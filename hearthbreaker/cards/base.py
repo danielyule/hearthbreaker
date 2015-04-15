@@ -281,9 +281,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
                 if not battlecry.do(minion, minion):
                     break
         game.check_delayed()
+        # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
+        minion = minion.replaced_by if minion.replaced_by else minion
         if not minion.removed:
-            # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
-            minion = player.minions[minion.index]
             player.trigger("minion_played", minion)
             player.trigger("minion_summoned", minion)
             player.trigger("after_added", minion)

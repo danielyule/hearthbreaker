@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from hearthbreaker.cards.minions.neutral import V07TR0N
+from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
@@ -2463,6 +2463,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())  # Buffed itself
         self.assertEqual(5, game.players[0].minions[1].health)
+
+    def test_Poultyizer_Nightmare(self):
+        game = generate_game_for([Poultryizer, Nightmare, BaronGeddon], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[0].calculate_max_health())
 
     def test_LorewalkerCho(self):
         game = generate_game_for([FreezingTrap, MagmaRager], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)

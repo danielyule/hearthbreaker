@@ -165,6 +165,16 @@ class LastDrawnSelector(CardSelector):
     def match(self, source, obj):
         return obj in self.get_targets(source, obj)
 
+    def __to_json__(self):
+        return {
+            'name': 'last_drawn',
+            'players': self.players
+        }
+
+    def __from_json__(self, players='friendly'):
+        self.players = Player.from_json(players)
+        return self
+
 
 class SecretSelector(CardSelector):
     def match(self, source, obj):

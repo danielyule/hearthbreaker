@@ -943,9 +943,10 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(20, game.players[0].deck.left)
 
         game.play_single_turn()
-        self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(21, game.players[0].deck.left)
-        self.assertEqual("Malorne", game.players[0].deck.cards[-1].name)
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(21, game.other_player.deck.left)
+        for card in game.other_player.deck.cards:
+            self.assertIsNotNone(card)
 
     def test_GroveTender(self):
         game = generate_game_for(GroveTender, Wisp, OneCardPlayingAgent, DoNothingAgent)

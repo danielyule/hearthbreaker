@@ -675,7 +675,8 @@ class CardQuery(JSONObject):
 
         chosen_card.attach(chosen_card, player)
 
-        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST or self.make_copy:
+        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST \
+                or self.source == CARD_SOURCE.MINION or self.make_copy:
             return chosen_card
         elif self.source == CARD_SOURCE.MY_DECK:
             chosen_card.drawn = True
