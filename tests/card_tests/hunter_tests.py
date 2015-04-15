@@ -760,3 +760,51 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(22, game.other_player.hero.health)
         self.assertEqual(1, game.current_player.minions[1].health)
         self.assertEqual(3, game.current_player.minions[0].health)
+
+    def test_Quickshot(self):
+        game = generate_game_for(QuickShot, Wisp, CardTestingAgent, CardTestingAgent)
+        for turn in range(2):
+            game.play_single_turn()
+        self.assertEqual(5, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+
+        game.play_single_turn()
+        # We should have played a quick shot and not drawn a card
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # We should have played a quick shot and not drawn a card
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(4, len(game.players[1].minions))
+        self.assertEqual(4, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # We should have played two shots and not drawn a card
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(3, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # We should have played two shots and not drawn a card
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(2, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # We should have played three shots and not drawn a card
+        self.assertEqual(30, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+        # We should have played three shots, one of which was drawn, and have one card left over
+        self.assertEqual(24, game.players[1].hero.health)
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].hand))

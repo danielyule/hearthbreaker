@@ -862,3 +862,20 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
             self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
+
+    def test_DragonsBreath(self):
+        game = generate_game_for([Flamestrike, DragonsBreath], StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        # The flamestrike kills 6 boars, so the Dragon's Breath is free
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Flamestrike only kills one boar, so we can't afford the Dragon's breath
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)

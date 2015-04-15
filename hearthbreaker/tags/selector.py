@@ -352,6 +352,49 @@ class MinionSelector(Selector):
         return self
 
 
+class DeadMinionSelector(Selector):
+    def __init__(self, condition=None, players=FriendlyPlayer()):
+        self.condition = condition
+        self.players = players
+
+    def get_targets(self, source, obj=None):
+        players = self.players.get_players(source.player)
+        targets = []
+        for p in players:
+            for minion in p.dead_this_turn:
+                if self.match(source, minion):
+                    targets.append(minion)
+
+        return targets
+
+    def match(self, source, obj):
+        if self.condition:
+            return not obj.is_card() and obj.is_minion() and self.players.match(source, obj) \
+                and self.condition.evaluate(source, obj)
+        else:
+            return obj.is_minion() and self.players.match(source, obj)
+
+    def __to_json__(self):
+        if self.condition:
+            return {
+                'name': 'dead_minion',
+                'condition': self.condition,
+                'players': self.players,
+            }
+        return {
+            'name': 'minion',
+            'players': self.players,
+        }
+
+    def __from_json__(self, players, condition=None):
+        if condition:
+            self.condition = hearthbreaker.tags.condition.Condition.from_json(**condition)
+        else:
+            self.condition = None
+        self.players = Player.from_json(players)
+        return self
+
+
 class CharacterSelector(Selector):
     def __init__(self, condition=hearthbreaker.tags.condition.MinionIsNotTarget(), players=FriendlyPlayer(),
                  picker=AllPicker()):

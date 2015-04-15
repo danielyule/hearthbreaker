@@ -45,7 +45,8 @@ class CardTest(unittest.TestCase):
                     try:
                         card = card_lookup(id_mappings[card_info["id"]])
                     except KeyError:
-                        not_implemented.append("{}: ({})".format(card_info["name"], card_info['id']))
+                        if 'collectible' in card_info and card_info['collectible']:
+                            not_implemented.append("{}: ({})".format(card_info["name"], card_info['id']))
                         continue
                     if "cost" in card_info:
                         self.assertEqual(int(card_info["cost"]), card.mana,

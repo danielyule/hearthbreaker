@@ -54,6 +54,7 @@ from hearthbreaker.cards.spells.hunter import (
     CallPet,
     CobraShot,
     FeignDeath,
+    QuickShot,
 )
 
 from hearthbreaker.cards.spells.mage import (
@@ -80,6 +81,7 @@ from hearthbreaker.cards.spells.mage import (
     Flamecannon,
     EchoOfMedivh,
     UnstablePortal,
+    DragonsBreath,
 )
 
 from hearthbreaker.cards.spells.paladin import (
