@@ -341,7 +341,7 @@ class UnstablePortal(SpellCard):
     def use(self, player, game):
         super().use(player, game)
         query = CardQuery(conditions=[IsMinion()])
-        new_minon = query.get_card(player, self)
+        new_minon = query.get_card(player, player, self)
         new_minon.add_buff(Buff(ManaChange(-3)))
         player.hand.append(new_minon)
 

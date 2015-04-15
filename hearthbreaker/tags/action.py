@@ -122,7 +122,7 @@ class Summon(Action):
         self.count = count
 
     def act(self, actor, target, other=None):
-        card = self.card.get_card(target, actor)
+        card = self.card.get_card(target, target, actor)
         if card is None:
             return
 
@@ -168,7 +168,7 @@ class Transform(Action):
             self.card = CardQuery(card.ref_name)
 
     def act(self, actor, target, other=None):
-        card = self.card.get_card(target, actor)
+        card = self.card.get_card(target, target.player, actor)
         if target.is_card():
             target.replace(card)
         elif target.is_minion():
@@ -266,7 +266,7 @@ class Discard(Action, metaclass=Amount):
 
     def act(self, actor, target, other=None):
         for index in range(0, self.get_amount(actor, target, other)):
-            card = self.query.get_card(actor.player, actor)
+            card = self.query.get_card(target, actor.player, actor)
             if card:
                 actor.player.trigger("discard", card)
 
@@ -327,11 +327,11 @@ class AddCard(Action):
     def act(self, actor, target, other=None):
         if self.add_to_deck:
             for i in range(self.count):
-                target.deck.put_back(self.card.get_card(target, actor))
+                target.deck.put_back(self.card.get_card(target, target, actor))
         else:
             for i in range(self.count):
                 if len(target.hand) < 10:
-                    card = self.card.get_card(target, actor)
+                    card = self.card.get_card(target, target, actor)
                     if card:
                         target.hand.append(card)
 
@@ -429,7 +429,7 @@ class ApplySecret(Action):
         self._query = CardQuery(conditions=[IsSecret()], source=source)
 
     def act(self, actor, target, other=None):
-        secret = self._query.get_card(target, actor)
+        secret = self._query.get_card(target, target, actor)
         if secret:
             target.secrets.append(secret)
             secret.player = target
@@ -463,7 +463,7 @@ class Equip(Action):
             self.weapon = CardQuery(weapon.ref_name)
 
     def act(self, actor, target, other=None):
-        card = self.weapon.get_card(target, actor)
+        card = self.weapon.get_card(target, target, actor)
         weapon = card.create_weapon(target)
         weapon.card = card
         weapon.equip(target)

@@ -4,6 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
+from hearthbreaker.engine import Player
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities
@@ -4433,6 +4434,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, game.current_player.hand[-1].mana)
         self.assertEqual(MINION_TYPE.BEAST, game.current_player.hand[-1].minion_type)
         self.assertEqual(6, len(game.current_player.hand))
+        self.assertEqual(type(game.current_player.hand[-1].player), Player)
 
     def test_GnomishExperimenter_with_spell(self):
         game = generate_game_for([GnomishExperimenter, ArcaneMissiles, ArcaneMissiles, ArcaneMissiles], StonetuskBoar,

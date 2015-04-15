@@ -618,7 +618,7 @@ class CardQuery(JSONObject):
         self.make_copy = make_copy
         self.minion = minion
 
-    def get_card(self, player, owner):
+    def get_card(self, target, player, owner):
         from hearthbreaker.engine import card_lookup, get_cards
         if self.name:
             chosen_card = card_lookup(self.name)
@@ -659,7 +659,7 @@ class CardQuery(JSONObject):
         # TODO Throw an exception in any other case?
 
         def check_condition(condition):
-            return lambda c: condition.evaluate(player, c)
+            return lambda c: condition.evaluate(target, c)
 
         for condition in self.conditions:
             card_list = filter(check_condition(condition), card_list)

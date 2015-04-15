@@ -162,7 +162,7 @@ class BaneOfDoom(SpellCard):
                 (isinstance(self.target, Minion) and not self.target.divine_shield):
             self.target.damage(player.effective_spell_damage(2), self)
             demons = CardQuery(conditions=[IsType(MINION_TYPE.DEMON)])
-            demons.get_card(player, self).summon(player, game, len(player.minions))
+            demons.get_card(player, player, self).summon(player, game, len(player.minions))
         else:
             self.target.damage(player.effective_spell_damage(2), self)
 
