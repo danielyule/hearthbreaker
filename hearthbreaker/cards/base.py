@@ -266,6 +266,8 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         if self._placeholder:
             minion.index = self._placeholder.index
             player.minions.remove(self._placeholder)
+            for m in player.minions[minion.index:]:
+                m.index -= 1
         else:
             minion.index = player.agent.choose_index(self, player)
         minion.add_to_board(minion.index)
@@ -283,9 +285,9 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
                 if not battlecry.do(minion, minion):
                     break
         game.check_delayed()
+        # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
+        minion = minion.replaced_by if minion.replaced_by else minion
         if not minion.removed:
-            # In case the minion has been replaced by its battlecry (e.g. Faceless Manipulator)
-            minion = player.minions[minion.index]
             player.trigger("minion_played", minion)
             player.trigger("minion_summoned", minion)
             player.trigger("after_added", minion)
@@ -314,6 +316,7 @@ class MinionCard(Card, metaclass=abc.ABCMeta):
         :param int index: The index where the new minion will be added
         """
         if len(player.minions) < 7:
+            self.attach(self, player)
             minion = self.create_minion(player)
             minion.card = self
             minion.player = player

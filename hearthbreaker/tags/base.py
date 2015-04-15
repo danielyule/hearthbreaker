@@ -623,7 +623,9 @@ class CardQuery(JSONObject):
     def get_card(self, player, owner):
         from hearthbreaker.engine import card_lookup, get_cards
         if self.name:
-            return card_lookup(self.name)
+            chosen_card = card_lookup(self.name)
+            chosen_card.attach(chosen_card, player)
+            return chosen_card
 
         if self.source == CARD_SOURCE.COLLECTION:
             card_list = get_cards()
@@ -638,14 +640,18 @@ class CardQuery(JSONObject):
         elif self.source == CARD_SOURCE.LIST:
             card_list = self.source_list
         elif self.source == CARD_SOURCE.LAST_CARD:
-            return type(player.game.last_card)()
+            chosen_card = type(player.game.last_card)()
+            chosen_card.attach(chosen_card, player)
+            return chosen_card
         elif self.source == CARD_SOURCE.LAST_DRAWN:
             chosen_card = player.hand[-1]
             player.hand.remove(chosen_card)
             chosen_card.unattach()
             return chosen_card
         elif self.source == CARD_SOURCE.MINION:
-            card_list = [minion.card for minion in self.minion.get_targets(owner, owner)]
+            chosen_card = self.minion.get_targets(owner, owner)[0].card
+            chosen_card.attach(chosen_card, player)
+            return chosen_card
         elif self.source == CARD_SOURCE.MY_SECRETS:
             card_list = [secret.card for secret in player.secrets]
         elif self.source == CARD_SOURCE.ENEMY_SECRETS:
@@ -669,7 +675,10 @@ class CardQuery(JSONObject):
         else:
             chosen_card = player.game.random_choice(card_list)
 
-        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST or self.make_copy:
+        chosen_card.attach(chosen_card, player)
+
+        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST \
+                or self.source == CARD_SOURCE.MINION or self.make_copy:
             return chosen_card
         elif self.source == CARD_SOURCE.MY_DECK:
             chosen_card.drawn = True

@@ -311,3 +311,15 @@ class FeignDeath(SpellCard):
             if player.double_deathrattle:
                 for deathrattle in minion.deathrattle:
                     deathrattle.do(minion)
+
+
+class QuickShot(SpellCard):
+    def __init__(self):
+        super().__init__("Quick Shot", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON,
+                         target_func=hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(3, self)
+        if len(player.hand) == 0:
+            player.draw()

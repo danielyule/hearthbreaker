@@ -620,6 +620,28 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Bloodfen Raptor", game.other_player.hand[5].name)
         self.assertEqual(0, len(game.other_player.secrets))
 
+    def test_Duplicate_and_play_after(self):
+        game = generate_game_for([Wisp, Wisp, Wisp, Wisp, Wisp, Duplicate], LightningStorm,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.hand))
+        self.assertEqual(5, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.other_player.secrets))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(2, len(game.other_player.hand))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.hand))
+        self.assertEqual(3, len(game.current_player.minions))
+
     def test_Duplicate_MadScientist(self):
         game = generate_game_for(Hellfire, [MadScientist, MagmaRager, Duplicate],
                                  OneCardPlayingAgent, OneCardPlayingAgent)
@@ -840,3 +862,20 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
             self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
+
+    def test_DragonsBreath(self):
+        game = generate_game_for([Flamestrike, DragonsBreath], StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(13):
+            game.play_single_turn()
+
+        # The flamestrike kills 6 boars, so the Dragon's Breath is free
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        # The Flamestrike only kills one boar, so we can't afford the Dragon's breath
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)

@@ -2,7 +2,7 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
-from hearthbreaker.cards.minions.neutral import V07TR0N
+from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent
@@ -1741,11 +1741,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(6, len(game.players[0].minions))
         self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[1].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
         self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[5].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
+
+        for index, minion in enumerate(game.players[0].minions):
+            self.assertEqual(minion.index, index, "{} did not have index {}".format(minion, index))
 
         game.play_single_turn()
 
@@ -1753,11 +1756,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.players[0].minions))
         self.assertEqual("Illidan Stormrage", game.players[0].minions[0].card.name)
         self.assertEqual("Illidan Stormrage", game.players[0].minions[1].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[2].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[3].card.name)
-        self.assertEqual("Flame of Azzinoth", game.players[0].minions[4].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[2].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[3].card.name)
+        self.assertEqual("Illidan Stormrage", game.players[0].minions[4].card.name)
         self.assertEqual("Flame of Azzinoth", game.players[0].minions[5].card.name)
-        self.assertEqual("Illidan Stormrage", game.players[0].minions[6].card.name)
+        self.assertEqual("Flame of Azzinoth", game.players[0].minions[6].card.name)
+
+        for index, minion in enumerate(game.players[0].minions):
+            self.assertEqual(minion.index, index, "{} did not have index {}".format(minion, index))
 
     def test_Lightwarden(self):
         game = generate_game_for([Lightwarden, MindControl],
@@ -2457,6 +2463,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual(1, game.players[0].minions[1].calculate_attack())  # Buffed itself
         self.assertEqual(5, game.players[0].minions[1].health)
+
+    def test_Poultyizer_Nightmare(self):
+        game = generate_game_for([Poultryizer, Nightmare, BaronGeddon], StonetuskBoar, CardTestingAgent, DoNothingAgent)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(8, game.current_player.minions[0].calculate_max_health())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(1, game.current_player.minions[0].calculate_max_health())
 
     def test_LorewalkerCho(self):
         game = generate_game_for([FreezingTrap, MagmaRager], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -4383,6 +4405,16 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Mimiron's Head", game.current_player.minions[0].card.name)
         self.assertEqual("Mimiron's Head", game.current_player.minions[1].card.name)
 
+    def test_MimironsHead_three_copies(self):
+        game = generate_game_for(MimironsHead, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(15):
+            game.play_single_turn()
+
+        # There should be only one V-07-TR-0N see https://www.youtube.com/watch?v=lY0RIT2f2HE
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual("Mimiron's Head", game.current_player.minions[0].card.name)
+        self.assertEqual("V-07-TR-0N", game.current_player.minions[1].card.name)
+
     def test_V07TR0N(self):
         game = generate_game_for(V07TR0N, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
         for turn in range(15):
@@ -4416,3 +4448,23 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual("Gnomish Experimenter", game.current_player.hand[3].name)
         self.assertEqual("Arcane Missiles", game.current_player.hand[4].name)
         self.assertEqual("Arcane Missiles", game.current_player.hand[5].name)
+
+    def test_GnomishExperimenter_with_empty_deck(self):
+        game = generate_game_for(GnomishExperimenter, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        game.players[0].deck.left = 0
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual("Gnomish Experimenter", game.players[0].hand[-1].name)
+        self.assertEqual(2, len(game.players[0].hand))
+
+    def test_HungryDragon(self):
+        game = generate_game_for(HungryDragon, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].card.mana)

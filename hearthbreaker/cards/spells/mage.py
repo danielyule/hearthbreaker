@@ -5,7 +5,7 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.base import BuffUntil, Buff, CardQuery
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import CurrentPlayer
+from hearthbreaker.tags.selector import CurrentPlayer, Count, DeadMinionSelector, BothPlayer
 from hearthbreaker.tags.status import Immune, Frozen, ManaChange
 import hearthbreaker.targeting
 
@@ -302,7 +302,9 @@ class Duplicate(SecretCard):
     def _reveal(self, minion, by):
         for c in range(0, 2):
             if len(self.player.hand) < 10:
-                self.player.hand.append(type(minion.card)())
+                new_card = type(minion.card)()
+                self.player.hand.append(new_card)
+                new_card.attach(new_card, self.player)
         super().reveal()
 
 
@@ -342,4 +344,14 @@ class UnstablePortal(SpellCard):
         new_minon = query.get_card(player, self)
         new_minon.add_buff(Buff(ManaChange(-3)))
         player.hand.append(new_minon)
-        new_minon.attach(new_minon, player)
+
+
+class DragonsBreath(SpellCard):
+    def __init__(self):
+        super().__init__("Dragon's Breath", 5, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
+                         target_func=hearthbreaker.targeting.find_spell_target,
+                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(4, self)

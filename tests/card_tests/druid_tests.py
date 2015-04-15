@@ -4,7 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.engine import Game
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
-    EnemyMinionSpellTestingAgent, CardTestingAgent
+    EnemyMinionSpellTestingAgent, CardTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
@@ -933,12 +933,22 @@ class TestDruid(unittest.TestCase):
         for turn in range(13):
             game.play_single_turn()
 
-        self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(20, game.current_player.deck.left)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(20, game.players[0].deck.left)
 
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(21, game.other_player.deck.left)
+        for card in game.other_player.deck.cards:
+            self.assertIsNotNone(card)
+
+    def test_Malorne_game_ends(self):
+        game = generate_game_for(Malorne, Malorne, PlayAndAttackAgent, PlayAndAttackAgent)
+
+        for turn in range(500):
+            game.play_single_turn()
+
+        self.assertTrue(game.game_ended)
 
     def test_GroveTender(self):
         game = generate_game_for(GroveTender, Wisp, OneCardPlayingAgent, DoNothingAgent)
@@ -1017,3 +1027,32 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(5, game.other_player.hero.health)
         self.assertEqual(0, game.current_player.hero.armor)
         self.assertEqual(0, game.other_player.hero.armor)
+
+    def test_DruidOfTheFlame(self):
+        game = generate_game_for(DruidOfTheFlame, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(2, game.current_player.minions[0].calculate_max_health())
+
+        test_cat = game.current_player.minions[0].card.create_minion(None)
+        test_cat.player = game.current_player
+        self.assertEqual(5, test_cat.calculate_attack())
+        self.assertEqual(2, test_cat.calculate_max_health())
+
+        game.current_player.agent.choose_option = lambda options, player: options[1]
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+
+        test_bird = game.current_player.minions[0].card.create_minion(None)
+        test_bird.player = game.current_player
+        self.assertEqual(2, test_bird.calculate_attack())
+        self.assertEqual(5, test_bird.calculate_max_health())

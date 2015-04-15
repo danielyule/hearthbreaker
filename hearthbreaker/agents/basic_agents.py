@@ -123,5 +123,5 @@ class RandomAgent(DoNothingAgent):
         return random.randint(0, len(player.minions))
 
     def choose_option(self, options, player):
-        options = self.filter_options(options, player)[0]
+        options = self.filter_options(options, player)
         return options[random.randint(0, len(options) - 1)]

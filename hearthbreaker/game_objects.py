@@ -823,6 +823,7 @@ class Minion(Character):
         self.card = None
         self.index = -1
         self.taunt = 0
+        self.replaced_by = None
         self.can_be_targeted_by_spells = True
         if deathrattle:
             if isinstance(deathrattle, Deathrattle):
@@ -936,6 +937,8 @@ class Minion(Character):
             if aura.match(new_minion):
                 aura.status.act(self, new_minion)
         new_minion.health += new_minion.calculate_max_health() - new_minion.base_health
+        self.removed = True
+        self.replaced_by = new_minion
 
     def attack(self):
         super().attack()

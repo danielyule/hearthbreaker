@@ -2020,7 +2020,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
 
     def test_Ysera(self):
-        game = generate_game_for(Innervate, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        game = generate_game_for(Innervate, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
         ysera = Ysera()
         ysera.summon(game.players[0], game, 0)
         game = game.copy()
@@ -2045,9 +2045,10 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         def check_dream():
             game.players[0].max_mana = 8
+            name = game.players[0].minions[0].card.name
             game.play_single_turn()
+            self.assertEqual(name, game.players[0].hand[-2].name)
             game.play_single_turn()
-            self.assertEqual("Ysera", game.players[0].minions[0].card.name)
 
         def check_ysera_awakens():
             health_list = {}
@@ -2076,23 +2077,25 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         required = ["Nightmare", "Dream", "Ysera Awakens", "Emerald Drake", "Laughing Sister"]
 
         while len(required) > 0:
-            self.assertEqual(1, len(game.players[0].hand))
             card_name = game.players[0].hand[0].name
             if card_name in required:
                 required.remove(card_name)
-            game = game.copy()
-            if card_name == "Nightmare":
-                check_nightmare()
-            elif card_name == "Dream":
-                check_dream()
-            elif card_name == "Ysera Awakens":
-                check_ysera_awakens()
-            elif card_name == "Emerald Drake":
-                check_emerald_drake()
-            elif card_name == "Laughing Sister":
-                check_laughing_sister()
+                game = game.copy()
+                if card_name == "Nightmare":
+                    check_nightmare()
+                elif card_name == "Dream":
+                    check_dream()
+                elif card_name == "Ysera Awakens":
+                    check_ysera_awakens()
+                elif card_name == "Emerald Drake":
+                    check_emerald_drake()
+                elif card_name == "Laughing Sister":
+                    check_laughing_sister()
             else:
-                self.assertTrue(False, "Unexpected card name: {}".format(card_name))
+                game.players[0].hand.remove(game.players[0].hand[0])
+                if len(game.players[0].hand) == 0:
+                    game.play_single_turn()
+                    game.play_single_turn()
 
     def test_LorewalkerCho(self):
         game = generate_game_for([FreezingTrap, MagmaRager], SinisterStrike, OneCardPlayingAgent, OneCardPlayingAgent)

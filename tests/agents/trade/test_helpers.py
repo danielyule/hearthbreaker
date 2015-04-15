@@ -23,6 +23,10 @@ class TempCard(MinionCard):
         self.mana = None
         self.minion_type = 0
         self.rarity = 0
+        self._attached = False
+        self.effects = []
+        self.buffs = []
+        self.auras = []
 
     def create_minion(self, player):
         res = Minion(self.base_attack, self.health, taunt=self.taunt)

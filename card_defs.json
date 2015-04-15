@@ -7809,7 +7809,7 @@
           }, 
           "selector": {
             "players": "friendly", 
-            "name": "card"
+            "name": "last_drawn"
           }
         }, 
         "actions": [
@@ -7822,13 +7822,49 @@
         ], 
         "selector": {
           "players": "friendly", 
-          "name": "card"
+          "name": "last_drawn"
         }
       }
     ], 
     "type": "minion", 
     "collectible": true, 
     "rarity": "Rare"
+  }, 
+  {
+    "mana": 4, 
+    "attack": 5, 
+    "health": 6, 
+    "name": "Hungry Dragon", 
+    "minion_type": "Dragon", 
+    "character_class": "", 
+    "battlecry": [
+      {
+        "actions": [
+          {
+            "name": "summon", 
+            "card": {
+              "source": "collection", 
+              "conditions": [
+                {
+                  "amount": 1, 
+                  "name": "mana_cost"
+                }, 
+                {
+                  "name": "is_minion"
+                }
+              ]
+            }
+          }
+        ], 
+        "selector": {
+          "players": "enemy", 
+          "name": "player"
+        }
+      }
+    ], 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Common"
   }, 
   {
     "mana": 1, 
@@ -10519,6 +10555,70 @@
     "rarity": "Rare"
   }, 
   {
+    "mana": 3, 
+    "attack": 5, 
+    "health": 2, 
+    "name": "Druid of the Flame", 
+    "minion_type": "Beast", 
+    "character_class": "Druid", 
+    "ref_name": "Druid of the Flame (cat)", 
+    "type": "minion", 
+    "collectible": false, 
+    "rarity": "Common"
+  }, 
+  {
+    "mana": 3, 
+    "attack": 2, 
+    "health": 5, 
+    "name": "Druid of the Flame", 
+    "minion_type": "Beast", 
+    "character_class": "Druid", 
+    "ref_name": "Druid of the Flame (bird)", 
+    "type": "minion", 
+    "collectible": false, 
+    "rarity": "Common"
+  }, 
+  {
+    "mana": 3, 
+    "attack": 2, 
+    "health": 2, 
+    "name": "Druid of the Flame", 
+    "character_class": "Druid", 
+    "choices": [
+      {
+        "card": "Flame Cat Form", 
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Druid of the Flame (cat)"
+            }
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }, 
+      {
+        "card": "Flame Bird Form", 
+        "actions": [
+          {
+            "name": "transform", 
+            "card": {
+              "name": "Druid of the Flame (bird)"
+            }
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Common"
+  }, 
+  {
     "mana": 1, 
     "attack": 1, 
     "health": 1, 
@@ -12626,6 +12726,42 @@
     "type": "minion", 
     "collectible": true, 
     "rarity": "Rare"
+  }, 
+  {
+    "mana": 4, 
+    "attack": 2, 
+    "health": 5, 
+    "name": "Axe Flinger", 
+    "character_class": "Warrior", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "damaged"
+          }, 
+          "tags": [
+            {
+              "actions": [
+                {
+                  "amount": 2, 
+                  "name": "damage"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "enemy", 
+                "name": "hero"
+              }
+            }
+          ]
+        }
+      ]
+    }, 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Common"
   }, 
   {
     "mana": 5, 
