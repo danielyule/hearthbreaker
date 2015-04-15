@@ -67,6 +67,7 @@ class Game(Bindable):
         self.last_card = None
         self._has_turn_ended = True
         self._all_cards_played = []
+        self._turns_passed = 0
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -148,6 +149,11 @@ class Game(Bindable):
         else:
             self.current_player = self.players[0]
             self.other_player = self.players[1]
+            self._turns_passed += 1
+        if self._turns_passed >= 50:
+            self.players[0].hero.dead = True
+            self.players[1].hero.dead = True
+            self.game_over()
         if self.current_player.max_mana < 10:
             self.current_player.max_mana += 1
 
@@ -269,6 +275,7 @@ class Game(Bindable):
             'players': self.players,
             'active_player': active_player,
             'current_sequence_id': self.minion_counter,
+            'turn_count': self._turns_passed,
         }
 
     @staticmethod
@@ -276,6 +283,7 @@ class Game(Bindable):
         new_game = Game.__new__(Game)
         new_game._all_cards_played = []
         new_game.minion_counter = d["current_sequence_id"]
+        new_game._turns_passed = d['turn_count']
         new_game.delayed_minions = set()
         new_game.game_ended = False
         new_game.random_func = random.randint

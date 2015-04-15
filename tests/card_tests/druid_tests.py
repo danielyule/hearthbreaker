@@ -4,7 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.engine import Game
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
-    EnemyMinionSpellTestingAgent, CardTestingAgent
+    EnemyMinionSpellTestingAgent, CardTestingAgent, PlayAndAttackAgent
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
@@ -947,6 +947,14 @@ class TestDruid(unittest.TestCase):
         self.assertEqual(21, game.other_player.deck.left)
         for card in game.other_player.deck.cards:
             self.assertIsNotNone(card)
+
+    def test_Malorne_game_ends(self):
+        game = generate_game_for(Malorne, Malorne, PlayAndAttackAgent, PlayAndAttackAgent)
+
+        for turn in range(500):
+            game.play_single_turn()
+
+        self.assertTrue(game.game_ended)
 
     def test_GroveTender(self):
         game = generate_game_for(GroveTender, Wisp, OneCardPlayingAgent, DoNothingAgent)
