@@ -329,3 +329,16 @@ class LightOfTheNaaru(SpellCard):
             lightwarden.summon(player, game, len(player.minions))
         elif self.target.health != self.target.calculate_max_health():
             lightwarden.summon(player, game, len(player.minions))
+
+
+class Resurrect(SpellCard):
+    def __init__(self):
+        super().__init__("Resurrect", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        from hearthbreaker.engine import card_lookup
+        super().use(player, game)
+        if len(player.graveyard) > 0 and len(player.minions) < 7:
+            card_name = game.random_choice(player.graveyard)
+            card = card_lookup(card_name)
+            card.summon(player, game, len(player.minions))

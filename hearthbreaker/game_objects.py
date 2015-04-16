@@ -969,7 +969,7 @@ class Minion(Character):
                 # Used to activate any secrets applied during the death phase
                 self.player.trigger("after_death", self.player)
 
-                self.player.graveyard.add(self.card.name)
+                self.player.graveyard.append(self.card.name)
             self.bind_once("died", delayed_death)
             super().die(by)
             self.player.dead_this_turn.append(self)

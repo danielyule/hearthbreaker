@@ -231,3 +231,16 @@ class AncestorsCall(SpellCard):
                 minion_card.unattach()
                 player.hand.remove(minion_card)
                 minion_card.summon(player, game, len(player.minions))
+
+
+class LavaShock(SpellCard):
+    def __init__(self):
+        super().__init__("Lava Shock", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.RARE,
+                         target_func=hearthbreaker.targeting.find_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(2, self)
+        player.upcoming_overload = 0
+        player.mana += player.current_overload
+        player.current_overload = 0

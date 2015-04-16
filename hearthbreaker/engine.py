@@ -161,8 +161,9 @@ class Game(Bindable):
             secret.activate(self.other_player)
         for minion in self.current_player.minions:
             minion.attacks_performed = 0
-        self.current_player.mana = self.current_player.max_mana - self.current_player.overload
-        self.current_player.overload = 0
+        self.current_player.mana = self.current_player.max_mana - self.current_player.upcoming_overload
+        self.current_player.current_overload = self.current_player.upcoming_overload
+        self.current_player.upcoming_overload = 0
         self.current_player.cards_played = 0
         self.current_player.dead_this_turn = []
         self.current_player.hero.power.used = False
@@ -264,7 +265,7 @@ class Game(Bindable):
         card.current_target = None
 
         # overload is applied regardless of counterspell, but after the card is played
-        self.current_player.overload += card.overload
+        self.current_player.upcoming_overload += card.overload
 
     def __to_json__(self):
         if self.current_player == self.players[0]:
@@ -333,7 +334,7 @@ class Player(Bindable):
         self.deck = deck
         self.spell_damage = 0
         self.minions = []
-        self.graveyard = set()
+        self.graveyard = []
         self.hand = []
         self.object_auras = []
         self.player_auras = []
@@ -346,7 +347,8 @@ class Player(Bindable):
         self.heal_does_damage = 0
         self.double_deathrattle = 0
         self.mana_filters = []
-        self.overload = 0
+        self.upcoming_overload = 0
+        self.current_overload = 0
         self.opponent = None
         self.cards_played = 0
         self.dead_this_turn = []
@@ -367,7 +369,8 @@ class Player(Bindable):
         copied_player.spell_damage = self.spell_damage
         copied_player.mana = self.mana
         copied_player.max_mana = self.max_mana
-        copied_player.overload = self.overload
+        copied_player.upcoming_overload = self.upcoming_overload
+        copied_player.current_overload = self.current_overload
         copied_player.dead_this_turn = copy.copy(self.dead_this_turn)
         for effect in self.effects:
             effect = copy.copy(effect)
@@ -470,7 +473,7 @@ class Player(Bindable):
         return {
             'hero': self.hero,
             'deck': self.deck,
-            'graveyard': [card for card in self.graveyard],
+            'graveyard': self.graveyard,
             'hand': self.hand,
             'secrets': [secret.name for secret in self.secrets],
             'effects': self.effects,
@@ -478,6 +481,8 @@ class Player(Bindable):
             'minions': self.minions,
             'mana': self.mana,
             'max_mana': self.max_mana,
+            'current_overload': self.current_overload,
+            'upcoming_overload': self.upcoming_overload,
             'name': self.name,
         }
 
@@ -493,6 +498,8 @@ class Player(Bindable):
             hero.weapon.player = player
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
+        player.upcoming_overload = pd['upcoming_overload']
+        player.current_overload = pd['current_overload']
         player.name = pd['name']
         player.hand = []
         for card_def in pd['hand']:
@@ -500,9 +507,7 @@ class Player(Bindable):
             card.__from_json__(card, **card_def)
             card.attach(card, player)
             player.hand.append(card)
-        player.graveyard = set()
-        for card_name in pd["graveyard"]:
-            player.graveyard.add(card_name)
+        player.graveyard = pd["graveyard"]
 
         player.secrets = []
         for secret_name in pd["secrets"]:

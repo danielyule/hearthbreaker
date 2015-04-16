@@ -34,13 +34,13 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Dust Devil", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].windfury())
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
 
         game.play_single_turn()
         # Overload should cause that we start this turn with 0 mana
         game.play_single_turn()
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(0, game.players[0].overload)
+        self.assertEqual(0, game.players[0].upcoming_overload)
         self.assertEqual(0, game.players[0].mana)
         self.assertEqual(2, game.players[0].max_mana)
 
@@ -54,7 +54,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual("Earth Elemental", game.players[0].minions[0].card.name)
         self.assertTrue(game.players[0].minions[0].taunt)
-        self.assertEqual(3, game.players[0].overload)
+        self.assertEqual(3, game.players[0].upcoming_overload)
 
     def test_FireElemental(self):
         game = generate_game_for(FireElemental, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -322,7 +322,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Spirit Wolf", game.players[0].minions[1].card.name)
         self.assertEqual(2, game.players[0].minions[1].card.mana)
 
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
 
     def test_VitalityTotem(self):
         game = generate_game_for(VitalityTotem, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -355,7 +355,7 @@ class TestShaman(unittest.TestCase):
         # Forked Lightning should be played
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
 
     def test_FrostShock(self):
         game = generate_game_for(FrostShock, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -395,7 +395,7 @@ class TestShaman(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(25, game.players[1].hero.health)
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
 
     def test_LightningBolt(self):
         game = generate_game_for(LightningBolt, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -404,7 +404,7 @@ class TestShaman(unittest.TestCase):
 
         game.play_single_turn()
         self.assertEqual(27, game.players[1].hero.health)
-        self.assertEqual(1, game.players[0].overload)
+        self.assertEqual(1, game.players[0].upcoming_overload)
 
     def test_LightningStorm(self):
         game = generate_game_for(LightningStorm, Shieldbearer, CardTestingAgent, PlayAndAttackAgent)
@@ -418,7 +418,7 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(1, game.players[1].minions[0].health)
         self.assertEqual(2, game.players[1].minions[1].health)
         self.assertEqual(2, game.players[1].minions[2].health)
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
 
     def test_RockbiterWeapon(self):
         game = generate_game_for(RockbiterWeapon, Shieldbearer, PlayAndAttackAgent, DoNothingAgent)
@@ -492,7 +492,7 @@ class TestShaman(unittest.TestCase):
         self.assertTrue(game.players[0].hero.windfury())
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(6, game.players[0].hero.weapon.durability)
-        self.assertEqual(2, game.players[0].overload)
+        self.assertEqual(2, game.players[0].upcoming_overload)
         self.assertEqual(26, game.players[1].hero.health)
 
     def test_StormforgedAxe(self):
@@ -503,7 +503,7 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(2, game.players[0].hero.weapon.base_attack)
         self.assertEqual(3, game.players[0].hero.weapon.durability)
-        self.assertEqual(1, game.players[0].overload)
+        self.assertEqual(1, game.players[0].upcoming_overload)
 
     def test_Crackle(self):
         game = generate_game_for(Crackle, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -512,7 +512,7 @@ class TestShaman(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(25, game.players[1].hero.health)
-        self.assertEqual(1, game.players[0].overload)
+        self.assertEqual(1, game.players[0].upcoming_overload)
 
     def test_SiltfinSpiritwalker(self):
         game = generate_game_for([MurlocTidecaller, MurlocTidehunter, SiltfinSpiritwalker, Deathwing],
@@ -625,3 +625,13 @@ class TestShaman(unittest.TestCase):
         self.assertEqual("Doomguard", game.other_player.minions[0].card.name)
         self.assertEqual(5, len(game.current_player.hand))
         self.assertEqual(7, len(game.other_player.hand))
+
+    def test_LavaShock(self):
+        game = generate_game_for([Doomhammer, LightningBolt, LavaShock], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+        for turn in range(11):
+            game.play_single_turn()
+
+        # The player should have been able to do everything AND have three mana left over
+        self.assertEqual(25, game.other_player.hero.health)
+        self.assertEqual(3, game.current_player.mana)

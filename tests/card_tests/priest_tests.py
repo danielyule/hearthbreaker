@@ -835,3 +835,27 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(5, game.current_player.minions[0].health)
         self.assertEqual(2, game.other_player.minions[0].calculate_max_health())
         self.assertEqual(2, game.other_player.minions[0].health)
+
+    def test_Resurrect(self):
+        game = generate_game_for([StonetuskBoar, VitalityTotem, Resurrect, BoulderfistOgre], ArcaneShot,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(4):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Stonetusk Boar", game.players[0].minions[1].card.name)
+
+    def test_Resurrect_WildPyro(self):
+        game = generate_game_for([WildPyromancer, StonetuskBoar, Resurrect], Darkbomb,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        # The wild pyro will be resurrected and then it should go off, killing the boar
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Wild Pyromancer", game.current_player.minions[0].card.name)
+        self.assertEqual(1, game.current_player.minions[0].health)

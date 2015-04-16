@@ -269,3 +269,14 @@ class Sabotage(SpellCard):
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1
+
+
+class GangUp(SpellCard):
+    def __init__(self):
+        super().__init__("Gang Up", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for i in range(3):
+            player.put_back(type(self.target.card)())

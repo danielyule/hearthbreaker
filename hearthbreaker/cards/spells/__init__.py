@@ -130,6 +130,7 @@ from hearthbreaker.cards.spells.priest import (
     VelensChosen,
     Lightbomb,
     LightOfTheNaaru,
+    Resurrect,
 )
 
 from hearthbreaker.cards.spells.rogue import (
@@ -152,6 +153,7 @@ from hearthbreaker.cards.spells.rogue import (
     Vanish,
     TinkersSharpswordOil,
     Sabotage,
+    GangUp,
 )
 
 from hearthbreaker.cards.spells.shaman import (
@@ -173,6 +175,7 @@ from hearthbreaker.cards.spells.shaman import (
     Reincarnate,
     Crackle,
     AncestorsCall,
+    LavaShock,
 )
 
 from hearthbreaker.cards.spells.warlock import (

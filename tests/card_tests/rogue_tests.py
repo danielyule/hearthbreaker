@@ -739,3 +739,16 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
 
         self.assertEqual(25, game.players[1].hero.health)
+
+    def test_GangUp(self):
+        game = generate_game_for(GangUp, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(3):
+            game.play_single_turn()
+
+        boar_count = 0
+        for card in game.current_player.deck.cards:
+            if card.name == "Stonetusk Boar":
+                boar_count += 1
+
+        self.assertEqual(3, boar_count)
+        self.assertEqual(28, game.current_player.deck.left)
