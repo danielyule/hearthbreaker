@@ -1,6 +1,5 @@
 import abc
-from hearthbreaker.constants import MINION_TYPE
-from hearthbreaker.tags.base import Selector, Player, Picker, Function, Amount
+from hearthbreaker.tags.base import Selector, Player, Picker, Function, Amount, Condition
 import hearthbreaker.tags.condition
 
 
@@ -125,8 +124,9 @@ class RandomPicker(Picker):
 
 
 class CardSelector(Selector, metaclass=abc.ABCMeta):
-    def __init__(self, players=FriendlyPlayer()):
+    def __init__(self, players=FriendlyPlayer(), condition=None):
         self.players = players
+        self.condition = condition
 
     def get_targets(self, source, obj=None):
         players = self.players.get_players(source.player)
@@ -139,16 +139,28 @@ class CardSelector(Selector, metaclass=abc.ABCMeta):
         return targets
 
     def match(self, source, obj):
+        if self.condition:
+            return obj.is_card() and self.players.match(source, obj) and self.condition.evaluate(source, obj)
         return obj.is_card() and self.players.match(source, obj)
 
     def __to_json__(self):
+        if self.condition:
+            return {
+                'name': 'card',
+                'players': self.players,
+                'condition': self.condition,
+            }
         return {
             'name': 'card',
             'players': self.players
         }
 
-    def __from_json__(self, players='friendly'):
+    def __from_json__(self, players='friendly', condition=None):
         self.players = Player.from_json(players)
+        if condition:
+            self.condition = Condition.from_json(**condition)
+        else:
+            self.condition = None
         return self
 
 
@@ -168,81 +180,6 @@ class LastDrawnSelector(CardSelector):
     def __to_json__(self):
         return {
             'name': 'last_drawn',
-            'players': self.players
-        }
-
-    def __from_json__(self, players='friendly'):
-        self.players = Player.from_json(players)
-        return self
-
-
-class SecretSelector(CardSelector):
-    def match(self, source, obj):
-        return super().match(source, obj) and obj.is_secret()
-
-    def __to_json__(self):
-        return {
-            'name': 'secret',
-            'players': self.players
-        }
-
-    def __from_json__(self, players='friendly'):
-        self.players = Player.from_json(players)
-        return self
-
-
-class SpellSelector(CardSelector):
-    def match(self, source, obj):
-        return super().match(source, obj) and obj.is_spell()
-
-    def __to_json__(self):
-        return {
-            'name': 'spell',
-            'players': self.players
-        }
-
-    def __from_json__(self, players='friendly'):
-        self.players = Player.from_json(players)
-        return self
-
-
-class BattlecrySelector(CardSelector):
-    def match(self, source, obj):
-        return super().match(source, obj) and obj.is_minion() and obj.is_card() and obj.battlecry is not ()
-
-    def __to_json__(self):
-        return {
-            'name': 'battlecry',
-            'players': self.players
-        }
-
-    def __from_json__(self, players='friendly'):
-        self.players = Player.from_json(players)
-        return self
-
-
-class MinionCardSelector(CardSelector):
-    def match(self, source, obj):
-        return super().match(source, obj) and obj.is_minion()
-
-    def __to_json__(self):
-        return {
-            'name': 'minion_card',
-            'players': self.players
-        }
-
-    def __from_json__(self, players='friendly'):
-        self.players = Player.from_json(players)
-        return self
-
-
-class MechCardSelector(MinionCardSelector):
-    def match(self, source, obj):
-        return super().match(source, obj) and obj.minion_type == MINION_TYPE.MECH
-
-    def __to_json__(self):
-        return {
-            'name': 'mech_card',
             'players': self.players
         }
 

@@ -6,10 +6,10 @@ from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Transform, Equip, \
     Remove, Heal
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff, ActionTag
-from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent
-from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage
-from hearthbreaker.tags.selector import MinionSelector, MinionCardSelector, PlayerSelector, \
-    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue
+from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent, IsMinion
+from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage, Damaged
+from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, \
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue, CardSelector
 from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
 
 
@@ -81,7 +81,7 @@ class SummoningPortal(MinionCard):
         super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(0, 4, auras=[Aura(ManaChange(-2, 1, minimum=1), MinionCardSelector())])
+        return Minion(0, 4, auras=[Aura(ManaChange(-2, 1, minimum=1), CardSelector(condition=IsMinion()))])
 
 
 class BloodImp(MinionCard):
@@ -200,3 +200,11 @@ class MistressOfPain(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 4, effects=[Effect(DidDamage(), ActionTag(Heal(EventValue()), HeroSelector()))])
+
+
+class ImpGangBoss(MinionCard):
+    def __init__(self):
+        super().__init__("Imp Gang Boss", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON)
+
+    def create_minion(self, player):
+        return Minion(2, 4, effects=[Effect(Damaged(), ActionTag(Summon(Imp()), PlayerSelector()))])

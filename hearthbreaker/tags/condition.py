@@ -249,6 +249,19 @@ class MinionHasDeathrattle(Condition):
         return len(minion.deathrattle) > 0
 
 
+class HasBattlecry(Condition):
+    def __to_json__(self):
+        return {
+            'name': 'has_battlecry'
+        }
+
+    def __init__(self):
+        super().__init__()
+
+    def evaluate(self, target, obj, *args):
+        return obj.is_minion() and len(obj.battlecry) > 0
+
+
 class HasStatus(Condition):
     def __init__(self, status):
         self.status = status

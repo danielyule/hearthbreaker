@@ -805,3 +805,22 @@ class TestWarlock(unittest.TestCase):
         game.play_single_turn()
 
         self.assertFalse(game.game_ended)
+
+    def test_ImpGangBoss(self):
+        game = generate_game_for(ImpGangBoss, [MortalCoil, ShadowWordPain], OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+
+        game.play_single_turn()  # Mortal Coils the gang boss
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Imp", game.players[0].minions[1].card.name)
+
+        game.play_single_turn()  # Plays 2nd Gang Boss
+        game.play_single_turn()  # Pains 1 Boss, no damage
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual("Imp Gang Boss", game.players[0].minions[0].card.name)
+        self.assertEqual("Imp", game.players[0].minions[1].card.name)

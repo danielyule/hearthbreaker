@@ -4,10 +4,10 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.base import Effect, Aura, Battlecry, AuraUntil, ActionTag
-from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent, IsSecret
+from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent, IsSecret, IsSpell
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded, CardPlayed, Drawn
-from hearthbreaker.tags.selector import SecretSelector, SpellSelector, SelfSelector, PlayerSelector, TargetSelector, \
-    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count, BothPlayer
+from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, TargetSelector, \
+    CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count, BothPlayer, CardSelector
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Frozen, NoSpellTarget, ManaChange
 
 
@@ -24,13 +24,13 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 2, auras=[Aura(ManaChange(-1), SpellSelector())])
+        return Minion(3, 2, auras=[Aura(ManaChange(-1), CardSelector(condition=IsSpell()))])
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
         super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
-                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-100), SecretSelector(),
+                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-100), CardSelector(condition=IsSecret()),
                                                                  CardPlayed(IsSecret()))]), PlayerSelector()))
 
     def create_minion(self, player):

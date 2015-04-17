@@ -2,8 +2,9 @@ import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import AddCard
 from hearthbreaker.tags.base import Effect, BuffUntil, Buff, AuraUntil, ActionTag
+from hearthbreaker.tags.condition import IsSpell
 from hearthbreaker.tags.event import TurnStarted, TurnEnded, SpellCast
-from hearthbreaker.tags.selector import PlayerSelector, SpellSelector
+from hearthbreaker.tags.selector import PlayerSelector, CardSelector
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -161,7 +162,7 @@ class Preparation(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_aura(AuraUntil(ManaChange(-3), SpellSelector(), SpellCast()))
+        player.add_aura(AuraUntil(ManaChange(-3), CardSelector(condition=IsSpell()), SpellCast()))
 
 
 class Sap(SpellCard):

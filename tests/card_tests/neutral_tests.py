@@ -4545,3 +4545,24 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, game.other_player.minions[0].health)
         self.assertEqual(2, game.other_player.minions[1].health)
         self.assertEqual(3, game.other_player.minions[2].health)
+
+    def test_BlackwingTechnician_with_dragon(self):
+        game = generate_game_for([BlackwingTechnician, FaerieDragon],
+                                 StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+
+    def test_BlackwingTechnician_without_dragon(self):
+        game = generate_game_for(BlackwingTechnician, FaerieDragon, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.current_player.minions[0].calculate_max_health())

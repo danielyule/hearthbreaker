@@ -1571,7 +1571,10 @@
           }, 
           "selector": {
             "players": "friendly", 
-            "name": "minion_card"
+            "name": "card", 
+            "condition": {
+              "name": "is_minion"
+            }
           }
         }
       ]
@@ -3396,7 +3399,10 @@
           }, 
           "selector": {
             "players": "both", 
-            "name": "minion_card"
+            "name": "card", 
+            "condition": {
+              "name": "is_minion"
+            }
           }
         }
       ]
@@ -4588,7 +4594,10 @@
                 }, 
                 "selector": {
                   "players": "friendly", 
-                  "name": "spell"
+                  "name": "card", 
+                  "condition": {
+                    "name": "is_spell"
+                  }
                 }
               }
             ]
@@ -4637,7 +4646,10 @@
                       }, 
                       "selector": {
                         "players": "friendly", 
-                        "name": "minion_card"
+                        "name": "card", 
+                        "condition": {
+                          "name": "is_minion"
+                        }
                       }
                     }
                   ]
@@ -5235,7 +5247,10 @@
           }, 
           "selector": {
             "players": "both", 
-            "name": "battlecry"
+            "name": "card", 
+            "condition": {
+              "name": "has_battlecry"
+            }
           }
         }
       ]
@@ -5306,7 +5321,10 @@
                 }, 
                 "selector": {
                   "players": "friendly", 
-                  "name": "spell"
+                  "name": "card", 
+                  "condition": {
+                    "name": "is_spell"
+                  }
                 }
               }
             ]
@@ -6143,7 +6161,12 @@
           }, 
           "selector": {
             "players": "friendly", 
-            "name": "mech_card"
+            "name": "card", 
+            "condition": {
+              "name": "is_type", 
+              "minion_type": "Mech", 
+              "include_self": false
+            }
           }
         }
       ]
@@ -7867,6 +7890,58 @@
     "rarity": "Common"
   }, 
   {
+    "mana": 3, 
+    "attack": 2, 
+    "health": 4, 
+    "name": "Blackwing Technician", 
+    "character_class": "", 
+    "battlecry": [
+      {
+        "condition": {
+          "amount": {
+            "name": "count", 
+            "selector": {
+              "players": "friendly", 
+              "name": "card", 
+              "condition": {
+                "name": "is_type", 
+                "minion_type": "Dragon", 
+                "include_self": false
+              }
+            }
+          }, 
+          "name": "greater_than", 
+          "value": 0
+        }, 
+        "actions": [
+          {
+            "name": "give", 
+            "buffs": [
+              {
+                "status": {
+                  "amount": 1, 
+                  "name": "change_attack"
+                }
+              }, 
+              {
+                "status": {
+                  "amount": 1, 
+                  "name": "change_health"
+                }
+              }
+            ]
+          }
+        ], 
+        "selector": {
+          "name": "self"
+        }
+      }
+    ], 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Common"
+  }, 
+  {
     "mana": 5, 
     "attack": 3, 
     "health": 3, 
@@ -7967,7 +8042,10 @@
           }, 
           "selector": {
             "players": "friendly", 
-            "name": "spell"
+            "name": "card", 
+            "condition": {
+              "name": "is_spell"
+            }
           }
         }
       ]
@@ -8002,7 +8080,10 @@
                 }, 
                 "selector": {
                   "players": "friendly", 
-                  "name": "secret"
+                  "name": "card", 
+                  "condition": {
+                    "name": "is_secret"
+                  }
                 }
               }
             ]
@@ -9384,7 +9465,10 @@
           }, 
           "selector": {
             "players": "friendly", 
-            "name": "minion_card"
+            "name": "card", 
+            "condition": {
+              "name": "is_minion"
+            }
           }
         }
       ]
@@ -9894,6 +9978,42 @@
     "type": "minion", 
     "collectible": true, 
     "rarity": "Rare"
+  }, 
+  {
+    "mana": 3, 
+    "attack": 2, 
+    "health": 4, 
+    "name": "Imp Gang Boss", 
+    "minion_type": "Demon", 
+    "character_class": "Warlock", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "damaged"
+          }, 
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Imp (warlock)"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
+        }
+      ]
+    }, 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Common"
   }, 
   {
     "mana": 4, 
