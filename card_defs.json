@@ -7867,6 +7867,52 @@
     "rarity": "Common"
   }, 
   {
+    "mana": 5, 
+    "attack": 3, 
+    "health": 3, 
+    "name": "Grim Patron", 
+    "character_class": "", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "damaged"
+          }, 
+          "tags": [
+            {
+              "condition": {
+                "amount": {
+                  "attribute": "health", 
+                  "name": "attribute", 
+                  "selector": {
+                    "name": "self"
+                  }
+                }, 
+                "name": "greater_than", 
+                "value": 0
+              }, 
+              "actions": [
+                {
+                  "name": "summon", 
+                  "card": {
+                    "name": "Grim Patron"
+                  }
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "player"
+              }
+            }
+          ]
+        }
+      ]
+    }, 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Rare"
+  }, 
+  {
     "mana": 1, 
     "attack": 1, 
     "health": 3, 

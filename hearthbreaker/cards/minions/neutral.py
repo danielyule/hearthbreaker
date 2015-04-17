@@ -2453,3 +2453,13 @@ class HungryDragon(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 6)
+
+
+class GrimPatron(MinionCard):
+    def __init__(self):
+        super().__init__("Grim Patron", 5, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(3, 3, effects=[Effect(Damaged(), [ActionTag(Summon(GrimPatron()), PlayerSelector(),
+                                                                  GreaterThan(Attribute("health", SelfSelector()),
+                                                                              value=0))])])

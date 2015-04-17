@@ -4470,3 +4470,78 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].card.mana)
+
+    def test_GrimPatron(self):
+        game = generate_game_for([GrimPatron, GrimPatron, Whirlwind], Blizzard, CardTestingAgent, CardTestingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].health)
+        self.assertEqual(3, game.current_player.minions[1].health)
+        self.assertEqual(2, game.current_player.minions[2].health)
+        self.assertEqual(3, game.current_player.minions[3].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(3, game.other_player.minions[1].health)
+        self.assertEqual(1, game.other_player.minions[2].health)
+        self.assertEqual(3, game.other_player.minions[3].health)
+
+    def test_GrimPatron_filling_board(self):
+        game = generate_game_for(Consecration, GrimPatron, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(6):
+            game.play_single_turn()
+
+        # Create a situation where grim patrons will spawn to fill the board before the old ones are dead
+
+        for i in range(6):
+            GrimPatron().summon(game.current_player, game, 0)
+            game.current_player.minions[0].health = 2
+
+        GrimPatron().summon(game.current_player, game, 0)
+
+        # So, we have 6 patrons with two health and one with 3
+
+        game.play_single_turn()
+        # The grim patron will not be summoned, because the 6 "dead" patrons haven't been removed from the board yet.
+        self.assertEqual(1, len(game.other_player.minions))
+
+    def test_GrimPatron_Blizzard(self):
+        game = generate_game_for(GrimPatron, Blizzard, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        # According to http://www.hearthhead.com/card=2279/grim-patron#comments:id=2153037, the blizzard should first
+        # damage the patrons, which causes two new patrons to appear, and then freeze all minions, including the
+        # new ones
+
+        self.assertEqual(4, len(game.other_player.minions))
+        self.assertTrue(game.other_player.minions[0].frozen)
+        self.assertTrue(game.other_player.minions[1].frozen)
+        self.assertTrue(game.other_player.minions[2].frozen)
+        self.assertTrue(game.other_player.minions[3].frozen)
+
+    def test_GrimPatron_Swipe(self):
+        game = generate_game_for(GrimPatron, Swipe, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        game.current_player.minions[0].increase_health(2)
+
+        # According to http://www.hearthhead.com/card=2279/grim-patron#comments:id=2153037, swipe will damage
+        # the newly summoned patron (summoning another patron), because it operates in two phases.
+        # This is a bug, as of patch 2.0.0.7234.
+
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(1, game.other_player.minions[0].health)
+        self.assertEqual(2, game.other_player.minions[1].health)
+        self.assertEqual(3, game.other_player.minions[2].health)

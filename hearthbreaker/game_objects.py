@@ -545,9 +545,6 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             return
         self.player.trigger("pre_damage", self, attacker, amount)
         if not self.immune:
-            self.trigger("damaged", amount, attacker)
-            self.player.trigger("character_damaged", self, attacker, amount)
-
             # This is constructed to avoid infinite recursion when mistress of pain and auchenai soulpriest
             # are in use.  This will prevent the did_damage event from going off if the character being damaged is
             # already dead.
@@ -562,6 +559,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
             min_health = self.calculate_stat(MinimumHealth, 0)
             if self.health < min_health:
                 self.health = min_health
+            self.trigger("damaged", amount, attacker)
+            self.player.trigger("character_damaged", self, attacker, amount)
             if self.health <= 0:
                 self.die(attacker)
             self.trigger("health_changed")
@@ -958,6 +957,7 @@ class Minion(Character):
             deathrattle = self.deathrattle
 
             def delayed_death(c):
+                self.remove_from_board()
                 self.unattach()
                 if deathrattle is not None:
                     for rattle in deathrattle:
@@ -973,7 +973,6 @@ class Minion(Character):
             self.bind_once("died", delayed_death)
             super().die(by)
             self.player.dead_this_turn.append(self)
-            self.remove_from_board()
 
     def silence(self):
         super().silence()

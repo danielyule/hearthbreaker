@@ -191,7 +191,7 @@ class Avenge(SecretCard):
         super().__init__("Avenge", 1, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON)
 
     def _reveal(self, dead_minion, attacker):
-        if len(self.player.minions) > 0:
+        if len([minion for minion in self.player.minions if not minion.dead]) > 0:
             target = self.player.game.random_choice(self.player.minions)
             target.change_attack(3)
             target.increase_health(2)

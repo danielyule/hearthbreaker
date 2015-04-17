@@ -10,7 +10,7 @@ def _battlecry_targetable(target):
 
 
 def _is_spell_targetable(target):
-    return target.spell_targetable()
+    return target.spell_targetable() and not target.dead
 
 
 class Card(Bindable, GameObject):

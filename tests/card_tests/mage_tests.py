@@ -793,8 +793,8 @@ class TestMage(unittest.TestCase):
 
         game.play_single_turn()
         game.players[0].minions[0].die(None)
-        game.players[0].minions[0].die(None)
-
+        game.players[0].minions[1].die(None)
+        game.check_delayed()
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(1, game.players[0].minions[0].health)
 
@@ -861,6 +861,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(5, len(game.current_player.hand))
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
+            # TODO This assertion may fail, if unstable portal summons a Giant.  Don't know how to solve that issue
             self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
 
     def test_DragonsBreath(self):

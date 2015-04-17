@@ -323,10 +323,10 @@ class MinionSelector(Selector):
 
     def match(self, source, obj):
         if self.condition:
-            return not obj.is_card() and obj.is_minion() and self.players.match(source, obj)\
+            return not obj.is_card() and obj.is_minion() and not obj.dead and self.players.match(source, obj)\
                 and self.condition.evaluate(source, obj)
         else:
-            return obj.is_minion() and self.players.match(source, obj)
+            return obj.is_minion() and self.players.match(source, obj) and not obj.dead
 
     def __to_json__(self):
         if self.condition:
@@ -421,10 +421,10 @@ class CharacterSelector(Selector):
 
     def match(self, source, obj):
         if self.condition:
-            return not obj.is_card() and self.players.match(source, obj) \
+            return not obj.is_card() and not obj.dead and self.players.match(source, obj) \
                 and self.condition.evaluate(source, obj)
         else:
-            return not obj.is_card() and self.players.match(source, obj)
+            return not obj.is_card() and not obj.dead and self.players.match(source, obj)
 
     def __to_json__(self):
         if self.condition:

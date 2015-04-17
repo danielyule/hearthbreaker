@@ -230,6 +230,7 @@ from hearthbreaker.cards.minions.neutral import (
     MimironsHead,
     GnomishExperimenter,
     HungryDragon,
+    GrimPatron,
 )
 
 from hearthbreaker.cards.minions.druid import (

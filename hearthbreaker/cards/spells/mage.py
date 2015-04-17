@@ -263,6 +263,7 @@ class Blizzard(SpellCard):
         super().use(player, game)
         for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
+        for minion in game.other_player.minions:
             minion.add_buff(Buff(Frozen()))
 
 
