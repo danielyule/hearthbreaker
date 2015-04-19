@@ -110,7 +110,7 @@ class GameRender:
                 color = curses.color_pair(3)
 
         name = card.name[:15]
-        window.addstr(y + 0, x, " {0:>2} mana ({1})   ".format(card.mana_cost(player), status), color)
+        window.addstr(y + 0, x, " {0:>2} mana ({1})   ".format(card.mana_cost(), status), color)
         window.addstr(y + 1, x, "{0:^15}".format(name), color)
 
     def draw_hero(self, hero, window, x, y):

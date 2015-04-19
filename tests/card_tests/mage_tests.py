@@ -212,8 +212,8 @@ class TestMage(unittest.TestCase):
         self.assertEqual(27, game.other_player.hero.health)
 
         # Make sure the other frostbolts have been properly reduced
-        self.assertEqual(1, game.current_player.hand[1].mana_cost(game.current_player))
-        self.assertEqual(1, game.current_player.hand[2].mana_cost(game.current_player))
+        self.assertEqual(1, game.current_player.hand[1].mana_cost())
+        self.assertEqual(1, game.current_player.hand[2].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
@@ -222,7 +222,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
 
         # Make sure that the cards in hand are no longer reduced
-        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(2, game.current_player.hand[0].mana_cost())
 
     def test_ArcaneIntellect(self):
         game = generate_game_for(ArcaneIntellect, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -432,7 +432,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual("Vaporize", game.current_player.secrets[0].name)
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Kirin Tor Mage", game.current_player.minions[0].card.name)
-        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(3, game.current_player.hand[0].mana_cost())
         self.assertEqual("Spellbender", game.current_player.hand[0].name)
 
         random.seed(1857)
@@ -443,7 +443,7 @@ class TestMage(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.secrets))
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Kirin Tor Mage", game.current_player.minions[0].card.name)
-        self.assertEqual(3, game.current_player.hand[2].mana_cost(game.current_player))
+        self.assertEqual(3, game.current_player.hand[2].mana_cost())
         self.assertEqual("Vaporize", game.current_player.hand[2].name)
 
     def test_EtherealArcanist(self):
@@ -862,7 +862,7 @@ class TestMage(unittest.TestCase):
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
             # TODO This assertion may fail, if unstable portal summons a Giant.  Don't know how to solve that issue
-            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
+            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost())
 
     def test_DragonsBreath(self):
         game = generate_game_for([Flamestrike, DragonsBreath], StonetuskBoar, CardTestingAgent, OneCardPlayingAgent)

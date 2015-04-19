@@ -695,7 +695,7 @@ class SwapStats(Action):
                 if not was_enraged:
                     obj._do_enrage()
         elif attribute == 'mana':
-            obj.add_buff(Buff(ManaChange(value - obj.mana_cost(None))))
+            obj.add_buff(Buff(ManaChange(value - obj.mana_cost())))
         elif attribute == "attack":
             obj.add_buff(Buff(SetAttack(value)))
         elif attribute == "health":

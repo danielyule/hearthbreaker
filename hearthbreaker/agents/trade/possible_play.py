@@ -15,12 +15,12 @@ class PossiblePlay:
             if card.name == "The Coin":
                 return -1
             else:
-                return card.mana_cost(card.player)
+                return card.mana_cost()
 
         return reduce(lambda s, c: s + eff_mana(c), self.cards, 0)
 
     def sorted_mana(self):
-        return Util.reverse_sorted(map(lambda c: c.mana_cost(c.player), self.cards))
+        return Util.reverse_sorted(map(lambda c: c.mana_cost(), self.cards))
 
     def wasted(self):
         return self.available_mana - self.card_mana()
@@ -115,7 +115,7 @@ class HeroPowerCard:
     def can_use(self, player, game):
         return True
 
-    def mana_cost(self, player):
+    def mana_cost(self):
         return 2
 
 
@@ -159,12 +159,12 @@ class PossiblePlays(CoinPlays):
 
             if card.name == 'Hero Power':
                 f_plays = PossiblePlays(rest,
-                                        self.mana - card.mana_cost(card.player),
+                                        self.mana - card.mana_cost(),
                                         allow_hero_power=False).raw_plays()
             else:
                 rest.remove(card)
                 f_plays = PossiblePlays(rest,
-                                        self.mana - card.mana_cost(card.player),
+                                        self.mana - card.mana_cost(),
                                         allow_hero_power=self.allow_hero_power).raw_plays()
 
             for following_play in f_plays:

@@ -230,7 +230,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(7, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[6].mana_cost())
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(30, game.players[0].hero.health)
         game.play_single_turn()
@@ -239,8 +239,8 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(8, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
-        self.assertEqual(4, game.players[1].hand[7].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[5].mana_cost())
+        self.assertEqual(4, game.players[1].hand[7].mana_cost())
 
     def test_FreezingTrap_many_cards(self):
         class FreezingTrapAgent(DoNothingAgent):
@@ -265,7 +265,7 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
         for card in game.current_player.hand:
             if card.name != "The Coin":
-                self.assertEqual(6, card.mana_cost(game.current_player))
+                self.assertEqual(6, card.mana_cost())
         self.assertEqual(30, game.other_player.hero.health)
         death_mock.assert_called_once_with(None)
 
@@ -299,7 +299,7 @@ class TestHunter(unittest.TestCase):
         # Freezing Trap triggers, bouncing the charging Wolfrider
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(8, len(game.players[1].hand))
-        self.assertEqual(5, game.players[1].hand[7].mana_cost(game.players[1]))
+        self.assertEqual(5, game.players[1].hand[7].mana_cost())
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(30, game.other_player.hero.health)
         self.assertEqual(30, game.current_player.hero.health)
@@ -603,13 +603,13 @@ class TestHunter(unittest.TestCase):
 
         # King Krush should cost 4 less (9 - 4 = 5)
         self.assertEqual(5, len(game.players[0].hand))
-        self.assertEqual(5, game.players[0].hand[4].mana_cost(game.players[0]))
+        self.assertEqual(5, game.players[0].hand[4].mana_cost())
 
         for turn in range(0, 2):
             game.play_single_turn()
 
         # Molten Giant should not be affected since it's not a beast
-        self.assertEqual(20, game.players[0].hand[5].mana_cost(game.players[0]))
+        self.assertEqual(20, game.players[0].hand[5].mana_cost())
 
     def test_CobraShot(self):
         game = generate_game_for(CobraShot, StonetuskBoar, CardTestingAgent, CardTestingAgent)

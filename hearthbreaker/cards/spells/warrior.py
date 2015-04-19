@@ -2,9 +2,10 @@ import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import Damage, Draw, Discard
 from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE, ActionTag
+from hearthbreaker.tags.condition import GreaterThan, IsDamaged
 from hearthbreaker.tags.event import TurnEnded, Drawn
-from hearthbreaker.tags.selector import MinionSelector, HeroSelector, PlayerSelector
-from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth
+from hearthbreaker.tags.selector import MinionSelector, HeroSelector, PlayerSelector, Count
+from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth, ManaChange
 import hearthbreaker.targeting
 import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -235,16 +236,8 @@ class BouncingBlade(SpellCard):
 class Crush(SpellCard):
     def __init__(self):
         super().__init__("Crush", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
-                         target_func=hearthbreaker.targeting.find_minion_spell_target)
-
-    def mana_cost(self, player):
-        damaged_minion_discount = 0
-        for minion in player.game.current_player.minions:
-            if minion.health != minion.calculate_max_health():
-                damaged_minion_discount = 4
-                break
-        cost = super().mana_cost(player) - damaged_minion_discount
-        return cost
+                         target_func=hearthbreaker.targeting.find_minion_spell_target,
+                         buffs=[Buff(ManaChange(-4), GreaterThan(Count(MinionSelector(IsDamaged())), value=0))])
 
     def use(self, player, game):
         super().use(player, game)

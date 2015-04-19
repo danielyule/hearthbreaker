@@ -1400,19 +1400,11 @@ class SeaGiant(MinionCard):
 
 class DreadCorsair(MinionCard):
     def __init__(self):
-        super().__init__("Dread Corsair", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.PIRATE)
+        super().__init__("Dread Corsair", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.PIRATE,
+                         buffs=[Buff(ManaChange(Attribute("attack", WeaponSelector()), -1))])
 
     def create_minion(self, player):
         return Minion(3, 3, taunt=True)
-
-    def mana_cost(self, player):
-        if player.hero.weapon:
-            cost = super().mana_cost(player) - player.hero.weapon.base_attack
-        else:
-            return 4
-        if cost < 0:
-            return 0
-        return cost
 
 
 class CaptainsParrot(MinionCard):
@@ -2477,3 +2469,11 @@ class GrimPatron(MinionCard):
         return Minion(3, 3, effects=[Effect(Damaged(), [ActionTag(Summon(GrimPatron()), PlayerSelector(),
                                                                   GreaterThan(Attribute("health", SelfSelector()),
                                                                               value=0))])])
+
+
+class EmperorThaurissan(MinionCard):
+    def __init__(self):
+        super().__init__("Emperor Thaurissan", 6, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(5, 5, effects=[Effect(TurnEnded(), [ActionTag(Give(Buff(ManaChange(-1))), CardSelector())])])

@@ -237,7 +237,7 @@ class Game(Bindable):
             raise GameException("That card cannot be used")
         card_index = self.current_player.hand.index(card)
         self.current_player.hand.pop(card_index)
-        self.current_player.mana -= card.mana_cost(self.current_player)
+        self.current_player.mana -= card.mana_cost()
         self._all_cards_played.append(card)
         card.target = None
         card.current_target = None

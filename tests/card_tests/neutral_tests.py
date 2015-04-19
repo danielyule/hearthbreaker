@@ -1183,13 +1183,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 10):
             game.play_single_turn()
 
-        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(8, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[0].mana_cost())
+        self.assertEqual(8, game.players[0].hand[1].mana_cost())
 
         game.play_single_turn()
 
-        self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(5, game.players[0].hand[0].mana_cost())
+        self.assertEqual(0, game.players[0].hand[1].mana_cost())
 
     def test_Demolisher(self):
         game = generate_game_for(Demolisher, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -1473,15 +1473,15 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 4):
             game.play_single_turn()
 
-        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
-        self.assertEqual(2, game.players[1].hand[0].mana_cost(game.players[1]))
+        self.assertEqual(0, game.players[0].hand[0].mana_cost())
+        self.assertEqual(3, game.players[0].hand[1].mana_cost())
+        self.assertEqual(2, game.players[1].hand[0].mana_cost())
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
-        self.assertEqual(1, game.players[1].hand[0].mana_cost(game.players[1]))
+        self.assertEqual(2, game.players[0].hand[0].mana_cost())
+        self.assertEqual(0, game.players[0].hand[1].mana_cost())
+        self.assertEqual(1, game.players[1].hand[0].mana_cost())
 
     def test_MindControlTech(self):
         game = generate_game_for(MindControlTech, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -1989,37 +1989,37 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()
 
-        self.assertEqual(8, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(8, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(7, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(7, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(6, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(6, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
 
         # Play the mountain giant (it costs 4 mana, then the subsequent ones cost 5)
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
         self.assertEqual(1, len(game.current_player.minions))
 
     def test_MoltenGiant(self):
         game = generate_game_for(MoltenGiant, StonetuskBoar, DoNothingAgent, DoNothingAgent)
 
         game.play_single_turn()
-        self.assertEqual(20, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(20, game.current_player.hand[0].mana_cost())
 
         game.current_player.hero.damage(10, None)
-        self.assertEqual(10, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(10, game.current_player.hand[0].mana_cost())
 
         game.current_player.hero.damage(15, None)
-        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(0, game.current_player.hand[0].mana_cost())
 
     def test_SeaGiant(self):
         game = generate_game_for([SeaGiant, SummoningPortal], StonetuskBoar, OneCardPlayingAgent, CardTestingAgent)
@@ -2027,29 +2027,29 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(9, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(9, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(7, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(7, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(4, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(2, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(4, game.current_player.hand[0].mana_cost())
+        self.assertEqual(2, game.current_player.hand[1].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(0, game.current_player.hand[0].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(0, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(2, game.current_player.hand[0].mana_cost())
+        self.assertEqual(0, game.current_player.hand[1].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(0, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(0, game.current_player.hand[0].mana_cost())
 
     def test_DreadCorsair(self):
         game = generate_game_for([DreadCorsair, LightsJustice, GladiatorsLongbow],
@@ -2058,17 +2058,17 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()  # Play 4 mana dread corsair
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(4, game.players[0].hand[2].mana_cost(game.players[0]))
+        self.assertEqual(4, game.players[0].hand[2].mana_cost())
 
         game.play_single_turn()  # Equip LJ and check
 
         self.assertEqual(1, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(3, game.players[0].hand[1].mana_cost())
 
         for turn in range(0, 4):
             game.play_single_turn()  # Equip longbow and check
 
-        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[0].mana_cost())
 
     def test_CaptainsParrot(self):
         game = generate_game_for([CaptainsParrot, DreadCorsair, StonetuskBoar], StonetuskBoar,
@@ -2279,12 +2279,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(2, game.players[0].hand[0].mana_cost())
 
         # Make sure the summoner's buff is being removed at the end of each turn
         game.play_single_turn()
         game.play_single_turn()
-        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(2, game.players[0].hand[0].mana_cost())
 
     def test_OldMurkEye(self):
         game = generate_game_for([OldMurkEye, ArcaneExplosion], BluegillWarrior,
@@ -2638,13 +2638,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
+        self.assertEqual(4, game.other_player.hand[0].mana_cost())
+        self.assertEqual(3, game.other_player.hand[1].mana_cost())
         game.current_player.minions[0].silence()
-        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(3, game.current_player.hand[0].mana_cost())
+        self.assertEqual(2, game.other_player.hand[0].mana_cost())
+        self.assertEqual(3, game.other_player.hand[1].mana_cost())
 
     def test_NerubarWeblord_with_combo_and_choose(self):
         game = generate_game_for(NerubarWeblord,
@@ -2654,12 +2654,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 5):
             game.play_single_turn()
 
-        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(7, game.other_player.hand[1].mana_cost(game.other_player))
-        self.assertEqual(6, game.other_player.hand[2].mana_cost(game.other_player))
-        self.assertEqual(2, game.other_player.hand[3].mana_cost(game.other_player))
+        self.assertEqual(4, game.other_player.hand[0].mana_cost())
+        self.assertEqual(7, game.other_player.hand[1].mana_cost())
+        self.assertEqual(6, game.other_player.hand[2].mana_cost())
+        self.assertEqual(2, game.other_player.hand[3].mana_cost())
         # Skip the coin
-        self.assertEqual(3, game.other_player.hand[5].mana_cost(game.other_player))
+        self.assertEqual(3, game.other_player.hand[5].mana_cost())
 
     def test_UnstableGhoul(self):
         game = generate_game_for([StonetuskBoar, FaerieDragon, GoldshireFootman, Frostbolt], UnstableGhoul,
@@ -2681,13 +2681,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 9):
             game.play_single_turn()
 
-        self.assertEqual(10, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(6, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(10, game.other_player.hand[0].mana_cost())
+        self.assertEqual(6, game.other_player.hand[1].mana_cost())
 
         game.play_single_turn()
 
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(6, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
+        self.assertEqual(6, game.current_player.hand[1].mana_cost())
 
     def test_StoneskinGargoyle(self):
         game = generate_game_for(ConeOfCold,
@@ -3445,7 +3445,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game = generate_game_for([Mechwarper, HarvestGolem], StonetuskBoar, CardTestingAgent, DoNothingAgent)
 
         # Harvest Golem is initial 3 cost
-        self.assertEqual(3, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(3, game.players[0].hand[1].mana_cost())
 
         for turn in range(0, 3):
             game.play_single_turn()
@@ -3455,7 +3455,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         # Harvest Golem (MECH) should now have a cost of 2
         self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
-        self.assertEqual(2, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(2, game.players[0].hand[0].mana_cost())
 
         # Kill the Mechwarper
         m = game.players[0].minions[0]
@@ -3464,7 +3464,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         # Harvest Golem should be back at 3 again
         self.assertEqual("Harvest Golem", game.players[0].hand[0].name)
-        self.assertEqual(3, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(3, game.players[0].hand[0].mana_cost())
 
     def test_ClockworkGiant(self):
         game = generate_game_for([Mechwarper, ClockworkGiant], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -3473,7 +3473,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(5, len(game.players[1].hand))
         # Initial cost is 12, opponent have 5 cards in hand, 12 - 5 = 7
-        self.assertEqual(7, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(7, game.players[0].hand[1].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
@@ -3481,7 +3481,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(6, len(game.players[1].hand))
         self.assertEqual(1, len(game.players[0].minions))
         # Initial cost is 12, opponent have 6 cards in hand and you have Mechwarper in play, 12 - 6 - 1 = 5
-        self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
+        self.assertEqual(5, game.players[0].hand[0].mana_cost())
 
     def test_ArmorPlating(self):
         game = generate_game_for(ArmorPlating, StonetuskBoar, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -4566,3 +4566,32 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(2, game.current_player.minions[0].calculate_attack())
         self.assertEqual(4, game.current_player.minions[0].calculate_max_health())
+
+    def test_EmperorThaurissan(self):
+        game = generate_game_for(EmperorThaurissan, Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(8, len(game.current_player.hand))
+        for card in game.current_player.hand:
+            self.assertEqual(5, card.mana_cost())
+
+        self.assertEqual(10, len(game.other_player.hand))
+        for card in game.other_player.hand:
+            if card.name != "The Coin":
+                self.assertEqual(5, card.mana_cost())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(8, len(game.current_player.hand))
+        for card in game.current_player.hand[:-1]:
+            self.assertEqual(4, card.mana_cost())
+
+        self.assertEqual(5, game.current_player.hand[-1].mana_cost())
+
+        self.assertEqual(9, len(game.other_player.hand))
+        for card in game.other_player.hand:
+            if card.name != "The Coin":
+                self.assertEqual(5, card.mana_cost())

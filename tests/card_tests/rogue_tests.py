@@ -409,7 +409,7 @@ class TestRogue(unittest.TestCase):
         game.play_single_turn()
         self.assertEqual(3, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[2].mana_cost())
 
     def test_Shiv(self):
         game = generate_game_for(Shiv, StonetuskBoar, CardTestingAgent, DoNothingAgent)

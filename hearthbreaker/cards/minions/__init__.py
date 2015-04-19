@@ -232,6 +232,7 @@ from hearthbreaker.cards.minions.neutral import (
     HungryDragon,
     GrimPatron,
     BlackwingTechnician,
+    EmperorThaurissan,
 )
 
 from hearthbreaker.cards.minions.druid import (

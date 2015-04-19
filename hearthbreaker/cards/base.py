@@ -100,16 +100,15 @@ class Card(Bindable, GameObject):
         """
         if game.game_ended:
             return False
-        return player.mana >= self.mana_cost(player)
+        return player.mana >= self.mana_cost()
 
-    def mana_cost(self, player):
+    def mana_cost(self):
         """
         Calculates the mana cost for this card.
 
         This cost is the base cost for the card, modified by any tags from the card itself, or
         from other cards (such as :class:`hearthbreaker.cards.minions.neutral.VentureCoMercenary`)
 
-        :param hearthbreaker.game_objects.Player player: The player who is trying to use the card.
 
         :return: representing the actual mana cost of this card.
         :rtype: int
@@ -439,14 +438,12 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
 
         return super().can_use(player, game)
 
-    def mana_cost(self, player):
+    def mana_cost(self):
         """
         Calculates the mana cost for this card.
 
         This cost is the base cost for the card, modified by any tags from the card itself, or
         from other cards (such as :class:`hearthbreaker.cards.minions.neutral.VentureCoMercenary`)
-
-        :param hearthbreaker.game_objects.Player player: The player who is trying to use the card.
 
         :return: representing the actual mana cost of this card.
         :rtype: int

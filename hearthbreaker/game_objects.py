@@ -786,6 +786,13 @@ class Weapon(Bindable, GameObject):
         self.attach(self, player)
         self.player.hero.trigger("weapon_equipped")
 
+    def calculate_attack(self):
+        """
+        Calculates the amount of attack this :class:`Wea[on` has, including the base attack, any temporary attack
+        bonuses for this turn
+        """
+        return self.calculate_stat(ChangeAttack, self.base_attack)
+
     def __to_json__(self):
         parent_json = super().__to_json__()
         parent_json.update({

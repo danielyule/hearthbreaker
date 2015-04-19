@@ -4379,12 +4379,31 @@
     "rarity": "Epic"
   }, 
   {
-    "mana": 4, 
-    "attack": 3, 
-    "health": 3, 
+    "collectible": true, 
+    "buffs": [
+      {
+        "status": {
+          "amount": {
+            "attribute": "attack", 
+            "name": "attribute", 
+            "selector": {
+              "players": "friendly", 
+              "name": "weapon"
+            }
+          }, 
+          "name": "mana_change", 
+          "multiplier": -1
+        }
+      }
+    ], 
     "name": "Dread Corsair", 
     "minion_type": "Pirate", 
     "character_class": "", 
+    "rarity": "Common", 
+    "mana": 4, 
+    "attack": 3, 
+    "health": 3, 
+    "type": "minion", 
     "impl": {
       "buffs": [
         {
@@ -4393,10 +4412,7 @@
           }
         }
       ]
-    }, 
-    "type": "minion", 
-    "collectible": true, 
-    "rarity": "Common"
+    }
   }, 
   {
     "mana": 2, 
@@ -7986,6 +8002,47 @@
     "type": "minion", 
     "collectible": true, 
     "rarity": "Rare"
+  }, 
+  {
+    "mana": 6, 
+    "attack": 5, 
+    "health": 5, 
+    "name": "Emperor Thaurissan", 
+    "character_class": "", 
+    "impl": {
+      "effects": [
+        {
+          "event": {
+            "event_name": "turn_ended", 
+            "player": "friendly"
+          }, 
+          "tags": [
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": -1, 
+                        "name": "mana_change"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "players": "friendly", 
+                "name": "card"
+              }
+            }
+          ]
+        }
+      ]
+    }, 
+    "type": "minion", 
+    "collectible": true, 
+    "rarity": "Legendary"
   }, 
   {
     "mana": 1, 

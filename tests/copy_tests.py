@@ -623,8 +623,8 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         game = game.copy()
         # Make sure the other frostbolts have been properly reduced
-        self.assertEqual(1, game.current_player.hand[1].mana_cost(game.current_player))
-        self.assertEqual(1, game.current_player.hand[2].mana_cost(game.current_player))
+        self.assertEqual(1, game.current_player.hand[1].mana_cost())
+        self.assertEqual(1, game.current_player.hand[2].mana_cost())
 
         game.play_single_turn()
         game.play_single_turn()
@@ -633,7 +633,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.current_player.minions))
 
         # Make sure that the cards in hand are no longer reduced
-        self.assertEqual(2, game.current_player.hand[0].mana_cost(game.current_player))
+        self.assertEqual(2, game.current_player.hand[0].mana_cost())
 
     def test_Loatheb(self):
         game = generate_game_for(Loatheb, [Assassinate, BoulderfistOgre], OneCardPlayingAgent, CardTestingAgent)
@@ -643,13 +643,13 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
 
         game = game.copy()
 
-        self.assertEqual(10, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(6, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(10, game.other_player.hand[0].mana_cost())
+        self.assertEqual(6, game.other_player.hand[1].mana_cost())
 
         game.play_single_turn()
 
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(6, game.current_player.hand[1].mana_cost(game.current_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
+        self.assertEqual(6, game.current_player.hand[1].mana_cost())
 
     def test_KirinTorMage(self):
         game = generate_game_for([KirinTorMage, BoulderfistOgre, Spellbender],
@@ -663,13 +663,13 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
             new_game = game.copy()
             self.assertEqual(1, len(new_game.current_player.minions))
             self.assertEqual("Kirin Tor Mage", new_game.current_player.minions[0].card.name)
-            self.assertEqual(0, new_game.current_player.hand[1].mana_cost(new_game.current_player))
+            self.assertEqual(0, new_game.current_player.hand[1].mana_cost())
             self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
         game.other_player.bind_once("turn_ended", check_secret_cost)
         game.play_single_turn()
         new_game._end_turn()
-        self.assertEqual(3, new_game.current_player.hand[1].mana_cost(new_game.current_player))
+        self.assertEqual(3, new_game.current_player.hand[1].mana_cost())
         self.assertEqual("Spellbender", new_game.current_player.hand[1].name)
 
     def test_WaterElemental(self):
@@ -1167,7 +1167,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(4, len(game.players[0].hand))
         self.assertEqual(7, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[6].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[6].mana_cost())
         self.assertEqual(0, len(game.players[0].secrets))
         self.assertEqual(30, game.players[0].hero.health)
         game.play_single_turn()
@@ -1177,8 +1177,8 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.current_player.minions))
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(8, len(game.players[1].hand))
-        self.assertEqual(4, game.players[1].hand[5].mana_cost(game.players[1]))
-        self.assertEqual(4, game.players[1].hand[7].mana_cost(game.players[1]))
+        self.assertEqual(4, game.players[1].hand[5].mana_cost())
+        self.assertEqual(4, game.players[1].hand[7].mana_cost())
 
     def test_Shadowstep(self):
         game = generate_game_for([StonetuskBoar, Shadowstep], StonetuskBoar, PlayAndAttackAgent,
@@ -1189,7 +1189,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game = game.copy()
         self.assertEqual(3, len(game.players[0].hand))
         self.assertEqual(0, len(game.players[0].minions))
-        self.assertEqual(0, game.players[0].hand[2].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[2].mana_cost())
 
     def test_UnboundElemental(self):
         game = generate_game_for([UnboundElemental, DustDevil, DustDevil], StonetuskBoar, OneCardPlayingAgent,
@@ -1287,13 +1287,13 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         for turn in range(0, 10):
             game.play_single_turn()
         game = game.copy()
-        self.assertEqual(0, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(8, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(0, game.players[0].hand[0].mana_cost())
+        self.assertEqual(8, game.players[0].hand[1].mana_cost())
 
         game.play_single_turn()
 
-        self.assertEqual(5, game.players[0].hand[0].mana_cost(game.players[0]))
-        self.assertEqual(0, game.players[0].hand[1].mana_cost(game.players[0]))
+        self.assertEqual(5, game.players[0].hand[0].mana_cost())
+        self.assertEqual(0, game.players[0].hand[1].mana_cost())
 
     def test_BaronGeddon(self):
         game = generate_game_for(BaronGeddon, MassDispel, OneCardPlayingAgent, CardTestingAgent)
@@ -1595,14 +1595,14 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
             game.play_single_turn()
         game = game.copy()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertEqual(5, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(4, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(5, game.current_player.hand[0].mana_cost())
+        self.assertEqual(4, game.other_player.hand[0].mana_cost())
+        self.assertEqual(3, game.other_player.hand[1].mana_cost())
         game.current_player.minions[0].silence()
         game = game.copy()
-        self.assertEqual(3, game.current_player.hand[0].mana_cost(game.current_player))
-        self.assertEqual(2, game.other_player.hand[0].mana_cost(game.other_player))
-        self.assertEqual(3, game.other_player.hand[1].mana_cost(game.other_player))
+        self.assertEqual(3, game.current_player.hand[0].mana_cost())
+        self.assertEqual(2, game.other_player.hand[0].mana_cost())
+        self.assertEqual(3, game.other_player.hand[1].mana_cost())
 
     def test_Lightwell(self):
         game = generate_game_for(Lightwell, StonetuskBoar, OneCardPlayingAgent, PredictableAgent)
@@ -2563,7 +2563,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(5, len(game.current_player.hand))
         self.assertTrue(game.current_player.hand[-1].is_minion())
         if game.current_player.hand[-1].mana >= 3:
-            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost(None))
+            self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost())
 
     def test_MimironsHead(self):
         game = generate_game_for([Mechwarper, SpiderTank, ChillwindYeti, MimironsHead, Deathwing], StonetuskBoar,
