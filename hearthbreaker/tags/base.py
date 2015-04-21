@@ -681,10 +681,12 @@ class CardQuery(JSONObject):
         elif self.source == CARD_SOURCE.MY_DECK:
             chosen_card.drawn = True
             player.deck.left -= 1
+            chosen_card.player = player
             return chosen_card
         elif self.source == CARD_SOURCE.OPPONENT_DECK:
             chosen_card.drawn = True
             player.opponent.deck.left -= 1
+            chosen_card.player = player.opponent
             return chosen_card
         elif self.source == CARD_SOURCE.MY_HAND:
             player.hand.remove(chosen_card)

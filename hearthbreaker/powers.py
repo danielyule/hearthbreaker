@@ -22,13 +22,13 @@ class DruidPower(Power):
 
 class HunterPower(Power):
     def use(self):
-        super().use()
         if self.hero.power_targets_minions:
             target = self.hero.find_power_target()
             super().use()
             target.damage(2 * self.hero.player.spell_multiplier, None)
             self.hero.player.game.check_delayed()
         else:
+            super().use()
             self.hero.player.game.other_player.hero.damage(2 * self.hero.player.spell_multiplier, None)
 
 

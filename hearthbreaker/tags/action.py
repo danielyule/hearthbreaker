@@ -334,6 +334,7 @@ class AddCard(Action):
                     card = self.card.get_card(target, target, actor)
                     if card:
                         target.hand.append(card)
+                        card.drawn = True
 
     def __to_json__(self):
         if self.add_to_deck:
@@ -370,18 +371,13 @@ class ResurrectFriendly(Action):
 
 
 class Bounce(Action):
-    def __init__(self, bounce_to_deck=False):
-        self.bounce_to_deck = bounce_to_deck
+    def __init__(self):
+        super().__init__()
 
     def act(self, actor, target, other=None):
-        target.bounce(self.bounce_to_deck)
+        target.bounce()
 
     def __to_json__(self):
-        if self.bounce_to_deck:
-            return {
-                'name': 'bounce',
-                'bounce_to_deck': True,
-            }
         return {
             'name': 'bounce'
         }

@@ -1045,20 +1045,15 @@ class Minion(Character):
         minion.player = player
         return minion
 
-    def bounce(self, bounce_to_deck=False):
-        if bounce_to_deck:
+    def bounce(self):
+        if len(self.player.hand) < 10:
             self.unattach()
             self.remove_from_board()
-            self.player.deck.put_back(self.card)
+            self.card.attach(self.card, self.player)
+            self.player.hand.append(self.card)
         else:
-            if len(self.player.hand) < 10:
-                self.unattach()
-                self.remove_from_board()
-                self.card.attach(self.card, self.player)
-                self.player.hand.append(self.card)
-            else:
-                self.die(None)
-                self.game.check_delayed()
+            self.die(None)
+            self.game.check_delayed()
 
     def __to_json__(self):
 
