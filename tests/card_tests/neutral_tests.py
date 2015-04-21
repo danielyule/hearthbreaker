@@ -913,22 +913,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNone(game.other_player.hero.weapon)
+        self.assertIsNone(game.other_player.weapon)
 
     def test_AcidicSwampOozeWithNoWeapon(self):
         game = generate_game_for(AcidicSwampOoze, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.current_player.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNone(game.other_player.hero.weapon)
+        self.assertIsNone(game.other_player.weapon)
 
     def test_KnifeJuggler(self):
         game = generate_game_for([KnifeJuggler, KnifeJuggler, MasterOfDisguise], [StonetuskBoar, GoldshireFootman],
@@ -1408,21 +1408,21 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(4, game.players[1].hero.weapon.durability)
+        self.assertEqual(4, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(2, game.players[1].hero.weapon.durability)
+        self.assertEqual(2, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[1].hero.weapon.durability)
+        self.assertEqual(2, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(6, len(game.players[0].minions))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_BloodsailRaider(self):
         game = generate_game_for([BloodsailRaider, LightsJustice], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -1447,14 +1447,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(4, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
+        self.assertEqual(4, game.players[0].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].hero.calculate_attack())
-        self.assertEqual(5, game.players[0].hero.weapon.durability)
+        self.assertEqual(5, game.players[0].weapon.durability)
 
     def test_HungryCrab(self):
         game = generate_game_for(HungryCrab, [MurlocRaider, Deathwing], OneCardPlayingAgent, OneCardPlayingAgent)
@@ -1914,14 +1914,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNotNone(game.players[1].hero.weapon)
-        self.assertEqual(4, game.players[1].hero.weapon.durability)
+        self.assertIsNotNone(game.players[1].weapon)
+        self.assertEqual(4, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(8, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_HarrisonJones_no_weapon(self):
         game = generate_game_for(HarrisonJones, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -1931,13 +1931,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_KingMukla(self):
         game = generate_game_for([KingMukla, MindControl], LightsJustice, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -2062,7 +2062,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()  # Equip LJ and check
 
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
         self.assertEqual(3, game.players[0].hand[1].mana_cost())
 
         for turn in range(0, 4):
@@ -3392,12 +3392,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 8):
             game.play_single_turn()
 
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
         self.assertEqual(2, len(game.current_player.minions))
 
         game.play_single_turn()
-        self.assertIsNotNone(game.current_player.hero.weapon)
-        self.assertIsNotNone(game.other_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
+        self.assertIsNotNone(game.other_player.weapon)
         self.assertEqual(0, len(game.other_player.minions))
 
     def test_BombLobber(self):

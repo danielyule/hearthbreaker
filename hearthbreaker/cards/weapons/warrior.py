@@ -7,7 +7,7 @@ from hearthbreaker.tags.condition import NotCurrentTarget, OneIn, OpponentMinion
     IsHero, TargetIsMinion
 from hearthbreaker.tags.event import CharacterAttack
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
-    RandomPicker
+    RandomPicker, WeaponSelector
 
 
 class FieryWarAxe(WeaponCard):
@@ -32,7 +32,7 @@ class Gorehowl(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(7, 1, effects=[Effect(CharacterAttack(And(IsHero(), TargetIsMinion())),
-                                            ActionTag(IncreaseDurability(), HeroSelector()))])
+                                            ActionTag(IncreaseDurability(), WeaponSelector()))])
 
 
 class HeavyAxe(WeaponCard):

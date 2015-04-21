@@ -3216,11 +3216,8 @@
           }
         ], 
         "selector": {
-          "picker": {
-            "name": "all"
-          }, 
           "players": "enemy", 
-          "name": "hero"
+          "name": "weapon"
         }
       }
     ], 
@@ -3285,11 +3282,8 @@
           }
         ], 
         "selector": {
-          "picker": {
-            "name": "all"
-          }, 
           "players": "friendly", 
-          "name": "hero"
+          "name": "weapon"
         }
       }
     ], 
@@ -11883,11 +11877,8 @@
           }
         ], 
         "selector": {
-          "picker": {
-            "name": "all"
-          }, 
           "players": "friendly", 
-          "name": "hero"
+          "name": "weapon"
         }
       }
     ], 
@@ -12960,11 +12951,8 @@
                 }
               ], 
               "selector": {
-                "picker": {
-                  "name": "all"
-                }, 
                 "players": "friendly", 
-                "name": "hero"
+                "name": "weapon"
               }
             }
           ]
@@ -13126,11 +13114,8 @@
                 }
               ], 
               "selector": {
-                "picker": {
-                  "name": "all"
-                }, 
                 "players": "friendly", 
-                "name": "hero"
+                "name": "weapon"
               }
             }
           ]
@@ -13447,11 +13432,8 @@
                 }
               ], 
               "selector": {
-                "picker": {
-                  "name": "all"
-                }, 
                 "players": "friendly", 
-                "name": "hero"
+                "name": "weapon"
               }
             }
           ]

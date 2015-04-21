@@ -460,7 +460,7 @@ class WeaponSelector(Selector):
         self.players = players
 
     def get_targets(self, source, obj=None):
-        return [p.hero.weapon for p in self.players.get_players(source.player) if p.hero.weapon]
+        return [p.weapon for p in self.players.get_players(source.player) if p.weapon]
 
     def match(self, source, obj):
         return obj.is_weapon() and self.players.match(source, obj)

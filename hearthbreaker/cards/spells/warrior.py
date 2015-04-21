@@ -191,9 +191,9 @@ class Upgrade(SpellCard):
     def use(self, player, game):
         super().use(player, game)
         from hearthbreaker.cards.weapons.warrior import HeavyAxe
-        if player.hero.weapon:
-            player.hero.weapon.durability += 1
-            player.hero.weapon.base_attack += 1
+        if player.weapon:
+            player.weapon.durability += 1
+            player.weapon.base_attack += 1
         else:
             heavy_axe = HeavyAxe().create_weapon(player)
             heavy_axe.equip(player)

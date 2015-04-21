@@ -773,18 +773,18 @@ class Weapon(Bindable, GameObject):
         # Deathrattle is triggered no matter how the weapon is destroyed, see
         # http://www.hearthhead.com/card=1805/deaths-bite#comments:id=1983510
         if self.deathrattle is not None:
-            self.deathrattle.do(self.player.hero)
-        self.player.hero.weapon = None
-        self.player.hero.trigger("weapon_destroyed")
+            self.deathrattle.do(self)
+        self.player.weapon = None
+        self.player.trigger("weapon_destroyed")
         self.unattach()
 
     def equip(self, player):
         self.player = player
-        if self.player.hero.weapon is not None:
-            self.player.hero.weapon.destroy()
-        self.player.hero.weapon = self
+        if self.player.weapon is not None:
+            self.player.weapon.destroy()
+        self.player.weapon = self
         self.attach(self, player)
-        self.player.hero.trigger("weapon_equipped")
+        self.player.trigger("weapon_equipped")
 
     def calculate_attack(self):
         """
@@ -1078,7 +1078,6 @@ class Hero(Character):
     def __init__(self, health, character_class, power, player):
         super().__init__(0, health)
         self.armor = 0
-        self.weapon = None
         self.character_class = character_class
         self.player = player
         self.game = player.game
@@ -1088,22 +1087,20 @@ class Hero(Character):
         self.power_targets_minions = False
 
     def calculate_attack(self):
-        if self.player == self.player.game.current_player and self.weapon:
-            base = self.base_attack + self.weapon.base_attack
+        if self.player == self.player.game.current_player and self.player.weapon:
+            base = self.base_attack + self.player.weapon.base_attack
         else:
             base = self.base_attack
         return self.calculate_stat(ChangeAttack, base)
 
     def calculate_stat(self, stat_class, starting_value=0):
-        if self.player == self.player.game.current_player and self.weapon:
-            starting_value = self.weapon.calculate_stat(stat_class, starting_value)
+        if self.player == self.player.game.current_player and self.player.weapon:
+            starting_value = self.player.weapon.calculate_stat(stat_class, starting_value)
 
         return super().calculate_stat(stat_class, starting_value)
 
     def copy(self, new_owner):
         new_hero = Hero(self.base_health, self.character_class, self.power, new_owner)
-        if self.weapon:
-            new_hero.weapon = self.weapon.copy(new_owner)
         new_hero.health = self.health
         new_hero.armor = self.armor
         new_hero.used_windfury = False
@@ -1118,10 +1115,11 @@ class Hero(Character):
 
     def attack(self):
         super().attack()
-        if self.weapon is not None:
-            self.weapon.durability -= 1
-            if self.weapon.durability == 0 or self.weapon.calculate_stat(ChangeAttack, self.weapon.base_attack) == 0:
-                self.weapon.destroy()
+        if self.player.weapon is not None:
+            self.player.weapon.durability -= 1
+            if self.player.weapon.durability == 0 or \
+                    self.player.weapon.calculate_stat(ChangeAttack, self.player.weapon.base_attack) == 0:
+                self.player.weapon.destroy()
 
     def damage(self, amount, attacker):
         self.armor -= amount
@@ -1175,7 +1173,6 @@ class Hero(Character):
         r_val = super().__to_json__()
         r_val.update({
             'character': hearthbreaker.constants.CHARACTER_CLASS.to_str(self.character_class),
-            'weapon': self.weapon,
             'health': self.health,
             'armor': self.armor,
             'name': self.card.short_name,
@@ -1197,6 +1194,4 @@ class Hero(Character):
         hero.immune = hd["immune"]
         hero.used_windfury = hd["used_windfury"]
         hero.attacks_performed = not hd["attacks_performed"]
-        if hd['weapon']:
-            hero.weapon = Weapon.__from_json__(hd["weapon"], player)
         return hero

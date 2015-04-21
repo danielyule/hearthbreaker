@@ -3,7 +3,7 @@ from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, DecreaseDurability, Heal
 from hearthbreaker.tags.condition import IsHero
 from hearthbreaker.tags.event import MinionSummoned, CharacterAttack
-from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker
+from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker, WeaponSelector
 from hearthbreaker.tags.base import Buff, Effect, Battlecry, ActionTag
 from hearthbreaker.tags.status import DivineShield, Taunt, ChangeAttack, ChangeHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -25,7 +25,7 @@ class SwordOfJustice(WeaponCard):
         return Weapon(1, 5, effects=[Effect(MinionSummoned(), ActionTag(Give([Buff(ChangeAttack(1)),
                                                                               Buff(ChangeHealth(1))]),
                                             TargetSelector())),
-                                     Effect(MinionSummoned(), ActionTag(DecreaseDurability(), HeroSelector()))])
+                                     Effect(MinionSummoned(), ActionTag(DecreaseDurability(), WeaponSelector()))])
 
 
 class TruesilverChampion(WeaponCard):

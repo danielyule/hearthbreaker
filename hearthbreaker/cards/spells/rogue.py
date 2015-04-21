@@ -67,11 +67,11 @@ class BladeFlurry(SpellCard):
     def use(self, player, game):
         super().use(player, game)
 
-        if player.hero.weapon is not None:
+        if player.weapon is not None:
             # Yes, this card is affected by spell damage cards.
             # Source: http://www.hearthhead.com/card=1064/blade-flurry#comments:id=1927317
             attack_power = player.effective_spell_damage(player.hero.calculate_attack())
-            player.hero.weapon.destroy()
+            player.weapon.destroy()
 
             for minion in copy.copy(game.other_player.minions):
                 minion.damage(attack_power, self)
@@ -111,11 +111,11 @@ class DeadlyPoison(SpellCard):
     def use(self, player, game):
         super().use(player, game)
 
-        player.hero.weapon.base_attack += 2
+        player.weapon.base_attack += 2
         player.hero.change_temp_attack(2)
 
     def can_use(self, player, game):
-        return super().can_use(player, game) and player.hero.weapon is not None
+        return super().can_use(player, game) and player.weapon is not None
 
 
 class Eviscerate(SpellCard):
@@ -243,7 +243,7 @@ class TinkersSharpswordOil(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        player.hero.weapon.base_attack += 3
+        player.weapon.base_attack += 3
         player.hero.change_temp_attack(3)
         if player.cards_played > 0:
             targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
@@ -252,7 +252,7 @@ class TinkersSharpswordOil(SpellCard):
                 target.add_buff(Buff(ChangeAttack(3)))
 
     def can_use(self, player, game):
-        return super().can_use(player, game) and player.hero.weapon is not None
+        return super().can_use(player, game) and player.weapon is not None
 
 
 class Sabotage(SpellCard):
@@ -265,8 +265,8 @@ class Sabotage(SpellCard):
         target = game.random_choice(targets)
         target.die(None)
         game.check_delayed()
-        if player.cards_played > 0 and game.other_player.hero.weapon is not None:
-            game.other_player.hero.weapon.destroy()
+        if player.cards_played > 0 and game.other_player.weapon is not None:
+            game.other_player.weapon.destroy()
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(game.other_player.minions) >= 1

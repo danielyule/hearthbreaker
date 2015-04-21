@@ -1078,7 +1078,7 @@ class BigGameHunter(MinionCard):
 class BloodsailCorsair(MinionCard):
     def __init__(self):
         super().__init__("Bloodsail Corsair", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, minion_type=MINION_TYPE.PIRATE,
-                         battlecry=Battlecry(DecreaseDurability(), HeroSelector(EnemyPlayer())))
+                         battlecry=Battlecry(DecreaseDurability(), WeaponSelector(EnemyPlayer())))
 
     def create_minion(self, player):
         return Minion(1, 2)
@@ -1098,7 +1098,7 @@ class CaptainGreenskin(MinionCard):
     def __init__(self):
         super().__init__("Captain Greenskin", 5, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
                          minion_type=MINION_TYPE.PIRATE,
-                         battlecry=Battlecry([IncreaseWeaponAttack(1), IncreaseDurability()], HeroSelector()))
+                         battlecry=Battlecry([IncreaseWeaponAttack(1), IncreaseDurability()], WeaponSelector()))
 
     def create_minion(self, player):
         return Minion(5, 4)

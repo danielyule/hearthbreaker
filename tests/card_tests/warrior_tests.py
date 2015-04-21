@@ -23,8 +23,8 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[0].calculate_attack())
         self.assertEqual(3, game.players[0].minions[0].health)
         self.assertEqual("Arathi Weaponsmith", game.players[0].minions[0].card.name)
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
 
     def test_Armorsmith(self):
         game = generate_game_for(Armorsmith, StonetuskBoar, OneCardPlayingAgent, PlayAndAttackAgent)
@@ -160,8 +160,8 @@ class TestWarrior(unittest.TestCase):
         # Test so that charge gets applied before a battlecry
         weapon = FieryWarAxe().create_weapon(game.players[0])
         weapon.equip(game.players[0])
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
         bloodsail = BloodsailRaider()
         bloodsail.player = game.players[0]
         bloodsail.use(game.players[0], game)  # Should gain charge first, then 4 attack from weapon
@@ -386,13 +386,13 @@ class TestWarrior(unittest.TestCase):
         for turn in range(0, 2):
             game.play_single_turn()
 
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(3, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
+        self.assertEqual(3, game.players[0].weapon.durability)
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(4, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(4, game.players[0].weapon.durability)
 
     def test_MortalStrike(self):
         game = generate_game_for(MortalStrike, StonetuskBoar, SelfSpellTestingAgent, DoNothingAgent)
@@ -433,13 +433,13 @@ class TestWarrior(unittest.TestCase):
         for turn in range(0, 13):
             game.play_single_turn()
 
-        self.assertEqual(1, game.current_player.hero.weapon.durability)
+        self.assertEqual(1, game.current_player.weapon.durability)
 
         game.play_single_turn()
         game.play_single_turn()
 
         self.assertEqual(23, game.other_player.hero.health)
-        self.assertIsNone(game.current_player.hero.weapon)
+        self.assertIsNone(game.current_player.weapon)
 
     def test_FieryWarAxe(self):
         game = generate_game_for(FieryWarAxe, BoulderfistOgre,
@@ -448,8 +448,8 @@ class TestWarrior(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(1, game.current_player.hero.weapon.durability)
-        self.assertEqual(3, game.current_player.hero.weapon.base_attack)
+        self.assertEqual(1, game.current_player.weapon.durability)
+        self.assertEqual(3, game.current_player.weapon.base_attack)
         self.assertEqual(27, game.other_player.hero.health)
 
     def test_DeathsBite(self):
@@ -460,7 +460,7 @@ class TestWarrior(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
         self.assertEqual(1, game.other_player.minions[0].health)
 
         game.play_single_turn()
@@ -521,7 +521,7 @@ class TestWarrior(unittest.TestCase):
         for turn in range(5):
             game.play_single_turn()
 
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
 
         self.assertEqual(1, len(game.other_player.minions))
         self.assertEqual("Stonetusk Boar", game.other_player.minions[0].card.name)

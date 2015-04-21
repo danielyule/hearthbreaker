@@ -573,8 +573,7 @@ class GiveManaCrystal(Action):
 
 class IncreaseDurability(Action):
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.durability += 1
+        target.durability += 1
 
     def __to_json__(self):
         return {
@@ -584,10 +583,9 @@ class IncreaseDurability(Action):
 
 class DecreaseDurability(Action):
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.durability -= 1
-            if target.weapon.durability <= 0:
-                target.weapon.destroy()
+            target.durability -= 1
+            if target.durability <= 0:
+                target.destroy()
 
     def __to_json__(self):
         return {
@@ -600,8 +598,7 @@ class IncreaseWeaponAttack(Action, metaclass=Amount):
         pass
 
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.base_attack += self.get_amount(actor, target, other)
+        target.base_attack += self.get_amount(actor, target, other)
 
     def __to_json__(self):
         return {
