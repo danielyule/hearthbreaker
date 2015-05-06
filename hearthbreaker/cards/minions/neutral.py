@@ -15,7 +15,7 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, Turn
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, \
     PlayerSelector, TargetSelector, EnemyPlayer, CharacterSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
-    Difference, LastDrawnSelector, RandomAmount
+    Difference, LastDrawnSelector, RandomAmount, DeadMinionSelector
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury
@@ -2477,3 +2477,12 @@ class EmperorThaurissan(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 5, effects=[Effect(TurnEnded(), [ActionTag(Give(Buff(ManaChange(-1))), CardSelector())])])
+
+
+class VolcanicDrake(MinionCard):
+    def __init__(self):
+        super().__init__("Volcanic Drake", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DRAGON,
+                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+
+    def create_minion(self, player):
+        return Minion(6, 4, taunt=True)

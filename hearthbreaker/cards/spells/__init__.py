@@ -106,6 +106,7 @@ from hearthbreaker.cards.spells.paladin import (
     Avenge,
     SealOfLight,
     MusterForBattle,
+    SolemnVigil,
 )
 
 from hearthbreaker.cards.spells.priest import (

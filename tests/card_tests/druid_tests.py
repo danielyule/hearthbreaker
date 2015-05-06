@@ -1062,3 +1062,20 @@ class TestDruid(unittest.TestCase):
         test_bird.player = game.current_player
         self.assertEqual(2, test_bird.calculate_attack())
         self.assertEqual(5, test_bird.calculate_max_health())
+
+
+    def test_VolcanicLumberer(self):
+        game = generate_game_for(LeeroyJenkins, [TwistingNether, VolcanicLumberer], OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(8, game.players[1].minions[0].calculate_max_health())

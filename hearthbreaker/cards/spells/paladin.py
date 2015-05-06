@@ -3,8 +3,8 @@ from hearthbreaker.cards.base import SpellCard, SecretCard
 from hearthbreaker.tags.action import Draw
 from hearthbreaker.tags.base import Effect, Buff, ActionTag
 from hearthbreaker.tags.event import Attack
-from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo
-from hearthbreaker.tags.status import DoubleAttack
+from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo, BothPlayer, Count, DeadMinionSelector
+from hearthbreaker.tags.status import DoubleAttack, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.cards.minions.paladin import SilverHandRecruit
@@ -297,3 +297,14 @@ class MusterForBattle(SpellCard):
         hammer = justice.create_weapon(player)
         hammer.card = justice
         hammer.equip(player)
+
+
+class SolemnVigil(SpellCard):
+    def __init__(self):
+        super().__init__("Solemn Vigil", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
+                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+
+    def use(self, player, game):
+        super().use(player, game)
+        for n in range(0, 2):
+            player.draw()

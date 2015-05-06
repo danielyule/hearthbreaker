@@ -233,6 +233,7 @@ from hearthbreaker.cards.minions.neutral import (
     GrimPatron,
     BlackwingTechnician,
     EmperorThaurissan,
+    VolcanicDrake,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -248,6 +249,7 @@ from hearthbreaker.cards.minions.druid import (
     Malorne,
     GroveTender,
     DruidOfTheFlame,
+    VolcanicLumberer,
 )
 
 from hearthbreaker.cards.minions.hunter import (

@@ -6,9 +6,9 @@ from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged, TurnEnded
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
-    PlayerSelector, HeroSelector, Count
+    PlayerSelector, HeroSelector, Count, DeadMinionSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt, ManaChange
 from hearthbreaker.cards.spells.neutral import spare_part_list
 
 
@@ -310,3 +310,12 @@ class DruidOfTheFlame(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 2)
+
+
+class VolcanicLumberer(MinionCard):
+    def __init__(self):
+        super().__init__("Volcanic Lumberer", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
+                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+
+    def create_minion(self, player):
+        return Minion(7, 8, taunt=True)
