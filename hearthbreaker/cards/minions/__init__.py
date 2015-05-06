@@ -234,6 +234,7 @@ from hearthbreaker.cards.minions.neutral import (
     BlackwingTechnician,
     EmperorThaurissan,
     VolcanicDrake,
+    BlackwingCorruptor,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -313,6 +314,7 @@ from hearthbreaker.cards.minions.priest import (
     Shadowbomber,
     Shadowboxer,
     Voljin,
+    TwilightWhelp,
 )
 
 from hearthbreaker.cards.minions.rogue import (

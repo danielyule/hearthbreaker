@@ -4596,7 +4596,6 @@ class TestCommon(unittest.TestCase, TestUtilities):
             if card.name != "The Coin":
                 self.assertEqual(5, card.mana_cost())
 
-
     def test_VolcanicDrake(self):
         game = generate_game_for(LeeroyJenkins, [TwistingNether, VolcanicDrake], OneCardPlayingAgent, CardTestingAgent)
 
@@ -4612,3 +4611,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(6, game.players[1].minions[0].calculate_attack())
         self.assertEqual(4, game.players[1].minions[0].calculate_max_health())
+
+    def test_BlackwingCorruptor(self):
+        game = generate_game_for([BlackwingCorruptor, Deathwing], Wisp, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)

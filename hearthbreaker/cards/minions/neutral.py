@@ -2486,3 +2486,14 @@ class VolcanicDrake(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 4, taunt=True)
+
+
+class BlackwingCorruptor(MinionCard):
+    def __init__(self):
+        super().__init__("Blackwing Corruptor", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Damage(3), CharacterSelector(players=BothPlayer(), picker=UserPicker()),
+                                             GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
+                                                         value=0)))
+
+    def create_minion(self, player):
+        return Minion(5, 4)

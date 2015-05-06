@@ -762,7 +762,6 @@ class TestPaladin(unittest.TestCase):
         self.assertEqual(0, game.current_player.minions[0].card.calculate_stat(ChangeAttack))
         self.assertFalse(game.current_player.minions[0].charge())
 
-
     def test_SolemnVigil(self):
         game = generate_game_for(Wisp, [Consecration, SolemnVigil], CardTestingAgent, CardTestingAgent)
         for turn in range(7):
