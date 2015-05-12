@@ -635,3 +635,54 @@ class TestShaman(unittest.TestCase):
         # The player should have been able to do everything AND have three mana left over
         self.assertEqual(25, game.other_player.hero.health)
         self.assertEqual(3, game.current_player.mana)
+
+    def test_FireguardDestroyer(self):
+        game = generate_game_for(FireguardDestroyer, Wisp, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(0, 8):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(5, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(7, len(game.players[0].minions))  # Well, I was trying to get a 7/6 but no luck
+        self.assertEqual(5, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].health)

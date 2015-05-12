@@ -352,6 +352,7 @@ from hearthbreaker.cards.minions.shaman import (
     WhirlingZapomatic,
     DunemaulShaman,
     Neptulon,
+    FireguardDestroyer,
 )
 
 from hearthbreaker.cards.minions.warlock import (
