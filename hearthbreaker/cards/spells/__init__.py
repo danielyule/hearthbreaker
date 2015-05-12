@@ -218,4 +218,5 @@ from hearthbreaker.cards.spells.warrior import (
     BouncingBlade,
     Crush,
     BurrowingMine,
+    Revenge,
 )

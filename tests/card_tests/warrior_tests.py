@@ -675,3 +675,19 @@ class TestWarrior(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(28, game.players[1].hero.health)
+
+    def test_Revenge(self):
+        game = generate_game_for(SinisterStrike, [ChillwindYeti, Revenge, Revenge],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[1].minions[0].health)  # 1st Revenge cast at 15 hp, so 1 damage
+        self.assertEqual(12, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)  # 2nd Revenge cast at 12 hp, so 3 damage
+        self.assertEqual(12, game.players[1].hero.health)
