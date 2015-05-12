@@ -3,9 +3,10 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff, ActionTag
-from hearthbreaker.tags.condition import IsType
+from hearthbreaker.tags.condition import IsType, Not, GreaterThan
 from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged
-from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, HeroSelector
+from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, \
+    HeroSelector, CardSelector
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, DoubleAttack, PowerTargetsMinions
 
 
@@ -166,3 +167,13 @@ class SteamwheedleSniper(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 3, auras=[Aura(PowerTargetsMinions(), HeroSelector())])
+
+
+class CoreRager(MinionCard):
+    def __init__(self):
+        super().__init__("Core Rager", 4, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE, minion_type=MINION_TYPE.BEAST,
+                         battlecry=(Battlecry(Give([Buff(ChangeAttack(3)), Buff(ChangeHealth(3))]), SelfSelector(),
+                                              Not(GreaterThan(Count(CardSelector()), value=0)))))
+
+    def create_minion(self, player):
+        return Minion(4, 4)

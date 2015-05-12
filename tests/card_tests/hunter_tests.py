@@ -808,3 +808,32 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(24, game.players[1].hero.health)
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(1, len(game.players[0].hand))
+
+    def test_CoreRager(self):
+        game = generate_game_for([CoreRager, Deathwing], Wisp, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(18):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(4, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))  # Deathwing discards whole hand
+        self.assertEqual(12, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(12, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))  # Deathwing the sequel
+        self.assertEqual(12, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(12, game.players[0].minions[0].health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))  # Core Rager activates battlecry
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(7, game.players[0].minions[0].health)

@@ -271,6 +271,7 @@ from hearthbreaker.cards.minions.hunter import (
     KingOfBeasts,
     Gahzrilla,
     SteamwheedleSniper,
+    CoreRager,
 )
 
 from hearthbreaker.cards.minions.mage import (
