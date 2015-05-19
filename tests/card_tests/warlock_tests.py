@@ -824,3 +824,12 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual("Imp Gang Boss", game.players[0].minions[0].card.name)
         self.assertEqual("Imp", game.players[0].minions[1].card.name)
+
+    def test_Demonwrath(self):
+        game = generate_game_for(Demonwrath, [Voidwalker, RiverCrocolisk], OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)  # Beast damaged
+        self.assertEqual(3, game.players[1].minions[1].health)  # Voidwalker undamaged

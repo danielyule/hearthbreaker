@@ -197,6 +197,7 @@ from hearthbreaker.cards.spells.warlock import (
     Darkbomb,
     Demonheart,
     Implosion,
+    Demonwrath,
 )
 
 from hearthbreaker.cards.spells.warrior import (
