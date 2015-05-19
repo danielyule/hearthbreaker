@@ -13453,6 +13453,46 @@
                 "players": "friendly", 
                 "name": "hero"
               }
+            },
+            {
+              "actions": [
+                {
+                  "amount": -1,
+                  "name": "increase_weapon_attack"
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
+            },
+            {
+              "actions": [
+                {
+                  "name": "give", 
+                  "buffs": [
+                    {
+                      "status": {
+                        "amount": 1,
+                        "name": "change_attack"
+                      }, 
+                      "until": {
+                        "event_name": "attack_completed"
+                      }
+                    }
+                  ]
+                }
+              ], 
+              "selector": {
+                "picker": {
+                  "name": "all"
+                }, 
+                "players": "friendly", 
+                "name": "hero"
+              }
             }
           ]
         }

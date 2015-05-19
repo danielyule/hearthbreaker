@@ -24,9 +24,8 @@ class GladiatorsLongbow(WeaponCard):
                          CARD_RARITY.EPIC)
 
     def create_weapon(self, player):
-        return Weapon(5, 2, effects=[Effect(CharacterAttack(IsHero()), ActionTag(Give(BuffUntil(Immune(),
-                                                                                                AttackCompleted())),
-                                            HeroSelector()))])
+        return Weapon(5, 2, effects=[Effect(CharacterAttack(IsHero()),
+                                            ActionTag(Give(BuffUntil(Immune(), AttackCompleted())), HeroSelector()))])
 
 
 class Glaivezooka(WeaponCard):

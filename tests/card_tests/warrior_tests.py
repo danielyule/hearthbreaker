@@ -427,19 +427,29 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
 
     def test_Gorehowl(self):
-        game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
+        game = generate_game_for([Gorehowl, Deathwing], [BoulderfistOgre, Deathwing],
                                  PlayAndAttackAgent, CardTestingAgent)
 
-        for turn in range(0, 13):
+        for turn in range(0, 12):
             game.play_single_turn()
 
-        self.assertEqual(1, game.current_player.hero.weapon.durability)
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, game.players[1].minions[0].health)
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].hero.weapon.durability)  # Gorehowl does not break from killing Boulderfist
+        self.assertEqual(6, game.players[0].hero.weapon.base_attack)  # But it does lose 1 attack
+        self.assertEqual(24, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(23, game.other_player.hero.health)
-        self.assertIsNone(game.current_player.hero.weapon)
+        self.assertIsNone(game.players[0].hero.weapon)  # Attacks face and weapon breaks
+        self.assertEqual(24, game.players[0].hero.health)
+        self.assertEqual(24, game.players[1].hero.health)
 
     def test_FieryWarAxe(self):
         game = generate_game_for(FieryWarAxe, BoulderfistOgre,

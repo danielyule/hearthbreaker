@@ -1,13 +1,14 @@
 from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.game_objects import Weapon
-from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget
-from hearthbreaker.tags.base import Deathrattle, Effect, ActionTag
+from hearthbreaker.tags.action import Damage, IncreaseDurability, ChangeTarget, Give, IncreaseWeaponAttack
+from hearthbreaker.tags.base import Deathrattle, Effect, ActionTag, BuffUntil
 from hearthbreaker.tags.condition import NotCurrentTarget, OneIn, OpponentMinionCountIsGreaterThan, And, \
     IsHero, TargetIsMinion
-from hearthbreaker.tags.event import CharacterAttack
+from hearthbreaker.tags.event import CharacterAttack, AttackCompleted
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, HeroSelector, CharacterSelector, EnemyPlayer, \
     RandomPicker
+from hearthbreaker.tags.status import ChangeAttack
 
 
 class FieryWarAxe(WeaponCard):
@@ -32,7 +33,10 @@ class Gorehowl(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(7, 1, effects=[Effect(CharacterAttack(And(IsHero(), TargetIsMinion())),
-                                            ActionTag(IncreaseDurability(), HeroSelector()))])
+                                            [ActionTag(IncreaseDurability(), HeroSelector()),
+                                             ActionTag(IncreaseWeaponAttack(-1), HeroSelector()),
+                                             ActionTag(Give(BuffUntil(ChangeAttack(1), AttackCompleted())),
+                                                       HeroSelector())])])
 
 
 class HeavyAxe(WeaponCard):
