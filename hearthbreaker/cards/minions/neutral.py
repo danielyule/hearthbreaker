@@ -9,7 +9,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, \
@@ -2497,3 +2497,15 @@ class BlackwingCorruptor(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 4)
+
+
+class DrakonidCrusher(MinionCard):
+    def __init__(self):
+        super().__init__("Drakonid Crusher", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.DRAGON,
+                         battlecry=(Battlecry(Give([Buff(ChangeAttack(3)), Buff(ChangeHealth(3))]), SelfSelector(),
+                                              Not(GreaterThan(Attribute('health', HeroSelector(EnemyPlayer())),
+                                                              value=15)))))
+
+    def create_minion(self, player):
+        return Minion(6, 6)

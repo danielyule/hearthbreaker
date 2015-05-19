@@ -235,6 +235,7 @@ from hearthbreaker.cards.minions.neutral import (
     EmperorThaurissan,
     VolcanicDrake,
     BlackwingCorruptor,
+    DrakonidCrusher,
 )
 
 from hearthbreaker.cards.minions.druid import (

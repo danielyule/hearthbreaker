@@ -4621,3 +4621,24 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(27, game.players[1].hero.health)
+
+    def test_DrakonidCrusher(self):
+        game = generate_game_for([MindBlast, MindBlast, DrakonidCrusher], Wisp, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(20, game.players[1].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].calculate_max_health())
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(10, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(9, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(9, game.players[0].minions[0].calculate_max_health())
+        self.assertEqual(6, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[1].calculate_max_health())
