@@ -332,6 +332,7 @@ from hearthbreaker.cards.minions.rogue import (
     OgreNinja,
     TradePrinceGallywix,
     GoblinAutoBarber,
+    DarkIronSkulker,
 )
 
 from hearthbreaker.cards.minions.shaman import (

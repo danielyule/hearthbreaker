@@ -4,7 +4,7 @@ from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
 from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE, ActionTag
 from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName, \
-    OpponentMinionCountIsGreaterThan, And
+    OpponentMinionCountIsGreaterThan, And, IsDamaged
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
     BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector, Attribute
@@ -138,3 +138,13 @@ class GoblinAutoBarber(MinionCard):
 
     def create_minion(self, player):
         return Minion(3, 2)
+
+
+class DarkIronSkulker(MinionCard):
+    def __init__(self):
+        super().__init__("Dark Iron Skulker", 5, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Damage(2), MinionSelector(condition=Not(IsDamaged()),
+                                                                       players=EnemyPlayer())))
+
+    def create_minion(self, player):
+        return Minion(4, 3)

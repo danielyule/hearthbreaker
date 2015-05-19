@@ -752,3 +752,23 @@ class TestRogue(unittest.TestCase):
 
         self.assertEqual(3, boar_count)
         self.assertEqual(28, game.current_player.deck.left)
+
+    def test_DarkIronskulker(self):
+        game = generate_game_for(DarkIronSkulker, ChillwindYeti, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(5, game.players[1].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[1].health)  # Damages full HP Yeti
+
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(3, game.players[0].minions[0].health)
+        self.assertEqual(3, game.players[0].minions[1].health)  # Does not damage friendly
+        self.assertEqual(3, game.players[1].minions[0].health)
+        self.assertEqual(3, game.players[1].minions[1].health)  # Does not damage already damaged Yeti
