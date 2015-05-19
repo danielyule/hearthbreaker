@@ -236,6 +236,7 @@ from hearthbreaker.cards.minions.neutral import (
     VolcanicDrake,
     BlackwingCorruptor,
     DrakonidCrusher,
+    DragonEgg,
 )
 
 from hearthbreaker.cards.minions.druid import (

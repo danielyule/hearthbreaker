@@ -4642,3 +4642,25 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(9, game.players[0].minions[0].calculate_max_health())
         self.assertEqual(6, game.players[0].minions[1].calculate_attack())
         self.assertEqual(6, game.players[0].minions[1].calculate_max_health())
+
+    def test_DragonEgg(self):
+        game = generate_game_for(ArcaneExplosion, DragonEgg, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+
+        game.play_single_turn()
+        game.play_single_turn()  # Arcane Explosion kills 1 whelp and 1 egg but spawns 2 whelps
+
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[2].health)

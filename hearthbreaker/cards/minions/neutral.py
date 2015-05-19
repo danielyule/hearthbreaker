@@ -2485,7 +2485,7 @@ class VolcanicDrake(MinionCard):
                          buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
 
     def create_minion(self, player):
-        return Minion(6, 4, taunt=True)
+        return Minion(6, 4)
 
 
 class BlackwingCorruptor(MinionCard):
@@ -2509,3 +2509,19 @@ class DrakonidCrusher(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 6)
+
+
+class BlackWhelp(MinionCard):
+    def __init__(self):
+        super().__init__("Black Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, MINION_TYPE.DRAGON)
+
+    def create_minion(self, player):
+        return Minion(2, 1)
+
+
+class DragonEgg(MinionCard):
+    def __init__(self):
+        super().__init__("Dragon Egg", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(0, 2, effects=[Effect(Damaged(), ActionTag(Summon(BlackWhelp()), PlayerSelector()))])
