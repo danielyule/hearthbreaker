@@ -287,6 +287,7 @@ from hearthbreaker.cards.minions.mage import (
     SootSpewer,
     WeeSpellstopper,
     FlameLeviathan,
+    Flamewaker
 )
 
 from hearthbreaker.cards.minions.paladin import (

@@ -880,3 +880,19 @@ class TestMage(unittest.TestCase):
         # The Flamestrike only kills one boar, so we can't afford the Dragon's breath
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(26, game.other_player.hero.health)
+
+    def test_Flamewaker(self):
+        game = generate_game_for([Flamewaker, CircleOfHealing], CircleOfHealing,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(6):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(28, game.players[1].hero.health)
