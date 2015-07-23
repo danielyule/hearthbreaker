@@ -182,6 +182,7 @@ from hearthbreaker.cards.minions.neutral import (
     SneedsOldShredder,
     AntiqueHealbot,
     AnnoyoTron,
+    ArcaneNullifierX21,
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
