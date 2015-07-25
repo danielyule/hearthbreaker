@@ -435,20 +435,19 @@ class TestWarrior(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(7, game.players[1].minions[0].health)
-        self.assertEqual(1, game.current_player.weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(1, game.players[0].hero.weapon.durability)  # Gorehowl does not break from killing Boulderfist
-        self.assertEqual(6, game.players[0].hero.weapon.base_attack)  # But it does lose 1 attack
+        self.assertEqual(1, game.players[0].weapon.durability)  # Gorehowl does not break from killing Boulderfist
+        self.assertEqual(6, game.players[0].weapon.base_attack)  # But it does lose 1 attack
         self.assertEqual(24, game.players[0].hero.health)
         self.assertEqual(30, game.players[1].hero.health)
 
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertIsNone(game.players[0].hero.weapon)  # Attacks face and weapon breaks
+        self.assertIsNone(game.players[0].weapon)  # Attacks face and weapon breaks
         self.assertEqual(24, game.players[0].hero.health)
         self.assertEqual(24, game.players[1].hero.health)
 

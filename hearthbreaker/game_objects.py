@@ -1117,8 +1117,7 @@ class Hero(Character):
         super().attack()
         if self.player.weapon is not None:
             self.player.weapon.durability -= 1
-            if self.player.weapon.durability == 0 or \
-                    self.player.weapon.calculate_stat(ChangeAttack, self.player.weapon.base_attack) == 0:
+            if self.player.weapon.durability == 0:
                 self.player.weapon.destroy()
 
     def damage(self, amount, attacker):

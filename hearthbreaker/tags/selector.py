@@ -319,7 +319,7 @@ class DeadMinionSelector(Selector):
                 'players': self.players,
             }
         return {
-            'name': 'minion',
+            'name': 'dead_minion',
             'players': self.players,
         }
 
