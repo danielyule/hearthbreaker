@@ -276,6 +276,20 @@ class HasStatus(Condition):
         return getattr(minion, self.status)
 
 
+class IsRarity(Condition):
+    def __init__(self, rarity):
+        self.rarity = rarity
+
+    def __to_json__(self):
+        return {
+            'name': 'is_rarity',
+            'rarity': self.rarity
+        }
+
+    def evaluate(self, target, minion, *args):
+        return minion.card.rarity == self.rarity
+
+
 class MinionCountIs(Condition):
     def __init__(self, count):
         self.count = count

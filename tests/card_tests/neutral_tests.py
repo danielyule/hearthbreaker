@@ -4758,3 +4758,37 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(5, game.current_player.minions[1].health)
         self.assertEqual(5, game.current_player.minions[1].calculate_max_health())
         self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+    def test_RendBlackhand(self):
+        game = generate_game_for([WindfuryHarpy, RendBlackhand, TwilightDrake], [Loatheb, BoulderfistOgre],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        def _validate_targets(targets):
+            self.assertEqual(1, len(targets))
+            return targets[0]
+
+        game.players[0].agent.choose_target = _validate_targets
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_RendBlackhand_no_dragon(self):
+        game = generate_game_for([WindfuryHarpy, RendBlackhand], [Loatheb, BoulderfistOgre],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))

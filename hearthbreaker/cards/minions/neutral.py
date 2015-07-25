@@ -10,7 +10,7 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not, IsRarity, MinionIsNotTarget
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced, \
     CardDrawn, SpellTargeted
@@ -2556,3 +2556,16 @@ class DragonkinSorcerer(MinionCard):
         return Minion(3, 5, effects=[Effect(SpellTargeted(), [ActionTag(Give([Buff(ChangeAttack(1)),
                                                                               Buff(ChangeHealth(1))]),
                                                                         SelfSelector())])])
+
+
+class RendBlackhand(MinionCard):
+    def __init__(self):
+        super().__init__("Rend Blackhand", 7, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY,
+                         battlecry=(Battlecry(Kill(), MinionSelector(And(MinionIsNotTarget(),
+                                                                         IsRarity(CARD_RARITY.LEGENDARY)), BothPlayer(),
+                                                                     UserPicker()),
+                                              GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
+                                                          value=0))))
+
+    def create_minion(self, player):
+        return Minion(8, 4)
