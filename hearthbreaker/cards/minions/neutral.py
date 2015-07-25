@@ -1,4 +1,5 @@
 from hearthbreaker.cards.base import SpellCard, MinionCard
+from hearthbreaker.cards.heroes import Ragnaros
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
@@ -2477,3 +2478,11 @@ class EmperorThaurissan(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 5, effects=[Effect(TurnEnded(), [ActionTag(Give(Buff(ManaChange(-1))), CardSelector())])])
+
+
+class MajordomoExecutus(MinionCard):
+    def __init__(self):
+        super().__init__("Majordomo Executus", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(9, 7, deathrattle=[Deathrattle(Transform(Ragnaros()), HeroSelector())])

@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import HeroCard
 from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.powers import MagePower, DruidPower, HunterPower, PaladinPower, PriestPower, RoguePower,\
-    ShamanPower, WarlockPower, WarriorPower, JaraxxusPower
+    ShamanPower, WarlockPower, WarriorPower, JaraxxusPower, DieInsect
 
 
 class Malfurion(HeroCard):
@@ -55,6 +55,11 @@ class Jaraxxus(HeroCard):
                          ref_name="Lord Jarraxus (hero)")
 
 
+class Ragnaros(HeroCard):
+    def __init__(self):
+        super().__init__("Ragnaros the Firelord (hero)", CHARACTER_CLASS.ALL, 8, DieInsect)
+
+
 def hero_for_class(character_class):
     if character_class == CHARACTER_CLASS.DRUID:
         return Malfurion()
@@ -85,7 +90,10 @@ __hero_lookup = {"Jaina": Jaina,
                  "Gul'dan": Guldan,
                  "Valeera": Valeera,
                  "Thrall": Thrall,
-                 "Garrosh": Garrosh}
+                 "Garrosh": Garrosh,
+                 "Jaraxxus": Jaraxxus,
+                 "Ragnaros": Ragnaros,
+                 }
 
 
 def hero_from_name(name):

@@ -4595,3 +4595,16 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for card in game.other_player.hand:
             if card.name != "The Coin":
                 self.assertEqual(5, card.mana_cost())
+
+    def test_Majordomo_Executus(self):
+        game = generate_game_for([MajordomoExecutus, Alexstrasza], Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(18):
+            game.play_single_turn()
+
+        self.assertEqual(8, game.other_player.hero.health)
+        self.assertEqual(8, game.other_player.hero.calculate_max_health())
+        game.other_player.agent.choose_target = lambda targets : game.players[0].hero
+        game.play_single_turn()
+        self.assertEqual(15, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())

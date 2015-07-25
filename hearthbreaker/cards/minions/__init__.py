@@ -233,6 +233,7 @@ from hearthbreaker.cards.minions.neutral import (
     GrimPatron,
     BlackwingTechnician,
     EmperorThaurissan,
+    MajordomoExecutus,
 )
 
 from hearthbreaker.cards.minions.druid import (

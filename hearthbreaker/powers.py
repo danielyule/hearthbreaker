@@ -1,3 +1,6 @@
+from copy import copy
+
+
 class Power:
     def __init__(self):
         self.hero = None
@@ -156,6 +159,15 @@ class JaraxxusPower(Power):
 
         infernal_card = Infernal()
         infernal_card.summon(self.hero.player, self.hero.player.game, len(self.hero.player.minions))
+
+
+class DieInsect(Power):
+    def use(self):
+        super().use()
+        targets = copy(self.hero.player.opponent.minions)
+        targets.append(self.hero.player.opponent.hero)
+        target = self.hero.player.game.random_choice(targets)
+        target.damage(2 * self.hero.player.spell_multiplier, None)
 
 
 class WarriorPower(Power):
