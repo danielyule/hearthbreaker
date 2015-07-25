@@ -10,13 +10,13 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
     IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, \
     PlayerSelector, TargetSelector, EnemyPlayer, CharacterSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
-    Difference, LastDrawnSelector, RandomAmount
+    Difference, LastDrawnSelector, RandomAmount, DeadMinionSelector
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
     SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury
@@ -2486,3 +2486,51 @@ class MajordomoExecutus(MinionCard):
 
     def create_minion(self, player):
         return Minion(9, 7, deathrattle=[Deathrattle(Transform(Ragnaros()), HeroSelector())])
+
+
+class VolcanicDrake(MinionCard):
+    def __init__(self):
+        super().__init__("Volcanic Drake", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DRAGON,
+                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+
+    def create_minion(self, player):
+        return Minion(6, 4)
+
+
+class BlackwingCorruptor(MinionCard):
+    def __init__(self):
+        super().__init__("Blackwing Corruptor", 5, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         battlecry=Battlecry(Damage(3), CharacterSelector(players=BothPlayer(), picker=UserPicker()),
+                                             GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
+                                                         value=0)))
+
+    def create_minion(self, player):
+        return Minion(5, 4)
+
+
+class DrakonidCrusher(MinionCard):
+    def __init__(self):
+        super().__init__("Drakonid Crusher", 6, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.DRAGON,
+                         battlecry=(Battlecry(Give([Buff(ChangeAttack(3)), Buff(ChangeHealth(3))]), SelfSelector(),
+                                              Not(GreaterThan(Attribute('health', HeroSelector(EnemyPlayer())),
+                                                              value=15)))))
+
+    def create_minion(self, player):
+        return Minion(6, 6)
+
+
+class BlackWhelp(MinionCard):
+    def __init__(self):
+        super().__init__("Black Whelp", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, MINION_TYPE.DRAGON)
+
+    def create_minion(self, player):
+        return Minion(2, 1)
+
+
+class DragonEgg(MinionCard):
+    def __init__(self):
+        super().__init__("Dragon Egg", 1, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(0, 2, effects=[Effect(Damaged(), ActionTag(Summon(BlackWhelp()), PlayerSelector()))])

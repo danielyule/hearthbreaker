@@ -247,3 +247,16 @@ class Implosion(SpellCard):
             for i in range(0, amount):
                 imp = Imp()
                 imp.summon(player, game, len(player.minions))
+
+
+class Demonwrath(SpellCard):
+    def __init__(self):
+        super().__init__("Demonwrath", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(game.current_player.minions)
+        for minion in targets:
+            if minion.card.minion_type is not MINION_TYPE.DEMON:
+                minion.damage(player.effective_spell_damage(2), self)

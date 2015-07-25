@@ -859,3 +859,14 @@ class TestPriest(unittest.TestCase):
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Wild Pyromancer", game.current_player.minions[0].card.name)
         self.assertEqual(1, game.current_player.minions[0].health)
+
+    def test_TwilightWhelp(self):
+        game = generate_game_for(TwilightWhelp, Wisp, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[0].hand))
+        self.assertEqual(1, game.players[0].minions[0].calculate_max_health())
+        self.assertEqual(3, game.players[0].minions[5].calculate_max_health())

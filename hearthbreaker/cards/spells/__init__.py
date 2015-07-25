@@ -106,6 +106,7 @@ from hearthbreaker.cards.spells.paladin import (
     Avenge,
     SealOfLight,
     MusterForBattle,
+    SolemnVigil,
 )
 
 from hearthbreaker.cards.spells.priest import (
@@ -196,6 +197,7 @@ from hearthbreaker.cards.spells.warlock import (
     Darkbomb,
     Demonheart,
     Implosion,
+    Demonwrath,
 )
 
 from hearthbreaker.cards.spells.warrior import (
@@ -217,4 +219,5 @@ from hearthbreaker.cards.spells.warrior import (
     BouncingBlade,
     Crush,
     BurrowingMine,
+    Revenge,
 )

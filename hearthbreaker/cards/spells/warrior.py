@@ -255,3 +255,19 @@ class BurrowingMine(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
+
+
+class Revenge(SpellCard):
+    def __init__(self):
+        super().__init__("Revenge", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
+
+    def use(self, player, game):
+        super().use(player, game)
+        targets = copy.copy(game.other_player.minions)
+        targets.extend(game.current_player.minions)
+        if player.hero.health <= 12:
+            for minion in targets:
+                minion.damage(player.effective_spell_damage(3), self)
+        else:
+            for minion in targets:
+                minion.damage(player.effective_spell_damage(1), self)

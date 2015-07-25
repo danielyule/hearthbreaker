@@ -1,12 +1,12 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget, AddCard
-from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE, ActionTag
+from hearthbreaker.tags.base import Aura, Effect, Battlecry, CardQuery, CARD_SOURCE, ActionTag, Buff
 from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget, \
     OpponentMinionCountIsGreaterThan, And
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
-    UserPicker, SelfSelector, RandomPicker, EnemyPlayer
+    UserPicker, SelfSelector, RandomPicker, EnemyPlayer, RandomAmount
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
 
@@ -176,3 +176,12 @@ class Neptulon(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 7)
+
+
+class FireguardDestroyer(MinionCard):
+    def __init__(self):
+        super().__init__("Fireguard Destroyer", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=1,
+                         battlecry=Battlecry(Give(Buff(ChangeAttack(RandomAmount(1, 4)))), SelfSelector()))
+
+    def create_minion(self, player):
+        return Minion(3, 6)

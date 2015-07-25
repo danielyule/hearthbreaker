@@ -182,6 +182,7 @@ from hearthbreaker.cards.minions.neutral import (
     SneedsOldShredder,
     AntiqueHealbot,
     AnnoyoTron,
+    ArcaneNullifierX21,
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
@@ -234,6 +235,10 @@ from hearthbreaker.cards.minions.neutral import (
     BlackwingTechnician,
     EmperorThaurissan,
     MajordomoExecutus,
+    VolcanicDrake,
+    BlackwingCorruptor,
+    DrakonidCrusher,
+    DragonEgg,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -249,6 +254,7 @@ from hearthbreaker.cards.minions.druid import (
     Malorne,
     GroveTender,
     DruidOfTheFlame,
+    VolcanicLumberer,
 )
 
 from hearthbreaker.cards.minions.hunter import (
@@ -269,6 +275,7 @@ from hearthbreaker.cards.minions.hunter import (
     KingOfBeasts,
     Gahzrilla,
     SteamwheedleSniper,
+    CoreRager,
 )
 
 from hearthbreaker.cards.minions.mage import (
@@ -283,6 +290,7 @@ from hearthbreaker.cards.minions.mage import (
     SootSpewer,
     WeeSpellstopper,
     FlameLeviathan,
+    Flamewaker
 )
 
 from hearthbreaker.cards.minions.paladin import (
@@ -312,6 +320,7 @@ from hearthbreaker.cards.minions.priest import (
     Shadowbomber,
     Shadowboxer,
     Voljin,
+    TwilightWhelp,
 )
 
 from hearthbreaker.cards.minions.rogue import (
@@ -327,6 +336,7 @@ from hearthbreaker.cards.minions.rogue import (
     OgreNinja,
     TradePrinceGallywix,
     GoblinAutoBarber,
+    DarkIronSkulker,
 )
 
 from hearthbreaker.cards.minions.shaman import (
@@ -348,6 +358,7 @@ from hearthbreaker.cards.minions.shaman import (
     WhirlingZapomatic,
     DunemaulShaman,
     Neptulon,
+    FireguardDestroyer,
 )
 
 from hearthbreaker.cards.minions.warlock import (

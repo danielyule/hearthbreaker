@@ -4596,6 +4596,75 @@ class TestCommon(unittest.TestCase, TestUtilities):
             if card.name != "The Coin":
                 self.assertEqual(5, card.mana_cost())
 
+    def test_VolcanicDrake(self):
+        game = generate_game_for(LeeroyJenkins, [TwistingNether, VolcanicDrake], OneCardPlayingAgent, CardTestingAgent)
+
+        for turn in range(0, 15):
+            game.play_single_turn()
+
+        self.assertEqual(4, len(game.players[0].minions))
+        self.assertEqual(7, len(game.players[1].minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[0].minions))
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(6, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(4, game.players[1].minions[0].calculate_max_health())
+
+    def test_BlackwingCorruptor(self):
+        game = generate_game_for([BlackwingCorruptor, Deathwing], Wisp, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(9):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(30, game.players[0].hero.health)
+        self.assertEqual(27, game.players[1].hero.health)
+
+    def test_DrakonidCrusher(self):
+        game = generate_game_for([MindBlast, MindBlast, DrakonidCrusher], Wisp, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(0, 12):
+            game.play_single_turn()
+
+        self.assertEqual(20, game.players[1].hero.health)
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(6, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[0].calculate_max_health())
+
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(10, game.players[1].hero.health)
+        self.assertEqual(2, len(game.players[0].minions))
+        self.assertEqual(9, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(9, game.players[0].minions[0].calculate_max_health())
+        self.assertEqual(6, game.players[0].minions[1].calculate_attack())
+        self.assertEqual(6, game.players[0].minions[1].calculate_max_health())
+
+    def test_DragonEgg(self):
+        game = generate_game_for(ArcaneExplosion, DragonEgg, OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.players[1].minions))
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+
+        game.play_single_turn()
+        game.play_single_turn()  # Arcane Explosion kills 1 whelp and 1 egg but spawns 2 whelps
+
+        self.assertEqual(3, len(game.players[1].minions))
+        self.assertEqual(0, game.players[1].minions[0].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[0].health)
+        self.assertEqual(2, game.players[1].minions[1].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[1].health)
+        self.assertEqual(2, game.players[1].minions[2].calculate_attack())
+        self.assertEqual(1, game.players[1].minions[2].health)
+
     def test_Majordomo_Executus(self):
         game = generate_game_for([FieryWarAxe, IceBlock, MajordomoExecutus, Alexstrasza], Assassinate,
                                  OneCardPlayingAgent, OneCardPlayingAgent)

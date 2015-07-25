@@ -427,19 +427,30 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(0, len(game.current_player.minions))
 
     def test_Gorehowl(self):
-        game = generate_game_for(Gorehowl, [BoulderfistOgre, Deathwing],
+        game = generate_game_for([Gorehowl, Deathwing], [BoulderfistOgre, Deathwing],
                                  PlayAndAttackAgent, CardTestingAgent)
 
-        for turn in range(0, 13):
+        for turn in range(0, 12):
             game.play_single_turn()
 
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(7, game.players[1].minions[0].health)
         self.assertEqual(1, game.current_player.weapon.durability)
 
         game.play_single_turn()
+
+        self.assertEqual(0, len(game.players[1].minions))
+        self.assertEqual(1, game.players[0].hero.weapon.durability)  # Gorehowl does not break from killing Boulderfist
+        self.assertEqual(6, game.players[0].hero.weapon.base_attack)  # But it does lose 1 attack
+        self.assertEqual(24, game.players[0].hero.health)
+        self.assertEqual(30, game.players[1].hero.health)
+
+        game.play_single_turn()
         game.play_single_turn()
 
-        self.assertEqual(23, game.other_player.hero.health)
-        self.assertIsNone(game.current_player.weapon)
+        self.assertIsNone(game.players[0].hero.weapon)  # Attacks face and weapon breaks
+        self.assertEqual(24, game.players[0].hero.health)
+        self.assertEqual(24, game.players[1].hero.health)
 
     def test_FieryWarAxe(self):
         game = generate_game_for(FieryWarAxe, BoulderfistOgre,
@@ -675,3 +686,19 @@ class TestWarrior(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(28, game.players[1].hero.health)
+
+    def test_Revenge(self):
+        game = generate_game_for(SinisterStrike, [ChillwindYeti, Revenge, Revenge],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(4, game.players[1].minions[0].health)  # 1st Revenge cast at 15 hp, so 1 damage
+        self.assertEqual(12, game.players[1].hero.health)
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, game.players[1].minions[0].health)  # 2nd Revenge cast at 12 hp, so 3 damage
+        self.assertEqual(12, game.players[1].hero.health)

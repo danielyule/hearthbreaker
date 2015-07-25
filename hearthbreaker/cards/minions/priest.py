@@ -2,10 +2,10 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage, SwapStats
 from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil, ActionTag
-from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged
+from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged, GreaterThan
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector
+    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector, SelfSelector, Count, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
     MultiplyHealAmount, ChangeAttack
@@ -141,3 +141,15 @@ class Voljin(MinionCard):
 
     def create_minion(self, player):
         return Minion(6, 2)
+
+
+class TwilightWhelp(MinionCard):
+    def __init__(self):
+        super().__init__("Twilight Whelp", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.DRAGON,
+                         battlecry=(Battlecry(Give(Buff(ChangeHealth(2))), SelfSelector(),
+                                              GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
+                                                          value=0))))
+
+    def create_minion(self, player):
+        return Minion(2, 1)
