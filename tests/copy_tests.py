@@ -527,7 +527,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game = game.copy()
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(9, len(game.current_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
 
     def test_Deathlord(self):
         game = generate_game_for(Deathlord, [HauntedCreeper, OasisSnapjaw, Frostbolt, WaterElemental, Pyroblast],

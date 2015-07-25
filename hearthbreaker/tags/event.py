@@ -35,6 +35,11 @@ class CardUsed(PlayerEvent):
         super().__init__("card_used", condition, player)
 
 
+class CardDrawn(PlayerEvent):
+    def __init__(self, condition=CardIsNotTarget(), player=FriendlyPlayer()):
+        super().__init__("card_drawn", condition, player)
+
+
 class AfterAdded(PlayerEvent):
     def __init__(self, condition=MinionIsNotTarget(), player=FriendlyPlayer()):
         super().__init__("after_added", condition, player)

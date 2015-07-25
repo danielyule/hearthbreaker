@@ -6,7 +6,7 @@ from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
 from hearthbreaker.engine import Player
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
-    PlayAndAttackAgent, EnemyMinionSpellTestingAgent
+    PlayAndAttackAgent, EnemyMinionSpellTestingAgent, SelfMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -2806,7 +2806,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.other_player.hand))
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(9, len(game.current_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
 
     def test_Deathlord(self):
         game = generate_game_for(Deathlord, [HauntedCreeper, OasisSnapjaw, Frostbolt, WaterElemental, Pyroblast],
@@ -4684,6 +4684,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         self.assertEqual(15, game.current_player.hero.health)
         self.assertEqual(15, game.current_player.hero.calculate_max_health())
+        # TODO add in testing w/ immunity and attack values
 
     def test_Majordomo_Executus_with_armor(self):
         game = generate_game_for([IceBarrier, MajordomoExecutus], [FieryWarAxe, InnerRage, Execute],
@@ -4702,3 +4703,36 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual(5, game.other_player.hero.health)
         self.assertEqual(0, game.other_player.hero.armor)
+
+    def test_Chromaggus(self):
+        game = generate_game_for([Chromaggus, ArcaneIntellect, Ysera], [DancingSwords, Assassinate],
+                                 OneCardPlayingAgent, SelfMinionSpellTestingAgent)
+
+        game.players[0].max_mana = 10
+        game.players[1].max_mana = 3
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(8, len(game.current_player.hand))
+
+        # Remove some cards so we can fit the newly drawn cards into our hand
+        game.current_player.hand = game.current_player.hand[:5]
+        # The Dancing Swords is assassinated, resulting in another card draw
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+
+        # Ysera doesn't trigger Chromaggus
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Ysera", game.current_player.minions[0].card.name)
+        self.assertEqual(9, len(game.current_player.hand))

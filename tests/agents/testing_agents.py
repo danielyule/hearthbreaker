@@ -23,6 +23,14 @@ class SelfSpellTestingAgent(CardTestingAgent):
         return self.player.game.current_player.hero
 
 
+class SelfMinionSpellTestingAgent(CardTestingAgent):
+    def __init__(self):
+        super().__init__()
+
+    def choose_target(self, targets):
+        return self.player.game.current_player.minions[0]
+
+
 class EnemySpellTestingAgent(CardTestingAgent):
     def __init__(self):
         super().__init__()

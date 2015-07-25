@@ -397,10 +397,10 @@ class Player(Bindable):
     def draw(self):
         if self.can_draw():
             card = self.deck.draw(self.game)
-            self.trigger("card_drawn", card)
             if len(self.hand) < 10:
                 self.hand.append(card)
                 card.attach(card, self)
+                self.trigger("card_drawn", card)
                 card.trigger("drawn")
             else:
                 self.trigger("card_destroyed", card)
@@ -432,6 +432,7 @@ class Player(Bindable):
             targets = self.hand
             target = self.game.random_choice(targets)
             self.hand.remove(target)
+            target.unattach()
             self.trigger("card_discarded", target)
 
     def add_effect(self, effect):

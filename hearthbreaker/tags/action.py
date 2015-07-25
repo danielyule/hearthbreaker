@@ -358,7 +358,7 @@ class AddCard(Action):
                 if len(target.hand) < 10:
                     card = self.card.get_card(target, target, actor)
                     if card:
-                        target.hand.append(card)
+                        target.hand.append(copy.copy(card))
                         card.drawn = True
 
     def __to_json__(self):

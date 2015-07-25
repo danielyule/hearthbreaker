@@ -643,8 +643,9 @@ class CardQuery(JSONObject):
             return chosen_card
         elif self.source == CARD_SOURCE.LAST_DRAWN:
             chosen_card = player.hand[-1]
-            player.hand.remove(chosen_card)
-            chosen_card.unattach()
+            if not self.make_copy:
+                player.hand.remove(chosen_card)
+                chosen_card.unattach()
             return chosen_card
         elif self.source == CARD_SOURCE.MINION:
             chosen_card = self.minion.get_targets(owner, owner)[0].card
@@ -674,9 +675,10 @@ class CardQuery(JSONObject):
             chosen_card = player.game.random_choice(card_list)
 
         chosen_card.attach(chosen_card, player)
-
-        if self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST \
-                or self.source == CARD_SOURCE.MINION or self.make_copy:
+        if self.make_copy:
+            return copy.copy(chosen_card)
+        elif self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST \
+                or self.source == CARD_SOURCE.MINION:
             return chosen_card
         elif self.source == CARD_SOURCE.MY_DECK:
             chosen_card.drawn = True
