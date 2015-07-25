@@ -4736,3 +4736,25 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.other_player.minions))
         self.assertEqual("Ysera", game.current_player.minions[0].card.name)
         self.assertEqual(9, len(game.current_player.hand))
+
+    def test_DragonkinSorcerer(self):
+        game = generate_game_for([DragonkinSorcerer, IronbeakOwl], Moonfire, OneCardPlayingAgent, CardTestingAgent)
+        game.players[0].max_mana = 3
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        self.assertEqual(10, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(8, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[1].health)
+        self.assertEqual(5, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())

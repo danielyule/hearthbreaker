@@ -123,3 +123,8 @@ class Damaged(MinionEvent):
 class Drawn(MinionEvent):
     def __init__(self):
         super().__init__("drawn")
+
+
+class SpellTargeted(MinionEvent):
+    def __init__(self):
+        super().__init__("spell_targeted")

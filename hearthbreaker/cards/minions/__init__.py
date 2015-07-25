@@ -240,6 +240,7 @@ from hearthbreaker.cards.minions.neutral import (
     DrakonidCrusher,
     DragonEgg,
     Chromaggus,
+    DragonkinSorcerer,
 )
 
 from hearthbreaker.cards.minions.druid import (

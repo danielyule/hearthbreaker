@@ -132,7 +132,9 @@ class TestHunter(unittest.TestCase):
         old_play = game.other_player.agent.do_turn
 
         def _play_and_attack(player):
-            Flare().use(player, player.game)
+            flare = Flare()
+            flare.target = None
+            flare.use(player, player.game)
             old_play(player)
             player.minions[4].attack()
 

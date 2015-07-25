@@ -13,7 +13,7 @@ from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle,
     BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced, \
-    CardDrawn
+    CardDrawn, SpellTargeted
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, \
     PlayerSelector, TargetSelector, EnemyPlayer, CharacterSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
@@ -2545,3 +2545,14 @@ class Chromaggus(MinionCard):
         return Minion(6, 8, effects=[Effect(CardDrawn(), [ActionTag(AddCard(CardQuery(source=CARD_SOURCE.LAST_DRAWN,
                                                                                       make_copy=True)),
                                                                     PlayerSelector())])])
+
+
+class DragonkinSorcerer(MinionCard):
+    def __init__(self):
+        super().__init__("Dragonkin Sorcerer", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON,
+                         minion_type=MINION_TYPE.DRAGON)
+
+    def create_minion(self, player):
+        return Minion(3, 5, effects=[Effect(SpellTargeted(), [ActionTag(Give([Buff(ChangeAttack(1)),
+                                                                              Buff(ChangeHealth(1))]),
+                                                                        SelfSelector())])])
