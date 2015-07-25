@@ -249,7 +249,7 @@ class SetHealth(Action, metaclass=Amount):
         super().__init__()
 
     def act(self, actor, target, other=None):
-        target.health = self.get_amount(actor, target, other)
+        target.set_health_to(self.get_amount(actor, target, other))
 
     def __to_json__(self):
         return {

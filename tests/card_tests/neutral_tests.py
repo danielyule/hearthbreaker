@@ -4597,14 +4597,39 @@ class TestCommon(unittest.TestCase, TestUtilities):
                 self.assertEqual(5, card.mana_cost())
 
     def test_Majordomo_Executus(self):
-        game = generate_game_for([MajordomoExecutus, Alexstrasza], Assassinate, OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for([FieryWarAxe, IceBlock, MajordomoExecutus, Alexstrasza], Assassinate,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
 
-        for turn in range(18):
+        for turn in range(17):
             game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertIsNotNone(game.current_player.weapon)
 
+        game.play_single_turn()
         self.assertEqual(8, game.other_player.hero.health)
         self.assertEqual(8, game.other_player.hero.calculate_max_health())
-        game.other_player.agent.choose_target = lambda targets : game.players[0].hero
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertIsNotNone(game.other_player.weapon)
+
+        game.other_player.agent.choose_target = lambda targets: game.players[0].hero
         game.play_single_turn()
         self.assertEqual(15, game.current_player.hero.health)
         self.assertEqual(15, game.current_player.hero.calculate_max_health())
+
+    def test_Majordomo_Executus_with_armor(self):
+        game = generate_game_for([IceBarrier, MajordomoExecutus], [FieryWarAxe, InnerRage, Execute],
+                                 OneCardPlayingAgent, PlayAndAttackAgent)
+        for turn in range(17):
+            game.play_single_turn()
+
+        # The axe hits the hero once before the secret is played, and once after, so there is three damage done
+        # to health and three to the secret.
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(27, game.current_player.hero.health)
+        self.assertEqual(5, game.current_player.hero.armor)
+
+        game.play_single_turn()
+        # Majordomo is executed and the player equips a axe which does three damage to the newly replaced hero
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.hero.health)
+        self.assertEqual(0, game.other_player.hero.armor)
