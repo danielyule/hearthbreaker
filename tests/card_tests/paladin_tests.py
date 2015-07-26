@@ -774,3 +774,29 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(9, len(game.players[1].hand))
+
+    def test_DragonConsort_no_dragon(self):
+        game = generate_game_for([DragonConsort, Ysera, Alexstrasza], Chromaggus,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+
+    def test_DragonConsort(self):
+        game = generate_game_for([DragonConsort, RagnarosTheFirelord], Chromaggus,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(11):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))

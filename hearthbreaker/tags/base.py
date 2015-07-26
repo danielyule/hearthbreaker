@@ -43,11 +43,12 @@ class Tag(JSONObject):
 
 
 class Aura(Tag):
-    def __init__(self, status, selector, condition=None):
+    def __init__(self, status, selector, condition=None, expires=False):
         self.owner = None
         self.status = status
         self.selector = selector
         self.condition = condition
+        self.expires = expires
 
     def set_owner(self, owner):
         self.owner = owner
@@ -73,19 +74,21 @@ class Aura(Tag):
                 'status': self.status,
                 'selector': self.selector,
                 'condition': self.condition,
+                'expires': self.expires,
             }
         return {
             'status': self.status,
             'selector': self.selector,
+            'expires': self.expires,
         }
 
     @staticmethod
-    def from_json(status, selector, condition=None):
+    def from_json(status, selector, condition=None, expires=False):
         status = Status.from_json(**status)
         selector = Selector.from_json(**selector)
         if condition:
             condition = Condition.from_json(**condition)
-        return Aura(status, selector, condition)
+        return Aura(status, selector, condition, expires)
 
 
 class Buff(Tag):
@@ -160,8 +163,8 @@ class BuffUntil(Buff):
 
 
 class AuraUntil(Aura):
-    def __init__(self, status, selector, until):
-        super().__init__(status, selector)
+    def __init__(self, status, selector, until, expires=True):
+        super().__init__(status, selector, None, expires)
         self.until = until
 
     def apply(self):
@@ -179,15 +182,16 @@ class AuraUntil(Aura):
         return {
             'status': self.status,
             'selector': self.selector,
-            'until': self.until
+            'until': self.until,
+            'expires': self.expires
         }
 
     @staticmethod
-    def from_json(status, selector, until):
+    def from_json(status, selector, until, expires=True):
         status = Status.from_json(**status)
         selector = Selector.from_json(**selector)
         until = Event.from_json(**until)
-        return AuraUntil(status, selector, until)
+        return AuraUntil(status, selector, until, expires)
 
 
 class Player(metaclass=abc.ABCMeta):

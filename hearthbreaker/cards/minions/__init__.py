@@ -307,6 +307,7 @@ from hearthbreaker.cards.minions.paladin import (
     Quartermaster,
     ScarletPurifier,
     BolvarFordragon,
+    DragonConsort,
 )
 
 from hearthbreaker.cards.minions.priest import (

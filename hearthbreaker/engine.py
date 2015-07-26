@@ -193,7 +193,7 @@ class Game(Bindable):
             minion.attacks_performed = 0
 
         for aura in copy.copy(self.current_player.object_auras):
-            if isinstance(aura, AuraUntil):
+            if aura.expires:
                 self.current_player.object_auras.remove(aura)
                 aura.unapply()
 
