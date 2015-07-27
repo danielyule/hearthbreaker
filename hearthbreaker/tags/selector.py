@@ -194,6 +194,8 @@ class HeroSelector(Selector):
         self.picker = picker
 
     def get_targets(self, source, obj=None):
+        if source.is_player():
+            return [p.hero for p in self.players.get_players(source)]
         return [p.hero for p in self.players.get_players(source.player)]
 
     def choose_targets(self, source, target=None):

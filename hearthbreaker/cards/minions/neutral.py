@@ -9,8 +9,9 @@ from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE,
     BuffUntil, Buff, AuraUntil, ActionTag
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
     MinionIsTarget, IsSpell, IsDamaged, InGraveyard, ManaCost, OpponentMinionCountIsGreaterThan, AttackGreaterThan, \
-    IsWeapon, HasStatus, AttackLessThanOrEqualTo, CardRarity, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
-    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not, IsRarity, MinionIsNotTarget
+    IsWeapon, HasStatus, AttackLessThanOrEqualTo, OneIn, NotCurrentTarget, HasDivineShield, HasSecret, \
+    BaseAttackEqualTo, GreaterThan, And, TargetAdjacent, Matches, HasBattlecry, Not, IsRarity, MinionIsNotTarget, \
+    IsClass
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced, \
     CardDrawn, SpellTargeted
@@ -1943,7 +1944,7 @@ class SneedsOldShredder(MinionCard):
                          minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(5, 7, deathrattle=Deathrattle(Summon(CardQuery(conditions=[CardRarity(CARD_RARITY.LEGENDARY),
+        return Minion(5, 7, deathrattle=Deathrattle(Summon(CardQuery(conditions=[IsRarity(CARD_RARITY.LEGENDARY),
                                                                                  IsMinion()])),
                                                     PlayerSelector()))
 
@@ -2569,3 +2570,15 @@ class RendBlackhand(MinionCard):
 
     def create_minion(self, player):
         return Minion(8, 4)
+
+
+class Nefarian(MinionCard):
+    def __init__(self):
+        super().__init__("Nefarian", 9, CHARACTER_CLASS.ALL, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.DRAGON,
+                         battlecry=Battlecry(AddCard(CardQuery(conditions=[
+                             IsClass(Attribute("character_class", HeroSelector(EnemyPlayer()))),
+                             IsSpell()
+                         ]), 2), PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(8, 8)

@@ -471,6 +471,9 @@ class Player(Bindable):
     def is_valid(self):
         return True
 
+    def is_player(self):
+        return True
+
     def __to_json__(self):
         auras = copy.copy(self.player_auras)
         auras.extend(self.object_auras)

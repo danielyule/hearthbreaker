@@ -3,7 +3,7 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
-from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
+from hearthbreaker.constants import CARD_RARITY, MINION_TYPE, CHARACTER_CLASS
 from hearthbreaker.engine import Player
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
     PlayAndAttackAgent, EnemyMinionSpellTestingAgent, SelfMinionSpellTestingAgent
@@ -4792,3 +4792,20 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         self.assertEqual(2, len(game.other_player.minions))
         self.assertEqual(2, len(game.current_player.minions))
+
+    def test_Nefarian(self):
+        game = generate_game_for(Nefarian, Naturalize, OneCardPlayingAgent, DoNothingAgent)
+
+        game.players[0].max_mana = 8
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[0].character_class)
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[1].character_class)
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[2].character_class)
+        self.assertEqual(CHARACTER_CLASS.DRUID, game.current_player.hand[3].character_class)
+        self.assertEqual(CHARACTER_CLASS.DRUID, game.current_player.hand[4].character_class)
+
+        self.assertTrue(game.current_player.hand[3].is_spell())
+        self.assertTrue(game.current_player.hand[4].is_spell())

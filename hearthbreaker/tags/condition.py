@@ -80,20 +80,6 @@ class ManaCost(Condition, metaclass=Amount):
         return self
 
 
-class CardRarity(Condition):
-    def __init__(self, rarity):
-        self.rarity = rarity
-
-    def evaluate(self, target, obj, *args):
-        return obj.is_card() and obj.rarity == self.rarity
-
-    def __to_json__(self):
-        return {
-            'name': 'card_rarity',
-            'rarity': self.rarity
-        }
-
-
 class IsMinion(Condition):
     def evaluate(self, target, minion, *args):
         return minion.is_minion()
@@ -236,6 +222,22 @@ class IsType(Condition):
         return self
 
 
+class IsClass(Condition, metaclass=Amount):
+    def __init__(self):
+        super().__init__()
+
+    def evaluate(self, target, card, *args):
+        return card.character_class == self.get_amount(target, card, *args)
+
+    def __to_json__(self):
+        return {
+            'name': 'is_class'
+        }
+
+    def __from_json__(self, **kwargs):
+        return self
+
+
 class MinionHasDeathrattle(Condition):
     def __to_json__(self):
         return {
@@ -287,7 +289,10 @@ class IsRarity(Condition):
         }
 
     def evaluate(self, target, minion, *args):
-        return minion.card.rarity == self.rarity
+        if minion.is_card():
+            return minion.rarity == self.rarity
+        else:
+            return minion.card.rarity == self.rarity
 
 
 class MinionCountIs(Condition):

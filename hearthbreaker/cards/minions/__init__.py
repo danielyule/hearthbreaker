@@ -242,6 +242,7 @@ from hearthbreaker.cards.minions.neutral import (
     Chromaggus,
     DragonkinSorcerer,
     RendBlackhand,
+    Nefarian,
 )
 
 from hearthbreaker.cards.minions.druid import (

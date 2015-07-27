@@ -293,6 +293,12 @@ class GameObject:
         """
         return False
 
+    def is_player(self):
+        """
+        Checks if this is a player object
+        """
+        return False
+
     def add_effect(self, effect):
         """
         Applies the the given effect to the :class:`GameObject`.  The effect will be unapplied in the case of silence,
