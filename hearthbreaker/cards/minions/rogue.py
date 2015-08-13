@@ -7,7 +7,7 @@ from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, One
     OpponentMinionCountIsGreaterThan, And, IsDamaged
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
-    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, HeroSelector, Attribute
+    BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, Attribute, WeaponSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
@@ -134,7 +134,7 @@ class TradePrinceGallywix(MinionCard):
 class GoblinAutoBarber(MinionCard):
     def __init__(self):
         super().__init__("Goblin Auto-Barber", 2, CHARACTER_CLASS.ROGUE, CARD_RARITY.COMMON,
-                         minion_type=MINION_TYPE.MECH, battlecry=Battlecry(IncreaseWeaponAttack(1), HeroSelector()))
+                         minion_type=MINION_TYPE.MECH, battlecry=Battlecry(IncreaseWeaponAttack(1), WeaponSelector()))
 
     def create_minion(self, player):
         return Minion(3, 2)

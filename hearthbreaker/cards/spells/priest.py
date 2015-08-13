@@ -165,8 +165,8 @@ class Mindgames(SpellCard):
             minion_card = ShadowOfNothing()
         else:
             minion_card = copy.copy(minion_card)
-        minion_card.summon(player, game, 0)
         minion_card.drawn = True
+        minion_card.summon(player, game, 0)
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) < 7

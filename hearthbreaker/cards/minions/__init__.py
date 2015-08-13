@@ -182,6 +182,7 @@ from hearthbreaker.cards.minions.neutral import (
     SneedsOldShredder,
     AntiqueHealbot,
     AnnoyoTron,
+    ArcaneNullifierX21,
     Blingtron3000,
     BombLobber,
     BurlyRockjawTrogg,
@@ -233,10 +234,15 @@ from hearthbreaker.cards.minions.neutral import (
     GrimPatron,
     BlackwingTechnician,
     EmperorThaurissan,
+    MajordomoExecutus,
     VolcanicDrake,
     BlackwingCorruptor,
     DrakonidCrusher,
     DragonEgg,
+    Chromaggus,
+    DragonkinSorcerer,
+    RendBlackhand,
+    Nefarian,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -302,6 +308,7 @@ from hearthbreaker.cards.minions.paladin import (
     Quartermaster,
     ScarletPurifier,
     BolvarFordragon,
+    DragonConsort,
 )
 
 from hearthbreaker.cards.minions.priest import (

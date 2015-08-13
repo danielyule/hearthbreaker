@@ -527,7 +527,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game = game.copy()
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(9, len(game.current_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
 
     def test_Deathlord(self):
         game = generate_game_for(Deathlord, [HauntedCreeper, OasisSnapjaw, Frostbolt, WaterElemental, Pyroblast],
@@ -741,7 +741,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         self.assertEqual(6, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
         self.assertEqual("Tirion Fordring", game.players[0].minions[0].card.name)
-        self.assertEqual(None, game.players[0].hero.weapon)
+        self.assertEqual(None, game.players[0].weapon)
 
         game = game.copy()
 
@@ -749,8 +749,8 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         tirion = game.players[0].minions[0]
         tirion.die(None)
         tirion.activate_delayed()
-        self.assertEqual(5, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(3, game.players[0].hero.weapon.durability)
+        self.assertEqual(5, game.players[0].weapon.base_attack)
+        self.assertEqual(3, game.players[0].weapon.durability)
 
     def test_Undertaker(self):
         game = generate_game_for([Undertaker, GoldshireFootman, HarvestGolem, AnubarAmbusher], HauntedCreeper,
@@ -898,7 +898,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
         self.assertEqual(1, game.other_player.minions[0].health)
 
         game = game.copy()
@@ -1578,7 +1578,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         for turn in range(0, 13):
             game.play_single_turn()
 
-        self.assertEqual(1, game.current_player.hero.weapon.durability)
+        self.assertEqual(1, game.current_player.weapon.durability)
 
         game = game.copy()
 
@@ -1586,7 +1586,7 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game.play_single_turn()
 
         self.assertEqual(23, game.other_player.hero.health)
-        self.assertIsNone(game.current_player.hero.weapon)
+        self.assertIsNone(game.current_player.weapon)
 
     def test_NerubarWeblord(self):
         game = generate_game_for([NerubarWeblord, EarthenRingFarseer], [NoviceEngineer, IronfurGrizzly],

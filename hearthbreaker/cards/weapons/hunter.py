@@ -3,7 +3,7 @@ from hearthbreaker.game_objects import Weapon
 from hearthbreaker.tags.action import Give, IncreaseDurability
 from hearthbreaker.tags.condition import IsHero
 from hearthbreaker.tags.event import AttackCompleted, SecretRevealed, CharacterAttack
-from hearthbreaker.tags.selector import HeroSelector, MinionSelector, RandomPicker
+from hearthbreaker.tags.selector import HeroSelector, MinionSelector, RandomPicker, WeaponSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.tags.base import Effect, BuffUntil, Battlecry, ActionTag
 from hearthbreaker.tags.status import ChangeAttack, Immune
@@ -15,7 +15,7 @@ class EaglehornBow(WeaponCard):
                          CARD_RARITY.RARE)
 
     def create_weapon(self, player):
-        return Weapon(3, 2, effects=[Effect(SecretRevealed(), ActionTag(IncreaseDurability(), HeroSelector()))])
+        return Weapon(3, 2, effects=[Effect(SecretRevealed(), ActionTag(IncreaseDurability(), WeaponSelector()))])
 
 
 class GladiatorsLongbow(WeaponCard):

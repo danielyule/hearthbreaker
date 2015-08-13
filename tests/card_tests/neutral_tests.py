@@ -3,10 +3,10 @@ import unittest
 
 from hearthbreaker.agents.basic_agents import PredictableAgent, DoNothingAgent
 from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
-from hearthbreaker.constants import CARD_RARITY, MINION_TYPE
+from hearthbreaker.constants import CARD_RARITY, MINION_TYPE, CHARACTER_CLASS
 from hearthbreaker.engine import Player
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
-    PlayAndAttackAgent, EnemyMinionSpellTestingAgent
+    PlayAndAttackAgent, EnemyMinionSpellTestingAgent, SelfMinionSpellTestingAgent
 from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -913,22 +913,22 @@ class TestCommon(unittest.TestCase, TestUtilities):
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNone(game.other_player.hero.weapon)
+        self.assertIsNone(game.other_player.weapon)
 
     def test_AcidicSwampOozeWithNoWeapon(self):
         game = generate_game_for(AcidicSwampOoze, StonetuskBoar, CardTestingAgent, DoNothingAgent)
         game.play_single_turn()
         game.play_single_turn()
 
-        self.assertTrue(game.current_player.hero.weapon is None)
+        self.assertIsNone(game.current_player.weapon)
 
         game.play_single_turn()
         self.assertEqual(1, len(game.current_player.minions))
-        self.assertIsNone(game.other_player.hero.weapon)
+        self.assertIsNone(game.other_player.weapon)
 
     def test_KnifeJuggler(self):
         game = generate_game_for([KnifeJuggler, KnifeJuggler, MasterOfDisguise], [StonetuskBoar, GoldshireFootman],
@@ -1408,21 +1408,21 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(4, game.players[1].hero.weapon.durability)
+        self.assertEqual(4, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(3, len(game.players[0].minions))
-        self.assertEqual(2, game.players[1].hero.weapon.durability)
+        self.assertEqual(2, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[1].hero.weapon.durability)
+        self.assertEqual(2, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(6, len(game.players[0].minions))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_BloodsailRaider(self):
         game = generate_game_for([BloodsailRaider, LightsJustice], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -1447,14 +1447,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(4, game.players[0].hero.weapon.durability)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
+        self.assertEqual(4, game.players[0].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].hero.calculate_attack())
-        self.assertEqual(5, game.players[0].hero.weapon.durability)
+        self.assertEqual(5, game.players[0].weapon.durability)
 
     def test_HungryCrab(self):
         game = generate_game_for(HungryCrab, [MurlocRaider, Deathwing], OneCardPlayingAgent, OneCardPlayingAgent)
@@ -1914,14 +1914,14 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNotNone(game.players[1].hero.weapon)
-        self.assertEqual(4, game.players[1].hero.weapon.durability)
+        self.assertIsNotNone(game.players[1].weapon)
+        self.assertEqual(4, game.players[1].weapon.durability)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(8, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_HarrisonJones_no_weapon(self):
         game = generate_game_for(HarrisonJones, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
@@ -1931,13 +1931,13 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
         game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertIsNone(game.players[1].hero.weapon)
+        self.assertIsNone(game.players[1].weapon)
 
     def test_KingMukla(self):
         game = generate_game_for([KingMukla, MindControl], LightsJustice, OneCardPlayingAgent, OneCardPlayingAgent)
@@ -2062,7 +2062,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()  # Equip LJ and check
 
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
         self.assertEqual(3, game.players[0].hand[1].mana_cost())
 
         for turn in range(0, 4):
@@ -2806,7 +2806,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(7, len(game.other_player.hand))
         game.play_single_turn()
         self.assertEqual(0, len(game.other_player.minions))
-        self.assertEqual(9, len(game.current_player.hand))
+        self.assertEqual(8, len(game.current_player.hand))
 
     def test_Deathlord(self):
         game = generate_game_for(Deathlord, [HauntedCreeper, OasisSnapjaw, Frostbolt, WaterElemental, Pyroblast],
@@ -3392,12 +3392,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         for turn in range(0, 8):
             game.play_single_turn()
 
-        self.assertIsNotNone(game.current_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
         self.assertEqual(2, len(game.current_player.minions))
 
         game.play_single_turn()
-        self.assertIsNotNone(game.current_player.hero.weapon)
-        self.assertIsNotNone(game.other_player.hero.weapon)
+        self.assertIsNotNone(game.current_player.weapon)
+        self.assertIsNotNone(game.other_player.weapon)
         self.assertEqual(0, len(game.other_player.minions))
 
     def test_BombLobber(self):
@@ -4664,6 +4664,151 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, game.players[1].minions[1].health)
         self.assertEqual(2, game.players[1].minions[2].calculate_attack())
         self.assertEqual(1, game.players[1].minions[2].health)
+
+    def test_Majordomo_Executus(self):
+        game = generate_game_for([FieryWarAxe, IceBlock, MajordomoExecutus, Alexstrasza], Assassinate,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertIsNotNone(game.current_player.weapon)
+
+        game.play_single_turn()
+        self.assertEqual(8, game.other_player.hero.health)
+        self.assertEqual(8, game.other_player.hero.calculate_max_health())
+        self.assertEqual(1, len(game.other_player.secrets))
+        self.assertIsNotNone(game.other_player.weapon)
+
+        game.other_player.agent.choose_target = lambda targets: game.players[0].hero
+        game.play_single_turn()
+        self.assertEqual(15, game.current_player.hero.health)
+        self.assertEqual(15, game.current_player.hero.calculate_max_health())
+        # TODO add in testing w/ immunity and attack values
+
+    def test_Majordomo_Executus_with_armor(self):
+        game = generate_game_for([IceBarrier, MajordomoExecutus], [FieryWarAxe, InnerRage, Execute],
+                                 OneCardPlayingAgent, PlayAndAttackAgent)
+        for turn in range(17):
+            game.play_single_turn()
+
+        # The axe hits the hero once before the secret is played, and once after, so there is three damage done
+        # to health and three to the secret.
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(27, game.current_player.hero.health)
+        self.assertEqual(5, game.current_player.hero.armor)
+
+        game.play_single_turn()
+        # Majordomo is executed and the player equips a axe which does three damage to the newly replaced hero
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.hero.health)
+        self.assertEqual(0, game.other_player.hero.armor)
+
+    def test_Chromaggus(self):
+        game = generate_game_for([Chromaggus, ArcaneIntellect, Ysera], [DancingSwords, Assassinate],
+                                 OneCardPlayingAgent, SelfMinionSpellTestingAgent)
+
+        game.players[0].max_mana = 10
+        game.players[1].max_mana = 3
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(3, len(game.current_player.hand))
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(8, len(game.current_player.hand))
+
+        # Remove some cards so we can fit the newly drawn cards into our hand
+        game.current_player.hand = game.current_player.hand[:5]
+        # The Dancing Swords is assassinated, resulting in another card draw
+        game.play_single_turn()
+        self.assertEqual(0, len(game.current_player.minions))
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(7, len(game.other_player.hand))
+
+        # Ysera doesn't trigger Chromaggus
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual("Ysera", game.current_player.minions[0].card.name)
+        self.assertEqual(9, len(game.current_player.hand))
+
+    def test_DragonkinSorcerer(self):
+        game = generate_game_for([DragonkinSorcerer, IronbeakOwl], Moonfire, OneCardPlayingAgent, CardTestingAgent)
+        game.players[0].max_mana = 3
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[0].health)
+        self.assertEqual(5, game.current_player.minions[0].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(5, game.other_player.minions[0].health)
+        self.assertEqual(10, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(8, game.other_player.minions[0].calculate_attack())
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(5, game.current_player.minions[1].health)
+        self.assertEqual(5, game.current_player.minions[1].calculate_max_health())
+        self.assertEqual(3, game.current_player.minions[1].calculate_attack())
+
+    def test_RendBlackhand(self):
+        game = generate_game_for([WindfuryHarpy, RendBlackhand, TwilightDrake], [Loatheb, BoulderfistOgre],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        def _validate_targets(targets):
+            self.assertEqual(1, len(targets))
+            return targets[0]
+
+        game.players[0].agent.choose_target = _validate_targets
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_RendBlackhand_no_dragon(self):
+        game = generate_game_for([WindfuryHarpy, RendBlackhand], [Loatheb, BoulderfistOgre],
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(12):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(2, len(game.current_player.minions))
+
+    def test_Nefarian(self):
+        game = generate_game_for(Nefarian, Naturalize, OneCardPlayingAgent, DoNothingAgent)
+
+        game.players[0].max_mana = 8
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(5, len(game.current_player.hand))
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[0].character_class)
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[1].character_class)
+        self.assertEqual(CHARACTER_CLASS.ALL, game.current_player.hand[2].character_class)
+        self.assertEqual(CHARACTER_CLASS.DRUID, game.current_player.hand[3].character_class)
+        self.assertEqual(CHARACTER_CLASS.DRUID, game.current_player.hand[4].character_class)
+
+        self.assertTrue(game.current_player.hand[3].is_spell())
+        self.assertTrue(game.current_player.hand[4].is_spell())
 
     def test_BoomBug(self):
         game = generate_game_for(DoctorBoom, FlameLeviathan, OneCardPlayingAgent, OneCardPlayingAgent)

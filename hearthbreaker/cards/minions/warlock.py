@@ -3,8 +3,8 @@ from hearthbreaker.cards.heroes import Jaraxxus
 from hearthbreaker.cards.weapons.warlock import BloodFury
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Transform, Equip, \
-    Remove, Heal
+from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Equip, \
+    Remove, Heal, ReplaceHeroWithMinion
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff, ActionTag
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent, IsMinion
 from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage, Damaged
@@ -98,7 +98,7 @@ class LordJaraxxus(MinionCard):
     def __init__(self):
         super().__init__("Lord Jaraxxus", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY,
                          minion_type=MINION_TYPE.DEMON,
-                         battlecry=(Battlecry(Transform(Jaraxxus()), HeroSelector()),
+                         battlecry=(Battlecry(ReplaceHeroWithMinion(Jaraxxus()), HeroSelector()),
                                     Battlecry(Remove(), SelfSelector()),
                                     Battlecry(Equip(BloodFury()), PlayerSelector())))
 

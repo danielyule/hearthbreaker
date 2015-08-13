@@ -2,10 +2,13 @@ import random
 import unittest
 
 from hearthbreaker.agents.basic_agents import DoNothingAgent
+from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.engine import Game
+from hearthbreaker.tags.base import CardQuery
+from hearthbreaker.tags.condition import HasCardName
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
     EnemyMinionSpellTestingAgent, CardTestingAgent, PlayAndAttackAgent
-from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE
+from hearthbreaker.constants import CHARACTER_CLASS, MINION_TYPE, CARD_RARITY
 from hearthbreaker.replay import playback, Replay
 from tests.testing_utils import generate_game_for, StackedDeck, mock
 from hearthbreaker.cards import *
@@ -1062,6 +1065,46 @@ class TestDruid(unittest.TestCase):
         test_bird.player = game.current_player
         self.assertEqual(2, test_bird.calculate_attack())
         self.assertEqual(5, test_bird.calculate_max_health())
+
+    def test_Malorne_UnstablePortal(self):
+        class MalornePortal(SpellCard):
+            def __init__(self):
+                super().__init__("Malorne Portal", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
+
+            def use(self, player, game):
+                super().use(player, game)
+                query = CardQuery(conditions=[HasCardName("Malorne")])
+                new_minon = query.get_card(player, player, self)
+                player.hand.append(new_minon)
+        game = generate_game_for(MalornePortal, Naturalize, OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        # Dump all the cards but the portal'd minion
+        game.current_player.hand = game.current_player.hand[-1:]
+
+        for turn in range(10):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+
+    def test_Malorne_Deathlord(self):
+        game = generate_game_for([Deathlord, Naturalize, Naturalize], Malorne, CardTestingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Deathlord", game.current_player.minions[0].card.name)
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(0, len(game.current_player.minions))
 
     def test_VolcanicLumberer(self):
         game = generate_game_for(LeeroyJenkins, [TwistingNether, VolcanicLumberer],

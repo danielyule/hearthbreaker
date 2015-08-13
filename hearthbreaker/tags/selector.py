@@ -194,6 +194,8 @@ class HeroSelector(Selector):
         self.picker = picker
 
     def get_targets(self, source, obj=None):
+        if source.is_player():
+            return [p.hero for p in self.players.get_players(source)]
         return [p.hero for p in self.players.get_players(source.player)]
 
     def choose_targets(self, source, target=None):
@@ -319,7 +321,7 @@ class DeadMinionSelector(Selector):
                 'players': self.players,
             }
         return {
-            'name': 'minion',
+            'name': 'dead_minion',
             'players': self.players,
         }
 
@@ -460,7 +462,7 @@ class WeaponSelector(Selector):
         self.players = players
 
     def get_targets(self, source, obj=None):
-        return [p.hero.weapon for p in self.players.get_players(source.player) if p.hero.weapon]
+        return [p.weapon for p in self.players.get_players(source.player) if p.weapon]
 
     def match(self, source, obj):
         return obj.is_weapon() and self.players.match(source, obj)

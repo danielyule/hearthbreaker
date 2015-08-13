@@ -289,12 +289,12 @@ class TestRogue(unittest.TestCase):
             game.play_single_turn()
 
         # Knife should have been played
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
 
         game.play_single_turn()
         # Deadly Poison should have been played
         game.play_single_turn()
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
 
     def test_Eviscerate(self):
         game = generate_game_for(Eviscerate, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -492,8 +492,8 @@ class TestRogue(unittest.TestCase):
         for turn in range(0, 9):
             game.play_single_turn()
 
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(4, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
+        self.assertEqual(4, game.players[0].weapon.durability)
 
     def test_PerditionsBlade(self):
         game = generate_game_for(PerditionsBlade, StonetuskBoar, CardTestingAgent, DoNothingAgent)
@@ -501,8 +501,8 @@ class TestRogue(unittest.TestCase):
         for turn in range(0, 5):
             game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
         self.assertEqual(29, game.players[0].hero.health)
 
         for turn in range(0, 5):
@@ -512,8 +512,8 @@ class TestRogue(unittest.TestCase):
 
         # Test Combo (1 + 2 = 3 damage)
         game.play_single_turn()
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
         self.assertEqual(24, game.players[0].hero.health)
 
     def test_AnubarAmbusher(self):
@@ -648,15 +648,15 @@ class TestRogue(unittest.TestCase):
         # Yeti
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, game.players[0].minions[0].calculate_attack())
-        self.assertIsNotNone(game.players[0].hero.weapon)
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertIsNotNone(game.players[0].weapon)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
 
         game.play_single_turn()
 
         # Hero ability, preparation and tinker's with combo
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(7, game.players[0].minions[0].calculate_attack())
-        self.assertEqual(4, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(4, game.players[0].weapon.base_attack)
 
     def test_Sabotage(self):
         game = generate_game_for([Preparation, Sabotage], [SI7Agent, Wisp], CardTestingAgent,
@@ -665,12 +665,12 @@ class TestRogue(unittest.TestCase):
         for turn in range(0, 10):
             game.play_single_turn()
         self.assertEqual(2, len(game.players[1].minions))
-        self.assertEqual(1, game.players[1].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[1].weapon.base_attack)
 
         # Sabotage, Preparation and Sabotage will be played, creating a combo.
         game.play_single_turn()
         self.assertEqual(0, len(game.players[1].minions))
-        self.assertEqual(None, game.players[1].hero.weapon)
+        self.assertEqual(None, game.players[1].weapon)
 
     def test_TradePrinceGallywix(self):
         game = generate_game_for([Wisp, Wisp, Wisp, TradePrinceGallywix, SinisterStrike], ArcaneExplosion,
@@ -711,11 +711,11 @@ class TestRogue(unittest.TestCase):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[0].minions))
-        self.assertIsNone(game.players[0].hero.weapon)
+        self.assertIsNone(game.players[0].weapon)
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
         self.assertEqual(2, len(game.players[0].minions))
 
     def test_CogmastersWrench(self):
@@ -724,7 +724,7 @@ class TestRogue(unittest.TestCase):
         for turn in range(0, 6):
             game.play_single_turn()
 
-        self.assertEqual(1, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.base_attack)
         self.assertEqual(29, game.players[1].hero.health)
         self.assertEqual(0, len(game.players[0].minions))
 

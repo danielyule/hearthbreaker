@@ -490,8 +490,8 @@ class TestShaman(unittest.TestCase):
         # Doomhammer should be played
         game.play_single_turn()
         self.assertTrue(game.players[0].hero.windfury())
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(6, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(6, game.players[0].weapon.durability)
         self.assertEqual(2, game.players[0].upcoming_overload)
         self.assertEqual(26, game.players[1].hero.health)
 
@@ -501,8 +501,8 @@ class TestShaman(unittest.TestCase):
         for turn in range(0, 3):
             game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(3, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(3, game.players[0].weapon.durability)
         self.assertEqual(1, game.players[0].upcoming_overload)
 
     def test_Crackle(self):
@@ -582,8 +582,8 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(0, len(game.players[0].minions))
         self.assertEqual(27, game.players[1].hero.health)
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(1, game.players[0].hero.weapon.durability)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.durability)
 
         game.play_single_turn()
 

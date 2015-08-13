@@ -463,7 +463,8 @@ class SpellCard(Card, metaclass=abc.ABCMeta):
         :param hearthbreaker.game_objects.Player player: The player who is using the card.
         :param hearthbreaker.game_objects.Game game: The game this card is being used in.
         """
-        pass
+        if self.target:
+            self.target.trigger("spell_targeted", self)
 
     @staticmethod
     def is_spell():

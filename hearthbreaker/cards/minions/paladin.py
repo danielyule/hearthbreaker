@@ -1,13 +1,13 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.game_objects import Weapon, Minion
-from hearthbreaker.tags.action import Equip, Give, Heal, Damage
-from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff, ActionTag
+from hearthbreaker.tags.action import Equip, Give, Heal, Damage, GiveAura
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff, ActionTag, AuraUntil
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector, \
-    BothPlayer
+    BothPlayer, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack
+from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack, ManaChange
 from hearthbreaker.tags.condition import IsType, HasCardName, MinionHasDeathrattle
-from hearthbreaker.tags.event import MinionSummoned, MinionDied
+from hearthbreaker.tags.event import MinionSummoned, MinionDied, CardPlayed
 
 
 class AldorPeacekeeper(MinionCard):
@@ -115,3 +115,16 @@ class BolvarFordragon(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 7)
+
+
+class DragonConsort(MinionCard):
+    def __init__(self):
+        super().__init__("Dragon Consort", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
+                         minion_type=MINION_TYPE.DRAGON,
+                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-3),
+                                                                 CardSelector(condition=IsType(MINION_TYPE.DRAGON)),
+                                                                 CardPlayed(IsType(MINION_TYPE.DRAGON)), False)]),
+                                             PlayerSelector()))
+
+    def create_minion(self, player):
+        return Minion(5, 5)

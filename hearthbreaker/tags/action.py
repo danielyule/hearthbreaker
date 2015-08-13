@@ -160,6 +160,37 @@ class Summon(Action):
         return self
 
 
+class ReplaceHeroWithMinion(Action):
+    # Used only for Jaraxxus currently
+    def __init__(self, card):
+        if isinstance(card, CardQuery):
+            self.card = card
+        else:
+            self.card = CardQuery(card.ref_name)
+
+    def act(self, actor, target, other=None):
+        card = self.card.get_card(target, target.player, actor)
+
+        hero = card.create_hero(target.player)
+        hero.card = card
+        target.player.trigger("minion_played", actor)
+        hero.buffs = copy.deepcopy(actor.buffs)
+        hero.health = actor.health
+        target.replace(hero)
+        if hero.health <= 0:
+            hero.die(None)
+
+    def __to_json__(self):
+        return {
+            'name': 'replace_hero_with_minion',
+            'card': self.card
+        }
+
+    def __from_json__(self, card):
+        self.card = CardQuery.from_json(**card)
+        return self
+
+
 class Transform(Action):
     def __init__(self, card):
         if isinstance(card, CardQuery):
@@ -177,13 +208,7 @@ class Transform(Action):
             target.replace(minion)
         elif target.is_hero():
             hero = card.create_hero(target.player)
-            hero.card = card
-            target.player.trigger("minion_played", actor)
-            hero.buffs = copy.deepcopy(actor.buffs)
-            hero.health = actor.health
             target.replace(hero)
-            if hero.health <= 0:
-                hero.die(None)
 
     def __to_json__(self):
         return {
@@ -224,7 +249,7 @@ class SetHealth(Action, metaclass=Amount):
         super().__init__()
 
     def act(self, actor, target, other=None):
-        target.health = self.get_amount(actor, target, other)
+        target.set_health_to(self.get_amount(actor, target, other))
 
     def __to_json__(self):
         return {
@@ -333,7 +358,8 @@ class AddCard(Action):
                 if len(target.hand) < 10:
                     card = self.card.get_card(target, target, actor)
                     if card:
-                        target.hand.append(card)
+                        target.hand.append(copy.copy(card))
+                        card.drawn = True
 
     def __to_json__(self):
         if self.add_to_deck:
@@ -370,18 +396,13 @@ class ResurrectFriendly(Action):
 
 
 class Bounce(Action):
-    def __init__(self, bounce_to_deck=False):
-        self.bounce_to_deck = bounce_to_deck
+    def __init__(self):
+        super().__init__()
 
     def act(self, actor, target, other=None):
-        target.bounce(self.bounce_to_deck)
+        target.bounce()
 
     def __to_json__(self):
-        if self.bounce_to_deck:
-            return {
-                'name': 'bounce',
-                'bounce_to_deck': True,
-            }
         return {
             'name': 'bounce'
         }
@@ -577,8 +598,7 @@ class GiveManaCrystal(Action):
 
 class IncreaseDurability(Action):
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.durability += 1
+        target.durability += 1
 
     def __to_json__(self):
         return {
@@ -588,10 +608,9 @@ class IncreaseDurability(Action):
 
 class DecreaseDurability(Action):
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.durability -= 1
-            if target.weapon.durability <= 0:
-                target.weapon.destroy()
+            target.durability -= 1
+            if target.durability <= 0:
+                target.destroy()
 
     def __to_json__(self):
         return {
@@ -604,8 +623,7 @@ class IncreaseWeaponAttack(Action, metaclass=Amount):
         pass
 
     def act(self, actor, target, other=None):
-        if target.weapon:
-            target.weapon.base_attack += self.get_amount(actor, target, other)
+        target.base_attack += self.get_amount(actor, target, other)
 
     def __to_json__(self):
         return {

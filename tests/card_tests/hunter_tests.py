@@ -132,7 +132,9 @@ class TestHunter(unittest.TestCase):
         old_play = game.other_player.agent.do_turn
 
         def _play_and_attack(player):
-            Flare().use(player, player.game)
+            flare = Flare()
+            flare.target = None
+            flare.use(player, player.game)
             old_play(player)
             player.minions[4].attack()
 
@@ -152,14 +154,14 @@ class TestHunter(unittest.TestCase):
         for turn in range(0, 9):
             game.play_single_turn()
 
-        self.assertEqual(1, game.players[0].hero.weapon.durability)
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(1, game.players[0].weapon.durability)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
 
         # Snipe should trigger, granting our weapon +1 durability
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
-        self.assertEqual(3, game.players[0].hero.weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
+        self.assertEqual(3, game.players[0].weapon.base_attack)
 
     def test_GladiatorsLongbow(self):
         game = generate_game_for(GladiatorsLongbow, WaterElemental, WeaponTestingAgent,
@@ -635,8 +637,8 @@ class TestHunter(unittest.TestCase):
 
         game.play_single_turn()
 
-        self.assertEqual(2, game.players[0].hero.weapon.base_attack)
-        self.assertEqual(2, game.players[0].hero.weapon.durability)
+        self.assertEqual(2, game.players[0].weapon.base_attack)
+        self.assertEqual(2, game.players[0].weapon.durability)
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(2, game.players[0].minions[0].calculate_attack())
 

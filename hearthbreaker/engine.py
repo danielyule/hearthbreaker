@@ -2,7 +2,7 @@ import copy
 import random
 from hearthbreaker.cards.heroes import hero_from_name
 import hearthbreaker.constants
-from hearthbreaker.game_objects import Bindable, GameException, Minion, Hero
+from hearthbreaker.game_objects import Bindable, GameException, Minion, Hero, Weapon
 import hearthbreaker.tags
 from hearthbreaker.tags.base import Effect, AuraUntil
 import hearthbreaker.targeting
@@ -193,7 +193,7 @@ class Game(Bindable):
             minion.attacks_performed = 0
 
         for aura in copy.copy(self.current_player.object_auras):
-            if isinstance(aura, AuraUntil):
+            if aura.expires:
                 self.current_player.object_auras.remove(aura)
                 aura.unapply()
 
@@ -221,8 +221,8 @@ class Game(Bindable):
 
         for player in copied_game.players:
             player.hero.attach(player.hero, player)
-            if player.hero.weapon:
-                player.hero.weapon.attach(player.hero, player)
+            if player.weapon:
+                player.weapon.attach(player.hero, player)
             for minion in player.minions:
                 minion.attach(minion, player)
 
@@ -311,8 +311,8 @@ class Game(Bindable):
             for aura_json in d['players'][index]['auras']:
                 player.add_aura(AuraUntil.from_json(**aura_json))
             player.hero.attach(player.hero, player)
-            if player.hero.weapon:
-                player.hero.weapon.attach(player.hero, player)
+            if player.weapon:
+                player.weapon.attach(player.weapon, player)
 
             for minion in player.minions:
                 minion.attach(minion, player)
@@ -342,6 +342,7 @@ class Player(Bindable):
         self.agent = agent
         self.effects = []
         self.secrets = []
+        self.weapon = None
         self.spell_multiplier = 1
         self.heal_multiplier = 1
         self.heal_does_damage = 0
@@ -372,6 +373,8 @@ class Player(Bindable):
         copied_player.upcoming_overload = self.upcoming_overload
         copied_player.current_overload = self.current_overload
         copied_player.dead_this_turn = copy.copy(self.dead_this_turn)
+        if self.weapon:
+            copied_player.weapon = self.weapon.copy(copied_player)
         for effect in self.effects:
             effect = copy.copy(effect)
             copied_player.add_effect(effect)
@@ -394,10 +397,10 @@ class Player(Bindable):
     def draw(self):
         if self.can_draw():
             card = self.deck.draw(self.game)
-            self.trigger("card_drawn", card)
             if len(self.hand) < 10:
                 self.hand.append(card)
                 card.attach(card, self)
+                self.trigger("card_drawn", card)
                 card.trigger("drawn")
             else:
                 self.trigger("card_destroyed", card)
@@ -429,6 +432,7 @@ class Player(Bindable):
             targets = self.hand
             target = self.game.random_choice(targets)
             self.hand.remove(target)
+            target.unattach()
             self.trigger("card_discarded", target)
 
     def add_effect(self, effect):
@@ -467,6 +471,9 @@ class Player(Bindable):
     def is_valid(self):
         return True
 
+    def is_player(self):
+        return True
+
     def __to_json__(self):
         auras = copy.copy(self.player_auras)
         auras.extend(self.object_auras)
@@ -476,6 +483,7 @@ class Player(Bindable):
             'graveyard': self.graveyard,
             'hand': self.hand,
             'secrets': [secret.name for secret in self.secrets],
+            'weapon': self.weapon,
             'effects': self.effects,
             'auras': [aura for aura in filter(lambda a: isinstance(a, AuraUntil), auras)],
             'minions': self.minions,
@@ -494,8 +502,9 @@ class Player(Bindable):
         hero = Hero.__from_json__(pd["hero"], player)
         player.hero = hero
         hero.player = player
-        if hero.weapon:
-            hero.weapon.player = player
+        if pd['weapon']:
+            player.weapon = Weapon.__from_json__(pd['weapon'], player)
+            player.weapon.player = player
         player.mana = pd["mana"]
         player.max_mana = pd["max_mana"]
         player.upcoming_overload = pd['upcoming_overload']
