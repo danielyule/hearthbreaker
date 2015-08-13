@@ -4664,3 +4664,16 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(1, game.players[1].minions[1].health)
         self.assertEqual(2, game.players[1].minions[2].calculate_attack())
         self.assertEqual(1, game.players[1].minions[2].health)
+
+    def test_BoomBug(self):
+        game = generate_game_for(DoctorBoom, FlameLeviathan, OneCardPlayingAgent, OneCardPlayingAgent)
+        game.players[0].max_mana = 7
+
+        for turn in range(0, 2):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(7, game.players[0].minions[0].calculate_attack())
+        self.assertEqual(5, game.players[0].minions[0].health)
+        self.assertEqual(28, game.players[0].hero.health)  # 2 damage from Flame Levi
+        self.assertEqual(24, game.players[1].hero.health)  # 2 damage from Flame Levi and 4 from Boom Bots
