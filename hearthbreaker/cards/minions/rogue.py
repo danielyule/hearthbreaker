@@ -1,4 +1,5 @@
 from hearthbreaker.cards.base import MinionCard
+from hearthbreaker.cards.minions.neutral import Nerubian
 from hearthbreaker.cards.spells.neutral import GallywixsCoin
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
@@ -148,3 +149,12 @@ class DarkIronSkulker(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 3)
+
+
+class Anubarak(MinionCard):
+    def __init__(self):
+        super().__init__("Anub'arak", 9, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY)
+
+    def create_minion(self, player):
+        return Minion(8, 4, deathrattle=[Deathrattle(Bounce(), SelfSelector()),
+                                         Deathrattle(Summon(Nerubian()), PlayerSelector())])

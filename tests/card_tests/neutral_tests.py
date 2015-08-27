@@ -6,7 +6,7 @@ from hearthbreaker.cards.minions.neutral import V07TR0N, Poultryizer, Nightmare
 from hearthbreaker.constants import CARD_RARITY, MINION_TYPE, CHARACTER_CLASS
 from hearthbreaker.engine import Player
 from tests.agents.testing_agents import OneCardPlayingAgent, CardTestingAgent, SelfSpellTestingAgent, \
-    PlayAndAttackAgent, EnemyMinionSpellTestingAgent, SelfMinionSpellTestingAgent
+    PlayAndAttackAgent, EnemyMinionSpellTestingAgent, SelfMinionSpellTestingAgent, InspireTestingAgent
 from tests.card_tests.card_tests import TestUtilities
 from tests.testing_utils import generate_game_for
 from hearthbreaker.cards import *
@@ -4822,3 +4822,15 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(5, game.players[0].minions[0].health)
         self.assertEqual(28, game.players[0].hero.health)  # 2 damage from Flame Levi
         self.assertEqual(24, game.players[1].hero.health)  # 2 damage from Flame Levi and 4 from Boom Bots
+
+    def test_TournamentMedic(self):
+        game = generate_game_for(TournamentMedic, MindBlast, InspireTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(8):
+            game.play_single_turn()
+
+        self.assertEqual(15, game.other_player.hero.health)
+        self.assertEqual(1, len(game.other_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(17, game.current_player.hero.health)

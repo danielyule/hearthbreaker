@@ -538,7 +538,7 @@ class ActionTag(Tag):
         found_target = False
         for t in targets:
             found_target = True
-            if t.is_valid():
+            if t is owner or t.is_valid():
                 for action in self.actions:
                     action.act(owner, t, other)
 

@@ -839,3 +839,25 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(2, len(game.players[0].minions))  # Core Rager activates battlecry
         self.assertEqual(7, game.players[0].minions[0].calculate_attack())
         self.assertEqual(7, game.players[0].minions[0].health)
+
+    def test_Acidmaw(self):
+        game = generate_game_for([Acidmaw, ArcaneExplosion, InjuredBlademaster], OasisSnapjaw,
+                                 CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(14):
+            game.play_single_turn()
+
+        # Three snapjaws
+        self.assertEqual(4, len(game.current_player.minions))
+
+        # One Acidmaw
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Acidmaw", game.other_player.minions[0].card.name)
+
+        game.play_single_turn()
+        # The snapjaws are dead from the arcane explosion
+        self.assertEqual(0, len(game.other_player.minions))
+
+        # The blademaster dies as well.
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual("Acidmaw", game.current_player.minions[0].card.name)

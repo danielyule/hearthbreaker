@@ -701,3 +701,22 @@ class TestWarrior(unittest.TestCase):
         self.assertEqual(1, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].health)  # 2nd Revenge cast at 12 hp, so 3 damage
         self.assertEqual(12, game.players[1].hero.health)
+
+    def test_AlextraszasChampion(self):
+        game = generate_game_for([AlexstraszasChampion, AlexstraszasChampion, AlexstraszasChampion,
+                                  AlexstraszasChampion, AlexstraszasChampion, Nefarian], StonetuskBoar,
+                                 CardTestingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, game.current_player.minions[0].calculate_attack())
+        self.assertFalse(game.current_player.minions[0].charge())
+
+        game.play_single_turn()
+        game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertEqual(3, game.current_player.minions[0].calculate_attack())
+        self.assertTrue(game.current_player.minions[0].charge())

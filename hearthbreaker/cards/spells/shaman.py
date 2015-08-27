@@ -244,3 +244,13 @@ class LavaShock(SpellCard):
         player.upcoming_overload = 0
         player.mana += player.current_overload
         player.current_overload = 0
+
+
+class AncestralKnowledge(SpellCard):
+    def __init__(self):
+        super().__init__("Ancestral Knowledge", 2, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=2)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for c in range(0, 2):
+            player.draw()

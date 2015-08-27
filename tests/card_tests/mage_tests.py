@@ -896,3 +896,17 @@ class TestMage(unittest.TestCase):
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(30, game.players[0].hero.health)
         self.assertEqual(28, game.players[1].hero.health)
+
+    def test_ArcaneBlast(self):
+        game = generate_game_for([KoboldGeomancer, DalaranMage, OgreMagi, ArcaneBlast], TournamentMedic,
+                                 OneCardPlayingAgent, OneCardPlayingAgent)
+
+        for turn in range(8):
+            game.play_single_turn()
+
+        self.assertEqual(3, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+        self.assertEqual(0, len(game.other_player.minions))
+        self.assertEqual(3, len(game.current_player.minions))

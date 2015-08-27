@@ -14,7 +14,7 @@ from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle,
     IsClass
 from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionSummoned, TurnStarted, DidDamage, AfterAdded, \
     SpellCast, CharacterHealed, CharacterDamaged, MinionDied, CardUsed, Damaged, Attack, CharacterAttack, MinionPlaced, \
-    CardDrawn, SpellTargeted
+    CardDrawn, SpellTargeted, UsedPower
 from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector, \
     PlayerSelector, TargetSelector, EnemyPlayer, CharacterSelector, WeaponSelector, \
     HeroSelector, OtherPlayer, UserPicker, RandomPicker, CurrentPlayer, Count, Attribute, CardSelector, \
@@ -2582,3 +2582,11 @@ class Nefarian(MinionCard):
 
     def create_minion(self, player):
         return Minion(8, 8)
+
+
+class TournamentMedic(MinionCard):
+    def __init__(self):
+        super().__init__("Tournament Medic", 4, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(1, 8, effects=[Effect(UsedPower(), ActionTag(Heal(2), HeroSelector()))])

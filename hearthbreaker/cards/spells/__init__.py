@@ -82,6 +82,7 @@ from hearthbreaker.cards.spells.mage import (
     EchoOfMedivh,
     UnstablePortal,
     DragonsBreath,
+    ArcaneBlast,
 )
 
 from hearthbreaker.cards.spells.paladin import (
@@ -177,6 +178,7 @@ from hearthbreaker.cards.spells.shaman import (
     Crackle,
     AncestorsCall,
     LavaShock,
+    AncestralKnowledge,
 )
 
 from hearthbreaker.cards.spells.warlock import (

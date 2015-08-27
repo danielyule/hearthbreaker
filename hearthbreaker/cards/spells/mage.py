@@ -355,4 +355,14 @@ class DragonsBreath(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.damage(4, self)
+        self.target.damage(player.effective_spell_damage(4), self)
+
+
+class ArcaneBlast(SpellCard):
+    def __init__(self):
+        super().__init__("Arcane Blast", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+        self.target.damage(player.effective_spell_damage(2 + player.spell_damage), self)

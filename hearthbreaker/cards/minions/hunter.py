@@ -1,12 +1,12 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Draw, Summon, AddCard, Give
+from hearthbreaker.tags.action import Draw, Summon, AddCard, Give, Kill
 from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff, ActionTag
-from hearthbreaker.tags.condition import IsType, Not, GreaterThan
-from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged
+from hearthbreaker.tags.condition import IsType, Not, GreaterThan, MinionIsNotTarget
+from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged, CharacterDamaged
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, \
-    HeroSelector, CardSelector
+    HeroSelector, CardSelector, BothPlayer, TargetSelector
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, DoubleAttack, PowerTargetsMinions
 
 
@@ -177,3 +177,12 @@ class CoreRager(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 4)
+
+
+class Acidmaw(MinionCard):
+    def __init__(self):
+        super().__init__("Acidmaw", 7, CHARACTER_CLASS.HUNTER, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.BEAST)
+
+    def create_minion(self, player):
+        return Minion(4, 2, effects=[Effect(CharacterDamaged(MinionIsNotTarget(), BothPlayer()),
+                                            [ActionTag(Kill(), TargetSelector())])])

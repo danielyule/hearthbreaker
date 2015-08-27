@@ -3,10 +3,10 @@ from hearthbreaker.cards.spells.warrior import BurrowingMine
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
 from hearthbreaker.tags.base import Effect, Battlecry, Buff, Aura, ActionTag
-from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType
+from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType, GreaterThan
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased, Damaged
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
-    PlayerSelector, EnemyPlayer, UserPicker
+    PlayerSelector, EnemyPlayer, UserPicker, Count, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, Charge, ChangeHealth
 
@@ -134,3 +134,14 @@ class AxeFlinger(MinionCard):
 
     def create_minion(self, player):
         return Minion(2, 5, effects=[Effect(Damaged(), ActionTag(Damage(2), HeroSelector(EnemyPlayer())))])
+
+
+class AlexstraszasChampion(MinionCard):
+    def __init__(self):
+        super().__init__("Alexstrasza's Champion", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
+                         battlecry=(Battlecry(Give([Buff(ChangeAttack(1)), Buff(Charge())]), SelfSelector(),
+                                              GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
+                                                          value=0))))
+
+    def create_minion(self, player):
+        return Minion(2, 3)

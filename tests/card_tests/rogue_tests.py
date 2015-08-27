@@ -772,3 +772,19 @@ class TestRogue(unittest.TestCase):
         self.assertEqual(3, game.players[0].minions[1].health)  # Does not damage friendly
         self.assertEqual(3, game.players[1].minions[0].health)
         self.assertEqual(3, game.players[1].minions[1].health)  # Does not damage already damaged Yeti
+
+    def test_Anubarak(self):
+        game = generate_game_for(Anubarak, Assassinate, CardTestingAgent, OneCardPlayingAgent)
+
+        for turn in range(17):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.other_player.minions))
+        self.assertEqual("Nerubian", game.other_player.minions[0].card.name)
+        self.assertEqual(4, game.other_player.minions[0].calculate_attack())
+        self.assertEqual(4, game.other_player.minions[0].calculate_max_health())
+        self.assertEqual(10, len(game.other_player.hand))

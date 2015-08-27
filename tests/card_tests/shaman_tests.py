@@ -686,3 +686,11 @@ class TestShaman(unittest.TestCase):
         self.assertEqual(7, len(game.players[0].minions))  # Well, I was trying to get a 7/6 but no luck
         self.assertEqual(5, game.players[0].minions[0].calculate_attack())
         self.assertEqual(6, game.players[0].minions[0].health)
+
+    def test_AncestralKnowledge(self):
+        game = generate_game_for(AncestralKnowledge, StonetuskBoar, CardTestingAgent, DoNothingAgent)
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(6, len(game.current_player.hand))
+        self.assertEqual(2, game.current_player.upcoming_overload)

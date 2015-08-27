@@ -58,6 +58,20 @@ class OneCardPlayingAgent(DoNothingAgent):
             player.game.play_card(player.hand[0])
 
 
+class InspireTestingAgent(DoNothingAgent):
+    def __init__(self):
+        super().__init__()
+
+    def do_turn(self, player):
+        if player.hero.power.can_use() and len(player.minions) > 0:
+            player.hero.power.use()
+
+        if len(player.hand) > 0 and player.hand[0].can_use(player, player.game):
+            if player.hand[0].name == "The Coin":
+                player.game.play_card(player.hand[0])
+            player.game.play_card(player.hand[0])
+
+
 class HeroPowerAndCardPlayingAgent(DoNothingAgent):
     def __init__(self):
         super().__init__()

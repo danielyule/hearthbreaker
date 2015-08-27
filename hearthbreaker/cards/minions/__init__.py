@@ -243,6 +243,7 @@ from hearthbreaker.cards.minions.neutral import (
     DragonkinSorcerer,
     RendBlackhand,
     Nefarian,
+    TournamentMedic,
 )
 
 from hearthbreaker.cards.minions.druid import (
@@ -280,6 +281,7 @@ from hearthbreaker.cards.minions.hunter import (
     Gahzrilla,
     SteamwheedleSniper,
     CoreRager,
+    Acidmaw,
 )
 
 from hearthbreaker.cards.minions.mage import (
@@ -342,6 +344,7 @@ from hearthbreaker.cards.minions.rogue import (
     TradePrinceGallywix,
     GoblinAutoBarber,
     DarkIronSkulker,
+    Anubarak,
 )
 
 from hearthbreaker.cards.minions.shaman import (
@@ -402,4 +405,5 @@ from hearthbreaker.cards.minions.warrior import (
     IronJuggernaut,
     ScrewjankClunker,
     AxeFlinger,
+    AlexstraszasChampion,
 )
