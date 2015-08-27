@@ -37,8 +37,8 @@ class CardTest(unittest.TestCase):
         card_dict = json.load(file)
         not_implemented = []
         total_cards = 0
-        for card_set in ['Classic', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Blackrock Mountain", "Reward",
-                         "Promotion"]:
+        for card_set in ['Classic', "Basic", "Curse of Naxxramas", "Goblins vs Gnomes", "Blackrock Mountain",
+                         "The Grand Tournament", "Reward", "Promotion"]:
             for card_info in card_dict[card_set]:
                 if card_info["type"] in ['Minion', 'Spell', 'Weapon', 'Secret']:
                     total_cards += 1

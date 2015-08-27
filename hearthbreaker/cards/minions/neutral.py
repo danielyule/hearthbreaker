@@ -1512,7 +1512,7 @@ class EliteTaurenChieftain(MinionCard):
 
 class Murloc(MinionCard):
     def __init__(self):
-        super().__init__("Murloc", 1, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.MURLOC)
+        super().__init__("Murloc", 0, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON, False, minion_type=MINION_TYPE.MURLOC)
 
     def create_minion(self, p):
         return Minion(1, 1)
