@@ -864,8 +864,9 @@ class TestHunter(unittest.TestCase):
 
 
     def test_BearTrap(self):
-        game = generate_game_for(BearTrap, BluegillWarrior, CardTestingAgent, PlayAndAttackAgent)
-        for turn in range(0, 5):
+        game = generate_game_for(BearTrap, StonetuskBoar, CardTestingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 3):
             game.play_single_turn()
 
         self.assertEqual(1, len(game.players[1].minions))
