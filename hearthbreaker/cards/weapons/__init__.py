@@ -9,6 +9,7 @@ from hearthbreaker.cards.weapons.paladin import (
     SwordOfJustice,
     TruesilverChampion,
     Coghammer,
+    ArgentLance,
 )
 
 from hearthbreaker.cards.weapons.rogue import (

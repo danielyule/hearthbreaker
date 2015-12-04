@@ -245,17 +245,31 @@ class MegaWindfury(Windfury):
         }
 
 
-class CantAttack(Status):
+class CanAttack(Status):
     def __init__(self):
         super().__init__()
-        self._old_attack = None
 
     def act(self, actor, target):
-        self._old_attack = target.can_attack
-        target.can_attack = lambda: False
+        pass
 
     def unact(self, actor, target):
-        target.can_attack = self._old_attack
+        pass
+
+    def update(self, owner, previous):
+        return True
+
+    def __to_json__(self):
+        return {
+            "name": "can_attack"
+        }
+
+
+class CantAttack(CanAttack):
+    def __init__(self):
+        super().__init__()
+
+    def update(self, owner, previous):
+        return False
 
     def __to_json__(self):
         return {

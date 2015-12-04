@@ -7,7 +7,7 @@ from hearthbreaker.tags.base import Aura, AuraUntil, Effect, Buff, BuffUntil, De
 from hearthbreaker.tags.event import TurnEnded
 from hearthbreaker.tags.selector import CurrentPlayer
 from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth, SetAttack, Charge, Taunt, DivineShield, \
-    Windfury, NoSpellTarget, SpellDamage, MinimumHealth
+    Windfury, NoSpellTarget, SpellDamage, MinimumHealth, CanAttack
 import hearthbreaker.targeting
 
 
@@ -714,7 +714,8 @@ class Character(Bindable, GameObject, metaclass=abc.ABCMeta):
 
         :rtype boolean:
         """
-        return self.calculate_attack() > 0 and self.attacks_performed < self.attacks_allowed() and \
+        can_attack = self.calculate_stat(CanAttack, True)
+        return can_attack and self.calculate_attack() > 0 and self.attacks_performed < self.attacks_allowed() and \
             not self.frozen and not (self.dead or self.removed)
 
     def spell_targetable(self):

@@ -244,6 +244,9 @@ from hearthbreaker.cards.minions.neutral import (
     RendBlackhand,
     Nefarian,
     TournamentMedic,
+    ArgentHorserider,
+    ArgentWatchman,
+    ArmoredWarhorse,
 )
 
 from hearthbreaker.cards.minions.druid import (

@@ -4,7 +4,8 @@ from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Summon, Draw, \
     Kill, Damage, ResurrectFriendly, Steal, Duplicate, Give, SwapWithHand, AddCard, Transform, ApplySecret, \
     Silence, Bounce, GiveManaCrystal, Equip, GiveAura, Replace, SetHealth, ChangeTarget, Discard, \
-    RemoveDivineShields, DecreaseDurability, IncreaseDurability, IncreaseWeaponAttack, Destroy, GiveEffect, SwapStats
+    RemoveDivineShields, DecreaseDurability, IncreaseDurability, IncreaseWeaponAttack, Destroy, GiveEffect, SwapStats, \
+    Joust
 from hearthbreaker.tags.base import Effect, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Aura, \
     BuffUntil, Buff, AuraUntil, ActionTag
 from hearthbreaker.tags.condition import Adjacent, IsType, MinionHasDeathrattle, IsMinion, IsSecret, \
@@ -21,7 +22,7 @@ from hearthbreaker.tags.selector import MinionSelector, BothPlayer, SelfSelector
     Difference, LastDrawnSelector, RandomAmount, DeadMinionSelector
 from hearthbreaker.constants import CARD_RARITY, CHARACTER_CLASS, MINION_TYPE
 from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Charge, Taunt, Windfury, CantAttack, \
-    SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury
+    SpellDamage, DoubleDeathrattle, Frozen, ManaChange, DivineShield, MegaWindfury, CanAttack
 import hearthbreaker.targeting
 import copy
 
@@ -2590,3 +2591,31 @@ class TournamentMedic(MinionCard):
 
     def create_minion(self, player):
         return Minion(1, 8, effects=[Effect(UsedPower(), ActionTag(Heal(2), HeroSelector()))])
+
+
+class ArgentHorserider(MinionCard):
+    def __init__(self):
+        super().__init__("Argent Horserider", 3, CHARACTER_CLASS.ALL, CARD_RARITY.COMMON)
+
+    def create_minion(self, player):
+        return Minion(2, 1, charge=True, divine_shield=True)
+
+
+class ArgentWatchman(MinionCard):
+    def __init__(self):
+        super().__init__("Argent Watchman", 2, CHARACTER_CLASS.ALL, CARD_RARITY.RARE)
+
+    def create_minion(self, player):
+        return Minion(2, 4, buffs=[Buff(CantAttack())], effects=[Effect(UsedPower(),
+                                                                        ActionTag(Give(BuffUntil(CanAttack(),
+                                                                                                 TurnEnded())),
+                                                                                  SelfSelector()))])
+
+
+class ArmoredWarhorse(MinionCard):
+    def __init__(self):
+        super().__init__("Armored Warhorse", 4, CHARACTER_CLASS.ALL, CARD_RARITY.RARE, minion_type=MINION_TYPE.BEAST,
+                         battlecry=Battlecry(Joust(Give(Buff(Charge()))), SelfSelector()))
+
+    def create_minion(self, player):
+        return Minion(5, 3)

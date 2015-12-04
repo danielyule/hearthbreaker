@@ -31,7 +31,7 @@ class CardTest(unittest.TestCase):
         spell_damage_re = re.compile("Spell Damage \\+(\\d)")
         battlecry_re = re.compile("Battlecry: .*")
         deathrattle_re = re.compile("Deathrattle: .*")
-        split_re = re.compile("\\s*\\.\\s*")
+        split_re = re.compile("\\s*\\.|\n\\s*")
         bold_tag_re = re.compile("</?b>")
         file = open("AllSets.enUS.json", "r", encoding="UTF-8")
         card_dict = json.load(file)
@@ -79,6 +79,8 @@ class CardTest(unittest.TestCase):
                         minion.card = card
                         minion.add_to_board(0)
                         if "text" in card_info:
+                            if card_info['name'] == "Argent Horserider":
+                                print(split_re.split(re.sub(bold_tag_re, "", card_info["text"])))
                             for effect in split_re.split(re.sub(bold_tag_re, "", card_info["text"])):
                                 if effect == "Taunt":
                                     self.assertTrue(minion.taunt,

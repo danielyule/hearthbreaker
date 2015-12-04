@@ -435,3 +435,17 @@ class TreeOfLife(SpellCard):
         targets.append(game.current_player.hero)
         for target in targets:
             target.heal(player.effective_heal_power(target.calculate_max_health()), self)
+
+
+class AstralCommunion(SpellCard):
+    def __init__(self):
+        super().__init__("Astral Communion", 4, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
+
+    def use(self, player, game):
+        super().use(player, game)
+        for card in player.hand:
+            card.unattach()
+            player.trigger("card_discarded", card)
+        player.hand = []
+        player.max_mana = 10
+        player.mana = 10

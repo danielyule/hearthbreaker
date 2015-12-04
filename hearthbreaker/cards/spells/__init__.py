@@ -32,6 +32,7 @@ from hearthbreaker.cards.spells.druid import (
     DarkWispers,
     Recycle,
     TreeOfLife,
+    AstralCommunion,
 )
 
 from hearthbreaker.cards.spells.hunter import (

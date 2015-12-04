@@ -1327,6 +1327,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         self.assertEqual(2, len(game.players[0].minions))
         self.assertEqual(30, game.players[1].hero.health)
+        self.assertFalse(game.players[0].minions[0].can_attack())
 
     def test_ColdlightOracle(self):
         game = generate_game_for(ColdlightOracle, StonetuskBoar, PlayAndAttackAgent, DoNothingAgent)
@@ -4834,3 +4835,42 @@ class TestCommon(unittest.TestCase, TestUtilities):
 
         game.play_single_turn()
         self.assertEqual(17, game.current_player.hero.health)
+
+    def test_ArgentWatchman(self):
+        game = generate_game_for(ArgentWatchman, StonetuskBoar, InspireTestingAgent, DoNothingAgent)
+
+        for turn in range(4):
+            game.play_single_turn()
+
+        game._start_turn()
+        game.current_player.agent.do_turn(game.current_player)
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].can_attack())
+
+    def test_ArgentWatchman_no_inspire(self):
+        game = generate_game_for(ArgentWatchman, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(5):
+            game.play_single_turn()
+
+        self.assertEqual(2, len(game.current_player.minions))
+        self.assertFalse(game.current_player.minions[1].can_attack())
+
+    def test_ArmoredWarhorse(self):
+        game = generate_game_for(ArmoredWarhorse, StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertTrue(game.current_player.minions[0].charge())
+
+    def test_ArmoredWarhorse_lose_joust(self):
+        game = generate_game_for(ArmoredWarhorse, Deathwing, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(7):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertFalse(game.current_player.minions[0].charge())

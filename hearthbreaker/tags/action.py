@@ -293,7 +293,7 @@ class Discard(Action, metaclass=Amount):
         for index in range(0, self.get_amount(actor, target, other)):
             card = self.query.get_card(target, actor.player, actor)
             if card:
-                actor.player.trigger("discard", card)
+                actor.player.trigger("card_discarded", card)
 
     def __to_json__(self):
         return {
@@ -726,3 +726,38 @@ class SwapStats(Action):
             'dest_stat': self.dest_stat,
             'swap_with_owner': self.swap_with_owner,
         }
+
+
+class Joust(Action):
+    def __init__(self, win_action, lose_action=None):
+        self.win_action = win_action
+        self.lose_action = lose_action
+
+    def act(self, actor, target, other=None):
+        my_card = actor.game.random_draw(actor.player.deck.cards, lambda c: not c.drawn)
+        their_card = actor.game.random_draw(actor.player.opponent.deck.cards, lambda c: not c.drawn and c.is_minion())
+
+        if my_card and (not their_card or my_card.mana > their_card.mana):
+            self.win_action.act(actor, target, other)
+        elif self.lose_action:
+            self.lose_action.act(actor, target, other)
+
+    def __to_json__(self):
+        if self.lose_action:
+            return {
+                'name': 'joust',
+                'win_action': self.win_action,
+                'lose_action': self.lose_action,
+            }
+        return {
+            'name': 'joust',
+            'win_action': self.win_action,
+        }
+
+    def __from_json__(self, win_action, lose_action=None):
+        self.win_action = Action.from_json(**win_action)
+        if lose_action:
+            self.lose_action = Action.from_json(**lose_action)
+        else:
+            self.lose_action = None
+        return self

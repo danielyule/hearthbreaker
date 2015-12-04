@@ -1,9 +1,10 @@
 from hearthbreaker.cards.base import WeaponCard
 from hearthbreaker.game_objects import Weapon
-from hearthbreaker.tags.action import Give, DecreaseDurability, Heal
+from hearthbreaker.tags.action import Give, DecreaseDurability, Heal, Joust, IncreaseDurability
 from hearthbreaker.tags.condition import IsHero
 from hearthbreaker.tags.event import MinionSummoned, CharacterAttack
-from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker, WeaponSelector
+from hearthbreaker.tags.selector import TargetSelector, HeroSelector, MinionSelector, RandomPicker, WeaponSelector, \
+    SelfSelector
 from hearthbreaker.tags.base import Buff, Effect, Battlecry, ActionTag
 from hearthbreaker.tags.status import DivineShield, Taunt, ChangeAttack, ChangeHealth
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
@@ -44,3 +45,12 @@ class Coghammer(WeaponCard):
 
     def create_weapon(self, player):
         return Weapon(2, 3)
+
+
+class ArgentLance(WeaponCard):
+    def __init__(self):
+        super().__init__("Argent Lance", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
+                         battlecry=Battlecry(Joust(IncreaseDurability()), SelfSelector()))
+
+    def create_weapon(self, player):
+        return Weapon(2, 2)

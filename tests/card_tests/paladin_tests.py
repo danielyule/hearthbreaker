@@ -800,3 +800,19 @@ class TestPaladin(unittest.TestCase):
 
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
+
+    def test_ArgentLance(self):
+        game = generate_game_for([ArgentLance, KoboldGeomancer], StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(3, game.current_player.weapon.durability)
+
+    def test_ArgentLance_lost_joust(self):
+        game = generate_game_for(ArgentLance, AldorPeacekeeper, OneCardPlayingAgent, DoNothingAgent)
+
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(2, game.current_player.weapon.durability)
