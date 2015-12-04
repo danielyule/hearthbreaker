@@ -861,3 +861,17 @@ class TestHunter(unittest.TestCase):
         # The blademaster dies as well.
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Acidmaw", game.current_player.minions[0].card.name)
+
+
+    def test_BearTrap(self):
+        game = generate_game_for(BearTrap, BluegillWarrior, CardTestingAgent, PlayAndAttackAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].secrets))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[0].secrets))

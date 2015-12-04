@@ -323,3 +323,20 @@ class QuickShot(SpellCard):
         self.target.damage(3, self)
         if len(player.hand) == 0:
             player.draw()
+
+class BearTrap(SecretCard):
+    def __init__(self):
+        super().__init__("Bear Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def activate(self, player):
+        player.game.current_player.bind("character_attack", self._reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("character_attack", self._reveal)
+
+    def _reveal(self, attacker, target):
+        if isinstance(target, Hero):
+            bear = hearthbreaker.cards.minions.neutral.IronfurGrizzly()
+            player = target.player.game.other_player
+            bear.summon(player, player.game, len(player.minions))
+            super().reveal()
