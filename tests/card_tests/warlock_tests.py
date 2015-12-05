@@ -833,3 +833,19 @@ class TestWarlock(unittest.TestCase):
         self.assertEqual(2, len(game.players[1].minions))
         self.assertEqual(1, game.players[1].minions[0].health)  # Beast damaged
         self.assertEqual(3, game.players[1].minions[1].health)  # Voidwalker undamaged
+
+    def test_FistOfJaraxxus(self):
+        game = generate_game_for([Succubus, FistOfJaraxxus, FistOfJaraxxus, FistOfJaraxxus, FistOfJaraxxus],
+                                 StonetuskBoar, OneCardPlayingAgent, DoNothingAgent)
+        for turn in range(3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(26, game.other_player.hero.health)
+
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()
+        game.play_single_turn()  # Fists of Jaraxxus will be played, targeting the enemy hero
+
+        self.assertEqual(22, game.other_player.hero.health)

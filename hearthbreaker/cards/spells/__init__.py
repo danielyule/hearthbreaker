@@ -202,6 +202,7 @@ from hearthbreaker.cards.spells.warlock import (
     Demonheart,
     Implosion,
     Demonwrath,
+    FistOfJaraxxus,
 )
 
 from hearthbreaker.cards.spells.warrior import (

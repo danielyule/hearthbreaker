@@ -1,12 +1,12 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import Kill
+from hearthbreaker.tags.action import Kill, Damage
 from hearthbreaker.tags.base import Effect, ActionTag
 from hearthbreaker.tags.card_source import CollectionSource
-from hearthbreaker.tags.condition import IsType
-from hearthbreaker.tags.event import TurnStarted, TurnEnded
-from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer
+from hearthbreaker.tags.condition import IsType, MinionIsTarget
+from hearthbreaker.tags.event import TurnStarted, TurnEnded, CardDiscarded
+from hearthbreaker.tags.selector import SelfSelector, EnemyPlayer, CharacterSelector, RandomPicker
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.cards.minions.warlock import Imp
@@ -261,3 +261,22 @@ class Demonwrath(SpellCard):
         for minion in targets:
             if minion.card.minion_type is not MINION_TYPE.DEMON:
                 minion.damage(player.effective_spell_damage(2), self)
+
+
+class FistOfJaraxxus(SpellCard):
+    def __init__(self):
+        super().__init__("Fist of Jaraxxus", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE,
+                         effects=[Effect(CardDiscarded(MinionIsTarget()), ActionTag(Damage(4),
+                                                                                    CharacterSelector(None,
+                                                                                                      EnemyPlayer(),
+                                                                                                      RandomPicker())))
+                                  ])
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        targets = copy.copy(game.other_player.minions)
+
+        targets.append(game.other_player.hero)
+        target = game.random_choice(targets)
+        target.damage(player.effective_spell_damage(4), self)
