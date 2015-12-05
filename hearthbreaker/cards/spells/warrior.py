@@ -1,7 +1,8 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
-from hearthbreaker.tags.action import Damage, Draw, Discard
-from hearthbreaker.tags.base import AuraUntil, Buff, Effect, CardQuery, CARD_SOURCE, ActionTag
+from hearthbreaker.tags.action import Damage, Draw, RemoveFromHand
+from hearthbreaker.tags.base import AuraUntil, Buff, Effect, ActionTag
+from hearthbreaker.tags.card_source import Same
 from hearthbreaker.tags.condition import GreaterThan, IsDamaged
 from hearthbreaker.tags.event import TurnEnded, Drawn
 from hearthbreaker.tags.selector import MinionSelector, HeroSelector, PlayerSelector, Count
@@ -249,7 +250,7 @@ class BurrowingMine(SpellCard):
     def __init__(self):
         super().__init__("Burrowing Mine", 0, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, False,
                          effects=[Effect(Drawn(), ActionTag(Damage(10), HeroSelector())),
-                                  Effect(Drawn(), ActionTag(Discard(query=CardQuery(source=CARD_SOURCE.LAST_DRAWN)),
+                                  Effect(Drawn(), ActionTag(RemoveFromHand(Same()),
                                          PlayerSelector())),
                                   Effect(Drawn(), ActionTag(Draw(), PlayerSelector()))])
 

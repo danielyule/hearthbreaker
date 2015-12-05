@@ -606,10 +606,8 @@ class TestShaman(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(4, len(game.players[0].hand))
-        self.assertEqual("Siltfin Spiritwalker", game.players[0].hand[0].name)
-        self.assertEqual("Murloc Tidecaller", game.players[0].hand[1].name)
-        self.assertEqual("Grimscale Oracle", game.players[0].hand[2].name)
-        self.assertEqual("Coldlight Seer", game.players[0].hand[3].name)
+        for card in game.players[0].hand:
+            self.assertEqual(MINION_TYPE.MURLOC, card.minion_type)
 
     def test_AncestorsCall(self):
         game = generate_game_for([AncestorsCall, StonetuskBoar], [Doomguard, Soulfire],

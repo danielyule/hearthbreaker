@@ -576,182 +576,40 @@ class Spell(ActionTag):
         super().__init__(actions, selector, condition)
 
 
-class CARD_SOURCE:
-    COLLECTION = 0
-    MY_HAND = 1
-    MY_DECK = 2
-    OPPONENT_HAND = 3
-    OPPONENT_DECK = 4
-    LIST = 5
-    LAST_CARD = 6
-    LAST_DRAWN = 7
-    MINION = 8
-    MY_SECRETS = 9,
-    ENEMY_SECRETS = 10,
-    __sources = {
-        "COLLECTION": COLLECTION,
-        "MY_HAND": MY_HAND,
-        "MY_DECK": MY_DECK,
-        "OPPONENT_HAND": OPPONENT_HAND,
-        "OPPONENT_DECK": OPPONENT_DECK,
-        "LIST": LIST,
-        "LAST_CARD": LAST_CARD,
-        "LAST_DRAWN": LAST_DRAWN,
-        "MINION": MINION,
-        "MY_SECRETS": MY_SECRETS,
-        "ENEMY_SECRETS": ENEMY_SECRETS,
-    }
+class CardQuery(JSONObject, metaclass=abc.ABCMeta):
+    def __init__(self):
+        pass
 
-    @staticmethod
-    def from_str(source_name):
-        return CARD_SOURCE.__sources[source_name.upper()]
-
-    @staticmethod
-    def to_str(source_number):
-        sources = dict(zip(CARD_SOURCE.__sources.values(), CARD_SOURCE.__sources.keys()))
-        return sources[source_number].lower()
-
-
-class CardQuery(JSONObject):
-    def __init__(self, name=None, conditions=[], source=CARD_SOURCE.COLLECTION, source_list=None, make_copy=False,
-                 minion=None):
-        self.name = name
-        self.conditions = conditions
-        self.source = source
-        self.source_list = source_list
-        self.make_copy = make_copy
-        self.minion = minion
-
+    @abc.abstractmethod
     def get_card(self, target, player, owner):
-        from hearthbreaker.engine import card_lookup, get_cards
-        if self.name:
-            chosen_card = card_lookup(self.name)
-            chosen_card.attach(chosen_card, player)
-            return chosen_card
+        pass
 
-        if self.source == CARD_SOURCE.COLLECTION:
-            card_list = get_cards()
-        elif self.source == CARD_SOURCE.MY_DECK:
-            card_list = filter(lambda c: not c.drawn, player.deck.cards)
-        elif self.source == CARD_SOURCE.MY_HAND:
-            card_list = player.hand
-        elif self.source == CARD_SOURCE.OPPONENT_DECK:
-            card_list = filter(lambda c: not c.drawn, player.opponent.deck.cards)
-        elif self.source == CARD_SOURCE.OPPONENT_HAND:
-            card_list = player.opponent.hand
-        elif self.source == CARD_SOURCE.LIST:
-            card_list = self.source_list
-        elif self.source == CARD_SOURCE.LAST_CARD:
-            chosen_card = type(player.game.last_card)()
-            chosen_card.attach(chosen_card, player)
-            return chosen_card
-        elif self.source == CARD_SOURCE.LAST_DRAWN:
-            chosen_card = player.hand[-1]
-            if not self.make_copy:
-                player.hand.remove(chosen_card)
-                chosen_card.unattach()
-            return chosen_card
-        elif self.source == CARD_SOURCE.MINION:
-            chosen_card = self.minion.get_targets(owner, owner)[0].card
-            chosen_card.attach(chosen_card, player)
-            return chosen_card
-        elif self.source == CARD_SOURCE.MY_SECRETS:
-            card_list = [secret.card for secret in player.secrets]
-        elif self.source == CARD_SOURCE.ENEMY_SECRETS:
-            card_list = [secret for secret in player.opponent.secrets]
-        else:
-            card_list = []
-        # TODO Throw an exception in any other case?
-
-        def check_condition(condition):
-            return lambda c: condition.evaluate(target, c)
-
-        for condition in self.conditions:
-            card_list = filter(check_condition(condition), card_list)
-
-        card_list = [card for card in card_list]
-        card_len = len(card_list)
-        if card_len == 1:
-            chosen_card = card_list[0]
-        elif card_len == 0:
-            return None
-        else:
-            chosen_card = player.game.random_choice(card_list)
-
-        chosen_card.attach(chosen_card, player)
-        if self.make_copy:
-            return copy.copy(chosen_card)
-        elif self.source == CARD_SOURCE.COLLECTION or self.source == CARD_SOURCE.LIST \
-                or self.source == CARD_SOURCE.MINION:
-            return chosen_card
-        elif self.source == CARD_SOURCE.MY_DECK:
-            chosen_card.drawn = True
-            player.deck.left -= 1
-            chosen_card.player = player
-            return chosen_card
-        elif self.source == CARD_SOURCE.OPPONENT_DECK:
-            chosen_card.drawn = True
-            player.opponent.deck.left -= 1
-            chosen_card.player = player.opponent
-            return chosen_card
-        elif self.source == CARD_SOURCE.MY_HAND:
-            player.hand.remove(chosen_card)
-            chosen_card.unattach()
-            return chosen_card
-        elif self.source == CARD_SOURCE.OPPONENT_HAND:
-            player.opponent.hand.remove(chosen_card)
-            chosen_card.unattach()
-            return chosen_card
-        elif self.source == CARD_SOURCE.MY_SECRETS:
-            if player is player.game.other_player:
-                chosen_card.deactivate(player)
-            player.secrets.remove(chosen_card)
-            return chosen_card
-        elif self.source == CARD_SOURCE.ENEMY_SECRETS:
-            if player.opponent is player.game.other_player:
-                chosen_card.deactivate(player.opponent)
-            player.opponent.secrets.remove(chosen_card)
-            return chosen_card
-
+    @abc.abstractmethod
     def __to_json__(self):
-        json_obj = {}
-        if self.name:
-            json_obj['name'] = self.name
-        else:
-            if self.conditions is not None:
-                json_obj['conditions'] = self.conditions
-            if self.source is not None:
-                json_obj['source'] = CARD_SOURCE.to_str(self.source)
-            if self.source_list:
-                json_obj['source_list'] = [card.name for card in self.source_list]
-            if self.make_copy:
-                json_obj['make_copy'] = self.make_copy
-            if self.minion:
-                json_obj['minion'] = self.minion
-
-        return json_obj
+        pass
 
     @staticmethod
-    def from_json(name=None, conditions=[], source="collection", source_list=None, make_copy=False, minion=None):
-        from hearthbreaker.engine import card_lookup
-        query = CardQuery.__new__(CardQuery)
-        query.name = name
-        query.conditions = []
-        for condition in conditions:
-            query.conditions.append(Condition.from_json(**condition))
+    def from_json(query):
+        from hearthbreaker.tags.card_source import SpecificCard, CardList, HandSource, \
+            DeckSource, CollectionSource, ObjectSource, LastCard, Same
+        if isinstance(query, str):
+            return SpecificCard.__from_json__(query)
+        elif isinstance(query, list):
+            return CardList.__from_json__(query)
+        elif query['name'] == 'object':
+            return ObjectSource.__from_json__(**query)
+        elif query['name'] == 'hand':
+            return HandSource.__from_json__(**query)
+        elif query['name'] == 'deck':
+            return DeckSource.__from_json__(**query)
+        elif query['name'] == 'collection':
+            return CollectionSource.__from_json__(**query)
+        elif query['name'] == 'last_card':
+            return LastCard()
+        elif query['name'] == 'same':
+            return Same()
         else:
-            query.condition = None
-        query.source = CARD_SOURCE.from_str(source)
-        if source_list:
-            query.source_list = [card_lookup(item) for item in source_list]
-        else:
-            query.source_list = None
-        query.make_copy = make_copy
-        if minion:
-            query.minion = Selector.from_json(**minion)
-        else:
-            query.minion = None
-        return query
+            raise Exception(query['name'])
 
 
 class Battlecry(ActionTag):

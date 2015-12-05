@@ -5,11 +5,13 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Equip, \
     Remove, Heal, ReplaceHeroWithMinion
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, CARD_SOURCE, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.card_source import HandSource
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent, IsMinion
 from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage, Damaged
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, \
-    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue, CardSelector
+    SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue, CardSelector, \
+    FriendlyPlayer
 from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
 
 
@@ -132,8 +134,8 @@ class Voidcaller(MinionCard):
         super().__init__("Voidcaller", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=Deathrattle(Summon(CardQuery(conditions=[IsType(MINION_TYPE.DEMON)],
-                                                                     source=CARD_SOURCE.MY_HAND)), PlayerSelector()))
+        return Minion(3, 4, deathrattle=Deathrattle(Summon(HandSource(FriendlyPlayer(), [IsType(MINION_TYPE.DEMON)])),
+                                                    PlayerSelector()))
 
 
 class AnimaGolem(MinionCard):

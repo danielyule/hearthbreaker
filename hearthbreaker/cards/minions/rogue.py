@@ -3,7 +3,8 @@ from hearthbreaker.cards.minions.neutral import Nerubian
 from hearthbreaker.cards.spells.neutral import GallywixsCoin
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
-from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, CardQuery, CARD_SOURCE, ActionTag
+from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.card_source import LastCard
 from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName, \
     OpponentMinionCountIsGreaterThan, And, IsDamaged
 from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attack, SpellCast
@@ -125,7 +126,7 @@ class TradePrinceGallywix(MinionCard):
 
     def create_minion(self, player):
         return Minion(5, 8, effects=[Effect(SpellCast(Not(HasCardName("Gallywix's Coin")), EnemyPlayer()),
-                                            ActionTag(AddCard(CardQuery(source=CARD_SOURCE.LAST_CARD)),
+                                            ActionTag(AddCard(LastCard()),
                                             PlayerSelector(FriendlyPlayer()))),
                                      Effect(SpellCast(Not(HasCardName("Gallywix's Coin")), EnemyPlayer()),
                                             ActionTag(AddCard(GallywixsCoin()),

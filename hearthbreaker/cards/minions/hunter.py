@@ -2,7 +2,8 @@ from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Summon, AddCard, Give, Kill
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, CardQuery, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.card_source import CollectionSource
 from hearthbreaker.tags.condition import IsType, Not, GreaterThan, MinionIsNotTarget
 from hearthbreaker.tags.event import MinionPlaced, MinionDied, Damaged, CharacterDamaged
 from hearthbreaker.tags.selector import MinionSelector, SelfSelector, PlayerSelector, UserPicker, Count, \
@@ -90,7 +91,7 @@ class Webspinner(MinionCard):
         super().__init__("Webspinner", 1, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CardQuery(conditions=[IsType(MINION_TYPE.BEAST)])),
+        return Minion(1, 1, deathrattle=Deathrattle(AddCard(CollectionSource([IsType(MINION_TYPE.BEAST)])),
                                                     PlayerSelector()))
 
 

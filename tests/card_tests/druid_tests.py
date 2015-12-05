@@ -4,7 +4,7 @@ import unittest
 from hearthbreaker.agents.basic_agents import DoNothingAgent
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.engine import Game
-from hearthbreaker.tags.base import CardQuery
+from hearthbreaker.tags.card_source import CollectionSource
 from hearthbreaker.tags.condition import HasCardName
 from tests.agents.testing_agents import SelfSpellTestingAgent, EnemySpellTestingAgent, OneCardPlayingAgent, \
     EnemyMinionSpellTestingAgent, CardTestingAgent, PlayAndAttackAgent
@@ -1073,9 +1073,10 @@ class TestDruid(unittest.TestCase):
 
             def use(self, player, game):
                 super().use(player, game)
-                query = CardQuery(conditions=[HasCardName("Malorne")])
+                query = CollectionSource([HasCardName("Malorne")])
                 new_minon = query.get_card(player, player, self)
                 player.hand.append(new_minon)
+                new_minon.attach(new_minon, player)
         game = generate_game_for(MalornePortal, Naturalize, OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(3):

@@ -68,6 +68,7 @@ class Game(Bindable):
         self._has_turn_ended = True
         self._all_cards_played = []
         self._turns_passed = 0
+        self.selected_card = None
 
     def random_draw(self, cards, requirement):
         filtered_cards = [card for card in filter(requirement, cards)]
@@ -397,6 +398,7 @@ class Player(Bindable):
     def draw(self):
         if self.can_draw():
             card = self.deck.draw(self.game)
+            self.game.selected_card = card
             if len(self.hand) < 10:
                 self.hand.append(card)
                 card.attach(card, self)
@@ -433,6 +435,7 @@ class Player(Bindable):
             target = self.game.random_choice(targets)
             self.hand.remove(target)
             target.unattach()
+            self.game.selected_card = target
             self.trigger("card_discarded", target)
 
     def add_effect(self, effect):

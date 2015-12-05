@@ -1,8 +1,9 @@
 import copy
-from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, \
-    CARD_SOURCE, Effect, Buff, BuffUntil, Amount, Picker, Selector
-from hearthbreaker.tags.condition import IsSecret
-from hearthbreaker.tags.selector import AllPicker, ConstantSelector
+
+from hearthbreaker.tags.base import Status, Action, Aura, Condition, AuraUntil, CardQuery, Effect, Buff, BuffUntil, \
+    Amount, Picker, Selector
+from hearthbreaker.tags.card_source import HandSource, SpecificCard
+from hearthbreaker.tags.selector import AllPicker, ConstantSelector, EnemyPlayer
 
 
 class Give(Action):
@@ -118,11 +119,12 @@ class Summon(Action):
         if isinstance(card, CardQuery):
             self.card = card
         else:
-            self.card = CardQuery(card.ref_name)
+            self.card = SpecificCard(card.ref_name)
         self.count = count
 
     def act(self, actor, target, other=None):
         card = self.card.get_card(target, target, actor)
+        target.game.selected_card = card
         if card is None:
             return
 
@@ -155,7 +157,7 @@ class Summon(Action):
         }
 
     def __from_json__(self, card, count=1):
-        self.card = CardQuery.from_json(**card)
+        self.card = CardQuery.from_json(card)
         self.count = count
         return self
 
@@ -166,11 +168,11 @@ class ReplaceHeroWithMinion(Action):
         if isinstance(card, CardQuery):
             self.card = card
         else:
-            self.card = CardQuery(card.ref_name)
+            self.card = SpecificCard(card.ref_name)
 
     def act(self, actor, target, other=None):
         card = self.card.get_card(target, target.player, actor)
-
+        target.player.game.selected_card = card
         hero = card.create_hero(target.player)
         hero.card = card
         target.player.trigger("minion_played", actor)
@@ -187,7 +189,7 @@ class ReplaceHeroWithMinion(Action):
         }
 
     def __from_json__(self, card):
-        self.card = CardQuery.from_json(**card)
+        self.card = CardQuery.from_json(card)
         return self
 
 
@@ -196,10 +198,11 @@ class Transform(Action):
         if isinstance(card, CardQuery):
             self.card = card
         else:
-            self.card = CardQuery(card.ref_name)
+            self.card = SpecificCard(card.ref_name)
 
     def act(self, actor, target, other=None):
         card = self.card.get_card(target, target.player, actor)
+        target.player.game.selected_card = card
         if target.is_card():
             target.replace(card)
         elif target.is_minion():
@@ -217,7 +220,7 @@ class Transform(Action):
         }
 
     def __from_json__(self, card):
-        self.card = CardQuery.from_json(**card)
+        self.card = CardQuery.from_json(card)
         return self
 
 
@@ -285,15 +288,23 @@ class Draw(Action, metaclass=Amount):
 
 
 class Discard(Action, metaclass=Amount):
-    def __init__(self, query=CardQuery(source=CARD_SOURCE.MY_HAND)):
+    def __init__(self, query=HandSource()):
         super().__init__()
         self.query = query
 
     def act(self, actor, target, other=None):
         for index in range(0, self.get_amount(actor, target, other)):
             card = self.query.get_card(target, actor.player, actor)
+            actor.player.game.selected_card = card
             if card:
-                actor.player.trigger("card_discarded", card)
+                if card.drawn:
+                    actor.player.hand.remove(card)
+                    actor.player.trigger("card_discarded", card)
+                    card.unattach()
+                else:
+                    card.drawn = True
+                    actor.player.deck.left -= 1
+                    actor.player.trigger("card_discarded", card)
 
     def __to_json__(self):
         return {
@@ -302,7 +313,7 @@ class Discard(Action, metaclass=Amount):
         }
 
     def __from_json__(self, query):
-        self.query = CardQuery.from_json(**query)
+        self.query = CardQuery.from_json(query)
         return self
 
 
@@ -345,21 +356,25 @@ class AddCard(Action):
         if isinstance(card, CardQuery):
             self.card = card
         else:
-            self.card = CardQuery(card.ref_name)
+            self.card = SpecificCard(card.ref_name)
         self.add_to_deck = add_to_deck
         self.count = count
 
     def act(self, actor, target, other=None):
         if self.add_to_deck:
             for i in range(self.count):
-                target.deck.put_back(self.card.get_card(target, target, actor))
+                card = self.card.get_card(target, target, actor)
+                target.deck.put_back(card)
+                target.game.selected_card = card
         else:
             for i in range(self.count):
                 if len(target.hand) < 10:
                     card = self.card.get_card(target, target, actor)
+                    target.game.selected_card = card
                     if card:
-                        target.hand.append(copy.copy(card))
-                        card.drawn = True
+                        card = copy.copy(card)
+                        target.hand.append(card)
+                        card.attach(card, target)
 
     def __to_json__(self):
         if self.add_to_deck:
@@ -376,9 +391,55 @@ class AddCard(Action):
         }
 
     def __from_json__(self, card, count=1, add_to_deck=False):
-        self.card = CardQuery.from_json(**card)
+        self.card = CardQuery.from_json(card)
         self.count = count
         self.add_to_deck = add_to_deck
+        return self
+
+
+class RemoveFromDeck(Action):
+    def __init__(self, card):
+        super().__init__()
+        self.card = card
+
+    def act(self, actor, target, other=None):
+        card = self.card.get_card(target, target, actor)
+        target.game.selected_card = card
+        if card:
+            card.drawn = True
+            target.deck.left -= 1
+
+    def __to_json__(self):
+        return {
+            'name': 'remove_from_deck',
+            'card': self.card
+        }
+
+    def __from_json__(self, card):
+        self.card = CardQuery.from_json(card)
+        return self
+
+
+class RemoveFromHand(Action):
+    def __init__(self, card):
+        super().__init__()
+        self.card = card
+
+    def act(self, actor, target, other=None):
+        card = self.card.get_card(target, target, actor)
+        target.game.selected_card = card
+        if card:
+            card.player.hand.remove(card)
+            card.unattach()
+
+    def __to_json__(self):
+        return {
+            'name': 'remove_from_hand',
+            'card': self.card
+        }
+
+    def __from_json__(self, card):
+        self.card = CardQuery.from_json(card)
         return self
 
 
@@ -445,14 +506,14 @@ class SwapWithHand(Action):
 
 class ApplySecret(Action):
 
-    def __init__(self, source):
-        self.source = source
-        self._query = CardQuery(conditions=[IsSecret()], source=source)
+    def __init__(self, secrets):
+        self.secrets = secrets
 
     def act(self, actor, target, other=None):
-        secret = self._query.get_card(target, target, actor)
+        secret = self.secrets.get_card(target, target, actor)
         if secret:
             target.secrets.append(secret)
+            target.game.selected_card = secret
             secret.player = target
             if target is target.game.other_player:
                 secret.player = target
@@ -467,12 +528,42 @@ class ApplySecret(Action):
     def __to_json__(self):
         return {
             'name': 'apply_secret',
-            'source': CARD_SOURCE.to_str(self.source)
+            'secrets': self.secrets
         }
 
-    def __from_json__(self, source):
-        self.source = CARD_SOURCE.from_str(source)
-        self._query = CardQuery(conditions=[IsSecret()], source=self.source)
+    def __from_json__(self, secrets):
+        self.secrets = CardQuery.from_json(secrets)
+        return self
+
+
+class RemoveSecret(Action):
+    def __init__(self, player=EnemyPlayer()):
+        self.player = player
+
+    def act(self, actor, target, other=None):
+        players = self.player.get_players(target)
+        for player in players:
+            if len(player.secrets) == 1:
+                secret = player.secrets[0]
+            elif len(player.secrets) == 0:
+                player.game.selected_card = None
+                break
+            else:
+                secret = player.game.random_choice(player.secrets)
+            secret.deactivate(player)
+            player.secrets.remove(secret)
+            player.game.selected_card = secret
+
+    def __to_json__(self):
+        return {
+            'name': 'remove_secret',
+            'player': self.player
+        }
+
+    def __from_json__(self, player):
+        from hearthbreaker.tags.selector import Player
+        self.player = Player.from_json(player)
+
         return self
 
 
@@ -481,10 +572,11 @@ class Equip(Action):
         if isinstance(weapon, CardQuery):
             self.weapon = weapon
         else:
-            self.weapon = CardQuery(weapon.ref_name)
+            self.weapon = SpecificCard(weapon.ref_name)
 
     def act(self, actor, target, other=None):
         card = self.weapon.get_card(target, target, actor)
+        target.game.selected_card = card
         weapon = card.create_weapon(target)
         weapon.card = card
         weapon.equip(target)
@@ -496,7 +588,7 @@ class Equip(Action):
         }
 
     def __from_json__(self, weapon):
-        self.weapon = CardQuery.from_json(**weapon)
+        self.weapon = CardQuery.from_json(weapon)
         return self
 
 

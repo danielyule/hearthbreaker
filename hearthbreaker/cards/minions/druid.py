@@ -2,7 +2,8 @@ from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon, AddCard, GiveManaCrystal, Remove, Kill
-from hearthbreaker.tags.base import Choice, Buff, Effect, CardQuery, CARD_SOURCE, Battlecry, Deathrattle, ActionTag
+from hearthbreaker.tags.base import Choice, Buff, Effect, Battlecry, Deathrattle, ActionTag
+from hearthbreaker.tags.card_source import CardList, ObjectSource
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged, TurnEnded
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
@@ -218,8 +219,7 @@ class MechBearCat(MinionCard):
 
     def create_minion(self, player):
         return Minion(7, 6, effects=[Effect(Damaged(),
-                                     ActionTag(AddCard(CardQuery(source=CARD_SOURCE.LIST, source_list=spare_part_list)),
-                                     PlayerSelector()))])
+                                            ActionTag(AddCard(CardList(spare_part_list)), PlayerSelector()))])
 
 
 class CobraForm(MinionCard):
@@ -246,8 +246,7 @@ class Malorne(MinionCard):
         super().__init__("Malorne", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.BEAST)
 
     def create_minion(self, player):
-        return Minion(9, 7, deathrattle=[Deathrattle(AddCard(CardQuery(source=CARD_SOURCE.MINION,
-                                                                       minion=SelfSelector()),
+        return Minion(9, 7, deathrattle=[Deathrattle(AddCard(ObjectSource(SelfSelector()),
                                                              add_to_deck=True), PlayerSelector()),
                                          Deathrattle(Remove(), SelfSelector())])
 

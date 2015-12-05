@@ -4376,7 +4376,7 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(30, game.other_player.hero.health)
 
     def test_KezanMystic(self):
-        game = generate_game_for(KezanMystic, MirrorEntity, OneCardPlayingAgent, OneCardPlayingAgent)
+        game = generate_game_for(KezanMystic, [MirrorEntity, OasisSnapjaw], OneCardPlayingAgent, OneCardPlayingAgent)
 
         for turn in range(7):
             game.play_single_turn()
@@ -4385,6 +4385,12 @@ class TestCommon(unittest.TestCase, TestUtilities):
         self.assertEqual(0, len(game.other_player.secrets))
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()  # The opponent will now play a snapjaw, which should be mirrored
+
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(2, len(game.other_player.minions))
+        self.assertEqual(0, len(game.other_player.secrets))
 
     def test_MimironsHead(self):
         game = generate_game_for([Mechwarper, SpiderTank, ChillwindYeti, MimironsHead, Deathwing], StonetuskBoar,

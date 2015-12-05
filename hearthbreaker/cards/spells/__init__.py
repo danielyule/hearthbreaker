@@ -6,6 +6,7 @@ from hearthbreaker.cards.spells.neutral import (
     RustyHorn,
     TimeRewinder,
     WhirlingBlades,
+    TheCoin
 )
 
 from hearthbreaker.cards.spells.druid import (
