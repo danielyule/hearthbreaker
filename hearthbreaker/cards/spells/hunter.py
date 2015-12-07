@@ -340,3 +340,22 @@ class BearTrap(SecretCard):
             player = target.player.game.other_player
             bear.summon(player, player.game, len(player.minions))
             super().reveal()
+
+class Powershot(SpellCard):
+    def __init__(self):
+        super().__init__("Powershot", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        index = self.target.index
+        if self.target.index < len(self.target.player.minions) - 1:
+            minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+        self.target.damage(player.effective_spell_damage(2), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
+            minion.damage(player.effective_spell_damage(2), self)

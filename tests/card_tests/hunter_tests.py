@@ -876,3 +876,19 @@ class TestHunter(unittest.TestCase):
 
         self.assertEqual(1, len(game.players[0].minions))
         self.assertEqual(0, len(game.players[0].secrets))
+
+    def test_Powershot(self):
+        game = generate_game_for(ManaWyrm, Powershot, OneCardPlayingAgent, CardTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        game.players[1].agent.choose_target = lambda targets: targets[len(targets) - 2]
+        self.assertEqual(3, len(game.players[0].minions))
+
+        game.play_single_turn()
+
+        # Powershot the middle Wyrm
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[2].health)
