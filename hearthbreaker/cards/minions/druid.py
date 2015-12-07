@@ -2,15 +2,15 @@ from hearthbreaker.cards.base import MinionCard, ChoiceCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Give, Damage, Silence, Transform, Draw, Heal, \
     Summon, AddCard, GiveManaCrystal, Remove, Kill
-from hearthbreaker.tags.base import Choice, Buff, Effect, Battlecry, Deathrattle, ActionTag
+from hearthbreaker.tags.base import Choice, Effect, Battlecry, Deathrattle, ActionTag
 from hearthbreaker.tags.card_source import CardList, ObjectSource
 from hearthbreaker.tags.condition import IsType, GreaterThan
 from hearthbreaker.tags.event import Damaged, TurnEnded
 from hearthbreaker.tags.selector import CharacterSelector, MinionSelector, SelfSelector, UserPicker, BothPlayer, \
     PlayerSelector, HeroSelector, Count, DeadMinionSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Taunt, ManaChange
 from hearthbreaker.cards.spells.neutral import spare_part_list
+from hearthbreaker.tags.status import Add, CHARACTER_STATUS, SetTrue, SetTo, CARD_STATUS
 
 
 class Moonfire(ChoiceCard):
@@ -109,8 +109,8 @@ class AncientOfWar(MinionCard):
     def __init__(self):
 
         super().__init__("Ancient of War", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC, choices=[
-            Choice(Health(), Give([Buff(ChangeHealth(5)), Buff(Taunt())]), SelfSelector()),
-            Choice(Attack(), Give([Buff(ChangeAttack(5))]), SelfSelector()),
+            Choice(Health(), Give([Add(CHARACTER_STATUS.HEALTH, 5), SetTrue(CHARACTER_STATUS.TAUNT)]), SelfSelector()),
+            Choice(Attack(), Give([Add(CHARACTER_STATUS.ATTACK, 5)]), SelfSelector()),
         ])
 
     def create_minion(self, player):
@@ -182,9 +182,9 @@ class SummonTreants(ChoiceCard):
 class Cenarius(MinionCard):
     def __init__(self):
         super().__init__("Cenarius", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.LEGENDARY, choices=[
-            Choice(IncreaseStats(), Give([Buff(ChangeAttack(2)),
-                                          Buff(ChangeHealth(2)),
-                                          Buff(Taunt())]), MinionSelector()),
+            Choice(IncreaseStats(), Give([Add(CHARACTER_STATUS.ATTACK, 2),
+                                          Add(CHARACTER_STATUS.HEALTH, 2),
+                                          SetTrue(CHARACTER_STATUS.TAUNT)]), MinionSelector()),
             Choice(SummonTreants(), Summon(TauntTreant(), 2), PlayerSelector())
         ])
 
@@ -206,8 +206,8 @@ class AnodizedRoboCub(MinionCard):
     def __init__(self):
         super().__init__("Anodized Robo Cub", 2, CHARACTER_CLASS.DRUID, CARD_RARITY.COMMON,
                          minion_type=MINION_TYPE.MECH,
-                         choices=[Choice(AttackMode(), Give([Buff(ChangeAttack(1))]), SelfSelector()),
-                                  Choice(TankMode(), Give([Buff(ChangeHealth(1))]), SelfSelector())])
+                         choices=[Choice(AttackMode(), Give([Add(CHARACTER_STATUS.ATTACK, 1)]), SelfSelector()),
+                                  Choice(TankMode(), Give([Add(CHARACTER_STATUS.HEALTH, 1)]), SelfSelector())])
 
     def create_minion(self, player):
         return Minion(2, 2, taunt=True)
@@ -314,7 +314,7 @@ class DruidOfTheFlame(MinionCard):
 class VolcanicLumberer(MinionCard):
     def __init__(self):
         super().__init__("Volcanic Lumberer", 9, CHARACTER_CLASS.DRUID, CARD_RARITY.RARE,
-                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+                         buffs=[SetTo(CARD_STATUS.MANA, Count(DeadMinionSelector(players=BothPlayer())), -1)])
 
     def create_minion(self, player):
         return Minion(7, 8, taunt=True)

@@ -2,13 +2,12 @@ import copy
 from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.cards.minions.mage import SpellbenderMinion, MirrorImageMinion
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.card_source import CollectionSource
 from hearthbreaker.tags.condition import IsMinion
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.selector import CurrentPlayer, Count, DeadMinionSelector, BothPlayer
-from hearthbreaker.tags.status import Immune, Frozen, ManaChange
+from hearthbreaker.tags.selector import Count, DeadMinionSelector, BothPlayer
 import hearthbreaker.targeting
+from hearthbreaker.tags.status import SetTrue, CHARACTER_STATUS, Subtract, CARD_STATUS
 
 
 class ArcaneMissiles(SpellCard):
@@ -34,7 +33,7 @@ class IceLance(SpellCard):
         if self.target.frozen:
             self.target.damage(4, self)
         else:
-            self.target.add_buff(Buff(Frozen()))
+            self.target.freeze()
 
 
 class MirrorImage(SpellCard):
@@ -68,7 +67,7 @@ class Frostbolt(SpellCard):
     def use(self, player, game):
         super().use(player, game)
         self.target.damage(player.effective_spell_damage(3), self)
-        self.target.add_buff(Buff(Frozen()))
+        self.target.freeze()
 
 
 class ArcaneIntellect(SpellCard):
@@ -89,7 +88,7 @@ class FrostNova(SpellCard):
     def use(self, player, game):
         super().use(player, game)
         for minion in game.other_player.minions:
-            minion.add_buff(Buff(Frozen()))
+            minion.freeze()
 
 
 class Counterspell(SecretCard):
@@ -197,7 +196,7 @@ class IceBlock(SecretCard):
     def _reveal(self, character, attacker, amount):
         if character.is_hero():
             if character.health - amount <= 0:
-                character.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
+                character.add_buff(SetTrue(CHARACTER_STATUS.IMMUNE, until=TurnEnded()))
                 # TODO Check if this spell will also prevent damage to armor.
                 super().reveal()
 
@@ -216,20 +215,20 @@ class ConeOfCold(SpellCard):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_buff(Buff(Frozen()))
+        self.target.freeze()
         index = self.target.index
 
         if self.target.index < len(self.target.player.minions) - 1:
             minion = self.target.player.minions[index + 1]
             minion.damage(player.effective_spell_damage(1), self)
-            minion.add_buff(Buff(Frozen()))
+            minion.freeze()
 
         self.target.damage(player.effective_spell_damage(1), self)
 
         if self.target.index > 0:
             minion = self.target.player.minions[index - 1]
             minion.damage(player.effective_spell_damage(1), self)
-            minion.add_buff(Buff(Frozen()))
+            minion.freeze()
 
 
 class Fireball(SpellCard):
@@ -265,7 +264,7 @@ class Blizzard(SpellCard):
         for minion in copy.copy(game.other_player.minions):
             minion.damage(player.effective_spell_damage(2), self)
         for minion in game.other_player.minions:
-            minion.add_buff(Buff(Frozen()))
+            minion.freeze()
 
 
 class Flamestrike(SpellCard):
@@ -344,7 +343,7 @@ class UnstablePortal(SpellCard):
         super().use(player, game)
         query = CollectionSource([IsMinion()])
         new_minon = query.get_card(player, player, self)
-        new_minon.add_buff(Buff(ManaChange(-3)))
+        new_minon.add_buff(Subtract(CARD_STATUS.MANA, 3))
         player.hand.append(new_minon)
         new_minon.attach(new_minon, player)
 
@@ -353,7 +352,7 @@ class DragonsBreath(SpellCard):
     def __init__(self):
         super().__init__("Dragon's Breath", 5, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON,
                          target_func=hearthbreaker.targeting.find_spell_target,
-                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+                         buffs=[Subtract(CARD_STATUS.MANA, Count(DeadMinionSelector(players=BothPlayer())))])
 
     def use(self, player, game):
         super().use(player, game)

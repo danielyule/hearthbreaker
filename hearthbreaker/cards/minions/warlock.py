@@ -5,14 +5,14 @@ from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Summon, Kill, Damage, Discard, DestroyManaCrystal, Give, Equip, \
     Remove, Heal, ReplaceHeroWithMinion
-from hearthbreaker.tags.base import Effect, Aura, Deathrattle, Battlecry, Buff, ActionTag
+from hearthbreaker.tags.base import Effect, Aura, Deathrattle, Battlecry, ActionTag
 from hearthbreaker.tags.card_source import HandSource
 from hearthbreaker.tags.condition import IsType, MinionCountIs, Not, OwnersTurn, IsHero, And, Adjacent, IsMinion
 from hearthbreaker.tags.event import TurnEnded, CharacterDamaged, DidDamage, Damaged
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, \
     SelfSelector, BothPlayer, HeroSelector, CharacterSelector, RandomPicker, Attribute, EventValue, CardSelector, \
     FriendlyPlayer
-from hearthbreaker.tags.status import ChangeHealth, ManaChange, ChangeAttack, Immune
+from hearthbreaker.tags.status import Subtract, CARD_STATUS, Add, CHARACTER_STATUS, SetTrue
 
 
 class FlameImp(MinionCard):
@@ -83,7 +83,7 @@ class SummoningPortal(MinionCard):
         super().__init__("Summoning Portal", 4, CHARACTER_CLASS.WARLOCK, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(0, 4, auras=[Aura(ManaChange(-2, 1, minimum=1), CardSelector(condition=IsMinion()))])
+        return Minion(0, 4, auras=[Aura(Subtract(CARD_STATUS.MANA, 2, minimum=1), CardSelector(condition=IsMinion()))])
 
 
 class BloodImp(MinionCard):
@@ -92,7 +92,7 @@ class BloodImp(MinionCard):
 
     def create_minion(self, player):
         return Minion(0, 1, stealth=True,
-                      effects=[Effect(TurnEnded(), ActionTag(Give(ChangeHealth(1)),
+                      effects=[Effect(TurnEnded(), ActionTag(Give(Add(CHARACTER_STATUS.HEALTH, 1)),
                                                              MinionSelector(picker=RandomPicker())))])
 
 
@@ -121,8 +121,8 @@ class VoidTerror(MinionCard):
     def __init__(self):
         super().__init__("Void Terror", 3, CHARACTER_CLASS.WARLOCK, CARD_RARITY.RARE, minion_type=MINION_TYPE.DEMON,
                          battlecry=(Battlecry(
-                             Give([Buff(ChangeHealth(Attribute("health", MinionSelector(Adjacent())))),
-                                   Buff(ChangeAttack(Attribute("attack", MinionSelector(Adjacent()))))]),
+                             Give([Add(CHARACTER_STATUS.ATTACK(Attribute("attack", MinionSelector(Adjacent())))),
+                                   Add(CHARACTER_STATUS.HEALTH(Attribute("health", MinionSelector(Adjacent()))))]),
                              SelfSelector()), Battlecry(Kill(), MinionSelector(Adjacent()))))
 
     def create_minion(self, player):
@@ -179,9 +179,9 @@ class MalGanis(MinionCard):
         super().__init__("Mal'Ganis", 9, CHARACTER_CLASS.WARLOCK, CARD_RARITY.LEGENDARY, minion_type=MINION_TYPE.DEMON)
 
     def create_minion(self, player):
-        return Minion(9, 7, auras=[Aura(ChangeHealth(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
-                                   Aura(ChangeAttack(2), MinionSelector(IsType(MINION_TYPE.DEMON))),
-                                   Aura(Immune(), HeroSelector())])
+        return Minion(9, 7, auras=[Aura(Add(CHARACTER_STATUS.ATTACK, 2), MinionSelector(IsType(MINION_TYPE.DEMON))),
+                                   Aura(Add(CHARACTER_STATUS.HEALTH, 2), MinionSelector(IsType(MINION_TYPE.DEMON))),
+                                   Aura(SetTrue(CHARACTER_STATUS.IMMUNE), HeroSelector())])
 
 
 class FloatingWatcher(MinionCard):
@@ -191,7 +191,8 @@ class FloatingWatcher(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 4, effects=[Effect(CharacterDamaged(And(IsHero(), OwnersTurn())),
-                                            ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
+                                            ActionTag(Give([Add(CHARACTER_STATUS.ATTACK, 2),
+                                                            Add(CHARACTER_STATUS.HEALTH, 2)]),
                                             SelfSelector()))])
 
 

@@ -1,15 +1,15 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import Damage, Draw, RemoveFromHand
-from hearthbreaker.tags.base import AuraUntil, Buff, Effect, ActionTag
+from hearthbreaker.tags.base import AuraUntil, Effect, ActionTag
 from hearthbreaker.tags.card_source import Same
 from hearthbreaker.tags.condition import GreaterThan, IsDamaged
 from hearthbreaker.tags.event import TurnEnded, Drawn
 from hearthbreaker.tags.selector import MinionSelector, HeroSelector, PlayerSelector, Count
-from hearthbreaker.tags.status import Charge as _Charge, MinimumHealth, ManaChange
 import hearthbreaker.targeting
 import hearthbreaker.tags.action
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.status import SetTrue, CHARACTER_STATUS, SetTo, Subtract, CARD_STATUS
 
 
 class BattleRage(SpellCard):
@@ -60,7 +60,7 @@ class Charge(SpellCard):
         super().use(player, game)
 
         self.target.change_attack(2)
-        self.target.add_buff(Buff(_Charge()))
+        self.target.add_buff(SetTrue(CHARACTER_STATUS.WINDFURY))
 
 
 class Cleave(SpellCard):
@@ -87,7 +87,7 @@ class CommandingShout(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_aura(AuraUntil(MinimumHealth(1), MinionSelector(), TurnEnded()))
+        player.add_aura(AuraUntil(SetTo(CHARACTER_STATUS.MINIMUM_HEALTH, 1), MinionSelector(), TurnEnded()))
 
         player.draw()
 
@@ -238,7 +238,8 @@ class Crush(SpellCard):
     def __init__(self):
         super().__init__("Crush", 7, CHARACTER_CLASS.WARRIOR, CARD_RARITY.EPIC,
                          target_func=hearthbreaker.targeting.find_minion_spell_target,
-                         buffs=[Buff(ManaChange(-4), GreaterThan(Count(MinionSelector(IsDamaged())), value=0))])
+                         buffs=[Subtract(CARD_STATUS.MANA, 4,
+                                         GreaterThan(Count(MinionSelector(IsDamaged())), value=0))])
 
     def use(self, player, game):
         super().use(player, game)

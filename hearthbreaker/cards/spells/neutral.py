@@ -1,9 +1,8 @@
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.base import BuffUntil, Buff
 from hearthbreaker.tags.event import TurnStarted
-from hearthbreaker.tags.status import Stealth, Taunt, Frozen
 import hearthbreaker.targeting
+from hearthbreaker.tags.status import SetTrue, CHARACTER_STATUS
 
 
 class TheCoin(SpellCard):
@@ -33,7 +32,7 @@ class EmergencyCoolant(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_buff(Buff(Frozen()))
+        self.target.freeze()
 
 
 class FinickyCloakfield(SpellCard):
@@ -43,7 +42,7 @@ class FinickyCloakfield(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_buff(BuffUntil(Stealth(), TurnStarted()))
+        self.target.add_buff(SetTrue(CHARACTER_STATUS.STEALTH, until=TurnStarted()))
 
 
 class ReversingSwitch(SpellCard):
@@ -69,7 +68,7 @@ class RustyHorn(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_buff(Buff(Taunt()))
+        self.target.add_buff(SetTrue(CHARACTER_STATUS.TAUNT))
 
 
 class TimeRewinder(SpellCard):

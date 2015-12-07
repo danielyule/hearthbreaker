@@ -2,13 +2,13 @@ from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.cards.spells.warrior import BurrowingMine
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import IncreaseArmor, Damage, Give, Equip, AddCard
-from hearthbreaker.tags.base import Effect, Battlecry, Buff, Aura, ActionTag
+from hearthbreaker.tags.base import Effect, Battlecry, Aura, ActionTag
 from hearthbreaker.tags.condition import AttackLessThanOrEqualTo, IsMinion, IsType, GreaterThan
 from hearthbreaker.tags.event import MinionPlaced, CharacterDamaged, ArmorIncreased, Damaged
 from hearthbreaker.tags.selector import BothPlayer, SelfSelector, TargetSelector, HeroSelector, MinionSelector, \
     PlayerSelector, EnemyPlayer, UserPicker, Count, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import ChangeAttack, Charge, ChangeHealth
+from hearthbreaker.tags.status import Add, CHARACTER_STATUS, SetTrue
 
 
 class BattleAxe(WeaponCard):
@@ -40,8 +40,8 @@ class Armorsmith(MinionCard):
 class CruelTaskmaster(MinionCard):
     def __init__(self):
         super().__init__("Cruel Taskmaster", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON,
-                         battlecry=Battlecry([Damage(1), Give(ChangeAttack(2))], MinionSelector(players=BothPlayer(),
-                                                                                                picker=UserPicker())))
+                         battlecry=Battlecry([Damage(1), Give(Add(CHARACTER_STATUS.ATTACK, 2))],
+                                             MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(2, 2)
@@ -52,9 +52,8 @@ class FrothingBerserker(MinionCard):
         super().__init__("Frothing Berserker", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[Effect(CharacterDamaged(player=BothPlayer(),
-                                                             condition=IsMinion()), ActionTag(Give(ChangeAttack(1)),
-                                                                                              SelfSelector()))])
+        return Minion(2, 4, effects=[Effect(CharacterDamaged(player=BothPlayer(), condition=IsMinion()),
+                                            ActionTag(Give(Add(CHARACTER_STATUS.ATTACK, 1)), SelfSelector()))])
 
 
 class GrommashHellscream(MinionCard):
@@ -62,7 +61,7 @@ class GrommashHellscream(MinionCard):
         super().__init__("Grommash Hellscream", 8, CHARACTER_CLASS.WARRIOR, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(4, 9, charge=True, enrage=[Aura(ChangeAttack(6), SelfSelector())])
+        return Minion(4, 9, charge=True, enrage=[Aura(Add(CHARACTER_STATUS.ATTACK, 6), SelfSelector())])
 
 
 class KorkronElite(MinionCard):
@@ -78,8 +77,9 @@ class WarsongCommander(MinionCard):
         super().__init__("Warsong Commander", 3, CHARACTER_CLASS.WARRIOR, CARD_RARITY.FREE)
 
     def create_minion(self, player):
+        # TODO update Warsong commander post nerf
         return Minion(2, 3, effects=[Effect(MinionPlaced(AttackLessThanOrEqualTo(3)),
-                                            ActionTag(Give(Charge()), TargetSelector()))])
+                                            ActionTag(Give(SetTrue(CHARACTER_STATUS.CHARGE)), TargetSelector()))])
 
 
 class Warbot(MinionCard):
@@ -87,7 +87,7 @@ class Warbot(MinionCard):
         super().__init__("Warbot", 1, CHARACTER_CLASS.WARRIOR, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(1, 3, enrage=[Aura(ChangeAttack(1), SelfSelector())])
+        return Minion(1, 3, enrage=[Aura(Add(CHARACTER_STATUS.ATTACK, 1), SelfSelector())])
 
 
 class Shieldmaiden(MinionCard):
@@ -104,7 +104,8 @@ class SiegeEngine(MinionCard):
         super().__init__("Siege Engine", 5, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(5, 5, effects=[Effect(ArmorIncreased(), ActionTag(Give(ChangeAttack(1)), SelfSelector()))])
+        return Minion(5, 5, effects=[Effect(ArmorIncreased(), ActionTag(Give(Add(CHARACTER_STATUS.ATTACK, 1)),
+                                                                        SelfSelector()))])
 
 
 class IronJuggernaut(MinionCard):
@@ -121,7 +122,7 @@ class ScrewjankClunker(MinionCard):
     def __init__(self):
         super().__init__("Screwjank Clunker", 4, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
                          minion_type=MINION_TYPE.MECH,
-                         battlecry=Battlecry(Give([Buff(ChangeHealth(2)), Buff(ChangeAttack(2))]),
+                         battlecry=Battlecry(Give([Add(CHARACTER_STATUS.ATTACK, 2), Add(CHARACTER_STATUS.HEALTH, 2)]),
                                              MinionSelector(IsType(MINION_TYPE.MECH), picker=UserPicker())))
 
     def create_minion(self, player):
@@ -139,7 +140,8 @@ class AxeFlinger(MinionCard):
 class AlexstraszasChampion(MinionCard):
     def __init__(self):
         super().__init__("Alexstrasza's Champion", 2, CHARACTER_CLASS.WARRIOR, CARD_RARITY.RARE,
-                         battlecry=(Battlecry(Give([Buff(ChangeAttack(1)), Buff(Charge())]), SelfSelector(),
+                         battlecry=(Battlecry(Give([Add(CHARACTER_STATUS.ATTACK, 1), SetTrue(CHARACTER_STATUS.CHARGE)]),
+                                              SelfSelector(),
                                               GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
                                                           value=0))))
 

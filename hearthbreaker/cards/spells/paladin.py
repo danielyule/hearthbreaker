@@ -1,14 +1,14 @@
 import copy
 from hearthbreaker.cards.base import SpellCard, SecretCard
 from hearthbreaker.tags.action import Draw
-from hearthbreaker.tags.base import Effect, Buff, ActionTag
+from hearthbreaker.tags.base import Effect, ActionTag
 from hearthbreaker.tags.event import Attack
 from hearthbreaker.tags.selector import PlayerSelector, PlayerOne, PlayerTwo, BothPlayer, Count, DeadMinionSelector
-from hearthbreaker.tags.status import DoubleAttack, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
 from hearthbreaker.cards.minions.paladin import SilverHandRecruit
 from hearthbreaker.cards.weapons.paladin import LightsJustice
+from hearthbreaker.tags.status import CHARACTER_STATUS, Multiply, Subtract, CARD_STATUS
 
 
 class AvengingWrath(SpellCard):
@@ -31,7 +31,7 @@ class BlessedChampion(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_buff(Buff(DoubleAttack()))
+        self.target.add_buff(Multiply(CHARACTER_STATUS.ATTACK, 2))
 
 
 class BlessingOfKings(SpellCard):
@@ -302,7 +302,7 @@ class MusterForBattle(SpellCard):
 class SolemnVigil(SpellCard):
     def __init__(self):
         super().__init__("Solemn Vigil", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         buffs=[Buff(ManaChange(Count(DeadMinionSelector(players=BothPlayer())), -1))])
+                         buffs=[Subtract(CARD_STATUS.MANA, Count(DeadMinionSelector(players=BothPlayer())))])
 
     def use(self, player, game):
         super().use(player, game)

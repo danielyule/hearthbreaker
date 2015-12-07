@@ -91,75 +91,26 @@ class Aura(Tag):
         return Aura(status, selector, condition, expires)
 
 
-class Buff(Tag):
-    def __init__(self, status, condition=None):
+class Buff(Tag, metaclass=abc.ABCMeta):
+    def __init__(self, status, condition, until):
         self.status = status
         self.condition = condition
+        self.until = until
         self.owner = None
 
     def set_owner(self, owner):
         self.owner = owner
 
-    def apply(self):
-        if not self.condition or self.condition.evaluate(self.owner, self.owner):
-            self.status.act(self.owner, self.owner)
-
-    def unapply(self):
-        self.status.unact(self.owner, self.owner)
-
     def is_minion(self):
         return False
 
-    def to_instance(self, target):
-        new_instance = copy.copy(self)
-        new_instance.status = self.status.to_instance(target)
-        return new_instance
-
+    @abc.abstractmethod
     def __to_json__(self):
-        if self.condition:
-            return {
-                'status': self.status,
-                'condition': self.condition
-            }
-        return {
-            'status': self.status,
-        }
+        pass
 
-    @staticmethod
+    @abc.abstractstaticmethod
     def from_json(status, condition=None):
-        status = Status.from_json(**status)
-        if condition:
-            condition = Condition.from_json(**condition)
-        return Buff(status, condition)
-
-
-class BuffUntil(Buff):
-    def __init__(self, status, until):
-        super().__init__(status)
-        self.until = until
-
-    def apply(self):
-        super().apply()
-        self.until.bind(self.owner, self.__until__)
-
-    def unapply(self):
-        self.until.unbind(self.owner, self.__until__)
-        super().unapply()
-
-    def __until__(self, *args):
-        self.owner.remove_buff(self)
-
-    def __to_json__(self):
-        return {
-            'status': self.status,
-            'until': self.until
-        }
-
-    @staticmethod
-    def from_json(status, until):
-        status = Status.from_json(**status)
-        until = Event.from_json(**until)
-        return BuffUntil(status, until)
+        pass
 
 
 class AuraUntil(Aura):

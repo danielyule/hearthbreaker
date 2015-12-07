@@ -2,12 +2,13 @@ import copy
 from hearthbreaker.cards.base import SpellCard, MinionCard
 from hearthbreaker.cards.minions.priest import ShadowOfNothing
 from hearthbreaker.cards.minions.neutral import Lightwarden
-from hearthbreaker.tags.base import BuffUntil, Buff
+from hearthbreaker.tags.base import Aura
 from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.status import Stolen, SpellDamage
 
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
+from hearthbreaker.tags.selector import PlayerSelector
+from hearthbreaker.tags.status import SetTrue, CHARACTER_STATUS, PLAYER_STATUS, Add
 
 
 class CircleOfHealing(SpellCard):
@@ -206,7 +207,7 @@ class ShadowMadness(SpellCard):
 
         # When silenced, the minion should immediately come back to its previous
         # owner.  See https://twitter.com/bdbrode/status/510251195173470208
-        minion.add_buff(BuffUntil(Stolen(), TurnEnded()))
+        minion.add_buff(SetTrue(CHARACTER_STATUS.STOLEN, until=TurnEnded()))
 
     def can_use(self, player, game):
         return super().can_use(player, game) and len(player.minions) < 7
@@ -297,7 +298,7 @@ class VelensChosen(SpellCard):
 
         self.target.change_attack(2)
         self.target.increase_health(4)
-        self.target.add_buff(Buff(SpellDamage(1)))
+        self.target.add_aura(Aura(Add(PLAYER_STATUS.SPELL_DAMAGE, 1), PlayerSelector()))
 
 
 class Lightbomb(SpellCard):

@@ -1,19 +1,20 @@
 from hearthbreaker.cards.base import MinionCard, WeaponCard
 from hearthbreaker.game_objects import Weapon, Minion
 from hearthbreaker.tags.action import Equip, Give, Heal, Damage, GiveAura
-from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, Buff, ActionTag, AuraUntil
+from hearthbreaker.tags.base import Deathrattle, Battlecry, Effect, ActionTag, AuraUntil
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, SelfSelector, EnemyPlayer, HeroSelector, \
     BothPlayer, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import SetAttack, DivineShield, ChangeHealth, ChangeAttack, ManaChange
 from hearthbreaker.tags.condition import IsType, HasCardName, MinionHasDeathrattle
 from hearthbreaker.tags.event import MinionSummoned, MinionDied, CardPlayed
+from hearthbreaker.tags.status import SetTo, CHARACTER_STATUS, SetTrue, Add, CARD_STATUS, Subtract
 
 
 class AldorPeacekeeper(MinionCard):
     def __init__(self):
         super().__init__("Aldor Peacekeeper", 3, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
-                         battlecry=Battlecry(Give(SetAttack(1)), MinionSelector(condition=None, players=EnemyPlayer())))
+                         battlecry=Battlecry(Give(SetTo(CHARACTER_STATUS.ATTACK, 1)),
+                                             MinionSelector(condition=None, players=EnemyPlayer())))
 
     def create_minion(self, player):
         return Minion(3, 3)
@@ -22,7 +23,7 @@ class AldorPeacekeeper(MinionCard):
 class ArgentProtector(MinionCard):
     def __init__(self):
         super().__init__("Argent Protector", 2, CHARACTER_CLASS.PALADIN, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(DivineShield()), MinionSelector()))
+                         battlecry=Battlecry(Give(SetTrue(CHARACTER_STATUS.DIVINE_SHIELD)), MinionSelector()))
 
     def create_minion(self, player):
         return Minion(2, 2)
@@ -68,7 +69,8 @@ class CobaltGuardian(MinionCard):
         super().__init__("Cobalt Guardian", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)), ActionTag(Give(DivineShield()),
+        return Minion(6, 3, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.MECH)),
+                                            ActionTag(SetTrue(CHARACTER_STATUS.DIVINE_SHIELD),
                                             SelfSelector()))])
 
 
@@ -92,7 +94,7 @@ class ShieldedMinibot(MinionCard):
 class Quartermaster(MinionCard):
     def __init__(self):
         super().__init__("Quartermaster", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.EPIC,
-                         battlecry=Battlecry(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
+                         battlecry=Battlecry(Give([Add(CHARACTER_STATUS.ATTACK, 2), Add(CHARACTER_STATUS.HEALTH, 2)]),
                                              MinionSelector(HasCardName("Silver Hand Recruit"))))
 
     def create_minion(self, player):
@@ -111,7 +113,7 @@ class ScarletPurifier(MinionCard):
 class BolvarFordragon(MinionCard):
     def __init__(self):
         super().__init__("Bolvar Fordragon", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.LEGENDARY,
-                         effects=[Effect(MinionDied(), ActionTag(Give(ChangeAttack(1)), SelfSelector()))])
+                         effects=[Effect(MinionDied(), ActionTag(Give(Add(CARD_STATUS.ATTACK, 1)), SelfSelector()))])
 
     def create_minion(self, player):
         return Minion(1, 7)
@@ -121,7 +123,7 @@ class DragonConsort(MinionCard):
     def __init__(self):
         super().__init__("Dragon Consort", 5, CHARACTER_CLASS.PALADIN, CARD_RARITY.RARE,
                          minion_type=MINION_TYPE.DRAGON,
-                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-3),
+                         battlecry=Battlecry(GiveAura([AuraUntil(Subtract(CARD_STATUS.MANA, 3),
                                                                  CardSelector(condition=IsType(MINION_TYPE.DRAGON)),
                                                                  CardPlayed(IsType(MINION_TYPE.DRAGON)), False)]),
                                              PlayerSelector()))
