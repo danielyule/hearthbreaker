@@ -588,6 +588,22 @@ class TestHunter(unittest.TestCase):
         self.assertEqual(0, len(game.players[1].minions))
         self.assertEqual(0, len(game.players[0].secrets))
 
+    def test_SnakeTrap_full_board(self):
+        game = generate_game_for([SnakeTrap, Onyxia], KingKrush, CardTestingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.play_single_turn()     # Player 2 will play King Krush, which will charge a whelp
+        self.assertEqual(1, len(game.other_player.secrets))  # The snake trap will not be proced as the board is full
+        self.assertEqual(6, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(30, game.other_player.hero.health)
+
     def test_Webspinner(self):
         game = generate_game_for(Webspinner, MortalCoil, OneCardPlayingAgent, CardTestingAgent)
         game.play_single_turn()
@@ -861,3 +877,51 @@ class TestHunter(unittest.TestCase):
         # The blademaster dies as well.
         self.assertEqual(1, len(game.current_player.minions))
         self.assertEqual("Acidmaw", game.current_player.minions[0].card.name)
+
+    def test_BearTrap(self):
+        game = generate_game_for(BearTrap, StonetuskBoar, CardTestingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 3):
+            game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[1].minions))
+        self.assertEqual(1, len(game.players[0].secrets))
+
+        game.play_single_turn()
+
+        self.assertEqual(1, len(game.players[0].minions))
+        self.assertEqual(0, len(game.players[0].secrets))
+
+    def test_BearTrap_full_board(self):
+        game = generate_game_for([BearTrap, Onyxia], KingKrush, CardTestingAgent, PlayAndAttackAgent)
+
+        for turn in range(0, 17):
+            game.play_single_turn()
+
+        self.assertEqual(7, len(game.current_player.minions))
+        self.assertEqual(1, len(game.current_player.secrets))
+        self.assertEqual(0, len(game.other_player.minions))
+
+        game.other_player.agent.choose_target = lambda x: game.players[0].hero
+
+        game.play_single_turn()     # Player 2 will play King Krush, which will charge the enemy hero's face
+        self.assertEqual(1, len(game.other_player.secrets))  # The bear trap will not be proced as the board is full
+        self.assertEqual(7, len(game.other_player.minions))
+        self.assertEqual(1, len(game.current_player.minions))
+        self.assertEqual(22, game.other_player.hero.health)
+
+    def test_Powershot(self):
+        game = generate_game_for(ManaWyrm, Powershot, OneCardPlayingAgent, CardTestingAgent)
+        for turn in range(0, 5):
+            game.play_single_turn()
+
+        game.players[1].agent.choose_target = lambda targets: targets[len(targets) - 2]
+        self.assertEqual(3, len(game.players[0].minions))
+
+        game.play_single_turn()
+
+        # Powershot the middle Wyrm
+        self.assertEqual(3, len(game.players[0].minions))
+        self.assertEqual(1, game.players[0].minions[0].health)
+        self.assertEqual(1, game.players[0].minions[1].health)
+        self.assertEqual(1, game.players[0].minions[2].health)

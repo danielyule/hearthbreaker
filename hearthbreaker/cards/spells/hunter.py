@@ -261,7 +261,7 @@ class SnakeTrap(SecretCard):
         player.game.current_player.unbind("character_attack", self._reveal)
 
     def _reveal(self, attacker, target):
-        if isinstance(target, Minion):
+        if isinstance(target, Minion) and len(target.player.game.other_player.minions) < 7:
             snake = hearthbreaker.cards.minions.hunter.Snake()
             player = target.player.game.other_player
             for i in range(0, 3):
@@ -321,3 +321,41 @@ class QuickShot(SpellCard):
         self.target.damage(3, self)
         if len(player.hand) == 0:
             player.draw()
+
+
+class BearTrap(SecretCard):
+    def __init__(self):
+        super().__init__("Bear Trap", 2, CHARACTER_CLASS.HUNTER, CARD_RARITY.COMMON)
+
+    def activate(self, player):
+        player.game.current_player.bind("character_attack", self._reveal)
+
+    def deactivate(self, player):
+        player.game.current_player.unbind("character_attack", self._reveal)
+
+    def _reveal(self, attacker, target):
+        if isinstance(target, Hero) and len(target.player.game.other_player.minions) < 7:
+            bear = hearthbreaker.cards.minions.neutral.IronfurGrizzly()
+            player = target.player.game.other_player
+            bear.summon(player, player.game, len(player.minions))
+            super().reveal()
+
+
+class Powershot(SpellCard):
+    def __init__(self):
+        super().__init__("Powershot", 3, CHARACTER_CLASS.HUNTER, CARD_RARITY.RARE,
+                         target_func=hearthbreaker.targeting.find_minion_spell_target)
+
+    def use(self, player, game):
+        super().use(player, game)
+
+        index = self.target.index
+        if self.target.index < len(self.target.player.minions) - 1:
+            minion = self.target.player.minions[index + 1]
+            minion.damage(player.effective_spell_damage(2), self)
+
+        self.target.damage(player.effective_spell_damage(2), self)
+
+        if self.target.index > 0:
+            minion = self.target.player.minions[index - 1]
+            minion.damage(player.effective_spell_damage(2), self)
