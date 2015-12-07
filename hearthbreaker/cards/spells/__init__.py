@@ -57,6 +57,8 @@ from hearthbreaker.cards.spells.hunter import (
     CobraShot,
     FeignDeath,
     QuickShot,
+    BearTrap,
+    Powershot,
 )
 
 from hearthbreaker.cards.spells.mage import (
