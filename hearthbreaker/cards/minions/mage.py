@@ -2,13 +2,13 @@ import hearthbreaker.cards
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
 from hearthbreaker.game_objects import Minion
-from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage, Freeze
+from hearthbreaker.tags.action import AddCard, Give, GiveAura, Damage
 from hearthbreaker.tags.base import Effect, Aura, Battlecry, AuraUntil, ActionTag
 from hearthbreaker.tags.condition import HasSecret, GreaterThan, IsType, Adjacent, IsSecret, IsSpell
 from hearthbreaker.tags.event import SpellCast, DidDamage, TurnEnded, CardPlayed, Drawn, CardUsed
 from hearthbreaker.tags.selector import SelfSelector, PlayerSelector, TargetSelector, \
     CharacterSelector, EnemyPlayer, RandomPicker, MinionSelector, Count, BothPlayer, CardSelector
-from hearthbreaker.tags.status import CHARACTER_STATUS, Add, Subtract, CARD_STATUS, SetTo, SetTrue
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Frozen, NoSpellTarget, ManaChange
 
 
 class ManaWyrm(MinionCard):
@@ -16,8 +16,7 @@ class ManaWyrm(MinionCard):
         super().__init__("Mana Wyrm", 1, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(1, 3, effects=[Effect(SpellCast(), ActionTag(Give(Add(CHARACTER_STATUS.ATTACK, 1)),
-                                                                   SelfSelector()))])
+        return Minion(1, 3, effects=[Effect(SpellCast(), ActionTag(Give(ChangeAttack(1)), SelfSelector()))])
 
 
 class SorcerersApprentice(MinionCard):
@@ -25,14 +24,13 @@ class SorcerersApprentice(MinionCard):
         super().__init__("Sorcerer's Apprentice", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 2, auras=[Aura(Subtract(CARD_STATUS.MANA, 1), CardSelector(condition=IsSpell()))])
+        return Minion(3, 2, auras=[Aura(ManaChange(-1), CardSelector(condition=IsSpell()))])
 
 
 class KirinTorMage(MinionCard):
     def __init__(self):
         super().__init__("Kirin Tor Mage", 3, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE,
-                         battlecry=Battlecry(GiveAura([AuraUntil(SetTo(CARD_STATUS.MANA, 0),
-                                                                 CardSelector(condition=IsSecret()),
+                         battlecry=Battlecry(GiveAura([AuraUntil(ManaChange(-100), CardSelector(condition=IsSecret()),
                                                                  CardPlayed(IsSecret()))]), PlayerSelector()))
 
     def create_minion(self, player):
@@ -44,10 +42,8 @@ class EtherealArcanist(MinionCard):
         super().__init__("Ethereal Arcanist", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 3, effects=[Effect(TurnEnded(HasSecret()), ActionTag(Give(Add(CHARACTER_STATUS.ATTACK, 2)),
-                                                                              SelfSelector())),
-                                     Effect(TurnEnded(HasSecret()), ActionTag(Give(Add(CHARACTER_STATUS.HEALTH, 2)),
-                                                                              SelfSelector()))])
+        return Minion(3, 3, effects=[Effect(TurnEnded(HasSecret()), ActionTag(Give(ChangeAttack(2)), SelfSelector())),
+                                     Effect(TurnEnded(HasSecret()), ActionTag(Give(ChangeHealth(2)), SelfSelector()))])
 
 
 class Sheep(MinionCard):
@@ -63,7 +59,7 @@ class WaterElemental(MinionCard):
         super().__init__("Water Elemental", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 6, effects=[Effect(DidDamage(), ActionTag(Freeze(), TargetSelector()))])
+        return Minion(3, 6, effects=[Effect(DidDamage(), ActionTag(Give(Frozen()), TargetSelector()))])
 
 
 class ArchmageAntonidas(MinionCard):
@@ -80,7 +76,7 @@ class Snowchugger(MinionCard):
         super().__init__("Snowchugger", 2, CHARACTER_CLASS.MAGE, CARD_RARITY.COMMON, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(2, 3, effects=[Effect(DidDamage(), ActionTag(Freeze(), TargetSelector()))])
+        return Minion(2, 3, effects=[Effect(DidDamage(), ActionTag(Give(Frozen()), TargetSelector()))])
 
 
 class SpellbenderMinion(MinionCard):
@@ -124,7 +120,7 @@ class WeeSpellstopper(MinionCard):
         super().__init__("Wee Spellstopper", 4, CHARACTER_CLASS.MAGE, CARD_RARITY.EPIC)
 
     def create_minion(self, player):
-        return Minion(2, 5, auras=[Aura(SetTrue(CHARACTER_STATUS.NO_SPELL_TARGET), MinionSelector(Adjacent()))])
+        return Minion(2, 5, auras=[Aura(NoSpellTarget(), MinionSelector(Adjacent()))])
 
 
 class FlameLeviathan(MinionCard):

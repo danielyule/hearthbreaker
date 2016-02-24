@@ -247,19 +247,6 @@ class Heal(Action, metaclass=Amount):
         }
 
 
-class Freeze(Action, metaclass=Amount):
-    def __init__(self):
-        super().__init__()
-
-    def act(self, actor, target, other=None):
-        target.freeze()
-
-    def __to_json__(self):
-        return {
-            'name': 'freeze'
-        }
-
-
 class SetHealth(Action, metaclass=Amount):
     def __init__(self):
         super().__init__()

@@ -1,11 +1,11 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import Summon
-from hearthbreaker.tags.base import Deathrattle
+from hearthbreaker.tags.base import Deathrattle, Buff
 from hearthbreaker.tags.selector import PlayerSelector
+from hearthbreaker.tags.status import Windfury as _Windfury, Frozen, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import Subtract, CARD_STATUS, CHARACTER_STATUS, SetTrue
 
 
 class AncestralHealing(SpellCard):
@@ -60,7 +60,7 @@ class FarSight(SpellCard):
 
     def use(self, player, game):
         def reduce_cost(card):
-            card.add_buff(Subtract(CARD_STATUS.MANA, 3))
+            card.add_buff(Buff(ManaChange(-3)))
 
         super().use(player, game)
         player.bind_once("card_drawn", reduce_cost)
@@ -108,7 +108,7 @@ class FrostShock(SpellCard):
         super().use(player, game)
 
         self.target.damage(player.effective_spell_damage(1), self)
-        self.target.freeze()
+        self.target.add_buff(Buff(Frozen()))
 
 
 class Hex(SpellCard):
@@ -188,7 +188,7 @@ class Windfury(SpellCard):
     def use(self, player, game):
         super().use(player, game)
 
-        self.target.add_buff(SetTrue(CHARACTER_STATUS.WINDFURY))
+        self.target.add_buff(Buff(_Windfury()))
 
 
 class Reincarnate(SpellCard):

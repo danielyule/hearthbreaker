@@ -1,13 +1,13 @@
 import copy
 from hearthbreaker.cards.base import SpellCard
 from hearthbreaker.tags.action import AddCard
-from hearthbreaker.tags.base import Effect, AuraUntil, ActionTag
+from hearthbreaker.tags.base import Effect, BuffUntil, Buff, AuraUntil, ActionTag
 from hearthbreaker.tags.condition import IsSpell
 from hearthbreaker.tags.event import TurnStarted, TurnEnded, SpellCast
 from hearthbreaker.tags.selector import PlayerSelector, CardSelector
+from hearthbreaker.tags.status import Stealth, ChangeAttack, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY
-from hearthbreaker.tags.status import SetTrue, CHARACTER_STATUS, Subtract, CARD_STATUS, Add
 
 
 class Assassinate(SpellCard):
@@ -101,7 +101,7 @@ class Conceal(SpellCard):
         super().use(player, game)
         for minion in player.minions:
             if not minion.stealth:
-                minion.add_buff(SetTrue(CHARACTER_STATUS.STEALTH, until=TurnStarted()))
+                minion.add_buff(BuffUntil(Stealth(), TurnStarted()))
 
 
 class DeadlyPoison(SpellCard):
@@ -162,7 +162,7 @@ class Preparation(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        player.add_aura(AuraUntil(Subtract(CARD_STATUS.MANA, 3), CardSelector(condition=IsSpell()), SpellCast()))
+        player.add_aura(AuraUntil(ManaChange(-3), CardSelector(condition=IsSpell()), SpellCast()))
 
 
 class Sap(SpellCard):
@@ -185,7 +185,7 @@ class Shadowstep(SpellCard):
         super().use(player, game)
 
         self.target.bounce()
-        self.target.card.add_buff(Subtract(CARD_STATUS.MANA, 3))
+        self.target.card.add_buff(Buff(ManaChange(-3)))
 
 
 class Shiv(SpellCard):
@@ -249,7 +249,7 @@ class TinkersSharpswordOil(SpellCard):
             targets = hearthbreaker.targeting.find_friendly_minion_battlecry_target(player.game, lambda x: x)
             if targets is not None:
                 target = player.game.random_choice(targets)
-                target.add_buff(Add(CHARACTER_STATUS.ATTACK, 3))
+                target.add_buff(Buff(ChangeAttack(3)))
 
     def can_use(self, player, game):
         return super().can_use(player, game) and player.weapon is not None

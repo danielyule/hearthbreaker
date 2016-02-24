@@ -1,13 +1,14 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Heal, Draw, Steal, Give, Damage, SwapStats
-from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, ActionTag
+from hearthbreaker.tags.base import Aura, Deathrattle, Effect, Battlecry, Buff, BuffUntil, ActionTag
 from hearthbreaker.tags.condition import IsMinion, AttackLessThanOrEqualTo, IsType, IsDamaged, GreaterThan
 from hearthbreaker.tags.event import TurnStarted, CharacterHealed, TurnEnded
 from hearthbreaker.tags.selector import PlayerSelector, MinionSelector, CharacterSelector, BothPlayer, \
-    EnemyPlayer, UserPicker, RandomPicker, HeroSelector, SelfSelector, Count, CardSelector
+    EnemyPlayer, UserPicker, RandomPicker, CurrentPlayer, HeroSelector, SelfSelector, Count, CardSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import SetTrue, PLAYER_STATUS, CHARACTER_STATUS, SetTo, Add, Subtract
+from hearthbreaker.tags.status import ChangeHealth, HealAsDamage, AttackEqualsHealth, MultiplySpellDamage, \
+    MultiplyHealAmount, ChangeAttack
 
 
 class AuchenaiSoulpriest(MinionCard):
@@ -15,7 +16,7 @@ class AuchenaiSoulpriest(MinionCard):
         super().__init__("Auchenai Soulpriest", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE)
 
     def create_minion(self, player):
-        return Minion(3, 5, auras=[Aura(SetTrue(PLAYER_STATUS.HEAL_AS_DAMAGE), PlayerSelector())])
+        return Minion(3, 5, auras=[Aura(HealAsDamage(), PlayerSelector())])
 
 
 class CabalShadowPriest(MinionCard):
@@ -35,7 +36,7 @@ class Lightspawn(MinionCard):
         super().__init__("Lightspawn", 4, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(0, 5, buffs=[SetTrue(CHARACTER_STATUS.ATTACK_EQUALS_HEALTH)])
+        return Minion(0, 5, buffs=[Buff(AttackEqualsHealth())])
 
 
 class Lightwell(MinionCard):
@@ -63,15 +64,14 @@ class ProphetVelen(MinionCard):
         super().__init__("Prophet Velen", 7, CHARACTER_CLASS.PRIEST, CARD_RARITY.LEGENDARY)
 
     def create_minion(self, player):
-        return Minion(7, 7, auras=[Aura(SetTo(PLAYER_STATUS.SPELL_DAMAGE_MULTIPLIER, 2), PlayerSelector()),
-                                   Aura(SetTo(PLAYER_STATUS.HEAL_MULTIPLIER, 2), PlayerSelector())])
+        return Minion(7, 7, auras=[Aura(MultiplySpellDamage(2), PlayerSelector()),
+                                   Aura(MultiplyHealAmount(2), PlayerSelector())])
 
 
 class TempleEnforcer(MinionCard):
     def __init__(self):
         super().__init__("Temple Enforcer", 6, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(Add(CHARACTER_STATUS.HEALTH, 3)),
-                                             MinionSelector(picker=UserPicker())))
+                         battlecry=Battlecry(Give(ChangeHealth(3)), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(6, 6)
@@ -90,14 +90,13 @@ class DarkCultist(MinionCard):
         super().__init__("Dark Cultist", 3, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(3, 4, deathrattle=Deathrattle(Give(Add(CHARACTER_STATUS.HEALTH, 3)),
-                                                    MinionSelector(picker=RandomPicker())))
+        return Minion(3, 4, deathrattle=Deathrattle(Give(ChangeHealth(3)), MinionSelector(picker=RandomPicker())))
 
 
 class Shrinkmeister(MinionCard):
     def __init__(self):
         super().__init__("Shrinkmeister", 2, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(Subtract(CHARACTER_STATUS.ATTACK, 2, until=TurnEnded())),
+                         battlecry=Battlecry(Give(BuffUntil(ChangeAttack(-2), TurnEnded(player=CurrentPlayer()))),
                                              MinionSelector(players=BothPlayer(), picker=UserPicker())))
 
     def create_minion(self, player):
@@ -108,8 +107,8 @@ class UpgradedRepairBot(MinionCard):
     def __init__(self):
         super().__init__("Upgraded Repair Bot", 5, CHARACTER_CLASS.PRIEST, CARD_RARITY.RARE,
                          minion_type=MINION_TYPE.MECH,
-                         battlecry=Battlecry(Give(Add(CHARACTER_STATUS.HEALTH, 4)),
-                                             MinionSelector(IsType(MINION_TYPE.MECH), picker=UserPicker())))
+                         battlecry=Battlecry(Give(ChangeHealth(4)), MinionSelector(IsType(MINION_TYPE.MECH),
+                                                                                   picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(5, 5)
@@ -148,7 +147,7 @@ class TwilightWhelp(MinionCard):
     def __init__(self):
         super().__init__("Twilight Whelp", 1, CHARACTER_CLASS.PRIEST, CARD_RARITY.COMMON,
                          minion_type=MINION_TYPE.DRAGON,
-                         battlecry=(Battlecry(Give(Add(CHARACTER_STATUS.HEALTH, 2)), SelfSelector(),
+                         battlecry=(Battlecry(Give(Buff(ChangeHealth(2))), SelfSelector(),
                                               GreaterThan(Count(CardSelector(condition=IsType(MINION_TYPE.DRAGON))),
                                                           value=0))))
 

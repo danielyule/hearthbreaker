@@ -3,7 +3,7 @@ from hearthbreaker.cards.minions.neutral import Nerubian
 from hearthbreaker.cards.spells.neutral import GallywixsCoin
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Kill, Bounce, Summon, Give, Damage, ChangeTarget, AddCard, IncreaseWeaponAttack
-from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, ActionTag
+from hearthbreaker.tags.base import Effect, Deathrattle, Battlecry, Buff, ActionTag
 from hearthbreaker.tags.card_source import LastCard
 from hearthbreaker.tags.condition import IsMinion, IsType, NotCurrentTarget, OneIn, Not, HasCardName, \
     OpponentMinionCountIsGreaterThan, And, IsDamaged
@@ -11,7 +11,7 @@ from hearthbreaker.tags.event import DidDamage, MinionSummoned, TurnEnded, Attac
 from hearthbreaker.tags.selector import TargetSelector, MinionSelector, PlayerSelector, UserPicker, \
     BothPlayer, CharacterSelector, RandomPicker, SelfSelector, EnemyPlayer, FriendlyPlayer, Attribute, WeaponSelector
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import Add, CHARACTER_STATUS, SetTrue, SetTo
+from hearthbreaker.tags.status import Stealth, ChangeAttack, ChangeHealth
 
 
 class DefiasBandit(MinionCard):
@@ -34,10 +34,8 @@ class DefiasRingleader(MinionCard):
 class EdwinVanCleef(MinionCard):
     def __init__(self):
         super().__init__("Edwin VanCleef", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.LEGENDARY,
-                         battlecry=Battlecry(Give([Add(CHARACTER_STATUS.ATTACK,
-                                                       Attribute("cards_played", PlayerSelector()), 2),
-                                                   Add(CHARACTER_STATUS.HEALTH,
-                                                       Attribute("cards_played", PlayerSelector()), 2)]),
+                         battlecry=Battlecry(Give([Buff(ChangeAttack(Attribute("cards_played", PlayerSelector()), 2)),
+                                                   Buff(ChangeHealth(Attribute("cards_played", PlayerSelector()), 2))]),
                                              SelfSelector()))
 
     def create_minion(self, player):
@@ -56,8 +54,7 @@ class Kidnapper(MinionCard):
 class MasterOfDisguise(MinionCard):
     def __init__(self):
         super().__init__("Master of Disguise", 4, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE,
-                         battlecry=Battlecry(Give(SetTrue(CHARACTER_STATUS.STEALTH)),
-                                             MinionSelector(picker=UserPicker())))
+                         battlecry=Battlecry(Give(Stealth()), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(4, 4)
@@ -96,7 +93,7 @@ class OneeyedCheat(MinionCard):
 
     def create_minion(self, player):
         return Minion(4, 1, effects=[Effect(MinionSummoned(IsType(MINION_TYPE.PIRATE)),
-                                            ActionTag(Give(SetTrue(CHARACTER_STATUS.STEALTH)), SelfSelector()))])
+                                            ActionTag(Give(Stealth()), SelfSelector()))])
 
 
 class IronSensei(MinionCard):
@@ -104,8 +101,7 @@ class IronSensei(MinionCard):
         super().__init__("Iron Sensei", 3, CHARACTER_CLASS.ROGUE, CARD_RARITY.RARE, minion_type=MINION_TYPE.MECH)
 
     def create_minion(self, player):
-        return Minion(2, 2, effects=[Effect(TurnEnded(), ActionTag(Give([SetTo(CHARACTER_STATUS.ATTACK, 2),
-                                                                         SetTo(CHARACTER_STATUS.HEALTH, 2)]),
+        return Minion(2, 2, effects=[Effect(TurnEnded(), ActionTag(Give([Buff(ChangeAttack(2)), Buff(ChangeHealth(2))]),
                                             MinionSelector(IsType(MINION_TYPE.MECH), picker=RandomPicker())))])
 
 

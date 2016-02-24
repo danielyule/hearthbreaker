@@ -1,10 +1,12 @@
 import copy
 from hearthbreaker.cards.base import SecretCard, SpellCard
 from hearthbreaker.game_objects import Minion, Hero
+from hearthbreaker.tags.base import BuffUntil, Buff
+from hearthbreaker.tags.event import TurnEnded
+from hearthbreaker.tags.selector import CurrentPlayer
+from hearthbreaker.tags.status import Immune, ManaChange
 import hearthbreaker.targeting
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.event import TurnEnded
-from hearthbreaker.tags.status import CARD_STATUS, Add, SetTrue, CHARACTER_STATUS, Subtract
 
 
 class HuntersMark(SpellCard):
@@ -39,7 +41,7 @@ class BestialWrath(SpellCard):
 
     def use(self, player, game):
         super().use(player, game)
-        self.target.add_buff(SetTrue(CHARACTER_STATUS.IMMUNE, until=TurnEnded()))
+        self.target.add_buff(BuffUntil(Immune(), TurnEnded(player=CurrentPlayer())))
         self.target.change_temp_attack(2)
 
 
@@ -110,7 +112,7 @@ class FreezingTrap(SecretCard):
     def _reveal(self, attacker, target):
         if isinstance(attacker, Minion) and not attacker.removed:
             attacker.bounce()
-            attacker.card.add_buff(Add(CARD_STATUS.MANA, 2))
+            attacker.card.add_buff(Buff(ManaChange(2)))
             super().reveal()
 
 
@@ -276,7 +278,7 @@ class CallPet(SpellCard):
     def use(self, player, game):
         def reduce_cost(card):
             if card.is_minion() and card.minion_type == MINION_TYPE.BEAST:
-                card.add_buff(Subtract(CARD_STATUS.MANA, 4))
+                card.add_buff(Buff(ManaChange(-4)))
 
         super().use(player, game)
         player.bind_once("card_drawn", reduce_cost)

@@ -1,7 +1,7 @@
 from hearthbreaker.cards.base import MinionCard
 from hearthbreaker.game_objects import Minion
 from hearthbreaker.tags.action import Draw, Damage, Give, Heal, ChangeTarget, AddCard
-from hearthbreaker.tags.base import Aura, Effect, Battlecry, ActionTag
+from hearthbreaker.tags.base import Aura, Effect, Battlecry, ActionTag, Buff
 from hearthbreaker.tags.card_source import CollectionSource
 from hearthbreaker.tags.condition import Adjacent, HasOverload, IsType, OneIn, NotCurrentTarget, \
     OpponentMinionCountIsGreaterThan, And
@@ -9,7 +9,7 @@ from hearthbreaker.tags.event import TurnEnded, CardPlayed, MinionDied, Attack
 from hearthbreaker.tags.selector import MinionSelector, PlayerSelector, HeroSelector, CharacterSelector, BothPlayer, \
     UserPicker, SelfSelector, RandomPicker, EnemyPlayer, RandomAmount
 from hearthbreaker.constants import CHARACTER_CLASS, CARD_RARITY, MINION_TYPE
-from hearthbreaker.tags.status import CHARACTER_STATUS, Add, SetTrue
+from hearthbreaker.tags.status import ChangeAttack, ChangeHealth, Windfury
 
 
 class AlAkirTheWindlord(MinionCard):
@@ -51,7 +51,7 @@ class FlametongueTotem(MinionCard):
                          minion_type=MINION_TYPE.TOTEM)
 
     def create_minion(self, player):
-        return Minion(0, 3, auras=[Aura(Add(CHARACTER_STATUS.ATTACK, 2), MinionSelector(Adjacent()))])
+        return Minion(0, 3, auras=[Aura(ChangeAttack(2), MinionSelector(Adjacent()))])
 
 
 class ManaTideTotem(MinionCard):
@@ -68,17 +68,16 @@ class UnboundElemental(MinionCard):
         super().__init__("Unbound Elemental", 3, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON)
 
     def create_minion(self, player):
-        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), ActionTag(Give(Add(CHARACTER_STATUS.ATTACK, 1)),
+        return Minion(2, 4, effects=[Effect(CardPlayed(HasOverload()), ActionTag(Give(ChangeAttack(1)),
                                                                                  SelfSelector())),
-                                     Effect(CardPlayed(HasOverload()), ActionTag(Give(Add(CHARACTER_STATUS.HEALTH, 1)),
+                                     Effect(CardPlayed(HasOverload()), ActionTag(Give(ChangeHealth(1)),
                                                                                  SelfSelector()))])
 
 
 class Windspeaker(MinionCard):
     def __init__(self):
         super().__init__("Windspeaker", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON,
-                         battlecry=Battlecry(Give(SetTrue(CHARACTER_STATUS.WINDFURY)),
-                                             MinionSelector(picker=UserPicker())))
+                         battlecry=Battlecry(Give(Windfury()), MinionSelector(picker=UserPicker())))
 
     def create_minion(self, player):
         return Minion(3, 3)
@@ -177,7 +176,7 @@ class Neptulon(MinionCard):
 class FireguardDestroyer(MinionCard):
     def __init__(self):
         super().__init__("Fireguard Destroyer", 4, CHARACTER_CLASS.SHAMAN, CARD_RARITY.COMMON, overload=1,
-                         battlecry=Battlecry(Give(Add(CHARACTER_STATUS.ATTACK, RandomAmount(1, 4))), SelfSelector()))
+                         battlecry=Battlecry(Give(Buff(ChangeAttack(RandomAmount(1, 4)))), SelfSelector()))
 
     def create_minion(self, player):
         return Minion(3, 6)
