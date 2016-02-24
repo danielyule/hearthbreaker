@@ -113,25 +113,25 @@ class GameRender:
         window.addstr(y + 0, x, " {0:>2} mana ({1})   ".format(card.mana_cost(), status), color)
         window.addstr(y + 1, x, "{0:^15}".format(name), color)
 
-    def draw_hero(self, hero, window, x, y):
+    def draw_hero(self, player, window, x, y):
         color = curses.color_pair(0)
         if self.targets:
-            if hero is self.selected_target:
+            if player.hero is self.selected_target:
                 color = curses.color_pair(4)
-            elif hero in self.targets:
+            elif player.hero in self.targets:
                 color = curses.color_pair(3)
-        if hero.weapon is not None:
-            weapon_power = "({0}) ({1})".format(hero.weapon.base_attack, hero.weapon.durability)
-            window.addstr(y, x, "{0:^20}".format(hero.weapon.card))
+        if player.weapon is not None:
+            weapon_power = "({0}) ({1})".format(player.weapon.base_attack, player.weapon.durability)
+            window.addstr(y, x, "{0:^20}".format(player.weapon.card.name))
             window.addstr(y + 1, x, "{0:^20}".format(weapon_power))
 
-        hero_power = "({0}) ({1}+{4}) -- {2}/{3}".format(hero.calculate_attack(), hero.health,
-                                                         hero.player.mana, hero.player.max_mana, hero.armor)
-        window.addstr(y, x + 20, "{0:^20}".format(CHARACTER_CLASS.to_str(hero.character_class)), color)
+        hero_power = "({0}) ({1}+{4}) -- {2}/{3}".format(player.hero.calculate_attack(), player.hero.health,
+                                                         player.mana, player.max_mana, player.hero.armor)
+        window.addstr(y, x + 20, "{0:^20}".format(CHARACTER_CLASS.to_str(player.hero.character_class)), color)
         window.addstr(y + 1, x + 20, "{0:^20}".format(hero_power), color)
 
         window.addstr(y, x + 40, "{0:^20}".format("Hero Power"))
-        if hero.power.can_use():
+        if player.hero.power.can_use():
             window.addstr(y + 1, x + 40, "{0:^20}".format("*"))
 
     def draw_game(self):
@@ -164,8 +164,8 @@ class GameRender:
         draw_cards(self.bottom_player.hand[:5], self.bottom_player, self.card_window, 0)
         draw_cards(self.bottom_player.hand[5:], self.bottom_player, self.card_window, 3)
 
-        self.draw_hero(self.top_player.hero, self.window, 10, 0)
-        self.draw_hero(self.bottom_player.hero, self.window, 10, 12)
+        self.draw_hero(self.top_player, self.window, 10, 0)
+        self.draw_hero(self.bottom_player, self.window, 10, 12)
         self.window.refresh()
         self.bottom_minion_window.refresh()
         self.top_minion_window.refresh()

@@ -2562,7 +2562,8 @@ class TestMinionCopying(unittest.TestCase, TestUtilities):
         game = game.copy()
         self.assertEqual(5, len(game.current_player.hand))
         self.assertTrue(game.current_player.hand[-1].is_minion())
-        if game.current_player.hand[-1].mana >= 3:
+        if game.current_player.hand[-1].mana >= 3 and game.current_player.hand[-1].name != "Mountain Giant":
+            # This might sometimes fail if the card drawn is mountain giant, because the mana cost is all weird.
             self.assertEqual(3, game.current_player.hand[-1].mana - game.current_player.hand[-1].mana_cost())
 
     def test_MimironsHead(self):
