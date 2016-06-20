@@ -499,13 +499,12 @@ class TestDruid(unittest.TestCase):
             game.play_single_turn()
 
         def check_minions():
-            self.assertEqual(3, len(game.current_player.minions))
+            self.assertEqual(6, len(game.current_player.minions))
 
             for minion in game.current_player.minions:
                 self.assertEqual(2, minion.calculate_attack())
                 self.assertEqual(2, minion.health)
                 self.assertEqual(2, minion.calculate_max_health())
-                self.assertTrue(minion.charge())
                 self.assertEqual("Treant", minion.card.name)
 
         game.other_player.bind_once("turn_ended", check_minions)

@@ -2362,7 +2362,7 @@
     "character_class": "Druid",
     "health": 4,
     "type": "minion",
-    "mana": 4,
+    "mana": 2,
     "collectible": true
   },
   {
@@ -3076,7 +3076,7 @@
     "collectible": true
   },
   {
-    "attack": 3,
+    "attack": 2,
     "name": "Knife Juggler",
     "impl": {
       "effects": [

@@ -322,13 +322,13 @@ class Starfall(SpellCard):
 
 class ForceOfNature(SpellCard):
     def __init__(self):
-        super().__init__("Force of Nature", 6, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
+        super().__init__("Force of Nature", 5, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC)
 
     def use(self, player, game):
         super().use(player, game)
-        from hearthbreaker.cards.minions.druid import ChargeTreant
+        from hearthbreaker.cards.minions.druid import Treant
         for i in [0, 1, 2]:
-            treant_card = ChargeTreant()
+            treant_card = Treant()
             treant_card.summon(player, game, len(player.minions))
 
     def can_use(self, player, game):
