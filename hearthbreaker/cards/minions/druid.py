@@ -88,7 +88,7 @@ class AncientOfLore(MinionCard):
 
         super().__init__("Ancient of Lore", 7, CHARACTER_CLASS.DRUID, CARD_RARITY.EPIC, choices=[
             Choice(AncientSecrets(), Heal(5), HeroSelector()),
-            Choice(AncientTeachings(), Draw(3), PlayerSelector())
+            Choice(AncientTeachings(), Draw(1), PlayerSelector())
         ])
 
     def create_minion(self, player):
