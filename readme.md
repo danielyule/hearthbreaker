@@ -21,7 +21,7 @@ Usage
 Hearthbreaker is compatible with [Python](https://www.python.org/) 3.2+ and [PyPy3](http://pypy.org/) 2.3+ on any
 operating system that supports them.
 
-###Console Application
+### Console Application
 
 ![Console Screenshot](http://danielyule.github.io/hearthbreaker/_static/console_screenshot.png)
 
@@ -56,7 +56,7 @@ on windows, you must download it from
 *Note:* Curses is not available for PyPy
 
 
-###Unit Tests
+### Unit Tests
 The tests are located in the [`tests`](tests) package.
 
 All tests can be run with the following command: `python -m unittest discover -s tests -p *_tests.py`
@@ -117,22 +117,22 @@ Related Projects
 A collection of Hearthstone AI related projects can be found at [hs-ai.com](http://hs-ai.com)
 
 
-###HearthSim
+### HearthSim
 Hiroaki Oyaizu has created [HearthSim](https://github.com/oyachai/HearthSim), another Hearthstone simulator, written in Java
 with a stronger focus on efficiency and AI modelling. It currently has fewer cards implemented, but has a much more
 sophisticated AI.
 
-###Focus
+### Focus
 Raffy is working towards a Domain Specific Language (DSL) for Hearthstone Cards, written in JSON.  The cards are
 completely defined, but the engine (called [Focus](http://fluiddruid.net/forum/viewtopic.php?f=24&t=4808)) is still in
 progress.  These will allow for anyone to define new cards, by simply writing a JSON object to represent the card.
 
-###Fireplace
+### Fireplace
 Jerome Leclanche is attempting to reverse engineer the xml format for the cards associated with Hearthstone and build
 an engine based on that.  It is planned to be a complete simulator, including all collectible and mission cards.
 His work can be found on [Fireplace GitHub page](https://github.com/jleclanche/fireplace)
 
-###Soot
+### Soot
 [Soot](https://github.com/Mischanix/soot) is a slightly out of date Clojure implementation of all cards in Hearthstone.  It's not clear how well the 
 implementations work.  It is interesting for its functional implementation of the cards.
 
