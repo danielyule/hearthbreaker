@@ -82,6 +82,7 @@ def hero_for_class(character_class):
     else:
         return Jaina()
 
+
 __hero_lookup = {"Jaina": Jaina,
                  "Malfurion": Malfurion,
                  "Rexxar": Rexxar,
