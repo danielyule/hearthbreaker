@@ -3,6 +3,9 @@ Hearthbreaker
 A Hearthstone Simulator
 -----------------------
 
+**Hearthbreaker is no longer under active development.  If you're interested in Hearthstone Simulation, check out the projects
+at [https://hearthsim.info/](https://hearthsim.info/)**
+
 Hearthbreaker is an open source Hearthstone simulator for the purposes of machine learning and
 data mining of Blizzard's [Hearthstone: Heroes of WarCraft](http://battle.net/hearthstone).  It implements every 
 card in the game.  Every attempts has been made to mimic Hearthstone precisely, including edge cases and bugs.
@@ -66,7 +69,8 @@ For Python 3.2 and PyPy3, the unit tests are dependent on the [mock package](htt
 Progress
 --------
 
-All collectible cards have been implemented.
+All Collectible cards up to The Grand Tournament have been implemented.  There is no plan to expand on the list
+of cards beyond that.
 The engine is complete, and can be used to simulate games.  The game state can be copied, or serialized to JSON.
 Replay functionality is included as well.  Furthermore, minions and weapons can be expressed either in python or
 via a JSON declaration.
