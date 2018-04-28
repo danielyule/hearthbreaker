@@ -10,6 +10,8 @@ from tests.testing_utils import generate_game_for
 
 def t(self):
     return self.name
+
+
 Minion.try_name = t
 
 
